@@ -36,7 +36,7 @@ test:
 production:
   adapter: mysql
   encoding: utf8
-  database: nuniverse_production
+  database: nuniverse_prod
   username: root
-  password: 
+  password: wossname
   socket: /tmp/mysql.sock
