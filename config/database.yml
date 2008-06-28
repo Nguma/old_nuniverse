@@ -17,8 +17,8 @@
 
 login: &login
   adapter: mysql
-  username: fantome_2
-  password: s4lv4d0r
+  username: nuniverse
+  password: wossname
   encoding: utf8
   #socket: /tmp/mysql.sock
   
@@ -33,7 +33,3 @@ test:
 production:
   <<: *login
   database: nuniverse_prod
-
-staging:
-  <<: *login
-  database: nuniverse_dev
