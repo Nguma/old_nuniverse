@@ -3,7 +3,6 @@ class SessionsController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
   include AuthenticatedSystem
 
-
   # GET /new
   def new
 		respond_to do |format|

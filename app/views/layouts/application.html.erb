@@ -13,12 +13,13 @@
   <meta name="Keywords" content="" />
   <meta http-equiv="imagetoolbar" content="no" />
 
-  <%= stylesheet_link_tag 'application', 'default' %>
+  <%= stylesheet_link_tag 'application', 'default'%>
   <%= javascript_include_tag  'application'%>
   <%#= GMap.header(:with_vml => false) %>
   <%#= @map.to_html if @map%>
 
   <%= yield :head %>
+  <%= head_for(controller.controller_name )%>
 
 </head>
 <body>
