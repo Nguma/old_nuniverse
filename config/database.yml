@@ -14,29 +14,26 @@
 #
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
-development:
-  adapter: mysql
-  encoding: utf8
-  database: nuniverse_development
-  username: root
-  password:
-  socket: /tmp/mysql.sock
 
-# Warning: The database defined as 'test' will be erased and
-# re-generated from your development database when you run 'rake'.
-# Do not set this db to the same as development or production.
-test:
+login: &login
   adapter: mysql
+  username: fantome_2
+  password: s4lv4d0r
   encoding: utf8
+  #socket: /tmp/mysql.sock
+  
+development:
+  <<: *login
+  database: nuniverse_dev
+
+test:
+  <<: *login
   database: nuniverse_test
-  username: root
-  password:
-  socket: /tmp/mysql.sock
 
 production:
-  adapter: mysql
-  encoding: utf8
-  database: nuniverse_production
-  username: root
-  password: 
-  socket: /tmp/mysql.sock
+  <<: *login
+  database: nuniverse_prod
+
+staging:
+  <<: *login
+  database: nuniverse_dev

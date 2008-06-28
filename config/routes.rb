@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+	
+	map.resources :users
+	map.resources :sessions
+	
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -9,6 +13,11 @@ ActionController::Routing::Routes.draw do |map|
   #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
   # This route can be invoked with purchase_url(:id => product.id)
 
+	map.my_account "/my_account",
+		:controller => 'users',
+		:action => 'index'
+		
+	
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products
 
