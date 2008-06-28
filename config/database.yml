@@ -39,4 +39,4 @@ production:
   database: nuniverse_prod
   username: root
   password: wossname
-  socket: /tmp/mysql.sock
+  # socket: /tmp/mysql.sock
