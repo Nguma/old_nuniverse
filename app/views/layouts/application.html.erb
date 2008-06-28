@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+       
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>* nuniverse *</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="en-us" />
+  <meta name="Author" content="#TODO" />
+  <meta name="ROBOTS" content="all" />
+  <meta name="MSSmartTagsPreventParsing" content="true" />
+  <meta name="Description" content="." />
+  <meta name="Keywords" content="" />
+  <meta http-equiv="imagetoolbar" content="no" />
+
+  <%= stylesheet_link_tag 'application', 'default' %>
+  <%= javascript_include_tag  'application'%>
+  <%#= GMap.header(:with_vml => false) %>
+  <%#= @map.to_html if @map%>
+
+  <%= yield :head %>
+
+</head>
+<body>
+  <div id="notice">
+    <%= flash[:notice] %>
+  </div>
+  
+  <%= yield %>
+</body>
+
+</html>

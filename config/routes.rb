@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-	
+  map.resources :tags
+
 	map.resources :users
 	map.resources :sessions
 	
@@ -12,11 +13,15 @@ ActionController::Routing::Routes.draw do |map|
   # Sample of named route:
   #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
   # This route can be invoked with purchase_url(:id => product.id)
-
+	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate'
+	map.signup '/signup', :controller => 'users', :action => 'new'
+	map.login '/login', :controller => 'sessions', :action => 'new'
+	map.logout '/logout', :controller => 'sessions', :action => 'destroy'
+	
 	map.my_account "/my_account",
 		:controller => 'users',
 		:action => 'index'
-		
+
 	
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products
