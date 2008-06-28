@@ -21,9 +21,9 @@ set :use_sudo,        true
 set :branch,          "master"
 set :runner,          nil # "root"
 
-role :app, "specing.net"
-role :web, "specing.net"
-role :db,  "specing.net", :primary => true
+role :app, "nuniverse.net"
+role :web, "nuniverse.net"
+role :db,  "nuniverse.net", :primary => true
 
 task :echo_vars do
   pp variables.keys.collect { |key| key.to_s }.sort
