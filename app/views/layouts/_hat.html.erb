@@ -1,0 +1,13 @@
+<div id="main_hat">
+  
+  
+  <div id="control_panel">
+    <%= link_to "About", "/#TODO" %>
+    <% if logged_in? -%>
+      <%= link_to "Sign out", "/logout" %>
+    <% else -%>
+      <%= link_to "Sign in", "/login" %>
+      <%= link_to "Register", "/signup" %>
+    <% end -%>
+  </div>
+</div>

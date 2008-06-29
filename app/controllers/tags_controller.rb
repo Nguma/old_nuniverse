@@ -41,17 +41,18 @@ class TagsController < ApplicationController
   # POST /tags
   # POST /tags.xml
   def create
-    @tag = Tag.new(params[:tag])
+		gumies = params[:gum].to_s.scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
+		@tags = []
+		for gumi in gumies
+    	tag = Tag.new(:kind => gumi[1], :content => gumi[2])
+			tag.save
+			@tags << tag
+		end
 
     respond_to do |format|
-      if @tag.save
-        flash[:notice] = 'Tag was successfully created.'
-        format.html { redirect_to(@tag) }
-        format.xml  { render :xml => @tag, :status => :created, :location => @tag }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @tag.errors, :status => :unprocessable_entity }
-      end
+        flash[:notice] = 'Tags were successfully created.'
+        format.html { redirect_to("/my_account") }
+        format.xml  { render :xml => @tags, :status => :created, :location => @tags  }
     end
   end
 

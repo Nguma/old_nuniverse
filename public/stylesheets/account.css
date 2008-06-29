@@ -1,6 +1,26 @@
 .box
 {
+	position:relative;
 	padding:10px;
 	text-align:center;
 	margin:auto;
+}
+
+#control_panel
+{
+	position:fixed;
+	background:none;
+	right:40px;
+	top:40px;
+	padding:5px;
+	font-size:13px;
+	font-weight:bold;
+	color:#333;
+	
+}
+
+#control_panel a
+{
+	margin-left:10px;
+	margin-right:5px;
 }

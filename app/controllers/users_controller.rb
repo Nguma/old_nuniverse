@@ -8,8 +8,9 @@ class UsersController < ApplicationController
 	# GET /my_account
 	def index
 		@user = self.current_user
+		
 		respond_to do |format|
-			format.html {render :layout => 'tags'}#index.html.erb
+			format.html #index.html.erb
 		end
 	end
 	
@@ -23,13 +24,12 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    @user = User.new(params[:user])
-		@user.save
-		@user.ontologize
+    @user = User.make(params[:user])
+		
 		   
     if @user.errors.empty?
       self.current_user = @user
-      redirect_back_or_default(@user.tag)
+      redirect_back_or_default("/my_account")
       flash[:notice] = "Thanks for signing up!"
     else
       render :action => 'new'

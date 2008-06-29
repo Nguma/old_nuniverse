@@ -1,5 +1,31 @@
 body
 {
 	background:#FFF url('/images/backgrounds/main.png') 0 0 repeat-x;
-	padding:20px 20px 0 20px;
+	padding:0;
+}
+
+#notice
+{
+	position:fixed;
+	top:20px;
+	left:100px;
+	color:#F09;
+	z-index:123456;
+}
+
+#main_hat
+{
+	background-color:transparent;
+	position:relative;
+	top:0;
+	left:0;
+	text-align:left;
+	display:block;
+	height:40px;
+	padding:10px 10px 10px 40px;
+}
+
+#wrap
+{
+	padding: 0 40px;
 }

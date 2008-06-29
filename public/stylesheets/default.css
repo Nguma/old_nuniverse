@@ -1,17 +1,17 @@
 *
 {
-	font-family:Myriad Pro, Arial, sans-serif;
+	font-family:Arial, sans-serif;
 	padding:0;
 	margin:0;
 	border:none;
-	color:#333;
+	color:inherit;
 	background:none;
 	text-decoration:none;
 }
 
 h1
 {
-	
+	font-family:Myriad Pro;
 }
 
 h2

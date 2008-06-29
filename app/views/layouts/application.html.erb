@@ -13,7 +13,7 @@
   <meta name="Keywords" content="" />
   <meta http-equiv="imagetoolbar" content="no" />
 
-  <%= stylesheet_link_tag 'application', 'default'%>
+  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account'%>
   <%= javascript_include_tag  'application'%>
   <%#= GMap.header(:with_vml => false) %>
   <%#= @map.to_html if @map%>
@@ -22,12 +22,15 @@
   <%= head_for(controller.controller_name )%>
 
 </head>
-<body>
+<body class="<%= controller.action_name %>  ">
   <div id="notice">
     <%= flash[:notice] %>
   </div>
   
-  <%= yield %>
+  <%= render :partial => "hat"  rescue render :partial => "/layouts/hat"%>
+  <div id="wrap">
+    <%= yield %>
+  </div>
 </body>
 
 </html>
