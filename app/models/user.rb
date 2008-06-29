@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
   #validates_confirmation_of :password,                   :if => :password_required?
   before_save :encrypt_password
   
+  # after_create :ontologize
+  
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :firstname, :lastname #:password_confirmation
