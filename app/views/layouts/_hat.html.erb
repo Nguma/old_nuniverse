@@ -4,6 +4,7 @@
   <div id="control_panel">
     <%= link_to "About", "/#TODO" %>
     <% if logged_in? -%>
+      <%= link_to "My Account", "/my_account" %>
       <%= link_to "Sign out", "/logout" %>
     <% else -%>
       <%= link_to "Sign in", "/login" %>

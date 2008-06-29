@@ -1,8 +1,17 @@
-<h1>Listing tags</h1>
-
-<% for nuniverse in @tags %>
-  <div class="tag"><%= link_to nuniverse.content, nuniverse %></div>
-<% end %>
-
-
-<%= link_to 'New tag', new_tag_path %>
+<div class="nuniverse">
+  <div id="breadcrumbs">
+      <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/", :class => "home") %>
+  </div>
+  <div class="content">
+    <div class="items">
+      <% for nuniverse in @tags %>
+        <div class="item"><%= link_to nuniverse.content, nuniverse %></div>
+      <% end %>
+    </div>
+    <div class="detail">
+      <p>Welcome.</p>
+    </div>
+  </div>
+  
+  <%= link_to 'New tag', new_tag_path %>
+</div>

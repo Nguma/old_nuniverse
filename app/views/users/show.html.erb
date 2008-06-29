@@ -1,3 +1,16 @@
-<h1>Your Account</h1>
-
-<p><%= @user.login %></p>
+<div class="nuniverse">
+  <div id="breadcrumbs" >
+    <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"), "/", :class => "home") %>
+    <h1><%= @user.login %></h1> 
+  </div>
+  <div class="content">
+    <div class="items">
+      <div class="item" class="selected">
+        <a href="#TODO">Edit your profile</a>
+      </div>
+    </div>
+    <div class="detail">
+      Placeholder for the profile edit form.
+    </div>
+  </div>
+</div>
