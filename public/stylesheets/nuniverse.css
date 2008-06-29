@@ -43,7 +43,7 @@
 	font-weight:bold;
 }
 
-#breadcrumbs h1
+h1
 {
 	display:relative;
 	float:left;
@@ -63,18 +63,19 @@
 .detail
 {
 	position:absolute;
-	left:422px;
+	left:222px;
 	width:100%;
 	height:100%;
 	padding:10px;
 	background:#FFF;
 }
 
+
 .items
 {
 	position:relative;
 	float:left;
-	width:400px;
+	width:200px;
 	height:100%;
 	padding:10px;
 	font-size:13px;
@@ -120,6 +121,30 @@ items .item a.avatar img
 .items .selected
 {
 	background:#000;
+	color:#FFF;
+}
+
+.perspectives
+{
+	position:relative;
+	height:35px;
+	border-bottom:solid 2px #ccc;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.perspectives dd
+{
+	margin:0;
+	padding:5px;
+	top:10px;
+	position:relative;
+	float:left;
+}
+
+.perspectives .selected
+{
+	background-color:#000;
 	color:#FFF;
 }
 
