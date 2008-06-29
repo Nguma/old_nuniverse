@@ -16,8 +16,8 @@ class User < ActiveRecord::Base
 	#validates_presence_of     :password_confirmation,      :if => :password_required?
   #validates_confirmation_of :password,                   :if => :password_required?
   before_save :encrypt_password
-  
-  # after_create :ontologize
+
+  after_create :ontologize
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
@@ -82,23 +82,15 @@ class User < ActiveRecord::Base
   end
 
 	def ontologize
-		ont = "#user #{self.login} #topic About Me #category My Topics #category My Contacts"
-	#	gumies = ont.scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/) # separates gumi type from its content
-		gumies = ont.scan(/\s*#([\w_]+[\s]+[^#|\[|\]]+)*/) 
+		#ont = "#user #{self.login} #topic About Me #category My Topics #category My Contacts"
+		#	gumies = ont.scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/) # separates gumi type from its content
+		#gumies = ont.scan(/\s*#([\w_]+[\s]+[^#|\[|\]]+)*/) 
 		self.tag = Tag.new(:content => self.login, :kind => "user")#find_or_create_by_gumi("##{gumies.shift}")
 		
 		#gumies.each do |gumi|
 		#	self.tag.connect_with(Tag.find_or_create_by_gumi("##{gumi}"))
 		#end
 		self.save
-	end
-	
-	def self.make(params = {})
-		u = User.new(params) 
-		u.tag = Tag.new(:content => self.login, :kind => "user")
-		u.save
-		u
-		#u.ontologize
 	end
 
   protected
