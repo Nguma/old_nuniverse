@@ -1,18 +1,8 @@
 <h1>Listing tags</h1>
 
-<table>
-  <tr>
-  </tr>
-
-<% for tag in @tags %>
-  <tr>
-    <td><%= link_to 'Show', tag %></td>
-    <td><%= link_to 'Edit', edit_tag_path(tag) %></td>
-    <td><%= link_to 'Destroy', tag, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<% for nuniverse in @tags %>
+  <div class="tag"><%= link_to nuniverse.content, nuniverse %></div>
 <% end %>
-</table>
 
-<br />
 
 <%= link_to 'New tag', new_tag_path %>
