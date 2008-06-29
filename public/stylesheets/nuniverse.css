@@ -82,6 +82,15 @@
 	background:#FFF;
 }
 
+.items dt
+{
+	position:relative;
+	padding:10px;
+	border-bottom:solid #ccc 2px;
+	color:#333;
+	font-weight:bold;
+}
+
 .items .item
 {
 	position:relative;
@@ -90,9 +99,26 @@
 	background:transparent url("/images/backgrounds/arrow_small.png") right center no-repeat;
 }
 
+.items .selected
+{
+	background:#000;
+	color:#FFF;
+}
+
 p
 {
 	font-size:13px;
 	line-height:18px;
 	color:#666;
+}
+
+.detail .items
+{
+	height:auto;
+}
+
+.add
+{
+	position:relative;
+	clear:both;
 }

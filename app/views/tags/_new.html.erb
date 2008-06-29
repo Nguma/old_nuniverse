@@ -1,0 +1,8 @@
+<div class="add">
+<h4>Add a new <%= kind %></h4>
+<% form_tag '/tags/create' do -%>
+  <%= hidden_field_tag :kind, kind %>
+  <%= text_field_tag :content, ""  %>
+  <input type="submit" value="Add">
+<% end -%>
+</div>

@@ -24,7 +24,14 @@ ActionController::Routing::Routes.draw do |map|
 		:controller => 'users',
 		:action => 'show'
 
+	map.my_nuniverse "/my_nuniverse",
+		:controller => 'users',
+		:action => 'nuniverse'
 	
+	map.nuniverse_of "/nuniverse_of/:id/:filter",
+		:controller => 'tags',
+		:action => 'show'
+		
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products
 

@@ -15,7 +15,8 @@ class TagsController < ApplicationController
   # GET /tags/1.xml
   def show
     @tag = Tag.find(params[:id])
-
+		@filter = params[:filter] || nil
+		@taggeds = Tag.find(:all, :conditions => ['kind = ?',@filter])
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
@@ -41,18 +42,21 @@ class TagsController < ApplicationController
   # POST /tags
   # POST /tags.xml
   def create
-		gumies = params[:gum].to_s.scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
-		@tags = []
-		for gumi in gumies
-    	tag = Tag.new(:kind => gumi[1], :content => gumi[2])
-			tag.save
-			@tags << tag
-		end
+		#	gumies = params[:gum].to_s.scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
+		# @tags = []
+		# 		for gumi in gumies
+		#     	tag = Tag.new(:kind => gumi[1], :content => gumi[2])
+		# 			tag.save
+		# 			@tags << tag
+		# 		end
+		
+		@tag = Tag.new(:content => params[:content], :kind => params[:kind])
+		@tag.save
 
     respond_to do |format|
         flash[:notice] = 'Tags were successfully created.'
-        format.html { redirect_to("/my_account") }
-        format.xml  { render :xml => @tags, :status => :created, :location => @tags  }
+        format.html { redirect_back_or_default(@tag) }
+        format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
     end
   end
 
