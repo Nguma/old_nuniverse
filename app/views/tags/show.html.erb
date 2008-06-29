@@ -21,7 +21,7 @@
       
       <dl class="items">
       <% @taggeds.each do |tag| -%>
-        <dd class="item"><%= link_to(tag.content, tag) %></dd>
+        <dd class="item"><%= avatar_for(tag) %><%= link_to(tag.content, tag) %></dd>
       <% end -%>
       </dl>
       <%= render :partial => "new", :locals => {:kind => @filter  } unless @filter.nil? %>
