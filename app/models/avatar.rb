@@ -7,5 +7,7 @@ class Avatar < ActiveRecord::Base
       :large => [100, 100]
     },
     :processor  => :image_science,
-    :storage    => :filesystem
+    :storage    => :file_system
+  
+  validates_as_attachment
 end
