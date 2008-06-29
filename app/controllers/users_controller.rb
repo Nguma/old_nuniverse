@@ -10,6 +10,15 @@ class UsersController < ApplicationController
 		@user = self.current_user
 	end
 	
+	def nuniverse
+		@tag = self.current_user.tag
+		
+		render :action => "../tags/show"
+		# respond_to do |format|
+		# 	format.html {render :controller => "tags", :action => "show", :id => @tag.id}
+		# end
+	end
+	
   # render new.rhtml
   def new
     #
