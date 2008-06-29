@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :tags
 
-	map.resources :users
+	map.resource :user
 	map.resources :sessions
 	
   # The priority is based upon order of creation: first created -> highest priority.
@@ -20,7 +20,7 @@ ActionController::Routing::Routes.draw do |map|
 	
 	map.my_account "/my_account",
 		:controller => 'users',
-		:action => 'index'
+		:action => 'show'
 
 	
   # Sample resource route (maps HTTP verbs to controller actions automatically):

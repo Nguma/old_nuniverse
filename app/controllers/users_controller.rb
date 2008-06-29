@@ -4,9 +4,9 @@ class UsersController < ApplicationController
   
 	before_filter :login_required, :only => [:index]
 
-	# GET /index
+	# GET /user
 	# GET /my_account
-	def index
+	def show
 		@user = self.current_user
 		
 		respond_to do |format|
@@ -16,6 +16,7 @@ class UsersController < ApplicationController
 	
   # render new.rhtml
   def new
+    #
   end
 
   def create
@@ -24,11 +25,12 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    @user = User.make(params[:user])
-		
+    @user = User.new(params[:user])
 		   
-    if @user.errors.empty?
+    if @user.valid? # errors.empty?
+      @user.save
       self.current_user = @user
+      
       redirect_back_or_default("/my_account")
       flash[:notice] = "Thanks for signing up!"
     else
@@ -36,8 +38,8 @@ class UsersController < ApplicationController
     end
   end
 
-
-	protected
+  protected
+	
 	def destroy
 		@user = User.find(params[:id])
 		@user.destroy
