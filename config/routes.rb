@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :tags
+  map.resources :tags do |tag|
+    tag.resource :avatar
+  end
 
 	map.resource :user
 	map.resources :sessions

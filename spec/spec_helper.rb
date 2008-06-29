@@ -40,6 +40,8 @@ Spec::Runner.configure do |config|
   # config.mock_with :mocha
   # config.mock_with :flexmock
   # config.mock_with :rr
+  
+  config.include ActiveMatchers::Matchers
   #
   # == Notes
   # 

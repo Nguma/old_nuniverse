@@ -1,3 +1,4 @@
 log/*.log
 *.tmproj
 **/*.DS_Store
+db/schema.rb
