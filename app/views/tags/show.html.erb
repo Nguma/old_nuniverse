@@ -1,3 +1,23 @@
+<div class="nuniverse">
+  <div id="breadcrumbs">
+      <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/", :class => "home") %>
+      <h1><%= @tag.content %></h1>
+      <h2>The item I chose</h2>
+  </div>
+  <div class="content">
+
+    <div class="items">
+      <% 10.times do |time| -%>
+        <%= render :partial => "/tags/instance", :locals => {:item => "item #{time}"}%>
+      <% end -%>
+    </div>
+    <div class="detail">
+      
+      <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+    </div>
+
+  </div>
+</div>
 
 <%= link_to 'Edit', edit_tag_path(@tag) %> |
 <%= link_to 'Back', tags_path %>

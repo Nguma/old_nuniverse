@@ -9,7 +9,7 @@
 {
 	position:relative;
 	clear:both;
-	background:#FFF;
+	background:none;
 	width:100%;
 	height:450px;
 	overflow:hidden;
@@ -63,10 +63,11 @@
 .detail
 {
 	position:absolute;
-	left:420px;
-	width:auto;
+	left:422px;
+	width:100%;
 	height:100%;
 	padding:10px;
+	background:#FFF;
 }
 
 .items
@@ -74,9 +75,11 @@
 	position:relative;
 	float:left;
 	width:400px;
+	height:100%;
 	padding:10px;
-	font-size:12px;
+	font-size:13px;
 	color:#666;
+	background:#FFF;
 }
 
 .items .item
@@ -84,4 +87,12 @@
 	position:relative;
 	padding:10px;
 	border-bottom:dotted #eee 1px;
+	background:transparent url("/images/backgrounds/arrow_small.png") right center no-repeat;
+}
+
+p
+{
+	font-size:13px;
+	line-height:18px;
+	color:#666;
 }
