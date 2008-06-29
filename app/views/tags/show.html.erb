@@ -18,6 +18,7 @@
         <dd class="item">Amazon</dd>
     </dl>
     <div class="detail">
+      
       <dl class="items">
       <% @taggeds.each do |tag| -%>
         <dd class="item"><%= link_to(tag.content, tag) %></dd>
