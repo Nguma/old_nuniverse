@@ -2,16 +2,12 @@ class UsersController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
   include AuthenticatedSystem
   
-	before_filter :login_required, :only => [:index]
+	before_filter :login_required, :except => [:new, :create]
 
 	# GET /user
 	# GET /my_account
 	def show
 		@user = self.current_user
-		
-		respond_to do |format|
-			format.html #index.html.erb
-		end
 	end
 	
   # render new.rhtml
@@ -35,6 +31,20 @@ class UsersController < ApplicationController
       flash[:notice] = "Thanks for signing up!"
     else
       render :action => 'new'
+    end
+  end
+  
+  def edit
+    @user = self.current_user
+  end
+  
+  def update
+    @user = self.current_user
+    
+    if @user.update_attributes(params[:user])
+      redirect_to user_path
+    else
+      render :action => "edit"
     end
   end
 

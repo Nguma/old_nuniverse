@@ -2,6 +2,6 @@
 module ApplicationHelper
 	
 	def head_for(view)
-		return render :partial => "/#{view}/head" rescue nil
+		return render(:partial => "/#{view}/head") rescue nil
 	end
 end
