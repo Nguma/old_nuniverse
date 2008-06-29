@@ -12,6 +12,10 @@
         <dd class="item"><%= link_to("Products", "/nuniverse_of/#{@tag.id}/product") %></dd>
         <dd class="item"><%= link_to("Comments", "/nuniverse_of/#{@tag.id}/comment") %></dd>
         <dd class="item"><%= link_to("Pros & Cons", "/nuniverse_of/#{@tag.id}/pro") %></dd>
+        <dt><%= @tag.content %> according to </dt>
+        <dd class="item">Google</dd>
+        <dd class="item">Ebay</dd>
+        <dd class="item">Amazon</dd>
     </dl>
     <div class="detail">
       <dl class="items">
@@ -21,7 +25,6 @@
       </dl>
       <%= render :partial => "new", :locals => {:kind => @filter  } unless @filter.nil? %>
     </div>
-
   </div>
 </div>
 
