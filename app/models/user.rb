@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
 
 	has_one :asset
-	belongs_to	:tag, :class_name => "Tag", :foreign_key => "reference_tag_id", :dependent => :destroy
+	belongs_to	:tag, :class_name => "Tag", :foreign_key => "tag_id", :dependent => :destroy
 
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?
@@ -83,16 +83,17 @@ class User < ActiveRecord::Base
 		ont = "#user #{self.login} #topic About Me #category My Topics #category My Contacts"
 	#	gumies = ont.scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/) # separates gumi type from its content
 		gumies = ont.scan(/\s*#([\w_]+[\s]+[^#|\[|\]]+)*/) 
-		self.tag = Tag.find_or_create_by_gumi("##{gumies.shift}")
+		self.tag = Tag.new(:content => self.login, :kind => "user")#find_or_create_by_gumi("##{gumies.shift}")
 		
-		gumies.each do |gumi|
-			self.tag.connect_with(Tag.find_or_create_by_gumi("##{gumi}"))
-		end
+		#gumies.each do |gumi|
+		#	self.tag.connect_with(Tag.find_or_create_by_gumi("##{gumi}"))
+		#end
 		self.save
 	end
 	
 	def self.make(params = {})
-		u = User.new(params)
+		u = User.new(params) 
+		u.tag = Tag.new(:content => self.login, :kind => "user")
 		u.save
 		u
 		#u.ontologize
