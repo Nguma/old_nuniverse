@@ -83,6 +83,42 @@ h1
 	background:#FFF;
 }
 
+.detail .items
+{
+	width:850px;
+}
+
+.item .kind,
+.connection .kind
+{
+	padding:5px 5px 5px 0;
+	font-size:11px;
+	color:inherit;
+}
+
+.user_kind {color:#39c;}
+.comment_kind {color:#999;}
+.topic_kind {color:#93c;}
+.person_kind {color:#3C9;}
+.location_kind {color:#C93;}
+
+.item .content,
+.connection .content
+{
+		font-size:13px;
+		font-weight:bold;
+		color:#666;
+}
+
+.item .private,
+.connection .private
+{
+	position:relative;
+	float:right;
+	top:-10px;
+	right:20px;
+}
+
 .items dt
 {
 	position:relative;
@@ -92,8 +128,10 @@ h1
 	font-weight:bold;
 }
 
-.items .item
+.items .item,
+.items .connection
 {
+	font-size:11px;
 	position:relative;
 	padding:10px;
 	border-bottom:dotted #eee 1px;
@@ -164,4 +202,9 @@ p
 {
 	position:relative;
 	clear:both;
+}
+
+.add .private
+{
+	background:#FFF url('/images/icons/private.png') 0 0 no-repeat;
 }

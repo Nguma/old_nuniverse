@@ -1,8 +1,13 @@
 <h1>Add tags</h1>
+<div class="add">
 <% form_tag '/tags/create' do -%>
-  <%= text_field_tag :gum , "", :style => "width:300px" %>
-  <input type="submit" value="Add">
+  
+  <%= hidden_field_tag :path, "" %>
+  <%= text_field_tag :kind, "" %>
+  <%= text_field_tag :content, ""  %>
+  <input type="submit" value="Create">
 <% end -%>
+</div>
 
 
 <%= link_to 'Back', tags_path %>

@@ -15,13 +15,11 @@
     
     <div class="detail">
       <div class="items">
-
-        <% for tag in @tags %>
-           <%= render :partial => "instance", :locals => {:tag => tag}%>
+        <% for connection in @connections %>
+           <%= render :partial => "instance", :locals => {:connection => connection}%>
         <% end %>
       </div>
     </div>
   </div>
   
-  <%= link_to 'New tag', new_tag_path %>
 </div>

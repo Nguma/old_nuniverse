@@ -1,0 +1,9 @@
+<dd class="connection <%= connection.object.kind %>_kind">
+    <span class="private"><%= image_tag('/images/icons/lock.png', :width => '20px') %></span>
+    <span class="kind"><%= connection.object.kind %></span>
+    <%#= avatar_for(connection) %>
+    <span class="content"><%= link_to(connection.object.content, connection.object) %></span>
+    <span class="who"> by <%= connection.user.login %>, </span>
+    <span class="context"> about <%= path_for(connection) %> </span>
+    
+</dd>

@@ -32,6 +32,18 @@ ActionController::Routing::Routes.draw do |map|
 		:controller => 'tags',
 		:action => 'show'
 		
+	map.nuniverse_of_according_to "/nuniverse_of/:id/according_to/:user_id",
+		:controller => 'tags',
+		:action => 'show'
+		
+	map.nuniverse_of_according_to_everyone "/nuniverse_of/:id/according_to_everyone/",
+		:controller => 'tags',
+		:action => 'show'
+		
+	map.nuniverse "/nuniverse/:filter",
+		:controller => "tags",
+		:action => "index"
+		
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products
 
@@ -48,7 +60,7 @@ ActionController::Routing::Routes.draw do |map|
   #   end
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-   map.root :controller => "tags"
+   map.root :controller => "taggings"
 
   # See how all your routes lay out with "rake routes"
 

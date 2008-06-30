@@ -1,0 +1,43 @@
+<div class="nuniverse">
+  <div id="breadcrumbs">
+      <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/", :class => "home") %>
+     
+  </div>
+  <h1>
+    <% if tag == current_user.tag -%>
+      Your nuniverse
+    <% else -%>
+      <%= tag.content %>
+    <% end -%>
+  </h1>
+  <div class="content">
+     
+    <dl class="items">
+        <dt>Browse By</dt>
+        <dd class="item"><%= link_to("Topics", "/nuniverse_of/#{tag.id}/topic") %></dd>
+        <dd class="item"><%= link_to("People", "/nuniverse_of/#{tag.id}/person") %></dd>
+        <dd class="item"><%= link_to("Places", "/nuniverse_of/#{tag.id}/location") %></dd>
+        <dd class="item"><%= link_to("Products", "/nuniverse_of/#{tag.id}/product") %></dd>
+        <dd class="item"><%= link_to("Comments", "/nuniverse_of/#{tag.id}/comment") %></dd>
+        <dd class="item"><%= link_to("Actions", "/nuniverse_of/#{tag.id}/action") %></dd>
+        <dd class="item"><%= link_to("Pros & Cons", "/nuniverse_of/#{tag.id}/pro") %></dd>
+    </dl>
+    
+    <div class="detail">
+      
+      <dl class="perspectives">
+        <dd style="color:#666">According to </dd>
+        <dd class="item selected"><%= link_to("Everyone", "/tags/#{tag.id}/") %></dd>
+        <dd class="item"><%= link_to("You", "/nuniverse_of/#{tag.id}/according_to/#{current_user.id}") %></dd>
+        <dd class="item">Google</dd>
+        <dd class="item">Ebay</dd>
+        <dd class="item">Amazon</dd>
+      </dl>
+      
+      <%= content %>
+      
+    </div>
+    <%= link_to 'Edit', edit_tag_path(tag) %> |
+    <%= link_to 'Back', tags_path %>
+    </div>
+</div>

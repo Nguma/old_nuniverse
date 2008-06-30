@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.find(:all)
+    @tags = Tag.find(:all, :order => "created_at DESC")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,7 +16,11 @@ class TagsController < ApplicationController
   def show
     @tag = Tag.find(params[:id])
 		@filter = params[:filter] || nil
-		@taggeds = Tag.find(:all, :conditions => ['kind = ?',@filter])
+		@connections = Tagging.find_taggeds_with(
+			:context => [@tag],
+			:user_id => params[:user_id] || nil,
+			:kind => @filter
+		)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
@@ -50,12 +54,16 @@ class TagsController < ApplicationController
 		# 			@tags << tag
 		# 		end
 		
-		@tag = Tag.new(:content => params[:content], :kind => params[:kind])
-		@tag.save
-
+		@tagging = Tag.connect(
+			:content 	=> params[:content],
+			:kind			=> params[:kind],
+			:path			=> params[:path],
+			:user_id	=> current_user.id
+		)
+		
     respond_to do |format|
         flash[:notice] = 'Tags were successfully created.'
-        format.html { redirect_back_or_default(@tag) }
+        format.html { redirect_back_or_default(@tagging.subject) }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
     end
   end

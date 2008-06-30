@@ -1,39 +1,10 @@
-<div class="nuniverse">
-  <div id="breadcrumbs">
-      <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/", :class => "home") %>
-     
-  </div>
-  <h1><%= @tag.content %></h1>
-  <div class="content">
-     
-    <dl class="items">
-        <dt>Browse By</dt>
-        <dd class="item"><%= link_to("Topics", "/nuniverse_of/#{@tag.id}/topic") %></dd>
-        <dd class="item"><%= link_to("People", "/nuniverse_of/#{@tag.id}/person") %></dd>
-        <dd class="item"><%= link_to("Places", "/nuniverse_of/#{@tag.id}/location") %></dd>
-        <dd class="item"><%= link_to("Products", "/nuniverse_of/#{@tag.id}/product") %></dd>
-        <dd class="item"><%= link_to("Comments", "/nuniverse_of/#{@tag.id}/comment") %></dd>
-        <dd class="item"><%= link_to("Pros & Cons", "/nuniverse_of/#{@tag.id}/pro") %></dd>
-    </dl>
-    <div class="detail">
-      
-      <dl class="perspectives">
-        <dd style="color:#666">According to </dd>
-        <dd class="item selected">Everyone</dd>
-        <dd class="item">You</dd>
-        <dd class="item">Google</dd>
-        <dd class="item">Ebay</dd>
-        <dd class="item">Amazon</dd>
-      </dl>
+<% nuniverse_of(@tag) do -%>
+
       <dl class="items">
-      <% @taggeds.each do |tag| -%>
-        <dd class="item"><%= avatar_for(tag) %><%= link_to(tag.content, tag) %></dd>
+      <% @connections.each do |connection| -%>
+          <%= render :partial => "/tags/instance", :locals => {:tag => connection.object}%>
       <% end -%>
       </dl>
-      <%= render :partial => "new", :locals => {:kind => @filter  } unless @filter.nil? %>
-    </div>
-  </div>
-</div>
+      <%= render :partial => "new", :locals => {:kind => @filter, :path => @tag.id.to_s } unless @filter.nil? %>
 
-<%= link_to 'Edit', edit_tag_path(@tag) %> |
-<%= link_to 'Back', tags_path %>
+<% end -%>

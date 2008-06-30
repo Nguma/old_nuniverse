@@ -12,6 +12,9 @@ class UsersController < ApplicationController
 	
 	def nuniverse
 		@tag = self.current_user.tag
+		@connections = Tagging.find_taggeds_with(
+			:context => [@tag]
+		)
 		
 		render :action => "../tags/show"
 		# respond_to do |format|
