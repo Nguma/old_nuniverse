@@ -10,15 +10,15 @@ class UsersController < ApplicationController
 		@user = current_user
 		@crumbs = [@user.tag]
 		
-		@adventures = Tagging.find_taggeds_with(
-			:page => 2,
+		@quests = Tagging.find_taggeds_with(
+			:page => 1,
 			:per_page => 6,
 			:path => @crumbs,
 			:kind => "quest"
 		)
 		
 		@connections = Tagging.find_taggeds_with(
-			:page => 2,
+			:page => 1,
 			:per_page => 6,
 			:path => @crumbs,
 			:order => "updated_at DESC"

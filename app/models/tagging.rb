@@ -30,7 +30,7 @@ class Tagging < ActiveRecord::Base
 		sub_query << " GROUP BY taggings.#{oid} HAVING count(taggings.#{oid}) >= 1 ORDER BY taggings.#{@order}"
 		
 		#raise sub_query
-		Tagging.paginate_by_sql(sub_query, :page => params[:page] || 2 , :per_page => params[:per_page] || 6 )
+		Tagging.paginate_by_sql(sub_query, :page => params[:page] || 1 , :per_page => params[:per_page] || 6 )
 	end
 	
 	protected

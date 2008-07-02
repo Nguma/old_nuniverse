@@ -18,8 +18,8 @@
   <h3>Your quests</h3>
   <h4>These are the adventures you either created or joined.</h4>
   <dl class="connections">
-    <% @adventures.each do |adventure| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => adventure}%>
+    <% @quests.each do |quest| -%>
+        <%= render :partial => "/tags/connection", :locals => {:connection => quest}%>
     <% end -%>
   </dl>
 </div>
