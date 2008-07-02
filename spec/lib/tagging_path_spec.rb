@@ -3,6 +3,8 @@ require 'spec/spec_helper'
 describe TaggingPath do
   before :each do
     @path = "_1_2_3_4_"
+    
+    Tag.stub_method(:find => Tag.stub_instance)
   end
   
   it "should parse a string of ids" do
@@ -23,5 +25,11 @@ describe TaggingPath do
   
   it "should handle integers" do
     lambda { TaggingPath.new(42) }.should_not raise_error
+  end
+  
+  it "should return an array of Tags" do
+    TaggingPath.new(@path).tags.each { |tag|
+      tag.should be_kind_of(Tag)
+    }
   end
 end

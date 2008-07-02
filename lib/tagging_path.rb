@@ -17,6 +17,10 @@ class TaggingPath
     @ids.last
   end
   
+  def tags
+    @tags ||= @ids.collect { |id| Tag.find id }
+  end
+  
   private
   
   def parse(path)
