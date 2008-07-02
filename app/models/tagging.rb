@@ -6,7 +6,19 @@ class Tagging < ActiveRecord::Base
 	def crumbs
 		Tagging.crumbs(path)
 	end	
-		
+	
+	def path
+	  TaggingPath.new(super)
+  end
+  
+  def path=(new_path)
+    case new_path
+    when TaggingPath
+      super(new_path.to_s)
+    else
+      super
+    end
+  end
 	
 	def self.find_taggeds_with(params)
 		

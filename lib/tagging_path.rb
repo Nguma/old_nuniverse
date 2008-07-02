@@ -2,7 +2,7 @@ class TaggingPath
   attr_reader :ids
   
   def initialize(path)
-    parse path
+    parse(path || "")
   end
   
   def to_s
