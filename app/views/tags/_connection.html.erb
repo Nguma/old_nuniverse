@@ -1,10 +1,14 @@
-<dd class="connection"> 
+<% if reverse
+    tag = connection.subject
+    path = TaggingPath.new
+  else 
+    tag = connection.object 
+    path = connection.path
+  end -%>
 
-    <span class="avatar"><%= avatar_for(connection.object) %></span>
-    
-    
-    <span class="kind <%= connection.object.kind %>_kind"><%= connection.object.kind %></span>
+<dd class="connection"> 
+    <span class="avatar"><%= avatar_for(tag) %></span>
+    <span class="kind <%= tag.kind %>_kind"><%= tag.kind %></span>
     <br/>
-    <%= link_to_nuniverse(connection.object, :path => connection.path, :class => "nuni") %>
-   
+    <%= link_to_nuniverse(tag, :path => path, :class => "nuni") %>   
 </dd>

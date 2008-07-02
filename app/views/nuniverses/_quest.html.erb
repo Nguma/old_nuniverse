@@ -21,3 +21,9 @@
   <h3>Where can you go?</h3>
   <h4>You can go to:</h4>
 <% end -%>
+
+<% list_for(:kind => "quest", :object => tag, :reverse => true) do -%>
+  <h3>When doing that, </h3>
+  <h4>You:</h4>
+<% end -%>
+

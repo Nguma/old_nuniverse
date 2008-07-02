@@ -32,13 +32,13 @@ class Tagging < ActiveRecord::Base
 		end
 		
 		sub_query = "SELECT taggings.* FROM taggings LEFT JOIN tags ON taggings.#{oid} = tags.id WHERE taggings.path rlike '#{@path}'"
-		sub_query << " AND taggings.#{sid} in (#{@subjects}) " if @subjects
-		sub_query << " AND taggings.#{oid} in (#{@objects}) " if @objects
+		sub_query << " AND taggings.subject_id in (#{params[:subject].id}) " if params[:subject]
+		sub_query << " AND taggings.object_id in (#{params[:object].id}) " if params[:object]
 		sub_query << " AND taggings.user_id in (#{params[:user_id]})" if params[:user_id]
 		sub_query << " AND tags.kind = '#{params[:kind]}'" if params[:kind]
 		sub_query << " GROUP BY taggings.#{oid} HAVING count(taggings.#{oid}) >= 1 ORDER BY taggings.#{@order}"
 		
-		#raise sub_query
+		#raise sub_query if params[:reverse]
 		Tagging.paginate_by_sql(sub_query, :page => params[:page] || 1 , :per_page => params[:per_page] || 6 )
 	end
 	

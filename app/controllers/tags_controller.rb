@@ -57,7 +57,6 @@ class TagsController < ApplicationController
 		# 			tag.save
 		# 			@tags << tag
 		# 		end
-		
 		@tagging = Tag.connect(
 			:content 	=> params[:content],
 			:kind			=> params[:kind],
