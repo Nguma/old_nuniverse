@@ -59,12 +59,18 @@ module TagsHelper
 	
 	
 	def list_for(params, &block)
+		params[:path] ||= TaggingPath.new
 		params[:header] = capture(&block)
+		params[:reverse] ||= false
 		params[:connections] = Tagging.find_taggeds_with(
 			:path => params[:path].tags,
 			:kind => params[:kind],
+			:subject => params[:subject] || nil,
+			:object => params[:object] || nil,
+			:reverse => params[:reverse],
 			:order => "updated_at DESC"
 		)
+			
 		concat(
 			render(
 				:partial => "/nuniverses/list", 

@@ -26,7 +26,7 @@ class Tag < ActiveRecord::Base
 		@object ||= Tag.create(:content => params[:content], :kind => params[:kind])
 		
 		unless params[:user_id].nil?
-			@subject = Tag.find(params[:path].split('_').last)
+			
 			@tagging = Tagging.create(
 				:subject 	=> @subject,
 				:object 	=> @object,

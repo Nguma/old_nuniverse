@@ -1,7 +1,6 @@
 <h1>Add tags</h1>
 <div class="add">
 <% form_tag '/tags/create' do -%>
-  
   <%= hidden_field_tag :path, "" %>
   <%= text_field_tag :kind, "" %>
   <%= text_field_tag :content, ""  %>
