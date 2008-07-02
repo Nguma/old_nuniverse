@@ -21,4 +21,11 @@ describe Tagging do
     tagging.path = TaggingPath.new("_1_4_3_")
     tagging.path.to_s.should == "_1_4_3_"
   end
+  
+  it "should remove extra underscores in the path on save" do
+    tagging = Tagging.new(:path => "_1_2_")
+    tagging.path = "__1_2__"
+    tagging.save
+    tagging.attributes["path"].should == "_1_2_"
+  end
 end

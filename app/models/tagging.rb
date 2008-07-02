@@ -3,6 +3,7 @@ class Tagging < ActiveRecord::Base
 	belongs_to :subject, :class_name => "Tag"
 	belongs_to :user
 	
+	before_save :clean_path
 	
 	def path
 	  TaggingPath.new(super)
@@ -55,4 +56,10 @@ class Tagging < ActiveRecord::Base
 		end
 		@crumbs
 	end
+	
+	private
+	
+	def clean_path
+	  self.path = self.path.to_s
+  end
 end
