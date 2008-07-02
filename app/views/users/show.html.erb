@@ -1,4 +1,4 @@
-<%= render :partial => "/tags/breadcrumbs", :locals => {:crumbs => @crumbs}%>
+<%= render :partial => "/nuniverses/breadcrumbs", :locals => {:path => @path}%>
 <div class="nuniverse">
   <div class="sidebar left">
     <div class="content">
@@ -7,6 +7,6 @@
     </div>
   </div>
   <div class="body" id="nuniverse_body">
-    <%= render :partial => "/nuniverses/user", :locals => {:tag => @user.tag, :user => @user, :crumbs => @crumbs} %>
+    <%= render :partial => "/nuniverses/user", :locals => {:tag => @user.tag, :user => @user, :path => @path} %>
   </div>
 </div>

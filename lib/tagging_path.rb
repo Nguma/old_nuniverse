@@ -2,7 +2,21 @@ class TaggingPath
   attr_reader :ids
   
   def initialize(path = "")
-    parse(path || "")
+		case path
+		when Array
+			@ids = path.collect { |tag|
+				case tag
+				when Tag
+					tag.id
+				else
+					tag
+				end
+			}
+		when Integer
+			@ids = [path]
+		else
+    	parse(path || "")
+		end
   end
   
   def to_s
@@ -28,6 +42,23 @@ class TaggingPath
   def empty?
     @ids.empty?
   end
+	
+	def path_for(tag)
+		tag = case tag
+		when Tag
+			tag.id
+		else
+			tag
+		end
+		
+		"_#{@ids[0..@ids.index(tag)].join("_")}_"
+	end
+	
+	def taggings
+		@taggings ||= @ids.collect { |id|
+			TaggingPath.new(@ids[0..@ids.index(id)])
+		}
+	end
   
   private
   

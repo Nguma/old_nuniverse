@@ -8,19 +8,19 @@ class UsersController < ApplicationController
 	# GET /my_account
 	def show
 		@user = current_user
-		@crumbs = [@user.tag]
+		@path = TaggingPath.new @user.tag.id
 		
 		@quests = Tagging.find_taggeds_with(
 			:page => 1,
 			:per_page => 6,
-			:path => @crumbs,
+			:path => @path.tags,
 			:kind => "quest"
 		)
 		
 		@connections = Tagging.find_taggeds_with(
 			:page => 1,
 			:per_page => 6,
-			:path => @crumbs,
+			:path => @path.tags,
 			:order => "updated_at DESC"
 		)
 	end

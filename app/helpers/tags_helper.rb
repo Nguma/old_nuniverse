@@ -23,4 +23,55 @@ module TagsHelper
 	       "Are you ready for this adventure?"
 			end
 	end
+	
+	def nuniverse_for(params)
+		params[:left] = render( 
+        			:partial => "/nuniverses/#{params[:tag].kind}_left", 
+        			:locals => {:tag => params[:tag], :path => @path}
+      			) rescue render(
+        			:partial => "/nuniverses/quest_left", 
+        			:locals => {:tag => params[:tag], :path => @path}
+      			)
+
+		params[:body] = render(
+	            :partial => "/nuniverses/#{params[:tag].kind}", 
+	            :locals => {:tag => params[:tag], :path => @path}
+	          ) rescue  render(
+	            :partial => "/nuniverses/quest", 
+	            :locals => {:tag => params[:tag], :path => @path}
+	          )
+
+	     render(
+	        :partial => '/nuniverses/instance',
+	        :locals => params
+	      )
+			
+	end
+	
+	
+	def new_tag_form(params)
+		params[:title] ||= "Add a new #{params[:kind]}"
+		render(
+			:partial => "/tags/new", 
+			:locals => params
+			)
+	end
+	
+	
+	def list_for(params, &block)
+		params[:header] = capture(&block)
+		params[:connections] = Tagging.find_taggeds_with(
+			:path => params[:path].tags,
+			:kind => params[:kind],
+			:order => "updated_at DESC"
+		)
+		concat(
+			render(
+				:partial => "/nuniverses/list", 
+				:locals => params
+			), block.binding
+		)
+	end
+	
+
 end

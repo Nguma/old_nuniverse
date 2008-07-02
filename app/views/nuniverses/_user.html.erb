@@ -1,4 +1,3 @@
-<% path = crumbs.collect {|c| c.id}.join('_') %>
 <div class="new content">
   <h3>Start a quest.</h3>
   <h4>Your quest is to:</h4>
@@ -6,7 +5,7 @@
 
   <% form_tag '/tags/create' do -%>
     <%= hidden_field_tag :kind, "quest" %>
-    <%= hidden_field_tag :path, path %>
+    <%= hidden_field_tag :path, @path %>
 
     <%= text_field_tag :content, "", :size => 40  %>
     <input type="submit" value="Make it public">

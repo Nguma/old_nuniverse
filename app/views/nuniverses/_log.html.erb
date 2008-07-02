@@ -1,0 +1,10 @@
+<div class="content log">
+  <h3>The Quest log.</h3>
+  <h4>This is what happened lately in this nuniverse</h4>
+  <dl class="connections">
+    <% @connections.each do |connection| -%>
+        <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+    <% end -%>
+
+  </dl>
+</div>

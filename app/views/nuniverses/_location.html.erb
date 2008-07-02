@@ -1,0 +1,43 @@
+<% path = tag.crumbs.collect {|c| c.id}.join('_') %>
+
+<div class="content log">
+  <h3><%= tag.content %>'s log</h3>
+  <% if @connections.empty? -%>
+    <h4>Nothing happened yet.</h4>
+  <% else -%>
+    <h4>This is what happened lately in this nuniverse</h4>
+    <dl class="connections">
+      <% @connections.each do |connection| -%>
+          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+      <% end -%>
+    </dl>
+  <% end -%>
+
+</div>
+
+<div class="content">
+<%= new_tag_form(
+      :kind => "person",
+      :path => path, 
+      :title => "Add a new person", 
+      :description => 'eg:"Leonardo Da vinci", "My Father", "Batman"'
+)%>
+</div>
+
+<div class="content">
+<%= new_tag_form(
+      :kind => "location",
+      :path => path, 
+      :title => "Add a new location", 
+      :description => 'eg:"The Pyramids", "France", "Fabrizio\'s restaurant"'
+)%>
+</div>
+
+<div class="content">
+<%= new_tag_form(
+      :kind => "item",
+      :path => path, 
+      :title => "Add a new quest item", 
+      :description => 'eg:"Sunglasses", "Led Zeppelin IV album"'
+)%>
+</div>

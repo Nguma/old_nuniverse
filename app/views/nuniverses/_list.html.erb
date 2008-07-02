@@ -1,0 +1,12 @@
+<div class="content explore">
+  <%= header %>
+  <dl class="connections">
+    <% connections.each do |connection| -%>
+        <%= render :partial => "/tags/connection", :locals => {:connection => connection}%>
+    <% end -%>
+  </dl>
+  <%= new_tag_form(
+    :kind => kind,
+    :path => path
+  )%>
+</div>

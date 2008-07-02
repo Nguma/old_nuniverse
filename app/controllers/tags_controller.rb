@@ -13,19 +13,18 @@ class TagsController < ApplicationController
 
   # GET /tags/1
   # GET /tags/1.xml
-  def show
-		@crumbs = Tagging.crumbs(params[:path])
-		@tag = Tag.find(@crumbs.last)
-		@tag.crumbs = @crumbs
+  def show		
+		@path = TaggingPath.new params[:path]
+		@tag  = @path.last_tag
 		
 		@filter = params[:filter] || nil
 		 
 		@connections = Tagging.find_taggeds_with(
-			:path => @crumbs,
+			:path => @path.tags,
 			:kind => @filter,
 			:order => "updated_at DESC"
 		)
-
+	
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }

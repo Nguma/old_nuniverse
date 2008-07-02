@@ -3,9 +3,6 @@ class Tagging < ActiveRecord::Base
 	belongs_to :subject, :class_name => "Tag"
 	belongs_to :user
 	
-	def crumbs
-		Tagging.crumbs(path)
-	end	
 	
 	def path
 	  TaggingPath.new(super)

@@ -23,27 +23,29 @@ module ApplicationHelper
 		
 	end
 	
-	def nuniverse_of(params, &block)
-		params.merge!(:body => capture(&block))
-		params[:sidebar_left] ||= render :partial => "/tags/default_filters", :locals => {:path => params[:path]}
-		params[:sidebar_right] ||= ""
-    concat(
-      render(
-        :partial => '/tags/nuniverse',
-        :locals => params
-      ), block.binding
-    )
-	end
 	
 	def link_to_nuniverse(tag, options = {})
 		
 		return link_to("You",	"/my_nuniverse", :class => options[:class]) if logged_in? && current_user.tag == tag 
 		label = tag.content.capitalize
 		label = "#{label[0,options[:max]]}..." if options[:max] && label.length > options[:max]
-		options[:path] ||= []
-		options[:path] << tag
+		# options[:path] ||= []
+		# options[:path] << tag
 	
-		return link_to(label,	"/nuniverse_of/#{options[:path].collect {|c| c.id}.join('_')}", :class =>options[:class])
+		return link_to(label,	"/nuniverse_of/#{options[:path].to_s.gsub(/^_/, '')}#{tag.id}", :class =>options[:class])
+	end
+	
+	def link_to_tagging(tagging, options = {})
+		if logged_in? && current_user.tag == tagging.last_tag
+			return link_to("You",	"/my_nuniverse", :class => options[:class])
+		end
+		
+		label = tagging.last_tag.content
+		if max = options.delete(:max)
+			label = "#{label[0..max]}..." if label.length > max
+		end
+		
+		return link_to(label, "/nuniverse_of/#{tagging.to_s}", options)
 	end
 	
 	def header_for(tag)
