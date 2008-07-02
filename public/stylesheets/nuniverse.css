@@ -1,210 +1,301 @@
 .nuniverse
 {
 	position:relative;
-	top:-40px;
+	clear:both;
 	width:100%;
+	height:450px;
+}
+
+.nuniverse .body
+{
+	overflow:hidden;
+	padding:0;
+	margin:0;
+	top:0;
+	color:#666;
+	font-size:11px;
+	height:100%;
+	padding:0 0 0 0;
+}
+
+.nuniverse .header
+{
+	position:relative;
+	background:#FFF url("/images/backgrounds/nuniverse_header.png") 0 0 repeat;
+	margin:0 0 0 0;
+	padding:10px;
+	border-bottom:solid #fff 2px;
+	background:#FFF;
+
+}
+
+.nuniverse .header .avatar
+{
+	position:relative;
+	float:left;
+	margin-right:10px;
+	border:solid 2px #eee;
+}
+
+.nuniverse h1
+{
+	font-size:30px;
+	color:#333;
 }
 
 .nuniverse .content
 {
+	padding:10px;
+	background:#FFF;
 	position:relative;
 	clear:both;
-	background:none;
-	width:100%;
-	height:450px;
-	overflow:hidden;
+	font-weight:bold;
+	font-size:14px;
+	margin-bottom:2px;
+
 }
 
-#breadcrumbs
+.body .content
+{
+	background:transparent url('/images/backgrounds/nuniverse_body_content.png') 0 0 repeat;
+}
+
+.nuniverse .perspectives
 {
 	position:relative;
-	padding:0;
+	clear:both;
+	display:block;
+
+	padding:10px 0 0 0;
 	margin:0 0 0 0;
-	font-size:13px;
-	color:#333;
-	background:none;
+	font-size:14px;
+	font-weight:bold;
+	
 }
 
-#breadcrumbs a.home
+.nuniverse .perspectives dd
 {
-	position:relative;
-	float:left;
-	line-height:0;
-	margin:7px 2px 0 0;
-}
-
-#breadcrumbs dd
-{
-	position:relative;
-	float:left;
-	background:#FFF url("/images/backgrounds/breadcrumb.png") right top no-repeat;
-	padding:12px 25px 12px 5px;
-	margin:10px 0 2px 0;
+	display:inline;
+	padding:5px;
 	font-weight:bold;
 }
 
-h1
+.nuniverse .perspectives dd a
 {
-	display:relative;
-	float:left;
-	padding:10px;
-	background:#FFF;
+	font-weight:normal;
 }
 
-#breadcrumbs h2
+.nuniverse .perspectives .selected
 {
-	display:relative;
-	float:left;
-	padding:10px;
-	margin:7px 2px 0 2px;
-	background:#FFF;
-}
-
-.detail
-{
-	position:absolute;
-	left:222px;
-	width:100%;
-	height:100%;
-	padding:10px;
-	background:#FFF;
+	background:#fff;
 }
 
 
-.items
+.nuniverse .sidebar
 {
 	position:relative;
 	float:left;
-	width:200px;
+	margin:0 2px 0 0px;
+	width:400px;
 	height:100%;
-	padding:10px;
-	font-size:13px;
-	color:#666;
+	overflow:hidden;
 	background:#FFF;
 }
 
-.detail .items
+.nuniverse .sidebar .right
 {
-	width:850px;
+	position:relative;
+	float:right;
+	width:0;
+}
+
+
+.nuniverse .filters
+{
+	font-size:11px;
+	padding:0 0 0 0;
+	color:#666;	
+	width:10px;
+		padding:10px;
+	text-align:right;	
+}
+
+.nuniverse .expanded
+{
+	width:120px;
+}
+
+
+
+.nuniverse .filters dt
+{
+	padding:10px;
+	font-weight:bold;
+	color:#FFF;
+	background:#333;
+	cursor:pointer;
+}
+
+.nuniverse .filters .item
+{
+	margin-bottom:1px;
+	padding:10px 30px 10px 10px;
+	background:#eee url("/images/backgrounds/arrow_small.png") right center no-repeat;
+}
+
+.nuniverse .header .edit
+{
+	position:absolute;
+	right:10px;
+	top:10px;
+	padding:10px;
+	font-size:12px;
+}
+
+.nuniverse .connections
+{
+	position:relative;
+	clear:both;
+	padding:0;
+	height:100%;
+}
+
+.nuniverse .connection
+{
+	padding:10px 50px 10px 10px;
+	position:relative;
+	clear:both;
+	border-bottom:dotted 2px #ccc;
+	font-size:12px;
+	font-weight:normal;
+	color:#999;
+	height:30px;
+}
+
+
+
+.nuniverse .context
+{
+	font-style:italic;
+	color:#999;
+}
+
+.nuniverse .connection .avatar
+{
+	position:relative;
+	float:left;
+	top:0;
+	margin-right:5px;
+}
+
+.nuniverse .connection .avatar img
+{
+
+	width:30px;
+	border:solid 1px #999;
+}
+
+.nuniverse .connection span
+{
+	padding:0;
+	margin:0;
+	top:-5px;
 }
 
 .item .kind,
 .connection .kind
 {
-	padding:5px 5px 5px 0;
 	font-size:11px;
-	color:inherit;
+	padding:5px 5px 5px 0;
+
+}
+
+.nuniverse .add
+{
+	padding:10px;
+	border-bottom:dotted 2px #ccc;
+}
+
+.nuniverse input
+{
+	border:solid 1px #ccc;
+	font-size:14px;
+	font-weight:bold;
+	margin:5px 0 0 0;
+}
+
+.actions 
+{
+	margin:0 0 0 0;
+}
+.actions dd
+{
+	padding:10px;
+	border-top:dotted #eee 2px;
+}
+
+.actions dd p
+{
+
+}
+
+.content
+{
+	color:#666;
+}
+
+.content p
+{
+	color:#999;
+	font-weight:normal;
+	font-size:12px;
+}
+
+.nuniverse h3
+{
+	color:#999;
+	font-size:19px;
+	margin: 10px 0 0 0;
+	padding:0;
+}
+
+.nuniverse h4
+{
+	font-size:14px;
+	margin: 0 0 5px 0;
+}
+
+a
+{
+	margin-left:2px;
+	color:#39c;
+}
+
+a.nuni
+{
+	font-weight:bold;
+	font-size:14px;
+}
+
+.nuniverse .body .hover
+{
+	background:#FFF;
+}
+
+.explore,
+.log,
+.profile
+{
+	height:100%;
+}
+
+.profile label
+{
+	display:block;
 }
 
 .user_kind {color:#39c;}
 .comment_kind {color:#999;}
-.topic_kind {color:#93c;}
+.quest_kind {color:#93c;}
 .person_kind {color:#3C9;}
 .location_kind {color:#C93;}
-
-.item .content,
-.connection .content
-{
-		font-size:13px;
-		font-weight:bold;
-		color:#666;
-}
-
-.item .private,
-.connection .private
-{
-	position:relative;
-	float:right;
-	top:-10px;
-	right:20px;
-}
-
-.items dt
-{
-	position:relative;
-	padding:10px;
-	border-bottom:solid #ccc 2px;
-	color:#333;
-	font-weight:bold;
-}
-
-.items .item,
-.items .connection
-{
-	font-size:11px;
-	position:relative;
-	padding:10px;
-	border-bottom:dotted #eee 1px;
-	background:transparent url("/images/backgrounds/arrow_small.png") right center no-repeat;
-}
-
-.items .item a.avatar
-{
-	position:relative;
-	float:left;
-	padding:0;
-	line-height:0;
-	border:solid 2px #333;
-	margin-right:10px;
-	top:-5px;
-
-}
-
-items .item a.avatar img
-{
-	height:20px;
-	width:20px;
-}
-
-.items .selected
-{
-	background:#000;
-	color:#FFF;
-}
-
-.perspectives
-{
-	position:relative;
-	height:35px;
-	border-bottom:solid 2px #ccc;
-	font-size:12px;
-	font-weight:bold;
-}
-
-.perspectives dd
-{
-	margin:0;
-	padding:5px;
-	top:10px;
-	position:relative;
-	float:left;
-}
-
-.perspectives .selected
-{
-	background-color:#000;
-	color:#FFF;
-}
-
-p
-{
-	font-size:13px;
-	line-height:18px;
-	color:#666;
-}
-
-.detail .items
-{
-	height:auto;
-}
-
-.add
-{
-	position:relative;
-	clear:both;
-}
-
-.add .private
-{
-	background:#FFF url('/images/icons/private.png') 0 0 no-repeat;
-}

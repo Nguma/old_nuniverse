@@ -1,0 +1,10 @@
+<dd class="connection"> 
+
+    <span class="avatar"><%= avatar_for(connection.object) %></span>
+    
+    
+    <span class="kind <%= connection.object.kind %>_kind"><%= connection.object.kind %></span>
+    <br/>
+    <%= link_to_nuniverse(connection.object, :path => connection.crumbs, :class => "nuni") %>
+   
+</dd>

@@ -26,13 +26,21 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.my_nuniverse "/my_nuniverse",
 		:controller => 'users',
-		:action => 'nuniverse'
+		:action => 'show'
 	
-	map.nuniverse_of "/nuniverse_of/:id/:filter",
+	map.nuniverse_of "/nuniverse_of/:path",
 		:controller => 'tags',
 		:action => 'show'
 		
-	map.nuniverse_of_according_to "/nuniverse_of/:id/according_to/:user_id",
+		map.nuniverse_of "/nuniverse_of/:id/:filter",
+			:controller => 'tags',
+			:action => 'show'
+		
+	map.nuniverse_of_with_path "/nuniverse_of/:id/with_path/:path",
+		:controller => 'tags',
+		:action => 'show'
+		
+	map.nuniverse_of_according_to "/nuniverse_of/:id/according_to/:path",
 		:controller => 'tags',
 		:action => 'show'
 		

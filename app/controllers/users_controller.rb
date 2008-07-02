@@ -7,20 +7,24 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_account
 	def show
-		@user = self.current_user
-	end
-	
-	def nuniverse
-		@tag = self.current_user.tag
-		@connections = Tagging.find_taggeds_with(
-			:context => [@tag]
+		@user = current_user
+		@crumbs = [@user.tag]
+		
+		@adventures = Tagging.find_taggeds_with(
+			:page => 2,
+			:per_page => 6,
+			:path => @crumbs,
+			:kind => "quest"
 		)
 		
-		render :action => "../tags/show"
-		# respond_to do |format|
-		# 	format.html {render :controller => "tags", :action => "show", :id => @tag.id}
-		# end
+		@connections = Tagging.find_taggeds_with(
+			:page => 2,
+			:per_page => 6,
+			:path => @crumbs,
+			:order => "updated_at DESC"
+		)
 	end
+	
 	
   # render new.rhtml
   def new

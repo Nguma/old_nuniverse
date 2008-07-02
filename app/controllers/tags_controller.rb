@@ -14,13 +14,18 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show
-    @tag = Tag.find(params[:id])
+		@crumbs = Tagging.crumbs(params[:path])
+		@tag = Tag.find(@crumbs.last)
+		@tag.crumbs = @crumbs
+		
 		@filter = params[:filter] || nil
+		 
 		@connections = Tagging.find_taggeds_with(
-			:context => [@tag],
-			:user_id => params[:user_id] || nil,
-			:kind => @filter
+			:path => @crumbs,
+			:kind => @filter,
+			:order => "updated_at DESC"
 		)
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
@@ -63,7 +68,7 @@ class TagsController < ApplicationController
 		
     respond_to do |format|
         flash[:notice] = 'Tags were successfully created.'
-        format.html { redirect_back_or_default(@tagging.subject) }
+        format.html { redirect_back_or_default("/nuniverse_of/#{@tagging.path}") }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
     end
   end

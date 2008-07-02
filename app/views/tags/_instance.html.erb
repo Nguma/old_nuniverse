@@ -1,6 +1,6 @@
 <dd class="item <%= tag.kind %>_kind">
     <span class="private"><%= image_tag('/images/icons/lock.png', :width => '20px') %></span>
     <span class="kind"><%= tag.kind %></span>
-    <%#= avatar_for(tag) %>
+    <span class="avatar"><%= avatar_for(tag) %></span>
     <span class="content"><%= link_to(tag.content, tag) %></span>
 </dd>

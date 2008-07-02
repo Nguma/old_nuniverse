@@ -2,6 +2,8 @@ class Tag < ActiveRecord::Base
   has_one :avatar
 	
 	validates_presence_of :content, :kind
+	
+	attr_accessor :crumbs
 		
 	def move(original_path, new_path)
 	  Tagging.transaction do

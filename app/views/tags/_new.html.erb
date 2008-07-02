@@ -1,8 +1,8 @@
 <div class="add">
-<h4>Add a new <%= kind %></h4>
+<h4>Add new</h4>
 <% form_tag '/tags/create' do -%>
-  <%= hidden_field_tag :kind, kind %>
-  <%= hidden_field_tag :path, path %>
+  <%= text_field_tag :kind, kind %>
+  <%= hidden_field_tag :path, path.join('_') %>
   <%= text_field_tag :content, ""  %>
   <input type="submit" value="Make it public">
   <input type="submit" value="Make it private" class ="private">

@@ -1,2 +1,12 @@
-<% account_for(@user) do -%>
-<% end -%>
+<%= render :partial => "/tags/breadcrumbs", :locals => {:crumbs => @crumbs}%>
+<div class="nuniverse">
+  <div class="sidebar left">
+    <div class="content">
+    <%= header_for(@user.tag)%>
+    <%= render :partial => "/nuniverses/user_menu", :locals => {:tag => @user.tag, :user => @user} %>
+    </div>
+  </div>
+  <div class="body" id="nuniverse_body">
+    <%= render :partial => "/nuniverses/user", :locals => {:tag => @user.tag, :user => @user, :crumbs => @crumbs} %>
+  </div>
+</div>

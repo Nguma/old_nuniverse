@@ -1,0 +1,38 @@
+<% path = crumbs.collect {|c| c.id}.join('_') %>
+<div class="new content">
+  <h3>Start a quest.</h3>
+  <h4>Your quest is to:</h4>
+  <p><i>eg:"Take a trip", "Buy a country house", "find a treasure"...</i></p>
+
+  <% form_tag '/tags/create' do -%>
+    <%= hidden_field_tag :kind, "quest" %>
+    <%= hidden_field_tag :path, path %>
+
+    <%= text_field_tag :content, "", :size => 40  %>
+    <input type="submit" value="Make it public">
+    <input type="submit" value="Make it private" class ="private">
+  <% end -%>
+</div>
+
+<div class="content explore">
+  <h3>Your quests</h3>
+  <h4>These are the adventures you either created or joined.</h4>
+  <dl class="connections">
+    <% @adventures.each do |adventure| -%>
+        <%= render :partial => "/tags/connection", :locals => {:connection => adventure}%>
+    <% end -%>
+  </dl>
+</div>
+
+<div class="content log">
+  <h3>Your log.</h3>
+  <h4>This is what happened lately in your nuniverse</h4>
+  <dl class="connections">
+    <% @connections.each do |connection| -%>
+        <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+    <% end -%>
+   
+  </dl>
+</div>
+
+<%= render :partial => '/users/edit'%>

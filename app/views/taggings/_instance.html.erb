@@ -1,9 +1,19 @@
-<dd class="connection <%= connection.object.kind %>_kind">
-    <span class="private"><%= image_tag('/images/icons/lock.png', :width => '20px') %></span>
-    <span class="kind"><%= connection.object.kind %></span>
-    <%#= avatar_for(connection) %>
-    <span class="content"><%= link_to(connection.object.content, connection.object) %></span>
-    <span class="who"> by <%= connection.user.login %>, </span>
-    <span class="context"> about <%= path_for(connection) %> </span>
+<dd class="connection"> 
+  
+    <span class="avatar"><%= avatar_for(connection.user.tag) %></span>
+    <span class="avatar"><%= avatar_for(connection.object) %></span>
     
+    <%= link_to_nuniverse(connection.user.tag, :class => "user user_kind") %>
+    <%= sentence_for(connection.object.kind) %>
+        
+    <%= link_to_nuniverse(connection.object, :path => connection.crumbs, :class => "nuni #{connection.object.kind}_kind") %>
+   
+    <% unless connection.crumbs.empty? -%>
+      <span class="context">  to  
+        <% connection.crumbs.each do |crumb| -%>
+          
+          <%= link_to_nuniverse(crumb) %>
+        <% end -%>
+      </span>
+    <% end -%>
 </dd>

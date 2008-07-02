@@ -1,10 +1,24 @@
-<% nuniverse_of(@tag) do -%>
-
-      <dl class="items">
-      <% @connections.each do |connection| -%>
-          <%= render :partial => "/tags/instance", :locals => {:tag => connection.object}%>
-      <% end -%>
-      </dl>
-      <%= render :partial => "new", :locals => {:kind => @filter, :path => @tag.id.to_s } unless @filter.nil? %>
-
-<% end -%>
+  <%= render :partial => "/tags/breadcrumbs", :locals => {:crumbs => @tag.crumbs}%>
+  <div class="nuniverse">
+    <div class="sidebar left">
+      <%= header_for(@tag)%>
+      <%= render( 
+            :partial => "/nuniverses/{@tag.kind}_left", 
+            :locals => {:tag => @tag}
+          ) rescue render(
+            :partial => "/nuniverses/quest_left", 
+            :locals => {:tag => @tag}
+          )%>
+    </div>
+    
+    <div class="body" id="nuniverse_body">
+     
+       <%= render(
+              :partial => "/nuniverses/#{@tag.kind}", 
+              :locals => {:tag => @tag}
+            ) rescue  render(
+              :partial => "/nuniverses/quest", 
+              :locals => {:tag => @tag}
+            ) %>
+    </div>
+  </div>

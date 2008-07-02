@@ -1,0 +1,164 @@
+
+
+.nuniverse .content
+{
+	position:relative;
+	float:left;
+	padding:10px;
+	height:100%;
+	width:100%;
+	background:#FFF;
+}
+
+.nuniverse .footer
+{
+	bottom:20px;
+	border-top:solid #ccc 2px;
+	height:20px;
+	position:absolute;
+	clear:both;
+}
+
+h1
+{
+	padding:0;
+		
+}
+
+
+.items
+{
+	position:relative;
+	float:left;
+	width:200px;
+	height:auto;
+	padding:0;
+	font-size:11px;
+	color:#666;
+	background:#FFF;
+}
+
+.filters
+{
+	margin-right:2px;
+	
+}
+
+.item .kind,
+.connection .kind
+{
+	padding:5px 5px 5px 0;
+	color:inherit;
+}
+
+.user_kind {color:#39c;}
+.comment_kind {color:#999;}
+.topic_kind {color:#93c;}
+.person_kind {color:#3C9;}
+.location_kind {color:#C93;}
+
+.item .content,
+.connection .content
+{
+		font-size:12px;
+}
+
+.context
+{
+	font-size:12px;
+}
+
+.item .private,
+.connection .private
+{
+	position:relative;
+	float:right;
+	top:-10px;
+	right:20px;
+}
+
+.items dt
+{
+	position:relative;
+	padding:10px;
+	border-bottom:solid #ccc 2px;
+	color:#333;
+	font-weight:bold;
+}
+
+.items .item,
+.items .connection
+{
+	position:relative;
+	padding:10px;
+	border-bottom:dotted #eee 1px;
+	background:transparent url("/images/backgrounds/arrow_small.png") right center no-repeat;
+}
+
+.items .item a.avatar,
+.items .connection a.avatar
+{
+	position:relative;
+	padding:0 0 0 0;
+	line-height:0;
+	top:5px;
+	margin-right:5px;
+}
+
+items .item a.avatar img
+{
+	position:relative;
+	height:20px;
+	width:20px;
+	border:solid 2px #333;
+	margin:0;
+}
+
+.items .selected
+{
+	background:#000;
+	color:#FFF;
+}
+
+.perspectives
+{
+	position:relative;
+	height:35px;
+	border-bottom:solid 2px #ccc;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.perspectives dd
+{
+	margin:0;
+	padding:5px;
+	top:10px;
+	position:relative;
+	float:left;
+}
+
+.perspectives .selected
+{
+	background-color:#000;
+	color:#FFF;
+}
+
+p
+{
+	font-size:13px;
+	line-height:18px;
+	color:#666;
+}
+
+
+.add
+{
+	position:relative;
+	clear:both;
+}
+
+.add .private
+{
+	background:#FFF url('/images/icons/private.png') 0 0 no-repeat;
+}
