@@ -1,4 +1,3 @@
-<% path = tag.crumbs.collect {|c| c.id}.join('_') %>
 
 <div class="content log">
   <h3><%= tag.content %>'s log</h3>
@@ -15,29 +14,17 @@
 
 </div>
 
-<div class="content">
-<%= new_tag_form(
-      :kind => "person",
-      :path => path, 
-      :title => "Add a new person", 
-      :description => 'eg:"Leonardo Da vinci", "My Father", "Batman"'
-)%>
-</div>
+<% list_for(:kind => "person", :path => @path) do -%>
+  <h3>Who can you meet to help you in that quest?</h3>
+  <p><i>eg:"Albert Einstein", "John Doe", "Batman"...</i></p>
+<% end -%>
 
-<div class="content">
-<%= new_tag_form(
-      :kind => "location",
-      :path => path, 
-      :title => "Add a new location", 
-      :description => 'eg:"The Pyramids", "France", "Fabrizio\'s restaurant"'
-)%>
-</div>
+<% list_for(:kind => "location", :path => @path) do -%>
+  <h3>Where can you go from here?</h3>
+  <h4>You can go to:</h4>
+<% end -%>
 
-<div class="content">
-<%= new_tag_form(
-      :kind => "item",
-      :path => path, 
-      :title => "Add a new quest item", 
-      :description => 'eg:"Sunglasses", "Led Zeppelin IV album"'
-)%>
-</div>
+<% list_for(:kind => "item", :path => @path) do -%>
+  <h3>What you can find in this location?</h3>
+  <h4>You can find:</h4>
+<% end -%>
