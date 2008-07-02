@@ -1,6 +1,7 @@
 <dd class="connection"> 
-  
-    <span class="avatar"><%= avatar_for(connection.user.tag) %></span>
+    <% unless connection.user == current_user %>
+      <span class="avatar"><%= avatar_for(connection.user.tag)  %></span>
+    <% end -%>
     <span class="avatar"><%= avatar_for(connection.object) %></span>
     
     <%= link_to_nuniverse(connection.user.tag, :class => "user user_kind") %>
@@ -9,7 +10,7 @@
 
     <%= link_to_nuniverse(connection.object, :path => connection.path, :class => "nuni #{connection.object.kind}_kind") %>
     
-    <% unless connection.path.taggings.empty? -%>
+    <% unless connection.path.taggings.empty? || connection.object.kind == "nuniverse"-%>
       <span class="context">  to  
         <% connection.path.taggings.each do |tagging| -%>
           <%= link_to_tagging(tagging) %>

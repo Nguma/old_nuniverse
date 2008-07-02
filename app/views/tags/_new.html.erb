@@ -1,10 +1,10 @@
 <div class="new">
-  <h4><%= title %></h4>
-  <h3></h3>
+  <h5><%= title %></h5>
   <p><i><%#= description %></i></p>
   <% form_tag '/tags/create' do -%>
     <%= hidden_field_tag :kind, kind %>
     <%= hidden_field_tag :path, path %>
+    <%= hidden_field_tag :restricted, 1 , :class => "restricted"%>
     <%= text_field_tag :content, ""  %>
     <input type="submit" value="Make it public">
     <input type="submit" value="Make it private" class ="private">

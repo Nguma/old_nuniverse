@@ -1,6 +1,6 @@
 <%= render :partial => "/nuniverses/log" %>
 
-<% list_for(:kind => "quest", :path => @path) do -%>
+<% list_for(:kind => "quest", :object => tag, :reverse => true) do -%>
   <h3>What quest this item can help you with?</h3>
   <h4>this can help you to</h4>
 <% end -%> 

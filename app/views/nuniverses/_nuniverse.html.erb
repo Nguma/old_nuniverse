@@ -1,0 +1,32 @@
+
+<div class="content log">
+  <div class="header">
+      <%= avatar_for(tag) %>
+      <h5>This is the nuniverse of</h5> 
+      <h1>
+        <%= tag.content %>
+      </h1>
+      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
+  </div>
+  
+  <% if @connections.empty? -%>
+    <h3>Nothing happened yet in this nuniverse.</h3>
+  <% else -%>
+    <h3>This is what happened lately in this nuniverse</h3>
+    <dl class="connections">
+      <% @connections.each do |connection| -%>
+          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+      <% end -%>
+    </dl>
+  <% end -%>
+
+</div>
+
+<div class="content">
+</div>
+<div class="content">
+</div>
+<div class="content">
+</div>
+<div class="content">
+</div>

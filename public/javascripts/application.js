@@ -21,7 +21,7 @@ function reset()
   })
   
 
-    $$('.body .content').each(function(box,i)
+  $$('.body .content').each(function(box,i)
     {
      // col = col.mix([255,255,255,0], 50)
       box.addEvent('mouseover', function()
@@ -34,6 +34,14 @@ function reset()
         this.removeClass('hover');
       });
       
-    });
+  });
+  
+  $$('form .private').each(function(button)
+  {
+      button.addEvent('click', function(ev)
+      {
+        this.getParent('form').getChild('.restricted').setProperty('value', 1);
+      });
+  });
     
 }

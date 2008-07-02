@@ -61,6 +61,7 @@ class TagsController < ApplicationController
 			:content 	=> params[:content],
 			:kind			=> params[:kind],
 			:path			=> params[:path],
+			:restricted => params[:restricted],
 			:user_id	=> current_user.id
 		)
 		

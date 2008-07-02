@@ -50,14 +50,18 @@ module ApplicationHelper
 	
 	def header_for(tag)
 		if logged_in? && current_user.tag == tag
-			@label = "Your nuniverse"
+			label = "Your nuniverse"
+			superlabel = "Welcome to"
+			sublabel = ""
 		else
-			@label = tag.content.capitalize
+			label = tag.content.capitalize
+			superlabel = "You are visiting the nuniverse of"
+			sublabel = ""
 		end
 		render(
 			:partial => "/tags/header",
 			:locals => {
-				:label => @label,
+				:label => label,
 				:tag => tag
 			}
 		)

@@ -1,10 +1,9 @@
 <div class="header">
-    <%= avatar_for(tag) %> 
+    <%= avatar_for(tag) %>
+    <h5><%= super_label %></h5> 
     <h1>
       <%= label %>
     </h1>
-    <h4><%= tag.kind %></h4>
+    <h4><%= sub_label %></h4>
     <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
-    
-    <%#= render :partial => "/tags/perspectives", :locals => {:tag => tag, :selected => "You"} %>
 </div>

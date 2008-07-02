@@ -7,9 +7,10 @@
     <% end -%>
   </dl>
   
-
+  <% unless reverse -%>
   <%= new_tag_form(
     :kind => kind,
     :path => path
   )%>
+  <% end -%>
 </div>

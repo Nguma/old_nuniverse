@@ -11,17 +11,28 @@ module TagsHelper
 	end
 	
 	
-	def h3_for(tag)
-		case tag.kind
-	    when "location"
-	      "You're at #{tag.content}, <br/>and your quest is to #{tag.crumbs[-2,1].last.content}"
-	    when "person"
-	       "Are you available?"
-			when "quest"
-				"You #{tag.crumbs[-2,1].last.content} and your quest is to #{tag.content}"
-	    else
-	       "Are you ready for this adventure?"
+	def h3_for(path)
+		
+		sentence = ""
+		path.tags.each do |tag|
+			
+			case tag.kind
+		    when "location"
+		      sentence << "you're at #{tag.content} "
+		    when "person"
+		       sentence << "you are meeting with #{tag.content} "
+				when "quest"
+					sentence << "your quest is to #{tag.content} "
+				when "item"
+					sentence << "you have a #{tag.content} "
+				when "topic"
+					sentence << "you talk about #{tag.content}"
+		    else
+		       "Are you ready for this adventure?"
 			end
+		end
+		sentence
+		
 	end
 	
 	def nuniverse_for(params)

@@ -4,6 +4,8 @@ module TaggingsHelper
 		case kind
 		when "comment"
 			return "said"
+		when "nuniverse"
+			return "visited the nuniverse of "
 		else 
 			return "added a #{kind}: "
 		end

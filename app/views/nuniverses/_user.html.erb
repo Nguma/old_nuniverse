@@ -1,3 +1,23 @@
+<div class="content log">
+  <div class="header">
+      <%= avatar_for(tag) %>
+      <h5>Welcome to</h5> 
+      <h1>
+        Your nuniverse
+      </h1>
+      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
+  </div>
+  
+  <dl class="connections">
+    <% @connections.each do |connection| -%>
+        <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+    <% end -%>
+  </dl>
+</div>
+
+
+<%= render :partial => "/nuniverses/visit" %>
+
 <div class="new content">
   <h3>Start a quest.</h3>
   <h4>Your quest is to:</h4>
@@ -23,15 +43,6 @@
   <a href="#">Join a quest now</a>
 </div>
 
-<div class="content log">
-  <h3>Your log.</h3>
-  <h4>This is what happened lately in your nuniverse</h4>
-  <dl class="connections">
-    <% @connections.each do |connection| -%>
-        <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
-    <% end -%>
-   
-  </dl>
-</div>
 
+<div class="content log">
 <%= render :partial => '/users/edit'%>

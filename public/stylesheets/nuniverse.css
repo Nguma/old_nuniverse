@@ -18,15 +18,12 @@
 	padding:0 0 0 0;
 }
 
-.nuniverse .header
-{
-	position:relative;
-	background:#FFF url("/images/backgrounds/nuniverse_header.png") 0 0 repeat;
-	margin:0 0 0 0;
-	padding:10px;
-	border-bottom:solid #fff 2px;
-	background:#FFF;
 
+
+.nuniverse .header h5
+{
+	color:#999;
+	font-style:italic;
 }
 
 .nuniverse .header .avatar
@@ -100,6 +97,16 @@
 	height:100%;
 	overflow:hidden;
 	background:#FFF;
+}
+.nuniverse .sidebar h3
+{
+	padding:5px 10px 0 10px;
+}
+
+.nuniverse .sidebar h5
+{
+	padding:10px;
+	color:#999;
 }
 
 .nuniverse .sidebar .right
@@ -233,9 +240,16 @@
 	border-top:dotted #eee 2px;
 }
 
+.actions a
+{
+	font-weight:bold;
+}
+
 .actions dd p
 {
-
+	font-size:12px;
+	color:#999;
+	font-style:normal;
 }
 
 .content
@@ -281,6 +295,12 @@ a.nuni
 	background:#FFF;
 }
 
+.new
+{
+	margin-top:5px;
+	padding-top:5px;
+}
+
 .explore,
 .log,
 .profile
@@ -291,6 +311,14 @@ a.nuni
 .profile label
 {
 	display:block;
+}
+
+.nuniverse .header
+{
+	position:relative;
+	margin:0 0 2px 0;
+	background:#FFF;
+	padding:20px 10px 20px 10px;
 }
 
 .user_kind {color:#39c;}

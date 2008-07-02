@@ -1,4 +1,28 @@
-<%= render :partial => "/nuniverses/log" %>
+<div class="content log">
+  <div class="header">
+      <%= avatar_for(tag) %>
+      
+      <h1>
+        <%= tag.content %>
+      </h1>
+      <h4>Quest</h4> 
+      
+      
+      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
+  </div>
+  
+  <% if @connections.empty? -%>
+    <h3>Nothing happened yet in this quest.</h3>
+  <% else -%>
+    <dl class="connections">
+      <% @connections.each do |connection| -%>
+          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+      <% end -%>
+    </dl>
+  <% end -%>
+
+</div>
+
 
 <% list_for(:kind => "quest", :path => @path) do -%>
   <h3>What can you do to make it happen?</h3>
@@ -23,7 +47,7 @@
 <% end -%>
 
 <% list_for(:kind => "quest", :object => tag, :reverse => true) do -%>
-  <h3>When doing that, </h3>
-  <h4>You:</h4>
+  <h3>When doing that</h3>
+  <h4>You also</h4>
 <% end -%>
 
