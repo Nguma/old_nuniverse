@@ -17,9 +17,17 @@ class TaggingPath
     @ids.last
   end
   
+  def tags
+    @tags ||= @ids.collect { |id| Tag.find id }
+  end
+  
   private
   
   def parse(path)
-    @ids = path.split('_').select { |id| !id.blank? }.collect { |id| id.to_i }
+    @ids = path.to_s.split('_').select { |id|
+      !id.blank?
+    }.collect { |id|
+      id.to_i
+    }
   end
 end
