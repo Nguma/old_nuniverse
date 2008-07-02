@@ -6,13 +6,13 @@
     <%= link_to_nuniverse(connection.user.tag, :class => "user user_kind") %>
     <%= sentence_for(connection.object.kind) %>
         
-    <%= link_to_tagging(connection.object, :class => "nuni #{connection.object.kind}_kind") %>
-   
+
+    <%= link_to_nuniverse(connection.object, :path => connection.path, :class => "nuni #{connection.object.kind}_kind") %>
+    
     <% unless connection.path.taggings.empty? -%>
       <span class="context">  to  
-        <% connection.path.taggings.each do |crumb| -%>
-          
-          <%= link_to_tagging(crumb) %>
+        <% connection.path.tags.each do |crumb| -%>          
+          <%= link_to_nuniverse(crumb) %>
         <% end -%>
       </span>
     <% end -%>
