@@ -52,6 +52,14 @@ class TaggingPath
 			TaggingPath.new(@ids[0..@ids.index(id)])
 		}
 	end
+	
+	def parent
+	  @parent ||= TaggingPath.new @ids[0..-2]
+  end
+  
+  def restricted?
+    self.taggings.any? { |tagging| tagging.restricted }
+  end
   
   private
   

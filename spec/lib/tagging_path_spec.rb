@@ -63,4 +63,20 @@ describe TaggingPath do
   it "should not be empty if there are some ids" do
     TaggingPath.new(@path).should_not be_empty
   end
+  
+  it "should return the parent TaggingPath object" do
+    TaggingPath.new(@path).parent.to_s.should == "_1_2_3_"
+  end
+  
+  it "should be restricted if any of the taggings are restricted" do
+    tagging_path = TaggingPath.new(@path)
+    tagging_path.stub_method(:taggings => [
+      Tagging.stub_instance(:restricted => false),
+      Tagging.stub_instance(:restricted => true),
+      Tagging.stub_instance(:restricted => false),
+      Tagging.stub_instance(:restricted => false)
+    ])
+    
+    tagging_path.should be_restricted
+  end
 end
