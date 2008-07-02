@@ -32,4 +32,11 @@ describe TaggingPath do
       tag.should be_kind_of(Tag)
     }
   end
+	
+	it "should return a Tag for last_tag" do
+		tagging = TaggingPath.new(@path)
+		tagging.last_tag.should be_kind_of(Tag)
+		
+		Tag.should have_received(:find).with(tagging.last)
+	end
 end

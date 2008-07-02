@@ -16,6 +16,10 @@ class TaggingPath
   def last
     @ids.last
   end
+	
+	def last_tag
+		@last_tag ||= Tag.find self.last
+	end
   
   def tags
     @tags ||= @ids.collect { |id| Tag.find id }
