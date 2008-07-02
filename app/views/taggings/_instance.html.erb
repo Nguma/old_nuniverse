@@ -10,8 +10,8 @@
    
     <% unless connection.path.tags.empty? -%>
       <span class="context">  to  
-        <% connection.path.tags.each do |crumb| -%>          
-          <%= link_to_nuniverse(crumb) %>
+        <% connection.path.taggings.each do |tagging| -%>
+          <%= link_to_tagging(tagging) %>
         <% end -%>
       </span>
     <% end -%>
