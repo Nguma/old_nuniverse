@@ -1,16 +1,23 @@
 <%= render :partial => "/nuniverses/log" %>
+
 <% list_for(:kind => "quest", :path => @path) do -%>
   <h3>What can you do to make it happen?</h3>
   <h4>You need to</h4>
   <p><i>eg:"Eat", "Sleep"</i></p>
 <% end -%> 
 
+
 <% list_for(:kind => "person", :path => @path) do -%>
   <h3>Who can you meet to help you in that quest?</h3>
   <p><i>eg:"Albert Einstein", "John Doe", "Batman"...</i></p>
 <% end -%>
 
-<% list_for(:kind => "person", :path => @path) do -%>
+<% list_for(:kind => "item", :path => @path) do -%>
   <h3>What can you use to help you in that quest?</h3>
   <h4>You can use:</h4>
+<% end -%>
+
+<% list_for(:kind => "location", :path => @path) do -%>
+  <h3>Where can you go?</h3>
+  <h4>You can go to:</h4>
 <% end -%>
