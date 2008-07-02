@@ -19,11 +19,7 @@ class TagsController < ApplicationController
 		
 		@filter = params[:filter] || nil
 		 
-		@connections = Tagging.find_taggeds_with(
-			:path => @path.tags,
-			:kind => @filter,
-			:order => "updated_at DESC"
-		)
+		@connections = Tagging.with_path(@path).with_object_kinds(@filter).by_latest
 	
     respond_to do |format|
       format.html # show.html.erb

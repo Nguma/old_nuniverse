@@ -17,7 +17,7 @@
   <h3>Your quests</h3>
   <dl class="connections">
     <% @quests.each do |quest| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => quest}%>
+        <%= render :partial => "/tags/connection", :locals => {:connection => quest, :reverse => reverse}%>
     <% end -%>
   </dl>
   <a href="#">Join a quest now</a>

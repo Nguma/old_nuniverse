@@ -10,18 +10,14 @@ class UsersController < ApplicationController
 		@user = current_user
 		@path = TaggingPath.new @user.tag.id
 		
-		@quests = Tagging.find_taggeds_with(
+		@quests = Tagging.with_path(@path).with_object_kinds("quest").paginate(
 			:page => 1,
-			:per_page => 6,
-			:path => @path.tags,
-			:kind => "quest"
+			:per_page => 6
 		)
 		
-		@connections = Tagging.find_taggeds_with(
+		@connections = Tagging.with_path(@path).by_latest.paginate(
 			:page => 1,
-			:per_page => 6,
-			:path => @path.tags,
-			:order => "updated_at DESC"
+			:per_page => 6
 		)
 	end
 	
