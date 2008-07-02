@@ -4,14 +4,7 @@ class TaggingPath
   def initialize(path = "")
 		case path
 		when Array
-			@ids = path.collect { |tag|
-				case tag
-				when Tag
-					tag.id
-				else
-					tag
-				end
-			}
+			parse_array path
 		when Integer
 			@ids = [path]
 		else
@@ -68,5 +61,16 @@ class TaggingPath
     }.collect { |id|
       id.to_i
     }
+  end
+  
+  def parse_array(arr)
+    @ids = arr.collect { |tag|
+			case tag
+			when Tag
+				tag.id
+			else
+				tag
+			end
+		}
   end
 end

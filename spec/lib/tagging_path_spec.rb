@@ -11,6 +11,22 @@ describe TaggingPath do
     TaggingPath.new(@path).ids.should == [1, 2, 3, 4]
   end
   
+  it "should initialise from an array of ints" do
+    TaggingPath.new([1, 2, 3, 4]).ids.should == [1, 2, 3, 4]
+  end
+  
+  it "should initialise from an array of tags" do
+    tag_a = Tag.stub_instance
+    tag_b = Tag.stub_instance
+    tag_c = Tag.stub_instance
+    
+    TaggingPath.new([tag_a, tag_b, tag_c]).ids.should == [tag_a.id, tag_b.id, tag_c.id]
+  end
+  
+  it "should initialise from a single int" do
+    TaggingPath.new(32).ids.should == [32]
+  end
+  
   it "should return the first item" do
     TaggingPath.new(@path).first.should == 1
   end
