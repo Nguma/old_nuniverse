@@ -32,4 +32,12 @@ describe TaggingPath do
       tag.should be_kind_of(Tag)
     }
   end
+  
+  it "should be empty if no ids" do
+    TaggingPath.new.should be_empty
+  end
+  
+  it "should not be empty if there are some ids" do
+    TaggingPath.new(@path).should_not be_empty
+  end
 end
