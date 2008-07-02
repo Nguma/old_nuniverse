@@ -20,4 +20,8 @@ describe TaggingPath do
   it "should build the path string" do
     TaggingPath.new(@path).to_s.should == @path
   end
+  
+  it "should handle integers" do
+    lambda { TaggingPath.new(42) }.should_not raise_error
+  end
 end

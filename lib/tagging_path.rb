@@ -20,6 +20,10 @@ class TaggingPath
   private
   
   def parse(path)
-    @ids = path.split('_').select { |id| !id.blank? }.collect { |id| id.to_i }
+    @ids = path.to_s.split('_').select { |id|
+      !id.blank?
+    }.collect { |id|
+      id.to_i
+    }
   end
 end
