@@ -1,7 +1,7 @@
 class TaggingPath
   attr_reader :ids
   
-  def initialize(path)
+  def initialize(path = "")
     parse(path || "")
   end
   
@@ -23,6 +23,10 @@ class TaggingPath
   
   def tags
     @tags ||= @ids.collect { |id| Tag.find id }
+  end
+  
+  def empty?
+    @ids.empty?
   end
   
   private
