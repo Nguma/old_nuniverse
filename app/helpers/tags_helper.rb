@@ -70,17 +70,18 @@ module TagsHelper
 	
 	
 	def list_for(params, &block)
-		params[:path] ||= TaggingPath.new
-		params[:header] = capture(&block)
-		params[:reverse] ||= false
-		params[:connections] = Tagging.find_taggeds_with(
-			:path => params[:path].tags,
-			:kind => params[:kind],
-			:subject => params[:subject] || nil,
-			:object => params[:object] || nil,
-			:reverse => params[:reverse],
-			:order => "updated_at DESC"
-		)
+		params[:path]     ||= TaggingPath.new
+		params[:header]     = capture(&block)
+		params[:reverse]  ||= false
+    
+		params[:connections] = Tagging.with_path(params[:path]).
+		  with_subject(params[:subject]).with_object(params[:object]).by_latest
+		
+		if params[:reverse]
+		  params[:connections] = params[:connections].with_object_kinds(params[:kind])
+	  else
+	    params[:connections] = params[:connections].with_subject_kinds(params[:kind])
+    end
 			
 		concat(
 			render(
