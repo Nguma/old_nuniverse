@@ -4,3 +4,31 @@
   <h3>What quest this item can help you with?</h3>
   <h4>this can help you to</h4>
 <% end -%> 
+
+<div class="content">
+  <dl class="connections">
+  <% ebay(tag.content).each do |item| %>
+    <dd>
+      <% unless item.gallery_url.nil? -%>
+        <%= image_tag(item.gallery_url.to_s, :class => 'avatar') %>
+      <% end -%>
+        <a href="#"><%= link_to(item.title.capitalize,item.view_item_url_for_natural_search) %></a>
+        $<%= item.converted_current_price.content%>
+    </dd>
+  <% end -%>
+  </dl>
+</div>
+
+<div class="content">
+  <dl class="connections">
+  <% amazon(tag.content).each do |item| %>
+    <dd>
+      <% unless item.thumbnail.nil? -%>
+       <%= image_tag(item.thumbnail, :class => 'avatar') %>
+      <% end -%>
+        <a href="#"><%= link_to(item.title.capitalize,item.url) %></a>
+        $<%= item.amount%>
+    </dd>
+  <% end -%>
+  </dl>
+</div>

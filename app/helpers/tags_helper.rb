@@ -10,6 +10,11 @@ module TagsHelper
 		Awsomo::Request.new().search(query, :category => category)
 	end
 	
+	def google(query)
+		GoogleAjax.referer = "http://localhost:3000"
+		return GoogleAjax::Search.web(query).results
+	end
+	
 	
 	def h3_for(path)
 		
@@ -39,18 +44,18 @@ module TagsHelper
 		params[:left] = render( 
         			:partial => "/nuniverses/#{params[:tag].kind}_left", 
         			:locals => {:tag => params[:tag], :path => @path}
-      			) rescue render(
-        			:partial => "/nuniverses/quest_left", 
-        			:locals => {:tag => params[:tag], :path => @path}
-      			)
+      			) # rescue render(
+      			#         			:partial => "/nuniverses/quest_left", 
+      			#         			:locals => {:tag => params[:tag], :path => @path}
+      			#       			)
 
 		params[:body] = render(
 	            :partial => "/nuniverses/#{params[:tag].kind}", 
 	            :locals => {:tag => params[:tag], :path => @path}
-	          ) rescue  render(
-	            :partial => "/nuniverses/quest", 
-	            :locals => {:tag => params[:tag], :path => @path}
-	          )
+	          ) # rescue  render(
+	          # 	            :partial => "/nuniverses/quest", 
+	          # 	            :locals => {:tag => params[:tag], :path => @path}
+	          # 	          )
 
 	     render(
 	        :partial => '/nuniverses/instance',
@@ -71,11 +76,10 @@ module TagsHelper
 	
 	def list_for(params, &block)
 		params[:path]     ||= TaggingPath.new
-		params[:header]     = capture(&block)
+		params[:header]    = capture(&block)
 		params[:reverse]  ||= false
     
-		params[:connections] = Tagging.with_path(params[:path]).
-		  with_subject(params[:subject]).with_object(params[:object]).by_latest
+		params[:connections] = Tagging.with_path(params[:path]).by_latest
 		
 		if params[:reverse]
 		  params[:connections] = params[:connections].with_object_kinds(params[:kind])

@@ -21,20 +21,20 @@ function reset()
   })
   
 
-  $$('.body .content').each(function(box,i)
-    {
-     // col = col.mix([255,255,255,0], 50)
-      box.addEvent('mouseover', function()
-      {
-        this.addClass('hover');
-      });
-      
-      box.addEvent('mouseout', function()
-      {
-        this.removeClass('hover');
-      });
-      
-  });
+  // $$('.body .content').each(function(box,i)
+  //     {
+  //      // col = col.mix([255,255,255,0], 50)
+  //       box.addEvent('mouseover', function()
+  //       {
+  //         this.addClass('hover');
+  //       });
+  //       
+  //       box.addEvent('mouseout', function()
+  //       {
+  //         this.removeClass('hover');
+  //       });
+  //       
+  //   });
   
   $$('form .private').each(function(button)
   {

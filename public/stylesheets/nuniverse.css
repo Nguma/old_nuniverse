@@ -31,7 +31,7 @@
 	position:relative;
 	float:left;
 	margin-right:10px;
-	border:solid 2px #eee;
+	border:solid 2px #ccc;
 }
 
 .nuniverse h1
@@ -49,6 +49,7 @@
 	font-weight:bold;
 	font-size:14px;
 	margin-bottom:2px;
+	height:100%;
 
 }
 
@@ -93,7 +94,7 @@
 	position:relative;
 	float:left;
 	margin:0 2px 0 0px;
-	width:400px;
+	width:300px;
 	height:100%;
 	overflow:hidden;
 	background:#FFF;
@@ -162,7 +163,7 @@
 .nuniverse .connections
 {
 	position:relative;
-	clear:both;
+	float:left;
 	padding:0;
 }
 
@@ -171,14 +172,16 @@
 	padding:10px 50px 10px 10px;
 	position:relative;
 	clear:both;
-	border-bottom:dotted 2px #ccc;
+	border-top:dotted 2px #ccc;
 	font-size:12px;
 	font-weight:normal;
 	color:#999;
-	height:30px;
 }
 
-
+.connection a
+{
+	font-size:14px;
+}
 
 .nuniverse .context
 {
@@ -297,6 +300,9 @@ a.nuni
 
 .new
 {
+	position:relative;
+	float:left;
+	width:400px;
 	margin-top:5px;
 	padding-top:5px;
 }
@@ -317,7 +323,6 @@ a.nuni
 {
 	position:relative;
 	margin:0 0 2px 0;
-	background:#FFF;
 	padding:20px 10px 20px 10px;
 }
 

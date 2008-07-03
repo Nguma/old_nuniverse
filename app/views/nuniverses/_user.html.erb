@@ -1,13 +1,15 @@
+<div class="content header">
+    <%= avatar_for(tag) %>
+    <h5>Welcome to</h5> 
+    <h1>
+      Your nuniverse
+    </h1>
+    <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
+</div>
+
+<%= render :partial => "/nuniverses/visit" %>
+
 <div class="content log">
-  <div class="header">
-      <%= avatar_for(tag) %>
-      <h5>Welcome to</h5> 
-      <h1>
-        Your nuniverse
-      </h1>
-      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
-  </div>
-  
   <dl class="connections">
     <% @connections.each do |connection| -%>
         <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
@@ -15,34 +17,31 @@
   </dl>
 </div>
 
-
-<%= render :partial => "/nuniverses/visit" %>
-
-<div class="new content">
-  <h3>Start a quest.</h3>
-  <h4>Your quest is to:</h4>
-  <p><i>eg:"Take a trip", "Buy a country house", "find a treasure"...</i></p>
-
-  <% form_tag '/tags/create' do -%>
-    <%= hidden_field_tag :kind, "quest" %>
-    <%= hidden_field_tag :path, @path %>
-
-    <%= text_field_tag :content, "", :size => 40  %>
-    <input type="submit" value="Make it public">
-    <input type="submit" value="Make it private" class ="private">
-  <% end -%>
-</div>
-
 <div class="content explore">
-  <h3>Your quests</h3>
+  <h2>Your Quests</h2>
   <dl class="connections">
     <% @quests.each do |quest| -%>
         <%= render :partial => "/tags/connection", :locals => {:connection => quest, :reverse => reverse}%>
     <% end -%>
   </dl>
   <a href="#">Join a quest now</a>
+  <h3>Start a new quest</h3>
+    <h4>Your quest is to:
+    <p><i>eg:"Take a trip", "Buy a country house", "find a treasure"...</i></p></h4>
+
+    <% form_tag '/tags/create' do -%>
+      <%= hidden_field_tag :kind, "quest" %>
+      <%= hidden_field_tag :path, @path %>
+
+      <%= text_field_tag :content, "", :size => 40  %>
+      <input type="submit" value="Make it public">
+      <input type="submit" value="Make it private" class ="private">
+    <% end -%>
 </div>
 
+<% list_for(:kind => "location", :path => @path) do -%>
+  <h3>Where can you go?</h3>
+  <h4>You can go to</h4>
+<% end -%>
 
-<div class="content log">
 <%= render :partial => '/users/edit'%>

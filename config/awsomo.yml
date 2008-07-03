@@ -1,0 +1,11 @@
+--- 
+:production: 
+  :aws_key_id: "0T7FGZDF5XZAV1S8YDR2"
+  :aws_associate_id: "nuniverse-20"
+  :aws_default_operation: "ItemSearch"
+  :aws_default_category: "Books"
+    
+# if you want to have different params for different environments specify them here, otherwise the production settings will be used for that environment
+# :development: 
+  #:aws_key_id: 
+  #:aws_associate_id:

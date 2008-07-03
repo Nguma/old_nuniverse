@@ -3,7 +3,7 @@
   <dl class="connections">
 
     <% connections.each do |connection| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => connection, :reverse => reverse}%>
+        <%= render :partial => "/tags/connection", :locals => {:connection => connection, :reverse => false}%>
     <% end -%>
   </dl>
   

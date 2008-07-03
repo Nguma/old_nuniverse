@@ -12,7 +12,7 @@
     
     <% unless connection.path.taggings.empty? || connection.object.kind == "nuniverse"-%>
       <span class="context">  to  
-        <% connection.path.taggings.each do |tagging| -%>
+        <% connection.path.taggings[1 .. -1].each do |tagging| -%>
           <%= link_to_tagging(tagging) %>
         <% end -%>
       </span>

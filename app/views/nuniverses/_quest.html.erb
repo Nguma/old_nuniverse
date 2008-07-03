@@ -1,13 +1,10 @@
 <div class="content log">
   <div class="header">
       <%= avatar_for(tag) %>
-      
       <h1>
         <%= tag.content %>
       </h1>
       <h4>Quest</h4> 
-      
-      
       <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
   </div>
   
@@ -20,7 +17,6 @@
       <% end -%>
     </dl>
   <% end -%>
-
 </div>
 
 
@@ -30,6 +26,16 @@
   <p><i>eg:"Eat", "Sleep"</i></p>
 <% end -%> 
 
+<div class="content">
+  <div class="connections">
+  <% google(tag.content).each do |rst| -%>
+    <dd class="connection">
+      <a href="<%= rst.url %>"><%= rst.title %></a>
+      <p><%= rst.content %></p>
+    </dd>
+  <% end -%>
+  </div>
+</div>
 
 <% list_for(:kind => "person", :path => @path) do -%>
   <h3>Who can you meet to help you in that quest?</h3>
