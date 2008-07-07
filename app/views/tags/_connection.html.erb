@@ -8,6 +8,7 @@
 
 <dd class="connection"> 
     <span class="avatar"><%= avatar_for(tag) %></span>
-    <span class="kind <%= tag.kind %>_kind"><%= tag.kind %> of</span>
-    <%= link_to_nuniverse(tag, :path => path, :class => "nuni") %>   
+    <span class="kind <%= tag.kind %>_kind"><%= tag.kind %></span></br/>
+    <%= link_to_nuniverse(tag, :path => path, :class => "nuni") %>
+    <p><%= connection.description %></p>
 </dd>

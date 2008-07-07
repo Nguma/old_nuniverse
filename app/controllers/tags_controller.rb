@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.find(:all, :order => "created_at DESC")
+    @tags = Tag.paginate(:page => 1, :per_page => 40, :order => "updated_at DESC")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -18,9 +18,18 @@ class TagsController < ApplicationController
 		@tag  = @path.last_tag
 		
 		@filter = params[:filter] || nil
-		 
+		
+		@quests = Tagging.with_path(@path).with_object_kinds("quest").paginate(
+			:page => 1,
+			:per_page => 6
+		)
+		
+		@messages = Tagging.with_path(@path).with_object_kinds("message").by_latest
+		
 		@connections = Tagging.with_path(@path).with_object_kinds(@filter).by_latest
 	
+		@places = Tagging.with_path(@path).with_object_kinds('location').by_name
+		
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
@@ -53,11 +62,13 @@ class TagsController < ApplicationController
 		# 			tag.save
 		# 			@tags << tag
 		# 		end
+		# raise params[:description].inspect
 		@tagging = Tag.connect(
 			:content 	=> params[:content],
 			:kind			=> params[:kind],
 			:path			=> params[:path],
 			:restricted => params[:restricted],
+			:description => params[:description],
 			:user_id	=> current_user.id
 		)
 		

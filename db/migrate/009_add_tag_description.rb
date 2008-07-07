@@ -1,6 +1,6 @@
 class AddTagDescription < ActiveRecord::Migration
   def self.up
-		add_column :tags, :description, :text
+		add_column :tags, :description, :text, :default => ""
   end
 
   def self.down

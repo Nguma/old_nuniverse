@@ -1,47 +1,36 @@
-<div class="content header">
-    <%= avatar_for(tag) %>
-    <h5>Welcome to</h5> 
-    <h1>
-      Your nuniverse
-    </h1>
-    <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
-</div>
 
-<%= render :partial => "/nuniverses/visit" %>
+   <% if !@connections.empty? -%>
+   <div class="content header" id="home_content">
+      <%= render :partial => "/users/welcome" %>
+    </div>
+   <% else -%>
+    <% header_for(:tag => tag) do -%>
+        
+    <% end -%>
+   <% end -%>
+  
 
-<div class="content log">
+
+<div class="content" id="messages_content">
+  <h2>Messages</h2>
   <dl class="connections">
     <% @connections.each do |connection| -%>
-        <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
+    <dd class="connection">
+      <%= link_to_nuniverse(connection.object) %> to <%= connection.subject.content %>
+    </dd>
     <% end -%>
   </dl>
 </div>
-
-<div class="content explore">
-  <h2>Your Quests</h2>
-  <dl class="connections">
-    <% @quests.each do |quest| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => quest, :reverse => reverse}%>
-    <% end -%>
-  </dl>
-  <a href="#">Join a quest now</a>
-  <h3>Start a new quest</h3>
-    <h4>Your quest is to:
-    <p><i>eg:"Take a trip", "Buy a country house", "find a treasure"...</i></p></h4>
-
-    <% form_tag '/tags/create' do -%>
-      <%= hidden_field_tag :kind, "quest" %>
-      <%= hidden_field_tag :path, @path %>
-
-      <%= text_field_tag :content, "", :size => 40  %>
-      <input type="submit" value="Make it public">
-      <input type="submit" value="Make it private" class ="private">
-    <% end -%>
+<div class="content" id="places_content">
+  <h2>Places</h2>
 </div>
 
-<% list_for(:kind => "location", :path => @path) do -%>
-  <h3>Where can you go?</h3>
-  <h4>You can go to</h4>
-<% end -%>
 
-<%= render :partial => '/users/edit'%>
+<%= render :partial => "/taggings/people", :locals => {:path => path}%>
+<div class="content" id="lists_content">
+  <h2>Lists</h2>
+</div>
+
+<div class="content" id="profile_content">
+  <h2>Your Profile</h2>
+</div>

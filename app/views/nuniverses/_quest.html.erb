@@ -1,59 +1,38 @@
-<div class="content log">
-  <div class="header">
-      <%= avatar_for(tag) %>
-      <h1>
-        <%= tag.content %>
-      </h1>
-      <h4>Quest</h4> 
-      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
-  </div>
-  
-  <% if @connections.empty? -%>
-    <h3>Nothing happened yet in this quest.</h3>
-  <% else -%>
-    <dl class="connections">
-      <% @connections.each do |connection| -%>
-          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
-      <% end -%>
-    </dl>
+<% header_for(:tag => tag) do -%>
+
+<% end -%>
+
+<% unless @places.empty? -%>
+  <% geolocate(@places.collect {|c| c.object})%>
+  <% content_for :head do -%>
+    <%= GMap.header (:local_search => true) %>
+    <%= @map.to_html %>
   <% end -%>
-</div>
-
-
-<% list_for(:kind => "quest", :path => @path) do -%>
-  <h3>What can you do to make it happen?</h3>
-  <h4>You need to</h4>
-  <p><i>eg:"Eat", "Sleep"</i></p>
-<% end -%> 
-
-<div class="content">
-  <div class="connections">
-  <% google(tag.content).each do |rst| -%>
-    <dd class="connection">
-      <a href="<%= rst.url %>"><%= rst.title %></a>
-      <p><%= rst.content %></p>
-    </dd>
-  <% end -%>
+  <div class="content" style="padding:0" id="map_content">
+    <%= @map.div(:width => "100%", :height => 450) %>
   </div>
+<% end -%>
+
+
+
+
+<div class="content" id="places_content">
+  <h2>Places</h2>
+
+   <script type="text/javascript"
+   src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+   </script>
 </div>
-
-<% list_for(:kind => "person", :path => @path) do -%>
-  <h3>Who can you meet to help you in that quest?</h3>
-  <p><i>eg:"Albert Einstein", "John Doe", "Batman"...</i></p>
-<% end -%>
-
-<% list_for(:kind => "item", :path => @path) do -%>
-  <h3>What can you use to help you in that quest?</h3>
-  <h4>You can use:</h4>
-<% end -%>
-
-<% list_for(:kind => "location", :path => @path) do -%>
-  <h3>Where can you go?</h3>
-  <h4>You can go to:</h4>
-<% end -%>
-
-<% list_for(:kind => "quest", :object => tag, :reverse => true) do -%>
-  <h3>When doing that</h3>
-  <h4>You also</h4>
-<% end -%>
+<div class="content" id="people_content">
+  <h2>People</h2>
+  <script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+</div>
+<div class="content" id="lists_content">
+  <h2>Lists</h2>
+  <script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+</div>
 

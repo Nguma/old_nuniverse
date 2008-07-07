@@ -1,30 +1,11 @@
-<h3>By accomplishing that quest</h3>
-<dl class="actions">
-  <dd>
-    <a href="#">The Quest Log</a>
-  </dd>
-  <h3>To complete that quest,</h3>
-  <dd>
-    <a href="#">You need to...</a>
-    <p><i>Actions</i></p>
-  </dd>
-  <dd>
-    <a href="#">Google</a>
-  </dd>
-  <dd>
-    <a href="#">You can meet with...</a>
-    <p><i>People &amp; characters that will help you complete that quest.</i></p>
-  </dd>
-  <dd>
-    <a href="#">You can use...</a>
-    <p><i>Quest items</i></p>
-  </dd>
-  <dd>
-    <a href="#">You can go to...</a>
-    <p><i>Places you might need to visit to complete that quest.</i></p>
-  </dd>
-  
-  <dd>
-    <a href="#">You also</a>
-  </dd>
-</dl>
+<div class="avatar" style="background:#FFF;text-align:center;"><%= image_tag('/images/icons/quest.png') %></div>
+  <dl class="actions">
+
+    <dd><a href="#" id="home">Home</a></dd>
+    <% unless @places.empty? -%>
+      <dd><a href="#" id="map">Map</a></dd>
+    <% end -%>
+    <dd><a href="#" id="places">Places</a></dd>
+    <dd><a href="#" id="people">People</a></dd>
+    <dd><a href="#" id="lists">Lists</a></dd>
+  </dl>

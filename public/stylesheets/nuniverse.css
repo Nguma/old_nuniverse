@@ -8,6 +8,7 @@
 
 .nuniverse .body
 {
+	
 	overflow:hidden;
 	padding:0;
 	margin:0;
@@ -16,9 +17,8 @@
 	font-size:11px;
 	height:100%;
 	padding:0 0 0 0;
+	
 }
-
-
 
 .nuniverse .header h5
 {
@@ -26,24 +26,45 @@
 	font-style:italic;
 }
 
-.nuniverse .header .avatar
+.nuniverse .sidebar .avatar
 {
 	position:relative;
-	float:left;
-	margin-right:10px;
-	border:solid 2px #ccc;
+	margin:0;
+	border:solid 2px #FFF;
+	padding:0;
+	background:#FFF;
+}
+
+.nuniverse .sidebar .avatar a,
+.nuniverse .sidebar .avatar img
+{
+	position:relative;
+	margin:0;
+	border:none;
+	padding:0;
 }
 
 .nuniverse h1
 {
+	font-size:40px;
+	color:#666;
+	margin: 0 0 5px 0;
+	padding:0;
+
+}
+
+.nuniverse .body h2
+{
+	margin:0 0 5px 0;
+	padding:0;
+	color:#999;
 	font-size:30px;
-	color:#333;
 }
 
 .nuniverse .content
 {
 	padding:10px;
-	background:#FFF;
+	background:transparent url('/images/backgrounds/nuniverse_body_content.png') 0 0 repeat;
 	position:relative;
 	clear:both;
 	font-weight:bold;
@@ -71,22 +92,11 @@
 	
 }
 
-.nuniverse .perspectives dd
+.actions dd.selected
 {
-	display:inline;
-	padding:5px;
-	font-weight:bold;
+	background:#FFF;
 }
 
-.nuniverse .perspectives dd a
-{
-	font-weight:normal;
-}
-
-.nuniverse .perspectives .selected
-{
-	background:#fff;
-}
 
 
 .nuniverse .sidebar
@@ -94,11 +104,20 @@
 	position:relative;
 	float:left;
 	margin:0 2px 0 0px;
-	width:300px;
+	width:auto;
 	height:100%;
 	overflow:hidden;
-	background:#FFF;
+	background:transparent url('/images/backgrounds/nuniverse_body_content.png') 0 0 repeat;
 }
+
+.nuniverse .right
+{
+	float:right;
+	margin:0 0 0 2px;
+	width:0;
+	
+}
+
 .nuniverse .sidebar h3
 {
 	padding:5px 10px 0 10px;
@@ -117,6 +136,11 @@
 	width:0;
 }
 
+.content .welcome a
+{
+	display:inline;
+}
+
 
 .nuniverse .filters
 {
@@ -124,7 +148,7 @@
 	padding:0 0 0 0;
 	color:#666;	
 	width:10px;
-		padding:10px;
+	padding:10px;
 	text-align:right;	
 }
 
@@ -133,6 +157,15 @@
 	width:120px;
 }
 
+.toggable
+{
+	
+}
+
+.hidden
+{
+	display:none;
+}
 
 
 .nuniverse .filters dt
@@ -163,24 +196,30 @@
 .nuniverse .connections
 {
 	position:relative;
-	float:left;
 	padding:0;
 }
 
 .nuniverse .connection
 {
-	padding:10px 50px 10px 10px;
+	padding:10px;
 	position:relative;
 	clear:both;
-	border-top:dotted 2px #ccc;
-	font-size:12px;
+	border-bottom:dotted 2px #ccc;
+	font-size:14px;
 	font-weight:normal;
 	color:#999;
 }
 
 .connection a
 {
-	font-size:14px;
+	font-size:16px;
+	font-weight:bold;
+	margin:0;
+}
+
+.connection p
+{
+	font-size:11px;
 }
 
 .nuniverse .context
@@ -195,6 +234,7 @@
 	float:left;
 	top:0;
 	margin-right:5px;
+	
 }
 
 .nuniverse .connection .avatar img
@@ -264,14 +304,14 @@
 {
 	color:#999;
 	font-weight:normal;
-	font-size:12px;
+	font-size:16px;
 }
 
 .nuniverse h3
 {
 	color:#999;
 	font-size:19px;
-	margin: 10px 0 0 0;
+	margin: 0 0 0 0;
 	padding:0;
 }
 
@@ -279,6 +319,7 @@
 {
 	font-size:14px;
 	margin: 0 0 5px 0;
+	font-weight:bold;
 }
 
 a
@@ -331,3 +372,13 @@ a.nuni
 .quest_kind {color:#93c;}
 .person_kind {color:#3C9;}
 .location_kind {color:#C93;}
+
+.sidebar .content
+{
+	background:none;
+}
+
+.message_body
+{
+	font-size:14px;
+}

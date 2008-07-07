@@ -37,6 +37,7 @@ class Tagging < ActiveRecord::Base
     kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :object}
   }
   named_scope :by_latest, :order => "taggings.updated_at DESC"
+	named_scope :by_name, :order => "tags.content DESC"
 	
   # def self.find_taggeds_with(params)
   #   
@@ -57,17 +58,17 @@ class Tagging < ActiveRecord::Base
 	
 	protected
 	
-	def self.crumbs(path)
-		# If there is a way to make mysql order by the path instead of run a select for each,
-		# that'd be great!
-		@crumbs = []
-		path.split('_').reject{|c| c.blank? }.each do |crumb|
-			@tag = Tag.find(crumb)
-			@tag.crumbs = [@crumbs].flatten
-			@crumbs << @tag
-		end
-		@crumbs
-	end
+	# def self.crumbs(path)
+	# 		# If there is a way to make mysql order by the path instead of run a select for each,
+	# 		# that'd be great!
+	# 		@crumbs = []
+	# 		path.split('_').reject{|c| c.blank? }.each do |crumb|
+	# 			@tag = Tag.find(crumb)
+	# 			@tag.crumbs = [@crumbs].flatten
+	# 			@crumbs << @tag
+	# 		end
+	# 		@crumbs
+	# 	end
 	
 	private
 	

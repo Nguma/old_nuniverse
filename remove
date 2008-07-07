@@ -1,0 +1,31 @@
+Script started on Thu Jul  3 16:09:51 2008
+grandmodena:~/Projects/nuniverse nguma$ ls
+Capfile			doc			script
+README			lib			spec
+Rakefile		log			stories
+app			nuniverse.tmproj	test
+config			public			tmp
+db			remove			vendor
+grandmodena:~/Projects/nuniverse nguma$ lscd var[4Plscd ..[3Plscd src[4Plscd ..[3Plscd src[4Plscd ..[3Plscd var[4Pls[Kruby script/delete plugin acts_as_commen t [Agrandmodena:~/Projects/nuniverse nguma$ ruby script/delete plugin acts_as_commen [K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/delete plugin acts_as_comme[K
+[K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/delete plugin acts_as_comme     geocod able
+ruby: No such file or directory -- script/delete (LoadError)
+grandmodena:~/Projects/nuniverse nguma$ ruby script/delete plugin acts_as_geocodaable[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/delete plugin acts_as_geoco plugin acts_as_geocodab[1P[Arandmodena:~/Projects/nuniverse nguma$ ruby script/delet plugin acts_as_geocodabl[1Pe[Aandmodena:~/Projects/nuniverse nguma$ ruby script/dele plugin acts_as_geocodable[K[Arandmodena:~/Projects/nuniverse nguma$ ruby script/del plugin acts_as_geocodable [K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/de[1P
+[K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/d[1P[4hr[4le plugin acts_as_geocodable [Arandmodena:~/Projects/nuniverse nguma$ ruby script/rem plugin acts_as_geocodablee[Arandmodena:~/Projects/nuniverse nguma$ ruby script/remo plugin acts_as_geocodable[Aandmodena:~/Projects/nuniverse nguma$ ruby script/remov plugin acts_as_geocodable[Andmodena:~/Projects/nuniverse nguma$ ruby script/remove plugin acts_as_geocoda[4hb[4l[Aandmodena:~/Projects/nuniverse nguma$ ruby script/remove
+
+ruby: No such file or directory -- script/remove (LoadError)
+grandmodena:~/Projects/nuniverse nguma$ ruby script/remove plugin acts_as_geocodaable[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/remove plugin acts_as_geoco[K
+[K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/remove plugin acts_as_geocodaable[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/remove plugin acts_as_geocoplugin acts_as_geocodab[1P[Arandmodena:~/Projects/nuniverse nguma$ ruby script/removeplugin acts_as_geocodabl[1Pe[Aandmodena:~/Projects/nuniverse nguma$ ruby script/removplugin acts_as_geocodable[K[Arandmodena:~/Projects/nuniverse nguma$ ruby script/remoplugin acts_as_geocodable [K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/rem[1P
+[K[Agrandmodena:~/Projects/nuniverse nguma$ ruby script/re[1P[1Pplugin [4h [4l[4hr[4le acts_as_geocodable [Arandmodena:~/Projects/nuniverse nguma$ ruby script/plugin rem acts_as_geocodablee[Arandmodena:~/Projects/nuniverse nguma$ ruby script/plugin remo acts_as_geocodable[Aandmodena:~/Projects/nuniverse nguma$ ruby script/plugin remov acts_as_geocodable[Andmodena:~/Projects/nuniverse nguma$ ruby script/plugin remove acts_as_geocoda[4hb[4l[Aandmodena:~/Projects/nuniverse nguma$ ruby script/plugin remove
+
+svn: '/Users/nguma/Projects/nuniverse/vendor/plugins' is not a working copy
+grandmodena:~/Projects/nuniverse nguma$ ruby script/plugin remove acts_as_geocodaable[Admodena:~/Projects/nuniverse nguma$ ruby script/remove plugin
+able[Admodena:~/Projects/nuniverse nguma$ ruby script/delet
+able[Admodena:~/Projects/nuniverse nguma$ ls[K
+[K[Agrandmodena:~/Projects/nuniverse nguma$ ls  rake db:migrate
+(in /Users/nguma/Projects/nuniverse)
+== 10 AddDescription: migrating ===============================================
+-- add_column(:taggings, :description, :string, {:default=>""})
+   -> 0.3409s
+== 10 AddDescription: migrated (0.3411s) ======================================
+
+grandmodena:~/Projects/nuniverse nguma$ 

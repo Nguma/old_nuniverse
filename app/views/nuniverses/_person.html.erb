@@ -1,43 +1,21 @@
-<div class="content log">
-  <div class="header">
-      <%= avatar_for(tag) %>
-      <h5>This is the nuniverse of</h5> 
-      <h1>
-        <%= tag.content %>
-      </h1>
-      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
-  </div>
-  
-  <% if @connections.empty? -%>
-    <h3>Nothing happened yet in this nuniverse.</h3>
-  <% else -%>
-    <h3>This is what happened lately in this nuniverse</h3>
-    <dl class="connections">
-      <% @connections.each do |connection| -%>
-          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
-      <% end -%>
-    </dl>
-  <% end -%>
-  
-</div>
-
-<% list_for(:kind => "topic", :path => @path) do -%>
-  <h3>What can talk about?</h3>
-  <p><i>eg:"Science", "Politics"...</i></p>
-<% end -%>
-
-<div class="content">
-  <h2>Places</h2>
-  <h3>Locations in the nuniverse of <%= tag.content %></h3>
+<% header_for(:tag => tag) do -%>
   <dl class="connections">
-    <% Tagging.with_path(@path).by_latest.each do |connection| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => connection, :reverse => false}%>
+    <% @messages.each do |message| -%>
+      <%= render :partial => "/taggings/message", :locals => {:message => message }%>
     <% end -%>
   </dl>
-  
-</div>
-
-<% list_for(:kind => "item", :path => @path) do -%>
-  <h3>What can you buy from this person?</h3>
-  <h4>You can get</h4>
+  <div class="delimiter" style="position:relative;clear:both">&nbsp;</div>
+  <% if logged_in? -%>
+    <%= render :partial => "/nuniverses/new_message", :locals => {:recipient => tag }%>
+  <% end -%>
 <% end -%>
+
+<div class="content" id="places_content">
+  <h2>Places</h2>
+</div>
+<div class="content" id="people_content">
+  <h2>People</h2>
+</div>
+<div class="content" id="lists_content">
+  <h2>Lists</h2>
+</div>

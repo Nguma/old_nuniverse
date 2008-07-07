@@ -1,9 +1,1 @@
-<%= render :partial => "/nuniverses/breadcrumbs", :locals => {:path => @path}%>
-<div class="nuniverse">
-  <div class="sidebar left">
-    <%= render :partial => "/nuniverses/user_menu", :locals => {:tag => @user.tag, :user => @user} %>
-  </div>
-  <div class="body" id="nuniverse_body">
-    <%= render :partial => "/nuniverses/user", :locals => {:tag => @user.tag, :user => @user, :path => @path, :reverse => @reverse} %>
-  </div>
-</div>
+<%= nuniverse_for(:tag => @user.tag, :path => @path) %>

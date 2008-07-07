@@ -1,8 +1,10 @@
-<% ebay("led ep").each do |item| %>
-  <dd><a href="#"><%= item.label %></a></dd>
-<% end -%>
+<% GoogleAjax.referer = "http://localhost:3000" -%>
+<% GoogleAjax::Search.local("Cafe Grumpy", "new York", "NY").results.each do |rst| %>
+          <%= rst.lat %>
 
-<div class="nuniverse">
+  <% end -%>
+
+<!-- <div class="nuniverse">
   <div id="breadcrumbs">
       <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/", :class => "home") %>
   </div>
@@ -28,4 +30,4 @@
   </div>
   
   <%= link_to 'New tag', new_tag_path %>
-</div>
+</div> -->

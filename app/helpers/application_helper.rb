@@ -8,7 +8,7 @@ module ApplicationHelper
 	
 	def avatar_for(tag)
 		return "" if tag.avatar.nil?
-		return link_to(image_tag(tag.avatar.public_filename(:small), :alt => tag.content), tag, :class => 'avatar')
+		return link_to(image_tag(tag.avatar.public_filename(:large), :alt => tag.content), tag, :class => 'avatar')
 	end
 	
 	def path_for(path, options = {})
@@ -72,30 +72,6 @@ module ApplicationHelper
 	  out = eval("yield #{name}", block.binding)
 	  concat(out || capture(&block), block.binding)
 	end
-	
-	
-	def geolocate(path)
-		
-		#gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
-		
-		query = path.tags.select {|tag| tag.kind == "location"}.reverse.map {|c| c.content+" "+c.description}.to_s
-		@map = GMap.new("map_div")
-		@map.control_init(:large_map => true, :map_type => true, :local_search => true) #add :large_map => true to get zoom controls
-		@map.center_zoom_init([40.40,-73.70],17)
-		
-		results = Geocoding::get(query)
-		if results.status == Geocoding::GEO_SUCCESS
-			coord = results[0].latlon
-			@map.center_zoom_init(coord,13)
-			@map.overlay_init(GMarker.new(coord,:info_window => path.tags.last.content))
-		end
-		# result = gg.locate query
-		# 		coord = [result.latitude, result.longitude]
-		# 			@map.center_zoom_init(coord,10)
-		# 			@map.overlay_init(GMarker.new(coord, :info_bubble => result.address))
 
-		#@map.overlay_init(GMarker.new("New York City, Ny United States",:title => tag.content, :info_bubble => "yeah mooo"))
-	end
-	
 
 end

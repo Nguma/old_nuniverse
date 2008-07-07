@@ -11,10 +11,40 @@ module TagsHelper
 	end
 	
 	def google(query)
-		GoogleAjax.referer = "http://localhost:3000"
-		return GoogleAjax::Search.web(query).results
+		#GoogleAjax.referer = "http://localhost:3000"
+		#return GoogleAjax::Search.web(query).results
 	end
 	
+	def geolocate(places)
+		
+		@map = GMap.new("map_div")
+		@map.control_init(:large_map => true, :map_type => true, :local_search => true) #add :large_map => true to get zoom controls
+		gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
+		
+		markers = []
+		places.each do |place|
+			unless place.description.blank?
+				marker = gg.locate place.description
+				@map.overlay_init(
+					GMarker.new([marker.latitude, marker.longitude],
+						:title => place.content, 
+						:info_window => "#{place.content}: #{marker.address}"
+					)
+				)				
+				markers << marker
+			end
+		end
+		
+		#path.tags.select {|tag| tag.kind == "location"}.reverse.map {|c| c.description }
+		#loc = gg.locate query
+		unless markers.empty?
+			@map.center_zoom_init([markers[0].latitude, markers[0].longitude],15)
+		else
+			@map.center_zoom_init("new York City",5)
+		end
+		 	
+			
+	end
 	
 	def h3_for(path)
 		
@@ -40,28 +70,31 @@ module TagsHelper
 		
 	end
 	
+	def header_for(params, &block)
+		params[:body] = capture(&block)
+		concat(
+			render(
+				:partial => "/nuniverses/header", 
+				:locals => params
+			), block.binding
+		)		
+	end
+	
 	def nuniverse_for(params)
 		params[:left] = render( 
         			:partial => "/nuniverses/#{params[:tag].kind}_left", 
         			:locals => {:tag => params[:tag], :path => @path}
-      			) # rescue render(
-      			#         			:partial => "/nuniverses/quest_left", 
-      			#         			:locals => {:tag => params[:tag], :path => @path}
-      			#       			)
+      			) 
 
 		params[:body] = render(
 	            :partial => "/nuniverses/#{params[:tag].kind}", 
 	            :locals => {:tag => params[:tag], :path => @path}
-	          ) # rescue  render(
-	          # 	            :partial => "/nuniverses/quest", 
-	          # 	            :locals => {:tag => params[:tag], :path => @path}
-	          # 	          )
+	          ) 
 
 	     render(
 	        :partial => '/nuniverses/instance',
 	        :locals => params
-	      )
-			
+	      )			
 	end
 	
 	
@@ -82,9 +115,9 @@ module TagsHelper
 		params[:connections] = Tagging.with_path(params[:path]).by_latest
 		
 		if params[:reverse]
-		  params[:connections] = params[:connections].with_object_kinds(params[:kind])
+		  params[:connections] = params[:connections].with_subject_kinds(params[:kind])
 	  else
-	    params[:connections] = params[:connections].with_subject_kinds(params[:kind])
+	    params[:connections] = params[:connections].with_object_kinds(params[:kind])
     end
 			
 		concat(
