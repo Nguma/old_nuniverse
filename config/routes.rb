@@ -67,6 +67,10 @@ ActionController::Routing::Routes.draw do |map|
 	map.nuniverse "/nuniverse/:filter",
 		:controller => "tags",
 		:action => "index"
+	
+	map.bookmark "/bookmark/:path",
+		:controller => "taggings",
+		:action => "bookmark"
 		
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products

@@ -6,13 +6,24 @@ class TaggingsController < ApplicationController
 	end
 	
 	def create
+		gumies = params[:content].scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/)
+		gum = {}
+		unless gumies.empty?
+			params[:content] = gumies[0][1]
+			params[:kind] = gumies[0][0]
+			
+			gumies.each do |gumi|
+				gum[gumi[0]] = gumi[1]
+			end
+		end
 		
 		@tagging = Tag.connect(
 			:content 	=> params[:content],
 			:kind			=> params[:kind],
 			:path			=> params[:path],
 			:restricted => params[:restricted],
-			:description => params[:description],
+			:description => gum['description'] || params[:description],
+			:url => gum['url'] || nil,
 			:user_id	=> current_user.id
 		)
 		
@@ -23,9 +34,4 @@ class TaggingsController < ApplicationController
     end
 	end
 	
-	def move
-		t = Tagging.find_by_id(248)
-		t.move("30_226", "30_232_226")
-	end
-
 end

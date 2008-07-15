@@ -63,7 +63,7 @@ class TagsController < ApplicationController
 			:content 	=> params[:content],
 			:kind			=> params[:kind],
 			:path			=> params[:path],
-			:restricted => params[:restricted],
+			:restricted => params[:restricted] || 1,
 			:description => params[:description],
 			:user_id	=> current_user.id
 		)
@@ -112,5 +112,9 @@ class TagsController < ApplicationController
 		@section = params[:filter] || @path.last_tag.content 
 		# session[:perspective] = params[:perspective] || session[:perspective]
 		# 	@perspective = session[:perspective]
+	end
+	
+	def bookmark
+		
 	end
 end

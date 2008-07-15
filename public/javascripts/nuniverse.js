@@ -97,21 +97,43 @@ var Nuniverse = new Class({
         // change selected
         obj.setSelected('dd','dl',this.getElement('a'));
         obj.getForm().setProperty('value', this.getElement('.path').get('text'));
-                
-        var parent_content = this.getParent('.content');
-        parent_content.setStyle('width', '340px');
-        obj.setSelected('.content','.body',this.getParent());
-        var next = obj.slideToPath(parent_content);
-        next.set('html', '<h6>Loading...</h6>');
-        var call = new Request.HTML({
-              'url':this.getElement('h3 a').getProperty('href'),
-                    onSuccess:function(a,b,c,d)
-                    {
-                      obj.update(next,c);
-                    }
-        }).get();
-        obj.refresh();
-
+        
+        if(this.getElement('h3 a').hasClass('inner')) 
+        {
+          var parent_content = this.getParent('.content');
+          parent_content.setStyle('width', '340px');
+          obj.setSelected('.content','.body',this.getParent());
+          var next = obj.slideToPath(parent_content);
+          next.set('html', '<h6>Loading...</h6>');
+          var call = new Request.HTML({
+            'url':this.getElement('h3 a').getProperty('href'),
+            onSuccess:function(a,b,c,d)
+            {
+              obj.update(next,c);
+            }
+          }).get();
+          obj.refresh();
+        } 
+        else
+        {
+          window.open(this.getElement('h3 a').getProperty('href'), '_blank');
+        }
+      });
+      
+      connection.getElements('.manage a').each(function(action)
+      {
+        action.addEvent('click',function(ev)
+        {
+          var form = connection.getElement('.data form')
+          var submission = new Request.HTML({
+            'url':form.getProperty('action'),
+            onSuccess:function(a,b,c,d)
+            {
+              
+            }
+          }).post(form);
+          return false;
+        });
       });
     });
   },
@@ -156,6 +178,7 @@ var Nuniverse = new Class({
     updated.set('html', '<h6>Loading...</h6>');
     var call = new Request.HTML({
          'url':url,
+         'autoCancel':true,
          onSuccess:function(a,b,c,d)
          {
            updated.set('html', c);
@@ -182,8 +205,8 @@ var Nuniverse = new Class({
             {
               var updated = obj.getPreview().getElement('dl');
               updated.grab(a[0],'top');
-              //a[0].inject(updated,'top');
-              //obj.update(updated.getElement('.connection'));
+              
+              obj.setConnections(updated)
             }
           }).post(form);
 

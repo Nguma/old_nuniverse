@@ -7,7 +7,12 @@ class Tag < ActiveRecord::Base
 	
 	def self.connect(params)
 		@object = Tag.find_by_content_and_kind(params[:content], params[:kind])
-		@object ||= Tag.create(:content => params[:content], :kind => params[:kind], :description => "")
+		@object ||= Tag.create(
+			:content => params[:content], 
+			:kind => params[:kind], 
+			:description => params[:description] || "",
+			:url => params[:url]
+		)
 		
 		unless params[:user_id].nil?
 			@subject = Tag.find(params[:path].split('_').last)
@@ -17,8 +22,7 @@ class Tag < ActiveRecord::Base
 				:object 	=> @object,
 				:path    	=> "_#{params[:path]}_",
 				:user_id	=> params[:user_id],
-				:restricted => params[:restricted],
-				:description => params[:description] || ""
+				:restricted => params[:restricted]
 			)
 		end
 		

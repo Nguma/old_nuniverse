@@ -14,11 +14,11 @@
   <div class="body">
     <%#= render :partial => "/nuniverse/filters", :locals => {:path => path, :tag => tag} %>
     <div class="content selected">      
-      <%= connections_for(path, :page => page) %>
-    </div>
-    <div class="content">
       <dl class="connections">
       </dl>
+    </div>
+    <div class="content">
+      <%= connections_for(path, :page => page) %>
     </div>
   </div>
   </div>

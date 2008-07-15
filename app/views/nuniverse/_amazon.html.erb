@@ -6,6 +6,9 @@
     <% end -%>
       <h3><a href="#"><%= link_to(item.title[0..100].capitalize,item.url) %></a></h3>
       <p>$<%= item.amount.to_i %></p>
+      <div class="manage">
+       <%#= item.inspect %>
+      </div>
   </dd>
 <% end -%>
 </dl>

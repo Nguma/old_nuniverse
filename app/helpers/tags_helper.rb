@@ -21,6 +21,16 @@ module TagsHelper
 		return GoogleAjax::Search.web(query).results
 	end
 	
+	def flickr(query)
+		flickr = Flickr.new 'c40c269aea764bb5f53c877c3d265327'
+		photos = flickr.photos(:tags => query, :per_page => '10') rescue []
+		return render 	:partial => "/nuniverse/flickr", 
+						:locals => {
+							:photos => photos
+						}
+
+	end
+	
 	def geolocate(places)
 		
 		@map = GMap.new("map_div")

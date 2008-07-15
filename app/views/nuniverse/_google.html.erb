@@ -5,6 +5,16 @@
       <dd class="connection" style="height:auto">
         <h3><a href="<%= rst.url %>" target="_blank"><%= rst.title %></a></h3>
         <p><%= rst.content %></p>
+        <div class="manage">
+         <%= link_to("+bookmark", "/bookmark/#{path}") %>
+        </div>
+        <div class="data hidden">
+          <% form_tag '/taggings/create' do -%>
+            <%= hidden_field_tag :path, path %>
+            <%= hidden_field_tag :content, "#bookmark #{rst.title} #url #{rst.url} #description #{rst.content}"   %>
+          <% end -%>
+          <div class="path"><%= path %></div>
+        </div>
       </dd>
     <% end -%>
   <% end -%>

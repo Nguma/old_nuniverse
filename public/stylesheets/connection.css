@@ -89,7 +89,8 @@
 	color:#69c;
 }
 
-.nuniverse .selected p a
+.connections .selected p,
+.connections .selected p a
 {
 	color:#FFF;
 }
@@ -159,4 +160,12 @@ h3 span.source
 	width:100%;
 	bottom:0;
 	z-index:123456;
+}
+
+.connections .photo
+{
+	position:relative;
+	float:left;
+	width:80px;
+	clear:none;
 }

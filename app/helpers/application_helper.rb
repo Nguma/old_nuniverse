@@ -31,7 +31,7 @@ module ApplicationHelper
 		if context.is_a?(String)
 			query = context
 		elsif context.is_a?(TaggingPath)
-			query = context.last_tag.content
+			query =context.tags.collect{|c| c.kind == 'user' ? "" : c.content}.join(', ')
 		else
 			return Error
 		end
@@ -42,9 +42,14 @@ module ApplicationHelper
 			when "amazon"
 				render :partial => "/nuniverse/amazon", :locals => {:query => query}
 			when "daylife"
-				render :partial => "/nuniverse/daylife", :locals => {:query => query}
+				render :partial => "/nuniverse/daylife", :locals => {:query => query.gsub(',',' ')}
 			when "google"
-				render :partial => "/nuniverse/google", :locals => {:query => query}
+				render :partial => "/nuniverse/google", :locals => {
+					:query => "#{query} -amazon.com -ebay.com",
+					:path => context
+					}
+			when "flickr"
+				return flickr(query)
 			when "maps"
 				render :partial => "/nuniverse/maps", :locals => {:query => context.last_tag}
 			when "me"
@@ -68,10 +73,14 @@ module ApplicationHelper
 		return link_to("You",	"/my_nuniverse", :class => options[:class]) if logged_in? && current_user.tag == tag 
 		label = tag.content.capitalize
 		label = "#{label[0,options[:max]]}..." if options[:max] && label.length > options[:max]
-		# options[:path] ||= []
-		# options[:path] << tag
+		options[:path] ||= []
 	
-		return link_to(label,	"/nuniverse_of/#{tag.id}", :class =>options[:class])
+		case tag.kind
+		when "bookmark"
+			return link_to(label, tag.url, :target => "_blank")
+		else
+			return link_to(label,	"/nuniverse_of/#{options[:path]}#{tag.id}", :class => "inner")
+		end
 	end
 	
 	def link_to_tagging(tagging, options = {})
