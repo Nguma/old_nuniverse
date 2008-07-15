@@ -7,11 +7,12 @@
   <div class="scroller">
     <%#= render :partial => "/nuniverse/filters", :locals => {:path => path, :tag => tag} %>
   <div class="body">  
-    <div class="content browsed">  
+    <div class="content selected">  
        <%= connections_for(path, :page => page)%>
     </div>
-    <div class="content preview">
-      <%#= @map.div(:width => "100%", :height => 450) %>
+    <div class="content">
+      <dl class="connections">
+      </dl>
     </div>
   </div>
   </div>
@@ -26,4 +27,11 @@
     <dd><%= link_to("+ Invite / manage contributors", "#") %></dd>
     <dd><%= link_to("+ Find related topics", "#") %></dd>
   </dl>
+</div>
+
+<div class="hidden" id="content_template">
+  <div class="content">
+    <dl class="connections">
+    </dl>
+  </div>
 </div>

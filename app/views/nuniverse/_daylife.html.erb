@@ -1,6 +1,6 @@
 <dl class="connections">
 <% daylife(query).articles.each do |article| %>
-  <dd class="connection <%= cycle('even','odd') %>" style="height:50px">
+  <dd class="connection <%= cycle('even','odd') %>" >
       <h3><%= link_to(article.headline.capitalize,article.url) %>
         <span class="source">
           <%= link_to(article.source.name.capitalize, article.source.daylife_url)%> article @ Daylife

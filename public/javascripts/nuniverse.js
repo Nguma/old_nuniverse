@@ -99,6 +99,7 @@ var Nuniverse = new Class({
         obj.getForm().setProperty('value', this.getElement('.path').get('text'));
                 
         var parent_content = this.getParent('.content');
+        parent_content.setStyle('width', '340px');
         obj.setSelected('.content','.body',this.getParent());
         var next = obj.slideToPath(parent_content);
         next.set('html', '<h6>Loading...</h6>');
@@ -168,7 +169,7 @@ var Nuniverse = new Class({
   setConnectionForm:function()
   {
     var obj = this;
-    var updated = this.getPreview().getElement('.connections');
+    
     $$('form .dynamo').each(function(button)
     {
         var form = button.getParent('form');
@@ -179,8 +180,10 @@ var Nuniverse = new Class({
             'url':form.get('action'),
             onSuccess:function(a,b,c,d)
             {
-              updated.grab(a[0], 'top');
-              obj.update(updated.getElement('.connection'));
+              var updated = obj.getPreview().getElement('dl');
+              updated.grab(a[0],'top');
+              //a[0].inject(updated,'top');
+              //obj.update(updated.getElement('.connection'));
             }
           }).post(form);
 
@@ -215,8 +218,8 @@ var Nuniverse = new Class({
   slideToPath:function(content)
   {
     content.getAllNext('.content').destroy();
-    var next = new Element('div', {'class':'content'});
-    next.setProperty('width','700px');
+    var next = $('content_template').getElement('.content').clone();
+    next.setStyle('width','700px');
     this.el.getElement('.body').adopt(next);
     this.slide.toElement(content);
     return next;

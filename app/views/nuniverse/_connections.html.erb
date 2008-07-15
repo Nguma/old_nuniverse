@@ -1,5 +1,5 @@
 <dl class="connections">
-  <dt><%= link_to(path.last_tag.content,"#") %></dt>
+  <dt><%= link_to(path.last_tag.content.capitalize,"#") %></dt>
   <% if @connections.previous_page -%>
     <dd class="pager top"><%= link_to("less", "/nuniverse_of/#{path}/page/#{@connections.previous_page}") %></dd>
   <% end -%>
