@@ -1,7 +1,0 @@
-<dl class="connections">
-   <% connections.each do |connection| -%>
-   <dd class="connection">
-     new <%= connection.object.kind %> : <%= link_to_nuniverse(connection.object) %> to <%= connection.subject.content %>
-   </dd>
-   <% end -%>
- </dl>
