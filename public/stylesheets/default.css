@@ -7,6 +7,7 @@
 	color:inherit;
 	background:none;
 	text-decoration:none;
+	outline:0;
 }
 
 h1
@@ -56,4 +57,9 @@ input
 	padding:10px;
 	background:#FFF;
 	border:solid #cc 1px;
+}
+
+.hidden
+{
+	display:none;
 }

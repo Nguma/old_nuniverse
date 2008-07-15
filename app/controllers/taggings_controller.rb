@@ -18,8 +18,14 @@ class TaggingsController < ApplicationController
 		
     respond_to do |format|
         flash[:notice] = 'Connection was successfully created.'
-        format.html { render :action => "add" }
+        format.html { render :layout => false }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
     end
 	end
+	
+	def move
+		t = Tagging.find_by_id(248)
+		t.move("30_226", "30_232_226")
+	end
+
 end

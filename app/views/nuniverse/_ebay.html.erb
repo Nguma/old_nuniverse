@@ -1,0 +1,11 @@
+<dl class="connections">
+<% ebay(query).each do |item| %>
+  <dd class="connection  <%= cycle('even','odd') %>">
+    <% unless item.gallery_url.nil? -%>
+      <%= link_to(image_tag(item.gallery_url.to_s),"#",:class => 'avatar') %>
+    <% end -%>
+      <h3><a href="#"><%= link_to(item.title[0..100].capitalize,item.view_item_url_for_natural_search) %></a></h3>
+      <p>$<%= item.converted_current_price.content%> | Ends <%= item.end_time %></p>
+  </dd>
+<% end -%>
+</dl>

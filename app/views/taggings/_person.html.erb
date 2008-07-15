@@ -1,4 +1,4 @@
-<dd class="connection person">
+<dd class="connection person <%= cycle('even', 'odd') %>">
   <%= avatar_for(connection.object)%>
   <%= link_to_nuniverse(connection.object) %>
   <p><%= connection.description %></p>

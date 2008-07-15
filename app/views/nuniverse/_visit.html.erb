@@ -1,0 +1,26 @@
+<div class="content visit">
+  <h2>Visit another nuniverse</h2>
+  <% path =  TaggingPath.new current_user.tag.id -%>
+  <div class="new">
+    <% form_tag '/tags/create' do -%>
+      <%= hidden_field_tag :kind, "nuniverse" %>
+      <%= hidden_field_tag :path, path.to_s %>
+      <%= hidden_field_tag :restricted, 0 , :class => "restricted"%>
+      <%= text_field_tag :content, ""  %>
+      <input type="submit" value="visit">
+    <% end -%>
+  </div>
+  <% connections = Tagging.with_path(@path).with_object_kinds("nuniverse").by_latest%>
+  <% unless connections.empty? %>
+  <h3>You recently visited</h3>
+  <dl class="connections">
+    <% connections.each do |connection| -%>
+        <%= render :partial => "/tags/connection", :locals => {:connection => connection, :reverse => false}%>
+    <% end -%>
+  </dl>
+  <%end%>
+  
+  
+  
+
+</div>

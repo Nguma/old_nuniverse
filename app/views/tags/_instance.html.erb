@@ -1,6 +1,5 @@
-<dd class="item <%= tag.kind %>_kind">
-    <span class="private"><%= image_tag('/images/icons/lock.png', :width => '20px') %></span>
-    <span class="kind"><%= tag.kind %></span>
+<dd class="connection <%= tag.kind %>_kind <%= cycle('even','odd') %>">
     <span class="avatar"><%= avatar_for(tag) %></span>
-    <span class="content"><%= link_to(tag.content, tag) %></span>
+    <span class="kind"><%= tag.kind %></span><br/>
+    <span class="content"><%= link_to_nuniverse(tag) %></span>
 </dd>

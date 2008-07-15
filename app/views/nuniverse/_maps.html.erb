@@ -1,0 +1,11 @@
+<%= @map.div(:width => "100%", :height => 450) %>
+<script type="text/javascript">
+if (GBrowserIsCompatible()) {
+map = new GMap2(document.getElementById("map_div"));
+map.setCenter(new GLatLng(78,101),5);map.addControl(new GLargeMapControl());
+map.addControl(new GMapTypeControl());
+map.addControl(new google.maps.LocalSearch(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
+}
+</script>
+
+<% geolocate([query])%>

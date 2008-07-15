@@ -1,7 +1,8 @@
 body
 {
-	background:#FFF url('/images/backgrounds/main.png') 0 0 repeat-x;
-	padding:0;
+	background:#efefef url('/images/backgrounds/main.png') 0 0 repeat-x;
+	padding:50px 0 0 50px;
+	overflow:hidden;
 }
 
 #notice
@@ -13,22 +14,16 @@ body
 	z-index:123456;
 }
 
-#main_hat
-{
-	
-	
-	background-color:transparent;
-	position:absolute;
-	top:0;
-	left:0;
-	text-align:left;
-	display:block;
-	height:40px;
-	padding:10px 10px 10px 40px;
-	margin:0;
-}
 
 #wrap
 {
-	padding:30px 40px;
+	padding:0 0;
+}
+
+.delimiter
+{
+	position:relative;
+	clear:both;
+	padding:0;
+	margin:0;
 }

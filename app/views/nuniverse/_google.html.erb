@@ -1,0 +1,11 @@
+<div class="connections">
+  <% rst = google(query) -%>
+  <% unless rst.empty? -%>
+    <% rst.each do |rst| -%>
+      <dd class="connection" style="height:auto">
+        <h3><a href="<%= rst.url %>" target="_blank"><%= rst.title %></a></h3>
+        <p><%= rst.content %></p>
+      </dd>
+    <% end -%>
+  <% end -%>
+</div>

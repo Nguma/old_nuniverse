@@ -1,6 +1,6 @@
 <div class="content" id="people_content">
   <h2>People</h2>
-  <p>Every person that you meet during your quests will become part of your nuniverse. This provides an easy way to track and overview your entourage, whether it's work, friends, family or even people you'd like to meet</p>
+  
   <dl class="connections">
   <% Tagging.with_path(path).with_object_kinds('person').by_name.each do |connection| -%>
     <%= render :partial => "/taggings/person", :locals => {:connection => connection }%>

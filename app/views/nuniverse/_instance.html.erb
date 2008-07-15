@@ -1,0 +1,16 @@
+<%#= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => @path} %>
+
+<div class="nuniverse" id="nuniverse">
+  <!-- <% header_for(:tag => tag) do -%>
+       <% if @connections.empty? -%>
+          <%#= render :partial => "/users/welcome" %>
+       <% else -%>
+       <% end -%>
+    <% end -%> -->
+  <div class="delimiter">&nbsp;</div>
+  
+  <div class="body" id="nuniverse_body">
+    <%= body %>
+  </div>
+  
+</div>

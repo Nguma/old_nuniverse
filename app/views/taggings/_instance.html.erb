@@ -1,20 +1,14 @@
-<dd class="connection"> 
-    <% unless connection.user == current_user %>
-      <span class="avatar"><%= avatar_for(connection.user.tag)  %></span>
-    <% end -%>
-    <span class="avatar"><%= avatar_for(connection.object) %></span>
-    
-    <%= link_to_nuniverse(connection.user.tag, :class => "user user_kind") %>
-    <%= sentence_for(connection.object.kind) %>
+<dd class="connection <%= cycle('even','odd') %>"> 
+        <%= avatar_for(connection.object) %>
+        <h3><%= link_to_nuniverse(connection.object, :path => connection.path, :class => "nuni") %></h3>
         
-
-    <%= link_to_nuniverse(connection.object, :path => connection.path, :class => "nuni #{connection.object.kind}_kind") %>
-    
-    <% unless connection.path.taggings.empty? || connection.object.kind == "nuniverse"-%>
-      <span class="context">  to  
-        <% connection.path.taggings[1 .. -1].each do |tagging| -%>
-          <%= link_to_tagging(tagging) %>
+        <% unless connection.path.taggings.empty? || connection.object.kind == "nuniverse"-%>
+        <p> Added to  
+          <% connection.path.taggings[1 .. -1].each do |tagging| -%>
+            <%= link_to_tagging(tagging) %>
+          <% end -%>
+          by <%= link_to_nuniverse(connection.user.tag) %>
+        </p>
         <% end -%>
-      </span>
-    <% end -%>
+
 </dd>

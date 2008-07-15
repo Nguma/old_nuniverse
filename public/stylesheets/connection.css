@@ -1,0 +1,162 @@
+.connections
+{
+	position:relative;
+	clear:both;
+	padding:0 0 0 0;
+	text-align:left;
+	overflow:hidden;
+	height:420px;
+}
+
+.content dt
+{
+	display:none;
+}
+
+.connections .connection
+{
+	padding:10px 10px 10px 10px;
+	position:relative;
+	clear:both;
+	margin:0 2px 2px 0px;
+	font-size:16px;
+	font-weight:bold;
+	color:#333;
+	width:auto;
+	min-height:30px;
+	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
+	cursor:pointer;
+	text-align:left;
+}
+
+.connections .odd
+{
+	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+}
+
+.connections .hover
+{
+	/*background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
+	background:#69c;
+	color:#FFF;
+}
+
+.connections .selected
+{
+	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;
+}
+
+.nuniverse .hover,
+.nuniverse .selected
+{
+	color:#FFF;
+}
+
+.connections .connection .avatar
+{
+	border:none;
+	position:relative;
+	float:left;
+	margin-right:10px;
+	height:30px;
+}
+
+.nuniverse .connection .avatar img
+{
+	/*width:30px;*/
+	height:30px;
+	border:none;
+}
+
+.connections .connection h3
+{
+	font-family:Arial;
+	margin-top:5px;
+	font-size:14px;
+	color:inherit;
+}
+
+.nuniverse .connection p
+{
+	font-size:12px;
+	font-weight:normal;
+	font-style:italic;
+	color:#666;
+}
+
+.nuniverse .connection p a
+{
+	color:#69c;
+}
+
+.nuniverse .selected p a
+{
+	color:#FFF;
+}
+
+
+.new_connection
+{
+	padding:10px 10px 10px 10px;
+	position:absolute;
+	clear:both;
+	bottom:30px;
+	margin:0 2px 2px 0px;
+	font-size:16px;
+	font-weight:bold;
+	color:#666;
+	width:800px;
+	height:60px;
+	background:#fff;
+	cursor:pointer;
+	text-align:left;
+}
+
+.new_connection input
+{
+	border:solid #ccc 1px;
+}
+
+.connection .manage
+{
+	position:absolute;
+	right:10px;
+}
+
+.connection .manage a
+{
+	font-size:11px;
+}
+
+h3 span.source
+{
+	display:inline;
+	color:#999;
+	font-size:11px;
+	font-weight:normal;
+	padding:0;
+	margin:0;
+}
+
+.connections .pager
+{
+	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+	text-align:center;
+	font-size:11px;
+	color:#69c;
+	padding:5px;
+}
+
+.connections .top
+{
+	connection:relative;
+}
+
+.connections .bottom
+{
+	position:absolute;
+	display:block;
+	width:100%;
+	bottom:0;
+	z-index:123456;
+}

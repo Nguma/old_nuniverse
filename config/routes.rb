@@ -31,20 +31,36 @@ ActionController::Routing::Routes.draw do |map|
 	map.nuniverse_of "/nuniverse_of/:path",
 		:controller => 'tags',
 		:action => 'show'
+
+	map.nuniverse_of_with_page "/nuniverse_of/:path/page/:page",
+		:controller => 'tags',
+		:action => 'show'
 		
-		map.nuniverse_of "/nuniverse_of/:id/:filter",
+	map.nuniverse_of "/nuniverse_of/:id/:filter",
 			:controller => 'tags',
 			:action => 'show'
 		
 	map.nuniverse_of_with_path "/nuniverse_of/:id/with_path/:path",
 		:controller => 'tags',
 		:action => 'show'
+
+	map.section_of "/section_of/:path",
+		:controller => 'tags',
+		:action => 'section'
+					
+	map.show_only "/nuniverse_of/:path/show_only/:filter",
+		:controller => 'tags',
+		:action => 'section'
 		
-	map.nuniverse_of_according_to "/nuniverse_of/:id/according_to/:path",
+	map.overview "/nuniverse_of/:path/overview/",
+		:controller => 'tags',
+		:action => 'section'
+		
+	map.nuniverse_of_according_to "/nuniverse_of/:path/according_to/:perspective",
 		:controller => 'tags',
 		:action => 'show'
 		
-	map.nuniverse_of_according_to_everyone "/nuniverse_of/:id/according_to_everyone/",
+	map.current_nuniverse_according_to "/current_nuniverse/according_to/:perspective",
 		:controller => 'tags',
 		:action => 'show'
 		

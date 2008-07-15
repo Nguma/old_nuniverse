@@ -21,6 +21,15 @@ class Tagging < ActiveRecord::Base
   named_scope :with_path, lambda { |path|
     path.nil? ? {} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
   }
+  named_scope :with_path_ending, lambda { |path|
+    path.nil? ? {} : {:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]}
+  }
+  named_scope :with_path_beginning, lambda { |path|
+    path.nil? ? {} : {:conditions => ["path rlike ?", "^_%s_" % path.ids.join('(_.*)?_')]}
+  }
+  named_scope :with_exact_path, lambda { |path|
+    path.nil? ? {} : {:conditions => ["path rlike ?", "^_%s_$" % path.ids.join('_')]}
+  }
   named_scope :with_subject, lambda { |subject|
     subject.nil? ? {} : {:conditions => ["subject_id = ?", subject.id]}
   }
@@ -36,40 +45,39 @@ class Tagging < ActiveRecord::Base
 	named_scope :with_object_kinds, lambda { |kind|
     kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :object}
   }
+	
+	named_scope :groupped, :group => "object_id"
   named_scope :by_latest, :order => "taggings.updated_at DESC"
 	named_scope :by_name, :order => "tags.content DESC"
-	
-  # def self.find_taggeds_with(params)
-  #   
-  #   @path = "_#{params[:path].collect{|c| c.id}.join('(_.*)?_')}_"
-  #   @order = params[:order] || "path ASC"
-  #   #
-  #   # @objects = params[:objects].collect {|o| o.id}.join(',') if params[:objects]
-  #   
-  #   sub_query = "SELECT taggings.* FROM taggings LEFT JOIN tags ON taggings.#{oid} = tags.id WHERE taggings.path rlike '#{@path}'"
-  #   sub_query << " AND taggings.subject_id in (#{params[:subject].id}) " if params[:subject]
-  #   sub_query << " AND taggings.object_id in (#{params[:object].id}) " if params[:object]
-  #   sub_query << " AND taggings.user_id in (#{params[:user_id]})" if params[:user_id]
-  #   sub_query << " AND tags.kind = '#{params[:kind]}'" if params[:kind]
-  #   
-  #   #raise sub_query if params[:reverse]
-  #   Tagging.paginate_by_sql(sub_query, :page => params[:page] || 1 , :per_page => params[:per_page] || 6 )
-  # end
-	
+
+
+	def move(original_path, new_path)
+	  Tagging.transaction do
+      Tagging.switch_paths("#{self.path}", "#{new_path}")
+    
+      # Tagging.find(:first, :conditions => {
+      #         :subject_id => self.path.last_tag.id,
+      #         :object_id  => self.id,
+      #         :user_id    => self.user_id,
+      #         :path       => self.path
+      #       }).update_attributes(
+      #         :subject_id => new_path.split('_').last,
+      #         :path       => new_path
+      #       )
+    end
+  end
+
 	protected
 	
-	# def self.crumbs(path)
-	# 		# If there is a way to make mysql order by the path instead of run a select for each,
-	# 		# that'd be great!
-	# 		@crumbs = []
-	# 		path.split('_').reject{|c| c.blank? }.each do |crumb|
-	# 			@tag = Tag.find(crumb)
-	# 			@tag.crumbs = [@crumbs].flatten
-	# 			@crumbs << @tag
-	# 		end
-	# 		@crumbs
-	# 	end
-	
+  def self.switch_paths(original_path, new_path)
+		c = ActiveRecord::Base.connection();
+    c.execute <<-SQL
+    UPDATE taggings
+    SET path = '_#{new_path}_' + SUBSTRING(path, CHAR_LENGTH('#{original_path.to_s}') + 1)
+    WHERE path REGEXP '^#{original_path.to_s}'
+    SQL
+  end	
+
 	private
 	
 	def clean_path

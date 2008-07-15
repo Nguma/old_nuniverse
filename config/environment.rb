@@ -60,3 +60,4 @@ end
 
 require 'will_paginate'
 require 'google_geocode'
+require 'google_ajax'

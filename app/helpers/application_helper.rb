@@ -7,20 +7,59 @@ module ApplicationHelper
 	
 	
 	def avatar_for(tag)
-		return "" if tag.avatar.nil?
-		return link_to(image_tag(tag.avatar.public_filename(:large), :alt => tag.content), tag, :class => 'avatar')
+		return link_to(image_tag("/images/icons/#{tag.kind}.png", :alt => tag.kind), "/nuniverse_of/#{tag.id}", :class=>'avatar', :title => "#{tag.kind}: #{tag.content}") if tag.avatar.nil?
+		return link_to(image_tag(tag.avatar.public_filename(:large), :alt => tag.content), "/nuniverse_of/#{tag.id}", :class => 'avatar', :title => "#{tag.kind}: #{tag.content}")
 	end
 	
-	def path_for(path, options = {})
+	# def path_for(path, options = {})
+	# 		
+	# 		crumbs = Tagging.crumbs(path)
+	# 		
+	# 		# Setting a default partial for rendering the path
+	# 		partial = options[:partial] || "/taggings/path"
+	# 		render(
+	# 				:partial => partial,
+	# 				:locals => {:tags => tags, :path => crumbs})
+	# 		
+	# 	end
+	
+	def connections_for(context, options = {})
 		
-		crumbs = Tagging.crumbs(path)
+		@perspective = options[:perspective] || "everyone"
+		options[:page] ||= 1
+		@filter = options[:filter] || nil
+		if context.is_a?(String)
+			query = context
+		elsif context.is_a?(TaggingPath)
+			query = context.last_tag.content
+		else
+			return Error
+		end
 		
-		# Setting a default partial for rendering the path
-		partial = options[:partial] || "/taggings/path"
-		render(
-				:partial => partial,
-				:locals => {:tags => tags, :path => crumbs})
-		
+		case @perspective
+			when "ebay"				
+				render :partial => "/nuniverse/ebay", :locals => {:query => query}
+			when "amazon"
+				render :partial => "/nuniverse/amazon", :locals => {:query => query}
+			when "daylife"
+				render :partial => "/nuniverse/daylife", :locals => {:query => query}
+			when "google"
+				render :partial => "/nuniverse/google", :locals => {:query => query}
+			when "maps"
+				render :partial => "/nuniverse/maps", :locals => {:query => context.last_tag}
+			when "me"
+				@connections = Tagging.with_user(current_user).with_path_ending(context).with_object_kinds(@filter).groupped.by_latest.paginate(
+					:page => options[:page],
+					:per_page => 8
+				)
+				render :partial => "/nuniverse/connections", :locals => {:connections => @connections, :path => context}
+			else
+				@connections = Tagging.with_path_ending(context).with_object_kinds(@filter).groupped.by_latest.paginate(
+					:page => options[:page], 
+					:per_page => 8
+				)
+				render :partial => "/nuniverse/connections", :locals => {:connections => @connections, :path => context}
+		end
 	end
 	
 	
@@ -32,7 +71,7 @@ module ApplicationHelper
 		# options[:path] ||= []
 		# options[:path] << tag
 	
-		return link_to(label,	"/nuniverse_of/#{options[:path].to_s.gsub(/^_/, '')}#{tag.id}", :class =>options[:class])
+		return link_to(label,	"/nuniverse_of/#{tag.id}", :class =>options[:class])
 	end
 	
 	def link_to_tagging(tagging, options = {})
@@ -47,31 +86,27 @@ module ApplicationHelper
 		
 		return link_to(label, "/nuniverse_of/#{tagging.to_s}", options)
 	end
-	
-	def header_for(tag)
-		if logged_in? && current_user.tag == tag
-			label = "Your nuniverse"
-			superlabel = "Welcome to"
-			sublabel = ""
-		else
-			label = tag.content.capitalize
-			superlabel = "You are visiting the nuniverse of"
-			sublabel = ""
-		end
-		render(
-			:partial => "/tags/header",
-			:locals => {
-				:label => label,
-				:tag => tag
-			}
-		)
-	end
-	
-	def default_content_for(name, &block)
-	  name = name.kind_of?(Symbol) ? ":#{name}" : name
-	  out = eval("yield #{name}", block.binding)
-	  concat(out || capture(&block), block.binding)
-	end
 
+	def menu(params = {}, &block)
+		params[:body] = capture(&block)
+		concat(
+		render(
+			:partial => "/nuniverse/menu",
+			:locals => params
+		), block.binding)
+	end
+	
+	def menu_item(name, params = {}, &block)
+		params[:body] = capture(&block)
+		params[:classes] ||= ""
+		if params[:selected] && name == params[:selected]
+			params[:classes] << " selected"
+		end
+		concat(
+		render(
+			:partial => "/nuniverse/menu_item",
+			:locals => params
+		), block.binding)
+	end
 
 end

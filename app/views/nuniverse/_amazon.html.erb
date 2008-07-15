@@ -1,0 +1,11 @@
+<dl class="connections">
+<% amazon(query).each do |item| %>
+  <dd class="connection <%= cycle('even','odd') %>">
+    <% unless item.thumbnail.nil? -%>
+     <%= link_to(image_tag(item.thumbnail),"#",:class => 'avatar') %>
+    <% end -%>
+      <h3><a href="#"><%= link_to(item.title[0..100].capitalize,item.url) %></a></h3>
+      <p>$<%= item.amount.to_i %></p>
+  </dd>
+<% end -%>
+</dl>

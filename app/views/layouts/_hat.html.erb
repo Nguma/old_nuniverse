@@ -1,12 +1,20 @@
-<div id="main_hat">
-  <div id="control_panel">
-    <%= link_to "About", "/#TODO" %>
-    <% if logged_in? -%>
-      <%= link_to "My Account", "/my_account" %>
-      <%= link_to "Sign out", "/logout" %>
-    <% else -%>
-      <%= link_to "Sign in", "/login" %>
-      <%= link_to "Register", "/signup" %>
+<% menu(:id => "control_panel", :selected => selected) do -%>
+    <% menu_item("home", :selected => selected) do -%>
+      <%= link_to "Home","/" %>
     <% end -%>
-  </div>
-</div>
+    <% if logged_in? -%>
+      <% menu_item("my_nuniverse", :selected => selected) do -%>
+        <%= link_to "My nuniverse","/my_nuniverse" %>
+      <% end -%>
+      <% menu_item("sign_out",  :selected => selected) do -%>
+        <%= link_to "Sign out","/logout" %>
+      <% end -%>
+    <% else -%>
+      <% menu_item("sign_in",  :selected => selected) do -%>
+        <%= link_to "Sign in","/login" %>
+      <% end -%>
+      <% menu_item("register",  :selected => selected) do -%>
+        <%= link_to "register","/signup" %>
+      <% end -%>
+    <% end -%>
+<% end -%>

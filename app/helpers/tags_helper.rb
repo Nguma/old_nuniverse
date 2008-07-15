@@ -2,7 +2,7 @@ module TagsHelper
 
 	
 	def ebay(query)
-		EbayShopping::Request.new(:find_items, {:query_keywords => query}).response.items
+		EbayShopping::Request.new(:find_items, {:query_keywords => "#{query}", :max_entries => 8}).response.items
 	end
 	
 	def amazon(query, options = {})
@@ -10,9 +10,15 @@ module TagsHelper
 		Awsomo::Request.new().search(query, :category => category)
 	end
 	
+	
+	def daylife(query)
+		day = Daylife::API.new('6e2eb9b4fce9bd1eff489d2c53b7ac65', '3aea4b3560e4b00e3027a7313a497f06')
+		return day.execute('search','getRelatedArticles', :query => "#{query}", :limit => 5)
+	end
+	
 	def google(query)
-		#GoogleAjax.referer = "http://localhost:3000"
-		#return GoogleAjax::Search.web(query).results
+		GoogleAjax.referer = "http://localhost:3000"
+		return GoogleAjax::Search.web(query).results
 	end
 	
 	def geolocate(places)
@@ -37,13 +43,13 @@ module TagsHelper
 		
 		#path.tags.select {|tag| tag.kind == "location"}.reverse.map {|c| c.description }
 		#loc = gg.locate query
-		unless markers.empty?
-			@map.center_zoom_init([markers[0].latitude, markers[0].longitude],15)
-		else
-			@map.center_zoom_init("new York City",5)
-		end
-		 	
-			
+		# unless markers.empty?
+		# 	@map.center_zoom_init([markers[0].latitude, markers[0].longitude],15)
+		# else
+		# 	@map.center_zoom_init("new York City",5)
+		# end
+		#  	
+			@map.center_zoom_init("New York City",5)
 	end
 	
 	def h3_for(path)
@@ -74,25 +80,25 @@ module TagsHelper
 		params[:body] = capture(&block)
 		concat(
 			render(
-				:partial => "/nuniverses/header", 
+				:partial => "/nuniverse/header", 
 				:locals => params
 			), block.binding
 		)		
 	end
 	
 	def nuniverse_for(params)
-		params[:left] = render( 
-        			:partial => "/nuniverses/#{params[:tag].kind}_left", 
-        			:locals => {:tag => params[:tag], :path => @path}
-      			) 
+		# params[:left] = render( 
+		#         			:partial => "/nuniverse/#{params[:tag].kind}_left", 
+		#         			:locals => {:tag => params[:tag], :path => @path}
+		#       			) 
 
 		params[:body] = render(
-	            :partial => "/nuniverses/#{params[:tag].kind}", 
+	            :partial => "/nuniverse/#{params[:tag].kind}", 
 	            :locals => {:tag => params[:tag], :path => @path}
 	          ) 
 
 	     render(
-	        :partial => '/nuniverses/instance',
+	        :partial => '/nuniverse/instance',
 	        :locals => params
 	      )			
 	end
@@ -122,7 +128,7 @@ module TagsHelper
 			
 		concat(
 			render(
-				:partial => "/nuniverses/list", 
+				:partial => "/nuniverse/list", 
 				:locals => params
 			), block.binding
 		)

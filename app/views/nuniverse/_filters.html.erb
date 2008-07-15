@@ -1,0 +1,43 @@
+<dl class="filters">
+    <dd class="selected">
+      <%= link_to(
+          image_tag('/images/icons/overview.png', :alt => "overview"), 
+          "/section_of/#{path}",:title => "Overview") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/topic.png', :alt => "topic"), 
+          "/nuniverse_of/#{path}/show_only/topic", :title => "topics") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/location.png', :alt => "location"), 
+          "/nuniverse_of/#{path}/show_only/location", :title => "places") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/person.png', :alt => "person"), 
+          "/nuniverse_of/#{path}/show_only/person", :title => "people") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/item.png', :alt => "item"), 
+          "/nuniverse_of/#{path}/show_only/item", :title => "items") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/pro.png', :alt => "pro"), 
+          "/nuniverse_of/#{path}/show_only/pro", :title => "pros") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/con.png', :alt => "con"), 
+          "/nuniverse_of/#{path}/show_only/con", :title => "cons") %>
+    </dd>
+    <dd class="">
+      <%= link_to(
+          image_tag('/images/icons/bookmark.png', :alt => "bookmark"), 
+          "/nuniverse_of/#{path}/show_only/bookmark", :title => "bookmarks") %>
+    </dd>
+ 
+</dl>

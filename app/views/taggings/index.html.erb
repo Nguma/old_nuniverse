@@ -1,19 +1,13 @@
+<%= render :partial => "/layouts/hat", :locals => {:selected => "home"}%>
 <div class="nuniverse">
-  <div id="breadcrumbs">
-      <dd class="home">
-        <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/") %>
-      </dd>
-  </div>
-  <div class="content" style="background:none">
-
-    
-    <div class="detail">
-      <div class="items">
+ 
+  <div class="content">
+    <h2>Lately in nuniverse...</h2>
+    <dl class="connections">
         <% for connection in @connections %>
            <%= render :partial => "instance", :locals => {:connection => connection}%>
         <% end %>
-      </div>
-    </div>
+    </dl>
   </div>
   
 </div>

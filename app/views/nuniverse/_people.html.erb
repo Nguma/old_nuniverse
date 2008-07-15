@@ -1,0 +1,9 @@
+<div class="content people">
+  <h2>People</h2>
+  <%= connections.each do |connection| -%>
+    <% person = connection.object %>
+    <dd class="connection">
+      <h4><a class="#"><%= person.content %></a></h4>
+    </dd>
+  <% end -%>
+</div>

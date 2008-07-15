@@ -1,1 +1,2 @@
-<%= nuniverse_for(:tag => @tag, :path => @path) %>
+<%= render :partial => "/layouts/hat", :locals => {:selected => "home"}%>
+<%= render :partial => "/nuniverse/topic", :locals => {:path => @path, :tag => @tag, :page => @page}%>

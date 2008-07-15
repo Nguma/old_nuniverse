@@ -13,8 +13,8 @@
   <meta name="Keywords" content="" />
   <meta http-equiv="imagetoolbar" content="no" />
 
-  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'path'%>
-  <%= javascript_include_tag  'mootools', 'application' %>
+  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'path', 'connection', 'filters'%>
+  <%= javascript_include_tag  'mootools', 'application', 'nuniverse' %>
   <%#= GMap.header(:with_vml => false) %>
   <%#= @map.to_html if @map%>
 
@@ -34,7 +34,7 @@
     <%= flash[:notice] %>
   </div>
   
-  <%= render :partial => "hat"  rescue render :partial => "/layouts/hat"%>
+  
   <div id="wrap">
     <%= yield %>
   </div>

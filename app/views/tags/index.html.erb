@@ -1,33 +1,18 @@
-<% GoogleAjax.referer = "http://localhost:3000" -%>
-<% GoogleAjax::Search.local("Cafe Grumpy", "new York", "NY").results.each do |rst| %>
-          <%= rst.lat %>
+<%# GoogleAjax.referer = "http://localhost:3000" -%>
+<%#GoogleAjax::Search.local("Cafe Grumpy", "new York", "NY").results.each do |rst| %>
+          <%#rst.lat %>
 
-  <% end -%>
-
-<!-- <div class="nuniverse">
-  <div id="breadcrumbs">
-      <%= link_to(image_tag("/images/icons/icon_nuniverse.png", :alt => "nuniverse.net"),"/", :class => "home") %>
-  </div>
-  <div class="content">
-    <dl class="items">
-        <dt>Browse By</dt>
-        <dd class="item"><%= link_to("Topics", "/nuniverse/topics") %></dd>
-        <dd class="item"><%= link_to("People", "/nuniverse/person") %></dd>
-        <dd class="item"><%= link_to("Places", "/nuniverse/location") %></dd>
-        <dd class="item"><%= link_to("Products", "/nuniverse/product") %></dd>
-        <dd class="item"><%= link_to("Comments", "/nuniverse/comment") %></dd>
-        <dd class="item"><%= link_to("Pros & Cons", "/nuniverse/pro") %></dd>
-    </dl>
-    
-    <div class="detail">
-      <div class="items">
-
-        <% for tag in @tags %>
-           <%= render :partial => "instance", :locals => {:tag => tag}%>
-        <% end %>
-      </div>
-    </div>
-  </div>
+  <%# end -%>
   
-  <%= link_to 'New tag', new_tag_path %>
-</div> -->
+  <%# g = Googleize.new(:mode => "local") -%>
+  <%#= g.search('cafe grumpy new york').viewport['center']['lat'].inspect %>
+
+<%= render :partial => "/layouts/hat", :locals => {:selected => "home"} %>
+<div class="nuniverse">
+  <div class="logo">
+    <%= image_tag('/images/icons/logo_nuniverse.png', :alt => 'nuniverse_logo') %>
+  </div>
+  <div class="tags">
+    <%= %>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<dl class="perspectives">
+  <dt>According to</dt>
+  <% if logged_in? -%>
+
+       <% if path.tags.include?(current_user.tag) -%>
+         
+          <dd class="item selected">
+             <%= link_to("You", "/current_nuniverse/according_to/me") %>
+           </dd>
+           <dd class="item"><%= link_to("Everyone", "/current_nuniverse/according_to/everyone") %></dd>
+       <% else -%>
+         
+         <dd class="item selected">
+           <%= link_to("You", "/current_nuniverse/according_to/me") %>
+         </dd>
+         <dd class="item"><%= link_to("Everyone", "/current_nuniverse/according_to/everyone") %></dd>
+       <% end -%>
+
+   <% else -%>
+     <dd class="item selected"><%= link_to("Everyone", "/current_nuniverse/according_to/everyone") %></dd>
+   <% end -%>
+  <dd class="item"><%= link_to("Daylife","/current_nuniverse/according_to/daylife") %></dd>
+  <dd class="item"><%= link_to("Ebay","/current_nuniverse/according_to/ebay") %></dd>
+  <dd class="item"><%= link_to("Amazon","/current_nuniverse/according_to/amazon") %></dd>
+  <dd class="item"><%= link_to("Maps","#", :class => "map") %></dd>
+  <dd class="item"><%= link_to("Wikipedia","#") %></dd>
+  <dd class="item"><%= link_to("Google","/current_nuniverse/according_to/google") %></dd>
+  
+ 
+  
+</dl>

@@ -1,0 +1,11 @@
+<div class="new">
+  <h3>Leave a Message</h3>
+  <% form_tag '/tags/create' do -%>
+    <%= hidden_field_tag :kind, "message" %>
+    <%= hidden_field_tag :path, "#{current_user.tag.id}_#{recipient.id}" %>
+    <%= hidden_field_tag :restricted, 1 , :class => "restricted"%>
+    <%= text_field_tag :content, "" , :width => 400 %>
+    <input type="submit" value="Make it public">
+    <input type="submit" value="Make it private" class ="private">
+  <% end -%>
+</div>

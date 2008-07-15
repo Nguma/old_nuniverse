@@ -9,16 +9,7 @@ class UsersController < ApplicationController
 	def show
 		@user = current_user
 		@path = TaggingPath.new @user.tag.id
-		
-		@quests = Tagging.with_path(@path).with_object_kinds("quest").paginate(
-			:page => 1,
-			:per_page => 6
-		)
-		
-		@connections = Tagging.with_path(@path).by_latest.paginate(
-			:page => 1,
-			:per_page => 6
-		)
+	
 	end
 	
 	

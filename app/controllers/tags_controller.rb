@@ -14,25 +14,21 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-		@path = TaggingPath.new params[:path]
+		session[:path] = params[:path] || session[:path]
+		@path = TaggingPath.new session[:path]
 		@tag  = @path.last_tag
-		
+		@page = params[:page] || 1
 		@filter = params[:filter] || nil
-		
-		@quests = Tagging.with_path(@path).with_object_kinds("quest").paginate(
-			:page => 1,
-			:per_page => 6
-		)
-		
-		@messages = Tagging.with_path(@path).with_object_kinds("message").by_latest
-		
-		@connections = Tagging.with_path(@path).with_object_kinds(@filter).by_latest
-	
-		@places = Tagging.with_path(@path).with_object_kinds('location').by_name
+		session[:perspective] = params[:perspective] || session[:perspective]
+		@perspective = params[:perspective] || "You"
 		
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
+			format.js 	{ 
+				@perspective = session[:perspective]
+				render :action => :section
+			}
     end
   end
 
@@ -76,6 +72,7 @@ class TagsController < ApplicationController
         flash[:notice] = 'Tags were successfully created.'
         format.html { redirect_back_or_default("/nuniverse_of/#{@tagging.path}") }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
+				format.js { render :action => "instance"}
     end
   end
 
@@ -83,7 +80,6 @@ class TagsController < ApplicationController
   # PUT /tags/1.xml
   def update
     @tag = Tag.find(params[:id])
-
     respond_to do |format|
       if @tag.update_attributes(params[:tag])
         flash[:notice] = 'Tag was successfully updated.'
@@ -107,4 +103,14 @@ class TagsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+	def section
+		@path = TaggingPath.new params[:path]
+		@page = params[:page] || 1
+		@tag = @path.last_tag
+		@filter = params[:filter] || nil
+		@section = params[:filter] || @path.last_tag.content 
+		# session[:perspective] = params[:perspective] || session[:perspective]
+		# 	@perspective = session[:perspective]
+	end
 end

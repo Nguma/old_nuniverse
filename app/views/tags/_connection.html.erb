@@ -6,9 +6,13 @@
     path = connection.path
   end -%>
 
-<dd class="connection"> 
-    <span class="avatar"><%= avatar_for(tag) %></span>
-    <span class="kind <%= tag.kind %>_kind"><%= tag.kind %></span></br/>
-    <%= link_to_nuniverse(tag, :path => path, :class => "nuni") %>
-    <p><%= connection.description %></p>
+<dd class="connection <%= cycle('even', 'odd') %>"> 
+    <div class="avatar"><%= avatar_for(tag) %></div>
+    <div class="text">
+      <div class="main"><%= link_to_nuniverse(tag, :path => path, :class => "nuni") %><span class="<%= tag.kind %>_kind"><%= tag.kind %></span>
+      </div>
+      <p><%= connection.description %></p>
+    </div>
+    
+    
 </dd>
