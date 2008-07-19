@@ -1,6 +1,12 @@
  <%# geolocate([tag])%>
+ <%# @map = GMap.new("map_div")
+	  @map.control_init(:large_map => true,:map_type => true)
+	  @map.center_zoom_init([75.5,-42.56],4)
+	  @map.overlay_init(GMarker.new([75.6,-42.467],:title => "Hello", :info_window => "Info! Info!")) %>
+ 
 <% content_for :head do -%>
-  <%#= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
+  <%= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
+  <%#= @map.to_html%>
 <% end -%>
 
 <div class="nuniverse" id="nuniverse">
@@ -13,12 +19,11 @@
       <% page_for(:tag => tag, :path => path) do -%> 
         <%= content_for_page(:tag => tag, :path => path, :perspective => perspective, :filter => filter) %>
       <% end -%>
+      <div class="page">
+        <%#= @map.div(:width => "100%", :height => 450) %>
+      </div>
     </div>
   </div>
-</div>
-
-<div class="hidden" id="gmap_hidden_div">
-  <%#= @map.div(:width => "100%", :height => 450) %>
 </div>
 
 <div class="hidden" id="content_template">

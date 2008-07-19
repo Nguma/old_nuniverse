@@ -3,7 +3,9 @@
   <%#= GMap.header (:local_search => true, :large_map => true) %>
   <%#= @map.to_html %>
 <%# end -%>
-
+<% content_for :head do -%>
+  <%= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
+<% end -%>
 <div class="nuniverse" id="nuniverse">
   <%= render :partial => "/nuniverse/breadcrumbs", :locals => 
   {

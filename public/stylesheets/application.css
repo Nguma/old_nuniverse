@@ -2,8 +2,7 @@ body
 {
 	background:#efefef url('/images/backgrounds/main.png') 0 0 repeat-x;
 	padding:40px 0 0 50px;
-	overflow:scroll;
-	overflow-x:hidden;
+
 }
 
 #notice
@@ -46,5 +45,6 @@ body
 .nuniverse .scroller
 {
 	width:1200px;
-	overflow-x:hidden;
+	height:600px;
+	overflow:hidden;
 }

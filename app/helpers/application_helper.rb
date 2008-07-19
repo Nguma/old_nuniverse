@@ -95,7 +95,7 @@ module ApplicationHelper
 				params[:connections] = flickr(:query => query)
 			when "map"
 				params[:connections] = geolocate(:path => params[:path])
-			when "me"
+			when "you"
 				params[:connections] = render :partial => "/nuniverse/connections", :locals => {
 					:connections => Tagging.with_user(current_user).with_path_ending(params[:path]).with_object_kinds(params[:filter]).groupped.by_latest.paginate(
 						:page => params[:page], 

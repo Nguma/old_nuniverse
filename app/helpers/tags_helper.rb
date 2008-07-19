@@ -5,8 +5,7 @@ module TagsHelper
 		return render :partial => "/nuniverse/ebay", :locals =>
 		{
 			:connections => EbayShopping::Request.new(:find_items, {:query_keywords => params[:query], :max_entries => 8}).response.items
-		}
-		
+		}	
 	end
 	
 	def amazon(params)
@@ -15,7 +14,6 @@ module TagsHelper
 			:connections => Awsomo::Request.new().search(params[:query], :category => params[:category] ||= "All")
 		}
 	end
-	
 	
 	def daylife(params)
 		day = Daylife::API.new('6e2eb9b4fce9bd1eff489d2c53b7ac65', '3aea4b3560e4b00e3027a7313a497f06')
@@ -45,33 +43,56 @@ module TagsHelper
 	end
 	
 	def geolocate(params)
-		map = GMap.new("map_div")
-		map.control_init(:large_map => true, :map_type => true, :local_search => true)
+		
 		gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
 		markers = []
-		places = params[:path].tags.select {|tag| tag.has_address? } || []
-		places.each do |place|
-			raise tag.address.inspect
-			marker = gg.locate tag.address
-			map.overlay_init(
-				GMarker.new([marker.latitude, marker.longitude],
-					:title => place.content, 
-					:info_window => "#{place.content}: #{marker.address}"
-				)
-			)				
-			markers << marker
+		@map = GMap.new("map_div")
+		#@map.control_init(:large_map => true, :map_type => true, :local_search => true) 	
+		#@map.center_zoom_init([35.12313,-110.567],12)
+		places = params[:path].tags.select {|tag| tag.has_address? }
+		case places.last.kind
+		when "country"
+			zoom = 5
+		when "city"
+			zoom = 10
+		else
+			zoom = 15
 		end
 		
-		#path.tags.select {|tag| tag.kind == "location"}.reverse.map {|c| c.description }
-		#loc = gg.locate query
-		# unless markers.empty?
-		# 	@map.center_zoom_init([markers[0].latitude, markers[0].longitude],15)
-		# else
-		# 	@map.center_zoom_init("new York City",5)
-		# end
-		#  	
-		map.center_zoom_init("New York City",5)
-		return map.div(:width => "100%", :height => 450)
+		#places.each do |place|
+			#raise place.address.inspect
+			marker = gg.locate places.last.address
+			# @map.overlay_init(
+			# 						GMarker.new([marker.latitude, marker.longitude],
+			# 									:title => place.content, 
+			# 									:info_window => "#{place.content}: #{marker.address}"
+			# 					)
+			# 			)				
+			markers << "{'longitude':#{marker.longitude},'latitude':#{marker.latitude}, 'title':'#{places.last.content}'}"
+			
+		#end
+		if markers.empty?
+			return "No address is linked to this nuniverse."
+		end
+		
+		
+		html = "<script type='text/javascript' charset='utf-8'>
+		//<![CDATA[
+			
+			nuniverse.options['map'] = {
+				'markers':[#{markers.join(',')}],
+				'zoom':#{zoom},
+				'center':#{markers[0]}
+			} 
+		//]]>
+		</script>"
+		
+		return render :partial => "/nuniverse/maps", :locals =>{
+			:map => @map,
+			:markers => markers,
+			:html => html
+		}
+		#return @map.div(:width => "100%", :height => 450, :class => "map")
 	end
 	
 	def h3_for(path)

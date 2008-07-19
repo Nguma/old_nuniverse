@@ -5,12 +5,20 @@ class Tag < ActiveRecord::Base
 	
 	def self.connect(params)
 		@object = Tag.find_by_content_and_kind(params[:content], params[:kind])
-		@object ||= Tag.create(
-			:content => params[:content], 
-			:kind => params[:kind], 
-			:description => params[:description] || "",
-			:url => params[:url]
-		)
+		if @object.nil?
+			@object = Tag.create(
+				:content => params[:content], 
+				:kind => params[:kind],
+				:description => params[:description] || "",
+				:url => params[:url]
+			)
+		else
+			@object.description = params[:description] || @object.description
+			@object.url = params[:url] || @object.url
+			@object.save	
+		end
+		
+		
 		
 		unless params[:user_id].nil?
 			@subject = Tag.find(params[:path].split('_').last)
@@ -28,12 +36,15 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def has_address?
+		return true if kind == "country" || "city" || "continent"
 		return true if description.match(/#address\s.+/)
 		return false
 	end
 	
 	def address
-		return description.match(/#address\s([^#].)+/)[1]
+		ad = description.scan(/#address\s([^#].+)+/)[0]
+		return ad[0] if ad
+		return content
 	end
 	# def self.find_taggeds_with(params)
 	# 		

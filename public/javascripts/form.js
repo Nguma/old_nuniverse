@@ -83,7 +83,7 @@ var NForm = new Class({
         obj.fireEvent('success',[a,b,c,d]);
         obj.inputs().each(function(input)
         {
-          if(input.getProperty('type') != "submit")
+          if(input.getProperty('type') == "")
           {
             input.setProperty('value','');
           }
@@ -103,6 +103,7 @@ var NForm = new Class({
   
   toggle:function()
   {
+   
     this.el.toggleClass('expanded');
   }
 });

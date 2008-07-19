@@ -6,9 +6,12 @@ class UsersController < ApplicationController
 
 	# GET /user
 	# GET /my_account
+	# GET /my_nuniverse
 	def show
 		@user = current_user
 		@path = TaggingPath.new @user.tag.id
+		session[:perspective] = "you"
+		@perspective = session[:perspective]
 	end
 	
 	

@@ -2,6 +2,7 @@
 
 function addInfoWindowToMarker(marker,info,options){
 	GEvent.addListener(marker, "click", function() {marker.openInfoWindowHtml(info,options);});
+	console.log(info)
 	return marker;
 }
 

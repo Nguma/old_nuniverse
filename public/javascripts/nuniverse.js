@@ -2,7 +2,8 @@ var Nuniverse = new Class({
   Implements: Options,
   options:{
     form:null,
-    nav:null
+    nav:null,
+    map:{}
   },
   
   initialize:function()
@@ -41,10 +42,12 @@ var Nuniverse = new Class({
             if(!action.hasClass('selected'))
             {
               obj.setSelected('dd','dl',this.getElement('a'));
+              perspectives.getElement('dt').set('text', 'According to '+action.get('text').toLowerCase());
               var updated = page.getElement('.content');
               updated.set('html', '<h6>Loading...</h6>');
               perspectives.removeClass('expanded');
               obj.requestAndUpdate(updated, this.getElement('a').get('href'));
+              
             } 
             else
             {
@@ -65,10 +68,12 @@ var Nuniverse = new Class({
           if(!this.hasClass('expanded'))
           {
             this.addClass('expanded');
+            perspectives.getElement('dt').set('text', 'According to: ');
           }
         },
         'mouseleave':function(ev){
           this.removeClass('expanded');
+          perspectives.getElement('dt').set('text', 'According to '+this.getElement('.selected a').get('text').toLowerCase());
         }
       });
   },
@@ -133,16 +138,19 @@ var Nuniverse = new Class({
               obj.selectPage(parent);
               if($defined(obj.nextPage()))
               {
+                obj.nextPage().getChildren().destroy();
                 var new_page = a[0].replaces(obj.nextPage());
               }
               else
               {
                 var new_page = a[0].inject(obj.currentPage(),'after');
               }
-              
               obj.refresh(new_page);
+              if(new_page.getElement('.map'))
+              {
+                obj.setMap();
+              }
             },
-            'evalResponse':true,
             'evalScripts':true
           }).get();
          
@@ -213,12 +221,16 @@ var Nuniverse = new Class({
     var call = new Request.HTML({
          'url':url,
          'autoCancel':true,
+         'update':updated,
          onSuccess:function(a,b,c,d)
          {
-           updated.set('html', c);
            obj.setConnections(updated);
+           //obj.setMap(updated);
+           if(updated.getElement('.map'))
+           {
+             obj.setMap();
+           }
          },
-         'evalResponse':true,
          'evalScripts':true
     }).get();
   },
@@ -273,6 +285,15 @@ var Nuniverse = new Class({
     
   },
   
+  hideForm:function(page)
+  {
+    var form = page.getElement('.new_connection');
+    if($defined(form))
+    {
+      form.removeClass('expanded');
+    }
+  },
+  
   selectPage:function(page)
   {
     if(page != this.currentPage())
@@ -282,6 +303,7 @@ var Nuniverse = new Class({
         this.currentPage().removeClass('.current_page');
         this.currentPage().setStyle('width',300);
         this.currentPage().getElement('.perspectives').removeClass('.current');
+        this.hideForm(this.currentPage());
       }
       this.options['page'] = page;
 
@@ -305,6 +327,37 @@ var Nuniverse = new Class({
     this.setPerspectives(page);
     this.setConnections(page);
     this.setConnectionForm(page);
+    this.hideForm(page);
     this.currentPage().setStyle('width',300);
+
+  },
+  
+  setMap:function()
+  {
+    //page = params['page'];
+    if($defined(this.map) )
+    {
+      this.map = null;
+    }
+    params = this.options['map']
+    var map_div = $('map_div');//page.getElement('.map');
+    if($defined(map_div))
+    {
+      if (GBrowserIsCompatible()) {
+       this.map = new GMap2(map_div);
+       this.map.setCenter(new GLatLng(params['center']['latitude'],params['center']['longitude']),params['zoom']);
+       this.map.addControl(new GLargeMapControl());
+       this.map.addControl(new GMapTypeControl());
+       this.map.addControl(new google.maps.LocalSearch(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
+       params['markers'].each(function(m)
+       {
+         var marker = new GMarker(new GLatLng(m['latitude'],m['longitude']), {title:m['title'], draggable:true});
+         
+         this.map.addOverlay(addInfoWindowToMarker(marker),"<h2 style='color:#333'>YEAH</h2>", {});
+         
+       },this);
+       }
+       
+    } 
   }
 });
