@@ -33,36 +33,69 @@ dl.filters dd.selected
 	font-weight:bold;
 }
 
-
-.header dl.perspectives
+.perspectives
 {
 	position:relative;
 	clear:both;
-	font-size:12px;
+	font-size:14px;
+	padding:0;
 	color:#333;
 	height:35px;
 	margin:0 0 2px 0;
-}
-
-dl.perspectives dt
-{
-	position:relative;
-	float:left;
-	padding:10px;
-}
-
-dl.perspectives dd
-{
-	position:relative;
-	float:left;
-	padding:10px;
-}
-
-dl.perspectives dd.selected
-{
+	z-index:1234567890;
 	background:#69c;
+	cursor:pointer;
+	width:100%;
+}
+
+.perspectives dl
+{
+	position:absolute;
+	padding:0;
+	font-weight:bold;
+	color:#FFF;
+	clear:none;
+	background:#69c;
+}
+.perspectives dt
+{
+	color:#FFF;
+	position:relative;
+	float:left;
+	font-size:14px;
+	padding:10px 5px 8px 10px;
+	z-index:12345678;
+}
+
+.perspectives dd
+{
+	position:relative;
+	display:none;
+	padding:10px 10px 8px 5px;
+	clear:none;
+}
+
+.expanded dd
+{
+	display:block;
+}
+
+.perspectives dd.hover
+{
+	background-color:#369;
+}
+
+.current_page dt,
+.current_page dd
+{
+	display:none;
+}
+
+.perspectives dd.selected
+{	
 	color:#FFF;
 	font-weight:bold;
+	display:block;
 }
 
 dl.options

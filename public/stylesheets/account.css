@@ -8,9 +8,10 @@
 
 #control_panel
 {
+
 	position:fixed;
 	background:none;
-	left:50px;
+	right:10px;
 	top:0px;
 	padding:0;
 	font-size:12px;
@@ -45,10 +46,16 @@
 	border:solid 1px #ccc;
 }
 
-.detail form label
+.detail form label,
+#sign_up label
 {
 	display:block;
 	padding:0;
 	margin:5px 0 5px 0;
 	background:none;
+}
+
+#sign_up label input
+{
+	display:block;
 }

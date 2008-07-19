@@ -1,5 +1,6 @@
-<dl class="perspectives">
-  <dt>According to</dt>
+<div class="perspectives">
+  <dl>
+    <dt>According to </dt>
   <% if logged_in? -%>
 
        <% if path.tags.include?(current_user.tag) -%>
@@ -23,10 +24,9 @@
   <dd class="item"><%= link_to("Ebay","/current_nuniverse/according_to/ebay") %></dd>
   <dd class="item"><%= link_to("Amazon","/current_nuniverse/according_to/amazon") %></dd>
   <dd class="item"><%= link_to("Flickr","/current_nuniverse/according_to/flickr") %></dd>
-  <dd class="item"><%= link_to("Maps","#", :class => "map") %></dd>
+  <dd class="item"><%= link_to("Maps","/current_nuniverse/according_to/map") %></dd>
   <dd class="item"><%= link_to("Wikipedia","#") %></dd>
   <dd class="item"><%= link_to("Google","/current_nuniverse/according_to/google") %></dd>
+  </dl>
   
- 
-  
-</dl>
+</div>

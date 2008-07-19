@@ -1,5 +1,6 @@
-<% if @tag.kind == "video" -%>
-  <%= render :partial => "/nuniverse/youtube", :locals => {:url => @tag.url }%>
-<% else -%>
-  <%= connections_for(@path, :perspective => @perspective, :filter => @filter) %>
-<% end -%>
+<%= content_for_page(
+    :tag => @tag, 
+    :path => @path, 
+    :page => @page, 
+    :perspective => @perspective
+    ) %> 

@@ -1,6 +1,10 @@
 <%= render :partial => "/layouts/hat", :locals => {:selected => "sign_in"}%>
 
 <div id="login" class="box">
+  <div class="header">
+    <%= image_tag("/images/icons/logo_nuniverse.png") %>
+  </div>
+  <h1>Log in.</h1>
   <% form_tag sessions_path do -%>
   <p><label for="login">Login</label><br/>
   <%= text_field_tag 'login' %></p>
@@ -12,7 +16,7 @@
     <p><label for="remember_me">Remember me:</label>
     <%= check_box_tag 'remember_me' %></p>
   -->
-
+  <br/>
   <p><%= submit_tag 'Log in' %></p>
   <% end -%>
 </div>

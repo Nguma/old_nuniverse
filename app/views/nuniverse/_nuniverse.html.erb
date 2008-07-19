@@ -1,30 +1,41 @@
-<div class="content log">
+<div class="nuniverse" id="nuniverse">
   <div class="header">
-      <%= avatar_for(tag) %>
-      <h5>This is the nuniverse of</h5> 
-      <h1>
-        <%= tag.content %>
-      </h1>
-      <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
+    <%= avatar_for(tag) %>
+    <h1><%= path.tags.map {|c| "#{c.content.capitalize} >"} %></h1>
+    <p><%= tag.description %></p>
+    <%= render :partial => "/nuniverse/perspectives" , :locals => {:tag => tag, :path => path}%>
   </div>
-  
-  <% if @connections.empty? -%>
-    <h3>Nothing happened yet in this nuniverse.</h3>
-  <% else -%>
-    <h3>This is what happened lately in this nuniverse</h3>
+  <div class="scroller">
+    <%#= render :partial => "/nuniverse/filters", :locals => {:path => path, :tag => tag} %>
+  <div class="body">  
+    <div class="content selected">  
+       <%= connections_for(path, :page => page)%>
+    </div>
+    <div class="content">
+      <dl class="connections">
+      </dl>
+    </div>
+  </div>
+  </div>
+  <%= render  :partial => "/taggings/new", 
+              :locals => {
+                :title => "Add a new topic",
+                :kind => "topic",
+                :path => path
+              }%>
+  <dl class="options">
+    <dd><%= link_to("+ Add something", "#", :class => 'add') %></dd>
+    <dd><%= link_to("+ Invite / manage contributors", "#") %></dd>
+    <dd><%= link_to("+ Find related topics", "#") %></dd>
+  </dl>
+  <script type="text/javascript"
+  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+  </script>
+</div>
+
+<div class="hidden" id="content_template">
+  <div class="content">
     <dl class="connections">
-      <% @connections.each do |connection| -%>
-          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
-      <% end -%>
     </dl>
-  <% end -%>
-</div>
-<%= render :partial => "/nuniverse/visit" %>
-
-
-<div class="content">
-</div>
-<div class="content">
-</div>
-<div class="content">
+  </div>
 </div>

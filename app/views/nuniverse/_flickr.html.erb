@@ -6,7 +6,7 @@
   <% photos.each do |photo| %>
     <dd class="connection photo <%= cycle('even','odd') %>">
       <% unless photo.sizes[0]['source'].nil? -%>
-        <%= link_to(image_tag(photo.sizes[0]['source']), "#") %>
+        <%= link_to(image_tag(photo.sizes[0]['source']), "#", :class => "main") %>
         <% end -%>
     </dd>
   <% end -%>

@@ -1,0 +1,9 @@
+<div class="page">
+  <div class="hat">
+    <%= avatar_for(tag) %>
+    <h2><%= link_to(tag.content.capitalize,"#") %></h2>
+    <p><%= tag.description %></p>
+    <%= render :partial => "/nuniverse/perspectives" , :locals => {:tag => tag, :path => path}%>
+  </div>
+  <%= content %>
+</div>

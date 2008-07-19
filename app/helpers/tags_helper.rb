@@ -1,29 +1,42 @@
 module TagsHelper
 
 	
-	def ebay(query)
-		EbayShopping::Request.new(:find_items, {:query_keywords => "#{query}", :max_entries => 8}).response.items
+	def ebay(params)
+		return render :partial => "/nuniverse/ebay", :locals =>
+		{
+			:connections => EbayShopping::Request.new(:find_items, {:query_keywords => params[:query], :max_entries => 8}).response.items
+		}
+		
 	end
 	
-	def amazon(query, options = {})
-		category = options[:category] || "All"
-		Awsomo::Request.new().search(query, :category => category)
+	def amazon(params)
+		return render :partial => "/nuniverse/amazon", :locals =>
+		{
+			:connections => Awsomo::Request.new().search(params[:query], :category => params[:category] ||= "All")
+		}
 	end
 	
 	
-	def daylife(query)
+	def daylife(params)
 		day = Daylife::API.new('6e2eb9b4fce9bd1eff489d2c53b7ac65', '3aea4b3560e4b00e3027a7313a497f06')
-		return day.execute('search','getRelatedArticles', :query => "#{query}", :limit => 5)
+		return render :partial => "/nuniverse/daylife", :locals =>
+		{
+			:connections => day.execute('search','getRelatedArticles', :query => params[:query], :limit => 5).articles
+		}
 	end
 	
-	def google(query)
+	def google(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		return GoogleAjax::Search.web(query).results
+		return render :partial => "/nuniverse/google", :locals =>
+		{
+			:connections => GoogleAjax::Search.web(params[:query]).results,
+			:path => params[:path]
+		}
 	end
 	
-	def flickr(query)
+	def flickr(params)
 		flickr = Flickr.new 'c40c269aea764bb5f53c877c3d265327'
-		photos = flickr.photos(:tags => query, :per_page => '10') rescue []
+		photos = flickr.photos(:tags => params[:query], :per_page => '10') rescue []
 		return render 	:partial => "/nuniverse/flickr", 
 						:locals => {
 							:photos => photos
@@ -31,24 +44,22 @@ module TagsHelper
 
 	end
 	
-	def geolocate(places)
-		
-		@map = GMap.new("map_div")
-		@map.control_init(:large_map => true, :map_type => true, :local_search => true) #add :large_map => true to get zoom controls
+	def geolocate(params)
+		map = GMap.new("map_div")
+		map.control_init(:large_map => true, :map_type => true, :local_search => true)
 		gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
-		
 		markers = []
+		places = params[:path].tags.select {|tag| tag.has_address? } || []
 		places.each do |place|
-			unless place.description.blank?
-				marker = gg.locate place.description
-				@map.overlay_init(
-					GMarker.new([marker.latitude, marker.longitude],
-						:title => place.content, 
-						:info_window => "#{place.content}: #{marker.address}"
-					)
-				)				
-				markers << marker
-			end
+			raise tag.address.inspect
+			marker = gg.locate tag.address
+			map.overlay_init(
+				GMarker.new([marker.latitude, marker.longitude],
+					:title => place.content, 
+					:info_window => "#{place.content}: #{marker.address}"
+				)
+			)				
+			markers << marker
 		end
 		
 		#path.tags.select {|tag| tag.kind == "location"}.reverse.map {|c| c.description }
@@ -59,7 +70,8 @@ module TagsHelper
 		# 	@map.center_zoom_init("new York City",5)
 		# end
 		#  	
-			@map.center_zoom_init("New York City",5)
+		map.center_zoom_init("New York City",5)
+		return map.div(:width => "100%", :height => 450)
 	end
 	
 	def h3_for(path)

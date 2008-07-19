@@ -1,8 +1,7 @@
 <div class="connections">
-  <% rst = google(query) -%>
-  <% unless rst.empty? -%>
-    <% rst.each do |rst| -%>
-      <dd class="connection" style="height:auto">
+  <% unless connections.empty? -%>
+    <% connections.each do |rst| -%>
+      <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
         <h3><a href="<%= rst.url %>" target="_blank"><%= rst.title %></a></h3>
         <p><%= rst.content %></p>
         <div class="manage">

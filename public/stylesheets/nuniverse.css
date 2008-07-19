@@ -1,53 +1,40 @@
-.nuniverse
-{
-	position:relative;
-	padding:0 0 0 0;
-}
-
-.nuniverse .body
-{
-	position:relative;
-	clear:both;
-	margin:0 0 0 0;
-	padding:0;
-	width:500%;
-}
-
-.nuniverse .scroller
-{
-	width:1100px;
-	overflow:hidden;
-}
-
-.nuniverse .nuniverse
-{
-	position:relative;
-	float:left;
-	width:800px;
-	padding:0;
-	margin:0;
-}
-
 .content
 {
 	position:relative;
 	float:left;
-	margin:0 2px 0 0;
+	margin:0 0 0 0;
 	padding:0 0 0 0px;
-	width:340px;
-	overflow:hidden;
+	width:100%;
 	background:none;
 }
 
-.nuniverse div.selected
+.body .page
 {
 	position:relative;
 	float:left;
-	padding:0;
-	background:#a7c0d9;
-	width:340px;
-	height:420px;
-	overflow:hidden;
+	width:800px;
+	height:1000px;
+	margin:0 3px 0 0;
+	padding:10px;
+	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat
+}
+
+.nuniverse .body .current_page
+{
+	padding:10px 20px 10px 20px;
+}
+
+.nuniverse .content h2 a
+{
+	font-size:20px;
+	color:#666;
+}
+
+.nuniverse .page .hat p
+{
+	font-size:12px;
+	font-style:italic;
+	color:#666;
 }
 
 .actions
@@ -65,16 +52,21 @@
 	width:500px;
 }
 
-.nuniverse .header a.avatar
+.nuniverse a.avatar
 {
 	position:relative;
 	float:left;
 	margin: 0 10px 10px 0;
 }
 
-.nuniverse .header a.avatar img
+.nuniverse .content h2
 {
-	height:50px;
+	margin:20px 0 0 0;
+}
+
+.hat a.avatar img
+{
+	height:70px;
 }
 
 .nuniverse h1
@@ -104,4 +96,14 @@ h1 a
 .nuniverse .action
 {
 	
+}
+
+.content .menu
+{
+	padding:10px;
+}
+.content .menu a
+{
+	display:block;
+	color:#69c;
 }

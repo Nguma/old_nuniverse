@@ -1,5 +1,5 @@
 <dl class="connections">
-<% amazon(query).each do |item| %>
+<% connections.each do |item| %>
   <dd class="connection <%= cycle('even','odd') %>">
     <% unless item.thumbnail.nil? -%>
      <%= link_to(image_tag(item.thumbnail),"#",:class => 'avatar') %>

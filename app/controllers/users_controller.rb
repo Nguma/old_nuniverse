@@ -9,7 +9,6 @@ class UsersController < ApplicationController
 	def show
 		@user = current_user
 		@path = TaggingPath.new @user.tag.id
-	
 	end
 	
 	

@@ -1,38 +1,20 @@
  <%# geolocate([tag])%>
-<%# content_for :head do -%>
-  <%#= GMap.header (:local_search => true, :large_map => true) %>
-  <%#= @map.to_html %>
-<%# end -%>
+<% content_for :head do -%>
+  <%#= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
+<% end -%>
 
 <div class="nuniverse" id="nuniverse">
-  <div class="header">
-    <h1><%= path.tags.map {|c| "#{c.content.capitalize} >"} %></h1>
-    <%= render :partial => "/nuniverse/perspectives" , :locals => {:tag => tag, :path => path}%>
-  </div>
-  <div class="scroller">
-    
-  <div class="body">
-    <%#= render :partial => "/nuniverse/filters", :locals => {:path => path, :tag => tag} %>
-    <div class="content selected">      
-      <dl class="connections">
-      </dl>
-    </div>
-    <div class="content">
-      <%= connections_for(path, :page => page) %>
+  <%= render :partial => "/nuniverse/breadcrumbs", :locals => 
+  {
+    :path => path
+  }%>
+  <div class="scroller"> 
+    <div class="body">  
+      <% page_for(:tag => tag, :path => path) do -%> 
+        <%= content_for_page(:tag => tag, :path => path, :perspective => perspective, :filter => filter) %>
+      <% end -%>
     </div>
   </div>
-  </div>
-  <%= render  :partial => "/taggings/new", 
-              :locals => {
-                :title => "Add a new topic",
-                :kind => "topic",
-                :path => path
-              }%>
-  <dl class="options">
-    <dd><%= link_to("+ Add something", "#", :class => 'add') %></dd>
-    <dd><%= link_to("+ Invite / manage contributors", "#") %></dd>
-    <dd><%= link_to("+ Find related topics", "#") %></dd>
-  </dl>
 </div>
 
 <div class="hidden" id="gmap_hidden_div">
@@ -45,3 +27,7 @@
     </dl>
   </div>
 </div>
+<!-- <script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script> -->
+

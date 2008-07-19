@@ -1,12 +1,14 @@
 <%= render :partial => "/layouts/hat", :locals => {:selected => "home"}%>
-<div class="nuniverse">
- 
-  <div class="content">
+<div class="nuniverse" >
+  <div class="header">
+    <%= image_tag("/images/icons/logo_nuniverse.png") %>
+  </div>
+  <div class="content" style="width:80%;">
     <h2>Lately in nuniverse...</h2>
-    <dl class="connections">
-        <% for connection in @connections %>
-           <%= render :partial => "instance", :locals => {:connection => connection}%>
-        <% end %>
+    <dl class="connections" style="height:800px">
+      <% for connection in @connections %>
+         <%= render :partial => "instance", :locals => {:connection => connection}%>
+      <% end %>
     </dl>
   </div>
   

@@ -1,6 +1,7 @@
 <dd class="connection <%= cycle('even','odd') %>"> 
+  <% if connection.object -%>
         <%= avatar_for(connection.object) %>
-        <h3><%= link_to_nuniverse(connection.object, :path => connection.path, :class => "nuni") %></h3>
+        <h3><%= link_to_nuniverse(connection.object,  :class => "nuni") %></h3>
         
         <% unless connection.path.taggings.empty? || connection.object.kind == "nuniverse"-%>
         <p> Added to  
@@ -10,5 +11,9 @@
           by <%= link_to_nuniverse(connection.user.tag) %>
         </p>
         <% end -%>
+    <% else -%>
+    <%= connection.id%>
+    
+    <% end -%>
 
 </dd>

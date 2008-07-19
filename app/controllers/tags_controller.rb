@@ -19,15 +19,15 @@ class TagsController < ApplicationController
 		@tag  = @path.last_tag
 		@page = params[:page] || 1
 		@filter = params[:filter] || nil
-		session[:perspective] = params[:perspective] || session[:perspective]
-		@perspective = params[:perspective] || "You"
+		session[:perspective] = params[:perspective] || "me"
+		@perspective = params[:perspective] || "me"
 		
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @tag }
 			format.js 	{ 
 				@perspective = session[:perspective]
-				render :action => :section
+				render :action => :page
 			}
     end
   end
@@ -105,13 +105,25 @@ class TagsController < ApplicationController
   end
 
 	def section
-		@path = TaggingPath.new params[:path]
+		# @path = TaggingPath.new params[:path]
+		# 		@page = params[:page] || 1
+		# 		@tag = @path.last_tag
+		# 		@filter = params[:filter] || nil
+		# 		@section = params[:filter] || @path.last_tag.content 
+		
+		session[:path] = params[:path] || session[:path]
+		@path = TaggingPath.new session[:path]
+		@tag  = @path.last_tag
 		@page = params[:page] || 1
-		@tag = @path.last_tag
 		@filter = params[:filter] || nil
-		@section = params[:filter] || @path.last_tag.content 
+		session[:perspective] = params[:perspective] || session[:perspective]
+		@perspective = params[:perspective] || "me"
 		# session[:perspective] = params[:perspective] || session[:perspective]
 		# 	@perspective = session[:perspective]
+	end
+
+	def page
+		
 	end
 	
 	def bookmark

@@ -1,32 +1,36 @@
+ <%# geolocate([tag])%>
+<%# content_for :head do -%>
+  <%#= GMap.header (:local_search => true, :large_map => true) %>
+  <%#= @map.to_html %>
+<%# end -%>
+
 <div class="nuniverse" id="nuniverse">
-  <div class="header">
-    <%= avatar_for(tag) %>
-    <h1><%= path.tags.map {|c| "#{c.content.capitalize} >"} %></h1>
-    <%= render :partial => "/nuniverse/perspectives" , :locals => {:tag => tag, :path => path}%>
-  </div>
+  <%= render :partial => "/nuniverse/breadcrumbs", :locals => 
+  {
+    :path => path
+  }%>
+
   <div class="scroller">
-    <%#= render :partial => "/nuniverse/filters", :locals => {:path => path, :tag => tag} %>
-  <div class="body">  
-    <div class="content selected">  
-       <%= connections_for(path, :page => page)%>
-    </div>
-    <div class="content">
-      <dl class="connections">
-      </dl>
+    
+  <div class="body">
+    <% page_for(:tag => tag, :path => path) do -%> 
+      <%= content_for_page(:tag => tag, :path => path, :perspective => @perspective, :filter => @filter) %>
+    <% end -%>
+    <div class="content"> 
+      <div class="connections">
+      </div>
+      <%= link_to("Your most recent activity", "/nuniverse_of/#{path}", :class => "inner") -%>
+      <%= link_to("All topics", "/nuniverse_of/#{path}/show_only/topic") -%>
+      <%= link_to("Edit your profile", "/users/edit") -%>
+      <%= link_to("+ Invite / manage contributors", "#") %>
+      <%= link_to("+ Find related topics", "#") %>
     </div>
   </div>
   </div>
-  <%= render  :partial => "/taggings/new", 
-              :locals => {
-                :title => "Add a new topic",
-                :kind => "topic",
-                :path => path
-              }%>
-  <dl class="options">
-    <dd><%= link_to("+ Add something", "#", :class => 'add') %></dd>
-    <dd><%= link_to("+ Invite / manage contributors", "#") %></dd>
-    <dd><%= link_to("+ Find related topics", "#") %></dd>
-  </dl>
+</div>
+
+<div class="hidden" id="gmap_hidden_div">
+  <%#= @map.div(:width => "100%", :height => 450) %>
 </div>
 
 <div class="hidden" id="content_template">
@@ -35,3 +39,7 @@
     </dl>
   </div>
 </div>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+

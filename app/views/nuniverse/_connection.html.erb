@@ -1,0 +1,9 @@
+<dd class="connection <%= cycle('even', 'odd') %>">
+  <%= avatar_for(object) %>
+  <h3><%= link_to_nuniverse(object, :path => path) %></h3>
+  <p><%= object.description[0..100] %></p>
+  <div class="manage">
+    <%#= link_to "edit", "/tags/#{object.id}/edit" %>
+  </div>
+  <div class="path hidden"><%= "#{path} #{object.id}" %></div>
+</dd>

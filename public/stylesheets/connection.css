@@ -4,8 +4,7 @@
 	clear:both;
 	padding:0 0 0 0;
 	text-align:left;
-	overflow:hidden;
-	height:420px;
+	width:100%;
 }
 
 .content dt
@@ -41,9 +40,19 @@
 	color:#FFF;
 }
 
+.connections .hover p
+{
+	color:#FFF;
+}
+
 .connections .selected
 {
 	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;
+}
+
+.selected .connections .connection p
+{
+	display:none;
 }
 
 .nuniverse .hover,
@@ -98,24 +107,74 @@
 
 .new_connection
 {
-	padding:10px 10px 10px 10px;
-	position:absolute;
+	padding:0;
+	position:relative;
 	clear:both;
-	bottom:30px;
-	margin:0 2px 2px 0px;
+	top:0;
+	margin:0 0 2px 0px;
 	font-size:16px;
 	font-weight:bold;
-	color:#666;
-	width:800px;
-	height:60px;
-	background:#fff;
-	cursor:pointer;
+	color:#369;
+	width:auto;
 	text-align:left;
+	z-index:1234567890123;
 }
 
-.new_connection input
+.new_connection fieldset
 {
-	border:solid #ccc 1px;
+	background:#FFF;
+	border:solid #369 2px;
+	display:none;	
+	margin:0;
+	padding:10px 10px 10px 10px;
+}
+
+.new_connection a.toggle
+{
+	position:absolute;
+	padding:10px;
+	right:0;
+	font-size:14px;
+	top:-37px;
+	color:#FFF;
+	margin:0;
+}
+
+.expanded a.toggle
+{
+	background:#369;
+	color:#FFF;
+}
+
+.expanded fieldset
+{
+	display:block;
+}
+
+.new_connection label
+{
+	display:block;
+	font-size:13px;
+}
+
+.new_connection input,
+.new_connection textarea
+{
+	padding:10px;
+	background-color:#eee;
+	margin: 0 0 5px 0;
+}
+
+.new_connection textarea
+{
+		width:80%;
+		font-size:12px;
+}
+
+.new_connection .blank
+{
+	color:#999;
+	background-color:#FFF;
 }
 
 .connection .manage

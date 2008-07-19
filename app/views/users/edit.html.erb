@@ -1,66 +1,18 @@
-<div class="content header">
-    <%= avatar_for(tag) %>
-    <h5>Welcome to</h5> 
-    <h1>Your nuniverse</h1>
-    <%= link_to 'Edit', edit_tag_path(tag) , :class => 'edit' %>
-    <h4>This is what happened lately in your nuniverse</h4>
-    <dl class="connections">
-      <% @connections.each do |connection| -%>
-          <%= render :partial => "/taggings/instance", :locals => {:connection => connection}%>
-      <% end -%>
-    </dl>
-</div>
+<div class="content profile">
+  <h3>Edit Your Profile</h3>
+  <h4>If there's anything to change, here is the place.</h4>
+    <%= error_messages_for :user %>
+    <% form_for :user, :url => user_path, :html => {:method => :put, :multipart => true } do |f| -%>
+      <div class="avatar_picker"></div>
+      <label for="firstname">First Name</label>
+      <%= f.text_field :firstname %>
 
-<%= render :partial => "/nuniverse/visit" %>
+      <label for="lastname">Last Name</label>
+      <%= f.text_field :lastname %>
 
-<div class="content log">
-  <h2>Your Lists</h2>
-  <h4>A list help you keep track of a bunch of things and keep them organized under a topic.</h4>
-   <dl class="connections">
-  <% Tagging.with_path(@path).with_object_kinds("list").by_latest.each do |list| -%>
-    <%= render :partial => "/tags/connection", :locals => {:connection => list, :reverse => false}%>
-  
-  <% end -%>
-  </dl>
-  <a href="#" class="more">Start a new list</a>
-</div>
+      <label for="email">Email</label>
+      <%= f.text_field :email %>
 
-<div class="content explore">
-  <h2>Your Quests</h2>
-  <dl class="connections">
-    <% @quests.each do |quest| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => quest, :reverse => reverse}%>
-    <% end -%>
-  </dl>
-  <a href="#">Join a quest now</a>
-  <h3>Start a new quest</h3>
-    <h4>Your quest is to:
-    <p><i>eg:"Take a trip", "Buy a country house", "find a treasure"...</i></p></h4>
-
-    <% form_tag '/tags/create' do -%>
-      <%= hidden_field_tag :kind, "quest" %>
-      <%= hidden_field_tag :path, @path %>
-
-      <%= text_field_tag :content, "", :size => 40  %>
-      <input type="submit" value="Make it public">
-      <input type="submit" value="Make it private" class ="private">
+      <%= submit_tag 'Save Changes' , :class => 'submit' %>
     <% end -%>
 </div>
-
-<% list_for(:kind => "location", :path => @path) do -%>
-  <h2>Your Places</h2>
-  <h4>You can go to</h4>
-<% end -%>
-
-<div class="content">
-  <%= @people.each do |person| -%>
-    <%= person.relationship%>
-  <% end -%>
-</div>
-<% list_for(:kind => "person", :path => @path) do -%>
-  <h2>Your People</h2>
-  <h4>You can interact with</h4>
-<% end -%>
-
-
-<%= render :partial => '/users/edit'%>

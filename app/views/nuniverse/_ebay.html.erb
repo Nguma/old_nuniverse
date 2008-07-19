@@ -1,5 +1,5 @@
 <dl class="connections">
-<% ebay(query).each do |item| %>
+<% connections.each do |item| %>
   <dd class="connection  <%= cycle('even','odd') %>">
     <% unless item.gallery_url.nil? -%>
       <%= link_to(image_tag(item.gallery_url.to_s),"#",:class => 'avatar') %>

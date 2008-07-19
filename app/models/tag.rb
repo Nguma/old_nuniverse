@@ -3,8 +3,6 @@ class Tag < ActiveRecord::Base
 	
 	validates_presence_of :content, :kind
 	
-	attr_accessor :crumbs
-	
 	def self.connect(params)
 		@object = Tag.find_by_content_and_kind(params[:content], params[:kind])
 		@object ||= Tag.create(
@@ -29,6 +27,14 @@ class Tag < ActiveRecord::Base
 		@tagging
 	end
 	
+	def has_address?
+		return true if description.match(/#address\s.+/)
+		return false
+	end
+	
+	def address
+		return description.match(/#address\s([^#].)+/)[1]
+	end
 	# def self.find_taggeds_with(params)
 	# 		
 	# 		@context = params[:context].collect {|s| s.id}.join('_')
@@ -55,9 +61,6 @@ class Tag < ActiveRecord::Base
 	# 		Tag.find_by_sql(query)
 	# 	end
 	
-	def relationships(params)
-		Tagging.with_path(params[:path]).with_object_kind
-	end
   
   protected
   

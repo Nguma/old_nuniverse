@@ -2,11 +2,18 @@
 
 <%= error_messages_for :tag %>
 
-<% form_for(@tag) do |f| %>
+<% form_for(@tag) do |f| -%>
+  <label>Title</label>
+  <br/>
+  <%= f.text_field :content   %>
+  <br/>
+  <label>Description</label>
+  <br/>
+  <%= f.text_area :description , :rows => 3, :cols => 50 %>
   <p>
     <%= f.submit "Update" %>
   </p>
-<% end %>
+<% end -%>
 
 <% form_for :avatar, @tag.avatar, :url => tag_avatar_path(@tag), :html => {:multipart => true} do |f| %>
   <%= f.file_field :uploaded_data %>

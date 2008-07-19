@@ -11,63 +11,6 @@ module ApplicationHelper
 		return link_to(image_tag(tag.avatar.public_filename(:large), :alt => tag.content), "/nuniverse_of/#{tag.id}", :class => 'avatar', :title => "#{tag.kind}: #{tag.content}")
 	end
 	
-	# def path_for(path, options = {})
-	# 		
-	# 		crumbs = Tagging.crumbs(path)
-	# 		
-	# 		# Setting a default partial for rendering the path
-	# 		partial = options[:partial] || "/taggings/path"
-	# 		render(
-	# 				:partial => partial,
-	# 				:locals => {:tags => tags, :path => crumbs})
-	# 		
-	# 	end
-	
-	def connections_for(context, options = {})
-		
-		@perspective = options[:perspective] || "everyone"
-		options[:page] ||= 1
-		@filter = options[:filter] || nil
-		if context.is_a?(String)
-			query = context
-		elsif context.is_a?(TaggingPath)
-			query =context.tags.collect{|c| c.kind == 'user' ? "" : c.content}.join(', ')
-		else
-			return Error
-		end
-		
-		case @perspective
-			when "ebay"				
-				render :partial => "/nuniverse/ebay", :locals => {:query => query}
-			when "amazon"
-				render :partial => "/nuniverse/amazon", :locals => {:query => query}
-			when "daylife"
-				render :partial => "/nuniverse/daylife", :locals => {:query => query.gsub(',',' ')}
-			when "google"
-				render :partial => "/nuniverse/google", :locals => {
-					:query => "#{query} -amazon.com -ebay.com",
-					:path => context
-					}
-			when "flickr"
-				return flickr(query)
-			when "maps"
-				render :partial => "/nuniverse/maps", :locals => {:query => context.last_tag}
-			when "me"
-				@connections = Tagging.with_user(current_user).with_path_ending(context).with_object_kinds(@filter).groupped.by_latest.paginate(
-					:page => options[:page],
-					:per_page => 8
-				)
-				render :partial => "/nuniverse/connections", :locals => {:connections => @connections, :path => context}
-			else
-				@connections = Tagging.with_path_ending(context).with_object_kinds(@filter).groupped.by_latest.paginate(
-					:page => options[:page], 
-					:per_page => 8
-				)
-				render :partial => "/nuniverse/connections", :locals => {:connections => @connections, :path => context}
-		end
-	end
-	
-	
 	def link_to_nuniverse(tag, options = {})
 		
 		return link_to("You",	"/my_nuniverse", :class => options[:class]) if logged_in? && current_user.tag == tag 
@@ -79,7 +22,7 @@ module ApplicationHelper
 		when "bookmark"
 			return link_to(label, tag.url, :target => "_blank")
 		else
-			return link_to(label,	"/nuniverse_of/#{options[:path]}#{tag.id}", :class => "inner")
+			return link_to(label,	"/nuniverse_of/#{options[:path]}#{tag.id}", :class => "main inner")
 		end
 	end
 	
@@ -116,6 +59,65 @@ module ApplicationHelper
 			:partial => "/nuniverse/menu_item",
 			:locals => params
 		), block.binding)
+	end
+	
+	def page_for(params ={}, &block)
+		raise "No tag is specified for page" if params[:tag].nil?
+		params[:content] = capture(&block)
+		params[:classes] ||= ""
+		params[:path] ||= params[:tag].id
+		concat(
+		render(
+			:partial => "/nuniverse/page",
+			:locals => params
+		), block.binding)
+	end
+	
+	def content_for_page(params ={})
+		raise "No tag is specified for content block" if params[:tag].nil?
+		params[:perspective] ||= "me"
+		params[:filter] ||= nil
+		params[:classes] ||= ""
+		params[:page] ||= 1
+		params[:path] ||= params[:tag].id
+		
+		query = params[:path].tags.collect{|c| c.kind == 'user' ? "" : c.content}.join(', ') 
+		case @perspective
+			when "ebay"	
+				params[:connections] = ebay(:query => params[:path].last_tag.content.to_s)			
+			when "amazon"
+				params[:connections] = amazon(:query => params[:path].last_tag.content.to_s)	
+			when "daylife"
+				params[:connections] = daylife(:query => query.gsub(',',' '))	
+			when "google"
+				params[:connections] = google(:query => "#{query} -amazon.com -ebay.com", :path => params[:path])
+			when "flickr"
+				params[:connections] = flickr(:query => query)
+			when "map"
+				params[:connections] = geolocate(:path => params[:path])
+			when "me"
+				params[:connections] = render :partial => "/nuniverse/connections", :locals => {
+					:connections => Tagging.with_user(current_user).with_path_ending(params[:path]).with_object_kinds(params[:filter]).groupped.by_latest.paginate(
+						:page => params[:page], 
+						:per_page => 20
+						),
+					:path => params[:path]
+				}
+			else
+				
+				params[:connections] = render :partial => "/nuniverse/connections", :locals => {
+					:connections => Tagging.with_path_ending(params[:path]).with_object_kinds(params[:filter]).groupped.by_latest.paginate(
+						:page => params[:page], 
+						:per_page => 20
+						),
+					:path => params[:path]
+				}
+		end
+		
+		return render(
+			:partial => "/nuniverse/content",
+			:locals => params
+		)
 	end
 
 end

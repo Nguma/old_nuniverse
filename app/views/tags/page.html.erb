@@ -1,0 +1,9 @@
+<% page_for(:tag => @tag, :path => @path) do -%> 
+  <%= content_for_page(
+      :tag => @tag, 
+      :path => @path, 
+      :page => @page, 
+      :perspective => @perspective, 
+      :filter => @filter
+      ) %>
+<% end -%>

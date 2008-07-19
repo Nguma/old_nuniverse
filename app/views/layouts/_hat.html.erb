@@ -1,11 +1,11 @@
 <% menu(:id => "control_panel", :selected => selected) do -%>
-    <% menu_item("home", :selected => selected) do -%>
-      <%= link_to "Home","/" %>
-    <% end -%>
+    <%# menu_item("home", :selected => selected) do -%>
+      <%#= link_to "Home","/" %>
+    <%# end -%>
     <% if logged_in? -%>
-      <% menu_item("my_nuniverse", :selected => selected) do -%>
-        <%= link_to "My nuniverse","/my_nuniverse" %>
-      <% end -%>
+      <%# menu_item("my_nuniverse", :selected => selected) do -%>
+        <%#= link_to "My nuniverse","/my_nuniverse" %>
+      <%# end -%>
       <% menu_item("sign_out",  :selected => selected) do -%>
         <%= link_to "Sign out","/logout" %>
       <% end -%>

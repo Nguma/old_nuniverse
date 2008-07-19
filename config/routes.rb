@@ -62,7 +62,7 @@ ActionController::Routing::Routes.draw do |map|
 		
 	map.current_nuniverse_according_to "/current_nuniverse/according_to/:perspective",
 		:controller => 'tags',
-		:action => 'show'
+		:action => 'section'
 		
 	map.nuniverse "/nuniverse/:filter",
 		:controller => "tags",

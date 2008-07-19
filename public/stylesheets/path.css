@@ -1,33 +1,39 @@
-
 #breadcrumbs
 {
-	position:relative;
+	position:fixed;
 	padding:0;
 	margin:0 0 0 0;
+	top:0px;
+	left:50px;
 	font-size:12px;
 	color:#333;
 	background:none;
 	display:block;
-	top:0;
 }
 
-#breadcrumbs dd
+#breadcrumbs dd,
+#breadcrumbs dt
 {
 	position:relative;
 	float:left;
 	background:none;
-	padding:13px 45px 13px 35px;
+	padding:10px 45px 10px 35px;
 	margin:0 0 2px 0;
 	left:-30px;
 	font-weight:bold;
-	background:transparent url("/images/backgrounds/breadcrumb.png") right 0 no-repeat;
+	background:transparent url("/images/backgrounds/breadcrumb.png") right center no-repeat;
 }
 
 #breadcrumbs .home
 {
-	padding:0 45px 0 0;
-	height:40px;
+	padding:0 35px 0 10px;
+	height:34px;
 	left:0;
+}
+
+#breadcrumbs .home img
+{
+	height:35px;
 }
 
 #breadcrumbs dd .arrow

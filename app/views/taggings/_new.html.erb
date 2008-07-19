@@ -1,10 +1,16 @@
-<div class="new_connection hidden" id="new_connection">
-  <h5><%= title %></h5>
+<div class="new_connection">
+  <a href="#" class="toggle">+ Add </a>
+  <fieldset>
   <% form_tag '/taggings/create' do -%>
     <%= hidden_field_tag :kind, kind %>
     <%= hidden_field_tag :path, path , :class => "path"%>
     <%= hidden_field_tag :restricted, 1 , :class => "restricted"%>
-    <%= text_field_tag :content, ""  , :size => 50 %>
+    <label>Title</label>
+    <%= text_field_tag :content, ""  %>
+    <label>Description</label>
+    <%= text_area_tag :description, ""  , :rows => 3, :cols => 50 %>
+    <br/>
     <input type="submit" value="Add" class="dynamo">
   <% end -%>
+  </fieldset>
 </div>

@@ -1,13 +1,16 @@
 var Nuniverse = new Class({
+  Implements: Options,
+  options:{
+    form:null,
+    nav:null
+  },
+  
   initialize:function()
   {
     this.el = $('nuniverse');
     this.slide = new Fx.Scroll(this.getScroller());
+    this.selectPage(this.el.getElement('.page'));
     this.setFilters();
-    this.setPerspectives();
-    this.setConnections(this.el);
-    this.setConnectionForm();
-    this.setHat();
   },
   
   getScroller:function()
@@ -15,40 +18,59 @@ var Nuniverse = new Class({
     return this.el.getElement('.scroller');
   },
   
-  getPreview:function()
+  nextPage:function()
   {
-    return this.getNav().getNext('.content');
+    return this.currentPage().getNext('.page');
   },
   
-  getNav:function()
+  currentPage:function()
   {
-    return this.el.getElement('div.selected');
+    // return this.el.getElement('div.selected');
+    return this.options['page']
   },
   
-  setPerspectives:function()
+  setPerspectives:function(page)
   {
     var obj = this;
-    this.getPerspectives().each(function(action)
-     {
-       action.addEvent('click',function(ev)
-       {
-         obj.setSelected('dd','dl',this);
-         var updated = obj.getPreview();
-
-          if(this.hasClass('map'))
+    var perspectives = page.getElement('.perspectives');
+    perspectives.getElements('dd').each(function(action)
+    {
+       action.addEvents({
+        'click':function(ev)
           {
-            updated.empty();
-            updated.adopt($('map_div'));
-          }
-          else
-          {
-            updated.set('html', '<h6>Loading...</h6>');
-            obj.requestAndUpdate(updated, this.get('href'));
-          }
-         
-         return false;
-         });
+            if(!action.hasClass('selected'))
+            {
+              obj.setSelected('dd','dl',this.getElement('a'));
+              var updated = page.getElement('.content');
+              updated.set('html', '<h6>Loading...</h6>');
+              perspectives.removeClass('expanded');
+              obj.requestAndUpdate(updated, this.getElement('a').get('href'));
+            } 
+            else
+            {
+              perspectives.addClass('expanded')
+            }
+            return false;
+          },
+        'mouseenter':function(){action.addClass('hover')},
+        'mouseleave':function(){action.removeClass('hover')}   
        });
+       
+       action.getElement('a').addEvent('click', function(){return false;})
+       
+      });
+       
+      perspectives.addEvents({
+        'click':function(ev){
+          if(!this.hasClass('expanded'))
+          {
+            this.addClass('expanded');
+          }
+        },
+        'mouseleave':function(ev){
+          this.removeClass('expanded');
+        }
+      });
   },
   
   setFilters:function()
@@ -96,27 +118,38 @@ var Nuniverse = new Class({
       {
         // change selected
         obj.setSelected('dd','dl',this.getElement('a'));
-        obj.getForm().setProperty('value', this.getElement('.path').get('text'));
+       
+        // obj.options['page'] = this.getParent('.page');
+        var parent = this.getParent('.page');
         
-        if(this.getElement('h3 a').hasClass('inner')) 
+        if(this.getElement('a.main').hasClass('inner')) 
         {
-          var parent_content = this.getParent('.content');
-          parent_content.setStyle('width', '340px');
-          obj.setSelected('.content','.body',this.getParent());
-          var next = obj.slideToPath(parent_content);
-          next.set('html', '<h6>Loading...</h6>');
+          // obj.options['page'].setStyle('width', '400');
+          //next.set('html', '<h6>Loading...</h6>');
           var call = new Request.HTML({
             'url':this.getElement('h3 a').getProperty('href'),
             onSuccess:function(a,b,c,d)
             {
-              obj.update(next,c);
-            }
+              obj.selectPage(parent);
+              if($defined(obj.nextPage()))
+              {
+                var new_page = a[0].replaces(obj.nextPage());
+              }
+              else
+              {
+                var new_page = a[0].inject(obj.currentPage(),'after');
+              }
+              
+              obj.refresh(new_page);
+            },
+            'evalResponse':true,
+            'evalScripts':true
           }).get();
-          obj.refresh();
+         
         } 
         else
         {
-          window.open(this.getElement('h3 a').getProperty('href'), '_blank');
+          window.open(this.getElement('a.main').getProperty('href'), '_blank');
         }
       });
       
@@ -140,18 +173,19 @@ var Nuniverse = new Class({
   
   getForm:function()
   {
-    return this.el.getElement('.new_connection').getElement('.path');
+    return this.options['page'].getElement('.new_connection');
   },
   
   update:function(updated,content)
   {
     updated.set('html', content);
     this.setConnections(updated);
+    this.setConnectionForm();
   },
   
-  getPerspectives:function()
+  perspectives:function()
   {
-    return $$('.perspectives dd a');
+    return this.currentPage().getElement('.perspectives');
   },
   
   getFilters:function()
@@ -184,72 +218,93 @@ var Nuniverse = new Class({
            updated.set('html', c);
            obj.setConnections(updated);
          },
-         evalResponse:true,
-         evalScripts:true
+         'evalResponse':true,
+         'evalScripts':true
     }).get();
   },
   
-  setConnectionForm:function()
+  setConnectionForm:function(page)
   {
     var obj = this;
-    
-    $$('form .dynamo').each(function(button)
+    var form = page.getElement('.new_connection')
+    if($defined(form))
     {
-        var form = button.getParent('form');
-        button.addEvent('click', function(ev)
-        {
-          // this.getParent('form').getChild('.restricted').setProperty('value', 1);
-          var submission = new Request.HTML({
-            'url':form.get('action'),
-            onSuccess:function(a,b,c,d)
-            {
-              var updated = obj.getPreview().getElement('dl');
-              updated.grab(a[0],'top');
-              
-              obj.setConnections(updated)
-            }
-          }).post(form);
-
-          return false;
-        });
-    });
+      this.options['form'] = new NForm(form);
+      this.options['form'].addEvent('success',function(a,b,c,d)
+      {
+        var updated = page.getElement('.content .connections');
+        updated.grab(a[0],'top');
+        obj.setConnections(updated);
+      });
+    }
+    
   },
   
-  getTitle:function()
+  breadcrumbs:function()
   {
-    return this.el.getElement('h1');
+    return $('breadcrumbs');
   },
   
   setHat:function()
   {
     var obj = this;
-    var title = this.getTitle();
-    title.empty();
-    var crumbs = this.el.getElements('.content dt a');
+    $('breadcrumbs').getElements('dd').each(function(el)
+    {
+      el.destroy();
+    });
+    var crumbs = this.el.getElements('.page h2 a');
+    crumbs.pop();
     crumbs.each(function(crumb,i)
     {
-      var c = crumb.clone();
-      title.adopt(c);
+      var c = new Element('dd',
+      {
+        styles:{
+          'z-index':999-i,
+          'left': -(30 * (i+1))+'px'
+        }
+      });
+      $('breadcrumbs').adopt(c.adopt(crumb.clone()));
       c.addEvent('click', function(ev)
       {
-        obj.slide.toElement(obj.el.getElements(".content")[i]);
+        var page = obj.el.getElements(".page")[i];
+        obj.selectPage(page);
       });
     });
     
   },
   
-  slideToPath:function(content)
+  selectPage:function(page)
   {
-    content.getAllNext('.content').destroy();
-    var next = $('content_template').getElement('.content').clone();
-    next.setStyle('width','700px');
-    this.el.getElement('.body').adopt(next);
-    this.slide.toElement(content);
-    return next;
+    if(page != this.currentPage())
+    {
+      if($defined(this.currentPage()))
+      {
+        this.currentPage().removeClass('.current_page');
+        this.currentPage().setStyle('width',300);
+        this.currentPage().getElement('.perspectives').removeClass('.current');
+      }
+      this.options['page'] = page;
+
+      if($defined(this.nextPage()))
+      {
+         this.nextPage().getAllNext('.page').destroy();
+         this.nextPage().setStyle('width', 800);
+      }
+
+      this.slide.toElement(this.currentPage());
+      this.currentPage().addClass('.current_page');
+      this.currentPage().getElement('.perspectives').addClass('.current'); 
+      this.refresh(page);     
+    }
+    
   },
   
-  refresh:function()
+  refresh:function(page)
   {
-    this.setHat();
+    this.setHat(page);
+    this.setPerspectives(page);
+    this.setConnections(page);
+    this.setConnectionForm(page);
+    this.currentPage().setStyle('width',300);
   }
 });
