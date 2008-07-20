@@ -144,7 +144,7 @@ var Nuniverse = new Class({
         if(this.getElement('a.main').hasClass('inner')) 
         {
           var call = new Request.HTML({
-            'url':this.getElement('h3 a').getProperty('href'),
+            'url':this.getElement('.path').get('text'),
             onSuccess:function(a,b,c,d)
             {
               var new_page = a[0].replaces(obj.nextPage());
