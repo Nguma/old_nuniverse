@@ -13,18 +13,13 @@
       <% page_for(:tag => tag, :path => path, :classes => "current_page") do -%> 
         <%= content_for_page(:tag => tag, :path => path, :perspective => perspective, :filter => filter) %>
       <% end -%>
-      <div class="page">
-        <%#= @map.div(:width => "100%", :height => 450) %>
-      </div>
+
     </div>
   </div>
 </div>
 
-<div class="hidden" id="content_template">
-  <div class="content">
-    <dl class="connections">
-    </dl>
-  </div>
+<div class="hidden">
+ <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "page_spinner")%>
 </div>
 <!-- <script type="text/javascript"
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">

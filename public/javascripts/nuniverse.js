@@ -126,7 +126,9 @@ var Nuniverse = new Class({
        
         // obj.options['page'] = this.getParent('.page');
         var parent = this.getParent('.page');
-        
+        obj.selectPage(parent);
+        obj.nextPage().getChildren().destroy();
+        obj.nextPage().adopt($('page_spinner').clone());
         if(this.getElement('a.main').hasClass('inner')) 
         {
           // obj.options['page'].setStyle('width', '400');
@@ -135,16 +137,9 @@ var Nuniverse = new Class({
             'url':this.getElement('h3 a').getProperty('href'),
             onSuccess:function(a,b,c,d)
             {
-              obj.selectPage(parent);
-              if($defined(obj.nextPage()))
-              {
-                obj.nextPage().getChildren().destroy();
-                var new_page = a[0].replaces(obj.nextPage());
-              }
-              else
-              {
-                var new_page = a[0].inject(obj.currentPage(),'after');
-              }
+              
+              var new_page = a[0].replaces(obj.nextPage());
+              
               obj.refresh(new_page);
               if(new_page.getElement('.map'))
               {
