@@ -103,7 +103,15 @@ var NForm = new Class({
   
   toggle:function()
   {
-   
-    this.el.toggleClass('expanded');
+    if(this.el.hasClass('expanded'))
+    {
+      this.el.removeClass('expanded');
+      this.el.getElement('.toggle').set('text', '+ Add');
+    }
+    else
+    {
+      this.el.addClass('expanded');
+      this.el.getElement('.toggle').set('text', '- Add');
+    }
   }
 });

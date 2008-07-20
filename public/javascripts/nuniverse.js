@@ -21,7 +21,17 @@ var Nuniverse = new Class({
   
   nextPage:function()
   {
-    return this.currentPage().getNext('.page');
+    if($defined(this.currentPage().getNext('.page')))
+    {
+      return this.currentPage().getNext('.page')
+    }
+    else
+    {
+      return new Element('div',{
+        'class':'page'
+      }).inject(this.currentPage(), 'after');
+      
+    }
   },
   
   currentPage:function()
@@ -128,18 +138,15 @@ var Nuniverse = new Class({
         var parent = this.getParent('.page');
         obj.selectPage(parent);
         obj.nextPage().getChildren().destroy();
+       
         obj.nextPage().adopt($('page_spinner').clone());
         if(this.getElement('a.main').hasClass('inner')) 
         {
-          // obj.options['page'].setStyle('width', '400');
-          //next.set('html', '<h6>Loading...</h6>');
           var call = new Request.HTML({
             'url':this.getElement('h3 a').getProperty('href'),
             onSuccess:function(a,b,c,d)
             {
-              
               var new_page = a[0].replaces(obj.nextPage());
-              
               obj.refresh(new_page);
               if(new_page.getElement('.map'))
               {
@@ -285,7 +292,7 @@ var Nuniverse = new Class({
     var form = page.getElement('.new_connection');
     if($defined(form))
     {
-      form.removeClass('expanded');
+     form.removeClass('expanded');
     }
   },
   
@@ -297,7 +304,6 @@ var Nuniverse = new Class({
       {
         this.currentPage().removeClass('current_page');
         this.currentPage().setStyle('width',300);
-        this.currentPage().getElement('.perspectives').removeClass('.current');
         this.hideForm(this.currentPage());
       }
       this.options['page'] = page;
@@ -310,7 +316,6 @@ var Nuniverse = new Class({
 
       this.slide.toElement(this.currentPage());
       this.currentPage().addClass('current_page');
-      this.currentPage().getElement('.perspectives').addClass('.current'); 
       this.refresh(page);     
     }
     
