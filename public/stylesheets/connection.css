@@ -17,7 +17,7 @@
 	padding:10px 10px 10px 10px;
 	position:relative;
 	clear:both;
-	margin:0 2px 2px 0px;
+	margin:0 0 1px 0px;
 	font-size:16px;
 	font-weight:bold;
 	color:#333;
@@ -43,6 +43,28 @@
 .connections .hover p
 {
 	color:#FFF;
+}
+
+.current_page .connections p
+{
+	display:none;
+}
+
+.current_page .connection 
+{
+	padding:5px;
+	margin:0 0 1px 0;
+	min-height:30px;
+}
+
+.current_page .connection .avatar
+{
+	display:none;
+}
+
+.current_page .manage
+{
+	display:none;
 }
 
 .connections .selected
@@ -117,7 +139,7 @@
 	color:#369;
 	width:auto;
 	text-align:left;
-	z-index:1234567890123;
+	z-index:123456782;
 }
 
 .new_connection fieldset
@@ -179,8 +201,14 @@
 
 .connection .manage
 {
-	position:absolute;
-	right:10px;
+	position:relative;
+	float:right;
+	padding:0;
+}
+
+.connection .manage img
+{
+	height:15px;
 }
 
 .connection .manage a

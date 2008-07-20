@@ -2,34 +2,34 @@ module TagsHelper
 
 	
 	def ebay(params)
-		return render :partial => "/nuniverse/ebay", :locals =>
+		return render(:partial => "/nuniverse/ebay", :locals =>
 		{
 			:connections => EbayShopping::Request.new(:find_items, {:query_keywords => params[:query], :max_entries => 8}).response.items
-		}	
+		})	
 	end
 	
 	def amazon(params)
-		return render :partial => "/nuniverse/amazon", :locals =>
+		return render(:partial => "/nuniverse/amazon", :locals =>
 		{
 			:connections => Awsomo::Request.new().search(params[:query], :category => params[:category] ||= "All")
-		}
+		})
 	end
 	
 	def daylife(params)
 		day = Daylife::API.new('6e2eb9b4fce9bd1eff489d2c53b7ac65', '3aea4b3560e4b00e3027a7313a497f06')
-		return render :partial => "/nuniverse/daylife", :locals =>
+		return render(:partial => "/nuniverse/daylife", :locals =>
 		{
 			:connections => day.execute('search','getRelatedArticles', :query => params[:query], :limit => 5).articles
-		}
+		})
 	end
 	
 	def google(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		return render :partial => "/nuniverse/google", :locals =>
+		return render(:partial => "/nuniverse/google", :locals =>
 		{
-			:connections => GoogleAjax::Search.web(params[:query]).results,
+			:connections => GoogleAjax::Search.web(params[:query], :rsz => "large").results,
 			:path => params[:path]
-		}
+		})
 	end
 	
 	def flickr(params)

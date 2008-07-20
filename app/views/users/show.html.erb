@@ -1,9 +1,9 @@
 <%= render :partial => "/layouts/hat", :locals => {:selected => "my_nuniverse"}%>
 
-<%= render :partial => "/nuniverse/user", :locals => {
+<%= render :partial => "/nuniverse/instance", :locals => {
     :path => @path, 
     :tag => @user.tag, 
     :page => @page,
-    :perspective => "me",
+    :perspective => "you",
     :filter => nil
 }%>

@@ -64,12 +64,11 @@ module ApplicationHelper
 	def page_for(params ={}, &block)
 		raise "No tag is specified for page" if params[:tag].nil?
 		params[:content] = capture(&block)
-		params[:classes] ||= ""
 		params[:path] ||= params[:tag].id
 		concat(
-		render(
-			:partial => "/nuniverse/page",
-			:locals => params
+			render(
+				:partial => "/nuniverse/page",
+				:locals => params
 		), block.binding)
 	end
 	
@@ -80,6 +79,11 @@ module ApplicationHelper
 		params[:classes] ||= ""
 		params[:page] ||= 1
 		params[:path] ||= params[:tag].id
+		
+		if params[:tag].kind == "video"
+			params[:connections] = render :partial => "/nuniverse/youtube",
+			:locals => {:url => params[:tag].url}
+		else
 		
 		query = params[:path].tags.collect{|c| c.kind == 'user' ? "" : c.content}.join(', ') 
 		case @perspective
@@ -113,7 +117,7 @@ module ApplicationHelper
 					:path => params[:path]
 				}
 		end
-		
+	end
 		return render(
 			:partial => "/nuniverse/content",
 			:locals => params

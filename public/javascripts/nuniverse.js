@@ -300,7 +300,7 @@ var Nuniverse = new Class({
     {
       if($defined(this.currentPage()))
       {
-        this.currentPage().removeClass('.current_page');
+        this.currentPage().removeClass('current_page');
         this.currentPage().setStyle('width',300);
         this.currentPage().getElement('.perspectives').removeClass('.current');
         this.hideForm(this.currentPage());
@@ -314,7 +314,7 @@ var Nuniverse = new Class({
       }
 
       this.slide.toElement(this.currentPage());
-      this.currentPage().addClass('.current_page');
+      this.currentPage().addClass('current_page');
       this.currentPage().getElement('.perspectives').addClass('.current'); 
       this.refresh(page);     
     }

@@ -36,16 +36,26 @@ dl.filters dd.selected
 .perspectives
 {
 	position:relative;
-	clear:both;
+	float:left;
 	font-size:14px;
 	padding:0;
-	color:#333;
-	height:35px;
 	margin:0 0 2px 0;
-	z-index:1234567890;
-	background:#69c;
+	z-index:123456780;
 	cursor:pointer;
-	width:100%;
+}
+
+.current_page .perspectives dl
+{
+	display:none;
+}
+
+.perspectives img
+{
+	display:inline;
+	position:relative;
+	float:left;
+	padding:10px 0 0 0;
+	height:17px;
 }
 
 .perspectives dl
@@ -63,6 +73,7 @@ dl.filters dd.selected
 {
 	color:#FFF;
 	position:relative;
+	float:left;
 	font-size:14px;
 	padding:10px 5px 8px 10px;
 	z-index:12345678;
@@ -74,7 +85,7 @@ dl.filters dd.selected
 	position:relative;
 	display:none;
 	padding:10px 10px 8px 5px;
-	clear:none;
+	clear:both;
 }
 
 .expanded dd
@@ -85,12 +96,6 @@ dl.filters dd.selected
 .perspectives dd.hover
 {
 	background-color:#369;
-}
-
-.current_page dt,
-.current_page dd
-{
-	display:none;
 }
 
 .perspectives dd.selected

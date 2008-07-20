@@ -6,8 +6,7 @@
 	padding:0 0 0 0px;
 	width:100%;
 	background:none;
-	height:450px;
-	overflow-y:scroll;
+
 }
 
 .body .page
@@ -15,15 +14,38 @@
 	position:relative;
 	float:left;
 	width:800px;
-	height:1000px;
+	min-height:600px;
 	margin:0 3px 0 0;
-	padding:10px;
+	padding:0;
 	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat
 }
 
-.nuniverse .body .current_page
+.body .current_page
 {
-	padding:10px 20px 10px 20px;
+	padding:0 0 0 0;
+}
+
+.page .hat
+{
+	padding:10px;
+}
+
+.page .menu
+{
+	background:#69c;
+	padding:0;
+	position:relative;
+	clear:both;
+	color:#FFF;
+	height:35px;
+}
+
+.hat .edit
+{
+	position:absolute;
+	top:5px;
+	right:5px;
+	font-size:12px;
 }
 
 .nuniverse .content h2 a
