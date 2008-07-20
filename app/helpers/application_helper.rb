@@ -65,6 +65,7 @@ module ApplicationHelper
 		raise "No tag is specified for page" if params[:tag].nil?
 		params[:content] = capture(&block)
 		params[:path] ||= params[:tag].id
+		params[:classes] ||= ""
 		concat(
 			render(
 				:partial => "/nuniverse/page",
