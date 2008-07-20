@@ -119,6 +119,7 @@ var Nuniverse = new Class({
     var obj = this;
     root.getElements('.connection').each(function(connection)
     {
+      connection.removeEvents();
       connection.addEvent('mouseenter', function(ev)
       {
         this.addClass('hover');
