@@ -1,7 +1,7 @@
 class TaggingsController < ApplicationController
 
 	def index
-		@connections = Tagging.find(:all, :order => "created_at DESC")
+		@connections = Tagging.paginate(:all, :order => "created_at DESC", :page => 1, :per_page => 20)
 	end
 	
 	def create

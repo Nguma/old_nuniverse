@@ -10,8 +10,8 @@ var Nuniverse = new Class({
   {
     this.el = $('nuniverse');
     this.slide = new Fx.Scroll(this.getScroller());
-    this.selectPage(this.el.getElement('.page'));
-    this.setFilters();
+    this.selectPage(this.el.getElement('.current_page'));
+    this.refresh(this.nextPage());
   },
   
   getScroller:function()
@@ -44,6 +44,7 @@ var Nuniverse = new Class({
   {
     var obj = this;
     var perspectives = page.getElement('.perspectives');
+    if(!$defined(perspectives)) return;
     perspectives.getElements('dd').each(function(action)
     {
        action.addEvents({
@@ -56,7 +57,7 @@ var Nuniverse = new Class({
               var updated = page.getElement('.content');
               updated.set('html', '<h6>Loading...</h6>');
               perspectives.removeClass('expanded');
-              obj.requestAndUpdate(updated, this.getElement('a').get('href'));
+              obj.requestAndUpdate(this.getElement('a').get('href'),updated);
               
             } 
             else
@@ -87,99 +88,93 @@ var Nuniverse = new Class({
         }
       });
   },
-  
-  setFilters:function()
+  setConnections:function(root)
   {
+    root.getElements('.connection').each(function(connection)
+    {
+      connection.removeEvents();
+      connection.addEvents(
+      {
+          'mouseenter':function() {connection.addClass('hover');},
+          'mouseleave':function() {connection.removeClass('hover');},
+          'mousedown':this.scrollContent.bindWithEvent(this,connection),
+          'mouseup':this.stopScrollingContent.bind(this,connection),
+          'click':this.selectConnection.bind(this,connection)
+      },this);
+    },this);
+  },
+  
+  scrollContent:function(ev,connection)
+  {
+   
+    this.isScrolling = false;
     var obj = this;
-    this.getFilters().each(function(action)
+    var page = connection.getParent('.page');
+    var y = ev.page.y+page.getScroll().y;
+    page.addEvent('mousemove',function(ev)
+    {
+      if(Math.abs(y - ev.page.y) > 1)
+      {
+        
+        page.scrollTo(page.getPosition().x,y - ev.page.y);
+        obj.setScrollFlag(true);
+      }
+      
+    },this);
+  },
+  
+  setScrollFlag:function(bool)
+  {
+    this.isScrolling = bool;
+  },
+  
+  stopScrollingContent:function(connection)
+  {
+    var page = connection.getParent('.page');
+    page.removeEvents();
+    this.setScrollFlag.delay(100,true);
+    console.log(this)
+  },
+  
+  selectConnection:function(connection)
+  {
+    if(this.isScrolling) return false;
+    var atag = connection.getElement('a.main');
+    this.setSelected('dd','dl',atag);
+    this.selectPage(connection.getParent('.page'));
+    this.nextPage().getChildren().destroy();
+    if(this.getConnectionType(connection) == "inner") 
+    {
+      this.requestAndReplace(connection.getElement('.path').get('text'), this.nextPage());
+    }
+    else
+    {
+      window.open(atag.getProperty('href'), '_blank');
+    }
+    connection.getElements('.manage a').each(function(action)
     {
       action.addEvent('click',function(ev)
       {
-        
-        obj.setSelected('dd','dl',this);
-        var updated = this.getParent('.nuniverse').getElement('.connections');
-        updated.set('html', '<h6>Loading...</h6>');
-        var call = new Request.HTML({
-          'url':this.href,
+        var form = connection.getElement('.data form')
+        var submission = new Request.HTML({
+          'url':form.getProperty('action'),
           onSuccess:function(a,b,c,d)
           {
-            // var container = $('nuniverse').getElement('.content .connections');
-            var new_content = a[0].replaces(updated);
-            $('kind').setProperty('value', action.getElement('img').getProperty('alt'));
-            setConnections(new_content);
+            
           }
-        }).get();
+        }).post(form);
         return false;
       });
     });
   },
   
-  setConnections:function(root)
+  getConnectionType:function(connection)
   {
-    var obj = this;
-    root.getElements('.connection').each(function(connection)
+    if(connection.getElement('a.main').hasClass('inner'))
     {
-      connection.removeEvents();
-      connection.addEvent('mouseenter', function(ev)
-      {
-        this.addClass('hover');
-      });
-
-      connection.addEvent('mouseleave', function(ev)
-      {
-        this.removeClass('hover');
-      });
-
-      connection.addEvent('click', function(ev)
-      {
-        // change selected
-        obj.setSelected('dd','dl',this.getElement('a'));
-       
-        // obj.options['page'] = this.getParent('.page');
-        var parent = this.getParent('.page');
-        obj.selectPage(parent);
-        obj.nextPage().getChildren().destroy();
-       
-        obj.nextPage().adopt($('page_spinner').clone());
-        if(this.getElement('a.main').hasClass('inner')) 
-        {
-          var call = new Request.HTML({
-            'url':this.getElement('.path').get('text'),
-            onSuccess:function(a,b,c,d)
-            {
-              var new_page = a[0].replaces(obj.nextPage());
-              obj.refresh(new_page);
-              if(new_page.getElement('.map'))
-              {
-                obj.setMap();
-              }
-            },
-            'evalScripts':true
-          }).get();
-         
-        } 
-        else
-        {
-          window.open(this.getElement('a.main').getProperty('href'), '_blank');
-        }
-      });
-      
-      connection.getElements('.manage a').each(function(action)
-      {
-        action.addEvent('click',function(ev)
-        {
-          var form = connection.getElement('.data form')
-          var submission = new Request.HTML({
-            'url':form.getProperty('action'),
-            onSuccess:function(a,b,c,d)
-            {
-              
-            }
-          }).post(form);
-          return false;
-        });
-      });
-    });
+      return "inner"
+    }
+    return "outer"
   },
   
   getForm:function()
@@ -215,27 +210,45 @@ var Nuniverse = new Class({
     activator.getParent(el).addClass('selected');
   },
   
-  requestAndUpdate:function(updated, url)
+  requestAndReplace:function(url,replaced)
+  {
+    this.ajaxRequest(url,replaced, "replace");
+  },
+  
+  requestAndUpdate:function(url, updated)
+  {
+    this.ajaxRequest(url,updated, "update");
+  },
+  
+  ajaxRequest:function(url,target,type)
   {
     var obj = this;
-    // removes previous subcontent
-    updated.empty();
-    updated.set('html', '<h6>Loading...</h6>');
-    var call = new Request.HTML({
-         'url':url,
-         'autoCancel':true,
-         'update':updated,
-         onSuccess:function(a,b,c,d)
-         {
-           obj.setConnections(updated);
-           //obj.setMap(updated);
-           if(updated.getElement('.map'))
-           {
-             obj.setMap();
-           }
-         },
-         'evalScripts':true
-    }).get();
+    var type = type || "update";
+    target.empty();
+    target.adopt($('page_spinner').clone());    
+    var args = {
+      'url':url,
+      'autoCancel':true,
+      'evalScripts':true,
+      'onSuccess':function(a,b,c,d)
+      {
+        if(type == "replace")
+        {
+          var new_page = a[0].replaces(target);
+        } else
+        {
+          target.empty();
+          var new_page = target.adopt(a[0])
+        }
+        
+        obj.refresh(new_page);
+        if(new_page.getElement('.map'))
+        {
+          obj.setMap();
+        }
+      }
+    }  
+    var call = new Request.HTML(args).get();
   },
   
   setConnectionForm:function(page)
@@ -299,26 +312,36 @@ var Nuniverse = new Class({
   
   selectPage:function(page)
   {
-    if(page != this.currentPage())
+    if(!$defined(this.currentPage()))
     {
-      if($defined(this.currentPage()))
-      {
-        this.currentPage().removeClass('current_page');
-        this.currentPage().setStyle('width',300);
-        this.hideForm(this.currentPage());
-      }
       this.options['page'] = page;
-
       if($defined(this.nextPage()))
       {
          this.nextPage().getAllNext('.page').destroy();
          this.nextPage().setStyle('width', 800);
+         
       }
-
       this.slide.toElement(this.currentPage());
       this.currentPage().addClass('current_page');
-      this.refresh(page);     
+      this.refresh(page);
+    } 
+    else if(page != this.currentPage())
+    {
+      this.currentPage().removeClass('current_page');
+      this.currentPage().setStyle('width',300);
+      this.hideForm(this.currentPage());
+      this.options['page'] = page;
+      if($defined(this.nextPage()))
+      {
+         this.nextPage().getAllNext('.page').destroy();
+         this.nextPage().setStyle('width', 800);
+         
+      }
+      this.slide.toElement(this.currentPage());
+      this.currentPage().addClass('current_page');
+      this.refresh(page);
     }
+    
     
   },
   
@@ -348,13 +371,16 @@ var Nuniverse = new Class({
        this.map = new GMap2(map_div);
        this.map.setCenter(new GLatLng(params['center']['latitude'],params['center']['longitude']),params['zoom']);
        this.map.addControl(new GLargeMapControl());
-       this.map.addControl(new GMapTypeControl());
+       // this.map.addControl(new GMapTypeControl());
        this.map.addControl(new google.maps.LocalSearch(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
        params['markers'].each(function(m)
        {
          var marker = new GMarker(new GLatLng(m['latitude'],m['longitude']), {title:m['title'], draggable:true});
          
-         this.map.addOverlay(addInfoWindowToMarker(marker),"<h2 style='color:#333'>YEAH</h2>", {});
+         this.map.addOverlay(marker);
+         GEvent.addListener(marker, "click", function() {
+             marker.openInfoWindowHtml("<h2 style='color:#333'>"+m['title']+"</h2>");
+           });
          
        },this);
        }

@@ -4,7 +4,7 @@
   </div>
   <%= avatar_for(object) %>
   <h3><%= link_to_nuniverse(object) %></h3>
-  <p><%= object.description[0..100] %></p>
+  <p><%= object.description %></p>
 
   <div class="path hidden"><%= "/nuniverse_of/#{path}_#{object.id}" %></div>
 </dd>

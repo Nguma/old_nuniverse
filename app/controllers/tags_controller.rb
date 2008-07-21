@@ -23,7 +23,7 @@ class TagsController < ApplicationController
 		
     respond_to do |format|
       format.html {
-					session[:perspective] = params[:perspective] || "you"
+					session[:perspective] = params[:perspective] || "everyone"
 					@perspective = session[:perspective]
 			}
       format.xml  { render :xml => @tag }

@@ -23,6 +23,15 @@ module TagsHelper
 		})
 	end
 	
+	def wikipedia(params)
+		day = Daylife::API.new('6e2eb9b4fce9bd1eff489d2c53b7ac65', '3aea4b3560e4b00e3027a7313a497f06')
+		raise day.execute('topic','getInfo', :name => params[:query]).response.inspect
+		return render(:partial => "/nuniverse/wikipedia", :locals =>
+		{
+			:topic => day.execute('topic','getInfo', :query => params[:query], :include_wikipedia_info => 1, :inlcude_image => 1).topic
+		})
+	end
+	
 	def google(params)
 		GoogleAjax.referer = "http://localhost:3000"
 		return render(:partial => "/nuniverse/google", :locals =>

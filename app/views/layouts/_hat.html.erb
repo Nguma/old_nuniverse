@@ -1,20 +1,12 @@
-<% menu(:id => "control_panel", :selected => selected) do -%>
-    <%# menu_item("home", :selected => selected) do -%>
-      <%#= link_to "Home","/" %>
-    <%# end -%>
+<% menu(:name => "control_panel") do -%>
+    <%= menu_item(:label => "Home", :action => "/",  :selected => selected) %>
     <% if logged_in? -%>
-      <%# menu_item("my_nuniverse", :selected => selected) do -%>
-        <%#= link_to "My nuniverse","/my_nuniverse" %>
-      <%# end -%>
-      <% menu_item("sign_out",  :selected => selected) do -%>
-        <%= link_to "Sign out","/logout" %>
-      <% end -%>
+
+      <%= menu_item(:label => "My nuniverse", :action => "/my_nuniverse",  :selected => selected) %>
+      <%= menu_item(:label => "Sign out", :action => "/logout",  :selected => selected) %>
     <% else -%>
-      <% menu_item("sign_in",  :selected => selected) do -%>
-        <%= link_to "Sign in","/login" %>
-      <% end -%>
-      <% menu_item("register",  :selected => selected) do -%>
-        <%= link_to "register","/signup" %>
-      <% end -%>
+      <%= menu_item(:label => "Sign in", :action => "/login",  :selected => selected) %>
+      <%= menu_item(:label => "Register", :action => "/signup",  :selected => selected) %>
+     
     <% end -%>
 <% end -%>

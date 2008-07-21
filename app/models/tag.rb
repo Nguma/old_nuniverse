@@ -42,7 +42,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def address
-		ad = description.scan(/#address\s([^#].+)+/)[0]
+		ad = description.scan(/#address[\s]+([^#|\[|\]]+)*/)[0]
 		return ad[0] if ad
 		return content
 	end

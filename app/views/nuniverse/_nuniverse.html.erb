@@ -1,41 +1,13 @@
-<div class="nuniverse" id="nuniverse">
-  <div class="header">
-    <%= avatar_for(tag) %>
-    <h1><%= path.tags.map {|c| "#{c.content.capitalize} >"} %></h1>
-    <p><%= tag.description %></p>
-    <%= render :partial => "/nuniverse/perspectives" , :locals => {:tag => tag, :path => path}%>
-  </div>
-  <div class="scroller">
-    <%#= render :partial => "/nuniverse/filters", :locals => {:path => path, :tag => tag} %>
-  <div class="body">  
-    <div class="content selected">  
-       <%= connections_for(path, :page => page)%>
-    </div>
-    <div class="content">
-      <dl class="connections">
-      </dl>
-    </div>
-  </div>
-  </div>
-  <%= render  :partial => "/taggings/new", 
-              :locals => {
-                :title => "Add a new topic",
-                :kind => "topic",
-                :path => path
-              }%>
-  <dl class="options">
-    <dd><%= link_to("+ Add something", "#", :class => 'add') %></dd>
-    <dd><%= link_to("+ Invite / manage contributors", "#") %></dd>
-    <dd><%= link_to("+ Find related topics", "#") %></dd>
-  </dl>
-  <script type="text/javascript"
-  src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-  </script>
-</div>
+<!-- <% path.taggings.each do |tagging| -%>
+        <% if tagging.last_tag == path.last_tag -%>
+          <% page_for(:tag => tagging.last_tag, :path => path) do -%> 
+            <%= content_for_page(:tag => tagging.last_tag, :path => path, :perspective => perspective, :filter => filter) %>
+        <% end -%>
+        <% else -%>
+          <% page_for(:tag => tagging.last_tag, :path => tagging) do -%>
 
-<div class="hidden" id="content_template">
-  <div class="content">
-    <dl class="connections">
-    </dl>
-  </div>
-</div>
+            
+          <% end -%> 
+        <% end -%>
+
+      <% end -%>   -->

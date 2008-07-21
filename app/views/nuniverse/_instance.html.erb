@@ -4,15 +4,24 @@
 <% end -%>
 
 <div class="nuniverse" id="nuniverse">
-  <%= render :partial => "/nuniverse/breadcrumbs", :locals => 
-  {
-    :path => path
-  }%>
+  <%= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => path }%>
   <div class="scroller"> 
-    <div class="body">  
-      <% page_for(:tag => tag, :path => path, :classes => "current_page") do -%> 
+    <div class="body">
+      <div class="page current_page">
+        <div class="content">
+          <% menu(:name => "main_menu") do -%>
+            <%= menu_item(:label =>"Lately in this nuniverse...", :action => "#") %>
+            <%= menu_item(:label =>"All topics",:action =>  "#") %>
+            <%= menu_item(:label =>"People",:action =>  "#") %>
+            <%= menu_item(:label =>"Places",:action =>  "#") %>
+            <%= menu_item(:label =>"Products", :action => "#") %>
+          <% end -%>
+        </div>
+      </div>
+      <% page_for(:tag => tag, :path => path) do -%> 
         <%= content_for_page(:tag => tag, :path => path, :perspective => perspective, :filter => filter) %>
       <% end -%>
+      
     </div>
   </div>
 </div>
@@ -20,6 +29,3 @@
 <div class="hidden">
  <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "page_spinner")%>
 </div>
-<!-- <script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script> -->

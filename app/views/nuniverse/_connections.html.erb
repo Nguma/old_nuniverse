@@ -5,16 +5,31 @@
             }%>
             
 <dl class="connections">
-  <% if connections.previous_page -%>
-    <dd class="pager top"><%= link_to("less", "/nuniverse_of/#{path}/page/#{connections.previous_page}") %></dd>
-  <% end -%>
-  <% connections.each do |connection| -%>
-    <%= render :partial => "/nuniverse/connection", :locals => {
-      :object => connection.object,
-      :path => path
-    }%>
-  <% end -%>
-  <% if connections.next_page -%>
-    <dd class="pager bottom"><%= link_to("more", "/nuniverse_of/#{path}/page/#{connections.next_page}") %></dd>
+  <% if connections.empty? -%>
+    <h2>You haven't added anything to this <%= path.last_tag.kind %> yet.</h2>
+    <a href="#" class="toggle">Add now</a>
+  <% else -%>
+    <% if connections.previous_page -%>
+      <dd class="pager top">
+        <%= link_to("less", "/nuniverse_of/#{path}/page/#{connections.previous_page}") %>
+      </dd>
+    <% end -%>
+    <div class="ads" style="position:relative;padding:5px;background:#FFF">
+      <script type="text/javascript"
+        src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+      </script>
+    </div>
+    <% connections.each do |connection| -%>
+        <%= render :partial => "/nuniverse/connection", :locals => {
+          :object => connection.object,
+          :path => path
+        }%>
+    <% end -%>
+
+    <% if connections.next_page -%>
+        <dd class="pager bottom">
+          <%= link_to("more", "/nuniverse_of/#{path}/page/#{connections.next_page}") %>
+        </dd>
+    <% end -%>
   <% end -%>
 </dl>

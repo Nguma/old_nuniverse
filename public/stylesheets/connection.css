@@ -7,6 +7,36 @@
 	width:100%;
 }
 
+
+#main_menu 
+{
+	position:relative;
+	clear:both;
+	padding:0 0 0 0;
+	text-align:left;
+	width:100%;
+}
+
+#main_menu dd
+{
+	position:relative;
+	clear:both;
+	margin:0 0 1px 0px;
+	padding:3px;
+	font-size:13px;
+	font-weight:bold;
+}
+
+#main_menu .even
+{
+	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
+}
+
+#main_menu .odd
+{
+	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+}
+
 .content dt
 {
 	display:none;
@@ -23,12 +53,26 @@
 	color:#333;
 	width:auto;
 	min-height:30px;
-	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
 	cursor:pointer;
 	text-align:left;
 }
 
+.connections .even
+{
+	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;
+}
+
 .connections .odd
+{
+	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
+}
+
+.current_page .even
+{
+	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
+}
+
+.current_page .odd
 {
 	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
 }

@@ -6,7 +6,6 @@
 	padding:0 0 0 0px;
 	width:100%;
 	background:none;
-
 }
 
 .body .page
@@ -14,9 +13,10 @@
 	position:relative;
 	float:left;
 	width:800px;
-	min-height:600px;
+	height:500px;
 	margin:0 3px 0 0;
 	padding:0;
+	overflow:hidden;
 	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat
 }
 
@@ -126,6 +126,7 @@ h1 a
 {
 	padding:10px;
 }
+
 .content .menu a
 {
 	display:block;

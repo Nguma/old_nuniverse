@@ -97,7 +97,10 @@ var NForm = new Class({
   
   setToggle:function()
   {
-    this.el.getElement('.toggle').addEvent('click', this.toggle.bind(this));
+    this.el.getParent('.page').getElements('.toggle').each(function(toggle)
+    {
+      toggle.addEvent('click', this.toggle.bind(this));
+    },this);
     
   },
   

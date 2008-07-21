@@ -41,6 +41,8 @@ module ApplicationHelper
 
 	def menu(params = {}, &block)
 		params[:body] = capture(&block)
+		params[:classes] ||= ""
+		params[:name] ||= ""
 		concat(
 		render(
 			:partial => "/nuniverse/menu",
@@ -48,24 +50,22 @@ module ApplicationHelper
 		), block.binding)
 	end
 	
-	def menu_item(name, params = {}, &block)
-		params[:body] = capture(&block)
+	def menu_item(params)
 		params[:classes] ||= ""
-		if params[:selected] && name == params[:selected]
+		if params[:selected] && params[:label] == params[:selected].capitalize
 			params[:classes] << " selected"
 		end
-		concat(
 		render(
 			:partial => "/nuniverse/menu_item",
 			:locals => params
-		), block.binding)
+		)
 	end
 	
 	def page_for(params ={}, &block)
 		raise "No tag is specified for page" if params[:tag].nil?
 		params[:content] = capture(&block)
 		params[:path] ||= params[:tag].id
-		params[:classes] ||= ""
+		params[:dom_classes] ||= ""
 		concat(
 			render(
 				:partial => "/nuniverse/page",
@@ -94,6 +94,8 @@ module ApplicationHelper
 				params[:connections] = amazon(:query => params[:path].last_tag.content.to_s)	
 			when "daylife"
 				params[:connections] = daylife(:query => query.gsub(',',' '))	
+			when "wikipedia"
+				params[:connections] = wikipedia(:query => params[:path].last_tag.content.to_s)
 			when "google"
 				params[:connections] = google(:query => "#{query} -amazon.com -ebay.com", :path => params[:path])
 			when "flickr"

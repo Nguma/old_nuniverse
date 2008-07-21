@@ -1,7 +1,11 @@
 <div class="perspectives">
   <dl>
     <dt>According to <%= selected %></dt><%= image_tag("/images/icons/down.png", :alt => "Change perspective") %>
-    <% perspectives = ['you','everyone','google','map','ebay','amazon','flickr','daylife','wikipedia'] -%>
+    <% if logged_in? -%>
+      <% perspectives = ['you','everyone','google','map','ebay','amazon','flickr','daylife','wikipedia'] -%>
+    <% else -%>
+      <% perspectives = ['everyone','google','map','ebay','amazon','flickr','daylife','wikipedia'] -%>
+    <% end -%>
     <% perspectives.each do |perspective| -%>
       <dd class="item <%= perspective == selected ? 'selected' : '' %>">
         <%= link_to(perspective.capitalize,"/current_nuniverse/according_to/#{perspective}") %>
