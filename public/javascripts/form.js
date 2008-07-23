@@ -104,17 +104,27 @@ var NForm = new Class({
     
   },
   
-  toggle:function()
+  toggle:function(force)
   {
     if(this.el.hasClass('expanded'))
     {
-      this.el.removeClass('expanded');
-      this.el.getElement('.toggle').set('text', '+ Add');
+      this.collapse();
     }
     else
     {
-      this.el.addClass('expanded');
-      this.el.getElement('.toggle').set('text', '- Add');
+      this.expand();
     }
+  },
+  
+  expand:function()
+  {
+    this.el.addClass('expanded');
+    this.el.getElement('.toggle').set('text', '- Add');
+  },
+  
+  collapse:function()
+  {
+    this.el.removeClass('expanded');
+    this.el.getElement('.toggle').set('text', '+ Add');
   }
 });
