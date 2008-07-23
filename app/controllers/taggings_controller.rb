@@ -28,7 +28,7 @@ class TaggingsController < ApplicationController
 			:description  => params[:description],
 			:url          => params[:url],
 			:service      => params[:service],
-			:data         => gum.collect { |k,v| "##{k} #{v}" }.join(" ")
+			:data         => gum.collect { |k,v| "##{k} #{v}" }.join(" "),
 			:user_id	    => current_user.id
 		)
 		
