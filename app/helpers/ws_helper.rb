@@ -62,15 +62,12 @@ module WsHelper
 	def images_from_flickr(params)
 		flickr = Flickr.new 'c40c269aea764bb5f53c877c3d265327'
 		photos = flickr.photos(:tags => params[:query], :per_page => '10') rescue []
-		return render 	:partial => "/ws/flickr", 
-						:locals => {
-							:photos => photos
-						}
-
+		return render(:partial => "/ws/flickr", 
+			:locals => { :photos => photos }
+		)
 	end
 	
 	def map_from_google(params)
-		
 		gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
 		markers = []
 		@map = GMap.new("map_div")
@@ -112,18 +109,18 @@ module WsHelper
 		//]]>
 		</script>"
 		
-		return render :partial => "/nuniverse/maps", :locals =>{
+		return render(:partial => "/nuniverse/maps", :locals => {
 			:map => @map,
 			:markers => markers,
 			:html => html
-		}
+		})
 		#return @map.div(:width => "100%", :height => 450, :class => "map")
 	end
 	
 	def details_for(params)
 		case params[:service]
 		when "video"
-			return render :partial => "/ws/video", :locals => {:url => params[:ws_url]}
+			return render(:partial => "/ws/video", :locals => {:url => params[:ws_url]})
 		else
 			return "#TODO: This service hasn't been implemented yet"
 		end
