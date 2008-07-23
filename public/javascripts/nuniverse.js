@@ -56,9 +56,9 @@ var Nuniverse = new Class({
   setPerspectives:function(section)
   {
     var obj = this;
-    var perspectives = section.getElement('.perspectives');
-    if(!$defined(perspectives)) return;
-    perspectives.getElements('dd').each(function(action)
+    var dropdown = section.getElement('.menu dl');
+    if(!$defined(dropdown)) return;
+    dropdown.getElements('dd').each(function(action)
     {
        action.addEvents({
         'click':function(ev)
@@ -66,16 +66,24 @@ var Nuniverse = new Class({
             if(!action.hasClass('selected'))
             {
               obj.setSelected('dd','dl',this.getElement('a'));
-              perspectives.getElement('dt').set('text', 'According to '+action.get('text').toLowerCase());
+              if(dropdown.hasClass('perspective'))
+              {
+                dropdown.getElement('dt').set('text', 'According to '+action.get('text').toLowerCase());
+              }
+              else
+              {
+                dropdown.getElement('dt').set('text', 'Sorted '+action.get('text').toLowerCase());
+              }
+              
               var updated = section.getElement('.content');
               updated.set('html', '<h6>Loading...</h6>');
-              perspectives.removeClass('expanded');
+              dropdown.removeClass('expanded');
               obj.requestAndUpdate(this.getElement('a').get('href'),updated);
               
             } 
             else
             {
-              perspectives.addClass('expanded')
+              dropdown.addClass('expanded')
             }
             return false;
           },
@@ -87,17 +95,20 @@ var Nuniverse = new Class({
        
       });
        
-      perspectives.addEvents({
+      dropdown.addEvents({
         'click':function(ev){
           if(!this.hasClass('expanded'))
           {
             this.addClass('expanded');
-            perspectives.getElement('dt').set('text', 'According to: ');
+            // var label = dropdown.getElement('dt').get('text');
+            //            label.gsub(this.getElement('.selected a').get('text'),"").rstrip
+            //            dropdown.getElement('dt').set('text',label);
           }
         },
         'mouseleave':function(ev){
           this.removeClass('expanded');
-          perspectives.getElement('dt').set('text', 'According to '+this.getElement('.selected a').get('text').toLowerCase());
+          var label = "According to "+this.getElement('.selected a').get('text').toLowerCase()
+          dropdown.getElement('dt').set('text',label);
         }
       });
   },
@@ -151,22 +162,13 @@ var Nuniverse = new Class({
   selectConnection:function(connection)
   {
     if(this.isScrolling) return false;
-    var atag = connection.getElement('a.main');
+    var atag = connection.getElement('h3 a');
     
     var section = this.nextsection(connection.getParent('.section'));
     
     section.getChildren().destroy();
     if(this.getConnectionType(connection) == "inner") 
     {
-      // if(connection.getElement('.param'))
-      //       {
-      //         var param = connection.getElement('.param').get('text') 
-      //       }
-      //       else
-      //       {
-      //         var param =  ""
-      //       }
-      
       this.requestAndReplace(connection.getElement('a.main').getProperty('href'), section);
     }
     else 
@@ -226,7 +228,7 @@ var Nuniverse = new Class({
   
   setSelected:function(el,context,activator)
   {
-    var previous = activator.getParent(context).getChildren('.selected');
+    var previous = activator.getParent(context).getElement('.selected');
     if($defined(previous))
     {
       previous.removeClass('selected');

@@ -1,13 +1,4 @@
 <div class="section <%= dom_classes.blank? ? "" : dom_classes %>">
-  <% if hat %>
-  <div class="hat">
-    <%= avatar_for(section.subject) %>
-    <h1><%= link_to(section.subject.content.capitalize,"#") %></h1>
-    <p><strong><%= section.subject.kind %>.</strong> <%= section.subject.description.capitalize %></p>
-    <%= link_to "edit", "/tags/#{section.subject.id}/edit" , :class => "edit"%>
-  </div>
-  <% end -%>
-
   <div class="menu">
     <a href="#" class="back">< back</a>
     <%= render :partial => "/nuniverse/perspectives" , :locals => {:section => section}%>

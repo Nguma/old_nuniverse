@@ -50,10 +50,12 @@ module WsHelper
 	
 	def videos_from_google(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		response = GoogleAjax::Search.video(params[:query], :rsz => "large")
+		page = params[:page] || 0
+		response = GoogleAjax::Search.video(params[:query], :start => page * 8, :rsz => "large")
 		return render(:partial => "/ws/videos", :locals => {
 			:connections => response.results,	
-			:path => params[:path]
+			:path => params[:path],
+			:page => page
 		})
 	end
 	

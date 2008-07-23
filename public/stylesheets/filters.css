@@ -48,6 +48,9 @@ dl.filters dd.selected
 	display:none;
 }
 
+
+
+
 .perspectives
 {
 	position:relative;
@@ -55,7 +58,7 @@ dl.filters dd.selected
 	font-size:14px;
 	padding:0;
 	margin:0 0 2px 0;
-	z-index:123456780;
+	z-index:1234567890;
 	cursor:pointer;
 	display:none;
 }
@@ -65,7 +68,7 @@ dl.filters dd.selected
 	display:block;
 }
 
-.perspectives img
+.section .menu img
 {
 	display:inline;
 	position:relative;
@@ -74,7 +77,7 @@ dl.filters dd.selected
 	height:17px;
 }
 
-.perspectives dl
+.section .menu dl
 {
 	position:absolute;
 	padding:0;
@@ -85,7 +88,18 @@ dl.filters dd.selected
 	width:auto;
 	min-width:200px;
 }
-.perspectives dt
+
+.order
+{
+	display:none;
+}
+
+.current_section .order 
+{
+	display:block;
+}
+
+.section .menu dt
 {
 	color:#FFF;
 	position:relative;
@@ -96,7 +110,7 @@ dl.filters dd.selected
 	background:#69c;
 }
 
-.perspectives dd
+.section .menu dd
 {
 	position:relative;
 	display:none;
@@ -104,7 +118,7 @@ dl.filters dd.selected
 	clear:both;
 }
 
-.expanded dd
+.section .expanded dd
 {
 	display:block;
 }

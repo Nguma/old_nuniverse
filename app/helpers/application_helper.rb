@@ -11,8 +11,7 @@ module ApplicationHelper
 		return link_to(image_tag(tag.avatar.public_filename(:large), :alt => tag.content), "/nuniverse_of/#{tag.id}", :class => 'avatar', :title => "#{tag.kind}: #{tag.content}")
 	end
 	
-	def link_to_nuniverse(tag, options = {})
-		
+	def link_to_nuniverse(tag, options = {})		
 		return link_to("You",	"/my_nuniverse", :class => options[:class]) if logged_in? && current_user.tag == tag 
 		label = tag.content.capitalize
 		label = "#{label[0,options[:max]]}..." if options[:max] && label.length > options[:max]

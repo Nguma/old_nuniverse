@@ -1,0 +1,20 @@
+<div class="section">  
+  <div class="hat">
+    <%= avatar_for(nuniverse.tag) %>
+    <h1><%= link_to(nuniverse.tag.content.capitalize,"#") %></h1>
+    <p><strong><%= nuniverse.tag.kind %>.</strong> <%= nuniverse.tag.description.capitalize %></p>
+    <%= link_to "edit", "/tags/#{nuniverse.tag.id}/edit" , :class => "edit"%>
+  </div> 
+  <div class="content">
+  <% menu(:name => "main_menu") do -%>
+    <%= menu_item(:label =>"Overview", :action => "/overview_for/#{nuniverse.path}") %>
+    <%= menu_item(:label =>"Topics",:action =>  "/section/#{nuniverse.path}/with_kind/topic/by/name?perspective=you") %>
+    <%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name?perspective=you") %>
+    <%= menu_item(:label =>"Places",:action =>  "/section/#{nuniverse.path}/with_kind/location/by/name?perspective=you") %>
+    <%= menu_item(:label =>"Bands",:action =>  "/section/#{nuniverse.path}/with_kind/band/by/name?perspective=you") %>
+    <%= menu_item(:label =>"Movies",:action =>  "/section/#{nuniverse.path}/with_kind/movie/by/name?perspective=you") %>
+    <%= menu_item(:label =>"Restaurants",:action =>  "/section/#{nuniverse.path}/with_kind/restaurant/by/name") %>
+    <%= menu_item(:label =>"Products", :action => "/section/#{nuniverse.path}/with_kind/item/by/name?perspective=you") %>
+  <% end -%>
+  </div>
+</div>

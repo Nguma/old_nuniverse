@@ -78,17 +78,16 @@ ActionController::Routing::Routes.draw do |map|
 	
 	map.section "/section/:path",
 		:controller => 'nuniverse',
-		:action => "section",
-		:perspective => "everyone"
+		:action => "section"
 
-	map.section_by"/section/:path/by/:order",
+	map.section_by "/section/:path/by/:order",
 		:controller => 'nuniverse',
 		:action => "section"
 		
-	map.section_by"/section/:path/by/:order",
+	map.current_section_by "/current_section/by/:order",
 		:controller => 'nuniverse',
 		:action => "section"
-	
+
 	map.section_by"/section/:path/with_kind/:kind/by/:order",
 		:controller => 'nuniverse',
 		:action => "section"

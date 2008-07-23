@@ -1,7 +1,1 @@
-<div class="section current_section">
-  <div class="content">
-    <div class="connections">
-        <%= render(:partial => "/taggings/instance", :collection => @nuniverse.overview )%>
-    </div>
-  </div>
-</div>
+<%= render :partial => "/nuniverse/overview", :locals => {:nuniverse => @nuniverse} -%>
