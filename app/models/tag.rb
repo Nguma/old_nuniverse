@@ -13,7 +13,7 @@ class Tag < ActiveRecord::Base
 				:kind         => params[:kind],
 				:description  => params[:description] || "",
 				:url          => params[:url],
-				:source       => params[:source],
+				:service       => params[:service],
 				:data         => params[:data]
 			)
 		else
@@ -41,15 +41,28 @@ class Tag < ActiveRecord::Base
 	
 	def has_address?
 		return true if kind == "country" || "city" || "continent"
-		return true if description.match(/#address\s.+/)
+		return true if data.match(/#address\s.+/)
 		return false
 	end
 	
 	def address
-		ad = description.scan(/#address[\s]+([^#|\[|\]]+)*/)[0]
-		return ad[0] if ad
+		ad = data.scan(/#address[\s]+([^#|\[|\]]+)*/).to_s
+		return ad unless ad.blank?
 		return content
 	end
+	
+	def has_coordinates?
+		return true if data.match(/#latlng\s.+/)
+	end
+	
+	def latitude
+		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[0] rescue nil
+	end
+	
+	def longitude
+		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[1] rescue nil
+	end
+	
 	# def self.find_taggeds_with(params)
 	# 		
 	# 		@context = params[:context].collect {|s| s.id}.join('_')

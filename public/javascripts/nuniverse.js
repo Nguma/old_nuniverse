@@ -126,7 +126,50 @@ var Nuniverse = new Class({
           'mouseup':this.stopScrollingContent.bind(this,connection),
           'click':this.selectConnection.bind(this,connection)
       },this);
+      
+      connection.getElements('a.bookmark').each(function(action)
+      {
+        action.addEvent('click', this.bookmark.bind(this,connection));
+      },this);
+      
+      connection.getElements('a.remove').each(function(action)
+      {
+        action.addEvent('click', this.removeBookmark.bind(this,connection));
+      },this);
+      
+     
+
     },this);
+  
+    
+  },
+  
+  bookmark:function(connection)
+  {
+    var form = connection.getElement('.data form');
+    var call = new Request.HTML(
+        {
+          'url':form.getProperty('action'),
+          'onSuccess':function()
+          {
+            connection.getElement('a.bookmark').destroy();
+          }
+    }).post(form);
+    return false;
+  },
+  
+  removeBookmark:function(connection)
+  {
+    var call = new Request.HTML(
+    {
+      'url':connection.getElement('a.remove').getProperty('href'),
+      'data':{'_method':'delete'},
+      'onSuccess':function()
+      {
+        connection.destroy();
+      }
+    }).post();
+    return false;
   },
   
   scrollContent:function(ev,connection)
@@ -170,7 +213,7 @@ var Nuniverse = new Class({
     section.getChildren().destroy();
     if(this.getConnectionType(connection) == "inner") 
     {
-      this.requestAndReplace(connection.getElement('a.main').getProperty('href'), section);
+      this.requestAndReplace(atag.getProperty('href'), section);
     }
     else 
     {
@@ -197,7 +240,7 @@ var Nuniverse = new Class({
   
   getConnectionType:function(connection)
   {
-    if(connection.getElement('a.main').hasClass('inner'))
+    if(connection.getElement('h3 a').hasClass('inner'))
     {
       return "inner"
     }
@@ -366,8 +409,13 @@ var Nuniverse = new Class({
     if($defined(this.options['form']))
     {
       this.options['form'].collapse();
-      this.options['form'].el = section.getElement('.new_connection');
+       if($defined(section.getElement('.new_connection')))
+        {
+          this.options['form'].el = section.getElement('.new_connection');
+        }
+      
     }
+   
     this.currentsection().removeClass('current_section');
     this.options['section'] = section;
     

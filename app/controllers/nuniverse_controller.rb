@@ -15,7 +15,8 @@ class NuniverseController < ApplicationController
 			:path => session[:path], 
 			:kind => params[:kind] || nil,
 			:page => params[:page] || 1,
-			:pespective => session[:perspective]
+			:pespective => session[:perspective],
+			:user => current_user
 		 )
 		
 	end

@@ -124,7 +124,11 @@ var NForm = new Class({
   
   collapse:function()
   {
-    this.el.removeClass('expanded');
-    this.el.getElement('.toggle').set('text', '+ Add');
+    if(this.el.hasClass('expanded'))
+    {
+      this.el.removeClass('expanded');
+      this.el.getElement('.toggle').set('text', '+ Add');
+    }
+    
   }
 });

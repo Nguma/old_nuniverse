@@ -2,9 +2,9 @@
   <dl>
     <dt>According to <%= section.perspective %></dt><%= image_tag("/images/icons/down.png", :alt => "Change perspective") %>
     <% if logged_in? -%>
-      <% perspectives = ['you','everyone','google','map','videos','ebay','amazon','flickr','daylife','wikipedia'] -%>
+      <% perspectives = ['you','everyone','google','map','local','videos','ebay','amazon','flickr','daylife','wikipedia', 'twitter'] -%>
     <% else -%>
-      <% perspectives = ['everyone','google','map','ebay','videos','amazon','flickr','daylife','wikipedia'] -%>
+      <% perspectives = ['everyone','google','map','local','ebay','videos','amazon','flickr','daylife','wikipedia', 'twitter'] -%>
     <% end -%>
     <% perspectives.each do |perspective| -%>
       <dd class="item <%= perspective == section.perspective ? 'selected' : '' %>">

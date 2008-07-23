@@ -2,7 +2,7 @@
 <% items.each do |item| %>
   <dd class="connection <%= cycle('even','odd') %>">
     <div class="manage">
-      <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "Bookmark") %>
+      <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "bookmark", :class => "bookmark") %>
     </div>
     <% unless item.thumbnail.nil? -%>
      <%= link_to(image_tag(item.thumbnail),"#",:class => 'avatar') %>
@@ -12,7 +12,12 @@
 
     </h3>
       <p>$<%= item.amount.to_i %></p>
-
+      <div class="data hidden">
+        <% form_tag '/taggings/create' do -%>
+          <%= hidden_field_tag :path, path %>
+          <%= hidden_field_tag :content, "#item #{item.title} #url #{item.url} #description #{item.amount} #service amazon"   %>
+        <% end -%>
+      </div>
   </dd>
 <% end -%>
 </dl>

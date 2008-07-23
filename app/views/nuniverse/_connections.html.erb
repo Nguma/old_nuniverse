@@ -24,7 +24,7 @@
 
     <% connections.each do |connection| -%>
         <%= render :partial => "/nuniverse/connection", :locals => {
-          :object => connection.object,
+          :connection => connection,
           :path => path
         }%>
     <% end -%>

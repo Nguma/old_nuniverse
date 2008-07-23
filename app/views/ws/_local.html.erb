@@ -1,6 +1,6 @@
 <div class="connections">
-  <% unless connections.empty? -%>
-    <% connections.each do |rst| -%>
+  <% unless locations.empty? -%>
+    <% locations.each do |location| -%>
       <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
         
         <div class="manage">
@@ -8,19 +8,18 @@
         </div>
         <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'avatar') %>
         <h3>
-          <a href="<%= rst.url %>" target="_blank"><%= rst.title %></a>
+          <a href="<%= location.url %>" target="_blank"><%= location.titleNoFormatting %></a>
           <span class="source">
             @ Google
           </span>
-          
         </h3>
-        <p><%= rst.content %></p>
+        <p><%= location.content %></p>
 
         <div class="data hidden">
           <% form_tag '/taggings/create' do -%>
             <%= hidden_field_tag :path, path %>
     
-            <%= hidden_field_tag :content,"#bookmark #{rst.title} #url #{rst.url} #description #{rst.content} #service google" %>
+            <%= hidden_field_tag :content, "#location #{location.titleNoFormatting} #address #{location.streetAddress} #{location.city} #{location.region} #{location.country} #latlng #{location.lat},#{location.lng}"   %>
           <% end -%>
         </div>
       </dd>

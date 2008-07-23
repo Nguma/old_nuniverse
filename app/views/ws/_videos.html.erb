@@ -4,7 +4,7 @@
       <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
         
         <div class="manage">
-          <%= link_to(image_tag("/images/icons/plus.png"),"/bookmark/#{path}",:title => "Bookmark") %>
+          <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "Bookmark", :class => "bookmark") %>
         </div>
         <%= link_to(image_tag(rst.tbUrl),"#",:class => 'avatar') %>
         <h3>
@@ -15,6 +15,13 @@
           
         </h3>
         <p><%= rst.content %></p>
+        <div class="data hidden">
+          <% form_tag '/taggings/create' do -%>
+            <%= hidden_field_tag :path, path %>
+    
+            <%= hidden_field_tag :content, "#video #{rst.title} #url #{rst.playUrl} #description #{rst.content} #image #{rst.tbUrl} #service video "   %>
+          <% end -%>
+        </div>
       </dd>
     <% end -%>
   <% end -%>
