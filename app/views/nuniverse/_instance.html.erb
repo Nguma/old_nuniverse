@@ -4,28 +4,34 @@
 <% end -%>
 
 <div class="nuniverse" id="nuniverse">
-  <%= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => path }%>
+  <%= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => nuniverse.path }%>
   <div class="scroller"> 
     <div class="body">
-      <div class="page current_page">
-        <div class="content">
-          <% menu(:name => "main_menu") do -%>
-            <%= menu_item(:label =>"Lately in this nuniverse...", :action => "#") %>
-            <%= menu_item(:label =>"All topics",:action =>  "#") %>
-            <%= menu_item(:label =>"People",:action =>  "#") %>
-            <%= menu_item(:label =>"Places",:action =>  "#") %>
-            <%= menu_item(:label =>"Products", :action => "#") %>
-          <% end -%>
-        </div>
-      </div>
-      <% page_for(:tag => tag, :path => path) do -%> 
-        <%= content_for_page(:tag => tag, :path => path, :perspective => perspective, :filter => filter) %>
+      <% render_section(section, :hat => true) do -%> 
+        <% menu(:name => "main_menu") do -%>
+          <%= menu_item(:label =>"Lately in this nuniverse...", :action => "/overview_for/#{nuniverse.path}") %>
+          <%= menu_item(:label =>"Topics",:action =>  "/section/#{nuniverse.path}/with_kind/topic/by/name") %>
+          <%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name/") %>
+          <%= menu_item(:label =>"Places",:action =>  "/section/#{nuniverse.path}/with_kind/location/by/name/") %>
+          <%= menu_item(:label =>"Products", :action => "/section/#{nuniverse.path}/with_kind/item/by/name/") %>
+        <% end -%>
       <% end -%>
-      
+      <div class="section current_section">
+        <div class="content">
+        <% if nuniverse.empty? -%>
+          <%= render :partial => "/nuniverse/welcome" %>
+        <% else -%>
+          <div class="connections">
+            <%= render(:partial => "/taggings/instance", :collection => nuniverse.overview )%>
+          </div>
+        <% end -%>
+        </div>
+      </div>     
+     
     </div>
   </div>
 </div>
 
 <div class="hidden">
- <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "page_spinner")%>
+ <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "spinner")%>
 </div>

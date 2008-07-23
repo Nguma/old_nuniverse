@@ -9,9 +9,21 @@ var Nuniverse = new Class({
   initialize:function()
   {
     this.el = $('nuniverse');
-    this.slide = new Fx.Scroll(this.getScroller());
-    this.selectPage(this.el.getElement('.current_page'));
-    this.refresh(this.nextPage());
+    this.slide = new Fx.Scroll(this.getScroller(), {
+      'offset':{'x':-310,'y':0}
+    });
+    this.selectsection(this.el.getElement('.current_section'));
+    var obj = this;
+    $('main_menu').getElements('a').each(function(action)
+    {
+      action.addEvent('click', function(ev)
+      {
+        ev.preventDefault();
+        obj.requestAndReplace(action.getProperty('href'), obj.currentsection());
+        return false;
+      },this);
+    },this);
+   
   },
   
   getScroller:function()
@@ -19,31 +31,32 @@ var Nuniverse = new Class({
     return this.el.getElement('.scroller');
   },
   
-  nextPage:function()
+  nextsection:function(section)
   {
-    if($defined(this.currentPage().getNext('.page')))
+    var section = section || this.currentsection();
+    if($defined(section.getNext('.section')))
     {
-      return this.currentPage().getNext('.page')
+      return section.getNext('.section');
     }
     else
     {
       return new Element('div',{
-        'class':'page'
-      }).inject(this.currentPage(), 'after');
+        'class':'section'
+      }).inject(section, 'after');
       
     }
   },
   
-  currentPage:function()
+  currentsection:function()
   {
-    // return this.el.getElement('div.selected');
-    return this.options['page']
+    return this.el.getElement('.current_section');
+   // return this.options['section']
   },
   
-  setPerspectives:function(page)
+  setPerspectives:function(section)
   {
     var obj = this;
-    var perspectives = page.getElement('.perspectives');
+    var perspectives = section.getElement('.perspectives');
     if(!$defined(perspectives)) return;
     perspectives.getElements('dd').each(function(action)
     {
@@ -54,7 +67,7 @@ var Nuniverse = new Class({
             {
               obj.setSelected('dd','dl',this.getElement('a'));
               perspectives.getElement('dt').set('text', 'According to '+action.get('text').toLowerCase());
-              var updated = page.getElement('.content');
+              var updated = section.getElement('.content');
               updated.set('html', '<h6>Loading...</h6>');
               perspectives.removeClass('expanded');
               obj.requestAndUpdate(this.getElement('a').get('href'),updated);
@@ -109,14 +122,14 @@ var Nuniverse = new Class({
    
     this.isScrolling = false;
     var obj = this;
-    var page = connection.getParent('.page');
-    var y = ev.page.y+page.getScroll().y;
-    page.addEvent('mousemove',function(ev)
+    var section = connection.getParent('.section');
+    var y = ev.page.y+section.getScroll().y;
+    section.addEvent('mousemove',function(ev)
     {
       if(Math.abs(y - ev.page.y) > 1)
       {
         
-        page.scrollTo(page.getPosition().x,y - ev.page.y);
+        section.scrollTo(section.getPosition().x,y - ev.page.y);
         obj.setScrollFlag(true);
       }
       
@@ -130,42 +143,53 @@ var Nuniverse = new Class({
   
   stopScrollingContent:function(connection)
   {
-    var page = connection.getParent('.page');
-    page.removeEvents();
+    var section = connection.getParent('.section');
+    section.removeEvents();
     this.setScrollFlag.delay(100,true);
-    console.log(this)
   },
   
   selectConnection:function(connection)
   {
     if(this.isScrolling) return false;
     var atag = connection.getElement('a.main');
-    this.setSelected('dd','dl',atag);
-    this.selectPage(connection.getParent('.page'));
-    this.nextPage().getChildren().destroy();
+    
+    var section = this.nextsection(connection.getParent('.section'));
+    
+    section.getChildren().destroy();
     if(this.getConnectionType(connection) == "inner") 
     {
-      this.requestAndReplace(connection.getElement('.path').get('text'), this.nextPage());
+      // if(connection.getElement('.param'))
+      //       {
+      //         var param = connection.getElement('.param').get('text') 
+      //       }
+      //       else
+      //       {
+      //         var param =  ""
+      //       }
+      
+      this.requestAndReplace(connection.getElement('a.main').getProperty('href'), section);
     }
-    else
+    else 
     {
       window.open(atag.getProperty('href'), '_blank');
+      
     }
-    connection.getElements('.manage a').each(function(action)
-    {
-      action.addEvent('click',function(ev)
-      {
-        var form = connection.getElement('.data form')
-        var submission = new Request.HTML({
-          'url':form.getProperty('action'),
-          onSuccess:function(a,b,c,d)
-          {
-            
-          }
-        }).post(form);
-        return false;
-      });
-    });
+    this.setSelected('dd','dl',atag);
+    // connection.getElements('.manage a').each(function(action)
+    //     {
+    //       action.addEvent('click',function(ev)
+    //       {
+    //         var form = connection.getElement('.data form')
+    //         var submission = new Request.HTML({
+    //           'url':form.getProperty('action'),
+    //           onSuccess:function(a,b,c,d)
+    //           {
+    //             
+    //           }
+    //         }).post(form);
+    //         return false;
+    //       });
+    //     });
   },
   
   getConnectionType:function(connection)
@@ -179,7 +203,7 @@ var Nuniverse = new Class({
   
   getForm:function()
   {
-    return this.options['page'].getElement('.new_connection');
+    return this.options['section'].getElement('.new_connection');
   },
   
   update:function(updated,content)
@@ -191,7 +215,7 @@ var Nuniverse = new Class({
   
   perspectives:function()
   {
-    return this.currentPage().getElement('.perspectives');
+    return this.currentsection().getElement('.perspectives');
   },
   
   getFilters:function()
@@ -210,22 +234,25 @@ var Nuniverse = new Class({
     activator.getParent(el).addClass('selected');
   },
   
-  requestAndReplace:function(url,replaced)
+  requestAndReplace:function(url,replaced, params )
   {
-    this.ajaxRequest(url,replaced, "replace");
+    var params = params || ""
+    this.ajaxRequest(url,replaced, "replace", params);
   },
   
-  requestAndUpdate:function(url, updated)
+  requestAndUpdate:function(url, updated, params)
   {
-    this.ajaxRequest(url,updated, "update");
+    var params = params || null
+    this.ajaxRequest(url,updated, "update", params);
   },
   
-  ajaxRequest:function(url,target,type)
+  ajaxRequest:function(url,target,type, params)
   {
+    var params = params || ""
     var obj = this;
     var type = type || "update";
     target.empty();
-    target.adopt($('page_spinner').clone());    
+    target.adopt($('spinner').clone());    
     var args = {
       'url':url,
       'autoCancel':true,
@@ -234,15 +261,24 @@ var Nuniverse = new Class({
       {
         if(type == "replace")
         {
-          var new_page = a[0].replaces(target);
-        } else
+          var new_section = a[0].replaces(target);
+        }
+        else
         {
           target.empty();
-          var new_page = target.adopt(a[0])
+          var new_section = target.adopt(a[0])
+        }
+        if(target.hasClass('section'))
+        {
+           obj.selectsection(new_section);
+        }
+        else
+        {
+          obj.refresh(new_section);
         }
         
-        obj.refresh(new_page);
-        if(new_page.getElement('.map'))
+        
+        if(new_section.getElement('.map'))
         {
           obj.setMap();
         }
@@ -251,16 +287,16 @@ var Nuniverse = new Class({
     var call = new Request.HTML(args).get();
   },
   
-  setConnectionForm:function(page)
+  setConnectionForm:function(section)
   {
     var obj = this;
-    var form = page.getElement('.new_connection')
+    var form = section.getElement('.new_connection')
     if($defined(form))
     {
       this.options['form'] = new NForm(form);
       this.options['form'].addEvent('success',function(a,b,c,d)
       {
-        var updated = page.getElement('.content .connections');
+        var updated = section.getElement('.content .connections');
         updated.grab(a[0],'top');
         obj.setConnections(updated);
       });
@@ -280,7 +316,7 @@ var Nuniverse = new Class({
     {
       el.destroy();
     });
-    var crumbs = this.el.getElements('.page h2 a');
+    var crumbs = this.el.getElements('.section h2 a');
     crumbs.pop();
     crumbs.each(function(crumb,i)
     {
@@ -294,77 +330,75 @@ var Nuniverse = new Class({
       $('breadcrumbs').adopt(c.adopt(crumb.clone()));
       c.addEvent('click', function(ev)
       {
-        var page = obj.el.getElements(".page")[i];
-        obj.selectPage(page);
+        var section = obj.el.getElements(".section")[i];
+        obj.selectsection(section);
       });
     });
+    if($defined(this.currentsection().getElement('.back')))
+    {
+       this.currentsection().getElement('.back').addEvent('click',function(ev)
+        {
+          obj.selectsection(this.getParent('.section'));
+        });
+    }
+   
     
   },
   
-  hideForm:function(page)
+  hideForm:function(section)
   {
-    var form = page.getElement('.new_connection');
+    var form = section.getElement('.new_connection');
     if($defined(form))
     {
      form.removeClass('expanded');
     }
   },
   
-  selectPage:function(page)
+  selectsection:function(section)
   {
-    if(!$defined(this.currentPage()))
+    
+    if(!$defined(this.currentsection()))
     {
-      this.options['page'] = page;
-      if($defined(this.nextPage()))
-      {
-         this.nextPage().getAllNext('.page').destroy();
-         this.nextPage().setStyle('width', 800);
-         
-      }
-      this.slide.toElement(this.currentPage());
-      this.currentPage().addClass('current_page');
-      this.refresh(page);
+      this.options['section'] = section;
+      this.currentsection().addClass('current_section');
+      this.refresh(section);
     } 
-    else if(page != this.currentPage())
+   
+    if(section == this.currentsection()) 
     {
-      this.currentPage().removeClass('current_page');
-      this.currentPage().setStyle('width',300);
-      this.hideForm(this.currentPage());
-      this.options['page'] = page;
-      if($defined(this.nextPage()))
-      {
-         this.nextPage().getAllNext('.page').destroy();
-         this.nextPage().setStyle('width', 800);
-         
-      }
-      this.slide.toElement(this.currentPage());
-      this.currentPage().addClass('current_page');
-      this.refresh(page);
+      this.refresh(section);
+      return;
     }
     
+    this.hideForm(this.currentsection());
+    this.currentsection().removeClass('current_section');
+    this.options['section'] = section;
+    section.addClass('current_section');
+    section.getAllNext('.section').destroy();
+    this.slide.toElement(this.currentsection());
+    
+    this.refresh(section);
     
   },
   
-  refresh:function(page)
+  refresh:function(section)
   {
-    this.setHat(page);
-    this.setPerspectives(page);
-    this.setConnections(page);
-    this.setConnectionForm(page);
-    this.hideForm(page);
-    this.currentPage().setStyle('width',300);
-
+    this.setHat(section);
+    this.setPerspectives(section);
+    this.setConnections(section);
+    this.setConnectionForm(section);
+    this.hideForm(section);
   },
   
   setMap:function()
   {
-    //page = params['page'];
+    //section = params['section'];
     if($defined(this.map) )
     {
       this.map = null;
     }
     params = this.options['map']
-    var map_div = $('map_div');//page.getElement('.map');
+    var map_div = $('map_div');//section.getElement('.map');
     if($defined(map_div))
     {
       if (GBrowserIsCompatible()) {

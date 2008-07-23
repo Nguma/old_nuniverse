@@ -29,48 +29,69 @@ ActionController::Routing::Routes.draw do |map|
 		:action => 'show'
 	
 	map.nuniverse_of "/nuniverse_of/:path",
-		:controller => 'tags',
+		:controller => 'nuniverse',
 		:action => 'show'
 
-	map.nuniverse_of_with_page "/nuniverse_of/:path/page/:page",
-		:controller => 'tags',
-		:action => 'show'
-		
-	map.nuniverse_of "/nuniverse_of/:id/:filter",
-			:controller => 'tags',
-			:action => 'show'
-		
-	map.nuniverse_of_with_path "/nuniverse_of/:id/with_path/:path",
-		:controller => 'tags',
+	map.nuniverse_of_with_section "/nuniverse_of/:path/section/:section",
+		:controller => 'nuniverse',
 		:action => 'show'
 
 	map.section_of "/section_of/:path",
-		:controller => 'tags',
+		:controller => 'nuniverse',
 		:action => 'section'
 					
 	map.show_only "/nuniverse_of/:path/show_only/:filter",
-		:controller => 'tags',
+		:controller => 'nuniverse',
 		:action => 'section'
-		
-	map.overview "/nuniverse_of/:path/overview/",
-		:controller => 'tags',
+			
+	map.according_to "/current_section/according_to/:perspective",
+		:controller => 'nuniverse',
 		:action => 'section'
-		
-	map.nuniverse_of_according_to "/nuniverse_of/:path/according_to/:perspective",
-		:controller => 'tags',
-		:action => 'show'
 		
 	map.current_nuniverse_according_to "/current_nuniverse/according_to/:perspective",
-		:controller => 'tags',
+		:controller => 'nuniverse',
 		:action => 'section'
 		
 	map.nuniverse "/nuniverse/:filter",
-		:controller => "tags",
+		:controller => 'nuniverse',
 		:action => "index"
 	
 	map.bookmark "/bookmark/:path",
 		:controller => "taggings",
 		:action => "bookmark"
+		
+	map.videos "/videos",
+		:controller => "ws",
+		:action => "videos"
+		
+	map.video "/video",
+		:controller => "ws",
+		:action => "video"
+		
+	map.details_for "/details_for/:source/:id",
+		:controller => "ws",
+		:action => "show"
+		
+	map.overview_for "/overview_for/:path",
+		:controller => "nuniverse",
+		:action => "overview"
+	
+	map.section "/section/:path",
+		:controller => 'nuniverse',
+		:action => "section",
+		:perspective => "everyone"
+
+	map.section_by"/section/:path/by/:order",
+		:controller => 'nuniverse',
+		:action => "section"
+		
+	map.section_by"/section/:path/by/:order",
+		:controller => 'nuniverse',
+		:action => "section"
+	
+	map.section_by"/section/:path/with_kind/:kind/by/:order",
+		:controller => 'nuniverse',
+		:action => "section"
 		
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products

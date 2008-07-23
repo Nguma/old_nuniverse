@@ -18,8 +18,10 @@ class Tagging < ActiveRecord::Base
     end
   end
   
-  named_scope :with_path, lambda { |path|
-    path.nil? ? {} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
+
+  named_scope :with_path, lambda { |path,degree|
+		return {} if path.nil?
+		return degree.nil? ? {:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
   }
   named_scope :with_path_ending, lambda { |path|
     path.nil? ? {} : {:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]}
@@ -46,9 +48,19 @@ class Tagging < ActiveRecord::Base
     kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :object}
   }
 	
+	named_scope :include_object, {:conditions => "tags.id > 0", :include => :object}
 	named_scope :groupped, :group => "object_id"
   named_scope :by_latest, :order => "taggings.updated_at DESC"
-	named_scope :by_name, :order => "tags.content DESC"
+	named_scope :with_order, lambda { |order|
+		case order
+		when "name"
+			{:include => :object, :order => "tags.content ASC"}
+		when "latest"
+			{:order => "taggings.updated_at DESC"}
+		else
+			{}
+		end
+	}
 
 
 	def move(original_path, new_path)

@@ -5,38 +5,51 @@
 	margin:0 0 0 0;
 	padding:0 0 0 0px;
 	width:100%;
+	height:100%;
 	background:none;
 }
 
-.body .page
+.current_section .content
+{
+	background:#FFF;
+}
+
+.body .section
 {
 	position:relative;
 	float:left;
-	width:800px;
-	height:500px;
+	width:300px;
+	height:520px;
 	margin:0 3px 0 0;
 	padding:0;
 	overflow:hidden;
-	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat
+	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+	border-bottom:solid 2px #666;
 }
 
-.body .current_page
+.body .current_section
 {
 	padding:0 0 0 0;
+	width:800px;
 }
 
-.page .hat
+.section .hat
 {
 	padding:10px;
 }
 
-.page .menu
+.section .menu
 {
 	background:#69c;
 	padding:0;
 	position:relative;
 	clear:both;
 	color:#FFF;
+	height:35px;
+}
+
+.current_section .menu
+{
 	height:35px;
 }
 
@@ -54,11 +67,37 @@
 	color:#666;
 }
 
-.nuniverse .page .hat p
+.nuniverse h1
+{
+	font-size:22px;
+	margin:0 0 0px 0;
+	padding: 0 0 0 0;
+}
+
+.nuniverse .section .hat p
+{
+	font-size:14px;
+	color:#333;
+}
+
+.hat a.avatar img
+{
+	height:50px;
+}
+
+.current_section .hat .avatar img
+{
+	height:70px;
+}
+
+.nuniverse .current_section h1
+{
+	font-size:18px;
+}
+
+.nuniverse .current_section .hat p
 {
 	font-size:12px;
-	font-style:italic;
-	color:#666;
 }
 
 .actions
@@ -86,17 +125,6 @@
 .nuniverse .content h2
 {
 	margin:20px 0 0 0;
-}
-
-.hat a.avatar img
-{
-	height:70px;
-}
-
-.nuniverse h1
-{
-	font-size:22px;
-	margin: 0 0 10px 0;
 }
 
 h1 a

@@ -7,7 +7,7 @@
     <h2>Lately in nuniverse...</h2>
     <dl class="connections" style="height:800px">
       <% for connection in @connections %>
-         <%= render :partial => "instance", :locals => {:connection => connection}%>
+         <%= render :partial => "instance", :locals => {:instance => connection}%>
       <% end %>
     </dl>
   </div>

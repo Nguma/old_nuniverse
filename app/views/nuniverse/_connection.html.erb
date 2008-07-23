@@ -3,8 +3,8 @@
     <%= link_to(image_tag("/images/icons/minus.png"),"#",:title => "Remove") %>
   </div>
   <%= avatar_for(object) %>
-  <h3><%= link_to_nuniverse(object) %></h3>
+  <h3>
+  <%= link_to(object.content.capitalize,"/section_of/#{path}_#{object.id}", :class => "main inner") %></h3>
   <p><%= object.description %></p>
 
-  <div class="path hidden"><%= "/nuniverse_of/#{path}_#{object.id}" %></div>
 </dd>

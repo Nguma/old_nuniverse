@@ -33,6 +33,21 @@ dl.filters dd.selected
 	font-weight:bold;
 }
 
+.back
+{
+	position:relative;
+	float:left;
+	color:#FFF;
+	font-size:14px;
+	font-weight:bold;
+	padding:10px 10px 0 10px;
+}
+
+.current_section .back
+{
+	display:none;
+}
+
 .perspectives
 {
 	position:relative;
@@ -42,11 +57,12 @@ dl.filters dd.selected
 	margin:0 0 2px 0;
 	z-index:123456780;
 	cursor:pointer;
+	display:none;
 }
 
-.current_page .perspectives dl
+.current_section .perspectives
 {
-	display:none;
+	display:block;
 }
 
 .perspectives img

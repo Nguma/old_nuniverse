@@ -1,0 +1,18 @@
+<dl class="connections">
+  <% items.each do |item| %>
+    <dd class="connection  <%= cycle('even','odd') %>">
+      <div class="manage">
+        <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "Bookmark") %>
+      </div>
+      <% unless item.gallery_url.nil? -%>
+        <%= link_to(image_tag(item.gallery_url.to_s),"#",:class => 'avatar') %>
+      <% end -%>
+      <h3>
+        <a href="#">
+          <%= link_to(item.title[0..100].capitalize,"/details_for_item/ebay/#{item.item_id}") %>
+        </a>
+      </h3>
+      <p>$<%= item.converted_current_price.content%> | Ends <%= item.end_time %></p>
+    </dd>
+  <% end -%>
+</dl>

@@ -8,10 +8,15 @@ class UsersController < ApplicationController
 	# GET /my_account
 	# GET /my_nuniverse
 	def show
-		@user = current_user
-		@path = TaggingPath.new @user.tag.id
 		session[:perspective] = "you"
-		@perspective = session[:perspective]
+		@user = current_user
+		@nuniverse = Nuniverse.new(:path => @user.tag.id, :user => current_user)
+		@section = Section.new(
+			:path => @nuniverse.path,
+			:perspective => session[:perspective],
+			:page => params[:page] || 1
+		)
+
 	end
 	
 	

@@ -1,18 +1,20 @@
 <dd class="connection <%= cycle('even','odd') %>"> 
-  <% if connection.object -%>
-        <%= avatar_for(connection.object) %>
-        <h3><%= link_to_nuniverse(connection.object,  :class => "nuni") %></h3>
+  <% if instance.object -%>
+    <%= avatar_for(instance.object) %>
+      <h3>
+        <%= link_to(instance.object.content, "/section_of/#{instance.path}_#{instance.object.id}",  :class => "main inner") %>
+      </h3>
         
-        <% unless connection.path.taggings.empty? || connection.object.kind == "nuniverse"-%>
+        <% unless instance.path.taggings.empty? -%>
         <p> Added to  
-          <% connection.path.taggings[1 .. -1].each do |tagging| -%>
+          <% instance.path.taggings[1 .. -1].each do |tagging| -%>
             <%= link_to_tagging(tagging) %>
           <% end -%>
-          by <%= link_to_nuniverse(connection.user.tag) %>
+          by <%= link_to_nuniverse(instance.user.tag) %>
         </p>
         <% end -%>
     <% else -%>
-    <%= connection.id%>
+      <%= instance.id%>
     
     <% end -%>
 

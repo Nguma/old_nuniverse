@@ -7,7 +7,6 @@
 	width:100%;
 }
 
-
 #main_menu 
 {
 	position:relative;
@@ -43,38 +42,40 @@
 }
 
 .connections .connection
-{
-	padding:10px 10px 10px 10px;
+{	
 	position:relative;
 	clear:both;
-	margin:0 0 1px 0px;
 	font-size:16px;
 	font-weight:bold;
 	color:#333;
 	width:auto;
-	min-height:30px;
 	cursor:pointer;
 	text-align:left;
+	padding:5px;
+	margin:0 0 1px 0;
+	min-height:30px;
 }
 
 .connections .even
 {
-	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;
+	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
 }
 
 .connections .odd
 {
-	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
-}
-
-.current_page .even
-{
-	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
-}
-
-.current_page .odd
-{
 	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+}
+
+.current_section .even
+{
+	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;
+	border-top:solid #eee 1px;
+}
+
+.current_section .odd
+{
+	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
+	border-top:solid #eee 1px;
 }
 
 .connections .hover
@@ -89,36 +90,37 @@
 	color:#FFF;
 }
 
-.current_page .connections p
+.connection .manage,
+.connection .avatar,
+.connection p
 {
 	display:none;
 }
 
-.current_page .connection 
+.current_section .connections p
 {
-	padding:5px;
-	margin:0 0 1px 0;
-	min-height:30px;
+	display:block;
 }
 
-.current_page .connection .avatar
+.current_section .connection 
 {
-	display:none;
+	padding:10px 10px 10px 10px;
 }
 
-.current_page .manage
+.current_section .connection .avatar
 {
-	display:none;
+	display:block;
+}
+
+.current_section .manage
+{
+	display:block;
 }
 
 .connections .selected
 {
-	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;
-}
-
-.selected .connections .connection p
-{
-	display:none;
+/*	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
+	background:#369;
 }
 
 .nuniverse .hover,
@@ -184,6 +186,25 @@
 	width:auto;
 	text-align:left;
 	z-index:123456782;
+	display:none;
+}
+
+.current_section .new_connection
+{
+	display:block;
+}
+
+.overview
+{
+	display:block;
+	position:absolute;
+	top:0;
+	right:0;
+}
+
+.current_section .overview
+{
+	display:none;
 }
 
 .new_connection fieldset
@@ -270,7 +291,7 @@ h3 span.source
 	margin:0;
 }
 
-.connections .pager
+.connections .sectionr
 {
 	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
 	text-align:center;

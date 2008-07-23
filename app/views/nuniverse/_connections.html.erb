@@ -6,8 +6,10 @@
             
 <dl class="connections">
   <% if connections.empty? -%>
+  <div class="message" style="padding:2px">
     <h2>You haven't added anything to this <%= path.last_tag.kind %> yet.</h2>
     <a href="#" class="toggle">Add now</a>
+  </div>
   <% else -%>
     <% if connections.previous_page -%>
       <dd class="pager top">

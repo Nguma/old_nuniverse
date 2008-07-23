@@ -1,0 +1,21 @@
+<dl class="connections">
+  <% unless connections.empty? -%>
+    <% connections.each do |rst| -%>
+      <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
+        
+        <div class="manage">
+          <%= link_to(image_tag("/images/icons/plus.png"),"/bookmark/#{path}",:title => "Bookmark") %>
+        </div>
+        <%= link_to(image_tag(rst.tbUrl),"#",:class => 'avatar') %>
+        <h3>
+          <a class="video main inner" href="/video?url=<%= rst.playUrl  %>" ><%= rst.title %></a>
+          <span class="source">
+            @ Google
+          </span>
+          
+        </h3>
+        <p><%= rst.content %></p>
+      </dd>
+    <% end -%>
+  <% end -%>
+</dl>

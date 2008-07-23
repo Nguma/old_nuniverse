@@ -8,9 +8,9 @@
 
 <dd class="connection <%= cycle('even', 'odd') %>"> 
     <div class="avatar"><%= avatar_for(tag) %></div>
-    <div class="text">
-      <div class="main"><%= link_to_nuniverse(tag, :path => path, :class => "nuni") %><span class="<%= tag.kind %>_kind"><%= tag.kind %></span>
-      </div>
+    <h3><%= tag.kind %>: 
+      <%= link_to(tag.content, "/section/#{connection.path}", :class =>"main inner") %>
+    </h3>
       <p><%= connection.description %></p>
     </div>
     

@@ -14,24 +14,7 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-		session[:path] = params[:path] || session[:path]
-		@path = TaggingPath.new session[:path]
-		@tag  = @path.last_tag
-		@page = params[:page] || 1
-		@filter = params[:filter] || nil
-	
-		
-    respond_to do |format|
-      format.html {
-					session[:perspective] = params[:perspective] || "everyone"
-					@perspective = session[:perspective]
-			}
-      format.xml  { render :xml => @tag }
-			format.js 	{ 
-				@perspective = session[:perspective]
-				render :action => :page
-			}
-    end
+
   end
 
   # GET /tags/new
@@ -106,21 +89,10 @@ class TagsController < ApplicationController
     end
   end
 
-	def section
-		session[:path] = params[:path] || session[:path]
-		@path = TaggingPath.new session[:path]
-		@tag  = @path.last_tag
-		@page = params[:page] || 1
-		@filter = params[:filter] || nil
-		session[:perspective] = params[:perspective] || session[:perspective]
-		@perspective = params[:perspective] || "me"
-	end
-
-	def page
-		
-	end
 	
 	def bookmark
 		
 	end
+	
+	
 end
