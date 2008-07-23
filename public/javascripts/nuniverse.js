@@ -107,11 +107,12 @@ var Nuniverse = new Class({
         },
         'mouseleave':function(ev){
           this.removeClass('expanded');
-          var label = "According to "+this.getElement('.selected a').get('text').toLowerCase()
+          var label = "According to "+ this.getElement('.selected a').get('text').toLowerCase()
           dropdown.getElement('dt').set('text',label);
         }
       });
   },
+  
   setConnections:function(root)
   {
     root.getElements('.connection').each(function(connection)
@@ -224,7 +225,6 @@ var Nuniverse = new Class({
   {
     return $$('.filters dd a');
   },
-  
   
   setSelected:function(el,context,activator)
   {
@@ -347,15 +347,6 @@ var Nuniverse = new Class({
     
   },
   
-  hideForm:function(section)
-  {
-    var form = section.getElement('.new_connection');
-    if($defined(form))
-    {
-     form.removeClass('expanded');
-    }
-  },
-  
   selectsection:function(section)
   {
     
@@ -372,9 +363,14 @@ var Nuniverse = new Class({
       return;
     }
     
-    this.hideForm(this.currentsection());
+    if($defined(this.options['form']))
+    {
+      this.options['form'].collapse();
+      this.options['form'].el = section.getElement('.new_connection');
+    }
     this.currentsection().removeClass('current_section');
     this.options['section'] = section;
+    
     section.addClass('current_section');
     section.getAllNext('.section').destroy();
     this.slide.toElement(this.currentsection());
@@ -389,7 +385,7 @@ var Nuniverse = new Class({
     this.setPerspectives(section);
     this.setConnections(section);
     this.setConnectionForm(section);
-    this.hideForm(section);
+   
   },
   
   setMap:function()
@@ -422,5 +418,10 @@ var Nuniverse = new Class({
        }
        
     } 
+  },
+  
+  destroySection:function(section)
+  {
+    section.getElements()
   }
 });
