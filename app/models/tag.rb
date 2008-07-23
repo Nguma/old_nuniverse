@@ -4,13 +4,17 @@ class Tag < ActiveRecord::Base
 	validates_presence_of :content, :kind
 	
 	def self.connect(params)
-		@object = Tag.find_by_content_and_kind(params[:content], params[:kind])
+		@object = Tag.find_by_content_and_kind_and_url(
+		  params[:content], params[:kind], params[:url]
+		)
 		if @object.nil?
 			@object = Tag.create(
-				:content => params[:content], 
-				:kind => params[:kind],
-				:description => params[:description] || "",
-				:url => params[:url]
+				:content      => params[:content], 
+				:kind         => params[:kind],
+				:description  => params[:description] || "",
+				:url          => params[:url],
+				:source       => params[:source],
+				:data         => params[:data]
 			)
 		else
 			@object.description = params[:description] || @object.description

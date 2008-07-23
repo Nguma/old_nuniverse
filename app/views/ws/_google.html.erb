@@ -19,7 +19,7 @@
         <div class="data hidden">
           <% form_tag '/taggings/create' do -%>
             <%= hidden_field_tag :path, path %>
-            <%= hidden_field_tag :content, "#bookmark #{rst.title} #url #{rst.url} #description #{rst.content}"   %>
+            <%= hidden_field_tag :content, "#bookmark #{rst.title} #url #{rst.url} #description #{rst.content} #service google"   %>
           <% end -%>
           <div class="path"><%= path %></div>
         </div>
