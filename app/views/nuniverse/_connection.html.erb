@@ -3,20 +3,20 @@
     <% if connection.user == current_user -%>
       <%= link_to(image_tag("/images/icons/minus.png"),"/taggings/delete/#{connection.id}",:title => "Remove", :class => "remove") %>
     <% else -%>
-      <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "Bookmark", :class => "bookmark") %>
+      <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
     <% end -%>
   </div>
   <%= avatar_for(connection.object) %>
+
   <h3>
-    <% if connection.object.kind == "video" -%>
-      <%= link_to(connection.object.content.capitalize,"/video?url=#{connection.object.url}", :class => "main inner") %>
-    <% else -%>
-      <%= link_to(connection.object.content.capitalize,"/section_of/#{path}#{connection.object.id}", :class => "main inner") %>
+    <%= link_to_object(connection.object, :path => "#{path}#{connection.object.id}")%>
+    <% if connection.object.service -%>
+      <span class="source">@ <%= connection.object.service %></span>
     <% end -%>
   </h3>
   <p><%= connection.object.description %></p>
   <div class="data hidden">
-    <% form_tag '/taggings/create' do -%>
+    <% form_tag '/taggings/delete' do -%>
       <%= hidden_field_tag :path, path %>
       <%= hidden_field_tag :id, connection.id %>
      

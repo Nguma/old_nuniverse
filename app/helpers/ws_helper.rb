@@ -6,7 +6,7 @@ module WsHelper
 			when "ebay"	
 				return items_from_ebay(params[:path].last_tag.content, :path => params[:path])
 			when "amazon"
-				return items_from_amazon(params[:path].last_tag.content, :path => params[:path])
+				return items_from_amazon(:query => params[:path].last_tag.content, :path => params[:path])
 			when "daylife"
 				return articles_from_daylife(:query => query.gsub(',',' '), :path => params[:path])
 			when "wikipedia"
@@ -33,9 +33,9 @@ module WsHelper
 		return render(:partial => "/ws/ebay", :locals => {:items => response.items, :path => params[:path]})
 	end
 	
-	def items_from_amazon(query, options = {})
-		response = Awsomo::Request.new().search(query,:category => options[:category] || "All")
-		return render(:partial => "/ws/amazon", :locals => {:items => response, :path => params[:path]})
+	def items_from_amazon(params)
+		response = Awsomo::Request.new(:query => params[:query], :category => params[:category] || "All").response
+		return render(:partial => "/ws/amazon", :locals => {:items => response.items, :path => params[:path]})
 	end
 	
 	def articles_from_daylife(params)
@@ -46,7 +46,8 @@ module WsHelper
 	
 	def results_from_google(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		response = GoogleAjax::Search.web(params[:query], :rsz => "large")
+		query = params[:path].tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind} #{t.content}"}.join(' ')
+		response = GoogleAjax::Search.web(query, :rsz => "large")
 		render(:partial => "/ws/google", :locals => {
 			:connections => response.results,	
 			:path => params[:path]
@@ -65,9 +66,11 @@ module WsHelper
 	def videos_from_google(params)
 		GoogleAjax.referer = "http://localhost:3000"
 		page = params[:page] || 0
-		response = GoogleAjax::Search.video(params[:query], :start => page * 8, :rsz => "large")
+		query = params[:path].tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind} #{t.content}"}.last
+		response = GoogleAjax::Search.video(query, :start => page * 8, :rsz => "large")
 		return render(:partial => "/ws/videos", :locals => {
 			:connections => response.results,	
+			:query => query,
 			:path => params[:path],
 			:page => page
 		})
@@ -173,18 +176,25 @@ module WsHelper
 				markers << place
 				
 			elsif place.has_address?
-				ggp = gg.locate place.address
-				markers << ggp
+				ggp = gg.locate place.address rescue nil
+				markers << ggp unless ggp.nil?
 				
 			end
 		end
-		return markers.map {|marker| "{'longitude':#{marker.longitude},'latitude':#{marker.latitude}, 'title':'---'}"}
+		return markers.map {|marker| "{'longitude':#{marker.longitude},'latitude':#{marker.latitude}, 'title':'--' }"}
 	end
 	
 	def details_for(params)
 		case params[:service]
+		when "ebay"
+			response = EbayShopping::Request.new(:get_single_item, :itemID => params[:id]).response
+			return render(:partial => "/ws/ebay_item", :locals => {:item => response.items, :response => response})
+		when "amazon"
+			response = Awsomo::Request.new(:operation => "ItemLookup", :item_id => params[:id]).response
+		
+			return render(:partial => "/ws/amazon_item", :locals => {:item => response.item})			
 		when "video"
-			return render(:partial => "/ws/video", :locals => {:url => params[:ws_url]})
+			return render(:partial => "/ws/video", :locals => {:url => params[:id], :flashvars => params[:flashvars] || ""})
 		else
 			return "#TODO: This service hasn't been implemented yet"
 		end

@@ -3,6 +3,8 @@ class Tag < ActiveRecord::Base
 	
 	validates_presence_of :content, :kind
 	
+	alias_attribute :name, :content
+	
 	def self.connect(params)
 		@object = Tag.find_by_content_and_kind_and_url(
 		  params[:content], params[:kind], params[:url]
@@ -63,6 +65,13 @@ class Tag < ActiveRecord::Base
 		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[1] rescue nil
 	end
 	
+	def flashvars
+		data.scan(/#params[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
+	def ws_id
+		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
+	end
 	# def self.find_taggeds_with(params)
 	# 		
 	# 		@context = params[:context].collect {|s| s.id}.join('_')

@@ -9,21 +9,48 @@ var Nuniverse = new Class({
   initialize:function()
   {
     this.el = $('nuniverse');
+    if(!$defined(this.el)) {return }
+    
     this.slide = new Fx.Scroll(this.getScroller(), {
       'offset':{'x':-310,'y':0}
     });
-    this.selectsection(this.el.getElement('.current_section'));
+    this.selectSection(this.el.getElement('.current_section'));
     var obj = this;
     $('main_menu').getElements('a').each(function(action)
     {
       action.addEvent('click', function(ev)
       {
         ev.preventDefault();
-        obj.requestAndReplace(action.getProperty('href'), obj.currentsection());
+        obj.requestAndReplace(action.getProperty('href'), obj.currentSection());
         return false;
       },this);
     },this);
+    window.document.addEvent('keypress',this.onKey.bindWithEvent(this));
+    
    
+  },
+  
+  onKey:function(ev)
+  {
+   
+    switch(ev.key)
+    {
+        case "up":
+          this.selectConnection(this.listSection().getElement(".connections .selected").getPrevious("dd"));
+          break;
+        case "down":
+          this.selectConnection(this.listSection().getElement(".connections .selected").getNext("dd"));
+          break;
+        case "left":
+          this.selectSection(this.listSection());
+          break;
+        case "right":
+          break;
+        case "enter":
+          break;
+        
+        default:
+    }
   },
   
   getScroller:function()
@@ -31,9 +58,9 @@ var Nuniverse = new Class({
     return this.el.getElement('.scroller');
   },
   
-  nextsection:function(section)
+  nextSection:function(section)
   {
-    var section = section || this.currentsection();
+    var section = section || this.currentSection();
     if($defined(section.getNext('.section')))
     {
       return section.getNext('.section');
@@ -47,10 +74,15 @@ var Nuniverse = new Class({
     }
   },
   
-  currentsection:function()
+  currentSection:function()
   {
     return this.el.getElement('.current_section');
    // return this.options['section']
+  },
+  
+  listSection:function()
+  {
+    return this.currentSection().getPrevious('.section');
   },
   
   setPerspectives:function(section)
@@ -129,12 +161,12 @@ var Nuniverse = new Class({
       
       connection.getElements('a.bookmark').each(function(action)
       {
-        action.addEvent('click', this.bookmark.bind(this,connection));
+        action.addEvent('click', this.bookmark.bindWithEvent(this,[connection, action]));
       },this);
       
       connection.getElements('a.remove').each(function(action)
       {
-        action.addEvent('click', this.removeBookmark.bind(this,connection));
+        action.addEvent('click', this.removeBookmark.bindWithEvent(this,[connection, action]));
       },this);
       
      
@@ -144,12 +176,13 @@ var Nuniverse = new Class({
     
   },
   
-  bookmark:function(connection)
+  bookmark:function(ev, connection, action)
   {
+    ev.preventDefault();
     var form = connection.getElement('.data form');
     var call = new Request.HTML(
         {
-          'url':form.getProperty('action'),
+          'url':action.getProperty('href'),
           'onSuccess':function()
           {
             connection.getElement('a.bookmark').destroy();
@@ -158,17 +191,19 @@ var Nuniverse = new Class({
     return false;
   },
   
-  removeBookmark:function(connection)
+  removeBookmark:function(ev, connection, action)
   {
+    ev.preventDefault();
+    var form = connection.getElement('.data form');
     var call = new Request.HTML(
     {
-      'url':connection.getElement('a.remove').getProperty('href'),
+      'url':action.getProperty('href'),
       'data':{'_method':'delete'},
       'onSuccess':function()
       {
         connection.destroy();
       }
-    }).post();
+    }).post(form);
     return false;
   },
   
@@ -208,7 +243,7 @@ var Nuniverse = new Class({
     if(this.isScrolling) return false;
     var atag = connection.getElement('h3 a');
     
-    var section = this.nextsection(connection.getParent('.section'));
+    var section = this.nextSection(connection.getParent('.section'));
     
     section.getChildren().destroy();
     if(this.getConnectionType(connection) == "inner") 
@@ -261,7 +296,7 @@ var Nuniverse = new Class({
   
   perspectives:function()
   {
-    return this.currentsection().getElement('.perspectives');
+    return this.currentSection().getElement('.perspectives');
   },
   
   getFilters:function()
@@ -315,7 +350,7 @@ var Nuniverse = new Class({
         }
         if(target.hasClass('section'))
         {
-           obj.selectsection(new_section);
+           obj.selectSection(new_section);
         }
         else
         {
@@ -376,31 +411,31 @@ var Nuniverse = new Class({
       c.addEvent('click', function(ev)
       {
         var section = obj.el.getElements(".section")[i];
-        obj.selectsection(section);
+        obj.selectSection(section);
       });
     });
-    if($defined(this.currentsection().getElement('.back')))
+    if($defined(this.currentSection().getElement('.back')))
     {
-       this.currentsection().getElement('.back').addEvent('click',function(ev)
+       this.currentSection().getElement('.back').addEvent('click',function(ev)
         {
-          obj.selectsection(this.getParent('.section'));
+          obj.selectSection(this.getParent('.section'));
         });
     }
    
     
   },
   
-  selectsection:function(section)
+  selectSection:function(section)
   {
     
-    if(!$defined(this.currentsection()))
+    if(!$defined(this.currentSection()))
     {
       this.options['section'] = section;
-      this.currentsection().addClass('current_section');
+      this.currentSection().addClass('current_section');
       this.refresh(section);
     } 
    
-    if(section == this.currentsection()) 
+    if(section == this.currentSection()) 
     {
       this.refresh(section);
       return;
@@ -416,12 +451,12 @@ var Nuniverse = new Class({
       
     }
    
-    this.currentsection().removeClass('current_section');
+    this.currentSection().removeClass('current_section');
     this.options['section'] = section;
     
     section.addClass('current_section');
     section.getAllNext('.section').destroy();
-    this.slide.toElement(this.currentsection());
+    this.slide.toElement(this.currentSection());
     
     this.refresh(section);
     

@@ -27,4 +27,19 @@ module NuniverseHelper
 		end
 	end
 	
+	
+	def link_to_object(object, params = {})
+		case object.service
+		when "amazon"
+			url = "/ws/show?service=amazon&item=#{object.url}"
+		when "ebay"
+			url = "/ws/show?service=ebay&item=#{object.url}"
+		when "video"
+			url = "/video?url=#{object.url}&flashvars=#{object.flashvars}"
+		else
+			url = "/section_of/#{params[:path]}"
+		end
+		link_to(object.name, url, :class =>"main inner")
+	end
+	
 end

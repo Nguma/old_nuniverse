@@ -4,14 +4,12 @@
       <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
         
         <div class="manage">
-          <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "bookmark", :class => "bookmark") %>
+          <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "bookmark", :class => "bookmark") %>
         </div>
         <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'avatar') %>
         <h3>
           <a href="<%= rst.url %>" target="_blank"><%= rst.title %></a>
-          <span class="source">
-            @ Google
-          </span>
+          <span class="source">@ Google</span>
           
         </h3>
         <p><%= rst.content %></p>

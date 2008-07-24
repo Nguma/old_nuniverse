@@ -38,6 +38,7 @@
 	padding:10px;
 }
 
+
 .section .menu
 {
 	background:#69c;
@@ -159,4 +160,15 @@ h1 a
 {
 	display:block;
 	color:#69c;
+}
+
+.article a
+{
+	color:#69c;
+	margin:0 5px 0 5px;
+}
+
+.article img
+{
+	max-height:400px;
 }

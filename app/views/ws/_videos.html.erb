@@ -1,10 +1,11 @@
+<p><%= query %></p>
 <dl class="connections">
   <% unless connections.empty? -%>
     <% connections.each do |rst| -%>
       <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
         
         <div class="manage">
-          <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "Bookmark", :class => "bookmark") %>
+          <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
         </div>
         <%= link_to(image_tag(rst.tbUrl),"#",:class => 'avatar') %>
         <h3>

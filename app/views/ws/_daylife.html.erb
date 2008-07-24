@@ -2,7 +2,7 @@
 <% connections.each do |article| %>
   <dd class="connection <%= cycle('even','odd') %>" >
     <div class="manage">
-      <%= link_to(image_tag("/images/icons/plus.png"),"#",:title => "Bookmark") %>
+      <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark") %>
     </div>
       <h3><%= link_to(article.headline.capitalize,article.url) %>
         <span class="source">

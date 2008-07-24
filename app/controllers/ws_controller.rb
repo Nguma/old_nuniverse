@@ -1,11 +1,13 @@
 class WsController < ApplicationController
 	
 	def show
-		@details = details(:source => @source, :id => @id)
+		@service = params[:service]
+		@id = params[:item]
 	end
 	
 	def video
 		@ws_url = params[:url]
+		@flashvars = params[:flashvars] || ""
 		respond_to do |format|
       format.html { render :action => :show, :layout => false }
       format.xml  { head :ok }
