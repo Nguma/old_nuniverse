@@ -32,7 +32,7 @@ end
 
 namespace :deploy do
   task :after_setup do
-    sudo "mkdir -p #{shared_path}/assets"
+    sudo "mkdir -p #{shared_path}/avatars"
     sudo "mkdir -p #{shared_path}/log"
     sudo "mkdir -p #{shared_path}/config"
     # sudo "mkdir -p #{shared_path}/db/sphinx"
@@ -49,6 +49,11 @@ namespace :deploy do
   
   task :after_update do
     # sudo "cp #{release_path}/config/database.example.yml #{release_path}/config/database.yml"
+  end
+  
+  task :restart do
+    stop
+    start
   end
     
   # task :after_cold do
@@ -71,10 +76,10 @@ namespace :deploy do
     #   ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
     # CMD
     
-    # sudo <<-CMD
-    #   rm -fr #{release_path}/public/assets &&
-    #   ln -nfs #{shared_path}/assets #{release_path}/public/assets
-    # CMD
+    sudo <<-CMD
+      rm -fr #{release_path}/public/avatars &&
+      ln -nfs #{shared_path}/avatars #{release_path}/public/avatars
+    CMD
     
     # sudo "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     
