@@ -3,7 +3,7 @@
   <dd class="connection <%= cycle('even','odd') %>">
     <%= render :partial => "/taggings/manage" %>
     <% unless item.thumbnail.nil? -%>
-     <%= link_to(image_tag(item.thumbnail),"#",:class => 'avatar') %>
+     <%= image_tag(item.thumbnail,:class => 'avatar') %>
     <% end -%>
     <h3>
       <%= link_to(item.title[0..100].capitalize,"/ws/show?service=amazon&item=#{item.id}", :class => "inner") %>

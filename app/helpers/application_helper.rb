@@ -7,9 +7,7 @@ module ApplicationHelper
 	
 	
 	def avatar_for(tag)
-		return image_tag(tag.thumbnail, :alt => tag.kind, :class => "avatar")
-		#return link_to(image_tag("/images/icons/#{tag.kind}.png", :alt => tag.kind), "/nuniverse_of/#{tag.id}", :class=>'avatar', :title => "#{tag.kind}: #{tag.content}") if tag.avatar.nil?
-		#return link_to(image_tag(tag.avatar.public_filename(:large), :alt => tag.content), "/nuniverse_of/#{tag.id}", :class => 'avatar', :title => "#{tag.kind}: #{tag.content}")
+		return image_tag(tag.thumbnail, :alt => tag.kind, :class => "avatar") 
 	end
 	
 	def link_to_nuniverse(tag, options = {})		

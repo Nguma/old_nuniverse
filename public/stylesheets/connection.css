@@ -21,8 +21,8 @@
 	position:relative;
 	clear:both;
 	margin:0 0 1px 0px;
-	padding:3px;
-	font-size:13px;
+	padding:8px;
+	font-size:12px;
 	font-weight:bold;
 }
 
@@ -97,6 +97,11 @@
 	display:none;
 }
 
+.current_section .connection .avatar
+{
+	display:block;
+}
+
 .current_section .connections p
 {
 	display:block;
@@ -105,11 +110,7 @@
 .current_section .connection 
 {
 	padding:10px 10px 10px 10px;
-}
-
-.current_section .connection .avatar
-{
-	display:block;
+	min-height:40px;
 }
 
 .current_section .manage
@@ -131,22 +132,22 @@
 
 .connections .connection .avatar
 {
-	border:none;
 	position:relative;
 	float:left;
+	border:none;
 	margin-right:10px;
-	height:30px;
+	height:40px;
+	font-size:11px;
 }
 
-.nuniverse .connection .avatar img
+.connections .connection .avatar img
 {
-	/*width:30px;*/
-	height:30px;
-	border:none;
+	height:40px;
 }
 
 .connections .connection h3
 {
+	position:relative;
 	font-family:Arial;
 	margin-top:5px;
 	font-size:14px;
@@ -155,6 +156,7 @@
 
 .nuniverse .connection p
 {
+	position:relative;
 	font-size:12px;
 	font-weight:normal;
 	font-style:italic;

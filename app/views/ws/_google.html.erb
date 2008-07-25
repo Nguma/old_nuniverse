@@ -6,7 +6,7 @@
         <div class="manage">
           <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "bookmark", :class => "bookmark") %>
         </div>
-        <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'avatar') %>
+        <%= image_tag("/images/icons/google.png", :class => 'avatar') %>
         <h3>
           <a href="<%= rst.url %>" target="_blank"><%= rst.title %></a>
           <span class="source">@ Google</span>

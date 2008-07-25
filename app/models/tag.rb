@@ -81,7 +81,8 @@ class Tag < ActiveRecord::Base
 	def thumbnail
 		return avatar.public_filename(:large) unless avatar.nil?
 		return data_image unless data_image.blank?
-		return "/images/icons/#{kind}.png"
+		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
+		return "/images/icons/icon_nuniverse.png"
 	end
 	
 	def price

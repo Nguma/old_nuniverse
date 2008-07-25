@@ -132,7 +132,7 @@ module WsHelper
 		
 		case params[:path].tags.last.kind
 		when "continent"
-			zoom = 1
+			zoom = 2
 		when "country"
 			zoom = 5
 		when "city"
