@@ -3,25 +3,19 @@
     <% locations.each do |location| -%>
       <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
         
-        <div class="manage">
-          <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "bookmark", :class => "bookmark") %>
-        </div>
+        <%= render :partial => "/taggings/manage" , :locals => {
+              :path => path,
+              :data => "#location #{location.titleNoFormatting} #address #{location.streetAddress} #{location.city} #{location.region} #{location.country} #latlng #{location.lat},#{location.lng}" 
+            }%>
+            
         <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'avatar') %>
         <h3>
-          <a href="<%= location.url %>" target="_blank"><%= location.titleNoFormatting %></a>
-          <span class="source">
-            @ Google
-          </span>
+          <%= link_to_ws_object(location, :service => "local")%>
+          <span class="source">@ Google</span>
         </h3>
-        <p><%= "#{location.streetAddress}, #{location.city}, #{location.region}, #{location.country}" %></p>
+        <p><%= h "#{location.streetAddress}, #{location.city}, #{location.region}, #{location.country}" %></p>
 
-        <div class="data hidden">
-          <% form_tag '/taggings/create' do -%>
-            <%= hidden_field_tag :path, path %>
-    
-            <%= hidden_field_tag :content, "#location #{location.titleNoFormatting} #address #{location.streetAddress} #{location.city} #{location.region} #{location.country} #latlng #{location.lat},#{location.lng}"   %>
-          <% end -%>
-        </div>
+       
       </dd>
     <% end -%>
   <% end -%>

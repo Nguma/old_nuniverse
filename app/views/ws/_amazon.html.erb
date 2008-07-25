@@ -1,20 +1,18 @@
 <dl class="connections">
 <% items.each do |item| %>
   <dd class="connection <%= cycle('even','odd') %>">
-    <%= render :partial => "/taggings/manage" %>
+    <%= render :partial => "/taggings/manage" , :locals => {
+      :path => path,
+      :data => "#item #{item.title} #url #{item.id} #price #{item.amount} #image #{item.thumbnail} #service amazon"
+    }%>
     <% unless item.thumbnail.nil? -%>
-     <%= image_tag(item.thumbnail,:class => 'avatar') %>
+     <%= image_tag(item.thumbnail.to_s,:class => 'avatar') %>
     <% end -%>
-    <h3>
-      <%= link_to(item.title[0..100].capitalize,"/ws/show?service=amazon&item=#{item.id}", :class => "inner") %>
-    </h3>
-      <p><%= item.amount %></p>
-      <div class="data hidden">
-        <% form_tag '/taggings/create' do -%>
-          <%= hidden_field_tag :path, path %>
-          <%= hidden_field_tag :content, "#item #{item.title} #url #{item.id} #price #{item.amount} #image #{item.thumbnail} #service amazon"   %>
-        <% end -%>
-      </div>
+     <h3>
+        <%= link_to_ws_object(item, :service => "amazon")%>
+      </h3>
+      <p><%= h item.amount.to_s %></p>
+
   </dd>
 <% end -%>
 </dl>

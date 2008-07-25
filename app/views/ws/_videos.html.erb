@@ -2,28 +2,20 @@
   <h2>No videos on google were found... :(</h2>
 <% else -%>
   <dl class="connections">
-    <% connections.each do |rst| -%>
-      <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
-        <%= render :partial => "/taggings/manage" %>
-        <%= link_to(image_tag(rst.tbUrl),"#",:class => 'avatar') %>
+    <% connections.each do |video| -%>
+      <dd class="connection <%= cycle('even', 'odd') %>">
+        <%= render :partial => "/taggings/manage" , :locals => {
+          :path => path,
+          :data => "#video #{video.titleNoFormatting} #url #{video.playUrl} #description #{video.content} #image #{video.tbUrl} #service video" 
+        }%>
+        <%= link_to(image_tag(video.tbUrl),"#",:class => 'avatar') %>
         <h3>
-          <%= link_to(rst.title, "/ws/show?service=video&item=#{rst.playUrl}", :class => "inner")%>
-          <span class="source">
-            @ Google
-          </span>
+          <%= link_to_ws_object(video, :service => "video") %>
+          <span class="source">@ Google</span>
         </h3>
-        <p><%= rst.content %></p>
-        <div class="data hidden">
-          <% form_tag '/taggings/create' do -%>
-            <%= hidden_field_tag :path, path %>
-    
-            <%= hidden_field_tag :content, "#video #{rst.title} #url #{rst.playUrl} #description #{rst.content} #image #{rst.tbUrl} #service video"   %>
-          <% end -%>
-        </div>
+          <p><%= h video.content %></p>
+        
       </dd>
-  <% end -%>
-  <dd>
-    <a href="/current_section/according_to/video?page=<%= page+1 %>">More videos</dd>
-  </dd>
-</dl>
+    <% end -%>
+  </dl>
 <% end -%>
