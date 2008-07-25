@@ -48,9 +48,9 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def address
+		return content if kind == "country" || "city" || "continent"
 		ad = data.scan(/#address[\s]+([^#|\[|\]]+)*/).to_s
-		return ad unless ad.blank?
-		return content
+		return ad
 	end
 	
 	def has_coordinates?
@@ -86,6 +86,11 @@ class Tag < ActiveRecord::Base
 	
 	def price
 		data.scan(/#price[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
+	def info
+		return address if kind == "location" && has_address?
+		return description
 	end
 	
 	# def self.find_taggeds_with(params)

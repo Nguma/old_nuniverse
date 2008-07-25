@@ -56,7 +56,7 @@ module WsHelper
 	
 	def results_from_google_local(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		response = GoogleAjax::Search.local(sanatized_query_from_path(params[:path]),70,70, :rsz => "large")
+		response = GoogleAjax::Search.local(params[:path].last_tag.content,70,70, :rsz => "large")
 		render(:partial => "/ws/local", :locals => {
 			:locations => response.results,	
 			:path => params[:path]
@@ -131,6 +131,8 @@ module WsHelper
 		@map = GMap.new("map_div")
 		
 		case params[:path].tags.last.kind
+		when "continent"
+			zoom = 1
 		when "country"
 			zoom = 5
 		when "city"
@@ -140,7 +142,7 @@ module WsHelper
 		end
 		
 		if params[:path].tags.last.kind == "topic" || params[:path].tags.length == 1
-			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().collect{|c| c.object })
+			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
 			markers = markers_for([params[:path].tags.last])
 		end

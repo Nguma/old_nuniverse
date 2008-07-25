@@ -13,7 +13,7 @@
             @ Google
           </span>
         </h3>
-        <p><%= location.content %></p>
+        <p><%= "#{location.streetAddress}, #{location.city}, #{location.region}, #{location.country}" %></p>
 
         <div class="data hidden">
           <% form_tag '/taggings/create' do -%>

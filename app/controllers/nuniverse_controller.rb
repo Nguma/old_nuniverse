@@ -35,7 +35,16 @@ class NuniverseController < ApplicationController
 	end
 	
 	def overview
-		@nuniverse = Nuniverse.new(:path => params[:path], :user => current_user)
+		session[:path] = params[:path] || session[:path]
+		session[:perspective] = params[:perspective] || nil
+		
+		@section = Section.new(
+			:path => params[:path], 
+			:user => current_user,
+			:pespective => session[:perspective],
+			:degree => "all"
+		)
 	end
+	
 	
 end

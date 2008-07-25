@@ -1,0 +1,35 @@
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "People",
+  :taggings => Tagging.with_object_kinds("person").include_object.groupped.with_order('name')
+}%>
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "Topics",
+  :taggings => Tagging.with_object_kinds("topic").include_object.groupped.with_order('name')
+}%>
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "Movies",
+  :taggings => Tagging.with_object_kinds("movie").include_object.groupped.with_order('name')
+}%>
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "Places",
+  :taggings => Tagging.with_object_kinds("location").include_object.groupped.with_order('name')
+}%>
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "Videos",
+  :taggings => Tagging.with_object_kinds("video").include_object.groupped.with_order('name')
+}%>
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "Items",
+  :taggings => Tagging.with_object_kinds("item").include_object.groupped.with_order('name')
+}%>
+
+<%= render :partial => "/nuniverse/widget", :locals => {
+  :title => "Bookmarks",
+  :taggings => Tagging.with_object_kinds("bookmark").include_object.groupped.with_order('name')
+}%>

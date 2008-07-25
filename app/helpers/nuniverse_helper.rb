@@ -31,15 +31,16 @@ module NuniverseHelper
 	def link_to_object(object, params = {})
 		case object.service
 		when "amazon"
-			url = "/ws/show?service=amazon&item=#{object.url}"
+			url = h "/ws/show?service=amazon&item=#{CGI::escape(object.url)}"
 		when "ebay"
-			url = "/ws/show?service=ebay&item=#{object.url}"
+			url = h "/ws/show?service=ebay&item=#{CGI::escape(object.url)}"
 		when "video"
-			url = "/ws/show?service=video&item=#{object.url}&flashvars=#{object.flashvars}"
+			url = h "/ws/show?service=video&item=#{CGI::escape(object.url)}&flashvars=#{CGI::escape(object.flashvars)}"
 		else
 			url = "/section_of/#{params[:path]}"
 		end
-		link_to(object.name, url, :class =>"main inner")
+		
+		link_to(object.name.capitalize, url, :class =>"main inner")
 	end
 	
 end

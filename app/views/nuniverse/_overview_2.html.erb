@@ -1,0 +1,34 @@
+<div class="section current_section" style="background:none">
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Topics",
+    :taggings => section.connections(:user => current_user, :kind => "topic", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "People",
+    :taggings => section.connections(:user => current_user, :kind => "person", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Places",
+    :taggings => section.connections(:user => current_user, :kind => "location", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Movies",
+    :taggings => section.connections(:user => current_user, :kind => "movie", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Videos",
+    :taggings => section.connections(:user => current_user, :kind => "video", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Bookmarks",
+    :taggings => section.connections(:user => current_user, :kind => "Bookmark", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Items",
+    :taggings => section.connections(:user => current_user, :kind => "item", :order => order)
+  }%>
+  <%= render :partial => "/nuniverse/widget", :locals => {
+    :title => "Bands",
+    :taggings => section.connections(:user => current_user, :kind => "band", :order => order)
+  }%>
+</div>

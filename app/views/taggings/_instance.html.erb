@@ -1,21 +1,15 @@
 <dd class="connection <%= cycle('even','odd') %>"> 
-  <% if instance.object -%>
-    <%= avatar_for(instance.object) %>
-      <h3>
-        <%= link_to_object(instance.object, :path => "#{instance.path}#{instance.object.id}") %>
-      </h3>
-        
-        <% unless instance.path.taggings.empty? -%>
-        <p><%= instance.object.kind.capitalize %> added to  
-          <% instance.path.taggings[1 .. -1].each do |tagging| -%>
-            <%= link_to_tagging(tagging) %>
-          <% end -%>
-          by <%= link_to_nuniverse(instance.user.tag) %>
-        </p>
-        <% end -%>
-    <% else -%>
-      <%= instance.id%>
-    
-    <% end -%>
+  <%= avatar_for(instance.object) %>
+  <h3>
+    <%= link_to_object(instance.object, :path => "#{instance.path}#{instance.object.id}") %>
+  </h3>
 
+         <% unless instance.path.taggings.empty? -%>
+         <p><%= instance.object.kind.capitalize %> added to  
+           <% instance.path.taggings[1 .. -1].each do |tagging| -%>
+             <%= link_to_tagging(tagging) %>
+           <% end -%>
+           by <%= link_to_nuniverse(instance.user.tag) %>
+         </p>
+         <% end -%>
 </dd>

@@ -25,6 +25,7 @@ var Nuniverse = new Class({
         return false;
       },this);
     },this);
+    
     window.document.addEvent('keypress',this.onKey.bindWithEvent(this));
     
    
@@ -472,11 +473,12 @@ var Nuniverse = new Class({
   
   refresh:function(section)
   {
+    
     this.setHat(section);
     this.setPerspectives(section);
     this.setConnections(section);
     this.setConnectionForm(section);
-   
+    this.setWidgets();
   },
   
   setMap:function()
@@ -514,5 +516,25 @@ var Nuniverse = new Class({
   destroySection:function(section)
   {
     section.getElements()
+  },
+  
+  setWidgets:function()
+  {
+    $$('div.widget .elements').each(function(widget)
+     {
+       var sc = new Fx.Scroll(widget);
+       widget.addEvent('click', function(ev)
+       {
+         var current = widget.getElement('.selected');
+         var next = current.getNext('.element');
+         if(!$defined(next))
+         {
+           next = widget.getElement('.element');
+         }
+         current.removeClass('selected');
+         next.addClass('selected');
+         sc.toElement(next);
+       });
+     });
   }
 });

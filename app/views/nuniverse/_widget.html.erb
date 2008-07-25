@@ -1,0 +1,11 @@
+<div class="widget">
+  <h2><%= title %></h2>
+  <div class="elements">
+  <% taggings.each_with_index do |tagging,i| -%>
+    <div class="element<%= (i==0) ? ' selected' : '' %>">
+      <%= avatar_for(tagging.object) %>
+      <h3><%= link_to_object(tagging.object) %></h3>
+    </div>
+  <% end -%>
+  </div>
+</div>

@@ -12,7 +12,7 @@
       <div class="data hidden">
         <% form_tag '/taggings/create' do -%>
           <%= hidden_field_tag :path, path %>
-          <%= hidden_field_tag :content, "#item #{item.title} #url #{item.id} #price #{item.amount} #thumbnail #{item.thumbnail} #service amazon"   %>
+          <%= hidden_field_tag :content, "#item #{item.title} #url #{item.id} #price #{item.amount} #image #{item.thumbnail} #service amazon"   %>
         <% end -%>
       </div>
   </dd>

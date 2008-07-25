@@ -10,9 +10,9 @@
   </h3>
   <p>
   <% unless connection.object.price.blank? -%>
-    <%= connection.object.price %>
+    <%= h connection.object.price %>
   <% end -%>
-  <%= connection.object.description %></p>
+  <%= h connection.object.info %></p>
   <div class="data hidden">
     <% form_tag '/taggings/delete' do -%>
       <%= hidden_field_tag :path, path %>

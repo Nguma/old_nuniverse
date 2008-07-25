@@ -16,6 +16,8 @@ class Section
 	end
 	
 	def connections(params = {})
+		kind = params[:kind] || @kind
+		order = params[:order] || @order
 		if @perspective == "you"
 			path = @path
 			user = params[:user]
@@ -23,7 +25,7 @@ class Section
 			user = nil
 			path = public_path
 		end
-		Tagging.with_object_kinds(@kind).with_user(user).with_path(path,@degree).include_object.groupped.with_order(@order).paginate(
+		Tagging.with_object_kinds(kind).with_user(user).with_path(path,@degree).include_object.groupped.with_order(order).paginate(
 				:page => @page, 
 				:per_page => 20
 		)

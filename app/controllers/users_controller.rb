@@ -14,7 +14,9 @@ class UsersController < ApplicationController
 		@section = Section.new(
 			:path => @nuniverse.path,
 			:perspective => session[:perspective],
-			:page => params[:page] || 1
+			:page => params[:page] || 1,
+			:degree => "all",
+			:order => "latest"
 		)
 
 	end
