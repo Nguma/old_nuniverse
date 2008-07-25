@@ -11,7 +11,7 @@
       <% if nuniverse.empty? -%>
         <%= render :partial => "/nuniverse/welcome" %>
       <% else -%>
-        <%= render :partial => "/nuniverse/overview", :locals => {:section => section, :order => "latest"} %>
+        <%= render :partial => "/nuniverse/overview", :locals => {:nuniverse => nuniverse, :order => "latest"} %>
       <% end -%>   
      
     </div>

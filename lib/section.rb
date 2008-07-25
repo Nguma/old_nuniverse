@@ -9,6 +9,7 @@ class Section
 		@degree = params[:degree] || nil
 		@page = params[:page] || 1
 		@no_wrap = params[:no_wrap] || nil
+		@user = params[:user] || nil
 	end
 	
 	def subject
@@ -29,6 +30,12 @@ class Section
 				:page => @page, 
 				:per_page => 20
 		)
+	end
+	
+	def overview(params = {})
+		Tagging.with_path(@path, "all").with_user(@user).include_object.by_latest.paginate(
+		:page => params[:page] || 1,
+		:per_page => 20)
 	end
 	
 	def public_path
