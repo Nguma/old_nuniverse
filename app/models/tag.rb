@@ -3,6 +3,8 @@ class Tag < ActiveRecord::Base
 	
 	validates_presence_of :content, :kind
 	
+	alias_attribute :name, :content
+	
 	def self.connect(params)
 		@object = Tag.find_by_content_and_kind_and_url(
 		  params[:content], params[:kind], params[:url]
@@ -13,7 +15,7 @@ class Tag < ActiveRecord::Base
 				:kind         => params[:kind],
 				:description  => params[:description] || "",
 				:url          => params[:url],
-				:source       => params[:source],
+				:service       => params[:service],
 				:data         => params[:data]
 			)
 		else
@@ -41,15 +43,51 @@ class Tag < ActiveRecord::Base
 	
 	def has_address?
 		return true if kind == "country" || "city" || "continent"
-		return true if description.match(/#address\s.+/)
+		return true if data.match(/#address\s.+/)
 		return false
 	end
 	
 	def address
-		ad = description.scan(/#address[\s]+([^#|\[|\]]+)*/)[0]
-		return ad[0] if ad
+		ad = data.scan(/#address[\s]+([^#|\[|\]]+)*/).to_s
+		return ad unless ad.blank?
 		return content
 	end
+	
+	def has_coordinates?
+		return true if data.match(/#latlng\s.+/)
+		return false
+	end
+	
+	def latitude
+		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[0] rescue nil
+	end
+	
+	def longitude
+		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[1] rescue nil
+	end
+	
+	def flashvars
+		data.scan(/#params[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
+	def ws_id
+		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
+	end
+	
+	def data_image
+		data.scan(/#image[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
+	def thumbnail
+		return avatar.public_filename(:large) unless avatar.nil?
+		return data_image unless data_image.blank?
+		return "/images/icons/#{kind}.png"
+	end
+	
+	def price
+		data.scan(/#price[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
 	# def self.find_taggeds_with(params)
 	# 		
 	# 		@context = params[:context].collect {|s| s.id}.join('_')

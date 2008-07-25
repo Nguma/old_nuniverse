@@ -9,21 +9,48 @@ var Nuniverse = new Class({
   initialize:function()
   {
     this.el = $('nuniverse');
+    if(!$defined(this.el)) {return }
+    
     this.slide = new Fx.Scroll(this.getScroller(), {
       'offset':{'x':-310,'y':0}
     });
-    this.selectsection(this.el.getElement('.current_section'));
+    this.selectSection(this.el.getElement('.current_section'));
     var obj = this;
     $('main_menu').getElements('a').each(function(action)
     {
       action.addEvent('click', function(ev)
       {
         ev.preventDefault();
-        obj.requestAndReplace(action.getProperty('href'), obj.currentsection());
+        obj.requestAndReplace(action.getProperty('href'), obj.currentSection());
         return false;
       },this);
     },this);
+    window.document.addEvent('keypress',this.onKey.bindWithEvent(this));
+    
    
+  },
+  
+  onKey:function(ev)
+  {
+   
+    switch(ev.key)
+    {
+        case "up":
+          this.selectConnection(ev,this.listSection().getElement(".connections .selected").getPrevious("dd"));
+          break;
+        case "down":
+          this.selectConnection(ev,this.listSection().getElement(".connections .selected").getNext("dd"));
+          break;
+        case "left":
+          this.selectSection(this.listSection());
+          break;
+        case "right":
+          break;
+        case "enter":
+          break;
+        
+        default:
+    }
   },
   
   getScroller:function()
@@ -31,9 +58,9 @@ var Nuniverse = new Class({
     return this.el.getElement('.scroller');
   },
   
-  nextsection:function(section)
+  nextSection:function(section)
   {
-    var section = section || this.currentsection();
+    var section = section || this.currentSection();
     if($defined(section.getNext('.section')))
     {
       return section.getNext('.section');
@@ -47,10 +74,15 @@ var Nuniverse = new Class({
     }
   },
   
-  currentsection:function()
+  currentSection:function()
   {
     return this.el.getElement('.current_section');
    // return this.options['section']
+  },
+  
+  listSection:function()
+  {
+    return this.currentSection().getPrevious('.section');
   },
   
   setPerspectives:function(section)
@@ -124,9 +156,56 @@ var Nuniverse = new Class({
           'mouseleave':function() {connection.removeClass('hover');},
           'mousedown':this.scrollContent.bindWithEvent(this,connection),
           'mouseup':this.stopScrollingContent.bind(this,connection),
-          'click':this.selectConnection.bind(this,connection)
+          'click':this.selectConnection.bindWithEvent(this,connection)
       },this);
+      
+      connection.getElements('a.bookmark').each(function(action)
+      {
+        action.addEvent('click', this.bookmark.bindWithEvent(this,[connection, action]));
+      },this);
+      
+      connection.getElements('a.remove').each(function(action)
+      {
+        action.addEvent('click', this.removeBookmark.bindWithEvent(this,[connection, action]));
+      },this);
+      
+      connection.getElement('h3 a').addEvent('click', this.selectConnection.bindWithEvent(this,connection));
+
     },this);
+  
+    
+  },
+  
+  bookmark:function(ev, connection, action)
+  {
+    ev.stopPropagation();
+    ev.preventDefault();
+    var form = connection.getElement('.data form');
+    var call = new Request.HTML(
+        {
+          'url':action.getProperty('href'),
+          'onSuccess':function()
+          {
+            connection.getElement('a.bookmark').destroy();
+          }
+    }).post(form);
+    return false;
+  },
+  
+  removeBookmark:function(ev, connection, action)
+  {
+    ev.preventDefault();
+    var form = connection.getElement('.data form');
+    var call = new Request.HTML(
+    {
+      'url':action.getProperty('href'),
+      'data':{'_method':'delete'},
+      'onSuccess':function()
+      {
+        connection.destroy();
+      }
+    }).post(form);
+    return false;
   },
   
   scrollContent:function(ev,connection)
@@ -160,17 +239,18 @@ var Nuniverse = new Class({
     this.setScrollFlag.delay(100,true);
   },
   
-  selectConnection:function(connection)
+  selectConnection:function(ev, connection)
   {
+    ev.preventDefault();
     if(this.isScrolling) return false;
     var atag = connection.getElement('h3 a');
     
-    var section = this.nextsection(connection.getParent('.section'));
+    var section = this.nextSection(connection.getParent('.section'));
     
     section.getChildren().destroy();
     if(this.getConnectionType(connection) == "inner") 
     {
-      this.requestAndReplace(connection.getElement('a.main').getProperty('href'), section);
+      this.requestAndReplace(atag.getProperty('href'), section);
     }
     else 
     {
@@ -197,7 +277,7 @@ var Nuniverse = new Class({
   
   getConnectionType:function(connection)
   {
-    if(connection.getElement('a.main').hasClass('inner'))
+    if(connection.getElement('h3 a').hasClass('inner'))
     {
       return "inner"
     }
@@ -218,7 +298,7 @@ var Nuniverse = new Class({
   
   perspectives:function()
   {
-    return this.currentsection().getElement('.perspectives');
+    return this.currentSection().getElement('.perspectives');
   },
   
   getFilters:function()
@@ -272,7 +352,7 @@ var Nuniverse = new Class({
         }
         if(target.hasClass('section'))
         {
-           obj.selectsection(new_section);
+           obj.selectSection(new_section);
         }
         else
         {
@@ -313,51 +393,57 @@ var Nuniverse = new Class({
   
   setHat:function()
   {
-    var obj = this;
-    $('breadcrumbs').getElements('dd').each(function(el)
-    {
-      el.destroy();
-    });
-    var crumbs = this.el.getElements('.section h2 a');
-    crumbs.pop();
-    crumbs.each(function(crumb,i)
-    {
-      var c = new Element('dd',
-      {
-        styles:{
-          'z-index':999-i,
-          'left': -(30 * (i+1))+'px'
-        }
-      });
-      $('breadcrumbs').adopt(c.adopt(crumb.clone()));
-      c.addEvent('click', function(ev)
-      {
-        var section = obj.el.getElements(".section")[i];
-        obj.selectsection(section);
-      });
-    });
-    if($defined(this.currentsection().getElement('.back')))
-    {
-       this.currentsection().getElement('.back').addEvent('click',function(ev)
-        {
-          obj.selectsection(this.getParent('.section'));
-        });
+   if($defined($('breadcrumbs')))
+   {
+     $('breadcrumbs').getElements('dd').each(function(el)
+     {
+       el.destroy();
+     });
+     var crumbs = this.el.getElements('.section h2 a');
+     crumbs.pop();
+     crumbs.each(function(crumb,i)
+     {
+       var c = new Element('dd',
+       {
+         styles:{
+           'z-index':999-i,
+           'left': -(30 * (i+1))+'px'
+         }
+       });
+       $('breadcrumbs').adopt(c.adopt(crumb.clone()));
+       c.addEvent('click', function(ev)
+       {
+         var section = obj.el.getElements(".section")[i];
+         obj.selectSection(section);
+       });
+     });
+   }
+    
+    var back_button = this.currentSection().getElement('.back')
+    if($defined(back_button))
+    {  
+       back_button.addEvent('click', this.selectSection.bind(this, back_button.getParent('.section')));
     }
    
     
   },
   
-  selectsection:function(section)
+  back:function()
+  {
+    this.selectSection(this.listSection());
+  },
+  
+  selectSection:function(section)
   {
     
-    if(!$defined(this.currentsection()))
+    if(!$defined(this.currentSection()))
     {
       this.options['section'] = section;
-      this.currentsection().addClass('current_section');
+      this.currentSection().addClass('current_section');
       this.refresh(section);
     } 
    
-    if(section == this.currentsection()) 
+    if(section == this.currentSection()) 
     {
       this.refresh(section);
       return;
@@ -366,14 +452,19 @@ var Nuniverse = new Class({
     if($defined(this.options['form']))
     {
       this.options['form'].collapse();
-      this.options['form'].el = section.getElement('.new_connection');
+       if($defined(section.getElement('.new_connection')))
+        {
+          this.options['form'].el = section.getElement('.new_connection');
+        }
+      
     }
-    this.currentsection().removeClass('current_section');
+   
+    this.currentSection().removeClass('current_section');
     this.options['section'] = section;
     
     section.addClass('current_section');
     section.getAllNext('.section').destroy();
-    this.slide.toElement(this.currentsection());
+    this.slide.toElement(this.currentSection());
     
     this.refresh(section);
     

@@ -1,0 +1,8 @@
+<div class="manage">
+  <% if connection  && connection.user == current_user -%>
+    <%= link_to(image_tag("/images/icons/minus.png"),"/taggings/delete/#{connection.id}",:title => "Remove", :class => "remove") %>
+  <% else -%>
+    <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
+  <% end -%>
+</div>
+

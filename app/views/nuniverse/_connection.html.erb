@@ -1,10 +1,23 @@
 <dd class="connection <%= cycle('even', 'odd') %>">
-  <div class="manage">
-    <%= link_to(image_tag("/images/icons/minus.png"),"#",:title => "Remove") %>
-  </div>
-  <%= avatar_for(object) %>
-  <h3>
-  <%= link_to(object.content.capitalize,"/section_of/#{path}_#{object.id}", :class => "main inner") %></h3>
-  <p><%= object.description %></p>
+  <%= render :partial => "/taggings/manage", :locals => {:connection => connection} %>
+  <%= avatar_for(connection.object) %>
 
+  <h3>
+    <%= link_to_object(connection.object, :path => "#{path}#{connection.object.id}")%>
+    <% if connection.object.service -%>
+      <span class="source">@ <%= connection.object.service %></span>
+    <% end -%>
+  </h3>
+  <p>
+  <% unless connection.object.price.blank? -%>
+    <%= connection.object.price %>
+  <% end -%>
+  <%= connection.object.description %></p>
+  <div class="data hidden">
+    <% form_tag '/taggings/delete' do -%>
+      <%= hidden_field_tag :path, path %>
+      <%= hidden_field_tag :id, connection.id %>
+     
+    <% end -%>
+  </div>
 </dd>

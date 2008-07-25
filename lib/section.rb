@@ -16,10 +16,21 @@ class Section
 	end
 	
 	def connections(params = {})
-		Tagging.with_object_kinds(@kind).with_user(params[:user]).with_path(@path,@degree).include_object.groupped.with_order(@order).paginate(
-			:page => @page, 
-			:per_page => 20
+		if @perspective == "you"
+			path = @path
+			user = params[:user]
+		else
+			user = nil
+			path = public_path
+		end
+		Tagging.with_object_kinds(@kind).with_user(user).with_path(path,@degree).include_object.groupped.with_order(@order).paginate(
+				:page => @page, 
+				:per_page => 20
 		)
+	end
+	
+	def public_path
+		TaggingPath.new [@path.last_tag]
 	end
 	
 	def is_web_service?

@@ -2,7 +2,8 @@
   <div class="content">
     
     <%= render :partial => "/ws/youtube", :locals => {
-      :url => @video_url
+      :url => @video_url,
+      :flashvars => @flashvars
     }%>
   </div>
 </div>

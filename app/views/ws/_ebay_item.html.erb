@@ -1,0 +1,8 @@
+<div class="article ebay_item">
+  <%= render :partial => "/taggings/manage" %>
+  <h1><%= item.title %></h1>
+  <p><%= item.converted_current_price.currency_id rescue "$" %><%= item.converted_current_price.content %> | Ends <%= item.end_time %><a href="#TODO">Bid on this item</a>(<%= item.bid_count%> bids already)</p>
+  <% for image in response.full_response['Item']['PictureURL'] -%>
+    <%= image_tag(image) %>
+  <% end-%>
+</div>

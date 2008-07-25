@@ -2,11 +2,11 @@
   <% if instance.object -%>
     <%= avatar_for(instance.object) %>
       <h3>
-        <%= link_to(instance.object.content, "/section_of/#{instance.path}_#{instance.object.id}",  :class => "main inner") %>
+        <%= link_to_object(instance.object, :path => "#{instance.path}#{instance.object.id}") %>
       </h3>
         
         <% unless instance.path.taggings.empty? -%>
-        <p> Added to  
+        <p><%= instance.object.kind.capitalize %> added to  
           <% instance.path.taggings[1 .. -1].each do |tagging| -%>
             <%= link_to_tagging(tagging) %>
           <% end -%>

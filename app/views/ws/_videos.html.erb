@@ -1,24 +1,29 @@
-<dl class="connections">
-  <% unless connections.empty? -%>
+<% if connections.empty? -%>
+  <h2>No videos on google were found... :(</h2>
+<% else -%>
+  <dl class="connections">
     <% connections.each do |rst| -%>
       <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
-        
-        <div class="manage">
-          <%= link_to(image_tag("/images/icons/plus.png"),"/bookmark/#{path}",:title => "Bookmark") %>
-        </div>
+        <%= render :partial => "/taggings/manage" %>
         <%= link_to(image_tag(rst.tbUrl),"#",:class => 'avatar') %>
         <h3>
-          <a class="video main inner" href="/video?url=<%= rst.playUrl  %>" ><%= rst.title %></a>
+          <%= link_to(rst.title, "/ws/show?service=video&item=#{rst.playUrl}", :class => "inner")%>
           <span class="source">
             @ Google
           </span>
-          
         </h3>
         <p><%= rst.content %></p>
+        <div class="data hidden">
+          <% form_tag '/taggings/create' do -%>
+            <%= hidden_field_tag :path, path %>
+    
+            <%= hidden_field_tag :content, "#video #{rst.title} #url #{rst.playUrl} #description #{rst.content} #image #{rst.tbUrl} #service video"   %>
+          <% end -%>
+        </div>
       </dd>
-    <% end -%>
   <% end -%>
   <dd>
     <a href="/current_section/according_to/video?page=<%= page+1 %>">More videos</dd>
   </dd>
 </dl>
+<% end -%>
