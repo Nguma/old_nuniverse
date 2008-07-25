@@ -1,5 +1,5 @@
 <dd class="connection <%= cycle('even', 'odd') %>">
-  <%= render :partial => "/taggings/manage", :locals => {:connection => connection} %>
+  <%= render :partial => "/taggings/manage", :locals => {:connection => connection, :path => path, :data => ""} %>
   <%= avatar_for(connection.object) %>
 
   <h3>
@@ -13,11 +13,5 @@
     <%= h connection.object.price %>
   <% end -%>
   <%= h connection.object.info %></p>
-  <div class="data hidden">
-    <% form_tag '/taggings/delete' do -%>
-      <%= hidden_field_tag :path, path %>
-      <%= hidden_field_tag :id, connection.id %>
-     
-    <% end -%>
-  </div>
+
 </dd>
