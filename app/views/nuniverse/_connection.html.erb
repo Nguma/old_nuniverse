@@ -1,11 +1,5 @@
 <dd class="connection <%= cycle('even', 'odd') %>">
-  <div class="manage">
-    <% if connection.user == current_user -%>
-      <%= link_to(image_tag("/images/icons/minus.png"),"/taggings/delete/#{connection.id}",:title => "Remove", :class => "remove") %>
-    <% else -%>
-      <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
-    <% end -%>
-  </div>
+  <%= render :partial => "/taggings/manage", :locals => {:connection => connection} %>
   <%= avatar_for(connection.object) %>
 
   <h3>
@@ -14,7 +8,11 @@
       <span class="source">@ <%= connection.object.service %></span>
     <% end -%>
   </h3>
-  <p><%= connection.object.description %></p>
+  <p>
+  <% unless connection.object.price.blank? -%>
+    <%= connection.object.price %>
+  <% end -%>
+  <%= connection.object.description %></p>
   <div class="data hidden">
     <% form_tag '/taggings/delete' do -%>
       <%= hidden_field_tag :path, path %>

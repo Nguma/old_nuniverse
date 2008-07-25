@@ -35,7 +35,7 @@ module NuniverseHelper
 		when "ebay"
 			url = "/ws/show?service=ebay&item=#{object.url}"
 		when "video"
-			url = "/video?url=#{object.url}&flashvars=#{object.flashvars}"
+			url = "/ws/show?service=video&item=#{object.url}&flashvars=#{object.flashvars}"
 		else
 			url = "/section_of/#{params[:path]}"
 		end

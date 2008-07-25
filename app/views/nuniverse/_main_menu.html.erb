@@ -8,12 +8,12 @@
   <div class="content">
   <% menu(:name => "main_menu") do -%>
     <%= menu_item(:label =>"Overview", :action => "/overview_for/#{nuniverse.path}") %>
-    <%= menu_item(:label =>"Topics",:action =>  "/section/#{nuniverse.path}/with_kind/topic/by/name?perspective=you") %>
+    <%= menu_item(:label =>"Topics",:action =>  "/section/#{nuniverse.path}/with_kind/topic/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Places",:action =>  "/section/#{nuniverse.path}/with_kind/location/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Bands",:action =>  "/section/#{nuniverse.path}/with_kind/band/by/name?perspective=you") %>
-    <%= menu_item(:label =>"Movies",:action =>  "/section/#{nuniverse.path}/with_kind/movie/by/name?perspective=you") %>
-    <%= menu_item(:label =>"Restaurants",:action =>  "/section/#{nuniverse.path}/with_kind/restaurant/by/name") %>
+    <%= menu_item(:label =>"Bands",:action =>  "/section/#{nuniverse.path}/with_kind/band/by/name?perspective=you&degree=all") %>
+    <%= menu_item(:label =>"Movies",:action =>  "/section/#{nuniverse.path}/with_kind/movie/by/name?perspective=you&degree=all") %>
+    <%= menu_item(:label =>"Restaurants",:action =>  "/section/#{nuniverse.path}/with_kind/restaurant/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Products", :action => "/section/#{nuniverse.path}/with_kind/item/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Videos", :action => "/section/#{nuniverse.path}/with_kind/video/by/name?perspective=you&degree=all") %>
   <% end -%>

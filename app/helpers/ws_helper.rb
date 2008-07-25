@@ -12,15 +12,15 @@ module WsHelper
 			when "wikipedia"
 				return page_from_wikipedia(:query => params[:path].last_tag.content)
 			when "google"
-				return results_from_google(:query => "#{query} -amazon.com -ebay.com", :path => params[:path])
+				return results_from_google(:path => params[:path])
 			when "local"
-				return results_from_google_local(:query => "#{query}", :path => params[:path])
+				return results_from_google_local(:path => params[:path])
 			when "videos"
-				return videos_from_google(:query => "#{query}", :path => params[:path])
+				return videos_from_google(:path => params[:path])
 			when "flickr"
-				return images_from_flickr(:query => query, :path => params[:path])
+				return images_from_flickr(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
 			when "twitter"
-				return tweets_from_twitter(:query => query, :path => params[:path])
+				return tweets_from_twitter(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
 			when "map"
 				return map_from_google(:path => params[:path])	
 			else
@@ -46,8 +46,8 @@ module WsHelper
 	
 	def results_from_google(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		query = params[:path].tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind} #{t.content}"}.join(' ')
-		response = GoogleAjax::Search.web(query, :rsz => "large")
+		
+		response = GoogleAjax::Search.web("#{sanatized_query_from_path(params[:path])} -amazon.com -ebay.com -youtube.com", :rsz => "large")
 		render(:partial => "/ws/google", :locals => {
 			:connections => response.results,	
 			:path => params[:path]
@@ -56,7 +56,7 @@ module WsHelper
 	
 	def results_from_google_local(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		response = GoogleAjax::Search.local(params[:query],70,70, :rsz => "large")
+		response = GoogleAjax::Search.local(sanatized_query_from_path(params[:path]),70,70, :rsz => "large")
 		render(:partial => "/ws/local", :locals => {
 			:locations => response.results,	
 			:path => params[:path]
@@ -66,11 +66,11 @@ module WsHelper
 	def videos_from_google(params)
 		GoogleAjax.referer = "http://localhost:3000"
 		page = params[:page] || 0
-		query = params[:path].tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind} #{t.content}"}.last
-		response = GoogleAjax::Search.video(query, :start => page * 8, :rsz => "large")
+		
+		response = GoogleAjax::Search.video(sanatized_query_from_path(params[:path]), :start => page * 8, :rsz => "large") rescue nil
+	 	return "No videos :(" if response.nil?
 		return render(:partial => "/ws/videos", :locals => {
 			:connections => response.results,	
-			:query => query,
 			:path => params[:path],
 			:page => page
 		})
@@ -139,11 +139,11 @@ module WsHelper
 			zoom = 15
 		end
 		
-		markers = markers_for([params[:path].tags.last])
-		if(markers.empty?)
-			markers = markers_for(Tagging.with_path_ending(params[:path]).with_object_kinds("location").collect{|c| c.object })
+		if params[:path].tags.last.kind == "topic" || params[:path].tags.length == 1
+			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().collect{|c| c.object })
+		else
+			markers = markers_for([params[:path].tags.last])
 		end
-		
 		
 		if markers.empty?
 			return "Sorry, no map for this..."
@@ -177,26 +177,33 @@ module WsHelper
 				
 			elsif place.has_address?
 				ggp = gg.locate place.address rescue nil
-				markers << ggp unless ggp.nil?
+				unless ggp.nil?
+					place.data =  "#{place.data} #latlng #{ggp.latitude},#{ggp.longitude}"
+					place.save
+					markers << place
+				end
 				
 			end
 		end
-		return markers.map {|marker| "{'longitude':#{marker.longitude},'latitude':#{marker.latitude}, 'title':'--' }"}
+		return markers.collect {|marker| "{'longitude':#{marker.longitude},'latitude':#{marker.latitude}, 'title':'#{marker.content}' }"}
 	end
 	
 	def details_for(params)
 		case params[:service]
 		when "ebay"
 			response = EbayShopping::Request.new(:get_single_item, :itemID => params[:id]).response
-			return render(:partial => "/ws/ebay_item", :locals => {:item => response.items, :response => response})
+			return render(:partial => "/ws/ebay_item", :locals => {:item => response.item, :response => response})
 		when "amazon"
-			response = Awsomo::Request.new(:operation => "ItemLookup", :item_id => params[:id]).response
-		
+			response = Awsomo::Request.new(:operation => "ItemLookup", :item_id => params[:id]).response		
 			return render(:partial => "/ws/amazon_item", :locals => {:item => response.item})			
 		when "video"
 			return render(:partial => "/ws/video", :locals => {:url => params[:id], :flashvars => params[:flashvars] || ""})
 		else
-			return "#TODO: This service hasn't been implemented yet"
+			return "#TODO: The service for #{params[:service]} hasn't been implemented yet"
 		end
+	end
+	
+	def sanatized_query_from_path(path)
+		return path.tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind == 'topic' ? '' : t.kind} #{t.content}"}.join(' ')
 	end
 end

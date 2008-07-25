@@ -36,10 +36,10 @@ var Nuniverse = new Class({
     switch(ev.key)
     {
         case "up":
-          this.selectConnection(this.listSection().getElement(".connections .selected").getPrevious("dd"));
+          this.selectConnection(ev,this.listSection().getElement(".connections .selected").getPrevious("dd"));
           break;
         case "down":
-          this.selectConnection(this.listSection().getElement(".connections .selected").getNext("dd"));
+          this.selectConnection(ev,this.listSection().getElement(".connections .selected").getNext("dd"));
           break;
         case "left":
           this.selectSection(this.listSection());
@@ -156,7 +156,7 @@ var Nuniverse = new Class({
           'mouseleave':function() {connection.removeClass('hover');},
           'mousedown':this.scrollContent.bindWithEvent(this,connection),
           'mouseup':this.stopScrollingContent.bind(this,connection),
-          'click':this.selectConnection.bind(this,connection)
+          'click':this.selectConnection.bindWithEvent(this,connection)
       },this);
       
       connection.getElements('a.bookmark').each(function(action)
@@ -169,7 +169,7 @@ var Nuniverse = new Class({
         action.addEvent('click', this.removeBookmark.bindWithEvent(this,[connection, action]));
       },this);
       
-     
+      connection.getElement('h3 a').addEvent('click', this.selectConnection.bindWithEvent(this,connection));
 
     },this);
   
@@ -178,6 +178,7 @@ var Nuniverse = new Class({
   
   bookmark:function(ev, connection, action)
   {
+    ev.stopPropagation();
     ev.preventDefault();
     var form = connection.getElement('.data form');
     var call = new Request.HTML(
@@ -238,8 +239,9 @@ var Nuniverse = new Class({
     this.setScrollFlag.delay(100,true);
   },
   
-  selectConnection:function(connection)
+  selectConnection:function(ev, connection)
   {
+    ev.preventDefault();
     if(this.isScrolling) return false;
     var atag = connection.getElement('h3 a');
     
@@ -391,38 +393,44 @@ var Nuniverse = new Class({
   
   setHat:function()
   {
-    var obj = this;
-    $('breadcrumbs').getElements('dd').each(function(el)
-    {
-      el.destroy();
-    });
-    var crumbs = this.el.getElements('.section h2 a');
-    crumbs.pop();
-    crumbs.each(function(crumb,i)
-    {
-      var c = new Element('dd',
-      {
-        styles:{
-          'z-index':999-i,
-          'left': -(30 * (i+1))+'px'
-        }
-      });
-      $('breadcrumbs').adopt(c.adopt(crumb.clone()));
-      c.addEvent('click', function(ev)
-      {
-        var section = obj.el.getElements(".section")[i];
-        obj.selectSection(section);
-      });
-    });
-    if($defined(this.currentSection().getElement('.back')))
-    {
-       this.currentSection().getElement('.back').addEvent('click',function(ev)
-        {
-          obj.selectSection(this.getParent('.section'));
-        });
+   if($defined($('breadcrumbs')))
+   {
+     $('breadcrumbs').getElements('dd').each(function(el)
+     {
+       el.destroy();
+     });
+     var crumbs = this.el.getElements('.section h2 a');
+     crumbs.pop();
+     crumbs.each(function(crumb,i)
+     {
+       var c = new Element('dd',
+       {
+         styles:{
+           'z-index':999-i,
+           'left': -(30 * (i+1))+'px'
+         }
+       });
+       $('breadcrumbs').adopt(c.adopt(crumb.clone()));
+       c.addEvent('click', function(ev)
+       {
+         var section = obj.el.getElements(".section")[i];
+         obj.selectSection(section);
+       });
+     });
+   }
+    
+    var back_button = this.currentSection().getElement('.back')
+    if($defined(back_button))
+    {  
+       back_button.addEvent('click', this.selectSection.bind(this, back_button.getParent('.section')));
     }
    
     
+  },
+  
+  back:function()
+  {
+    this.selectSection(this.listSection());
   },
   
   selectSection:function(section)

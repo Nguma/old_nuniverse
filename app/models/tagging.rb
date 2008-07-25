@@ -5,6 +5,8 @@ class Tagging < ActiveRecord::Base
 	
 	before_save :clean_path
 	
+	validates_uniqueness_of :object_id, :scope => [:subject_id, :path, :user_id]
+	
 	def path
 	  TaggingPath.new(super)
   end
@@ -47,7 +49,11 @@ class Tagging < ActiveRecord::Base
 	named_scope :with_object_kinds, lambda { |kind|
     kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :object}
   }
-	
+
+	named_scope :with_address_or_geocode, lambda { |kind|
+    kind.nil? ? {} : {:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
+  }
+
 	named_scope :include_object, {:conditions => "tags.id > 0", :include => :object}
 	named_scope :groupped, :group => "object_id"
   named_scope :by_latest, :order => "taggings.updated_at DESC"

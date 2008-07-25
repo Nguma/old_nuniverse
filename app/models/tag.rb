@@ -55,6 +55,7 @@ class Tag < ActiveRecord::Base
 	
 	def has_coordinates?
 		return true if data.match(/#latlng\s.+/)
+		return false
 	end
 	
 	def latitude
@@ -72,6 +73,21 @@ class Tag < ActiveRecord::Base
 	def ws_id
 		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
 	end
+	
+	def data_image
+		data.scan(/#image[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
+	def thumbnail
+		return avatar.public_filename(:large) unless avatar.nil?
+		return data_image unless data_image.blank?
+		return "/images/icons/#{kind}.png"
+	end
+	
+	def price
+		data.scan(/#price[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
 	# def self.find_taggeds_with(params)
 	# 		
 	# 		@context = params[:context].collect {|s| s.id}.join('_')

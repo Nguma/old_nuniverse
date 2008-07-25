@@ -167,11 +167,11 @@
 }
 
 .connections .selected p,
-.connections .selected p a
+.connections .hover a
+.connections .selected a
 {
 	color:#FFF;
 }
-
 
 .new_connection
 {
@@ -297,7 +297,7 @@ h3 span.source
 	margin:0;
 }
 
-.connections .sectionr
+.connections .section
 {
 	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
 	text-align:center;
@@ -306,9 +306,10 @@ h3 span.source
 	padding:5px;
 }
 
+
 .connections .top
 {
-	connection:relative;
+	position:relative;
 }
 
 .connections .bottom
