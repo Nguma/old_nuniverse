@@ -141,14 +141,14 @@ module WsHelper
 			zoom = 15
 		end
 		
-		if params[:path].tags.last.kind == "topic" || params[:path].tags.length == 1
+		if params[:path].tags.last.kind == "topic"
 			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
 			markers = markers_for([params[:path].tags.last])
 		end
 		
 		if markers.empty?
-			return "Sorry, no map for this..."
+			return "Sorry, no map for #{params[:path].tags.last.address}"
 		end
 		
 		
@@ -187,7 +187,7 @@ module WsHelper
 				
 			end
 		end
-		return markers.collect {|marker| "{'longitude':#{marker.longitude},'latitude':#{marker.latitude}, 'title':'#{marker.content}' }"}
+		return markers.collect {|marker| "{'longitude':'#{marker.longitude}','latitude':'#{marker.latitude}', 'title':'#{h marker.content.rstrip}'}"}
 	end
 	
 	def details_for(params)

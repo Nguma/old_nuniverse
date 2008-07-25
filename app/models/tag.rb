@@ -42,15 +42,14 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def has_address?
-		return true if kind == "country" || "city" || "continent"
+		return true if ["country", "city", "continent"].include?(kind)
 		return true if data.match(/#address\s.+/)
 		return false
 	end
 	
 	def address
-		return content if kind == "country" || "city" || "continent"
-		ad = data.scan(/#address[\s]+([^#|\[|\]]+)*/).to_s
-		return ad
+		return content if ["country", "city", "continent"].include?(kind)
+		return data.scan(/#address[\s]+([^#|\[|\]]+)*/).to_s
 	end
 	
 	def has_coordinates?
@@ -90,7 +89,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def info
-		return address if kind == "location" && has_address?
+		return address if  has_address?
 		return description
 	end
 	

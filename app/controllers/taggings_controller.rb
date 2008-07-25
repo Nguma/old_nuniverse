@@ -17,7 +17,7 @@ class TaggingsController < ApplicationController
 			unless gumies.empty?
 				params[:content] = gumies[0][1]
 				params[:kind]    = gumies[0][0]
-			
+				gumies.shift
 				gumies.each do |gumi|
 					gum[gumi[0]] = gumi[1]
 				end
@@ -32,7 +32,7 @@ class TaggingsController < ApplicationController
 				:kind			    => params[:kind],
 				:path			    => params[:path],
 				:restricted   => params[:restricted],
-				:description  => params[:description],
+				:description  => params[:description] || "",
 				:url          => params[:url],
 				:service      => params[:service],
 				:data         => gum.collect { |k,v| "##{k} #{v}" }.join(" "),
