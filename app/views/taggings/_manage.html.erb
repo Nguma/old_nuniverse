@@ -5,10 +5,12 @@
     <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
   <% end -%>
 </div>
+<% if path %>
 <div class="data hidden">
   <% form_tag '/taggings/create' do -%>
     <%= hidden_field_tag :path, path %>
     <%= hidden_field_tag :content, data  %>
   <% end -%>
 </div>
+<% end -%>
 
