@@ -93,8 +93,8 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def info
-		return property('address')
-		return ""
+		return property('address') if has_address?
+		return description
 	end
 	
 	def replace(property,value)

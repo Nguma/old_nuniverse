@@ -1,5 +1,6 @@
 class TagsController < ApplicationController
 	
+	protect_from_forgery :except => [:suggest]
   # GET /tags
   # GET /tags.xml
   def index
