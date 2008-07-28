@@ -1,6 +1,8 @@
 var NForm = new Class({
-  Implements: Events, 
- 
+  Implements: [Events, Options],
+  options:{
+    suggest_uri:"/suggest"
+  },
   
   initialize:function(el)
   {
@@ -34,6 +36,7 @@ var NForm = new Class({
       {
         input.addEvent('focus',this.onInputFocus.bind(this,input));
         input.addEvent('blur', this.onInputBlur.bind(this,input));
+        input.addEvent('keyup', this.onInputChange.bind(this,input));
         // this.labelize(input);
       };
       
@@ -47,10 +50,10 @@ var NForm = new Class({
   
   onInputBlur:function(input)
   {
-    if(input.getProperty('value') == "" || input.getProperty('value') == input.getPrevious('label').get('text'))
-    {
-      //this.labelize(input);
-    }
+    // if(input.getProperty('value') == "" || input.getProperty('value') == input.getPrevious('label').get('text'))
+    //    {
+    //      //this.labelize(input);
+    //    }
   },
   
   onInputFocus:function(input)
@@ -63,11 +66,16 @@ var NForm = new Class({
     }
   },
   
+  onInputChange:function(input)
+  {
+    this.findSuggestions()
+  },
+  
   setActions:function()
   {
     this.el.getElements('.dynamo').each(function(button)
     {
-      button.addEvent('click',this.submit.bind(this));
+      button.addEvent('click',this.submit.bindWithEvent(this));
     },this);
   },
   
@@ -78,20 +86,41 @@ var NForm = new Class({
     
     var submission = new Request.HTML({
       'url':this.el.getElement('form').get('action'),
+      'update':this.suggestions(),
       onSuccess:function(a,b,c,d)
       {
+        obj.clearInputs(); 
         obj.fireEvent('success',[a,b,c,d]);
-        obj.inputs().each(function(input)
-        {
-          if(input.getProperty('type') == "")
-          {
-            input.setProperty('value','');
-          }
-        });
+        
+        
       }
     }).post(this.el.getElement('fieldset'));
     return false;
-    
+  },
+  
+  findSuggestions:function()
+  {
+    var obj = this;
+    var submission = new Request.HTML({
+      'url':this.options['suggest_uri'],
+      'update':this.suggestions(),
+      onSuccess:function(a,b,c,d)
+      {
+        obj.fireEvent('suggest',obj.suggestions());
+      }
+    }).post(this.el.getElement('fieldset'));
+    return false;
+  },
+  
+  clearInputs:function()
+  {
+    this.inputs().each(function(input)
+    {
+      if(input.getProperty('type') == "text")
+      {
+        input.setProperty('value','');
+      }
+    });
     
   },
   
@@ -128,7 +157,11 @@ var NForm = new Class({
     {
       this.el.removeClass('expanded');
       this.el.getElement('.toggle').set('text', '+ Add');
-    }
-    
+    } 
+  },
+  
+  suggestions:function()
+  {
+    return this.el.getElement('.suggestions');
   }
 });

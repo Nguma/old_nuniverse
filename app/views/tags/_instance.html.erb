@@ -1,5 +1,5 @@
-<dd class="connection <%= tag.kind %>_kind <%= cycle('even','odd') %>">
-    <span class="avatar"><%= avatar_for(tag) %></span>
-    <span class="kind"><%= tag.kind %></span><br/>
-    <span class="content"><%= link_to_nuniverse(tag) %></span>
+<dd class="connection kind_<%= instance.kind %> <%= cycle('even','odd') %>">
+    <%= avatar_for(instance) %>
+    <h4><%= instance.label %></h4>
+    <p><%= instance.kind %></p>
 </dd>

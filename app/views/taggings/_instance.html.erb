@@ -1,13 +1,13 @@
 <dd class="connection <%= cycle('even','odd') %>"> 
   <%= avatar_for(instance.object) %>
   <h3>
-    <%= link_to_object(instance.object, :path => "#{instance.path}#{instance.object.id}") %>
+    <%= link_to_object(instance.object, :path => "#{section.path rescue ""}#{instance.object.id}") %>
   </h3>
 
          <% unless instance.path.taggings.empty? -%>
          <p><%= instance.object.kind.capitalize %> added to  
-           <% instance.path.taggings[1 .. -1].each do |tagging| -%>
-             <%= link_to_tagging(tagging) %>
+           <% instance.path.tags[1 .. -1].each do |tagging| -%>
+             <%= link_to_nuniverse(tagging) %>
            <% end -%>
            by <%= link_to_nuniverse(instance.user.tag) %>
          </p>

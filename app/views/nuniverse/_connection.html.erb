@@ -12,6 +12,6 @@
   <% unless connection.object.price.blank? -%>
     <%= h connection.object.price %>
   <% end -%>
-  <%= h connection.object.info %></p>
+  <%= "<span class='kind_#{connection.kind}'>#{connection.kind.capitalize}</span> #{ h connection.info}" %></p>
 
 </dd>

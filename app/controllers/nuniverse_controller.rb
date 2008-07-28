@@ -23,11 +23,12 @@ class NuniverseController < ApplicationController
 	
 	def section
 		if params[:path]
+			# params[:no_wrap] = 1 if params[:path] == session[:path]
 			session[:path] = params[:path]
 			params[:perspective] ||= session[:perspective]
 		else
 			params[:path] = session[:path]
-			params[:no_wrap] = 1
+			# params[:no_wrap] = 1
 			params[:perspective] ||= session[:perspective]
 		end
 		session[:perspective] = params[:perspective]

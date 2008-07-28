@@ -5,8 +5,8 @@
 }%>
 
 <%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Topics",
-  :taggings => Tagging.with_object_kinds("topic").include_object.groupped.with_order('name')
+  :title => "Channels",
+  :taggings => Tagging.with_object_kinds("channel").include_object.groupped.with_order('name')
 }%>
 
 <%= render :partial => "/nuniverse/widget", :locals => {

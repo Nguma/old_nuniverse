@@ -12,14 +12,17 @@ class TaggingsController < ApplicationController
 				:path		 => params[:path]
 			)
 		else
-			gumies = params[:content].scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/)
 			gum = {}
-			unless gumies.empty?
-				params[:content] = gumies[0][1]
-				params[:kind]    = gumies[0][0]
-				gumies.shift
-				gumies.each do |gumi|
-					gum[gumi[0]] = gumi[1]
+			gum['address'] = params[:address] 
+			if params[:data]
+				gumies = params[:data].scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/)
+				unless gumies.empty?
+					params[:label] = gumies[0][1]
+					params[:kind]    = gumies[0][0]
+					gumies.shift
+					gumies.each do |gumi|
+						gum[gumi[0]] = gumi[1]
+					end
 				end
 			end
 		
@@ -28,14 +31,15 @@ class TaggingsController < ApplicationController
 			params[:service]     ||= gum.delete('service')
 			
 			@tagging = Tag.connect(
-				:content 	    => params[:content],
+				:label 	    => params[:label],
 				:kind			    => params[:kind],
 				:path			    => params[:path],
 				:restricted   => params[:restricted],
 				:description  => params[:description] || "",
 				:url          => params[:url],
 				:service      => params[:service],
-				:data         => gum.collect { |k,v| "##{k} #{v}" }.join(" "),
+				:gum          => gum,
+				:relationship => params[:relationship],
 				:user_id	    => current_user.id
 			)
 		end

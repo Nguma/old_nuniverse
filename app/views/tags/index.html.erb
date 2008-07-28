@@ -1,18 +1,11 @@
-<%# GoogleAjax.referer = "http://localhost:3000" -%>
-<%#GoogleAjax::Search.local("Cafe Grumpy", "new York", "NY").results.each do |rst| %>
-          <%#rst.lat %>
-
-  <%# end -%>
-  
-  <%# g = Googleize.new(:mode => "local") -%>
-  <%#= g.search('cafe grumpy new york').viewport['center']['lat'].inspect %>
-
 <%= render :partial => "/layouts/hat", :locals => {:selected => "home"} %>
 <div class="nuniverse">
   <div class="logo">
     <%= image_tag('/images/icons/logo_nuniverse.png', :alt => 'nuniverse_logo') %>
   </div>
   <div class="tags">
-    <%= %>
+    <% @tags.each do |tag| %>
+      <%= tag.label %>  - 
+    <% end %>
   </div>
 </div>

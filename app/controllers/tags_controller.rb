@@ -3,7 +3,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.paginate(:page => 1, :per_page => 40, :order => "updated_at DESC")
+    @tags = Tag.paginate(:page => 1, :per_page => 100, :order => "label ASC", :conditions => "kind = 'country'")
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,7 +14,8 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-
+		@tags = Tag.find(:all, :conditions => ['kind = ?', 'country'])
+		raise @tags.collect {|t| "#{t.property('code')}|#{t.label}" }.inspect
   end
 
   # GET /tags/new
@@ -39,13 +40,13 @@ class TagsController < ApplicationController
 		#	gumies = params[:gum].to_s.scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
 		# @tags = []
 		# 		for gumi in gumies
-		#     	tag = Tag.new(:kind => gumi[1], :content => gumi[2])
+		#     	tag = Tag.new(:kind => gumi[1], :label => gumi[2])
 		# 			tag.save
 		# 			@tags << tag
 		# 		end
 		# raise params[:description].inspect
 		@tagging = Tag.connect(
-			:content 	=> params[:content],
+			:label 	=> params[:label],
 			:kind			=> params[:kind],
 			:path			=> params[:path],
 			:restricted => params[:restricted] || 1,
@@ -89,9 +90,11 @@ class TagsController < ApplicationController
     end
   end
 
-	
-	def bookmark
-		
+	def suggest
+		@tags = Tag.with_label_like(params[:label]).with_kind_like(params[:kind]).paginate(
+			:per_page => 10,
+			:page => 1
+		)
 	end
 	
 	

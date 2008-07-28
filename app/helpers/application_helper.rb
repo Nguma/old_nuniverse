@@ -12,7 +12,7 @@ module ApplicationHelper
 	
 	def link_to_nuniverse(tag, options = {})		
 		return link_to("You",	"/my_nuniverse", :class => options[:class]) if logged_in? && current_user.tag == tag 
-		label = tag.content.capitalize
+		label = tag.label.capitalize
 		label = "#{label[0,options[:max]]}..." if options[:max] && label.length > options[:max]
 		options[:path] ||= []
 	
@@ -29,7 +29,7 @@ module ApplicationHelper
 			return link_to("You",	"/my_nuniverse", :class => options[:class])
 		end
 		
-		label = tagging.last_tag.content
+		label = tagging.last_tag.label
 		if max = options.delete(:max)
 			label = "#{label[0..max]}..." if label.length > max
 		end
@@ -57,5 +57,9 @@ module ApplicationHelper
 			:partial => "/nuniverse/menu_item",
 			:locals => params
 		)
+	end
+	
+	def todo(todo)
+		"<div class='nuniverse_info'>#{todo} isn't implemented yet, sorry... But it's tracked in our todos :)</div>"
 	end
 end

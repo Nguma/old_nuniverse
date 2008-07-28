@@ -5,7 +5,14 @@ class Tagging < ActiveRecord::Base
 	
 	before_save :clean_path
 	
-	validates_uniqueness_of :object_id, :scope => [:subject_id, :path, :user_id]
+	def kind
+		object.kind
+	end
+	
+	def info
+		return description unless description.blank?
+		return object.info
+	end
 	
 	def path
 	  TaggingPath.new(super)
@@ -50,6 +57,10 @@ class Tagging < ActiveRecord::Base
     kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :object}
   }
 
+	named_scope :with_kind_like, lambda { |kinds|
+    kinds.nil? ? {} : {:conditions => ["tags.kind rlike ?", "^#{kinds}$"], :include => :object}
+  }
+
 	named_scope :with_address_or_geocode, lambda { |kind|
     kind.nil? ? {} : {:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
@@ -60,7 +71,7 @@ class Tagging < ActiveRecord::Base
 	named_scope :with_order, lambda { |order|
 		case order
 		when "name"
-			{:include => :object, :order => "tags.content ASC"}
+			{:include => :object, :order => "tags.label ASC"}
 		when "latest"
 			{:order => "taggings.updated_at DESC"}
 		else

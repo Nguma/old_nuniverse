@@ -4,14 +4,9 @@ module NuniverseHelper
 		params[:content] = capture(&block)
 		params[:dom_classes] ||= ""
 		params[:section] = section
-		if section.no_wrap
-			partial = "/nuniverse/content"
-		else
-			partial = "/nuniverse/section"	
-		end
 		concat(
 			render(
-				:partial => partial,
+				:partial => "/nuniverse/section",
 				:locals => params
 		), block.binding)
 	end
@@ -50,8 +45,8 @@ module NuniverseHelper
 			title = object.titleNoFormatting
 		when "google"
 			title = object.titleNoFormatting
-			url = h "/ws/show?service=google&item=#{object.url.rstrip}"
-			dom_class = ""
+			url = h "#{object.url.rstrip}"
+			dom_c = "outer"
 		when "amazon"
 			title = h sanitize(object.title[0..100])
 			url = h "/ws/show?service=amazon&item=#{object.id.rstrip}"
@@ -62,7 +57,7 @@ module NuniverseHelper
 			title = h object.title
 			url = h "/ws/show?service=#{params[:service]}&item=#{object.url}"
 		end
-		link_to(title.capitalize, url, :class => dom_class || "inner")
+		link_to(title.capitalize, url, :class => dom_c || "inner")
 	end
 	
 end

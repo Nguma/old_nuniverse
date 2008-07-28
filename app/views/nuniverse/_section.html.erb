@@ -1,9 +1,8 @@
 <div class="section <%= dom_classes.blank? ? "" : dom_classes %>">
-  <div class="menu">
-    <a href="#" class="back">&lt; back</a>
-    <%= render :partial => "/nuniverse/perspectives" , :locals => {:section => section}%>
-  </div>
+  <%= render :partial => "/nuniverse/section_menu", :locals => {:section => section} %>
+  <%#= render :partial => "/nuniverse/slider" %>
   <div class="content">
     <%= content %>
   </div>
+  
 </div>

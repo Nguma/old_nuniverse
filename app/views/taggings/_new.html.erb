@@ -1,18 +1,28 @@
 <div class="new_connection">
   <a href="#" class="toggle">+ Add </a>
-  <fieldset>
+  
+  
+    
     <% if logged_in? -%>
       <% form_tag '/taggings/create' do -%>
-        <%= hidden_field_tag :kind, kind %>
+      <fieldset>
+        <dl class="suggestions">
+        </dl>
         <%= hidden_field_tag :path, path , :class => "path"%>
         <%= hidden_field_tag :restricted, 1 , :class => "restricted"%>
-        <h2>To create a specific kind, type it in the title:</h2>
-        <h4>eg: #restaurant Balthazar, #movie Blade Runner, #pro It's very cheap ...</h4>
-        <br/>
-        
-        <%= text_area_tag :content, "", :rows => 6, :cols => 60 %>
-        <br/>
+        <%= hidden_field_tag :data, ""%>
+
+        <%= text_field_tag :label, "", :class => "title"%>        
+        <label>What <span>eg:Person, Location, band...</span></label>
+        <%= text_field_tag :kind, kind  %>
+        <label>Why <span>Why is it/he/she connected to <%= path.last_tag.label %></span></label>
+        <%= text_field_tag :relationship, "" %>
+        <label>Where <span>Any address?</span></label>
+        <%= text_field_tag :address, "" %>
+        <label>When <span></span></label>
+        <%= text_field_tag :date, "" %>
         <input type="submit" value="Add" class="dynamo" />
+      </fieldset>
       <% end -%>
     <% else -%>
       <h2>Sorry, but you have to login to add to nuniverse.</h2>
@@ -20,5 +30,5 @@
       <%= link_to "Register","/register" %>
     <% end -%>
   
-  </fieldset>
+  
 </div>

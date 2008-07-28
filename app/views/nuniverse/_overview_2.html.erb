@@ -1,7 +1,7 @@
 <div class="section current_section" style="background:none">
   <%= render :partial => "/nuniverse/widget", :locals => {
-    :title => "Topics",
-    :taggings => section.connections(:user => current_user, :kind => "topic", :order => order)
+    :title => "Channels",
+    :taggings => section.connections(:user => current_user, :kind => "channel", :order => order)
   }%>
   <%= render :partial => "/nuniverse/widget", :locals => {
     :title => "People",

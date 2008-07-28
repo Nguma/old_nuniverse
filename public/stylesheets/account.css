@@ -39,6 +39,15 @@
 	color:#333;
 }
 
+form input
+{
+	font-size:15px;
+	font-weight:bold;
+	border:solid 1px #ccc;
+	color:#666;
+	
+}
+
 .detail form input
 {
 	position:relative;

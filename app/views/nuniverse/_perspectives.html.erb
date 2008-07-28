@@ -1,16 +1,13 @@
-<div class="perspectives">
-  <dl>
-    <dt>According to <%= section.perspective %></dt><%= image_tag("/images/icons/down.png", :alt => "Change perspective") %>
+<dl class="dropdown perspectives">
+    <dt>According to <span class="label"><%= section.perspective %></span><%= image_tag("/images/icons/down.png", :alt => "Change perspective") %></dt>
     <% if logged_in? -%>
-      <% perspectives = ['you','everyone','google','map','local','videos','ebay','amazon','flickr','daylife','wikipedia', 'twitter'] -%>
+      <% perspectives = ['you','everyone','google','map','local','videos','ebay','amazon','flickr','daylife','wikipedia', 'freebase', 'twitter'] -%>
     <% else -%>
-      <% perspectives = ['everyone','google','map','local','ebay','videos','amazon','flickr','daylife','wikipedia', 'twitter'] -%>
+      <% perspectives = ['everyone','google','map','local','ebay','videos','amazon','flickr','daylife','wikipedia', 'freebase', 'twitter'] -%>
     <% end -%>
     <% perspectives.each do |perspective| -%>
       <dd class="item <%= perspective == section.perspective ? 'selected' : '' %>">
         <%= link_to(perspective.capitalize, "/current_section/according_to/#{perspective}") %>
       </dd>
     <% end -%>
-  </dl>
-  
-</div>
+</dl>

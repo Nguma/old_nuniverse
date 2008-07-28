@@ -1,18 +1,20 @@
 module WsHelper
 
 	def content_from_web_service(params)
-		query = params[:path].tags.collect{|c| c.kind == 'user' ? "" : c.content}.join(', ')
+		query = params[:path].tags.collect{|c| c.kind == 'user' ? "" : c.label}.join(', ')
 		case params[:service]
 			when "ebay"	
-				return items_from_ebay(params[:path].last_tag.content, :path => params[:path])
+				return items_from_ebay(params[:path].last_tag.label, :path => params[:path])
 			when "amazon"
-				return items_from_amazon(:query => params[:path].last_tag.content, :path => params[:path])
+				return items_from_amazon(:query => params[:path].last_tag.label, :path => params[:path])
 			when "daylife"
 				return articles_from_daylife(:query => query.gsub(',',' '), :path => params[:path])
 			when "wikipedia"
-				return page_from_wikipedia(:query => params[:path].last_tag.content)
+				return page_from_wikipedia(:query => params[:path].last_tag.label)
 			when "google"
 				return results_from_google(:path => params[:path])
+			when "freebase"
+				return results_from_freebase(:query => params[:path].last_tag.label,:path => params[:path])
 			when "local"
 				return results_from_google_local(:path => params[:path])
 			when "videos"
@@ -47,8 +49,18 @@ module WsHelper
 	def results_from_google(params)
 		GoogleAjax.referer = "http://localhost:3000"
 		
-		response = GoogleAjax::Search.web("#{sanatized_query_from_path(params[:path])} -amazon.com -ebay.com -youtube.com", :rsz => "large")
+		response = GoogleAjax::Search.web("#{sanatized_query_from_path(params[:path])} -amazon.com -ebay.com -youtube.com", :rsz => "large") rescue nil
+		return "Oops something crazy happened on the way to google..." if response.nil?
 		render(:partial => "/ws/google", :locals => {
+			:connections => response.results,	
+			:path => params[:path]
+		})
+	end
+	
+	def results_from_freebase(params)
+		response = Freebaser::Request.new(:query => params[:query])
+		
+		render(:partial => "/ws/freebase", :locals => {
 			:connections => response.results,	
 			:path => params[:path]
 		})
@@ -56,7 +68,7 @@ module WsHelper
 	
 	def results_from_google_local(params)
 		GoogleAjax.referer = "http://localhost:3000"
-		response = GoogleAjax::Search.local(params[:path].last_tag.content,70,70, :rsz => "large")
+		response = GoogleAjax::Search.local(params[:path].last_tag.label,70,70, :rsz => "large")
 		render(:partial => "/ws/local", :locals => {
 			:locations => response.results,	
 			:path => params[:path]
@@ -89,6 +101,10 @@ module WsHelper
 		return render(:partial => "/ws/twitter", 
 			:locals => { :tweets => tweets, :path => params[:path] }
 		)
+	end
+	
+	def code_from_geonames(params)
+		
 	end
 	
 	def page_from_wikipedia(params)
@@ -141,29 +157,29 @@ module WsHelper
 			zoom = 15
 		end
 		
-		if params[:path].tags.last.kind == "topic"
+		if params[:path].tags.last.kind == "channel"
 			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
 			markers = markers_for([params[:path].tags.last])
 		end
 		
 		if markers.empty?
-			return "Sorry, no map for #{params[:path].tags.last.address}"
+			return render(:partial => "/nuniverse/maps", :locals => {:no_map => true, :path => params[:path]})
+		else
+			html = "<script type='text/javascript' charset='utf-8'>
+			//<![CDATA[
+			
+				nuniverse.options['map'] = {
+					'markers':[#{markers.join(',')}],
+					'zoom':#{zoom},
+					'center':#{markers[0]}
+				} 
+			//]]>
+			</script>"
 		end
 		
-		
-		html = "<script type='text/javascript' charset='utf-8'>
-		//<![CDATA[
-			
-			nuniverse.options['map'] = {
-				'markers':[#{markers.join(',')}],
-				'zoom':#{zoom},
-				'center':#{markers[0]}
-			} 
-		//]]>
-		</script>"
-		
 		return render(:partial => "/nuniverse/maps", :locals => {
+			:no_map => false,
 			:map => @map,
 			:markers => markers,
 			:html => html
@@ -171,23 +187,19 @@ module WsHelper
 	end
 	
 	def markers_for(places)
-		gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
+		# gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
+	
 		markers = []
 		places.each do |place|
-			if place.has_coordinates?
+		if place.has_coordinates?
 				markers << place
+
 				
-			elsif place.has_address?
-				ggp = gg.locate place.address rescue nil
-				unless ggp.nil?
-					place.data =  "#{place.data} #latlng #{ggp.latitude},#{ggp.longitude}"
-					place.save
-					markers << place
-				end
-				
-			end
+		 end
 		end
-		return markers.collect {|marker| "{'longitude':'#{marker.longitude}','latitude':'#{marker.latitude}', 'title':'#{h marker.content.rstrip}'}"}
+		return markers.collect {|marker| 
+			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{}'}"
+		}
 	end
 	
 	def details_for(params)
@@ -206,6 +218,6 @@ module WsHelper
 	end
 	
 	def sanatized_query_from_path(path)
-		return path.tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind == 'topic' ? '' : t.kind} #{t.content}"}.join(' ')
+		return path.tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind == 'channel' ? '' : t.kind} #{t.label}"}.join(' ')
 	end
 end

@@ -5,17 +5,19 @@
 
 <div class="nuniverse" id="nuniverse">
   <%#= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => nuniverse.path }%>
+  
   <div class="scroller"> 
     <div class="body">
-      <%= render :partial => "/nuniverse/main_menu", :locals => {:nuniverse => nuniverse }%>
-      <% if nuniverse.empty? -%>
+      <%= render :partial => "/nuniverse/main_menu", :locals => {:nuniverse => section }%>
+      <% if section.empty? -%>
         <%= render :partial => "/nuniverse/welcome" %>
       <% else -%>
-        <%= render :partial => "/nuniverse/overview", :locals => {:nuniverse => nuniverse, :order => "latest"} %>
+        <%= render :partial => "/nuniverse/overview", :locals => {:section => section, :order => "latest"} %>
       <% end -%>   
      
     </div>
   </div>
+  
 </div>
 
 <div class="hidden">

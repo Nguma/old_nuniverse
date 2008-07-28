@@ -1,27 +1,37 @@
 class Tag < ActiveRecord::Base
   has_one :avatar
 	
-	validates_presence_of :content, :kind
+	validates_presence_of :label, :kind
 	
-	alias_attribute :name, :content
+	alias_attribute :name, :label
+	attr_accessor :address
+	
+	after_create  :find_coordinates
+		
+	def after_initialize
+		@address = Nuniverse::Address.new(self)
+	end
 	
 	def self.connect(params)
-		@object = Tag.find_by_content_and_kind_and_url(
-		  params[:content], params[:kind], params[:url]
+		@object = Tag.find_by_label_and_kind_and_url(
+		  params[:label], params[:kind], params[:url]
 		)
 		if @object.nil?
 			@object = Tag.create(
-				:content      => params[:content], 
+				:label      => params[:label], 
 				:kind         => params[:kind],
 				:description  => params[:description] || "",
 				:url          => params[:url],
 				:service       => params[:service],
-				:data         => params[:data]
+				:data         => params[:gum].collect { |k,v| "##{k} #{v}" }.join("")
 			)
 		else
 			@object.description = params[:description] || @object.description
 			@object.url = params[:url] || @object.url
-			@object.save	
+			@object.update_data(params[:gum])
+			@object.find_coordinates
+			
+			@object.save!
 		end
 		
 		
@@ -34,7 +44,8 @@ class Tag < ActiveRecord::Base
 				:object 	=> @object,
 				:path    	=> "_#{params[:path]}_",
 				:user_id	=> params[:user_id],
-				:restricted => params[:restricted]
+				:restricted => params[:restricted],
+				:description => params[:relationship]
 			)
 		end
 		
@@ -42,31 +53,24 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def has_address?
-		return true if ["country", "city", "continent"].include?(kind)
-		return true if data.match(/#address\s.+/)
-		return false
-	end
-	
-	def address
-		return content if ["country", "city", "continent"].include?(kind)
-		return data.scan(/#address[\s]+([^#|\[|\]]+)*/).to_s
+		return true if !address.full_address.blank?
+		false
 	end
 	
 	def has_coordinates?
-		return true if data.match(/#latlng\s.+/)
-		return false
+		address.has_coordinates?
 	end
 	
-	def latitude
-		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[0] rescue nil
-	end
-	
-	def longitude
-		data.scan(/#latlng[\s]+([^#|\[|\]]+)*/).to_s.split(',')[1] rescue nil
+	def coordinates
+		address.coordinates
 	end
 	
 	def flashvars
-		data.scan(/#params[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+		data.scan(/#flashvars[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+	end
+	
+	def property(prop)
+		data.scan(/##{prop}[\s]+([^#|\[|\]]+)*/).to_s.rstrip rescue ""
 	end
 	
 	def ws_id
@@ -89,8 +93,25 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def info
-		return address if  has_address?
-		return description
+		return property('address')
+		return ""
+	end
+	
+	def replace(property,value)
+		new_data = data.gsub(/##{property}[\s]+([^#|\[|\]]+)/,'')
+		self.data = "#{new_data}##{property} #{value}"
+	end
+	
+	def update_data(gums)		
+		gums.each do |prop|
+			replace(prop[0],prop[1])
+		end
+	end
+	
+	def weather
+		return nil unless has_coordinates?
+		g = Geonamer::Request.new.weather(:lat => latitude, :lng => longitude)
+		return "#{g.temperature}F / #{g.clouds} / #{g.conditions}" rescue "No information available"
 	end
 	
 	# def self.find_taggeds_with(params)
@@ -114,12 +135,31 @@ class Tag < ActiveRecord::Base
 	# 		sub_query << " GROUP BY #{oid} HAVING count(#{oid}) >= 1 ORDER BY path ASC"
 	# 		query = "SELECT tags.* FROM tags WHERE tags.id in (#{sub_query})"
 	# 		query << " AND kind = '#{params[:kind]}'" if params[:kind]
-	# 		query << " ORDER BY content DESC"
+	# 		query << " ORDER BY label DESC"
 	# 		
 	# 		Tag.find_by_sql(query)
 	# 	end
 	
-  
-  protected
+	named_scope :with_label_like, lambda { |label| 
+		return label.nil? ? {} : {:conditions => ["label like ?","%#{label}%"]}
+	}
+	
+  named_scope :with_kind_like, lambda { |kind|
+   	return kind.nil? ? {} : {:conditions => ["kind like ?", "%#{kind}%"]}
+  }
+	
+  named_scope :with_kind, lambda { |kind|
+   		return kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
+  }
+   
+  named_scope :with_property, lambda { |prop_name, prop_value|
+ 		return kind.nil? ? {} : {:conditions => ["data rlike ?", "##{prop}[\s]+#{prop_value}/"]}
+  }
+
+
+
+	def find_coordinates
+		Nuniverse::Address.find_coordinates(self)
+	end
   
 end

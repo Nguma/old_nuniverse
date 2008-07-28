@@ -1,36 +1,75 @@
-dl.filters
+.section .menu
 {
-	font-size:11px;
-	color:#333;
+	background:#69c;
+	padding:0;
+	display:block;
+	position:absolute;
+	clear:both;
+	width:100%;
+	color:#FFF;
+	height:35px;
+	z-index:1234567890123;
+}
+
+dl.dropdown
+{
+	position:relative;
+	float:left;
+	width:auto;
+	display:none;
+	color:#FFF;
+	padding:0 0 0 0;
+	font-weight:bold;
+	font-size:14px;
+	z-index:12345678;
+	background:#69c;
+}
+
+dl.dropdown dd
+{
 	position:relative;
 	clear:both;
-	width:auto;
-	z-index:12345678;
+	display:none;
+	padding:10px 10px 8px 5px;
 }
 
-dl.filters
-{
-	position:absolute;
-}
-
-dl.filters dd
+dl.dropdown dt
 {
 	position:relative;
-	padding:0 0 0 0px;
+	float:left;
+	padding:5px 10px 10px 10px;
 }
 
-dl.filters dd img
+dl.dropdown dt img
 {
-	height:30px;
-	padding:0;
-	margin:0;
+	height:17px;
+	padding:0px 0 0 5px;
 }
 
-dl.filters dd.selected
+dl.dropdown dd img
 {
-	background:#FFF;
-	color:#FFF;
-	font-weight:bold;
+	height:20px;
+}
+
+.current_section dl
+{
+	display:block;
+}
+
+dl.expanded dd
+{
+	
+	display:block;
+}
+
+dl.dropdown dd.hover
+{
+	background:#47A;
+}
+
+dl.dropdown dd.selected
+{
+	background:#369;
 }
 
 .back
@@ -47,111 +86,3 @@ dl.filters dd.selected
 {
 	display:none;
 }
-
-
-
-
-.perspectives
-{
-	position:relative;
-	float:left;
-	font-size:14px;
-	padding:0;
-	margin:0 0 2px 0;
-	z-index:1234567890;
-	cursor:pointer;
-	display:none;
-}
-
-.current_section .perspectives
-{
-	display:block;
-}
-
-.section .menu img
-{
-	display:inline;
-	position:relative;
-	float:left;
-	padding:10px 0 0 0;
-	height:17px;
-}
-
-.section .menu dl
-{
-	position:absolute;
-	padding:0;
-	font-weight:bold;
-	color:#FFF;
-	clear:both;
-	background:#69c;
-	width:auto;
-	min-width:200px;
-}
-
-.order
-{
-	display:none;
-}
-
-.current_section .order 
-{
-	display:block;
-}
-
-.section .menu dt
-{
-	color:#FFF;
-	position:relative;
-	float:left;
-	font-size:14px;
-	padding:10px 5px 8px 10px;
-	z-index:12345678;
-	background:#69c;
-}
-
-.section .menu dd
-{
-	position:relative;
-	display:none;
-	padding:10px 10px 8px 5px;
-	clear:both;
-}
-
-.section .expanded dd
-{
-	display:block;
-}
-
-.perspectives dd.hover
-{
-	background-color:#369;
-}
-
-.perspectives dd.selected
-{	
-	color:#FFF;
-	background:#369;
-}
-
-dl.options
-{
-	position:relative;
-	clear:both;
-	color:#666;
-	font-size:13px;
-}
-
-dl.options dd
-{
-	position:relative;
-	float:left;
-	padding:10px;	
-}
-
-dl.options dd.selected
-{
-	background:#FFF;
-	color:#666;
-}
-

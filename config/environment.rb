@@ -59,9 +59,11 @@ Rails::Initializer.run do |config|
 end
 
 require 'will_paginate'
-require 'google_geocode'
+# require 'google_geocode'
 require 'google_ajax'
 require 'flickr'
 require 'hpricot'
 require 'open-uri'
 require 'twitter'
+require 'metaweb'
+require 'graticule'

@@ -2,7 +2,7 @@
 {
 	position:relative;
 	clear:both;
-	padding:0 0 0 0;
+	padding:35px 0 0 0;
 	text-align:left;
 	width:100%;
 }
@@ -51,9 +51,9 @@
 	width:auto;
 	cursor:pointer;
 	text-align:left;
-	padding:5px;
+	padding:0;
 	margin:0 0 1px 0;
-	min-height:30px;
+	min-height:40px;
 }
 
 .connections .even
@@ -91,16 +91,13 @@
 }
 
 .connection .manage,
-.connection .avatar,
 .connection p
 {
 	display:none;
 }
 
-.current_section .connection .avatar
-{
-	display:block;
-}
+
+
 
 .current_section .connections p
 {
@@ -109,8 +106,8 @@
 
 .current_section .connection 
 {
-	padding:10px 10px 10px 10px;
-	min-height:40px;
+	padding:0;
+	min-height:60px;
 }
 
 .current_section .manage
@@ -135,23 +132,42 @@
 	position:relative;
 	float:left;
 	border:none;
-	margin-right:10px;
-	height:40px;
+	margin-right:0;
+	height:30px;
+	padding:5px;
 	font-size:11px;
 }
 
-.connections .connection .avatar img
+
+.current_section .connection .avatar
 {
 	height:40px;
+	display:block;
+	padding:10px;
+}
+
+.current_section .connection .avatar img
+{
+	height:40px;
+}
+
+.current_section .connection h3
+{
+	padding-top:15px;
 }
 
 .connections .connection h3
 {
 	position:relative;
 	font-family:Arial;
-	margin-top:5px;
-	font-size:14px;
+	padding-top:10px;
+	font-size:12px;
 	color:inherit;
+}
+
+.current_section .connection h3
+{
+	font-size:14px;
 }
 
 .nuniverse .connection p
@@ -196,6 +212,20 @@
 	display:block;
 }
 
+.new_connection select
+{
+	display:block;
+	padding:5px;
+	color:#333;
+	background:#CCC;
+	border:none;
+	font-size:14px;
+	font-weight:bold;
+}
+.new_connection select option
+{
+	margin:2px;
+}
 .overview
 {
 	display:block;
@@ -240,18 +270,76 @@
 	display:block;
 }
 
+.new_connection .suggestions
+{	
+	position:relative;
+	float:right;
+	width:400px;
+}
+
+.new_connection .suggestions dd
+{
+	height:30px;
+	min-height:20px;
+	width:auto;
+	display:block;
+	padding:5px;
+	clear:both;
+}
+
+.new_connection .suggestions dd h3,
+.new_connection .suggestions dd h4
+{
+	position:relative;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.suggestions dd p
+{
+	position:relative;
+	font-size:11px;
+	font-style:italic;
+	color:#666;
+	padding:0;
+	margin:0;
+	display:block;
+}
+
+.new_connection .suggestions .avatar
+{
+	height:20px;
+	padding:0;
+	position:relative;
+	float:left;
+	margin-right:5px;
+}
+
 .new_connection label
 {
 	display:block;
 	font-size:13px;
+	padding:3px 3px 3px 0;
+	color:#999;
+}
+
+.new_connection label span
+{
+	font-size:11px;
+	font-style:italic;
 }
 
 .new_connection input,
 .new_connection textarea
 {
-	padding:10px;
+	padding:5px;
 	background-color:#eee;
 	margin: 0 0 5px 0;
+}
+
+.new_connection input.title
+{
+	padding:10px;
 }
 
 .new_connection textarea
@@ -270,7 +358,9 @@
 {
 	position:relative;
 	float:right;
-	padding:0;
+	padding:5px;
+	z-index:1234567890;
+	display:none;
 }
 
 .article
@@ -330,3 +420,12 @@ h3 span.source
 	width:80px;
 	clear:none;
 }
+
+.connection p span
+{
+	font-size:11px;
+}
+
+.kind_person {color:#669;}
+.kind_location {color:#966;}
+.kind_channel {color:#696;}

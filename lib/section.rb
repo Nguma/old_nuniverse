@@ -18,6 +18,7 @@ class Section
 	
 	def connections(params = {})
 		kind = params[:kind] || @kind
+		kind = "location|city|country|restaurant|continent|museum|bar" if kind == "location"
 		order = params[:order] || @order
 		if @perspective == "you"
 			path = @path
@@ -26,10 +27,14 @@ class Section
 			user = nil
 			path = public_path
 		end
-		Tagging.with_object_kinds(kind).with_user(user).with_path(path,@degree).include_object.groupped.with_order(order).paginate(
+		Tagging.with_kind_like(kind).with_user(user).with_path(path,@degree).include_object.groupped.with_order(order).paginate(
 				:page => @page, 
 				:per_page => 20
 		)
+	end
+	
+	def empty?
+		overview.empty?
 	end
 	
 	def overview(params = {})

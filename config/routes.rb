@@ -79,6 +79,19 @@ ActionController::Routing::Routes.draw do |map|
 	map.section "/section/:path",
 		:controller => 'nuniverse',
 		:action => "section"
+	
+	map.section_filter "/section_of/:path/show_only/:kind",
+		:controller => "nuniverse",
+		:action => "section"
+
+	map.overview "/overview",
+		:controller => "nuniverse",
+		:action => "section",
+		:degree => "all"
+					
+	map.current_section_filter "/current_section/show_only/:kind",
+		:controller => "nuniverse",
+		:action => "section"
 
 	map.section_by "/section/:path/by/:order",
 		:controller => 'nuniverse',
@@ -88,9 +101,13 @@ ActionController::Routing::Routes.draw do |map|
 		:controller => 'nuniverse',
 		:action => "section"
 
-	map.section_by"/section/:path/with_kind/:kind/by/:order",
+	map.section_by "/section/:path/with_kind/:kind/by/:order",
 		:controller => 'nuniverse',
 		:action => "section"
+		
+	map.suggest "/suggest",
+		:controller => 'tags',
+		:action => "suggest"
 		
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products

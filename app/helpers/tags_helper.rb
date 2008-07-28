@@ -9,15 +9,15 @@ module TagsHelper
 			
 			case tag.kind
 		    when "location"
-		      sentence << "you're at #{tag.content} "
+		      sentence << "you're at #{tag.label} "
 		    when "person"
-		       sentence << "you are meeting with #{tag.content} "
+		       sentence << "you are meeting with #{tag.label} "
 				when "quest"
-					sentence << "your quest is to #{tag.content} "
+					sentence << "your quest is to #{tag.label} "
 				when "item"
-					sentence << "you have a #{tag.content} "
-				when "topic"
-					sentence << "you talk about #{tag.content}"
+					sentence << "you have a #{tag.label} "
+				when "channel"
+					sentence << "you talk about #{tag.label}"
 		    else
 		       "Are you ready for this adventure?"
 			end

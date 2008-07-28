@@ -1,29 +1,13 @@
-.content
-{
-	position:relative;
-	float:left;
-	margin:0 0 0 0;
-	padding:0 0 0 0px;
-	width:100%;
-	height:100%;
-	background:none;
-}
-
-.current_section .content
-{
-	background:#FFF;
-}
-
 .body .section
 {
 	position:relative;
 	float:left;
 	width:300px;
-	height:520px;
+	height:550px;
 	margin:0 3px 0 0;
 	padding:0;
 	overflow:hidden;
-	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+/*	*/
 	border-bottom:solid 2px #666;
 }
 
@@ -33,26 +17,30 @@
 	width:800px;
 }
 
+.content
+{
+	position:relative;
+	margin:0 0 0 0;
+	padding:35px 0 0 0px;
+	width:100%;
+	height:100%;
+	background:none;
+	overflow:hidden;
+}
+
+.current_section .content
+{
+	background:#FFF;
+}
+
+
 .section .hat
 {
 	padding:10px;
+	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;
+	margin-bottom:2px;
 }
 
-
-.section .menu
-{
-	background:#69c;
-	padding:0;
-	position:relative;
-	clear:both;
-	color:#FFF;
-	height:35px;
-}
-
-.current_section .menu
-{
-	height:35px;
-}
 
 .hat .edit
 {
@@ -81,19 +69,34 @@
 	color:#333;
 }
 
-.hat a.avatar img
-{
-	height:50px;
-}
 
-.current_section .hat .avatar img
+.current_section .hat .avatar
 {
 	height:70px;
+	position:relative;
+	float:left;
 }
 
 .nuniverse .current_section h1
 {
 	font-size:18px;
+}
+
+.slider
+{
+	position:relative;
+	float:left;
+	height:100%;
+	width:20px;
+	border:solid 2px #eee;
+	z-index:123456;
+}
+
+.slider .knob
+{
+	background:#69c;
+	width:20px;
+	height:30px;
 }
 
 .nuniverse .current_section .hat p
@@ -143,17 +146,6 @@ h1 a
 	font-size:14px;
 	position:relative;
 	color:#999;	
-}
-
-.content .menu
-{
-	padding:10px;
-}
-
-.content .menu a
-{
-	display:block;
-	color:#69c;
 }
 
 .article a
@@ -222,4 +214,11 @@ h1 a
 .widget .element a
 {
 	color:#333;
+}
+
+a.back
+{
+	display:none;
+	position:absolute;
+	left:5px;
 }

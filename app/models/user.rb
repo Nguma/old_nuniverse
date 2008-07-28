@@ -82,10 +82,10 @@ class User < ActiveRecord::Base
   end
 
 	def ontologize
-		#ont = "#user #{self.login} #topic About Me #category My Topics #category My Contacts"
+		#ont = "#user #{self.login} #channel About Me #category My Channels #category My Contacts"
 		#	gumies = ont.scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/) # separates gumi type from its content
 		#gumies = ont.scan(/\s*#([\w_]+[\s]+[^#|\[|\]]+)*/) 
-		self.tag = Tag.new(:content => self.login, :kind => "user", :description => "")#find_or_create_by_gumi("##{gumies.shift}")
+		self.tag = Tag.new(:label => self.login, :kind => "user", :description => "")#find_or_create_by_gumi("##{gumies.shift}")
 		
 		#gumies.each do |gumi|
 		#	self.tag.connect_with(Tag.find_or_create_by_gumi("##{gumi}"))

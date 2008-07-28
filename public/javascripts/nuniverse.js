@@ -21,7 +21,7 @@ var Nuniverse = new Class({
       action.addEvent('click', function(ev)
       {
         ev.preventDefault();
-        obj.requestAndReplace(action.getProperty('href'), obj.currentSection());
+        obj.request(action.getProperty('href'), obj.currentSection());
         return false;
       },this);
     },this);
@@ -86,64 +86,51 @@ var Nuniverse = new Class({
     return this.currentSection().getPrevious('.section');
   },
   
-  setPerspectives:function(section)
+  setDropdowns:function(section)
   {
-    var obj = this;
-    var dropdown = section.getElement('.menu dl');
-    if(!$defined(dropdown)) return;
-    dropdown.getElements('dd').each(function(action)
+    var dropdowns = section.getElements('.menu dl');
+    dropdowns.each(function(dropdown)
     {
-       action.addEvents({
-        'click':function(ev)
-          {
-            if(!action.hasClass('selected'))
-            {
-              obj.setSelected('dd','dl',this.getElement('a'));
-              if(dropdown.hasClass('perspective'))
-              {
-                dropdown.getElement('dt').set('text', 'According to '+action.get('text').toLowerCase());
-              }
-              else
-              {
-                dropdown.getElement('dt').set('text', 'Sorted '+action.get('text').toLowerCase());
-              }
-              
-              var updated = section.getElement('.content');
-              updated.set('html', '<h6>Loading...</h6>');
-              dropdown.removeClass('expanded');
-              obj.requestAndUpdate(this.getElement('a').get('href'),updated);
-              
-            } 
-            else
-            {
-              dropdown.addClass('expanded')
-            }
-            return false;
-          },
-        'mouseenter':function(){action.addClass('hover')},
-        'mouseleave':function(){action.removeClass('hover')}   
-       });
-       
-       action.getElement('a').addEvent('click', function(){return false;})
-       
-      });
-       
+      dropdown.removeEvents();
+      dropdown.getElements('dd').each(function(option)
+      {
+        option.removeEvents();
+        option.addEvents({
+          'click':this.selectFromDropdown.bindWithEvent(this, [dropdown, option]),
+          'mouseenter':function() {option.addClass('hover');},
+          'mouseleave':function() {option.removeClass('hover');},
+          
+        },this);
+      },this);
       dropdown.addEvents({
-        'click':function(ev){
-          if(!this.hasClass('expanded'))
-          {
-            this.addClass('expanded');
-            // var label = dropdown.getElement('dt').get('text');
-            //            label.gsub(this.getElement('.selected a').get('text'),"").rstrip
-            //            dropdown.getElement('dt').set('text',label);
-          }
-        },
-        'mouseleave':function(ev){
-          this.removeClass('expanded');
-          var label = "According to "+ this.getElement('.selected a').get('text').toLowerCase()
-          dropdown.getElement('dt').set('text',label);
-        }
-      });
+        'mouseleave':this.collapseDropdown.bind(this, dropdown),
+        'click':this.expandDropdown.bind(this, dropdown)
+      },this);
+    },this);
+  },
+  
+  selectFromDropdown:function(ev,dropdown,option)
+  {
+    ev.preventDefault();
+    this.setSelected(option,dropdown);
+    this.collapseDropdown(dropdown);
+    this.request(option.getElement('a').getProperty('href'),dropdown.getParent('.section').getElement('.content'));
+    return false;
+  },
+  
+  expandDropdown:function(dropdown)
+  {
+    dropdown.addClass('expanded');
+    // dropdown.getElement('dt .label').set('text', ':');
+  },
+  
+  collapseDropdown:function(dropdown)
+  {
+    if(dropdown.hasClass('expanded'))
+    {
+      dropdown.removeClass('expanded');
+      dropdown.getElement('dt .label').set('text', dropdown.getElement('.selected').get('text').toLowerCase());      
+    }
   },
   
   setConnections:function(root)
@@ -151,6 +138,12 @@ var Nuniverse = new Class({
     root.getElements('.connection').each(function(connection)
     {
       connection.removeEvents();
+      connection.getElements('a.bookmark').each(function(action)
+      {
+        action.removeEvents();
+        action.addEvent('click', this.bookmark.bindWithEvent(this,[connection, action]));
+      },this);
+        
       connection.addEvents(
       {
           'mouseenter':function() {connection.addClass('hover');},
@@ -160,13 +153,12 @@ var Nuniverse = new Class({
           'click':this.selectConnection.bindWithEvent(this,connection)
       },this);
       
-      connection.getElements('a.bookmark').each(function(action)
-      {
-        action.addEvent('click', this.bookmark.bindWithEvent(this,[connection, action]));
-      },this);
+      
+     
       
       connection.getElements('a.remove').each(function(action)
-      {
+      { 
+        action.removeEvents();
         action.addEvent('click', this.removeBookmark.bindWithEvent(this,[connection, action]));
       },this);
       
@@ -214,7 +206,7 @@ var Nuniverse = new Class({
    
     this.isScrolling = false;
     var obj = this;
-    var section = connection.getParent('.section');
+    var section = connection.getParent('.content');
     var y = ev.page.y+section.getScroll().y;
     section.addEvent('mousemove',function(ev)
     {
@@ -235,7 +227,7 @@ var Nuniverse = new Class({
   
   stopScrollingContent:function(connection)
   {
-    var section = connection.getParent('.section');
+    var section = connection.getParent('.content');
     section.removeEvents();
     this.setScrollFlag.delay(100,true);
   },
@@ -243,37 +235,22 @@ var Nuniverse = new Class({
   selectConnection:function(ev, connection)
   {
     ev.preventDefault();
-    if(this.isScrolling) return false;
     var atag = connection.getElement('h3 a');
-    
-    var section = this.nextSection(connection.getParent('.section'));
-    
-    section.getChildren().destroy();
+    if(this.isScrolling) return false;
     if(this.getConnectionType(connection) == "inner") 
     {
-      this.requestAndReplace(atag.getProperty('href'), section);
-    }
-    else 
-    {
+      this.loadContent(this.nextSection(connection.getParent('.section')), connection.getElement('h3 a').getProperty('href'))
+    } 
+    else {
       window.open(atag.getProperty('href'), '_blank');
-      
     }
-    this.setSelected('dd','dl',atag);
-    // connection.getElements('.manage a').each(function(action)
-    //     {
-    //       action.addEvent('click',function(ev)
-    //       {
-    //         var form = connection.getElement('.data form')
-    //         var submission = new Request.HTML({
-    //           'url':form.getProperty('action'),
-    //           onSuccess:function(a,b,c,d)
-    //           {
-    //             
-    //           }
-    //         }).post(form);
-    //         return false;
-    //       });
-    //     });
+    this.setSelected(atag.getParent('dd'),connection.getParent('.connections'));
+  },
+  
+  loadContent:function(section, source)
+  {
+    section.getChildren().destroy();
+    this.request(source, section);
   },
   
   getConnectionType:function(connection)
@@ -290,46 +267,29 @@ var Nuniverse = new Class({
     return this.options['section'].getElement('.new_connection');
   },
   
-  update:function(updated,content)
-  {
-    updated.set('html', content);
-    this.setConnections(updated);
-    this.setConnectionForm();
-  },
+  // update:function(updated,content)
+  //  {
+  //    updated.set('html', content);
+  //    this.setConnections(updated);
+  //    this.setConnectionForm();
+  //  },
   
   perspectives:function()
   {
     return this.currentSection().getElement('.perspectives');
   },
   
-  getFilters:function()
+  setSelected:function(el,context)
   {
-    return $$('.filters dd a');
-  },
-  
-  setSelected:function(el,context,activator)
-  {
-    var previous = activator.getParent(context).getElement('.selected');
+    var previous = context.getElement('.selected');
     if($defined(previous))
     {
       previous.removeClass('selected');
     }
-    activator.getParent(el).addClass('selected');
+    el.addClass('selected');
   },
   
-  requestAndReplace:function(url,replaced, params )
-  {
-    var params = params || ""
-    this.ajaxRequest(url,replaced, "replace", params);
-  },
-  
-  requestAndUpdate:function(url, updated, params)
-  {
-    var params = params || null
-    this.ajaxRequest(url,updated, "update", params);
-  },
-  
-  ajaxRequest:function(url,target,type, params)
+  request:function(url,target)
   {
     var params = params || ""
     var obj = this;
@@ -341,30 +301,16 @@ var Nuniverse = new Class({
       'autoCancel':true,
       'evalScripts':true,
       'onSuccess':function(a,b,c,d)
-      {
-        if(type == "replace")
-        {
-          var new_section = a[0].replaces(target);
-        }
-        else
-        {
-          target.empty();
-          var new_section = target.adopt(a[0])
-        }
+      {   
+        target.empty();
         if(target.hasClass('section'))
         {
-           obj.selectSection(new_section);
-        }
+          obj.selectSection(target.adopt(a[0].getChildren()));
+        } 
         else
         {
-          obj.refresh(new_section);
-        }
-        
-        
-        if(new_section.getElement('.map'))
-        {
-          obj.setMap();
-        }
+          obj.refresh(target.adopt(a[0].getElement('.content').getChildren()));
+        } 
       }
     }  
     var call = new Request.HTML(args).get();
@@ -377,12 +323,29 @@ var Nuniverse = new Class({
     if($defined(form))
     {
       this.options['form'] = new NForm(form);
-      this.options['form'].addEvent('success',function(a,b,c,d)
-      {
-        var updated = section.getElement('.content .connections');
-        updated.grab(a[0],'top');
-        obj.setConnections(updated);
-      });
+      this.options['form'].addEvents(
+        {
+          'success':function(a,b,c,d)
+          {
+            var updated = section.getElement('.content .connections');
+            updated.grab(a[0],'top');
+            obj.setConnections(updated);
+          },
+          'suggest':function(suggestions)
+          {
+            suggestions.getChildren().each(function(suggestion)
+            {
+              suggestion.addEvent('click', function(ev)
+              {
+                ev.preventDefault();
+                ev.stopPropagation();
+                obj.options['form'].el.getElement('input#label').setProperty('value', suggestion.getElement('h4').get('text'));
+                obj.options['form'].el.getElement('input#kind').setProperty('value', suggestion.getElement('p').get('text'));
+                obj.options['form'].submit(ev);
+              });
+            });
+          }
+        });
     }
     
   },
@@ -392,7 +355,7 @@ var Nuniverse = new Class({
     return $('breadcrumbs');
   },
   
-  setHat:function()
+  setHat:function(section)
   {
    if($defined($('breadcrumbs')))
    {
@@ -418,15 +381,24 @@ var Nuniverse = new Class({
          obj.selectSection(section);
        });
      });
-   }
-    
-    var back_button = this.currentSection().getElement('.back')
-    if($defined(back_button))
-    {  
-       back_button.addEvent('click', this.selectSection.bind(this, back_button.getParent('.section')));
+   }   
+    this.setBackButton(section);
+  },
+  
+  setBackButton:function(section)
+  {
+    var back_button = section.getElement('.back');
+    if(!$defined(back_button)) return;
+    if(!$defined(this.listSection()))
+    {
+      back_button.setStyle('display','none');
     }
-   
-    
+    else
+    {
+      back_button.setStyle('display','block');
+      back_button.removeEvents();
+      back_button.addEvent('click', this.back.bind(this));
+    }
   },
   
   back:function()
@@ -475,10 +447,59 @@ var Nuniverse = new Class({
   {
     
     this.setHat(section);
-    this.setPerspectives(section);
-    this.setConnections(section);
-    this.setConnectionForm(section);
-    this.setWidgets();
+    this.setSection(section);
+    this.setDropdowns(section);
+    if(section.getElement('.map'))
+    {
+      this.setMap();
+    }
+    
+  },
+  
+  setSection:function(section)
+  {
+    switch(this.sectionService(section))
+    {
+      case "article":
+        this.enableScroll(section);
+        break;
+      case "connections":
+        this.setConnections(section);
+        this.setConnectionForm(section);
+        break;
+      case "overview":
+        
+        break;
+      default:
+        this.setWidgets(); 
+        this.enableScroll(section);
+        this.setConnections(section);
+        this.setConnectionForm(section);
+    }
+    
+  },
+  
+  enableScroll:function(section)
+  {
+    var slider = section.getElement('.slider');
+    if(!$defined(slider)) return;
+    section.removeEvents();
+    var sliding = new Slider(slider, slider.getElement('.knob'),
+    {
+      onChange:function(step)
+      {
+        console.log(step);
+      }
+    });
+  },
+  
+  sectionService:function(section)
+  {
+    if ($defined(section.getElement('.service')))
+    {
+      return section.getElement('.service').get('text')
+    }
+    return null
   },
   
   setMap:function()

@@ -1,2 +1,11 @@
-<%= map.div(:width => "100%", :height => 470, :class=>"map") %>
-<%= html %>
+<% if no_map -%>
+  <div class="article">
+    <h2>We'd like to show a map for <%= path.last_tag.label %></h2>
+    <h3>but we'd need some kind of address...</h3>
+    <h4><a href="#">+ Give <%= path.last_tag.label %> an address</a></h4>
+    <%= todo("Adding an address from the map page")%>
+  </div>
+<% else -%>
+  <%= map.div(:width => "100%", :height => 470, :class=>"map") %>
+  <%= html %>  
+<% end -%>

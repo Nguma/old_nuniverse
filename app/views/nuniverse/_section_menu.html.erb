@@ -1,0 +1,13 @@
+<div class="menu">
+  <a href="#" class="back">&lt; back</a>
+  <%= render :partial => "/nuniverse/perspectives" , :locals => {:section => section} %>
+  <% unless section.is_web_service? -%>
+    <%= render :partial => "/nuniverse/filters", :locals => {:section => section} %>
+    <%= render  :partial => "/taggings/new", 
+                :locals => {
+                  :kind => "",
+                  :path => section.path
+                }%>
+  <% end -%>
+  
+</div>

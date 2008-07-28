@@ -9,7 +9,7 @@
 <dd class="connection <%= cycle('even', 'odd') %>"> 
     <div class="avatar"><%= avatar_for(tag) %></div>
     <h3><%= tag.kind %>: 
-      <%= link_to(tag.content, "/section/#{connection.path}", :class =>"main inner") %>
+      <%= link_to(tag.label, "/section/#{connection.path}", :class =>"main inner") %>
     </h3>
       <p><%= connection.description %></p>
     </div>

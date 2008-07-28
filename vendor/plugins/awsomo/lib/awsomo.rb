@@ -42,7 +42,6 @@ module Awsomo
 		end
 		
 		def call(params)
-			
 			Net::HTTP.get_response(URI.parse(build(params)))
 		end
 		
