@@ -2,16 +2,16 @@
 <% items.each do |item| %>
   <dd class="connection <%= cycle('even','odd') %>">
     <%= render :partial => "/taggings/manage" , :locals => {
+      :connection => nil,
       :path => path,
-      :data => "#item #{item.title} #url #{item.id} #price #{item.amount} #image #{item.thumbnail} #service amazon"
+      :data => item.data
     }%>
-    <% unless item.thumbnail.nil? -%>
-     <%= image_tag(item.thumbnail.to_s,:class => 'avatar') %>
-    <% end -%>
+      <%= avatar_for(item)%>
      <h3>
-        <%= link_to_ws_object(item, :service => "amazon")%>
+        <%= link_to_object(item, :service => "amazon")%>
       </h3>
-      <p><%= h item.amount.to_s %></p>
+      
+      <p><%= h item.info %></p>
 
   </dd>
 <% end -%>

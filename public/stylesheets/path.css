@@ -49,3 +49,30 @@
 {
 	z-index:123456;
 }
+
+.ad,
+.hat
+{
+	padding:25px 5px 0 10px;
+}
+
+.ad a,
+.hat a
+{
+	color:#69F;
+	padding:3px 3px 3px 0;
+}
+
+.hat h1
+{
+	font-size:18px;
+	font-family:Arial,sans-serif;
+	font-weight:bold;
+}
+
+.ad p,
+.hat p
+{
+	font-size:15px;
+	color:#999;
+}

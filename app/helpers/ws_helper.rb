@@ -25,14 +25,20 @@ module WsHelper
 				return tweets_from_twitter(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
 			when "map"
 				return map_from_google(:path => params[:path])	
+			when "news"
+				return news_from_rss(:path => params[:path])
 			else
 				return "no service for #{params[:service]}"
 		end
 	end
 	
+	def news_from_rss(params)
+		return render(:partial => "/ws/rss", :locals => {:items => params[:path].last_tag.rss} )
+	end
+	
 	def items_from_ebay(query, options = {})
 		response = EbayShopping::Request.new(:find_items, :query_keywords => query, :max_entries => 10).response
-		return render(:partial => "/ws/ebay", :locals => {:items => response.items, :path => params[:path]})
+		return render(:partial => "/ws/ebay", :locals => {:items => convert(response.items, 'ebay'), :path => params[:path]})
 	end
 	
 	def items_from_amazon(params)
@@ -198,7 +204,7 @@ module WsHelper
 		 end
 		end
 		return markers.collect {|marker| 
-			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{}'}"
+			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{marker.weather}'}"
 		}
 	end
 	
@@ -206,12 +212,12 @@ module WsHelper
 		case params[:service]
 		when "ebay"
 			response = EbayShopping::Request.new(:get_single_item, :itemID => params[:id]).response
-			return render(:partial => "/ws/ebay_item", :locals => {:item => response.item, :response => response})
+			return render(:partial => "/ws/ebay_item", :locals => {:item => response.item, :response => response,  :path => params[:path]})
 		when "amazon"
 			response = Awsomo::Request.new(:operation => "ItemLookup", :item_id => params[:id]).response		
-			return render(:partial => "/ws/amazon_item", :locals => {:item => response.item})			
+			return render(:partial => "/ws/amazon_item", :locals => {:item => response.item,  :path => params[:path]})			
 		when "video"
-			return render(:partial => "/ws/video", :locals => {:url => params[:id], :flashvars => params[:flashvars] || ""})
+			return render(:partial => "/ws/video", :locals => {:url => params[:id], :flashvars => params[:flashvars] || "", :path => params[:path]})
 		else
 			return "#TODO: The service for #{params[:service]} hasn't been implemented yet"
 		end
@@ -220,4 +226,6 @@ module WsHelper
 	def sanatized_query_from_path(path)
 		return path.tags.collect {|t| t.kind == 'user' ? "" : "#{t.kind == 'channel' ? '' : t.kind} #{t.label}"}.join(' ')
 	end
+	
+
 end

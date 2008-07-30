@@ -9,9 +9,7 @@
     <% end -%>
   </h3>
   <p>
-  <% unless connection.object.price.blank? -%>
-    <%= h connection.object.price %>
-  <% end -%>
+
   <%= "<span class='kind_#{connection.kind}'>#{connection.kind.capitalize}</span> #{ h connection.info}" %></p>
 
 </dd>

@@ -1,7 +1,12 @@
-<div class="article amazon_item">
-  <%= render :partial => "/taggings/manage" %>
-  <h1><%= item.title %></h1>
-  <p><a href="#">buy for <%= item.amount %></a></p>
-  <%= image_tag(item.image) rescue "No image available" %>
-  <%= item.features %>
+<div class="content amazon_item">
+  
+  <%= render :partial => "/nuniverse/hat", :locals => {:tag => item, :show_avatar => false} %>
+    
+     
+  <div class="article">
+  <p><%=  %><a href="#">buy for <%= item.price %></a></p>
+  <%= image_tag(item.property('image')) rescue "No image available" %>
+ <%= image_tag("/images/icons/amazon.png", :class => 'service')%>
+  
+  </div>
 </div>

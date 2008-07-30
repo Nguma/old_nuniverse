@@ -54,7 +54,7 @@ module Awsomo
 			req = "#{AWS_REST_URL}?Service=#{AWS_SERVICE}&Version=#{AWS_VERSION}&Operation=#{params[:operation] || aws_default_operation}"
 			req << "&ContentType=text%2Fxml&SubscriptionId=#{aws_key_id}&XMLEscaping=Double"
 			req << "&SearchIndex=#{params[:category] || aws_default_category}&ItemPage=#{params[:page] || 1}&Keywords=#{params[:query].split(" ").join("_")}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,ItemIds" if params[:query]
-			req << "&ItemId=#{params[:item_id]}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank" if params[:item_id]
+			req << "&ItemId=#{params[:item_id]}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,EditorialReview" if params[:item_id]
 			
 			req
 		end
@@ -91,7 +91,7 @@ module Awsomo
 			# parse xml response into Ruby Objects
 			items = []
 			xml_items(REXML::Document.new(body)).each do |xml_item|
-				items << AwsomeItem.new(xml_item)
+				items << aws_to_nuniverse(xml_item)
 			end
 			items
 		end
@@ -102,6 +102,24 @@ module Awsomo
 		
 		def xml_items(xml)
 			xml.elements.to_a("//Item")
+		end
+		
+		def aws_to_nuniverse(xml_data)
+			item = Tag.new
+			item.label = xml_data.elements["ItemAttributes/Title"].text
+			
+			item.kind = "item"
+			item.url = xml_data.elements["DetailPageURL"].text rescue ""
+			item.service = "amazon"
+			item.description = xml_data.elements["//ItemAttributes/Binding"].text rescue ""
+			item.description << xml_data.elements["//EditorialReview/Content"].text rescue ""
+			
+			item.data = "#price #{xml_data.elements["ItemAttributes/ListPrice/FormattedPrice"].text}" rescue ""
+			item.data << "#thumbnail #{xml_data.elements["SmallImage/URL"].text}" rescue ""
+			item.data << "#image #{xml_data.elements["LargeImage/URL"].text}" rescue ""
+			item.data << "#amazon_id #{xml_data.elements["ASIN"].text}" rescue ""
+			item.data << "#attributes #{xml_data.elements["ItemAttributes"].text}" rescue ""
+			item
 		end
 	end
 

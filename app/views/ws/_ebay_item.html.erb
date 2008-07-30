@@ -1,8 +1,12 @@
-<div class="article ebay_item">
-  <%= render :partial => "/taggings/manage" %>
-  <h1><%= item.title %></h1>
-  <p><%= item.converted_current_price.currency_id rescue "$" %><%= item.converted_current_price.content %> | Ends <%= item.end_time %><a href="#TODO">Bid on this item</a>(<%= item.bid_count%> bids already)</p>
-  <% for image in response.full_response['Item']['PictureURL'] -%>
-    <%= image_tag(image) %>
-  <% end-%>
+
+<div class="content ebay_item">
+  <%= render :partial => "/nuniverse/hat", :locals => {:tag => item, :show_avatar => false} %>
+  <div class="article">
+    <p><%= item.price %> | Ends <%= item.property('end_time') %><a href="#TODO">Bid on this item</a>(<%= item.property('bid_count') %> bids already)</p><br/>
+    
+    <div class="commercial">
+      <h3><%= item.price %>
+      <h2><a href="#TODO">Bid Now!</a></h2>
+    </div>
+  </div>
 </div>

@@ -78,7 +78,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def data_image
-		data.scan(/#image[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+		data.scan(/#[image|thumbnail]+[\s]+([^#|\[|\]]+)*/).to_s rescue ""
 	end
 	
 	def thumbnail
@@ -94,7 +94,11 @@ class Tag < ActiveRecord::Base
 	
 	def info
 		return property('address') if has_address?
-		return description
+		return "#{property('price')} "
+	end
+	
+	def details
+		"#{description.capitalize} #{property('price')} #{property('address')} #{property('tel')}"
 	end
 	
 	def replace(property,value)
@@ -110,8 +114,13 @@ class Tag < ActiveRecord::Base
 	
 	def weather
 		return nil unless has_coordinates?
-		g = Geonamer::Request.new.weather(:lat => latitude, :lng => longitude)
+		g = Geonamer::Request.new.weather(:lat => address.lat, :lng => address.lng)
 		return "#{g.temperature}F / #{g.clouds} / #{g.conditions}" rescue "No information available"
+	end
+	
+	def rss
+		return if property('rss').blank?
+		Rssr.news(property('rss'))
 	end
 	
 	# def self.find_taggeds_with(params)

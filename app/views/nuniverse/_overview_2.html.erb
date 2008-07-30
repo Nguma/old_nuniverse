@@ -1,4 +1,5 @@
-<div class="section current_section" style="background:none">
+<div class="section current_section">
+  <%= render_hat(:label => "Overview", :description => "Your nuniverse in a glance") %>
   <%= render :partial => "/nuniverse/widget", :locals => {
     :title => "Channels",
     :taggings => section.connections(:user => current_user, :kind => "channel", :order => order)

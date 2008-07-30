@@ -1,10 +1,10 @@
 <% content_for :head do -%>
   <%= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
-  <%#= @map.to_html%>
 <% end -%>
 
 <div class="nuniverse" id="nuniverse">
   <%#= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => nuniverse.path }%>
+  <%= render :partial => "/nuniverse/section_menu", :locals => {:section => section} %>
   
   <div class="scroller"> 
     <div class="body">
@@ -12,14 +12,17 @@
       <% if section.empty? -%>
         <%= render :partial => "/nuniverse/welcome" %>
       <% else -%>
-        <%= render :partial => "/nuniverse/overview", :locals => {:section => section, :order => "latest"} %>
+        <%= render :partial => "/nuniverse/overview", :locals => {
+            :section => section, 
+            :order => "latest"
+          } %>
       <% end -%>   
-     
     </div>
   </div>
   
+
 </div>
 
 <div class="hidden">
- <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "spinner")%>
+ <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "spinner") %>
 </div>

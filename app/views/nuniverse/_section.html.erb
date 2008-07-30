@@ -1,8 +1,9 @@
 <div class="section <%= dom_classes.blank? ? "" : dom_classes %>">
-  <%= render :partial => "/nuniverse/section_menu", :locals => {:section => section} %>
   <%#= render :partial => "/nuniverse/slider" %>
   <div class="content">
+    
     <%= content %>
+    <%= render :partial => "/nuniverse/ads" %>
   </div>
   
 </div>

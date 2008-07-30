@@ -163,7 +163,7 @@ module EbayShopping
     # turns xml_items into EbayShopping::Items
     def items
       return [] if total_items == 0 # don't bother parsing if no items
-      @items ||= (xml_items.is_a?(Array) ? xml_items : [xml_items]).collect { |i| Item.new(i) } # because we don't ForceArray when parsing XML response if only one item is returned it will not be an array, so we make it into one.
+      @items ||= (xml_items.is_a?(Array) ? xml_items : [xml_items]).collect { |i| Item.new(i).to_nuniverse } # because we don't ForceArray when parsing XML response if only one item is returned it will not be an array, so we make it into one.
     end
     
     # Extracts the items from the response. Often overridden by response subclasses
@@ -293,6 +293,24 @@ module EbayShopping
     def end_time
       Time.xmlschema(@end_time).getlocal
     end
+
+		def to_nuniverse
+		
+			item = Tag.new
+			item.label = @title
+			item.kind = "item"
+			item.url = @view_url_for_natural_search rescue ""
+			item.service = "ebay"
+			item.description = @description rescue ""
+			item.data = "#price #{converted_current_price.to_s}" rescue ""
+			item.data << "#thumbnail #{gallery_url}" rescue ""
+			item.data << "#bid_count #{bid_count}" rescue ""
+			item.data << "#category_name #{@primary_category_name}" rescue ""
+			item.data << "#ebay_id #{item_id}" rescue ""
+			item.data << "#end_time #{end_time}" rescue ""
+			item
+		end
+		
   end
   
   # 

@@ -1,19 +1,21 @@
 <div class="section">  
-  <div class="hat">
-    <%= avatar_for(nuniverse.subject) %>
-    <h1><%= link_to(nuniverse.subject.label.capitalize,"#") %></h1>
-    <p><strong><%= nuniverse.subject.kind %>.</strong> <%= nuniverse.subject.description.capitalize %></p>
-    <%= link_to "edit", ".subjects/#{nuniverse.subject.id}/edit" , :class => "edit"%>
-  </div> 
   <div class="content">
+  <%= render :partial => "/nuniverse/hat", :locals => {
+    :avatar => avatar_for(current_user.tag),
+    :kind => "user",
+    :label => current_user.tag.label,
+    :description => "This is your nuniverse.",
+    :options => nil
+  } %>
   <% menu(:name => "main_menu") do -%>
     <%= menu_item(:label =>"Overview", :action => "/overview_for/#{nuniverse.path}") %>
-    <%= menu_item(:label =>"Channels",:action =>  "/section/#{nuniverse.path}/with_kind/channel/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name?perspective=you&degree=all") %>
+    <%= menu_item(:label =>"Preferences",:action =>  "/edit/#{current_user.tag}") %>
+    
     <%= menu_item(:label =>"Places",:action =>  "/section/#{nuniverse.path}/with_kind/location/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Bands",:action =>  "/section/#{nuniverse.path}/with_kind/band/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Movies",:action =>  "/section/#{nuniverse.path}/with_kind/movie/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Restaurants",:action =>  "/section/#{nuniverse.path}/with_kind/restaurant/by/name?perspective=you&degree=all") %>
+    <%= menu_item(:label =>"Sport",:action =>  "/section/#{nuniverse.path}/with_kind/sport/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Products", :action => "/section/#{nuniverse.path}/with_kind/item/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Videos", :action => "/section/#{nuniverse.path}/with_kind/video/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Events", :action => "/section/#{nuniverse.path}/with_kind/event/by/name?perspective=you&degree=all") %>

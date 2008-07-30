@@ -11,18 +11,40 @@
 	z-index:1234567890123;
 }
 
+.tabs
+{
+	position:relative;
+	clear:both;
+	padding:0 0 0 310px;
+	margin:0;
+	height:35px;
+	background:transparent url('/images/backgrounds/tab.png') left bottom repeat-x;
+}
+
+a.back
+{
+	display:none;
+	position:absolute;
+	left:5px;
+}
+
+
 dl.dropdown
 {
 	position:relative;
 	float:left;
 	width:auto;
-	display:none;
+/*	display:none;*/
 	color:#FFF;
 	padding:0 0 0 0;
 	font-weight:bold;
+	margin:0 2px 0 0;
 	font-size:14px;
 	z-index:12345678;
-	background:#69c;
+/*	background:#69c;*/
+	
+	height:35px;
+	color:#FFF;
 }
 
 dl.dropdown dd
@@ -31,6 +53,7 @@ dl.dropdown dd
 	clear:both;
 	display:none;
 	padding:10px 10px 8px 5px;
+	background:#ccc;
 }
 
 dl.dropdown dt
@@ -56,6 +79,7 @@ dl.dropdown dd img
 	display:block;
 }
 
+
 dl.expanded dd
 {
 	
@@ -64,12 +88,12 @@ dl.expanded dd
 
 dl.dropdown dd.hover
 {
-	background:#47A;
+	background:#999;
 }
 
 dl.dropdown dd.selected
 {
-	background:#369;
+	background:#666;
 }
 
 .back

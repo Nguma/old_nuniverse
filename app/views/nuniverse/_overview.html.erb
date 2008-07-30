@@ -1,4 +1,5 @@
 <% render_section(@section, :dom_classes => "current_section") do -%>
+  <%= render_hat(:label => "Overview", :description => "Your nuniverse in a glance") %>
  <div class="connections">
    <%= render(:partial => "/taggings/instance", :collection => section.overview, :locals => {:section => section} )%>
  </div>

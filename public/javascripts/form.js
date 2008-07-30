@@ -126,7 +126,7 @@ var NForm = new Class({
   
   setToggle:function()
   {
-    this.el.getParent('.section').getElements('.toggle').each(function(toggle)
+    this.el.getParent('.nuniverse').getElements('.toggle').each(function(toggle)
     {
       toggle.addEvent('click', this.toggle.bind(this));
     },this);

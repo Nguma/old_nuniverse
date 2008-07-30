@@ -4,7 +4,7 @@ class AvatarsController < ApplicationController
   end
   
   def create
-    @avatar = Avatar.new params[:avatar]
+    @avatar = Avatar.new params[:avatar] 
     @avatar.tag_id = params[:tag_id]
     
     if @avatar.save

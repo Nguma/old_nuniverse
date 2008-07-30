@@ -27,7 +27,7 @@ var Nuniverse = new Class({
     },this);
     
     window.document.addEvent('keypress',this.onKey.bindWithEvent(this));
-    
+    this.setConnectionForm();
    
   },
   
@@ -88,7 +88,7 @@ var Nuniverse = new Class({
   
   setDropdowns:function(section)
   {
-    var dropdowns = section.getElements('.menu dl');
+    var dropdowns = this.el.getElements('.dropdown');
     dropdowns.each(function(dropdown)
     {
       dropdown.removeEvents();
@@ -114,7 +114,7 @@ var Nuniverse = new Class({
     ev.preventDefault();
     this.setSelected(option,dropdown);
     this.collapseDropdown(dropdown);
-    this.request(option.getElement('a').getProperty('href'),dropdown.getParent('.section').getElement('.content'));
+    this.request(option.getElement('a').getProperty('href'),this.currentSection().getElement('.content'));
     return false;
   },
   
@@ -319,7 +319,8 @@ var Nuniverse = new Class({
   setConnectionForm:function(section)
   {
     var obj = this;
-    var form = section.getElement('.new_connection')
+    var form = this.el.getElement('.new_connection');
+    console.log(form);
     if($defined(form))
     {
       this.options['form'] = new NForm(form);
@@ -327,7 +328,7 @@ var Nuniverse = new Class({
         {
           'success':function(a,b,c,d)
           {
-            var updated = section.getElement('.content .connections');
+            var updated = this.currentSection().getElement('.content .connections');
             updated.grab(a[0],'top');
             obj.setConnections(updated);
           },
@@ -339,9 +340,9 @@ var Nuniverse = new Class({
               {
                 ev.preventDefault();
                 ev.stopPropagation();
-                obj.options['form'].el.getElement('input#label').setProperty('value', suggestion.getElement('h4').get('text'));
-                obj.options['form'].el.getElement('input#kind').setProperty('value', suggestion.getElement('p').get('text'));
-                obj.options['form'].submit(ev);
+                form.getElement('input#label').setProperty('value', suggestion.getElement('h4').get('text'));
+                form.getElement('input#kind').setProperty('value', suggestion.getElement('p').get('text'));
+                form.submit(ev);
               });
             });
           }
@@ -387,9 +388,9 @@ var Nuniverse = new Class({
   
   setBackButton:function(section)
   {
-    var back_button = section.getElement('.back');
+    var back_button = this.el.getElement('.back');
     if(!$defined(back_button)) return;
-    if(!$defined(this.listSection()))
+    if(this.listSection() == this.el.getElement('.section'))
     {
       back_button.setStyle('display','none');
     }
@@ -465,7 +466,7 @@ var Nuniverse = new Class({
         break;
       case "connections":
         this.setConnections(section);
-        this.setConnectionForm(section);
+        
         break;
       case "overview":
         
@@ -474,7 +475,7 @@ var Nuniverse = new Class({
         this.setWidgets(); 
         this.enableScroll(section);
         this.setConnections(section);
-        this.setConnectionForm(section);
+        
     }
     
   },
