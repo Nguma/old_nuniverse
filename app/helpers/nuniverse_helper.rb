@@ -19,6 +19,7 @@ module NuniverseHelper
 			params[:description] ||= params[:subject].description
 			params[:options] ||= link_to("edit", "/tags/edit/#{params[:subject].id}", :class => "edit")
 		end
+		
 		return render :partial => "/nuniverse/hat", :locals => params
 	end
 	

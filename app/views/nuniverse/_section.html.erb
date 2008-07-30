@@ -1,9 +1,10 @@
 <div class="section <%= dom_classes.blank? ? "" : dom_classes %>">
   <%#= render :partial => "/nuniverse/slider" %>
+  <%= render_hat(:subject => section.subject ) %>
   <div class="content">
     
     <%= content %>
-    <%= render :partial => "/nuniverse/ads" %>
+    <%#= render :partial => "/nuniverse/ads" %>
   </div>
   
 </div>

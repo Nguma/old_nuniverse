@@ -179,6 +179,7 @@ var Nuniverse = new Class({
           'url':action.getProperty('href'),
           'onSuccess':function()
           {
+            notice("Bookmarked!");
             connection.getElement('a.bookmark').destroy();
           }
     }).post(form);
@@ -320,7 +321,6 @@ var Nuniverse = new Class({
   {
     var obj = this;
     var form = this.el.getElement('.new_connection');
-    console.log(form);
     if($defined(form))
     {
       this.options['form'] = new NForm(form);
@@ -331,6 +331,7 @@ var Nuniverse = new Class({
             var updated = this.currentSection().getElement('.content .connections');
             updated.grab(a[0],'top');
             obj.setConnections(updated);
+            notice("New connection added.")
           },
           'suggest':function(suggestions)
           {
@@ -342,7 +343,7 @@ var Nuniverse = new Class({
                 ev.stopPropagation();
                 form.getElement('input#label').setProperty('value', suggestion.getElement('h4').get('text'));
                 form.getElement('input#kind').setProperty('value', suggestion.getElement('p').get('text'));
-                form.submit(ev);
+                obj.options['form'].submit(ev);
               });
             });
           }
@@ -459,25 +460,30 @@ var Nuniverse = new Class({
   
   setSection:function(section)
   {
-    switch(this.sectionService(section))
+    this.setWidgets(); 
+    this.enableScroll(section);
+    this.setConnections(section);
+    this.setSectionMenu();
+  },
+  
+  setSectionMenu:function()
+  {
+    var menu = this.currentSection().getElement('.menu');
+    menu.getChildren('a').each(function(menu_item)
     {
-      case "article":
-        this.enableScroll(section);
-        break;
-      case "connections":
-        this.setConnections(section);
-        
-        break;
-      case "overview":
-        
-        break;
-      default:
-        this.setWidgets(); 
-        this.enableScroll(section);
-        this.setConnections(section);
-        
-    }
-    
+      menu_item.removeEvents();
+      menu_item.addEvents({
+        'click':this.selectSectionMenuItem.bindWithEvent(this,menu_item)
+      },this);
+    },this);
+  },
+  
+  selectSectionMenuItem:function(ev,item)
+  {
+    ev.preventDefault();
+    ev.stopPropagation();
+    this.setSelected(item, item.getParent('.menu'));
+    this.request(item.getProperty('href'),item.getParent('.section').getElement('.content'));
   },
   
   enableScroll:function(section)

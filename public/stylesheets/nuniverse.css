@@ -41,6 +41,24 @@
 /*	margin-bottom:2px;*/
 }
 
+.hat .menu
+{
+	clear:both;
+	background:none;
+}
+
+.hat .menu a.selected
+{
+	color:#FFF;
+	background:#666;
+}
+
+.hat .menu a
+{
+	font-size:12px;
+	font-weight:bold;
+	padding:4px;
+}
 
 .hat .edit
 {
@@ -160,7 +178,7 @@
 	position:relative;
 	float:left;
 	margin:0 1px 1px 0;
-	width:190px;
+	width:170px;
 	height:200px;
 	cursor:pointer;
 	text-align:center;
@@ -171,12 +189,12 @@
 	border-bottom:solid #ccc 1px;
 	font-size:16px;
 	padding:3px;
-	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
+/*	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;*/
 }
 
 .widget .elements
 {
-	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+/*	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;*/
 	height:170px;
 	width:190px;
 	overflow:hidden;
@@ -197,7 +215,7 @@
 	margin:auto;
 	display:block;
 	text-align:center;
-	height:70px;
+	height:50px;
 }
 
 .widget .element h3

@@ -3,6 +3,7 @@ var nuniverse;
 function reset()
 {
   nuniverse = new Nuniverse();
+  notice();
 }
 
 function onunLoad()
@@ -10,4 +11,10 @@ function onunLoad()
   nuniverse.getElements('page').destroy();
   nuniverse.el.destroy();
   nuniverse.destroy();
+}
+
+function notice(msg)
+{
+  if($defined(msg)) {$('notice').set('text',msg)}
+  $('notice').fade.delay('3000',$('notice'),'out');
 }

@@ -78,7 +78,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def data_image
-		data.scan(/#[image|thumbnail]+[\s]+([^#|\[|\]]+)*/).to_s rescue ""
+		data.scan(/#[thumbnail]+[\s]+([^#|\[|\]]+)*/).to_s rescue ""
 	end
 	
 	def thumbnail

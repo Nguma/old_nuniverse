@@ -10,7 +10,7 @@ class TaggingsController < ApplicationController
 		if params[:id]
 			@tagging = Tagging.create Tagging.find(params[:id]).attributes.merge(
 				:user_id => current_user.id,
-				:path		 => params[:path]
+				:path		 => session[:path]
 			)
 		else
 			gum = {}
@@ -34,7 +34,7 @@ class TaggingsController < ApplicationController
 			@tagging = Tag.connect(
 				:label 	    => params[:label],
 				:kind			    => params[:kind],
-				:path			    => params[:path],
+				:path			    => session[:path],
 				:restricted   => params[:restricted],
 				:description  => params[:description] || "",
 				:url          => params[:url],
