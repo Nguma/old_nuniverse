@@ -69,11 +69,29 @@ module WsHelper
 	end
 	
 	def results_from_freebase(params)
-		response = Freebaser::Request.new(params)
+	  results = []
+	  match   = nil
+	  tag     = params[:path].last_tag
+	  
+	  unless tag.property("freebase_id").blank?
+	    match = Metaweb::Type::Object.find(tag.property("freebase_id"))
+    end
+    
+    if match.nil?
+	    results = Freebaser::Request.new(params).results
+		
+  		if results.length == 1
+  		  match = Metaweb::Type::Object.find results.first.id
+  		  tag.data += " #freebase_id #{match.id}"
+  		  tag.description = match.article if tag.description.blank?
+  		  tag.save
+  	  end
+	  end
 		
 		render(:partial => "/ws/freebase", :locals => {
-			:connections  => response.results,
-			:path         => params[:path]
+			:connections  => results,
+			:path         => params[:path],
+			:match        => match
 		})
 	end
 	
