@@ -20,4 +20,9 @@ config.action_view.cache_template_loading            = true
 # config.action_mailer.raise_delivery_errors = false
 
 # Ruby Inline Permissions Hackery
-ENV['INLINEDIR'] = "#{RAILS_ROOT}/tmp/.ruby_inline"
+# ENV['INLINEDIR'] = "#{RAILS_ROOT}/tmp/.ruby_inline"
+temp = Tempfile.new('ruby_inline', '/tmp')
+dir = temp.path
+temp.delete
+Dir.mkdir(dir, 0755)
+ENV['INLINEDIR'] = dir

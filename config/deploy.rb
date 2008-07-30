@@ -35,7 +35,7 @@ namespace :deploy do
     sudo "mkdir -p #{shared_path}/avatars"
     sudo "mkdir -p #{shared_path}/log"
     sudo "mkdir -p #{shared_path}/config"
-    sudo "mkdir -p #{shared_path}/.ruby_inline"
+    # sudo "mkdir -p #{shared_path}/.ruby_inline"
     # sudo "mkdir -p #{shared_path}/db/sphinx"
     
     sudo "chown -R #{user}:#{user} #{deploy_to}"
@@ -78,10 +78,10 @@ namespace :deploy do
       ln -nfs #{shared_path}/avatars #{release_path}/public/avatars
     CMD
     
-    sudo <<-CMD
-      rm -fr #{release_path}/tmp/.ruby_inline &&
-      ln -nfs #{shared_path}/.ruby_inline #{release_path}/tmp/.ruby_inline
-    CMD
+    # sudo <<-CMD
+    #   rm -fr #{release_path}/tmp/.ruby_inline &&
+    #   ln -nfs #{shared_path}/.ruby_inline #{release_path}/tmp/.ruby_inline
+    # CMD
     
     # sudo "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     
