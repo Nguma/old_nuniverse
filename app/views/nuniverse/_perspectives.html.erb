@@ -1,7 +1,7 @@
 <dl class="tab dropdown">
     <dt>According to <span class="label"><%= section.perspective %></span><%= image_tag("/images/icons/down.png", :alt => "Change perspective") %></dt>
     <% if logged_in? -%>
-      <% perspectives = ['you','everyone','google','map','local','videos','ebay','amazon','freebase','flickr','daylife','wikipedia', 'twitter'] -%>
+      <% perspectives = ['you','your entourage','everyone','google', 'ebay','amazon','freebase','flickr','daylife', 'twitter'] -%>
     <% else -%>
       <% perspectives = ['everyone','google','map','local','ebay','videos','amazon','freebase', 'flickr','daylife','wikipedia', 'twitter'] -%>
     <% end -%>

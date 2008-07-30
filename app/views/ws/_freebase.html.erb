@@ -1,22 +1,27 @@
-<% unless connections.empty? -%>
-  <div class="connections">
-  <% connections.each do |rst| -%>
-    <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
-    <%#= render :partial => "/taggings/manage" , :locals => {
-          :path => path,
-          :data => "#{rst.kind} #{rst.name} #freebase_id #{rst.id}" 
-        }%>
-      <%= image_tag("/images/icons/#{rst.kind}.png", :class => 'avatar') %>
-      <h3>
-        <%= link_to(rst.name, "http://www.freebase.com/#{rst.id}") %>
-        <span class="source">@ Freebase</span>
-      </h3>
-     
-    </dd>
-  <% end -%>
- </div>
-<% else -%>
+<% if connections.length == 1 -%>
+  <div class="article">
+    <%= textilize Metaweb::Type::Object.find(connections.first.id).article %>
+  </div>
+<% elsif connections.empty? -%>
   <div class="article">
     <h2>Nothing was found.</h2>
   </div>
+<% else -%>
+ <div class="connections">
+ <% connections.each do |rst| -%>
+   <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
+   <%#= render :partial => "/taggings/manage" , :locals => {
+         :path => path,
+         :data => "#{rst.kind} #{rst.name} #freebase_id #{rst.id}" 
+       }%>
+     <%= image_tag("/images/icons/#{rst.kind}.png", :class => 'avatar') %>
+     <h3>
+       <%= link_to(rst.name, "http://www.freebase.com/#{rst.id}") %>
+       <span class="source">@ Freebase</span>
+     </h3>
+    
+   </dd>
+ <% end -%>
+</div>
+
 <% end -%>

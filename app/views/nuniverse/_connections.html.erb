@@ -1,28 +1,31 @@
 <dl class="connections">
   
   <% if connections.empty? -%>
-  <div class="message" style="padding:2px">
-    <h2>You haven't added anything to this <%= path.last_tag.kind %> yet.</h2>
-    <a href="#" class="toggle">Add now</a>
+  <div class="article" >
+    <h2>You haven't added any <%= section.kind.pluralize rescue "thing" %> to this <%= section.subject.kind %> yet.</h2>
+    <h3><a href="#" class="toggle">Add one now</a></h3>
+    <br/>
+    <%= link_to("See what others have added") %>
+    <%= link_to("See what's on google")%>
   </div>
   <% else -%>
 
     <% if connections.previous_page -%>
       <dd class="pager top">
-        <%= link_to("less", "/nuniverse_of/#{path}/page/#{connections.previous_page}") %>
+        <%= link_to("less", "/nuniverse_of/#{section.path}/page/#{connections.previous_page}") %>
       </dd>
     <% end -%>
 
     <% connections.each do |connection| -%>
         <%= render :partial => "/nuniverse/connection", :locals => {
           :connection => connection,
-          :path => path
+          :path => section.path
         }%>
     <% end -%>
 
     <% if connections.next_page -%>
         <dd class="pager bottom">
-          <%= link_to("more", "/nuniverse_of/#{path}/page/#{connections.next_page}") %>
+          <%= link_to("more", "/nuniverse_of/#{section.path}/page/#{connections.next_page}") %>
         </dd>
     <% end -%>
   <% end -%>

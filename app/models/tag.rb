@@ -18,11 +18,11 @@ class Tag < ActiveRecord::Base
 		)
 		if @object.nil?
 			@object = Tag.create(
-				:label      => params[:label], 
+				:label        => params[:label], 
 				:kind         => params[:kind],
 				:description  => params[:description] || "",
 				:url          => params[:url],
-				:service       => params[:service],
+				:service      => params[:service],
 				:data         => params[:gum].collect { |k,v| "##{k} #{v}" }.join("")
 			)
 		else
