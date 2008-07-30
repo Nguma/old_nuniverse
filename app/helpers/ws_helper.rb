@@ -14,7 +14,11 @@ module WsHelper
 			when "google"
 				return results_from_google(:path => params[:path])
 			when "freebase"
-				return results_from_freebase(:query => params[:path].last_tag.label,:path => params[:path])
+				return results_from_freebase(
+				  :query  => params[:path].last_tag.label,
+				  :path   => params[:path],
+				  :type   => params[:path].last_tag.kind
+				)
 			when "local"
 				return results_from_google_local(:path => params[:path])
 			when "videos"
@@ -64,11 +68,11 @@ module WsHelper
 	end
 	
 	def results_from_freebase(params)
-		response = Freebaser::Request.new(:query => params[:query])
+		response = Freebaser::Request.new(params)
 		
 		render(:partial => "/ws/freebase", :locals => {
-			:connections => response.results,	
-			:path => params[:path]
+			:connections  => response.results,
+			:path         => params[:path]
 		})
 	end
 	
