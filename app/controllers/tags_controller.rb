@@ -71,7 +71,7 @@ class TagsController < ApplicationController
     respond_to do |format|
       if @tag.update_attributes(params[:tag])
         flash[:notice] = 'Tag was successfully updated.'
-        format.html { redirect_to => "/my_nuniverse") }
+        format.html { redirect_to "/my_nuniverse" }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
