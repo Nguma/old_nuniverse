@@ -35,16 +35,13 @@ namespace :deploy do
     sudo "mkdir -p #{shared_path}/avatars"
     sudo "mkdir -p #{shared_path}/log"
     sudo "mkdir -p #{shared_path}/config"
+    # sudo "mkdir -p #{shared_path}/.ruby_inline"
     # sudo "mkdir -p #{shared_path}/db/sphinx"
     
-    sphinx.install
-    image_science.install
+    sudo "chown -R #{user}:#{user} #{deploy_to}"
     
-    # bdb.install
-    # bdb.install_bindings
-    
-    # wordnet.install
-    # wordnet.install_bindings
+    # sphinx.install
+    image_science.install    
   end
   
   task :after_update do
@@ -80,6 +77,11 @@ namespace :deploy do
       rm -fr #{release_path}/public/avatars &&
       ln -nfs #{shared_path}/avatars #{release_path}/public/avatars
     CMD
+    
+    # sudo <<-CMD
+    #   rm -fr #{release_path}/tmp/.ruby_inline &&
+    #   ln -nfs #{shared_path}/.ruby_inline #{release_path}/tmp/.ruby_inline
+    # CMD
     
     # sudo "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     
