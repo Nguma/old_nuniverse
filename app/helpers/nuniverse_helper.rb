@@ -24,7 +24,7 @@ module NuniverseHelper
 	
 	def connections_for(section)
 		if section.is_web_service?
-			return content_from_web_service(:service => section.perspective, :path => section.path)
+			return content_from_web_service(:service => section.service, :path => section.path)
 		else
 			return render(:partial => "/nuniverse/connections", :locals => {
 					:section => section,

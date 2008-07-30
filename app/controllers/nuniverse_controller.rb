@@ -6,11 +6,8 @@ class NuniverseController < ApplicationController
 	def show
 		session[:path] = params[:path] || session[:path]
 		session[:perspective] = params[:perspective] || nil
+		session[:kind] = params[:kind] || nil
 		
-		@nuniverse = Nuniverse.new(
-			:path => session[:path], 
-			:user => current_user
-		)
 		@section = Section.new (
 			:path => session[:path], 
 			:kind => params[:kind] || nil,
@@ -25,13 +22,17 @@ class NuniverseController < ApplicationController
 		if params[:path]
 			# params[:no_wrap] = 1 if params[:path] == session[:path]
 			session[:path] = params[:path]
-			params[:perspective] ||= session[:perspective]
+			
 		else
 			params[:path] = session[:path]
 			# params[:no_wrap] = 1
-			params[:perspective] ||= session[:perspective]
+			
 		end
-		session[:perspective] = params[:perspective]
+		params[:perspective] ||= session[:perspective]
+		
+		params[:kind] ||= session[:kind]
+		session[:kind] = params[:kind]
+		session[:perspective] = params[:perspective] 
 		@section = Section.new(params)
 	end
 	
