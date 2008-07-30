@@ -6,7 +6,7 @@ class Avatar < ActiveRecord::Base
       :small => [ 50,  50],
       :large => [100, 100]
     },
-    :processor  => :image_science,
+    :processor  => :mini_magick,
     :storage    => :file_system
   
   validates_as_attachment
