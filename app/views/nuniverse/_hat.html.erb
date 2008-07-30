@@ -5,19 +5,16 @@
   <%= "<p>#{description}</p>" unless description.nil? %>
   <%= "<div class='options'>#{options}</div>" unless options.nil? %>
   <div class="menu">
-  <%= link_to "About", "/current_section/according_to/freebase" %>
-  <%= link_to "News", "/current_section/according_to/daylife" %>
-  <%= link_to "Images", "/current_section/according_to/flickr" %>
-  <%= link_to "Videos", "/current_section/according_to/videos" %>
+  <%= link_to "About", "/current_section/about" %>
+  <%= link_to "News", "/current_section/show_only/news" %>
+  <%= link_to "Images", "/current_section/show_only/images" %>
+  <%= link_to "Videos", "/current_section/show_only/video" %>
   <%= link_to "Bookmarks", "/current_section/show_only/bookmark" %>
   <%= link_to "People", "/current_section/show_only/person" %>
   <%= link_to "Places", "/current_section/show_only/location" %>
-  <%= link_to "Events", "/current_section/show_only/person" %>
+  <%= link_to "Events", "/current_section/show_only/event" %>
   <%= link_to "Comments, Pros & cons", "/current_section/show_only/comments" %>
   <%= link_to "Products & items", "/current_section/show_only/item" %>
-  <%= link_to "Amazon" , "/current_section/according_to/amazon"%>
-  <%= link_to "Ebay" , "/current_section/according_to/ebay"%>
-  <%= link_to "Twitter", "/current_section/according_to/twitter" %>
   <%= link_to "Map it", "/current_section/according_to/map"%>
   </div>
 </div>

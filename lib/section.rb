@@ -52,4 +52,8 @@ class Section
 		return false if ['you','everyone','private','public'].include?(@perspective)
 		return true
 	end
+	
+	def service
+		return "#{perspective rescue ""}_#{kind rescue ""}"
+	end
 end

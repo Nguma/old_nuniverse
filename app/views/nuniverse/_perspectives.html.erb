@@ -3,7 +3,7 @@
     <% if logged_in? -%>
       <% perspectives = ['you','your entourage','everyone','google', 'ebay','amazon','freebase','flickr','daylife', 'twitter'] -%>
     <% else -%>
-      <% perspectives = ['everyone','google','map','local','ebay','videos','amazon','freebase', 'flickr','daylife','wikipedia', 'twitter'] -%>
+      <% perspectives = ['everyone','google','map','local','ebay','amazon','videos','freebase', 'flickr','daylife','wikipedia', 'twitter'] -%>
     <% end -%>
     <% perspectives.each do |perspective| -%>
       <dd class="item <%= perspective == section.perspective ? 'selected' : '' %>">

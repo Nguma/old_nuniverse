@@ -1,35 +1,36 @@
 module WsHelper
 
 	def content_from_web_service(params)
+
 		query = params[:path].tags.collect{|c| c.kind == 'user' ? "" : c.label}.join(', ')
 		case params[:service]
-			when "ebay"	
+			when "ebay_","ebay_item"	
 				return items_from_ebay(params[:path].last_tag.label, :path => params[:path])
-			when "amazon"
+			when "amazon_"
 				return items_from_amazon(:query => params[:path].last_tag.label, :path => params[:path])
-			when "daylife"
+			when "daylife_"
 				return articles_from_daylife(:query => query.gsub(',',' '), :path => params[:path])
-			when "wikipedia"
+			when "wikipedia_"
 				return page_from_wikipedia(:query => params[:path].last_tag.label)
-			when "google"
+			when "google_","google_bookmark"
 				return results_from_google(:path => params[:path])
-			when "freebase"
+			when "freebase_"
 				return results_from_freebase(
 				  :query  => params[:path].last_tag.label,
 				  :path   => params[:path],
 				  :type   => params[:path].last_tag.kind
 				)
-			when "local"
+			when "google_location"
 				return results_from_google_local(:path => params[:path])
-			when "videos"
+			when "google_video"
 				return videos_from_google(:path => params[:path])
-			when "flickr"
+			when "flickr_","flickr_image"
 				return images_from_flickr(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
-			when "twitter"
+			when "twitter_"
 				return tweets_from_twitter(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
-			when "map"
+			when "map_","google_map"
 				return map_from_google(:path => params[:path])	
-			when "news"
+			when "news_"
 				return news_from_rss(:path => params[:path])
 			else
 				return "no service for #{params[:service]}"
