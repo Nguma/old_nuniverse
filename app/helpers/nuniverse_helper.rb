@@ -27,8 +27,8 @@ module NuniverseHelper
 			return content_from_web_service(:service => section.perspective, :path => section.path)
 		else
 			return render(:partial => "/nuniverse/connections", :locals => {
-					:connections => section.connections(:user => current_user),
-					:path => section.path
+					:section => section,
+					:connections => section.connections(:user => current_user)
 				})
 		end
 	end

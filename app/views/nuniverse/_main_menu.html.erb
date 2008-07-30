@@ -9,9 +9,10 @@
   } %>
   <% menu(:name => "main_menu") do -%>
     <%= menu_item(:label =>"Overview", :action => "/overview_for/#{nuniverse.path}") %>
-    <%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name?perspective=you&degree=all") %>
+    <%= menu_item(:label =>"Search",:action =>  "#") %>
+    <%= menu_item(:label =>"Your most active topics",:action =>  "/section/#{nuniverse.path}/with_kind/topic/by/latest?perspective=you") %>
     <%= menu_item(:label =>"Preferences",:action =>  "/edit/#{current_user.tag}") %>
-    
+<%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Places",:action =>  "/section/#{nuniverse.path}/with_kind/location/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Bands",:action =>  "/section/#{nuniverse.path}/with_kind/band/by/name?perspective=you&degree=all") %>
     <%= menu_item(:label =>"Movies",:action =>  "/section/#{nuniverse.path}/with_kind/movie/by/name?perspective=you&degree=all") %>

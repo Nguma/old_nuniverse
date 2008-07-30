@@ -1,4 +1,3 @@
 <% render_section(@section, :dom_classes => "current_section") do -%> 
-  <%= render_hat(:subject => @section.subject )%>
   <%= connections_for(@section) %>
 <% end -%>

@@ -1,5 +1,5 @@
 class Section
-	attr_reader :path, :perspective, :no_wrap
+	attr_reader :path, :perspective, :no_wrap, :kind
 	
 	def initialize(params = {})
 		@path = TaggingPath.new params[:path]

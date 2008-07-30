@@ -1,14 +1,14 @@
 .section .menu
 {
-	background:#69c;
-	padding:0;
-	display:block;
-	position:absolute;
-	clear:both;
-	width:100%;
-	color:#FFF;
-	height:35px;
-	z-index:1234567890123;
+	/*background:#69c;
+		padding:0;
+		display:block;
+		position:absolute;
+		clear:both;
+		width:100%;
+		color:#FFF;
+		height:35px;
+		z-index:1234567890123;*/
 }
 
 .tabs

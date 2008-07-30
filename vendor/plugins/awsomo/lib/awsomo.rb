@@ -113,8 +113,8 @@ module Awsomo
 			item.service = "amazon"
 			item.description = xml_data.elements["//ItemAttributes/Binding"].text rescue ""
 			item.description << xml_data.elements["//EditorialReview/Content"].text rescue ""
-			
-			item.data = "#price #{xml_data.elements["ItemAttributes/ListPrice/FormattedPrice"].text}" rescue ""
+			item.data = "#item #{item.label} #service amazon"
+			item.data << "#price #{xml_data.elements["ItemAttributes/ListPrice/FormattedPrice"].text}" rescue ""
 			item.data << "#thumbnail #{xml_data.elements["SmallImage/URL"].text}" rescue ""
 			item.data << "#image #{xml_data.elements["LargeImage/URL"].text}" rescue ""
 			item.data << "#amazon_id #{xml_data.elements["ASIN"].text}" rescue ""

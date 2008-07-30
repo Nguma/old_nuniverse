@@ -2,7 +2,7 @@
 {
 	position:relative;
 	clear:both;
-	padding:35px 0 0 0;
+	padding:10px 0 0 0;
 	text-align:left;
 	width:100%;
 }
@@ -249,7 +249,7 @@
 {
 	position:absolute;
 	padding:10px;
-	right:10px;
+	right:20px;
 	font-size:14px;
 	top:-35px;
 	color:#FFF;

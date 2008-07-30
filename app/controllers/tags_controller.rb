@@ -33,6 +33,7 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
     @tag = Tag.find(params[:id])
+		
   end
 
   # POST /tags
@@ -57,7 +58,7 @@ class TagsController < ApplicationController
 		
     respond_to do |format|
         flash[:notice] = 'Tags were successfully created.'
-        format.html { redirect_back_or_default("/nuniverse_of/#{@tagging.path}") }
+        format.html { redirect_back_or_default("/my_nuniverse") }
         format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
 				format.js { render :action => "instance"}
     end
@@ -70,7 +71,7 @@ class TagsController < ApplicationController
     respond_to do |format|
       if @tag.update_attributes(params[:tag])
         flash[:notice] = 'Tag was successfully updated.'
-        format.html { redirect_to(@tag) }
+        format.html { redirect_back_or_default("/my_nuniverse") }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
