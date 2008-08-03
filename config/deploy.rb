@@ -17,7 +17,7 @@ set :scm, :git
 set :user,            "deployer"
 set :password,        "wossname"
 set :scm_passphrase,  "wossname"
-set :use_sudo,        true
+set :use_sudo,        false
 set :branch,          "master"
 set :runner,          nil # "root"
 

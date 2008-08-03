@@ -1,11 +1,6 @@
-<% if connections.length == 1 -%>
+<% if match -%>
   <div class="article">
-    <% d = Metaweb::Type::Object.find(connections.first.id).article %>
-    <%= textilize d %>
-    <% if section.subject.description.blank? -%>
-      <% section.subject.description = d -%>
-      <% section.subject.save -%>
-    <% end -%>
+    <%= textilize match.article %>
   </div>
 <% elsif connections.empty? -%>
   <div class="article">

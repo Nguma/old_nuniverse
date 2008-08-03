@@ -77,7 +77,7 @@ module Nuniverse
 			gg = Graticule.service(:google).new(GOOG_GEO_KEY).locate(full_address.to_s) rescue nil
 			
 			if gg
-				tag.replace ("latlng","#{gg.latitude},#{gg.longitude}")
+				tag.replace("latlng","#{gg.latitude},#{gg.longitude}")
 				tag.replace("city",gg.locality) unless gg.locality.nil?
 				tag.replace("zip",gg.postal_code) unless gg.postal_code.nil?
 				tag.replace("country", gg.country) unless gg.country.nil?

@@ -1,13 +1,5 @@
 module WsHelper
-	
-	
-	def items_from_ebay(query, options = {})
-		response = EbayShopping::Request.new(:find_items, :query_keywords => query, :max_entries => 10).response
-		return render(:partial => "/ws/ebay", :locals => {:items => convert(response.items, 'ebay'), :path => params[:path]})
-	end
-	
-
-	
+		
 	def images_from_flickr(params)
 		flickr = Flickr.new 'c40c269aea764bb5f53c877c3d265327'
 		photos = flickr.photos(:tags => params[:query], :per_page => '10') rescue []

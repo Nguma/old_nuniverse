@@ -82,11 +82,25 @@ class Section
 		when "ebay"
 			return []
 		when "freebase"
-			return Freebaser::Request.new(
-			  :query  => subject.label,
-			  :path   => path,
-			  :type   => subject.kind
-			).results
+			match   = nil
+			results = []
+			unless subject.property("freebase_id").blank?
+				match = Metaweb::Type::Object.find(subject.property("freebase_id"))
+		  end
+			if match.nil?
+				results =  Freebaser::Request.new(
+				  :query  => subject.label,
+				  :path   => path,
+				  :type   => subject.kind
+				).results 
+				if results.length == 1
+	  		  match = Metaweb::Type::Object.find results.first.id
+	  		  tag.data += " #freebase_id #{match.id}"
+	  		  tag.description = match.article if tag.description.blank?
+	  		  tag.save
+	  	  end
+			end
+			results
 		when "daylife"
 			
 			return Daylife::Request.new(
@@ -94,6 +108,8 @@ class Section
 				:mode => params[:kind],
 				:@per_pages => 10
 			).results
+		when "ebay"
+			return EbayShopping::Request.new(:find_items, :query_keywords => subject, :max_entries => 10).response.items
 		else
 			return connections(params)
 		end
