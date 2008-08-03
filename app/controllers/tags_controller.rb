@@ -15,8 +15,8 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-		@tags = Tag.find(:all, :conditions => ['kind = ?', 'country'])
-		raise @tags.collect {|t| "#{t.property('code')}|#{t.label}" }.inspect
+		@tag = Tag.find(params[:id])
+	
   end
 
   # GET /tags/new

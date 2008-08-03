@@ -1,103 +1,12 @@
 module WsHelper
-
-	def content_from_web_service(params)
-
-		query = params[:path].tags.collect{|c| c.kind == 'user' ? "" : c.label}.join(', ')
-		case params[:service]
-			when "ebay_","ebay_item"	
-				return items_from_ebay(params[:path].last_tag.label, :path => params[:path])
-			when "amazon_"
-				return items_from_amazon(:query => params[:path].last_tag.label, :path => params[:path])
-			when "daylife_"
-				return articles_from_daylife(:query => query.gsub(',',' '), :path => params[:path])
-			when "wikipedia_"
-				return page_from_wikipedia(:query => params[:path].last_tag.label)
-			when "google_","google_bookmark"
-				return results_from_google(:path => params[:path])
-			when "freebase_"
-				return results_from_freebase(
-				  :query  => params[:path].last_tag.label,
-				  :path   => params[:path],
-				  :type   => params[:path].last_tag.kind
-				)
-			when "google_location"
-				return results_from_google_local(:path => params[:path])
-			when "google_video"
-				return videos_from_google(:path => params[:path])
-			when "flickr_","flickr_image"
-				return images_from_flickr(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
-			when "twitter_"
-				return tweets_from_twitter(:query => sanatized_query_from_path(params[:path]), :path => params[:path])
-			when "map_","google_map"
-				return map_from_google(:path => params[:path])	
-			when "news_"
-				return news_from_rss(:path => params[:path])
-			else
-				return "no service for #{params[:service]}"
-		end
-	end
 	
-	def news_from_rss(params)
-		return render(:partial => "/ws/rss", :locals => {:items => params[:path].last_tag.rss} )
-	end
 	
 	def items_from_ebay(query, options = {})
 		response = EbayShopping::Request.new(:find_items, :query_keywords => query, :max_entries => 10).response
 		return render(:partial => "/ws/ebay", :locals => {:items => convert(response.items, 'ebay'), :path => params[:path]})
 	end
 	
-	def items_from_amazon(params)
-		response = Awsomo::Request.new(:query => params[:query], :category => params[:category] || "All").response
-		return render(:partial => "/ws/amazon", :locals => {:items => response.items, :path => params[:path]})
-	end
-	
-	def articles_from_daylife(params)
-		day = Daylife::API.new('6e2eb9b4fce9bd1eff489d2c53b7ac65', '3aea4b3560e4b00e3027a7313a497f06')
-		response = day.execute('search','getRelatedArticles', :query => params[:query], :limit => 10)
-		return render(:partial => "/ws/daylife", :locals => {:connections => response.articles, :path => params[:path]})
-	end
-	
-	def results_from_google(params)
-		GoogleAjax.referer = "http://localhost:3000"
-		
-		response = GoogleAjax::Search.web("#{sanatized_query_from_path(params[:path])} -amazon.com -ebay.com -youtube.com", :rsz => "large") rescue nil
-		return "Oops something crazy happened on the way to google..." if response.nil?
-		render(:partial => "/ws/google", :locals => {
-			:connections => response.results,	
-			:path => params[:path]
-		})
-	end
-	
-	def results_from_freebase(params)
-		response = Freebaser::Request.new(params)
-		
-		render(:partial => "/ws/freebase", :locals => {
-			:connections  => response.results,
-			:path         => params[:path]
-		})
-	end
-	
-	def results_from_google_local(params)
-		GoogleAjax.referer = "http://localhost:3000"
-		response = GoogleAjax::Search.local(params[:path].last_tag.label,70,70, :rsz => "large")
-		render(:partial => "/ws/local", :locals => {
-			:locations => response.results,	
-			:path => params[:path]
-		})
-	end
-	
-	def videos_from_google(params)
-		GoogleAjax.referer = "http://localhost:3000"
-		page = params[:page] || 0
-		
-		response = GoogleAjax::Search.video(sanatized_query_from_path(params[:path]), :start => page * 8, :rsz => "large") rescue nil
-	 	return "No videos :(" if response.nil?
-		return render(:partial => "/ws/videos", :locals => {
-			:connections => response.results,	
-			:path => params[:path],
-			:page => page
-		})
-	end
+
 	
 	def images_from_flickr(params)
 		flickr = Flickr.new 'c40c269aea764bb5f53c877c3d265327'
@@ -114,9 +23,7 @@ module WsHelper
 		)
 	end
 	
-	def code_from_geonames(params)
-		
-	end
+
 	
 	def page_from_wikipedia(params)
 		items_to_remove = [
@@ -157,7 +64,7 @@ module WsHelper
 	def map_from_google(params)
 		@map = GMap.new("map_div")
 		
-		case params[:path].tags.last.kind
+		case params[:location]
 		when "continent"
 			zoom = 2
 		when "country"
@@ -168,10 +75,10 @@ module WsHelper
 			zoom = 15
 		end
 		
-		if params[:path].tags.last.kind == "channel"
-			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
+		if params[:location].kind == "channel"
+			markers = markers_for(Tagging.with_path_ending(params[:location]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
-			markers = markers_for([params[:path].tags.last])
+			markers = markers_for([params[:location]])
 		end
 		
 		if markers.empty?

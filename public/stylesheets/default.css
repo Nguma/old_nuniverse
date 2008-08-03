@@ -12,7 +12,7 @@
 
 h1
 {
-	font-family:Myriad Pro;
+	font-family:Times;
 }
 
 h2
@@ -22,7 +22,7 @@ h2
 
 h3
 {
-	
+	font-family:arial;
 }
 
 h4
@@ -40,11 +40,21 @@ h6
 	
 }
 
+p
+{
+	font-size:14px;
+}
+
 
 a,
 a:visited
 {
-	
+	font-family:arial;
+}
+
+p a
+{
+
 }
 
 a:hover

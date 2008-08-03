@@ -1,12 +1,6 @@
-<div class="section" >  
-  <div class="content hidden">
-  <%= render :partial => "/nuniverse/hat", :locals => {
-    :avatar => avatar_for(current_user.tag),
-    :kind => "user",
-    :label => current_user.tag.label,
-    :description => "This is your nuniverse.",
-    :options => nil
-  } %>
+<div class="section "  style="visibility:hidden;width:100px">  
+  <div class="content ">
+  
   <% menu(:name => "main_menu") do -%>
     <%= menu_item(:label =>"Overview", :action => "/overview_for/#{nuniverse.path}") %>
     <%= menu_item(:label =>"Search",:action =>  "#") %>

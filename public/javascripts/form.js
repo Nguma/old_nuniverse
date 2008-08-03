@@ -32,11 +32,12 @@ var NForm = new Class({
   {
     this.inputs().each(function(input)
     {
+      input.removeEvents();
       if(input.getProperty('type') != "submit") 
       {
         input.addEvent('focus',this.onInputFocus.bind(this,input));
         input.addEvent('blur', this.onInputBlur.bind(this,input));
-        input.addEvent('keyup', this.onInputChange.bind(this,input));
+        
         // this.labelize(input);
       };
       
@@ -50,6 +51,7 @@ var NForm = new Class({
   
   onInputBlur:function(input)
   {
+    input.removeEvent('keyup');
     // if(input.getProperty('value') == "" || input.getProperty('value') == input.getPrevious('label').get('text'))
     //    {
     //      //this.labelize(input);
@@ -58,7 +60,7 @@ var NForm = new Class({
   
   onInputFocus:function(input)
   {
-    
+    input.addEvent('keyup', this.onInputChange.bind(this,input));
     if(input.hasClass('blank'))
     {
       input.removeClass('blank');
@@ -82,6 +84,7 @@ var NForm = new Class({
   submit:function(ev)
   {
     ev.preventDefault();
+    ev.stopPropagation();
     var obj = this;
     
     var submission = new Request.HTML({

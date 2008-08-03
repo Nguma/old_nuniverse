@@ -14,7 +14,7 @@
 
         <%= text_field_tag :label, "", :class => "title"%>        
         <label>What <span>eg:Person, Location, band...</span></label>
-        <%= text_field_tag :kind, kind  %>
+        <%= text_field_tag :kind, kind  , :class => 'kind' %>
         <label>Why <span>Why is it/he/she connected to <%= path.last_tag.label %></span></label>
         <%= text_field_tag :relationship, "" %>
         <label>Where <span>Any address?</span></label>

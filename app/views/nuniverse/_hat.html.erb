@@ -1,20 +1,7 @@
-<div class="hat">
+<div class="hat hidden">
   <%= avatar unless avatar.nil? %>
-  <%= "<h6>#{kind}</h6>" unless kind.nil? %>
-  <%= "<h1>#{label}</h1>" unless label.nil? %>
+  <%= "<h6>#{kind.capitalize}</h6>" unless kind.nil? %>
+  <%= "<h1>#{label.titleize}</h1>" unless label.nil? %>
   <%= "<p>#{description}</p>" unless description.nil? %>
   <%= "<div class='options'>#{options}</div>" unless options.nil? %>
-  <div class="menu">
-  <%= link_to "About", "/current_section/about" %>
-  <%= link_to "News", "/current_section/show_only/news" %>
-  <%= link_to "Images", "/current_section/show_only/images" %>
-  <%= link_to "Videos", "/current_section/show_only/video" %>
-  <%= link_to "Bookmarks", "/current_section/show_only/bookmark" %>
-  <%= link_to "People", "/current_section/show_only/person" %>
-  <%= link_to "Places", "/current_section/show_only/location" %>
-  <%= link_to "Events", "/current_section/show_only/event" %>
-  <%= link_to "Comments, Pros & cons", "/current_section/show_only/comments" %>
-  <%= link_to "Products & items", "/current_section/show_only/item" %>
-  <%= link_to "Map it", "/current_section/according_to/map"%>
-  </div>
 </div>

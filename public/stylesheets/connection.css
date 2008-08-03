@@ -2,10 +2,12 @@
 {
 	position:relative;
 	clear:both;
-	padding:10px 0 0 0;
+	padding:1px 0 0 0;
 	text-align:left;
 	width:100%;
 }
+
+
 
 #main_menu 
 {
@@ -20,7 +22,7 @@
 {
 	position:relative;
 	clear:both;
-	margin:0 0 1px 0px;
+	margin:0 0 0px 0px;
 	padding:8px;
 	font-size:12px;
 	font-weight:bold;
@@ -51,25 +53,26 @@
 	width:auto;
 	cursor:pointer;
 	text-align:left;
-	padding:0;
+	padding:5px;
 	margin:0 0 1px 0;
-	min-height:40px;
+	height:auto;
+	min-height:auto;
 }
 
 .connections .even
 {
-	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
+/*	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;*/
 }
 
 .connections .odd
 {
-	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
+/*	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;*/
 }
 
 .current_section .even
 {
 	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;
-	border-top:solid #eee 1px;
+
 }
 
 .current_section .odd
@@ -81,13 +84,16 @@
 .connections .hover
 {
 	/*background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
-	background:#69c;
-	color:#FFF;
+/*	background:#69c;*/
+	background:#FFF;
+	color:#333;
+/*	color:#FFF;*/
 }
 
-.connections .hover p
+.connections .hover p,
+.connections .hover a
 {
-	color:#FFF;
+	color:#333;
 }
 
 .connection .manage,
@@ -96,8 +102,22 @@
 	display:none;
 }
 
+.connections .selected p
+{
+	display:block;
+}
 
+.connections .details
+{
+	display:none;
+	font-size:11px;
+	font-weight:normal;
+}
 
+.connections .selected .details
+{
+	display:block;
+}
 
 .current_section .connections p
 {
@@ -106,8 +126,7 @@
 
 .current_section .connection 
 {
-	padding:0;
-	min-height:60px;
+	padding:5px;
 }
 
 .current_section .manage
@@ -118,8 +137,25 @@
 .connections .selected
 {
 /*	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
-	background:#369;
+	/*background:#369;
+		height:140px;*/
+		background:#333;
+		color:#FFF;
+		height:auto;
 }
+
+.connections .selected h3
+{
+/*	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
+	font-weight:bold;
+}
+
+.current_section .connections .selected
+{
+	height:auto;
+}
+
+
 
 .nuniverse .hover,
 .nuniverse .selected
@@ -151,23 +187,20 @@
 	height:40px;
 }
 
-.current_section .connection h3
-{
-	padding-top:15px;
-}
-
 .connections .connection h3
 {
 	position:relative;
 	font-family:Arial;
 	padding-top:10px;
 	font-size:12px;
+	font-weight:normal;
 	color:inherit;
 }
 
 .current_section .connection h3
 {
-	font-size:14px;
+	font-size:15px;
+	padding:15px 0 0 0 ;
 }
 
 .nuniverse .connection p
@@ -175,7 +208,6 @@
 	position:relative;
 	font-size:12px;
 	font-weight:normal;
-	font-style:italic;
 	color:#666;
 }
 
@@ -217,7 +249,6 @@
 	width:auto;
 	text-align:left;
 	z-index:12345678234567;
-	display:block;
 }
 
 
@@ -239,23 +270,29 @@
 .new_connection fieldset
 {
 	background:#FFF;
-	border:solid #369 2px;
+	border:none;
 	display:none;	
 	margin:0;
+	height:100%;
 	padding:10px 10px 10px 10px;
 }
 
 .new_connection a.toggle
 {
 	position:absolute;
-	padding:10px;
+	padding:0;
 	right:20px;
 	font-size:14px;
-	top:-35px;
+	top:-20px;
 	color:#FFF;
 	margin:0;
+	
 }
 
+.current_section .new_connection
+{
+	display:block;
+}
 .expanded a.toggle
 {
 	background:#369;
@@ -354,7 +391,7 @@
 .manage
 {
 	position:relative;
-	float:right;
+	float:left;
 	padding:5px;
 	z-index:1234567890;
 	display:none;
@@ -362,7 +399,6 @@
 
 .article
 {
-	padding:10px;
 	font-size:12px;
 }
 
@@ -410,14 +446,25 @@ h3 span.source
 	z-index:123456;
 }
 
-.connections .photo
+.connections .photo,
+.connections .images
 {
 	position:relative;
 	float:left;
-	width:80px;
+	width:120px;
 	clear:none;
 }
 
+.connection .images .avatar
+{
+	width:100px;
+	display:block;
+}
+
+.connection .images h3
+{
+	display:none;
+}
 .connection p span
 {
 	font-size:11px;
@@ -426,3 +473,51 @@ h3 span.source
 .kind_person {color:#669;}
 .kind_location {color:#966;}
 .kind_channel {color:#696;}
+
+
+.article .connections
+{
+	width:100%;
+	
+	position:relative;
+	float:left;
+	clear:none;
+	margin:0 5px 5px 0;
+	overflow:hidden;
+}
+
+.article .connections .connection
+{
+
+}
+
+.article .connections dt
+{
+	position:relative;
+	width:auto;
+	display:block;
+	clear:both;
+	font-weight:normal;
+	font-weight:bold;
+	margin:5px 0 0 0;
+	padding:5px;
+	color:#666;
+	font-size:15px;
+	border-bottom:dotted 2px #999;
+/*	border-top:dotted 1px #999;*/
+}
+
+.article .connections h3
+{
+	padding:8px 0 0 0;
+}
+
+.article .connections h3 a
+{
+	font-size:12px;
+}
+
+.article .connection .avatar
+{
+	height:20px;
+}

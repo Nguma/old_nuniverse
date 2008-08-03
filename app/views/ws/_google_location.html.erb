@@ -1,0 +1,23 @@
+<div class="connections">
+  <% unless connections.empty? -%>
+    <% connections.each do |location| -%>
+      <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
+        
+        <%= render :partial => "/taggings/manage" , :locals => {
+              :path => path,
+              :data => "#location #{location.titleNoFormatting} #address #{location.streetAddress} #{location.city} #{location.region} #{location.country} #latlng #{location.lat},#{location.lng}" 
+            }%>
+            
+        <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'avatar') %>
+        <h3>
+          <%= link_to_ws_object(location, :service => "local")%>
+          <span class="source">@ Google</span>
+        </h3>
+        <p><%= h "#{location.streetAddress}, #{location.city}, #{location.region}, #{location.country}" %></p>
+
+       
+      </dd>
+    <% end -%>
+  <% end -%>
+
+</div>

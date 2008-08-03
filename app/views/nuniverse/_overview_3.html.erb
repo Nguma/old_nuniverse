@@ -1,0 +1,5 @@
+<% render_section(@section, :dom_classes => "current_section") do -%>
+ 
+   <%#= render(:partial => "/taggings/instance", :collection => section.overview, :locals => {:section => section} )%>
+ <%= connections_for(@section, :kind => 'topic', :degree => nil) %>
+<% end -%>

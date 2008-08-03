@@ -1,18 +1,18 @@
 <dl class="connections">
-<% items.each do |item| %>
+<% connections.each do |item| %>
   <dd class="connection <%= cycle('even','odd') %>">
     <%= render :partial => "/taggings/manage" , :locals => {
       :connection => nil,
-      :path => path,
-      :data => item.data
+      :path => section.path,
+      :tag => item
     }%>
-      <%= avatar_for(item)%>
+      <%= image_tag(item.thumbnail,:class => "avatar")%>
      <h3>
-        <%= link_to_object(item, :service => "amazon")%>
+        <%= link_to_object(item) %>
       </h3>
       
-      <p><%= h item.info %></p>
-
+      <p><%=  "#{item.precision} #{item.price}" %></p>
+      <div class="delimiter">&nbsp;</div>
   </dd>
 <% end -%>
 </dl>

@@ -53,26 +53,11 @@ module Awsomo
 		def build(params)
 			req = "#{AWS_REST_URL}?Service=#{AWS_SERVICE}&Version=#{AWS_VERSION}&Operation=#{params[:operation] || aws_default_operation}"
 			req << "&ContentType=text%2Fxml&SubscriptionId=#{aws_key_id}&XMLEscaping=Double"
-			req << "&SearchIndex=#{params[:category] || aws_default_category}&ItemPage=#{params[:page] || 1}&Keywords=#{params[:query].split(" ").join("_")}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,ItemIds" if params[:query]
+			req << "&SearchIndex=#{params[:category].capitalize || aws_default_category}&ItemPage=#{params[:page] || 1}&Keywords=#{params[:query].split(" ").join("_")}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,ItemIds" if params[:query]
 			req << "&ItemId=#{params[:item_id]}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,EditorialReview" if params[:item_id]
 			
 			req
 		end
-	end
-	
-	class AwsomeItem	
-		attr_reader :title, :amount, :url, :thumbnail, :id, :image, :features
-    def initialize(item)
-      @title = item.elements["ItemAttributes/Title"].text
-			@url = item.elements["DetailPageURL"].text if item.elements["DetailPageURL"]
-			@amount = item.elements["ItemAttributes/ListPrice/FormattedPrice"].text rescue nil
-		 #@brand = item.elements["ItemAttributes/Brand"].text if item.elements["ItemAttributes/Brand"]
-			@thumbnail = item.elements["SmallImage/URL"].text rescue nil
-			@image = item.elements["LargeImage/URL"].text rescue nil
-			@id  = item.elements["ASIN"].text
-			@features = item.elements["ItemAttributes/"].text
-    end
-		
 	end
 	
 	
@@ -90,8 +75,15 @@ module Awsomo
 		def items
 			# parse xml response into Ruby Objects
 			items = []
-			xml_items(REXML::Document.new(body)).each do |xml_item|
-				items << aws_to_nuniverse(xml_item)
+			xml_items(body).each do |item|
+				items << Tag.new(
+					:label => parse(item, "ItemAttributes/Title"),
+					:url => parse(item, "ASIN"),
+					:kind => map_kind(parse(item, "//ItemAttributes/Binding")),
+					:service => 'amazon',
+					:description => parse(item,"//EditorialReview/Content"),
+					:data => "#price #{parse(item,"ItemAttributes/ListPrice/FormattedPrice")} #thumbnail #{parse(item,"SmallImage/URL")} #image #{parse(item,"LargeImage/URL")} #sub_type #{parse(item, "//ItemAttributes/Binding")}"
+					)
 			end
 			items
 		end
@@ -100,27 +92,18 @@ module Awsomo
 			items.first
 		end
 		
-		def xml_items(xml)
-			xml.elements.to_a("//Item")
+		def xml_items(content)
+			REXML::Document.new(content).elements.to_a("//Item")
 		end
 		
-		def aws_to_nuniverse(xml_data)
-			item = Tag.new
-			item.label = xml_data.elements["ItemAttributes/Title"].text
-			
-			item.kind = "item"
-			item.url = xml_data.elements["DetailPageURL"].text rescue ""
-			item.service = "amazon"
-			item.description = xml_data.elements["//ItemAttributes/Binding"].text rescue ""
-			item.description << xml_data.elements["//EditorialReview/Content"].text rescue ""
-			item.data = "#item #{item.label} #service amazon"
-			item.data << "#price #{xml_data.elements["ItemAttributes/ListPrice/FormattedPrice"].text}" rescue ""
-			item.data << "#thumbnail #{xml_data.elements["SmallImage/URL"].text}" rescue ""
-			item.data << "#image #{xml_data.elements["LargeImage/URL"].text}" rescue ""
-			item.data << "#amazon_id #{xml_data.elements["ASIN"].text}" rescue ""
-			item.data << "#attributes #{xml_data.elements["ItemAttributes"].text}" rescue ""
-			item
+		def parse(item, q)
+			item.elements[q].text rescue ""
 		end
+		
+		def map_kind(binding)
+			return "item"
+		end
+		
 	end
 
 	

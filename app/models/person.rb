@@ -1,0 +1,2 @@
+class person < Tag
+end

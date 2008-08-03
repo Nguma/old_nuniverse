@@ -1,7 +1,3 @@
-class Item < Tag
-	
-	
-
-		
+class Item < Tag		
 		
 end

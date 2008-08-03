@@ -12,23 +12,23 @@ var Nuniverse = new Class({
     if(!$defined(this.el)) {return }
     
     this.slide = new Fx.Scroll(this.getScroller(), {
-      'offset':{'x':-310,'y':0}
+      'offset':{'x':-300,'y':0}
     });
     this.selectSection(this.el.getElement('.current_section'));
     var obj = this;
-    $('main_menu').getElements('a').each(function(action)
-    {
-      action.addEvent('click', function(ev)
-      {
-        ev.preventDefault();
-        obj.request(action.getProperty('href'), obj.currentSection());
-        return false;
-      },this);
-    },this);
+    // $('main_menu').getElements('a').each(function(action)
+    //     {
+    //       action.addEvent('click', function(ev)
+    //       {
+    //         ev.preventDefault();
+    //         obj.request(action.getProperty('href'), obj.currentSection(), 'section');
+    //         return false;
+    //       },this);
+    //     },this);
     
     window.document.addEvent('keypress',this.onKey.bindWithEvent(this));
     this.setConnectionForm();
-   
+    this.setDropdown();
   },
   
   onKey:function(ev)
@@ -86,51 +86,21 @@ var Nuniverse = new Class({
     return this.currentSection().getPrevious('.section');
   },
   
-  setDropdowns:function(section)
+  setDropdown:function(section)
   {
-    var dropdowns = this.el.getElements('.dropdown');
-    dropdowns.each(function(dropdown)
-    {
-      dropdown.removeEvents();
-      dropdown.getElements('dd').each(function(option)
+    var obj = this;
+    if(!$defined(this.el.getElement('.dropdown'))) return;
+    this.dropdown = new Dropdown(this.el.getElement('.dropdown'),{
+      onChange:function(service)
       {
-        option.removeEvents();
-        option.addEvents({
-          'click':this.selectFromDropdown.bindWithEvent(this, [dropdown, option]),
-          'mouseenter':function() {option.addClass('hover');},
-          'mouseleave':function() {option.removeClass('hover');},
-          
-        },this);
-      },this);
-      dropdown.addEvents({
-        'mouseleave':this.collapseDropdown.bind(this, dropdown),
-        'click':this.expandDropdown.bind(this, dropdown)
-      },this);
+        obj.changeService(service);
+      }
     },this);
   },
   
-  selectFromDropdown:function(ev,dropdown,option)
+  changeService:function(service_call)
   {
-    ev.preventDefault();
-    this.setSelected(option,dropdown);
-    this.collapseDropdown(dropdown);
-    this.request(option.getElement('a').getProperty('href'),this.currentSection().getElement('.content'));
-    return false;
-  },
-  
-  expandDropdown:function(dropdown)
-  {
-    dropdown.addClass('expanded');
-    // dropdown.getElement('dt .label').set('text', ':');
-  },
-  
-  collapseDropdown:function(dropdown)
-  {
-    if(dropdown.hasClass('expanded'))
-    {
-      dropdown.removeClass('expanded');
-      dropdown.getElement('dt .label').set('text', dropdown.getElement('.selected').get('text').toLowerCase());      
-    }
+    this.request(service_call+'&path='+this.currentPath(), this.currentSection());
   },
   
   setConnections:function(root)
@@ -240,18 +210,16 @@ var Nuniverse = new Class({
     if(this.isScrolling) return false;
     if(this.getConnectionType(connection) == "inner") 
     {
-      this.loadContent(this.nextSection(connection.getParent('.section')), connection.getElement('h3 a').getProperty('href'))
+      this.request(connection.getElement('h3 a').getProperty('href'),this.nextSection(connection.getParent('.section')))
+      // $try(function(){
+      //         // connection.getParent('.connections').getElement('.selected').getElement('menu').destroy() 
+      //       },this);
+      //       connection.adopt(this.el.getElement('.menu').clone());
     } 
     else {
       window.open(atag.getProperty('href'), '_blank');
     }
     this.setSelected(atag.getParent('dd'),connection.getParent('.connections'));
-  },
-  
-  loadContent:function(section, source)
-  {
-    section.getChildren().destroy();
-    this.request(source, section);
   },
   
   getConnectionType:function(connection)
@@ -267,19 +235,7 @@ var Nuniverse = new Class({
   {
     return this.options['section'].getElement('.new_connection');
   },
-  
-  // update:function(updated,content)
-  //  {
-  //    updated.set('html', content);
-  //    this.setConnections(updated);
-  //    this.setConnectionForm();
-  //  },
-  
-  perspectives:function()
-  {
-    return this.currentSection().getElement('.perspectives');
-  },
-  
+
   setSelected:function(el,context)
   {
     var previous = context.getElement('.selected');
@@ -301,17 +257,23 @@ var Nuniverse = new Class({
       'url':url,
       'autoCancel':true,
       'evalScripts':true,
+      
       'onSuccess':function(a,b,c,d)
-      {   
+      {  
         target.empty();
-        if(target.hasClass('section'))
-        {
-          obj.selectSection(target.adopt(a[0].getChildren()));
-        } 
-        else
-        {
-          obj.refresh(target.adopt(a[0].getElement('.content').getChildren()));
-        } 
+        obj.selectSection(target.adopt(a[0].getChildren())); 
+        
+        // target.empty();
+        //        if(!$defined(u) || u == ".section")
+        //        {
+        //          
+        //        } 
+        //        else
+        //        {
+        //          
+        //          obj.refresh(target.adopt(a[0].getElement(u).getChildren()));
+        //          
+        //        } 
       }
     }  
     var call = new Request.HTML(args).get();
@@ -328,7 +290,7 @@ var Nuniverse = new Class({
         {
           'success':function(a,b,c,d)
           {
-            var updated = this.currentSection().getElement('.content .connections');
+            var updated = this.currentSection().getElement('.connections');
             updated.grab(a[0],'top');
             obj.setConnections(updated);
             notice("New connection added.")
@@ -391,7 +353,7 @@ var Nuniverse = new Class({
   {
     var back_button = this.el.getElement('.back');
     if(!$defined(back_button)) return;
-    if(this.listSection() == this.el.getElement('.section'))
+    if(!$defined(this.listSection()))
     {
       back_button.setStyle('display','none');
     }
@@ -450,7 +412,6 @@ var Nuniverse = new Class({
     
     this.setHat(section);
     this.setSection(section);
-    this.setDropdowns(section);
     if(section.getElement('.map'))
     {
       this.setMap();
@@ -463,28 +424,9 @@ var Nuniverse = new Class({
     this.setWidgets(); 
     this.enableScroll(section);
     this.setConnections(section);
-    this.setSectionMenu();
+    //this.setConnectionForm(section);
   },
   
-  setSectionMenu:function()
-  {
-    var menu = this.currentSection().getElement('.menu');
-    menu.getChildren('a').each(function(menu_item)
-    {
-      menu_item.removeEvents();
-      menu_item.addEvents({
-        'click':this.selectSectionMenuItem.bindWithEvent(this,menu_item)
-      },this);
-    },this);
-  },
-  
-  selectSectionMenuItem:function(ev,item)
-  {
-    ev.preventDefault();
-    ev.stopPropagation();
-    this.setSelected(item, item.getParent('.menu'));
-    this.request(item.getProperty('href'),item.getParent('.section').getElement('.content'));
-  },
   
   enableScroll:function(section)
   {
@@ -495,7 +437,7 @@ var Nuniverse = new Class({
     {
       onChange:function(step)
       {
-        console.log(step);
+        
       }
     });
   },
@@ -523,9 +465,10 @@ var Nuniverse = new Class({
       if (GBrowserIsCompatible()) {
        this.map = new GMap2(map_div);
        this.map.setCenter(new GLatLng(params['center']['latitude'],params['center']['longitude']),params['zoom']);
-       this.map.addControl(new GLargeMapControl());
+       this.map.addControl(new GSmallMapControl());
        // this.map.addControl(new GMapTypeControl());
-       this.map.addControl(new google.maps.LocalSearch(), new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
+       //this.map.addControl(new google.maps.LocalSearch());
+       this.map.addControl( new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
        params['markers'].each(function(m)
        {
          var marker = new GMarker(new GLatLng(m['latitude'],m['longitude']), {title:m['title'], draggable:true});
@@ -564,5 +507,10 @@ var Nuniverse = new Class({
          sc.toElement(next);
        });
      });
+  },
+  
+  currentPath:function()
+  {
+    return this.currentSection().getElement('.path').get('text')
   }
 });

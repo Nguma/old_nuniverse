@@ -1,0 +1,9 @@
+<div class="tabs">
+  <% section.tabs(service).each_with_index do |tab,i| -%>
+    <% if i == 0 -%>
+      <%= link_to tab.label, tab.link, :class => "selected" %>
+    <% else -%>
+      <%= link_to tab.label, tab.link %>
+    <% end -%>
+  <% end -%>
+</div>

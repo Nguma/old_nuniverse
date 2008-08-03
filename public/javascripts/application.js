@@ -18,3 +18,13 @@ function notice(msg)
   if($defined(msg)) {$('notice').set('text',msg)}
   $('notice').fade.delay('3000',$('notice'),'out');
 }
+
+function debug(msg)
+{
+  console.log(msg);
+}
+
+function onAvatar(img)
+{
+  $('image').set('html',img)
+}

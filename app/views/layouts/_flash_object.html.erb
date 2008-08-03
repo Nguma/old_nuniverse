@@ -1,0 +1,10 @@
+<div class="content video" style="padding:0;margin:0">
+  <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="<%= width %>" height="<%= height %>">
+    <param name="movie" value="<%= url %>" />
+    <param name="quality" value="high"/>
+    <param name="allowScriptAccess" value="always"/>
+    <param name="allowFullScreen" value="true"/>
+    <param name="FlashVars" value="<%= flashvars || '' %>" />
+    <embed src="<%= url %>" FlashVars="<%= flashvars || ''%>" type="application/x-shockwave-flash" allowfullscreen="true" width="<%= width %>" height="<%= height %>" quality="high" allowScriptAccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>
+  </object>
+</div>

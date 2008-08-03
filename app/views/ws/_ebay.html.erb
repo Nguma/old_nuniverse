@@ -3,7 +3,7 @@
     <dd class="connection <%= cycle('even','odd') %>">
       <%= render :partial => "/taggings/manage" , :locals => {
         :connection => nil,
-        :path => path,
+        :path => section.path,
         :data => item.data
       }%>
         <%= avatar_for(item)%>

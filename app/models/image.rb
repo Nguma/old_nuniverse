@@ -1,0 +1,2 @@
+class Image < Tag
+end

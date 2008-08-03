@@ -1,4 +1,5 @@
 class AvatarsController < ApplicationController
+	protect_from_forgery :except => [:upload]
   def new
     @avatar = Avatar.new
   end
@@ -14,4 +15,21 @@ class AvatarsController < ApplicationController
       render :action => "new"
     end
   end
+
+	def upload
+		@tag = Tag.create(
+			:label => params[:Filename],
+			:kind => 'image',
+			:avatar => Avatar.new (:uploaded_data => params[:Filedata]),
+			:description => '')
+		if params[:path] && @tag
+			Tagging.create(
+				:subject_id => TaggingPath.new(params[:path]).last_tag.id,
+				:object_id => @tag.id,
+				:path => params[:path],
+				:user_id => current_user.id
+			)
+		end
+			render :layout => false
+	end
 end

@@ -1,0 +1,19 @@
+<div class="connections">
+  <% unless connections.empty? -%>
+    <% connections.each do |rst| -%>
+      <dd class="connection photo <%= cycle('even', 'odd') %>" style="height:auto">
+      
+        <%= image_tag(rst.tbUrl, :class => 'avatar') %>
+        <h3>
+          <%= link_to_ws_object(rst, :service => "google") %>
+          <span class="source">@ Google</span>
+          
+        </h3>
+        <p><%= rst.content %></p>
+
+        
+      </dd>
+    <% end -%>
+  <% end -%>
+
+</div>

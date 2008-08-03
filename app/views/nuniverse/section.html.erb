@@ -1,3 +1,12 @@
 <% render_section(@section, :dom_classes => "current_section") do -%> 
-  <%= connections_for(@section) %>
+  <% if @section.kind == "overview" -%>
+    <%= render :partial => "/nuniverse/overview", :locals => {:section => @section }%>
+  <% elsif @section.subject.kind == "image" -%>
+    <div class="image">
+      <%= image_tag(@section.subject.image) %> 
+    </div>
+  <% else -%>
+    <%= connections_for(@section) %>
+  <% end -%>
+  
 <% end -%>

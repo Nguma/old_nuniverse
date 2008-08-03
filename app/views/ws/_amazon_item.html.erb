@@ -1,12 +1,15 @@
 <div class="content amazon_item">
   
-  <%= render :partial => "/nuniverse/hat", :locals => {:tag => item, :show_avatar => false} %>
+  <%#= render :partial => "/nuniverse/hat", :locals => {:tag => item, :show_avatar => false} %>
     
      
   <div class="article">
-  <p><%=  %><a href="#">buy for <%= item.price %></a></p>
-  <%= image_tag(item.property('image')) rescue "No image available" %>
- <%= image_tag("/images/icons/amazon.png", :class => 'service')%>
+    <div class="" style="font-family:Times; font-size:13px; width:800px">
+      <%= item.description %>
+    </div>
+    <p><%=  %><a href="#">buy for <%= item.price %></a></p>
+    <%= image_tag(item.image) rescue "No image available" %>
+    <%= image_tag("/images/icons/amazon.png", :class => 'service')%>
   
   </div>
 </div>

@@ -4,20 +4,27 @@ require 'md5'
 require 'cgi'
 
 module Daylife
-  class API
+  class Request
     DEFAULT_PROTOCOL = 'xmlrest'
     DEFAULT_VERSION = '4.2'
     DEFAULT_SERVER = 'freeapi.daylife.com'
+		ACCESS_KEY = '6e2eb9b4fce9bd1eff489d2c53b7ac65'
+		SHARED_SECRET = '3aea4b3560e4b00e3027a7313a497f06'
+		DEFAULT_MODE = "getReleatedArticles"
     
     CORE_IDENTIFIER_MAP = {'search' => :query, 'topic' => :name, 'article' => :article_id, 'quote' => :quote_id, 'image' => :image_id}
     
-    def initialize(access_key, shared_secret, options = {})
-      @protocol = options[:protocol] || DEFAULT_PROTOCOL
-      @version = options[:version] || DEFAULT_VERSION
-      @server = options[:server] || DEFAULT_SERVER
+    def initialize(params)
+      @protocol = params[:protocol] || DEFAULT_PROTOCOL
+      @version = params[:version] || DEFAULT_VERSION
+      @server = params[:server] || DEFAULT_SERVER
       
-      @access_key = access_key
-      @shared_secret = shared_secret
+      @access_key = ACCESS_KEY
+      @shared_secret = SHARED_SECRET
+
+			@query = params[:query]
+			@mode = params[:mode] || DEFAULT_MODE
+			@per_page = params[:per_page] || 10
     end
     
     def execute(service_name, method_name, parameters = {})
@@ -41,6 +48,32 @@ module Daylife
       
       Daylife::Response.new(http_response.body)
     end
+
+		def response
+			execute('search',map_method[@mode] || "getRelatedArticles", :query => @query, :limit => @per_page)
+		end
+
+		def results
+			case @mode
+			when 'images'
+				response.images
+			when 'topics'
+				response.topics
+			when 'quotes'
+				response.quotes
+			else
+				response.articles
+			end
+		end
+		
+		def map_method
+			{
+				'images' => 'getRelatedImages',
+				'topics' => 'getMatchingTopics',
+				'news' => 'getRelatedArticles',
+				'quotes' => 'getRelatedQuotes'
+			}
+		end
   end
 
   class Response

@@ -47,6 +47,9 @@ ActionController::Routing::Routes.draw do |map|
 	map.according_to "/current_section/according_to/:perspective",
 		:controller => 'nuniverse',
 		:action => 'section'
+	map.according_to "/section_of/:path/according_to/:perspective",
+		:controller => 'nuniverse',
+		:action => 'section'
 		
 	map.current_nuniverse_according_to "/current_nuniverse/according_to/:perspective",
 		:controller => 'nuniverse',
@@ -102,6 +105,14 @@ ActionController::Routing::Routes.draw do |map|
 		:action => "section"
 
 	map.section_by "/section/:path/with_kind/:kind/by/:order",
+		:controller => 'nuniverse',
+		:action => "section"
+
+	map.section_by "/section/:path/according_to/:perspective/show_only/:kind",
+		:controller => 'nuniverse',
+		:action => "section"
+					
+	map.section_by "/section/:path/according_to/:perspective/show_only/:kind/by/:order",
 		:controller => 'nuniverse',
 		:action => "section"
 		

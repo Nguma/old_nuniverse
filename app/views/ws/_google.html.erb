@@ -1,22 +1,27 @@
-<div class="connections">
+<dl class="connections">
   <% unless connections.empty? -%>
     <% connections.each do |rst| -%>
-      <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
+      <dd class="connection <%= section.kind %> <%= cycle('even', 'odd') %>" style="height:auto">
       <%= render :partial => "/taggings/manage" , :locals => {
-            :path => path,
-            :data => "#bookmark #{rst.titleNoFormatting} #url #{rst.url} #description #{rst.content} #service google" 
+            :connection => nil,
+            :path => section.path,
+            :tag => rst
           }%>
-        <%= image_tag("/images/icons/google.png", :class => 'avatar') %>
-        <h3>
-          <%= link_to_ws_object(rst, :service => "google") %>
-          <span class="source">@ Google</span>
-          
-        </h3>
-        <p><%= rst.content %></p>
-
+          <%  if rst.kind == "image" || rst.kind =="video" %>
+            <%= avatar_for(rst) %>
+ 
+          <% else -%>
+            <%= image_tag("/images/icons/google.png", :class => 'avatar') %>
+          <% end -%>
+            <h3>
+               <%= link_to_object(rst) %>
+               <span class="source">@ Google</span>
+             </h3>
         
+        <p><%= rst.description %></p>
+        <div class="delimiter">&nbsp;</div>
       </dd>
     <% end -%>
   <% end -%>
 
-</div>
+</dl>

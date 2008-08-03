@@ -1,15 +1,12 @@
-<dd class="connection <%= cycle('even', 'odd') %>">
+<dd class="connection <%= cycle('even', 'odd') %> <%= connection.object.kind %>_kind">
   <%= render :partial => "/taggings/manage", :locals => {:connection => connection, :path => path, :data => ""} %>
   <%= avatar_for(connection.object) %>
-
   <h3>
     <%= link_to_object(connection.object, :path => "#{path}#{connection.object.id}")%>
     <% if connection.object.service -%>
-      <span class="source">@ <%= connection.object.service %></span>
+      
     <% end -%>
   </h3>
-  <p>
-
-  <%= "<span class='kind_#{connection.kind}'>#{connection.kind.capitalize}</span> #{ h connection.info}" %></p>
-
+  <p><%= "<span class='kind_#{connection.kind}'>#{connection.object.precision.capitalize}</span> <span class='source'> #{connection.object.service}</span>" %> <%= connection.info %></p>
+  <div class="delimiter">&nbsp;</div>
 </dd>

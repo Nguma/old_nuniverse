@@ -1,6 +1,11 @@
 <% if connections.length == 1 -%>
   <div class="article">
-    <%= textilize Metaweb::Type::Object.find(connections.first.id).article %>
+    <% d = Metaweb::Type::Object.find(connections.first.id).article %>
+    <%= textilize d %>
+    <% if section.subject.description.blank? -%>
+      <% section.subject.description = d -%>
+      <% section.subject.save -%>
+    <% end -%>
   </div>
 <% elsif connections.empty? -%>
   <div class="article">
@@ -19,7 +24,7 @@
        <%= link_to(rst.name, "http://www.freebase.com/#{rst.id}") %>
        <span class="source">@ Freebase</span>
      </h3>
-    
+    <div class="delimiter">&nbsp;</div>
    </dd>
  <% end -%>
 </div>

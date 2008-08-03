@@ -1,13 +1,44 @@
 class Avatar < ActiveRecord::Base
   belongs_to :tag
   
-  has_attachment :content_type => :image,
-    :thumbnails => {
-      :small => [ 50,  50],
-      :large => [100, 100]
-    },
-    :processor  => :image_science,
-    :storage    => :file_system
+  has_attachment	:content_type => :image,
+    							:thumbnails => {
+      							:small => '50x50>',
+      							:large => '100x100>'
+    							},
+    							:processor  => :image_science,
+    							:storage    => :file_system
   
   validates_as_attachment
+
+	#override from has_attachment plugin
+  def uploaded_data=(file_data)
+    return nil if file_data.nil? || file_data.size == 0
+    self.filename = file_data.original_filename if respond_to?(:filename)
+    if file_data.is_a?(StringIO)
+      file_data.rewind
+      self.temp_data = file_data.read
+    else
+      self.temp_path    = file_data.path
+    end
+    # in the original the next line occured earlier, and just used file_data.content_type
+    self.content_type = get_content_type((file_data.content_type.chomp if file_data.content_type))
+  end
+
+  #uses the os's "file" utility to determine the file type, yanked and modified slightly from file_column.
+  def get_content_type(fallback=nil)
+      begin
+        content_type = `file -bi "#{File.join(temp_path)}"`.chomp
+        content_type = fallback unless $?.success?
+        content_type.gsub!(/;.+$/,"") if content_type
+        content_type
+      rescue
+        fallback
+      end
+  end
+  
+  def full_filename(thumbnail = nil)
+      file_system_path = (thumbnail ? thumbnail_class : self).attachment_options[:path_prefix].to_s
+      File.join(RAILS_ROOT, file_system_path, thumbnail_name_for(thumbnail))
+  end
 end

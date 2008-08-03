@@ -11,12 +11,12 @@
 
 	position:fixed;
 	background:none;
-	left:40px;
+	right:10px;
 	top:0px;
 	padding:0;
 	font-size:12px;
 	font-weight:bold;
-	color:#333;
+	color:#FFF;
 	z-index:1234567;
 }
 
@@ -30,7 +30,10 @@
 
 #control_panel .selected 
 {
-	background:#FFF;
+	background:#333;
+	color:#FFF;
+	border:solid 1px #ccc;
+	border-bottom:none;
 }
 
 .detail form

@@ -1,5 +1,40 @@
-<% render_section(@section, :dom_classes => "current_section") do -%>
- <div class="connections">
-   <%= render(:partial => "/taggings/instance", :collection => section.overview, :locals => {:section => section} )%>
- </div>
-<% end -%>
+<div class="article">
+  <%#= render_hat(:subject => section.subject, :section => section ) %>
+  <% if section.subject.has_address? %>
+  <div class="mini_map" style="float:right; width:200px;height:200px;border:solid 1px #999">
+    <%= map_from_google(
+    :location => section.subject,
+    :path => section.path
+    )%>
+  </div>
+  <% end -%>
+  <% unless section.subject == current_user.tag %>
+    <h1><%= section.subject.label %></h1>
+    <p><strong><%= section.subject.kind.capitalize %></strong><br/>
+    <% if section.subject.description.blank? -%>
+      <%= link_to("Add your own description","") %> or <%= link_to ("Try to find a description on Freebase", "") %>
+    <% end -%>
+    <%= h section.subject.details %></p>
+    <br/>
+  <% end -%>
+  
+  <dl class="connections">
+    <dt>Your most recent additions</dt>
+    <% section.overview.each do |connection| -%>
+        <%= render :partial => "/nuniverse/connection", :locals => {
+          :connection => connection,
+          :path => section.path
+        }%>
+    <% end -%>
+ 
+     <dt>Related Topics</dt>
+     <% section.connections(:kind => 'topic').each do |connection| -%>
+         <%= render :partial => "/nuniverse/connection", :locals => {
+           :connection => connection,
+           :path => section.path
+         }%>
+     <% end -%>
+
+     
+    </dl>
+</div>

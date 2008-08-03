@@ -13,7 +13,10 @@
     <% if connection -%>
       <%= hidden_field_tag :id, connection.id  %>
     <% else -%>
-      <%= hidden_field_tag :data, data  %>
+      <%= hidden_field_tag :service, tag.service %>
+      <%= hidden_field_tag :url, tag.url %>
+      <%= hidden_field_tag :description, tag.description %>
+      <%= hidden_field_tag :data, "##{tag.kind} #{tag.label} #{tag.data}"  %>
     <% end -%>
     
   <% end -%>

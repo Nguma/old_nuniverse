@@ -40,7 +40,9 @@ module Freebaser
 		'/cvg/computer_videogame' => 'videogame',
 		'/dining/restaurant'      => 'restaurant',
 		'/business/company'       => 'company',
-		'architecture/museum'     => 'museum'
+		'/architecture/museum'     => 'museum',
+		'/film/film_character'   => 'character',
+		'/fictional_universe/fictional_character'  => 'character'
 	}
 	
 	ReverseMappings = Mappings.keys.inject({}) { |hash,key|

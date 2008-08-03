@@ -37,7 +37,7 @@ class Tag < ActiveRecord::Base
 		
 		
 		unless params[:user_id].nil?
-			@subject = Tag.find(params[:path].split('_').last)
+			@subject = Tag.find(TaggingPath.new(params[:path]).last_tag.id)
 
 			@tagging = Tagging.create(
 				:subject 	=> @subject,
@@ -65,6 +65,11 @@ class Tag < ActiveRecord::Base
 		address.coordinates
 	end
 	
+	def precision
+		return property('sub_type') unless property('sub_type').blank?
+		kind
+	end
+	
 	def flashvars
 		data.scan(/#flashvars[\s]+([^#|\[|\]]+)*/).to_s rescue ""
 	end
@@ -77,15 +82,17 @@ class Tag < ActiveRecord::Base
 		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
 	end
 	
-	def data_image
-		data.scan(/#[thumbnail]+[\s]+([^#|\[|\]]+)*/).to_s rescue ""
-	end
 	
 	def thumbnail
 		return avatar.public_filename(:large) unless avatar.nil?
-		return data_image unless data_image.blank?
+		return property('thumbnail') unless property('thumbnail').blank?
 		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
 		return "/images/icons/icon_nuniverse.png"
+	end
+	
+	def image
+		return avatar.public_filename unless avatar.nil?
+		return property('image') 
 	end
 	
 	def price
@@ -95,6 +102,11 @@ class Tag < ActiveRecord::Base
 	def info
 		return property('address') if has_address?
 		return "#{property('price')} "
+	end
+	
+	def link
+		return url unless url.nil? || url.blank?
+		return property('url')
 	end
 	
 	def details

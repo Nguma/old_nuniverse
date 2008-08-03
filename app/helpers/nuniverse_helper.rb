@@ -19,56 +19,36 @@ module NuniverseHelper
 			params[:description] ||= params[:subject].description
 			params[:options] ||= link_to("edit", "/tags/edit/#{params[:subject].id}", :class => "edit")
 		end
-		return render(:partial => "/nuniverse/hat", :locals => params)
+		return render(:partial => "/nuniverse/hat", :locals => params, :section => params[:section])
 	end
 	
-	def connections_for(section)
+	def connections_for(section, params = {})
 		if section.is_web_service?
-			return content_from_web_service(:service => section.service, :path => section.path)
+				partial = "/ws/#{section.perspective}"
 		else
-			return render(:partial => "/nuniverse/connections", :locals => {
-					:section => section,
-					:connections => section.connections(:user => current_user)
-				})
+				partial = "/nuniverse/connections"
 		end
+		return render(:partial => partial, :locals => {
+				:section => section,
+				:connections => section.results(params)
+			})
 	end
 	
 	
 	def link_to_object(object, params = {})
-		case object.service
-		when "amazon"
-			url = h "/ws/show?service=amazon&item=#{CGI::escape(object.property('amazon_id').rstrip)}"
-		when "ebay"
-			url = h "/ws/show?service=ebay&item=#{CGI::escape(object.property('ebay_id').rstrip)}"
+		case object.kind
+		when 'item'
+			url = h "/ws/show?service=#{object.service}&item=#{CGI::escape(object.link.rstrip)}"
 		when "video"
-			url = h "/ws/show?service=video&item=#{CGI::escape(object.url.rstrip)}&flashvars=#{CGI::escape(object.flashvars)}"
+			url = h "/ws/show?service=video&item=#{CGI::escape(object.url.rstrip)}&flashvars=#{CGI::escape(object.property('flashvars'))}"
+		when 'bookmark'
+			url = CGI::unescape(object.url)
+			dom_class = ""
 		else
 			url = "/section_of/#{params[:path]}"
 		end
 		
-		link_to(object.name.capitalize, url, :class =>"inner")
-	end
-	
-	def link_to_ws_object(object, params = {})
-		case params[:service]
-		when "video"
-			url = h "/ws/show?service=video&item=#{object.playUrl}"
-			title = object.titleNoFormatting
-		when "google"
-			title = object.titleNoFormatting
-			url = h "#{object.url.rstrip}"
-			dom_c = "outer"
-		when "amazon"
-			title = h sanitize(object.title[0..100])
-			url = h "/ws/show?service=amazon&item=#{object.id.rstrip}"
-		when "ebay"
-			title = h sanitize(object.title[0..100])
-			url = h "/ws/show?service=ebay&item=#{object.item_id.rstrip}"
-		else
-			title = h object.title
-			url = h "/ws/show?service=#{params[:service]}&item=#{object.url}"
-		end
-		link_to(title.capitalize, url, :class => dom_c || "inner")
+		link_to(object.label.capitalize, url, :class => dom_class || "inner")
 	end
 	
 end
