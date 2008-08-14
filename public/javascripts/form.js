@@ -52,6 +52,7 @@ var NForm = new Class({
   onInputBlur:function(input)
   {
     input.removeEvent('keyup');
+    this.fireEvent('blur', input);
     // if(input.getProperty('value') == "" || input.getProperty('value') == input.getPrevious('label').get('text'))
     //    {
     //      //this.labelize(input);
@@ -61,6 +62,7 @@ var NForm = new Class({
   onInputFocus:function(input)
   {
     input.addEvent('keyup', this.onInputChange.bind(this,input));
+    this.fireEvent('focus', input);
     if(input.hasClass('blank'))
     {
       input.removeClass('blank');
@@ -70,6 +72,7 @@ var NForm = new Class({
   
   onInputChange:function(input)
   {
+    if(!$defined(this.suggestions())) return;
     this.findSuggestions()
   },
   
@@ -86,19 +89,37 @@ var NForm = new Class({
     ev.preventDefault();
     ev.stopPropagation();
     var obj = this;
+    if($defined(this.el.getElement('form')))
+    {
+      var url = this.el.getElement('form').get('action');
+    }
+    else
+    {
+      url = this.el.get('action');
+    }
     
     var submission = new Request.HTML({
-      'url':this.el.getElement('form').get('action'),
+      'url':url,
       'update':this.suggestions(),
+      'data':{'authenticity_token':this.getToken()},
       onSuccess:function(a,b,c,d)
       {
         obj.clearInputs(); 
         obj.fireEvent('success',[a,b,c,d]);
-        
-        
       }
-    }).post(this.el.getElement('fieldset'));
+    }).post(this.el);
     return false;
+  },
+  
+  getToken:function()
+  {
+    this.el.getElements('input').each(function(input)
+    {
+      if($defined(input.getProperty('name') == 'authenticity_token'))
+      {
+        return input.getProperty('value');
+      }
+    });
   },
   
   findSuggestions:function()

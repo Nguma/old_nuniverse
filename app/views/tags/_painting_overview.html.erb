@@ -1,0 +1,7 @@
+<%#= image_tag('') %> 
+  
+  <% Tagging.with_path(path, nil).with_kind_like('image').find(:all).each do |p| -%>
+    <%= image_tag(p.object.avatar.public_filename) %>
+  <% end -%>
+<%= subject.description %>
+

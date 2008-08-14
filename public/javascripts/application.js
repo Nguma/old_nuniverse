@@ -4,6 +4,8 @@ function reset()
 {
   nuniverse = new Nuniverse();
   notice();
+
+
 }
 
 function onunLoad()

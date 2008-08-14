@@ -1,0 +1,7 @@
+<% @results.each do |result| -%>
+  
+  <div class='suggestion <%= cycle('even','odd') %>' >
+    <%= avatar_for(result)%>
+    <%= link_to(result.label,'#') %>
+  </div>
+<% end -%>

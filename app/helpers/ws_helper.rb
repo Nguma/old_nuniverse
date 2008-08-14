@@ -1,5 +1,9 @@
 module WsHelper
 		
+	def update_from_freebase(tag,match)
+		tag.data.replace('freebase_id', match.id)
+	end
+	
 	def images_from_flickr(params)
 		flickr = Flickr.new 'c40c269aea764bb5f53c877c3d265327'
 		photos = flickr.photos(:tags => params[:query], :per_page => '10') rescue []
@@ -67,7 +71,7 @@ module WsHelper
 			zoom = 15
 		end
 		
-		if params[:location].kind == "channel"
+		if params[:location].kind == "topic"
 			markers = markers_for(Tagging.with_path_ending(params[:location]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
 			markers = markers_for([params[:location]])
@@ -92,7 +96,8 @@ module WsHelper
 			:no_map => false,
 			:map => @map,
 			:markers => markers,
-			:html => html
+			:html => html,
+			:path => params[:path]
 		})
 	end
 	
@@ -101,11 +106,12 @@ module WsHelper
 	
 		markers = []
 		places.each do |place|
-		if place.has_coordinates?
-				markers << place
-
-				
-		 end
+			if place.has_coordinates?
+					markers << place	
+			elsif place.has_address?
+					place.find_coordinates
+					markers << place
+			end
 		end
 		return markers.collect {|marker| 
 			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{marker.weather}'}"

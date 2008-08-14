@@ -56,7 +56,13 @@ class TaggingsController < ApplicationController
 	def delete
 		@tagging = Tagging.find(params[:id])
 		raise "You don't have the right to do this!" if current_user != @tagging.user
-		@tagging.destroy
+		@tagging.user_id = nil
+		path = TaggingPath.new(path)
+		path.tags.shift
+		@tagging.path = path
+		if !@tagging.save
+			@tagging.destroy
+		end
 		render :nothing => true
 	end
 end

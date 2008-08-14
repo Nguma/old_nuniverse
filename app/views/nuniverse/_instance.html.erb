@@ -1,19 +1,20 @@
 <% content_for :head do -%>
-  <%= GMap.header (:local_search => false, :large_map => false, :with_vml => false) %>
+  <%= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
 <% end -%>
 
 <div class="nuniverse" id="nuniverse">
   <%#= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => nuniverse.path }%>
  
   
-  <%= render :partial => "/nuniverse/section_menu", :locals =>{
-    :section => section
-  }%>
-  <%= render  :partial => "/taggings/new", 
+  <%#= render :partial => "/nuniverse/section_menu", :locals =>{
+     :section => section
+   }%>
+  <%#= render  :partial => "/taggings/new", 
                 :locals => {
                   :kind => "",
                   :path => section.path
-                }%>
+                } %>
+  <%= render :partial => "/nuniverse/search", :locals => { } %>
   <div class="scroller"> 
 
     <div class="body">
@@ -21,17 +22,16 @@
       <% if section.empty? -%>
         <%= render :partial => "/nuniverse/welcome", :locals => {:section => section }%>
       <% else -%>
-      <% render_section(section, :dom_classes => "current_section") do -%> 
+      <%# render_section(section, :dom_classes => "current_section") do -%> 
       
-        <%= render :partial => "/nuniverse/overview", :locals => {
+        <%= render :partial => "/nuniverse/overview_3", :locals => {
             :section => section, 
             :order => "name"
           } %>
-        <% end -%>
+        <% #end -%>
       <% end -%>   
     </div>
   </div>
-  
 
 </div>
 

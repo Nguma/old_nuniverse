@@ -3,12 +3,14 @@ var Nuniverse = new Class({
   options:{
     form:null,
     nav:null,
+    focus:null,
     map:{}
   },
   
   initialize:function()
   {
     this.el = $('nuniverse');
+    
     if(!$defined(this.el)) {return }
     
     this.slide = new Fx.Scroll(this.getScroller(), {
@@ -27,8 +29,17 @@ var Nuniverse = new Class({
     //     },this);
     
     window.document.addEvent('keypress',this.onKey.bindWithEvent(this));
+    var obj = this;
     this.setConnectionForm();
     this.setDropdown();
+    this.finder =  new Finder($('finder'));
+    this.finder.addEvents({
+      'connect':function(a,b,c,d)
+        {
+          obj.currentSection().getElement('.connections').grab(a[0],'top');
+          obj.currentSection().getElement('.article').addClass('hidden');
+        }
+      },this);
   },
   
   onKey:function(ev)
@@ -49,9 +60,37 @@ var Nuniverse = new Class({
           break;
         case "enter":
           break;
-        
+        case "space":
+          if(this.options['focus'] == null)
+          {
+            this.finder.expand();
+          }
+          
+          break;
         default:
+          //this.finder.expand(ev.key);
+          
     }
+  },
+  
+  setFocus:function(el)
+  {
+    console.log(el)
+    el.focus();
+    this.options['focus'] = el; 
+  },
+  
+  removeFocus:function(el)
+  {
+    if(this.options['focus'] == el)
+    {
+      this.options['focus'] = null;
+    }
+  },
+  
+  getFocus:function()
+  {
+    return this.options['focus'];
   },
   
   getScroller:function()
@@ -425,6 +464,15 @@ var Nuniverse = new Class({
     this.enableScroll(section);
     this.setConnections(section);
     //this.setConnectionForm(section);
+    this.currentSection().getElements('form').each(function(form)
+    {
+      var f = new NForm(form);
+      f.addEvents({
+        'focus':this.setFocus.bind(this, form),
+        'blur':this.removeFocus.bind(this, form)
+      },this);
+    },this);
+
   },
   
   
@@ -462,15 +510,21 @@ var Nuniverse = new Class({
     var map_div = $('map_div');//section.getElement('.map');
     if($defined(map_div))
     {
+     
       if (GBrowserIsCompatible()) {
+       
        this.map = new GMap2(map_div);
+       
+       
        this.map.setCenter(new GLatLng(params['center']['latitude'],params['center']['longitude']),params['zoom']);
-       this.map.addControl(new GSmallMapControl());
-       // this.map.addControl(new GMapTypeControl());
-       //this.map.addControl(new google.maps.LocalSearch());
-       this.map.addControl( new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
+       this.map.addControl(new GLargeMapControl());
+       //this.map.addControl(new GMapTypeControl());
+      // this.map.addControl(new google.maps.LocalSearch());
+       //this.map.addControl( new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
+       //console.log(params['markers'])
        params['markers'].each(function(m)
        {
+         
          var marker = new GMarker(new GLatLng(m['latitude'],m['longitude']), {title:m['title'], draggable:true});
          
          this.map.addOverlay(marker);
@@ -511,6 +565,6 @@ var Nuniverse = new Class({
   
   currentPath:function()
   {
-    return this.currentSection().getElement('.path').get('text')
+    return this.currentSection().getElement('.path').get('text');
   }
 });

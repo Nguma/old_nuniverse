@@ -119,6 +119,10 @@ ActionController::Routing::Routes.draw do |map|
 	map.suggest "/suggest",
 		:controller => 'tags',
 		:action => "suggest"
+	
+	map.connect "/connect",
+		:controller => '/nuniverse',
+		:action => 'connect'
 		
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   map.resources :products

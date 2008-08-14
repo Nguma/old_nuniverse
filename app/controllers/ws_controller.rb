@@ -8,4 +8,10 @@ class WsController < ApplicationController
 		render :layout => false
 	end
 	
+	def find
+		@results = Finder::Search.find(:query => params[:query], :service => params[:service])
+		
+		render :layout => false
+	end
+	
 end

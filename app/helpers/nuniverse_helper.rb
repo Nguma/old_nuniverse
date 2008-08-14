@@ -36,6 +36,7 @@ module NuniverseHelper
 	
 	
 	def link_to_object(object, params = {})
+		
 		case object.kind
 		when 'item'
 			url = h "/ws/show?service=#{object.service}&item=#{CGI::escape(object.link.rstrip)}"

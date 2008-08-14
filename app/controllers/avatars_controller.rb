@@ -27,12 +27,17 @@ class AvatarsController < ApplicationController
 			:avatar => Avatar.new (:uploaded_data => params[:Filedata]),
 			:description => '')
 		if params[:path] && @tag
+			subject = TaggingPath.new(params[:path]).last_tag
 			Tagging.create(
-				:subject_id => TaggingPath.new(params[:path]).last_tag.id,
+				:subject_id => subject.id,
 				:object_id => @tag.id,
 				:path => params[:path],
-				:user_id => current_user.id
+				:user_id => params[:user_id]
 			)
+		end
+		if subject.avatar.nil?
+			subject.avatar = @tag.avatar
+			subject.save
 		end
 			render :layout => false
 	end

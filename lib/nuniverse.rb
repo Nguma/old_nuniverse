@@ -4,12 +4,44 @@ module Nuniverse
 		def initialize
 		end
 		
+		def self.all
+			self.list
+		end
+		
 		def self.list
-			['channel', 'person', 'location', 'character', 'band', 'company', 'video', 'bookmark',  'country', 'city']
+			{
+				'topic' => 'topic',
+				'location' => 'location',
+				'person' => 'person#person',
+				'video' => 'video',
+				'bookmark' => 'bookmark',
+				'website' => 'bookmark',
+				'video' => 'video',
+				'country' => 'location#country',
+				'city' => 'location#city',
+				'restaurant' => 'location#restaurant',
+				'museum' => 'location#museum',
+				'company' => 'group#company',
+				'team' => 'group#team',
+				'band' => 'group#band',
+				'album' => 'item#album',
+				'camera' => 'item#camera',
+				'character' => 'person#character',
+				'my trip to' => 'location',
+				'trip to' => 'location',
+				'on the way to' => 'location',
+				'event' => 'event',
+				'address' => 'address',
+				'message' => ''
+			}
 		end
 		
 		def self.hash	
 			self.list.collect {|kind| Nuniverse::Kind::LabelValue.new(kind)}
+		end
+		
+		def self.scan_entry(entry)
+			entry.scan(/^(#{self.list.collect {|c| c[0]}.join('|')})?\:?\s?([^#|\[|\]]+)$/)[0]
 		end
 		
 		class LabelValue

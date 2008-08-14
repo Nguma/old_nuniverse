@@ -99,20 +99,15 @@
 .nuniverse .content h2
 {
 	margin:20px 0 0 0;
+	font-size:30px;
+	font-weight:normal;
+	color:#666;
 }
 
 .nuniverse .header h5
 {
 	margin-top:10px;
 }
-
-.nuniverse .content h2
-{
-	font-size:14px;
-	position:relative;
-	color:#999;	
-}
-
 
 
 .article a
@@ -260,4 +255,81 @@ img.service
 	top:5px;
 	right:5px;
 	font-size:12px;
+}
+
+
+#finder
+{
+	position:fixed;
+	bottom:20px;
+	left:20px;
+	padding:0;
+	background:none;
+	margin:auto;
+	display:none;
+	z-index:1234567890123456789090;
+}
+
+#finder.expanded
+{
+	display:block;
+}
+
+#finder input#query
+{
+	padding:10px;
+	font-size:25px;
+	font-weight:normal;
+	color:#FFF;
+	background:#333;
+	border:solid 1px #ccc;
+	display:block;
+	width:800px;
+}
+
+#finder .suggestions
+{
+	max-height:400px;
+	overflow:hidden;
+	position:relative;
+}
+
+#finder .suggestion
+{
+	position:relative;
+	clear:both;
+	display:block;
+	padding:5px;
+	min-height:20px;
+	width:300px;
+	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
+}
+
+#finder .suggestion .avatar
+{
+	height:20px;
+	position:relative;
+	float:left;
+	margin-right:5px;
+}
+
+#finder .suggestion a
+{
+	position:relative;
+	padding:5px 0 0 0;
+	font-size:12px;
+	font-weight:bold;
+}
+
+#finder .suggestions .even
+{
+	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;	
+}
+
+.welcome .connection a
+{
+	font-size:20px;
+	padding:5px;
+	line-height:30px;
+	color:#333;
 }

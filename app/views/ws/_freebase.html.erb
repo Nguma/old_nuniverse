@@ -1,13 +1,30 @@
-<% if match -%>
-  <div class="article">
-    <%= textilize match.article %>
-  </div>
-<% elsif connections.empty? -%>
+<% if connections.empty? -%>
   <div class="article">
     <h2>Nothing was found.</h2>
   </div>
+  
+<% elsif connections.length == 1 -%>
+  <div class="article">
+        
+    <%= textilize connections[0].article %>
+    <dl class="connections">
+    <% section.subject.essential_elements.each do |el| -%>
+      <% unless connections[0].property_value(el).nil? %>
+        <% connections[0].property_value(el).each  do |c| %>
+          <dd class="connection <%= cycle('even','odd') %>">
+            <%= image_tag("/images/icons/#{el}.png", :class => 'avatar') %>
+            <h3>
+              <%= link_to(c, '#')%>
+            </h3>
+          </dd>
+        <% end -%>
+      <% end -%>
+    <% end -%>
+    </dl>
+   
+  </div>
 <% else -%>
- <div class="connections">
+ <dl class="connections">
  <% connections.each do |rst| -%>
    <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
    <%#= render :partial => "/taggings/manage" , :locals => {
@@ -22,6 +39,6 @@
     <div class="delimiter">&nbsp;</div>
    </dd>
  <% end -%>
-</div>
+</dl>
 
 <% end -%>

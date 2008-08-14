@@ -1,10 +1,15 @@
 module Freebaser
 	class Request
-		def initialize(params)
+		def initialize(params = {})
 			@query = Metaweb::Type::Object.search(
 			  params[:query],
 			  Freebaser::ReverseMappings[params[:type]] || []
 			)
+		end
+		
+		
+		def find(params)
+			Metaweb::Type::Object.find params[:id]
 		end
 		
 		def results
@@ -40,9 +45,11 @@ module Freebaser
 		'/cvg/computer_videogame' => 'videogame',
 		'/dining/restaurant'      => 'restaurant',
 		'/business/company'       => 'company',
-		'/architecture/museum'     => 'museum',
+		'/structure/location'     => 'museum',
 		'/film/film_character'   => 'character',
-		'/fictional_universe/fictional_character'  => 'character'
+		'/fictional_universe/fictional_character'  => 'character',
+		'/cvg/game_character' => 'character'
+		
 	}
 	
 	ReverseMappings = Mappings.keys.inject({}) { |hash,key|

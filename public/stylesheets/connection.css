@@ -7,8 +7,6 @@
 	width:100%;
 }
 
-
-
 #main_menu 
 {
 	position:relative;
@@ -192,7 +190,7 @@
 	position:relative;
 	font-family:Arial;
 	padding-top:10px;
-	font-size:12px;
+	font-size:14px;
 	font-weight:normal;
 	color:inherit;
 }
@@ -200,13 +198,13 @@
 .current_section .connection h3
 {
 	font-size:15px;
-	padding:15px 0 0 0 ;
+	padding:10px 0 5px 0 ;
 }
 
 .nuniverse .connection p
 {
 	position:relative;
-	font-size:12px;
+	font-size:14px;
 	font-weight:normal;
 	color:#666;
 }
@@ -286,13 +284,13 @@
 	top:-20px;
 	color:#FFF;
 	margin:0;
-	
 }
 
 .current_section .new_connection
 {
 	display:block;
 }
+
 .expanded a.toggle
 {
 	background:#369;
@@ -391,10 +389,11 @@
 .manage
 {
 	position:relative;
-	float:left;
+	float:right;
 	padding:5px;
 	z-index:1234567890;
 	display:none;
+	font-weight:bold;
 }
 
 .article

@@ -1,5 +1,12 @@
-<% render_section(@section, :dom_classes => "current_section") do -%>
- 
-   <%#= render(:partial => "/taggings/instance", :collection => section.overview, :locals => {:section => section} )%>
- <%= connections_for(@section, :kind => 'topic', :degree => nil) %>
+<% render_section(section , :dom_classes => "current_section welcome") do -%>
+  <div class="connections">
+    <% section.overview.each do |c| -%>
+      <div class="connection">
+        <%= render :partial => "/taggings/manage", :locals => {:connection => c, :path => section.path, :data => ""} %>
+        <%= avatar_for(c.object) %>
+        <h3><%= link_to_object(c.object, :path => "#{section.path}#{c.object.id}")%></h3>
+      </div>
+    <% end -%>
+  </div>
+  </div>
 <% end -%>

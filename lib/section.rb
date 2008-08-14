@@ -10,10 +10,11 @@ class Section
 		@page = params[:page] || 1
 		@no_wrap = params[:no_wrap] || nil
 		@user = params[:user] || nil
+		
 	end
 
 	def subject
-		@path.last_tag
+			@path.last_tag
 	end
 	
 	def connections(params = {})
@@ -29,16 +30,17 @@ class Section
 			user = nil
 			path = public_path
 		end
+		# params[:degree] = "all"
 		Tagging.with_kind_like(kind).with_user(user).with_path(path,params[:degree]).include_object.groupped.with_order(order).paginate(
 				:page => @page, 
 				:per_page => 20
 		)
 	end
 	
-	def map_kind(kind = nil)
+	def map_kind(kind = nil, service = perspective)
 		kind =  tabs.select {|t| kind.downcase == t.value}.first.value rescue nil
 		if kind.nil? || kind.blank?
-			kind = tabs[0].value
+			kind = tabs(service)[0].value
 		end
 		kind
 		
@@ -49,9 +51,17 @@ class Section
 	end
 	
 	def overview(params = {})
-		Tagging.with_path(@path, "all").with_user(@user).include_object.by_latest.paginate(
-		:page => params[:page] || 1,
-		:per_page => 20)
+		
+		if @perspective == "everyone"
+			Tagging.with_path(public_path,nil).include_object.by_latest.paginate(
+			:page => params[:page] || 1,
+			:per_page => 20)
+		else
+			Tagging.with_user(@user).with_path(@path, nil).include_object.by_latest.paginate(
+			:page => params[:page] || 1,
+			:per_page => 20)
+		end
+		
 	end
 	
 	def public_path
@@ -69,47 +79,45 @@ class Section
 	end
 	
 	def results(params = {})
-		params[:kind] ||= kind
+		
 		params[:service] ||= perspective
+		params[:kind] ||= map_kind(kind,params[:service])
 		case params[:service]
 		when "google"
-			return Googleizer::Request.new("#{subject.label} -amazon.com -ebay.com -youtube.com", :mode => params[:kind]).response.results
+			tags = path.tags
+			tags.shift
+			Finder::Search.find(:query => tags.collect {|c| c.label}.join(' '), :service => 'google', :filter => params[:kind])
 		when "amazon"
-			return Awsomo::Request.new(
-				:query => subject.label, 
-				:category => params[:kind]
-				).response.items
+			Finder::Search.find(:query => subject.label, :service => 'amazon')
 		when "ebay"
 			return []
 		when "freebase"
-			match   = nil
+			# Looks for the matching record if freebase_id is already bound to subject.
+			# else
+			# Maps the freebase object to the subject if an exact match is found,
+			# otherwise returns a list of matching records.
+			# TODO: Let the user select the correct freebase record to map in case a list is returned.
 			results = []
 			unless subject.property("freebase_id").blank?
-				match = Metaweb::Type::Object.find(subject.property("freebase_id"))
-		  end
-			if match.nil?
+				return [Metaweb::Type::Object.find(subject.property("freebase_id"))]
+		  else
 				results =  Freebaser::Request.new(
 				  :query  => subject.label,
 				  :path   => path,
 				  :type   => subject.kind
-				).results 
+				).results
 				if results.length == 1
-	  		  match = Metaweb::Type::Object.find results.first.id
-	  		  tag.data += " #freebase_id #{match.id}"
-	  		  tag.description = match.article if tag.description.blank?
-	  		  tag.save
-	  	  end
+					results = [Metaweb::Type::Object.find(results[0].id)] 
+					subject.match_freebase_record(results[0])
+				end
 			end
 			results
 		when "daylife"
-			
-			return Daylife::Request.new(
-				:query => subject.label,
-				:mode => params[:kind],
-				:@per_pages => 10
-			).results
+			Finder::Search.find(:query => subject.label, :service => 'daylife')
 		when "ebay"
 			return EbayShopping::Request.new(:find_items, :query_keywords => subject, :max_entries => 10).response.items
+		when "nuniverse"
+			return subject.find_similars
 		else
 			return connections(params)
 		end
@@ -164,7 +172,8 @@ class Section
 				filt.add('Places', "location"),
 				filt.add('Products', "item"),
 				filt.add('Topics',"topic"),
-				filt.add('Videos',"video")
+				filt.add('Videos',"video"),
+				filt.add('Map',"map")
 			]
 		end
 	end

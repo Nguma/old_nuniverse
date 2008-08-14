@@ -1,12 +1,16 @@
 <dd class="connection <%= cycle('even', 'odd') %> <%= connection.object.kind %>_kind">
   <%= render :partial => "/taggings/manage", :locals => {:connection => connection, :path => path, :data => ""} %>
   <%= avatar_for(connection.object) %>
-  <h3>
-    <%= link_to_object(connection.object, :path => "#{path}#{connection.object.id}")%>
-    <% if connection.object.service -%>
-      
+  
+    
+    <% if connection.description.blank?  -%>
+       <h3><%= link_to_object(connection.object, :path => "#{path}#{connection.object.id}")%></h3>
+    <% else -%>
+     <h3><p><%= connection.info.gsub(connection.object.label, link_to_object(connection.object, :path => "#{path}#{connection.object.id}"))%></p></h3>
     <% end -%>
-  </h3>
-  <p><%= "<span class='kind_#{connection.kind}'>#{connection.object.precision.capitalize}</span> <span class='source'> #{connection.object.service}</span>" %> <%= connection.info %></p>
+ 
+  <%#= "<span class='kind_#{connection.kind}'>#{connection.object.precision.capitalize}</span> <span class='source'> #{connection.object.service}</span>" %> <%#= connection.info %>
+  
+ 
   <div class="delimiter">&nbsp;</div>
 </dd>

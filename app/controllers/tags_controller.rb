@@ -4,8 +4,7 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    @tags = Tag.paginate(:page => 1, :per_page => 100, :order => "label ASC", :conditions => "kind = 'country'")
-
+  	
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @tags }
@@ -68,6 +67,11 @@ class TagsController < ApplicationController
   # PUT /tags/1.xml
   def update
     @tag = Tag.find(params[:id])
+
+		if(params[:address])
+			@tag.replace('address',params[:address])
+		end
+		
     respond_to do |format|
       if @tag.update_attributes(params[:tag])
         flash[:notice] = 'Tag was successfully updated.'

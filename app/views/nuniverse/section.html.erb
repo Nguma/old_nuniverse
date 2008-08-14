@@ -1,10 +1,8 @@
 <% render_section(@section, :dom_classes => "current_section") do -%> 
   <% if @section.kind == "overview" -%>
     <%= render :partial => "/nuniverse/overview", :locals => {:section => @section }%>
-  <% elsif @section.subject.kind == "image" -%>
-    <div class="image">
-      <%= image_tag(@section.subject.image) %> 
-    </div>
+  <% elsif @section.kind == "map" -%>
+    <%= map_from_google(:location => @section.subject, :path =>@section.path)%>
   <% else -%>
     <%= connections_for(@section) %>
   <% end -%>

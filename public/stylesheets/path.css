@@ -76,3 +76,24 @@
 	font-size:15px;
 	color:#999;
 }
+
+
+.wid
+{
+	position:relative;
+	float:left;
+	width:250px;
+	height:400px;
+	margin:10px;
+	border:solid 1px #ccc;
+}
+
+.wid a
+{
+	font-size:12px;
+	line-height:25px;
+	padding:5px;
+	background:#FFF;
+	margin:1px;
+	display:block;
+}

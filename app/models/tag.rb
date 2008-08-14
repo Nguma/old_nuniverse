@@ -13,6 +13,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.connect(params)
+		gum =  params[:gum].collect { |k,v| "##{k} #{v}" }.join("") rescue ""
 		@object = Tag.find_by_label_and_kind_and_url(
 		  params[:label], params[:kind], params[:url]
 		)
@@ -23,12 +24,12 @@ class Tag < ActiveRecord::Base
 				:description  => params[:description] || "",
 				:url          => params[:url],
 				:service      => params[:service],
-				:data         => params[:gum].collect { |k,v| "##{k} #{v}" }.join("")
+				:data         => gum
 			)
 		else
 			@object.description = params[:description] || @object.description
 			@object.url = params[:url] || @object.url
-			@object.update_data(params[:gum])
+			@object.update_data(params[:gum]) if params[:gum]
 			@object.find_coordinates
 			
 			@object.save!
@@ -161,26 +162,52 @@ class Tag < ActiveRecord::Base
 	# 		Tag.find_by_sql(query)
 	# 	end
 	
-	named_scope :with_label_like, lambda { |label| 
-		return label.nil? ? {} : {:conditions => ["label like ?","%#{label}%"]}
-	}
+	# named_scope :with_label_like, lambda { |label| 
+	# 	return label.nil? ? {} : {:conditions => ["label like ?","%#{label}%"]}
+	# }
 	
   named_scope :with_kind_like, lambda { |kind|
    	return kind.nil? ? {} : {:conditions => ["kind like ?", "%#{kind}%"]}
   }
 	
   named_scope :with_kind, lambda { |kind|
-   		return kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
+   	return kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
   }
    
   named_scope :with_property, lambda { |prop_name, prop_value|
  		return kind.nil? ? {} : {:conditions => ["data rlike ?", "##{prop}[\s]+#{prop_value}/"]}
   }
 
+	named_scope :with_label_like, lambda {|label|
+		return label.nil? ? {} : {:conditions => ["label rlike ?","^.\{0,4\}#{label}.\{0,6\}$"]}
+	}
+
 
 
 	def find_coordinates
 		Nuniverse::Address.find_coordinates(self)
 	end
+	
+	def match_freebase_record(record)
+		description = record.article if description.blank?
+		self.replace('freebase_id', record.id)
+		save
+	end
+	
+	def essential_elements
+		[]
+	end
+
+	def find_similars
+		Tag.with_label_like(self.label).paginate(:page => 1, :per_page => 8)
+	end
+	
+
+	def update_data(new_data)
+		new_data.scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/).each do |gum|
+			replace(gum[0].to_s,gum[1].to_s)
+		end
+	end
+	
   
 end
