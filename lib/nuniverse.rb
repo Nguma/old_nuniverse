@@ -41,7 +41,9 @@ module Nuniverse
 		end
 		
 		def self.scan_entry(entry)
-			entry.scan(/^(#{self.list.collect {|c| c[0]}.join('|')})?\:?\s?([^#|\[|\]]+)$/)[0]
+			
+			# entry.scan(/^(#{self.list.collect {|c| c[0]}.join('|')})?\:?\s?([^#|\[|\]]+)$/)[0]
+			
 		end
 		
 		class LabelValue
