@@ -1,5 +1,7 @@
-
-<% form_tag '/tags/create' do -%>
-  <%= text_field_tag :label, "" %>
-  <%= text_field_tag :description, "" %>
-<% end -%>
+<div class="input" id="finder">
+  <div class="suggestions"></div>
+  <% form_tag "/tags/find_or_create" do -%>
+    <%= hidden_field_tag "list", list.id %>
+    <%= text_field_tag "query", "", :id => "input" %>
+  <% end -%>
+</div>

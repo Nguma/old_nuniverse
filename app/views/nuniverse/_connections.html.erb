@@ -1,27 +1,18 @@
-<% if connections.empty? -%>
-  <div class="article" >
-    <h3>You haven't added any <%= section.kind.pluralize rescue "thing" %> to this <%= section.subject.kind %> yet. <a href="#" class="toggle">Add one now</a></h3>
-   <%= render :partial => "/avatars/new", :locals => {
-     :path => section.path
-   }%>
-    <br/>
-    <%= link_to("See what others have added") %>
-    <br/>
-    <br/>
-    <%= link_to("See what's on google >")%>
-    <br/>
-    <%# section.results(:service => "google").each do |r| %>
-      <%#= link_to(r.label, "#") %>
-    <%# end -%>
-  </div>
-<% else -%>
-  <dl class="connections">
-    <% connections.each do |connection| -%>
-        <%= render :partial => "/nuniverse/connection", :locals => {
-          :connection => connection,
-          :path => section.path
-        }%>
+<% items.each_with_index do |item,i| %>
+  <h3 class="item <%= (i == selected) ? '' : '' %>">
+    <% if service == "google" -%>
+      <%= (i+1)  %> 
+      <%= link_to(item.label.capitalize, item.url)%>
+      <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
+    <% elsif service == "map" -%>
+      <%= (i+1) + items.offset rescue 0 %> 
+      <%= link_to_item(item) %>
+      <p><%= item.object.property('address') %></p>
+    <% else -%>
+      <%= (i+1) + items.offset rescue 0 %> 
+      <%= link_to_item(item) %>
     <% end -%>
-  </dl>
+  </h3>
 <% end -%>
+<%= will_paginate items if service.nil? %>
 

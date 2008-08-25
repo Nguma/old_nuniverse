@@ -1,3 +1,16 @@
+* {
+	font-weight:normal;
+	color:#333;
+	font-family:Arial;
+	padding:0;
+	margin:0;
+	border:none;
+	color:inherit;
+	background:none;
+	text-decoration:none;
+	outline:0;
+}
+
 body
 {
 	background:#efefef url('/images/backgrounds/main.png') 0 0 repeat-x;
@@ -10,10 +23,10 @@ body
 {
 	position:fixed;
 	top:20px;
-	right:30px;
-	color:#3F9;
+	left:30px;
+	color:#339;
 	font-weight:bold;
-	font-size:14px;
+	font-size:15px;
 	z-index:123456;
 }
 
@@ -30,21 +43,6 @@ body
 	margin:0;
 	height:0;
 	line-height:1px;
-}
-
-.nuniverse
-{
-	position:relative;
-	padding:0 0 0 0;
-}
-
-.nuniverse .body
-{
-	position:relative;
-	clear:both;
-	margin:0 0 0 0;
-	padding:0;
-	width:1000%;
 }
 
 .nuniverse .scroller

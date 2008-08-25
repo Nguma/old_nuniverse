@@ -1,39 +1,16 @@
-<% content_for :head do -%>
-  <%= GMap.header (:local_search => true, :large_map => true, :with_vml => false) %>
+<% nuniverse do %>
+    <h1>Welcome, <%= current_user.login.capitalize %>, this is your nuniverse</h1>
+    <h2>Browse your existing lists</h2>
+    <%= render :partial => "/nuniverse/connections", :locals => {
+      :items => @items,
+      :selected => nil,
+      :service => @service
+    }%>
+    <h2>or create a new one</h2>
+    <%= render :partial => "/taggings/find_or_create", :locals => {
+        :subject => @tag,
+        :path => @path} %>
 <% end -%>
-
-<div class="nuniverse" id="nuniverse">
-  <%#= render :partial => "/nuniverse/breadcrumbs", :locals => {:path => nuniverse.path }%>
- 
-  
-  <%#= render :partial => "/nuniverse/section_menu", :locals =>{
-     :section => section
-   }%>
-  <%#= render  :partial => "/taggings/new", 
-                :locals => {
-                  :kind => "",
-                  :path => section.path
-                } %>
-  <%= render :partial => "/nuniverse/search", :locals => { } %>
-  <div class="scroller"> 
-
-    <div class="body">
-      <%#= render :partial => "/nuniverse/main_menu", :locals => {:nuniverse => section }%>
-      <% if section.empty? -%>
-        <%= render :partial => "/nuniverse/welcome", :locals => {:section => section }%>
-      <% else -%>
-      <%# render_section(section, :dom_classes => "current_section") do -%> 
-      
-        <%= render :partial => "/nuniverse/overview_3", :locals => {
-            :section => section, 
-            :order => "name"
-          } %>
-        <% #end -%>
-      <% end -%>   
-    </div>
-  </div>
-
-</div>
 
 <div class="hidden">
  <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "spinner") %>

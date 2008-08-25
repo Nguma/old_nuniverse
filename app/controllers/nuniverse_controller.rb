@@ -1,6 +1,7 @@
 class NuniverseController < ApplicationController
 	
 	def index
+		redirect_to "/my_nuniverse" if logged_in?
 	end
 	
 	def show
@@ -106,6 +107,8 @@ class NuniverseController < ApplicationController
 		# 			)
 		render :layout => false
 	end
+	
+	
 	
 	
 end

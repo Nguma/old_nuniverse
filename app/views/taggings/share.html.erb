@@ -1,0 +1,17 @@
+<% nuniverse do -%>
+  <%= breadcrumbs(@tagging.path)%>
+  <h1><%= @tagging.object.label.capitalize %></h1>
+  <h2>Share</h2>
+  <% if @contributors.empty? -%>
+    <h3>No one has been invited yet.</h3>
+  <% else -%>
+    <% @contributors.each do |contributor| -%>
+      <%= contributor.login.capitalize %>
+    <% end -%>
+  <% end -%>
+  <h2>Invite someone else (email address)</h2>
+  <%= render :partial => "/taggings/invite", :locals => {:tagging => @tagging}%>
+  <div class="options">
+    <%= link_to "back to content", @tagging , :class => "option" %>
+  </div>
+<% end -%>

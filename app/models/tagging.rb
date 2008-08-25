@@ -1,9 +1,11 @@
 class Tagging < ActiveRecord::Base
   belongs_to :object, :class_name => "Tag"
 	belongs_to :subject, :class_name => "Tag"
-	belongs_to :user
+	belongs_to :owner, :class_name => "User", :foreign_key => "user_id"
 	
 	before_save :clean_path
+	
+	before_destroy :destroy_connections
 	
 	def kind
 		object.kind
@@ -26,6 +28,10 @@ class Tagging < ActiveRecord::Base
       super
     end
   end
+
+	def full_path
+		TaggingPath.new([path.taggings,self].flatten)
+	end
   
 
   named_scope :with_path, lambda { |path,degree|
@@ -96,6 +102,23 @@ class Tagging < ActiveRecord::Base
     end
   end
 
+	def self.find_or_create(params)
+		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND path = ? AND user_id = ?', params[:subject_id], params[:object_id], params[:path], params[:owner]])
+		tagging = Tagging.create(:subject_id => params[:subject_id], :object_id => params[:object_id], :path => params[:path], :user_id => params[:owner].id) if tagging.nil?
+		tagging
+	end
+	
+	def connections	
+		Tagging.with_exact_path(self.full_path).include_object.with_order('name')
+	end
+	
+	def contributors(params = {})
+		Permission.find(:all, :conditions => ['tagging_id = ?', self.id]).collect {|p| p.user}
+	end
+	
+	def authorized_users
+		[contributors, self.owner].flatten
+	end
 	protected
 	
   def self.switch_paths(original_path, new_path)
@@ -106,6 +129,13 @@ class Tagging < ActiveRecord::Base
     WHERE path REGEXP '^#{original_path.to_s}'
     SQL
   end	
+
+	def destroy_connections
+		self.connections.each do |c|
+			c.destroy
+		end
+	end
+
 
 	private
 	

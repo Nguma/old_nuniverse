@@ -15,7 +15,11 @@ class TagsController < ApplicationController
   # GET /tags/1.xml
   def show		
 		@tag = Tag.find(params[:id])
-	
+		@selected = params[:selected].to_i || nil
+		@path = TaggingPath.new(params[:path])
+		@page = params[:page] || 1
+		@items = @list.items(:path => current_user).paginate(:page => @page, :per_page => 10)
+		@list = List.find(:first,:conditions => ['tag_id = ?', params[:list]]) || nil
   end
 
   # GET /tags/new
@@ -102,6 +106,6 @@ class TagsController < ApplicationController
 			:page => 1
 		)
 	end
-	
+
 	
 end

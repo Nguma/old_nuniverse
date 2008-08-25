@@ -1,335 +1,110 @@
-.body .section
+.nuniverse
 {
 	position:relative;
-	float:left;
-	width:300px;
-	height:1000px;
-	margin:0 0 0 2px;
-	padding:0;
-	overflow:hidden;
-	border:none;
-	border-right:solid #999 2px;
-}
-
-.body .current_section
-{
-	width:900px;
-	border:none;
-	margin:0;
-	background:none;
-}
-
-.content
-{
-	position:relative;
-	margin:0 0 0 0;
-	padding:10px;
-	width:auto;
-	height:600px;
-	background:none;
-	overflow:hidden;
-}
-
-.current_section .content
-{
-	
-}
-
-.nuniverse .content h2 a
-{
-	font-size:20px;
-	color:#666;
-}
-
-.nuniverse h1
-{
-	font-size:25px;
-	margin:0 0 0px 0;
-	padding: 0 0 0 0;
-}
-
-
-
-.nuniverse .current_section h1
-{
-	font-size:18px;
-}
-
-.slider
-{
-	position:relative;
-	float:left;
-	height:100%;
-	width:20px;
-	border:solid 2px #eee;
-	z-index:123456;
-}
-
-.slider .knob
-{
-	background:#69c;
-	width:20px;
-	height:30px;
-}
-
-
-
-.actions
-{
-	width:300px;
-}
-
-.nuniverse .logo
-{
-	margin-top:120px;
-}
-
-.nuniverse .search
-{
-	width:500px;
-}
-
-.nuniverse a.avatar
-{
-	position:relative;
-	float:left;
-	margin: 0 10px 10px 0;
-}
-
-.nuniverse .content h2
-{
-	margin:20px 0 0 0;
-	font-size:30px;
-	font-weight:normal;
-	color:#666;
-}
-
-.nuniverse .header h5
-{
-	margin-top:10px;
-}
-
-
-.article a
-{
-	color:#69c;
-	margin:0 5px 0 0;
-}
-
-.article p
-{
-	font-size:11px;
-}
-
-.current_section .article p
-{
-	font-size:12px;
-}
-
-.article img
-{
-	max-height:400px;
-}
-
-
-.widget
-{
-	position:relative;
-	float:left;
-	margin:0 1px 1px 0;
-	width:170px;
-	height:200px;
-	cursor:pointer;
-	text-align:center;
-}
-
-.widget h2
-{
-	border-bottom:solid #ccc 1px;
-	font-size:16px;
-	padding:3px;
-/*	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;*/
-}
-
-.widget .elements
-{
-/*	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;*/
-	height:170px;
-	width:190px;
-	overflow:hidden;
-}
-
-.widget .elements .element
-{
-	position:relative;
-	float:left;
-	width:100%;
-	height:100%;
-	padding:20px 0 0 0;
-}
-
-.widget img
-{
-	position:relative;
-	margin:auto;
-	display:block;
-	text-align:center;
-	height:50px;
-}
-
-.widget .element h3
-{
-	font-size:13px;
-	padding:5px;
-}
-
-.widget .element a
-{
+	padding:30px 20px 20px 20px;
 	color:#333;
-}
-
-.commercial
-{
-	padding:10px;
-	position:absolute;
-	top:30px;
-	right:30px;
-	background:#FFF;
-	border:solid 1px #EEE;
-}
-
-img.service
-{
-	height:30px;
-	position:absolute;
-	right:50px;
-}
-
-/* HAT */
-.section .hat
-{
-	padding:10px 10px 0 10px;
-/*	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;*/
-/*	margin-bottom:2px;*/
-	height:50px;
-	display:none;
-}
-
-.current_section .hat
-{
-	/*display:block;*/
-}
-
-.hat .edit
-{
-	display:none;
-}
-
-.section .hat p
-{
-	font-size:14px;
-	color:#333;
-}
-
-.hat .avatar
-{
-	height:50px;
-	position:relative;
-	float:left;
-	margin-right:5px;
-}
-
-.current_section .hat p
-{
-	font-size:12px;
-}
-
-.current_section .hat .avatar
-{
-	height:50px;
-}
-
-.hat .edit
-{
-	position:absolute;
-	top:5px;
-	right:5px;
-	font-size:12px;
-}
-
-
-#finder
-{
-	position:fixed;
-	bottom:20px;
-	left:20px;
-	padding:0;
-	background:none;
-	margin:auto;
-	display:none;
-	z-index:1234567890123456789090;
-}
-
-#finder.expanded
-{
-	display:block;
-}
-
-#finder input#query
-{
-	padding:10px;
-	font-size:25px;
 	font-weight:normal;
-	color:#FFF;
-	background:#333;
-	border:solid 1px #ccc;
-	display:block;
-	width:800px;
 }
 
-#finder .suggestions
-{
-	max-height:400px;
-	overflow:hidden;
-	position:relative;
-}
-
-#finder .suggestion
+.nuniverse .body
 {
 	position:relative;
 	clear:both;
-	display:block;
-	padding:5px;
-	min-height:20px;
-	width:300px;
-	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
+	margin:0 0 0 0;
+	padding:0;
 }
 
-#finder .suggestion .avatar
-{
-	height:20px;
-	position:relative;
-	float:left;
-	margin-right:5px;
+.nuniverse h1 {
+	font-size:35px;
+	font-weight:normal;
+	color:#4f4f4f;
 }
 
-#finder .suggestion a
-{
-	position:relative;
-	padding:5px 0 0 0;
-	font-size:12px;
-	font-weight:bold;
+.nuniverse h2 {
+	font-size:30px;
+	color:#999;
 }
 
-#finder .suggestions .even
-{
-	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;	
+.nuniverse h3 {
+	
 }
 
-.welcome .connection a
-{
-	font-size:20px;
-	padding:5px;
-	line-height:30px;
+.nuniverse h4 {
+	
+}
+
+.nuniverse .input {
+	border:none;
+}
+
+.nuniverse .input fieldset {
+	border:none;
+}
+
+.nuniverse .input input {
+	background:none;
+	border:none;
+/*	border-bottom:solid 1px #666;*/
+	font-size:30px;
+	font-weight:normal;
 	color:#333;
+	margin: 5px 0 0 0;
+	padding:1px 1px 3px 1px;
+	width:90%;
+}
+
+
+.nuniverse .selected {
+	height:100px;
+}
+
+.nuniverse .pagination {
+	font-size:13px;
+	color:#999;
+}
+
+.nuniverse .pagination .current {
+	color:#333;
+}
+
+.nuniverse .breadcrumbs a {
+	display:block;
+	color:#666;
+}
+
+.nuniverse .options {
+	position:fixed;
+	bottom:10px;
+}
+
+.nuniverse .options .option {
+	color:#666;
+	padding:0 0 0 20px;
+	margin:0 10px 0 0;
+	background:transparent url("/images/icons/option.png") 0 center no-repeat;
+}
+
+.nuniverse .item p {
+	font-size:13px;
+	padding:0 0 0 15px;
+	margin:0 0 5px 0;
+}
+
+.nuniverse p a {
+	color:#666;
+}
+
+.nuniverse .service {
+	color:#999;
+}
+
+.nuniverse .kind {
+	font-size:14px;
+}
+
+.nuniverse .right {
+	position:relative;
+	clear:both;
+	width:800px;
+
 }

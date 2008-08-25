@@ -9,9 +9,9 @@ class WsController < ApplicationController
 	end
 	
 	def find
-		@results = Finder::Search.find(:query => params[:query], :service => params[:service])
+		@tagging = Tagging.find(params[:id])
 		
-		render :layout => false
+		render :co => false
 	end
 	
 end

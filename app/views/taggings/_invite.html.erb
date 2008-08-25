@@ -1,0 +1,7 @@
+<div class="input" id="finder">
+  <div class="suggestions"></div>
+  <% form_tag "/taggings/invite" do -%>
+    <%= hidden_field_tag "id", tagging.id %>
+    <%= text_field_tag "email", "", :id => "input" %>
+  <% end -%>
+</div>

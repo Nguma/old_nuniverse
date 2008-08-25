@@ -209,5 +209,30 @@ class Tag < ActiveRecord::Base
 		end
 	end
 	
+	def self.find_or_create(params)
+		tag = Tag.find(:first, :conditions => ['label = ? AND kind = ?', params[:label], params[:kind]])
+		if tag.nil?
+			if params[:label].match(/^http:\/\/.+/)
+				tag = Tag.create(
+					:label => params[:label], 
+					:kind => "link",
+					:url => params[:label]
+				)
+			else
+				
+			tag = Tag.create(
+				:label => params[:label], 
+				:kind => params[:kind]
+			) 
+			end
+		
+		end
+		tag
+	end
+	
+	def connections(params = {})
+		context = TaggingPath.new(params[:context])
+		Tagging.find(:all, :conditions => ['subject_id = ?', self.id])
+	end
   
 end

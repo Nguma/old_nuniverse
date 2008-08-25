@@ -1,3 +1,14 @@
-<%= avatar_for(@tag) %>
-<h1>@tag.label</h1>
-<p>@tag.desciption</p>
+<div class="nuniverse" id="nuniverse">
+  <div class="body">
+    <%= link_to '< Back to your nuniverse', "/my_nuniverse" %><br/>
+    <%= link_to("< #{@list.label.capitalize}", @list) if @list%>
+    <h1><%= @tag.label.capitalize %></h1>
+    <%= render :partial => "/nuniverse/connections", :locals => {
+      :items => @items,
+      :selected => nil
+    }%>
+    <h2>Connect that item with</h2>
+    <%= render :partial => "/taggings/find_or_create" , :locals => {:subject => @tag, :path => TaggingPath.new}%>
+    <%#= link_to 'Edit', edit_list_path(@tag) %> 
+  </div>
+</div>

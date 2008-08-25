@@ -1,14 +1,12 @@
 module NuniverseHelper
-
-	def render_section(section, params = {}, &block)
+	
+	def nuniverse(params = {}, &block)
 		params[:content] = capture(&block)
-		params[:dom_classes] ||= ""
-		params[:section] = section
 		concat(
 			render(
-				:partial => "/nuniverse/section",
+				:partial => "/nuniverse/page",
 				:locals => params
-		), block.binding)
+		), block.binding)		
 	end
 	
 	def render_hat(params)
@@ -21,19 +19,6 @@ module NuniverseHelper
 		end
 		return render(:partial => "/nuniverse/hat", :locals => params, :section => params[:section])
 	end
-	
-	def connections_for(section, params = {})
-		if section.is_web_service?
-				partial = "/ws/#{section.perspective}"
-		else
-				partial = "/nuniverse/connections"
-		end
-		return render(:partial => partial, :locals => {
-				:section => section,
-				:connections => section.results(params)
-			})
-	end
-	
 	
 	def link_to_object(object, params = {})
 		

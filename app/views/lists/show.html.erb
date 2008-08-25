@@ -1,0 +1,20 @@
+<div class="nuniverse" id="nuniverse">
+  <div class="body">
+    <%= link_to '< Back to your nuniverse', "/my_nuniverse" %>
+    <h1><%= @list.label.capitalize %></h1>
+    
+    <% @items.each_with_index do |item,i| %>
+    
+      <h3 class="item <%= (i == @selected) ? '' : '' %>">
+        <%= (i+1) + @items.offset %> 
+        <%= link_to(item.object.label.capitalize, "/taggings/#{item.id}") %>
+        <%#= link_to(item.object.label.capitalize, "/lists/#{@list.id}?selected=#{i}") %>
+        
+      </h3>
+    <% end -%>
+    <%= will_paginate @items %>
+    <h2>Add an item to that list</h2>
+    <%= render :partial => "/taggings/find_or_create" , :locals => {:subject => @list.tag, :path => nil}%>
+    <%#= link_to 'Edit', edit_list_path(@list) %> 
+  </div>
+</div>

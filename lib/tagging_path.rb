@@ -24,12 +24,16 @@ class TaggingPath
     @ids.last
   end
 	
+	def last_tagging
+		self.taggings.last
+	end
+	
 	def last_tag
-		@last_tag ||= Tag.find self.last
+		@last_tag ||= Tag.find self.taggings.last.object
 	end
   
   def tags
-    @tags ||= @ids.collect { |id| Tag.find id }
+    @tags ||= self.taggings.collect { |tagging| Tag.find tagging.object.id }
   end
   
   def empty?
@@ -48,9 +52,10 @@ class TaggingPath
 	end
 	
 	def taggings
-		@taggings ||= @ids.collect { |id|
-			TaggingPath.new(@ids[0..@ids.index(id)])
-		}
+		# @taggings ||= @ids.collect { |id|
+		# 			TaggingPath.new(@ids[0..@ids.index(id)])
+		# 		}
+		@taggings ||= @ids.collect { |id| Tagging.find id }
 	end
 	
 	def parent
@@ -74,7 +79,7 @@ class TaggingPath
   def parse_array(arr)
     @ids = arr.collect { |tag|
 			case tag
-			when Tag
+			when Tagging
 				tag.id
 			else
 				tag

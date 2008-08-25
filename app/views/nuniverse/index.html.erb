@@ -1,35 +1,16 @@
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "People",
-  :taggings => Tagging.with_object_kinds("person").include_object.groupped.with_order('name')
-}%>
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Channels",
-  :taggings => Tagging.with_object_kinds("channel").include_object.groupped.with_order('name')
-}%>
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Movies",
-  :taggings => Tagging.with_object_kinds("movie").include_object.groupped.with_order('name')
-}%>
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Places",
-  :taggings => Tagging.with_object_kinds("location").include_object.groupped.with_order('name')
-}%>
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Videos",
-  :taggings => Tagging.with_object_kinds("video").include_object.groupped.with_order('name')
-}%>
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Items",
-  :taggings => Tagging.with_object_kinds("item").include_object.groupped.with_order('name')
-}%>
-
-<%= render :partial => "/nuniverse/widget", :locals => {
-  :title => "Bookmarks",
-  :taggings => Tagging.with_object_kinds("bookmark").include_object.groupped.with_order('name')
-}%>
+<%= render :partial => "/layouts/hat", :locals => {:selected => "home"}%>
+<div class="nuniverse" >
+  
+  <div class="article" style="padding:20px" >
+    <div class="header">
+      <%= image_tag("/images/icons/logo_nuniverse.png") %>
+    </div>
+    <h1 style="font-size:30px;color:#333">See it all, your way. <strong><a href="/signup">Start now.</a></strong></h1>
+    <h2 style="color:#666">Nuniverse is a personal content management system. It helps you to easily create a map of what matters to you. Define topics, handpick what you want to connect with and create your own personal vision of any subject. Whether you want to keep it private, share it with a few or the whole world, it's all up to you.</h2>
+    <h3 style="color:#999">With nuniverse you can explore a given topic, according to many different perspectives. Bookmark sites and videos that you find on google, items on ebay or amazon, images on flickr, connect people to topics, add your own content &amp; comments, and voila! You can then organize all these elements to represent your personal vision.</h3>
+    <br/>
+    <h2><%#= link_to("Watch our intro video","#TODO") %></h2>
+  </div>
+  
+  
+</div>

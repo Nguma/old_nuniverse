@@ -57,48 +57,55 @@ module WsHelper
 		return "<div class='article'>#{@article.inner_html}</div>"
 	end
 	
-	def map_from_google(params)
+	def map(params)
 		@map = GMap.new("map_div")
-		
-		case params[:location]
-		when "continent"
-			zoom = 2
-		when "country"
-			zoom = 5
-		when "city"
-			zoom = 10
-		else
-			zoom = 15
-		end
-		
-		if params[:location].kind == "topic"
-			markers = markers_for(Tagging.with_path_ending(params[:location]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
+	  @map.control_init(:large_map => true,:map_type => true)
+	  
+		# case params[:location]
+		# 		when "continent"
+		# 			zoom = 2
+		# 		when "country"
+		# 			zoom = 5
+		# 		when "city"
+		# 			zoom = 10
+		# 		else
+		# 			zoom = 15
+		# 		end
+		# 		
+		if params[:location].kind == "tag"
+			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
 			markers = markers_for([params[:location]])
 		end
 		
 		if markers.empty?
-			return render(:partial => "/nuniverse/maps", :locals => {:no_map => true, :path => params[:path]})
+			return false
+			# return render(:partial => "/nuniverse/maps", :locals => {:no_map => true, :path => params[:path]})
 		else
-			html = "<script type='text/javascript' charset='utf-8'>
-			//<![CDATA[
-			
-				nuniverse.options['map'] = {
-					'markers':[#{markers.join(',')}],
-					'zoom':#{zoom},
-					'center':#{markers[0]}
-				} 
-			//]]>
-			</script>"
+			@map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],10)
+			markers.each do |marker|
+				@map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "Info! Info!"))
+			end
+			return @map
+			# html = "<script type='text/javascript' charset='utf-8'>
+			# 			//<![CDATA[
+			# 			
+			# 				setMap({
+			# 					'markers':[#{markers.join(',')}],
+			# 					'zoom':#{zoom},
+			# 					'center':#{markers[0]}
+			# 				});
+			# 			//]]>
+			# 			</script>"
 		end
 		
-		return render(:partial => "/nuniverse/maps", :locals => {
-			:no_map => false,
-			:map => @map,
-			:markers => markers,
-			:html => html,
-			:path => params[:path]
-		})
+		# return render(:partial => "/nuniverse/maps", :locals => {
+		# 			:no_map => false,
+		# 			:map => @map,
+		# 			:markers => markers,
+		# 			:html => html,
+		# 			:path => params[:path]
+		# 		})
 	end
 	
 	def markers_for(places)
@@ -113,9 +120,10 @@ module WsHelper
 					markers << place
 			end
 		end
-		return markers.collect {|marker| 
-			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{marker.weather}'}"
-		}
+		return markers
+		# return markers.collect {|marker| 
+		# 			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{}'}"
+		# 		}
 	end
 	
 	def details_for(params)
