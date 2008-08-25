@@ -48,6 +48,7 @@ class User < ActiveRecord::Base
 		else	
 		end
 	end
+	
 
   protected
     
@@ -64,5 +65,9 @@ class User < ActiveRecord::Base
 			self.save
 		end
 
+		class Authentication
+		end
 
 end
+
+

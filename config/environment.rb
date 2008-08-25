@@ -72,3 +72,5 @@ require 'metaweb'
 require 'graticule'
 require 'rss'
 require 'redcloth'
+
+include AuthenticatedSystem
