@@ -4,10 +4,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :tags do |tag|
     tag.resource :avatar
   end
-
-	map.resources :taggings
-	map.resource  :user
 	map.resources :sessions
+	map.resources :taggings
+	map.resources :users, :member => { :suspend   => :put,
+	                                   :unsuspend => :put,
+	                                   :purge     => :delete }
+	
 	
 	map.activate '/activate/:activation_code', 
 		:controller => 'users', 
