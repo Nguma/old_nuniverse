@@ -85,10 +85,10 @@ class Tag < ActiveRecord::Base
 	
 	
 	def thumbnail
-		return avatar.public_filename(:large) unless avatar.nil?
+		return avatar.public_filename(:small) unless avatar.nil?
 		return property('thumbnail') unless property('thumbnail').blank?
 		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
-		return "/images/icons/icon_nuniverse.png"
+		return nil
 	end
 	
 	def image
@@ -232,7 +232,15 @@ class Tag < ActiveRecord::Base
 	
 	def connections(params = {})
 		context = TaggingPath.new(params[:context])
-		Tagging.find(:all, :conditions => ['subject_id = ?', self.id])
+		Tagging.find(:all, :conditions => ['object_id = ?', self.id], :group => "subject_id")
+	end
+	
+	def subject_of(params = {})
+		Tagging.with_subject(self)
+	end
+	
+	def object_of(params = {})
+		Tagging.with_object(self)
 	end
   
 end

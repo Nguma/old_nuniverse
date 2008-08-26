@@ -19,6 +19,10 @@ ActionController::Routing::Routes.draw do |map|
 	map.login '/login', :controller => 'sessions', :action => 'new'
 	map.logout '/logout', :controller => 'sessions', :action => 'destroy'
 	
+	map.upgrade "/upgrade",
+		:controller => "users",
+		:action => "upgrade"
+	
 	map.my_nuniverse "/my_nuniverse",
 		:controller => 'users',
 		:action => 'show'

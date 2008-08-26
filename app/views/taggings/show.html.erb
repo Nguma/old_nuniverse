@@ -2,13 +2,17 @@
     <%= breadcrumbs(@tagging.path)%>
     
     <h1>
+      <%= image_tag(@tagging.object.thumbnail) if @tagging.object.thumbnail %>
       <%= @tagging.object.label.capitalize %> 
       <span class="service"><%= " according to #{@service.capitalize}" if @service%></span>
     </h1>
+    <div class="delimiter">&nbsp;</div>
     <%= render :partial => "/nuniverse/connections", :locals => {
       :service => @service,
       :items => @items,
-      :selected => @selected
+      :selected => @selected,
+      :order => @order,
+      :tagging => @tagging
     }%>
     <% unless @service -%>
       <h2>Add Something</h2>
@@ -22,6 +26,7 @@
         <%= link_to "Share this topic with someone", "/taggings/share/#{@tagging.id}" , :class => "option" if current_user == @tagging.owner %>
         <%= link_to "Google this topic", "/google/#{@tagging.id}" , :class => "option" %>
         <%= link_to "Locate", "/map/#{@tagging.id}" , :class => "option" %>
+        <%= link_to "Images", "/taggings/#{@tagging.id}?service=images" , :class => "option" %>
         <%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete, :class => "option" %>
       </div>
     <% else -%>
@@ -29,4 +34,9 @@
         <%= link_to "back to content", @tagging , :class => "option" %>
       </div>
     <% end -%>
+    <div id="google_ads">
+    <script type="text/javascript"
+       src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+     </script>
+    </div>
 <% end -%>

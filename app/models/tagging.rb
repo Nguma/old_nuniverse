@@ -76,7 +76,7 @@ class Tagging < ActiveRecord::Base
   named_scope :by_latest, :order => "taggings.updated_at DESC"
 	named_scope :with_order, lambda { |order|
 		case order
-		when "name"
+		when "name","label"
 			{:include => :object, :order => "tags.label ASC"}
 		when "latest"
 			{:order => "taggings.updated_at DESC"}
@@ -108,8 +108,8 @@ class Tagging < ActiveRecord::Base
 		tagging
 	end
 	
-	def connections	
-		Tagging.with_exact_path(self.full_path).include_object.with_order('name')
+	def connections(params = {})
+		Tagging.with_exact_path(self.full_path).include_object.with_order(params[:order] || 'name')
 	end
 	
 	def contributors(params = {})
@@ -119,6 +119,20 @@ class Tagging < ActiveRecord::Base
 	def authorized_users
 		[contributors, self.owner].flatten
 	end
+	
+	def siblings
+		# Add a method to find siblings from parent
+	end
+	
+	def images
+		Avatar.find(:all, :conditions => ['tag_id = ?', object.id])
+	end
+	
+	def is_a_list?
+		return true if object.kind == "list"
+		return false
+	end
+	
 	protected
 	
   def self.switch_paths(original_path, new_path)

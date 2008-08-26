@@ -4,7 +4,7 @@ class Avatar < ActiveRecord::Base
   has_attachment	:content_type => :image,
     							:thumbnails => {
       							:small => '50x50>',
-      							:large => '100x100>'
+      							:large => '150x150>'
     							},
     							:processor  => :image_science,
     							:storage    => :file_system

@@ -15,7 +15,7 @@
 }
 
 .nuniverse h1 {
-	font-size:35px;
+	font-size:50px;
 	font-weight:normal;
 	color:#4f4f4f;
 }
@@ -58,15 +58,6 @@
 	height:100px;
 }
 
-.nuniverse .pagination {
-	font-size:13px;
-	color:#999;
-}
-
-.nuniverse .pagination .current {
-	color:#333;
-}
-
 .nuniverse .breadcrumbs a {
 	display:block;
 	color:#666;
@@ -107,4 +98,91 @@
 	clear:both;
 	width:800px;
 
+}
+.nuniverse h1 img {
+	border:solid 1px #333;
+	height:50px;
+	width:50px;
+	position:relative;
+	float:left;
+	margin-right:10px;
+	
+}
+
+.nuniverse .items {
+	position:relative;
+	clear:both;
+	margin:5px 0 0 0;
+}
+
+.nuniverse .item {
+	position:relative;
+	clear:both;
+	margin:0 0 1px 0;
+	overflow:hidden;
+	cursor: move;
+	background:#ccc;
+	padding:5px;
+}
+
+.items .dragged {
+	cursor:-moz-grabbing;
+	background:#FFF;
+}
+
+.nuniverse .item .sort_actions {
+	position:relative;
+	float:left;
+	margin-right:5px;
+	width:20px;
+	height:20px;
+}
+
+.item .sort_actions a {
+	display:block;
+}
+
+.items .item .rank {
+	width:30px;
+	text-align:center;
+}
+
+.nuniverse .item h3 {
+	
+}
+
+.nuniverse .sorting_options {
+	font-size:13px;
+	color:#999;
+	position:relative;
+	float:left;
+}
+
+.nuniverse .sorting_options a {
+	margin-right:5px;
+}
+
+.nuniverse .sorting_options .current {
+	color:#333;
+}
+
+.nuniverse .pagination {
+	position:relative;
+	float:left;
+	font-size:13px;
+	color:#999;
+	margin: 0 10px 0 0;
+}
+
+.nuniverse .pagination .current {
+	color:#333;
+}
+
+#google_ads {
+	clear:both;
+	position:relative;
+	float:left;
+	border:solid 2px #ccc;
+	padding:3px;
+	background:#FFF;
 }

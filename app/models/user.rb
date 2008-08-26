@@ -1,11 +1,11 @@
 require 'digest/sha1'
 
 class User < ActiveRecord::Base
-  #include Authentication
+  include Authentication
   include Authentication::ByPassword
   include Authentication::ByCookieToken
   include Authorization::StatefulRoles
-  validates_presence_of     :login
+  #validates_presence_of     :login
   validates_length_of       :login,    :within => 3..40
   validates_uniqueness_of   :login,    :case_sensitive => false
   validates_format_of       :login,    :with => RE_LOGIN_OK, :message => MSG_LOGIN_BAD
@@ -29,6 +29,8 @@ class User < ActiveRecord::Base
 	belongs_to :tag
 	
 	after_create :assign_tag
+	
+	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 
 
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
@@ -49,6 +51,13 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def invite(params)
+		Permission.create(
+			:tagging => params[:topic],
+			:user => params[:user])
+		UserMailer.deliver_invitation(:topic => params[:topic], :user => params[:user], :sender => self)
+	end
+	
 
   protected
     
@@ -58,14 +67,12 @@ class User < ActiveRecord::Base
     end
 
 		def assign_tag
+			return if self.login.nil?
 			self.tag = Tag.create(
 				:label => self.login,
 				:kind => 'user'
 			)
 			self.save
-		end
-
-		class Authentication
 		end
 
 end

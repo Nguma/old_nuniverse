@@ -1,0 +1,8 @@
+<%= h @sender.login.capitalize %> is inviting you to visit his nuniverse. 
+<%= h @url %>
+
+He is sharing with you <%= @topic.object.label.capitalize %>:
+<% @topic.connections.paginate(:page => 1, :per_page => 8).each do |item| %>
+<%= item.object.label %>
+<%= item.object.property('address') %>
+<% end -%>

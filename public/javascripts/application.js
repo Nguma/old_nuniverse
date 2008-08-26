@@ -7,6 +7,27 @@ function reset()
   if($defined($('input'))) {
     $('input').focus();
   }
+  
+  $$('.items').each(function(list){
+    var sortable = new Sortables(list, {
+      revert:{duration:500, transition:'elastic:out'},
+      onStart:function(item) {
+        
+        item.addClass('dragged');
+        
+      },
+      
+      onSort:function(item) {
+        
+        list.getElements('.item').each(function(item,i){
+          item.getElement('.rank').set('text', i+1);
+        });
+      },
+      onComplete:function(item) {
+        item.removeClass('dragged');
+      }
+    })
+  });
 
 }
 

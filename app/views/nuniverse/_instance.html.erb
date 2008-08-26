@@ -1,15 +1,25 @@
 <% nuniverse do %>
+    <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
     <h1>Welcome, <%= current_user.login.capitalize %>, this is your nuniverse</h1>
-    <h2>Browse your existing lists</h2>
+    <div class="delimiter">&nbsp;</div>
+    <h2>Browse your existing topics</h2>
     <%= render :partial => "/nuniverse/connections", :locals => {
       :items => @items,
       :selected => nil,
-      :service => @service
+      :service => @service,
+      :tagging => nil
     }%>
     <h2>or create a new one</h2>
     <%= render :partial => "/taggings/find_or_create", :locals => {
         :subject => @tag,
         :path => @path} %>
+      
+    <% unless current_user.invitations.empty? %>
+    <h2>You have been invited to follow</h2>
+      <% current_user.invitations.each do |invitation| -%>
+        <h4><%= link_to_user(invitation.tagging.owner) %>'s <%= link_to_item(invitation.tagging) %></h4>
+      <% end -%>
+    <% end -%>
 <% end -%>
 
 <div class="hidden">

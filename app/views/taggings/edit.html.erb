@@ -1,0 +1,25 @@
+<% nuniverse(:dom_class => "edit") do -%>
+    <%= breadcrumbs(@tagging.path)%>
+    
+    <h1>
+      <%= image_tag(@tagging.object.thumbnail) if @tagging.object.thumbnail %>
+      <%= @tagging.object.label.capitalize %> 
+      
+    </h1>
+    <div class="delimiter">&nbsp;</div>
+    <div class="items">
+      <% @items.each_with_index do |item, i| -%>
+        <div class="item">
+          <div class="sort_actions">
+            <%= link_to(image_tag('/images/icons/sort_up.png'), "#") %>
+            <%= link_to(image_tag('/images/icons/sort_down.png'), "#") %>
+          </div>
+          <h3> 
+            <span class="rank"><%= (i+1) %></span>
+            <%= item.object.label %>
+          </h3>
+        </div>
+      <% end -%>
+    </div>
+    
+<% end -%>

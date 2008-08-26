@@ -1,18 +1,31 @@
+<%= will_paginate items if service.nil? %>
+<% if tagging.nil?  || tagging.is_a_list? %>
+  <div class="sorting_options">
+    <%= sorting_options(
+      [['By Name', 'name'],
+        ['By Latest', 'latest'],
+        ['By Rank', 'rank']
+      ], :selected => @order)%>
+  </div>
+<% end -%>
+<div class="items">
 <% items.each_with_index do |item,i| %>
-  <h3 class="item <%= (i == selected) ? '' : '' %>">
+  <div class="item <%= (i == selected) ? '' : '' %>">
+  <h3>
     <% if service == "google" -%>
-      <%= (i+1)  %> 
+     <span class="rank"><%= (i+1)  %></span>
       <%= link_to(item.label.capitalize, item.url)%>
       <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
     <% elsif service == "map" -%>
-      <%= (i+1) + items.offset rescue 0 %> 
-      <%= link_to_item(item) %>
+      <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
+      <%= link_to_item(item)%>
       <p><%= item.object.property('address') %></p>
     <% else -%>
-      <%= (i+1) + items.offset rescue 0 %> 
+      <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
       <%= link_to_item(item) %>
     <% end -%>
   </h3>
+  </div
 <% end -%>
-<%= will_paginate items if service.nil? %>
+</div>
 

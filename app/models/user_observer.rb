@@ -9,4 +9,5 @@ class UserObserver < ActiveRecord::Observer
     UserMailer.deliver_activation(user) if user.recently_activated?
   
   end
+
 end

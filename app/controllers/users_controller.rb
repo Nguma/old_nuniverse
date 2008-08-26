@@ -1,10 +1,8 @@
 class UsersController < ApplicationController
-  # Be sure to include AuthenticationSystem in Application Controller instead
-  include AuthenticatedSystem
   
   # Protect these actions behind an admin login
   # before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
-  before_filter :find_user, :only => [:suspend, :unsuspend, :destroy, :purge]
+  before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge]
 	before_filter :login_required, :except => [:new, :create]
   
 
@@ -64,6 +62,9 @@ class UsersController < ApplicationController
     @user.destroy
     redirect_to users_path
   end
+
+	def upgrade
+	end
   
   # There's no page here to update or destroy a user.  If you add those, be
   # smart -- make sure you check that the visitor is authorized to do so, that they
@@ -72,14 +73,17 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_nuniverse
 	def show
+		if @user && current_user != @user
+			redirect_to @user.tag 
+		end
 		@tag = current_user.tag
 		@path = TaggingPath.new
 		@service = nil
-		@items = @tag.connections.paginate(:page => 1, :per_page => 8)
+		@items = @tag.subject_of.paginate(:page => 1, :per_page => 8)
 	end
 	
 protected
   def find_user
-    @user = User.find(params[:id])
+    @user = User.find(params[:id]) rescue nil
   end
 end

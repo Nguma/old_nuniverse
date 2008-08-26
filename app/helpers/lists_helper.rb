@@ -27,4 +27,14 @@ module ListsHelper
 		str << "</div>"
 		str
 	end
+	
+	def sorting_options(elements, params = {})
+		str = '<div class="sorting_options">'
+		elements.each do |element|
+			
+			str << link_to(element[0],same_uri_with(:order => element[1]), :class => (params[:selected] == element[1]) ? "current" : "")
+		end
+		str << "</div>"
+		str
+	end
 end

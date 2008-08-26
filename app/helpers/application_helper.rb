@@ -59,7 +59,21 @@ module ApplicationHelper
 		)
 	end
 	
-	def todo(todo)
-		"<div class='nuniverse_info'>#{todo} isn't implemented yet, sorry... But it's tracked in our todos :)</div>"
+	def same_uri_with(params = {})
+		new_uri = "/#{request.parameters[:controller]}/#{request.parameters[:action]}"
+		new_uri << "/#{request.parameters[:id]}" if request.parameters[:id]
+		new_uri << "?"
+		new_params = request.parameters.clone
+		new_params.delete('controller')
+		new_params.delete('action')
+		new_params.delete('id')
+		params.each do |p|
+			new_params[p[0]] = p[1].to_s
+		end
+		new_params.each do |p|
+			new_uri << "#{p[0]}=#{p[1]}&"
+		end
+		new_uri
+		
 	end
 end
