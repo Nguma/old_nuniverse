@@ -68,3 +68,13 @@
 	width:30%;
 	text-align:center;
 }
+
+
+.state {
+	position:relative;
+	font-size:13px;
+}
+
+.pending {
+	color:#F30;
+}

@@ -22,7 +22,9 @@ class ApplicationController < ActionController::Base
 
 	protected
 	def invitation_required
-		redirect_to "/beta"
+		if !logged_in?
+			redirect_to "/beta"
+		end
 	end
 	
 

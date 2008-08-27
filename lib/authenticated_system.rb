@@ -54,7 +54,7 @@ module AuthenticatedSystem
     end
 
 		def admin_required
-       (logged_in? && self.current_user.active?) ? true : access_restricted
+       (logged_in? && self.current_user.role == "admin") ? true : access_restricted
 		end
 		
 		def restrict_to(users)
@@ -80,7 +80,7 @@ module AuthenticatedSystem
       respond_to do |format|
         format.html do
           store_location
-          redirect_to new_session_path
+          redirect_to "/login"
         end
         # format.any doesn't work in rails version < http://dev.rubyonrails.org/changeset/8987
         # you may want to change format.any to e.g. format.any(:js, :xml)

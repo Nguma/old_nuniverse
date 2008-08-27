@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 	map.resources :sessions
 	map.resources :taggings
-	map.resources :users, :member => { :suspend   => :put,
+	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
 	                                   :purge     => :delete }
 	

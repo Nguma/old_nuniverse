@@ -41,7 +41,7 @@ function onunLoad()
 function notice(msg)
 {
   if($defined(msg)) {$('notice').set('text',msg)}
-  $('notice').fade.delay('3000',$('notice'),'out');
+  $('notice').fade.delay('5000',$('notice'),'out');
 }
 
 function debug(msg)

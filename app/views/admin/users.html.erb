@@ -1,0 +1,13 @@
+<% nuniverse do -%>
+  <h1>Users</h1>
+  <% @users.each do |user| -%>
+    <div class="item">
+      <h3><%= user.login %>
+      <span class="state <%= user.state %>">
+        <%= user.state %>
+        <%= link_to("(send activation code)", "/admin/send_activation_code/#{user.id}") if user.pending? %>
+      </span>
+      </h3>
+    </div>
+  <% end -%>
+<% end -%>
