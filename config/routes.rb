@@ -11,6 +11,11 @@ ActionController::Routing::Routes.draw do |map|
 	                                   :purge     => :delete }
 	
 	
+	map.beta "/beta",
+		:controller => "application",
+		:action => "beta"
+		
+		
 	map.activate '/activate/:activation_code', 
 		:controller => 'users', 
 		:action => 'activate'
