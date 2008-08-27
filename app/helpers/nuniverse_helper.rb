@@ -2,6 +2,7 @@ module NuniverseHelper
 	
 	def nuniverse(params = {}, &block)
 		params[:content] = capture(&block)
+		params[:selected] ||= ""
 		concat(
 			render(
 				:partial => "/nuniverse/page",

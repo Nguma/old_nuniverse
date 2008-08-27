@@ -42,6 +42,22 @@
 	display:block;
 }
 
+#login input,
+#sign_up input {
+	font-size:25px;
+	border:solid 1px #ccc;
+	margin: 0 0 10px 0;
+}
+
+#login label,
+#sign_p label {
+	font-size:15px;
+	margin:10px 0 5px 0;
+	padding:10px 0 5px 0;
+	color:#666;
+	font-weight:bold;
+}
+
 .plans {
 	margin:200px auto;
 }
