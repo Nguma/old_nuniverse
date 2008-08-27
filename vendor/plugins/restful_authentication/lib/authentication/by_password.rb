@@ -1,17 +1,16 @@
 module Authentication
   module ByPassword
-    
     # Stuff directives into including module
-    def self.included( recipient )
-      recipient.extend( ModelClassMethods )
+    def self.included(recipient)
+      recipient.extend(ModelClassMethods)
       recipient.class_eval do
         include ModelInstanceMethods
         
         # Virtual attribute for the unencrypted password
         attr_accessor :password
         validates_presence_of     :password,                   :if => :password_required?
-        # validates_presence_of     :password_confirmation,      :if => :password_required?
-        # validates_confirmation_of :password,                   :if => :password_required?
+        validates_presence_of     :password_confirmation,      :if => :password_required?
+        validates_confirmation_of :password,                   :if => :password_required?
         validates_length_of       :password, :within => 6..40, :if => :password_required?
         before_save :encrypt_password
       end
