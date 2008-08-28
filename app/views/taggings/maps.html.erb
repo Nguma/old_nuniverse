@@ -1,4 +1,4 @@
-<%= Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue ""%>
+<%= Graticule.service(:host_ip).new.locate(request.remote_ip) %>
 <% @map = map(:source => @tagging.object, :path => @tagging.full_path ) %>
 <% nuniverse(:dom_class => "maps") do -%>
     <%= breadcrumbs(@tagging.path)%>
@@ -21,6 +21,7 @@
         <%= @map.div(:width => 'auto', :height => 400, :style=>"position:relative") %>
       </div>
     <% else -%>
+      <h2>Google suggests these possible addresses</h2>
       <% @items = Finder::Search.find(:service => "google", :filter => "local", :query => @tagging.object.label ) %>
       <div class="items">
       <% @items.each do |item| -%>
