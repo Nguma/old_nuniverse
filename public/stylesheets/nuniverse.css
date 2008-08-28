@@ -66,6 +66,8 @@
 .nuniverse .options {
 	position:fixed;
 	bottom:10px;
+	background:#EAEAEA;
+	padding:5px;
 }
 
 .nuniverse .options .option {
