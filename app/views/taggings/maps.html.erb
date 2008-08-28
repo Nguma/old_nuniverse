@@ -1,4 +1,4 @@
-<%= @map = map(:location => @tagging.object, :path => @tagging.full_path ) %>
+<% @map = map(:source => @tagging.object, :path => @tagging.full_path ) %>
 <% nuniverse(:dom_class => "maps") do -%>
     <%= breadcrumbs(@tagging.path)%>
     <h1><%= @tagging.object.label.capitalize %></h1>
@@ -10,7 +10,7 @@
       :items => @items,
       :selected => @selected,
       :tagging => nil
-    }%>
+    } if @tagging.kind == "list" %>
     <% if @map -%>
       <% content_for :head do -%>
         <%= GMap.header (:large_map => true, :with_vml => false) %>
@@ -18,6 +18,16 @@
       <% end -%>
       <div style="position:relative;margin:20px 0 0 405px">
         <%= @map.div(:width => 'auto', :height => 400, :style=>"position:relative") %>
+      </div>
+    <% else -%>
+      <% @items = Finder::Search.find(:service => "google", :filter => "local", :query => @tagging.object.label ) %>
+      <div class="items">
+      <% @items.each do |item| -%>
+      <div class="item">
+        <h3><%= item.label %></h3>
+        <p><%= item.url%></p>
+        </div>
+      <% end -%>
       </div>
     <% end -%>
     <div class="options">

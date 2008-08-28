@@ -11,6 +11,7 @@ module Finder
 		def initialize(params)
 			@query = params[:query]
 			@mode = params[:filter] || "web"
+
 		end
 		
 		def results

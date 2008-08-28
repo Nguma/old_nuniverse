@@ -13,6 +13,7 @@ module Googleizer
 		
 		def response
 			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=large"
+			
 			Googleizer::Response.new(Net::HTTP.get_response(URI.parse(uri)),mode)
 		end
 		
