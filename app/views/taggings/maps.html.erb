@@ -1,3 +1,4 @@
+
 <% @map = map(:source => @tagging.object, :path => @tagging.full_path ) %>
 <% nuniverse(:dom_class => "maps") do -%>
     <%= breadcrumbs(@tagging.path)%>
@@ -23,9 +24,9 @@
       <% @items = Finder::Search.find(:service => "google", :filter => "local", :query => @tagging.object.label ) %>
       <div class="items">
       <% @items.each do |item| -%>
-      <div class="item">
-        <h3><%= item.label %></h3>
-        <p><%= item.url %></p>
+        <div class="item">
+          <h3><%= item.label %></h3>
+          <p><%= item.property('address') %></p>
         </div>
       <% end -%>
       </div>
