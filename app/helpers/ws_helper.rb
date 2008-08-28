@@ -58,8 +58,8 @@ module WsHelper
 	end
 	
 	def map(params)
-		@map = GMap.new("map_div")
-	  @map.control_init(:large_map => true,:map_type => true)
+		map = GMap.new("map_div")
+	  map.control_init(:large_map => true)
 	  
 		# case params[:location]
 		# 		when "continent"
@@ -72,7 +72,9 @@ module WsHelper
 		# 			zoom = 15
 		# 		end
 		# 		
-		if params[:location].kind == "tag"
+
+		if params[:location].address
+			
 			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
 		else
 			markers = markers_for([params[:location]])
@@ -82,11 +84,12 @@ module WsHelper
 			return false
 			# return render(:partial => "/nuniverse/maps", :locals => {:no_map => true, :path => params[:path]})
 		else
-			@map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],10)
+			 #@map.center_zoom_init([-37,-49],10)
+			map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],13)
 			markers.each do |marker|
-				@map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "Info! Info!"))
+				map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "Info! Info!"))
 			end
-			return @map
+			return map
 			# html = "<script type='text/javascript' charset='utf-8'>
 			# 			//<![CDATA[
 			# 			

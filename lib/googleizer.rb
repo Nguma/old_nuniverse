@@ -1,6 +1,6 @@
 module Googleizer
 	attr_reader :results
-	G_REFERER = 	"http://localhost:3000"
+	G_REFERER = 	"http://www.nuniverse.net"
 	G_REST_URL = 	"http://ajax.googleapis.com/ajax/services/search"
 	DEFAULT_SEARCH_MODE = "web"
 	

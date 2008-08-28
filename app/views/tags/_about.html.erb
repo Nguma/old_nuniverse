@@ -1,0 +1,7 @@
+<div class="about">
+  <% form_tag "/tags/update/#{tag.id}" do -%>
+    <label>Address</label>
+    <%= text_field_tag "address", tag.property("address") %>
+    <%= submit_tag "update" %>
+  <% end -%>
+</div>

@@ -97,15 +97,16 @@
 	position:relative;
 	clear:both;
 	width:800px;
-
 }
-.nuniverse h1 img {
-	border:solid 1px #333;
-	height:50px;
-	width:50px;
+
+.nuniverse h1 .avatar {
+/*	border:solid 1px #333;*/
+	height:30px;
+	width:30px;
+	padding:15px 0 0 0;
 	position:relative;
 	float:left;
-	margin-right:10px;
+	margin-right:3px;
 	
 }
 
@@ -145,6 +146,7 @@
 .items .item .rank {
 	width:30px;
 	text-align:center;
+	color:#999;
 }
 
 .nuniverse .item h3 {
@@ -185,4 +187,21 @@
 	border:solid 2px #ccc;
 	padding:3px;
 	background:#FFF;
+}
+
+.list_button {
+	border:none;
+	display:inline;
+}
+
+.list_button img {
+	border:none;
+	width:auto;
+	height:auto;
+}
+
+.maps .items {
+	position:relative;
+	float:left;
+	width:400px;
 }

@@ -71,6 +71,10 @@ class Tagging < ActiveRecord::Base
     kind.nil? ? {} : {:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
 
+	named_scope :with_kind, lambda {|kind| 
+		kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
+	}
+
 	named_scope :include_object, {:conditions => "tags.id > 0", :include => :object}
 	named_scope :groupped, :group => "object_id"
   named_scope :by_latest, :order => "taggings.updated_at DESC"
@@ -113,7 +117,8 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def contributors(params = {})
-		Permission.find(:all, :conditions => ['tagging_id = ?', self.id]).collect {|p| p.user}
+		ids = self.full_path.ids || []
+		Permission.find(:all, :conditions => ['tagging_id IN (?)', ids]).collect {|p| p.user}
 	end
 	
 	def authorized_users
@@ -129,7 +134,7 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def is_a_list?
-		return true if object.kind == "list"
+		return true if kind == "list"
 		return false
 	end
 	

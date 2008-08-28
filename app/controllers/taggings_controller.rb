@@ -2,7 +2,7 @@ class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
 	
 	before_filter :login_required
-	before_filter :find_tagging, :only => [:edit, :show, :share, :invite, :destroy]
+	before_filter :find_tagging, :only => [:edit, :show, :update, :share, :invite, :destroy]
 
 	def index
 		redirect_to "/my_nuniverse"
@@ -13,51 +13,11 @@ class TaggingsController < ApplicationController
 		@items = @tagging.connections.paginate(:page => params[:page] || 1, :per_page => 10)
 	end
 	
-	def create
-		
-		# if params[:id]
-		# 			@tagging = Tagging.create Tagging.find(params[:id]).attributes.merge(
-		# 				:user_id => current_user.id,
-		# 				:path		 => session[:path]
-		# 			)
-		# 		else
-		# 			gum = {}
-		# 			gum['address'] = params[:address] 
-		# 			if params[:data]
-		# 				gumies = params[:data].scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/)
-		# 				unless gumies.empty?
-		# 					params[:label] = gumies[0][1]
-		# 					params[:kind]    = gumies[0][0]
-		# 					gumies.shift
-		# 					gumies.each do |gumi|
-		# 						gum[gumi[0]] = gumi[1]
-		# 					end
-		# 				end
-		# 			end
-		# 		
-		# 			params[:description] ||= gum.delete('description')
-		# 			params[:url]         ||= gum.delete('url')
-		# 			params[:service]     ||= gum.delete('service')
-		# 			
-		# 			@tagging = Tag.connect(
-		# 				:label 	    => params[:label],
-		# 				:kind			    => params[:kind],
-		# 				:path			    => session[:path],
-		# 				:restricted   => params[:restricted],
-		# 				:description  => params[:description] || "",
-		# 				:url          => params[:url],
-		# 				:service      => params[:service],
-		# 				:gum          => gum,
-		# 				:relationship => params[:relationship],
-		# 				:user_id	    => current_user.id
-		# 			)
-		# 		end
-		
-    # respond_to do |format|
-    #       flash[:notice] = 'Connection was successfully created.'
-    #       format.html { render :layout => false }
-    #       format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
-    #     end
+	def update
+		restrict_to([@tagging.owner])
+		@tagging.object.kind = params[:kind] if params[:kind]
+		@tagging.object.save
+		redirect_to @tagging
 	end
 	
 	def destroy
@@ -68,8 +28,13 @@ class TaggingsController < ApplicationController
 	end
 	
 	def connect
+		gums = params[:query].scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
+		unless gums.empty?
+			params[:kind] = gums[0][1]
+			params[:query] = gums[0][2]
+		end
 		@subject = Tag.find(params[:subject])
-		@tag = Tag.find_or_create(:label => params[:query], :kind => 'tag')
+		@tag = Tag.find_or_create(:label => params[:query], :kind => params[:kind] || nil)
 		@tagging = Tagging.find_or_create(:owner => current_user, :subject_id => @subject.id, :object_id => @tag.id, :path => params[:path])
 		redirect_to("/taggings/#{@tagging.path.last}")
 	end
@@ -86,8 +51,10 @@ class TaggingsController < ApplicationController
 		
 		case @service
 		when "google"
-			@items = Finder::Search.find(:query => @tagging.object.label, :service => @service)
+			@items = Finder::Search.find(:query => "#{@tagging.subject.label} #{@tagging.object.label}", :service => @service)
 		when "map"
+			
+			
 			@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
 			render :action => "maps"
 		when "images"

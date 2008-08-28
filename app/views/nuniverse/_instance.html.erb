@@ -7,7 +7,8 @@
       :items => @items,
       :selected => nil,
       :service => @service,
-      :tagging => nil
+      :tagging => nil,
+      :order => @order
     }%>
     <h2>or create a new one</h2>
     <%= render :partial => "/taggings/find_or_create", :locals => {
@@ -17,7 +18,7 @@
     <% unless current_user.invitations.empty? %>
     <h2>You have been invited to follow</h2>
       <% current_user.invitations.each do |invitation| -%>
-        <h4><%= link_to_user(invitation.tagging.owner) %>'s <%= link_to_item(invitation.tagging) %></h4>
+        <h4><%= link_to(invitation.tagging.owner.login.capitalize, invitation.tagging.owner.tag) %>'s <%= link_to_item(invitation.tagging) %></h4>
       <% end -%>
     <% end -%>
 <% end -%>

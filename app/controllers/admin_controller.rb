@@ -13,5 +13,6 @@ class AdminController < ApplicationController
 	def send_activation_code
 		@user = User.find(params[:id])
 		UserMailer.deliver_activation_code(@user)
+		redirect_to "/admin/users"
 	end
 end

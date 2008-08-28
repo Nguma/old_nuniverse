@@ -1,7 +1,7 @@
 class Tag < ActiveRecord::Base
   has_one :avatar
 	
-	validates_presence_of :label, :kind
+	validates_presence_of :label
 	
 	alias_attribute :name, :label
 	attr_accessor :address
@@ -54,6 +54,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def has_address?
+		return true if self.kind == "address"
 		return true if !address.full_address.blank?
 		false
 	end
@@ -115,6 +116,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def replace(property,value)
+		data = self.data || ""
 		new_data = data.gsub(/##{property}[\s]+([^#|\[|\]]+)/,'')
 		self.data = "#{new_data}##{property} #{value}"
 	end

@@ -209,6 +209,10 @@
 	color:#666;
 }
 
+.item .avatar {
+	height:15px;
+}
+
 .nuniverse .connection p a
 {
 	color:#69c;

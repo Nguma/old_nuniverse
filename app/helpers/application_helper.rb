@@ -6,10 +6,6 @@ module ApplicationHelper
 	end
 	
 	
-	def avatar_for(tag)
-		return image_tag(tag.thumbnail, :alt => tag.kind, :class => "avatar") 
-	end
-	
 	def link_to_nuniverse(tag, options = {})		
 		return link_to("You",	"/my_nuniverse", :class => options[:class]) if logged_in? && current_user.tag == tag 
 		label = tag.label.capitalize

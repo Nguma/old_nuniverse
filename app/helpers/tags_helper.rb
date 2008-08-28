@@ -1,7 +1,6 @@
 module TagsHelper
 
-	
-	
+
 	def h3_for(path)
 		
 		sentence = ""

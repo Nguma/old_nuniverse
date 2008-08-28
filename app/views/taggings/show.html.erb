@@ -2,11 +2,16 @@
     <%= breadcrumbs(@tagging.path)%>
     
     <h1>
-      <%= image_tag(@tagging.object.thumbnail) if @tagging.object.thumbnail %>
+      <%= avatar_for(@tagging.object)  %>
       <%= @tagging.object.label.capitalize %> 
-      <span class="service"><%= " according to #{@service.capitalize}" if @service%></span>
+      <span class="service">
+        <%= " according to #{@service.capitalize}" if @service%>
+      </span>
+      
     </h1>
+    <%= kind_options(@tagging) %>
     <div class="delimiter">&nbsp;</div>
+    <%= elements_proper_to_kind(@tagging) %>
     <%= render :partial => "/nuniverse/connections", :locals => {
       :service => @service,
       :items => @items,
