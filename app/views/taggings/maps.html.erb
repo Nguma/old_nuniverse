@@ -1,4 +1,4 @@
-
+<%= Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue ""%>
 <% @map = map(:source => @tagging.object, :path => @tagging.full_path ) %>
 <% nuniverse(:dom_class => "maps") do -%>
     <%= breadcrumbs(@tagging.path)%>
