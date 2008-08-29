@@ -42,8 +42,9 @@ class User < ActiveRecord::Base
   # This will also let us return a human error message.
   #
   def self.authenticate(login, password)
-    u = find_in_state :first, :active, :conditions => {:login => login} # need to get the salt
-    u && u.authenticated?(password) ? u : nil
+    # u = find_in_state :first, :active, :conditions => {:login => login} # need to get the salt
+    u = find(:first,:conditions => {:login => login})
+		u && u.authenticated?(password) ? u : nil
   end
 
 	def avatar

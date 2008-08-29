@@ -19,7 +19,9 @@ class SessionsController < ApplicationController
       end
       redirect_back_or_default('/my_nuniverse')
       flash[:notice] = "Logged in successfully"
-    else
+    elsif current_user
+      redirect_to '/activate/'
+		else
       redirect_to '/login'
 			flash[:notice] = "Wrong username / password "
     end
