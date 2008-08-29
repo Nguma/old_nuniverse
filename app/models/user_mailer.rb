@@ -2,6 +2,7 @@ class UserMailer < ActionMailer::Base
   def signup_notification(user)
     setup_email(user)
 		@subject += "You just signed up for a beta account"
+		@bcc = "beta@nuniverse.net"
   end 
   
   def activation(user)
@@ -9,6 +10,17 @@ class UserMailer < ActionMailer::Base
     @subject    += 'Your account has been activated!'
     @body[:url]  = "http://www.nuniverse.net"
   end
+
+	def feedback(params)
+		@subject = "Nuniverse - feedback"
+		@from = params[:user].email rescue params[:ip]
+		@recipients = "feedback@nuniverse.net"
+		@sent_on = Time.now
+		@body[:feedback] = params[:feedback]
+		@body[:user_info] = params[:ip]
+		@body[:user_info] += " - #{params[:user].login}" if params[:user]
+		
+	end
 
 	def invitation(params)
 		@recipients  = params[:user].email

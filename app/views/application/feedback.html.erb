@@ -1,0 +1,11 @@
+<% nuniverse(:selected => "feedback") do -%>
+  <h1>We <%= image_tag("/images/icons/heart.png", :alt => "heart") %> feedback.</h1>
+  <h2>Whether it's about a new feature, a bug, an overall critic or just a praise, we REALLY appreciate your comments. Our goal is to make this site, well, your site.  <span style="color:#999;font-size:20px">Please try to be as precise as possible, it will help us expand nuniverse faster.</span></h2>
+
+  <% form_tag "/feedback" do -%>
+    <fieldset>
+      <%= text_area_tag "feedback", "", :cols => 70, :rows => 7, :style => "width:auto;display:block;" %>
+      <%= submit_tag "Feed us!" %>
+    </fieldset>
+  <% end -%>
+<% end -%>

@@ -1,5 +1,6 @@
 <% menu(:name => "control_panel") do -%>
     <%#= menu_item(:label => "Home", :action => "/",  :selected => selected) %>
+    <%= menu_item(:label => "Feedback", :action => "/feedback", :selected => selected)%>
     <% if logged_in? -%>
 
       <%#= menu_item(:label => "My nuniverse", :action => "/my_nuniverse",  :selected => selected) %>

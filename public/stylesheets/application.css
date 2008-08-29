@@ -70,15 +70,21 @@ body
 #preview {
 	display:none;
 	position:absolute;
-	width:500px;
-	height:300px;
+	width:600px;
+	height:325px;
 	left:405px;
 /*	border:solid #666 10px;*/
 	background:#eee;
+	z-index:1234567;
+}
+
+#preview .items {
+	padding:10px;
 }
 
 #preview .item {
 	display:block;
 	margin:3px 0 2px 0;
 	border-bottom:dotted 2px #666;
+	background:#FFF;
 }

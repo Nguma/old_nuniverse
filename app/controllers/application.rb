@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 	include AuthenticatedSystem
 	
-	before_filter :invitation_required, :except => [:beta]
+	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you]
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -17,6 +17,17 @@ class ApplicationController < ActionController::Base
 	
 	def beta
 		
+	end
+	
+	def thank_you
+	end
+	
+	def feedback
+		if params[:feedback]
+			@selected = "feedback"
+			UserMailer.deliver_feedback(:ip => request.remote_ip, :user => current_user || nil, :feedback => params[:feedback])
+			render :action =>  "thank_you"
+		end
 	end
 	
 

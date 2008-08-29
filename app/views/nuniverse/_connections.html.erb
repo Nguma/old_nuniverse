@@ -9,6 +9,8 @@
   </div>
 <% end -%>
 <div class="items">
+  <div id="preview">
+  </div>
 <% items.each_with_index do |item,i| %>
   <div class="item <%= (i == selected) ? '' : '' %>">
   <h3>

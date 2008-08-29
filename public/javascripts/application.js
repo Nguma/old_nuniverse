@@ -32,8 +32,12 @@ function reset()
     list.getElements('.item').each(function(item){
       item.addEvents({
         'mouseenter':function() {
-          item.addClass('hover');
-          display = showElement.delay(2000,item)
+           item.addClass('hover');
+        },
+        'click':function() {
+         
+          display = showElement(item);
+          return false;
         },
         'mouseleave':function() {
           item.removeClass('hover');
@@ -50,7 +54,6 @@ function reset()
 
 
 function showElement() {
-    $('preview').setStyle('top',this.getCoordinates().top);
     $('preview').setStyle('display','block');
 
     var call = new Request.HTML({
@@ -60,7 +63,6 @@ function showElement() {
 }
 
 function hideElement(item) {
-  $clear(display);
   $('preview').setStyle('display','none');
 }
 
@@ -119,3 +121,4 @@ function onAvatar(img)
 //       }
 //     }
 // }
+

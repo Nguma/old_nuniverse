@@ -15,6 +15,14 @@ ActionController::Routing::Routes.draw do |map|
 		:controller => "application",
 		:action => "beta"
 		
+	map.feedback "/feedback",
+		:controller => "application",
+		:action => "feedback"
+	
+	map.feedback "/thank_you",
+		:controller => "application",
+		:action => "thank_you"
+		
 		
 	map.activate '/activate/:activation_code', 
 		:controller => 'users', 
