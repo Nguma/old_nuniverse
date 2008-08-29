@@ -19,14 +19,15 @@
     <% elsif service == "map" -%>
       <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
       <%= link_to_item(item)%>
-      <p><%= item.object.property('address') %></p>
+      
     <% else -%>
       <% if !@tagging || @tagging.is_a_list? -%>
         <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
         
       <% end -%>
       <%= avatar_for(item.object) %>
-      <%= link_to_item(item) %>
+      <%= link_to_item(item) %> <span style="font-size:12px"><%= item.object.property('address') %></span>
+      <div class="preview hidden">/taggings/preview/<%= item.id %></div>
     <% end -%>
   </h3>
   </div

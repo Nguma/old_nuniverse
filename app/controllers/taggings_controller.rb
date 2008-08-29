@@ -1,8 +1,9 @@
 class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
 	
-	before_filter :login_required
-	before_filter :find_tagging, :only => [:edit, :show, :update, :share, :invite, :destroy]
+	before_filter :login_required, :except => [:preview]
+	before_filter :find_tagging, :only => [:edit, :show, :update, :share, :invite, :destroy, :preview]
+	skip_before_filter :invitation_required
 
 	def index
 		redirect_to "/my_nuniverse"
@@ -16,6 +17,9 @@ class TaggingsController < ApplicationController
 	def update
 		restrict_to([@tagging.owner])
 		@tagging.object.kind = params[:kind] if params[:kind]
+		@tagging.object.replace_property('address', params[:address].to_s) if params[:address]
+		
+		@tagging.object.replace_property("latlng", params[:latlng]) if params[:latlng]
 		@tagging.object.save
 		redirect_to @tagging
 	end
@@ -34,9 +38,14 @@ class TaggingsController < ApplicationController
 			params[:query] = gums[0][2]
 		end
 		@subject = Tag.find(params[:subject])
-		@tag = Tag.find_or_create(:label => params[:query], :kind => params[:kind] || nil)
-		@tagging = Tagging.find_or_create(:owner => current_user, :subject_id => @subject.id, :object_id => @tag.id, :path => params[:path])
-		redirect_to("/taggings/#{@tagging.path.last}")
+		if params[:kind] == "address"
+			@subject.replace_property('address', params[:query])
+			@subject.save
+		else
+			@tag = Tag.find_or_create(:label => params[:query], :kind => params[:kind] || nil)
+			@tagging = Tagging.find_or_create(:owner => current_user, :subject_id => @subject.id, :object_id => @tag.id, :path => params[:path])
+		end
+		redirect_back_or_default("/taggings/#{@tagging.path.last}")
 	end
 	
 	def show
@@ -94,6 +103,10 @@ class TaggingsController < ApplicationController
       puts @avatar.errors.inspect
       render :action => "new"
     end
+	end
+	
+	def preview
+		@items = @tagging.connections.paginate(:page => 1, :per_page => 5)
 	end
 	
 	protected

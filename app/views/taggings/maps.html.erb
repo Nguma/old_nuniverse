@@ -1,4 +1,3 @@
-<%= Graticule.service(:host_ip).new.locate(request.remote_ip) %>
 <% @map = map(:source => @tagging.object, :path => @tagging.full_path ) %>
 <% nuniverse(:dom_class => "maps") do -%>
     <%= breadcrumbs(@tagging.path)%>
@@ -17,7 +16,7 @@
         <%= GMap.header (:large_map => true, :with_vml => false) %>
         <%= @map.to_html %>
       <% end -%>
-      <div style="position:relative;margin:20px 0 0 405px">
+      <div style="position:relative;margin:20px 0 0 405px;">
         <%= @map.div(:width => 'auto', :height => 400, :style=>"position:relative") %>
       </div>
     <% else -%>
@@ -26,7 +25,7 @@
       <div class="items">
       <% @items.each do |item| -%>
         <div class="item">
-          <h3><%= item.label %></h3>
+          <h3><%= link_to(item.label, "/taggings/update/#{@tagging.id}?address=#{CGI::escape(item.property('address'))}&latlng=#{item.property('latlng')}") %></h3>
           <p><%= item.property('address') %></p>
         </div>
       <% end -%>

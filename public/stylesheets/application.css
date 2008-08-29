@@ -66,3 +66,19 @@ body
 	margin:5px;
 	background:#CFC;
 }
+
+#preview {
+	display:none;
+	position:absolute;
+	width:500px;
+	height:300px;
+	left:405px;
+/*	border:solid #666 10px;*/
+	background:#eee;
+}
+
+#preview .item {
+	display:block;
+	margin:3px 0 2px 0;
+	border-bottom:dotted 2px #666;
+}

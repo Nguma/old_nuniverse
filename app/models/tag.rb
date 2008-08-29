@@ -121,6 +121,12 @@ class Tag < ActiveRecord::Base
 		self.data = "#{new_data}##{property} #{value}"
 	end
 	
+	def replace_property(property,value)
+		data = self.data || ""
+		new_data = data.gsub(/##{property}[\s]+([^#|\[|\]]+)/,'')
+		self.data = "#{new_data}##{property} #{value}"
+	end
+	
 	def update_data(gums)		
 		gums.each do |prop|
 			replace(prop[0],prop[1])

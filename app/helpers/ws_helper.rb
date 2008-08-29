@@ -87,7 +87,7 @@ module WsHelper
 			 #@map.center_zoom_init([-37,-49],10)
 			map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],13)
 			markers.each do |marker|
-				map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "Info! Info!"))
+				map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => marker.label.rstrip))
 			end
 			return map
 			# html = "<script type='text/javascript' charset='utf-8'>

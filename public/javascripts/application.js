@@ -1,5 +1,6 @@
 window.addEvent('domready',reset);
 var nuniverse;
+var display;
 function reset()
 {
   // nuniverse = new Nuniverse();
@@ -8,7 +9,7 @@ function reset()
     $('input').focus();
   }
   
-  $$('.items').each(function(list){
+  $$('.list .items').each(function(list){
     var sortable = new Sortables(list, {
       revert:{duration:500, transition:'elastic:out'},
       onStart:function(item) {
@@ -26,11 +27,41 @@ function reset()
       onComplete:function(item) {
         item.removeClass('dragged');
       }
-    })
+    });
+    
+    list.getElements('.item').each(function(item){
+      item.addEvents({
+        'mouseenter':function() {
+          item.addClass('hover');
+          display = showElement.delay(2000,item)
+        },
+        'mouseleave':function() {
+          item.removeClass('hover');
+          hideElement(item);
+        }
+      });
+    });
+    
   });
   
 
 
+}
+
+
+function showElement() {
+    $('preview').setStyle('top',this.getCoordinates().top);
+    $('preview').setStyle('display','block');
+
+    var call = new Request.HTML({
+      'url':this.getElement('.preview').get('text'),
+      'update':$('preview')
+    }).get()
+}
+
+function hideElement(item) {
+  $clear(display);
+  $('preview').setStyle('display','none');
 }
 
 function onunLoad()

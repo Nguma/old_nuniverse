@@ -12,7 +12,7 @@ module Googleizer
 		end
 		
 		def response
-			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=large&sll=#{Graticule.service(:host_ip).new.locate request.remote_ip.coordinates.join(',') rescue ""}"
+			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=large&sll=#{Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"}"
 			
 			Googleizer::Response.new(Net::HTTP.get_response(URI.parse(uri)),mode)
 		end
@@ -40,6 +40,7 @@ module Googleizer
 				)
 				t.replace("address", "#{item['streetAddress']}, #{item['city']}, #{item['country']}") if item['streetAddress']
 				t.replace("tel", "#{item['phoneNumbers'][0]}") if item['phoneNumbers']
+				t.replace("latlng", "#{item['lat']},#{item['lng']}") if item['lat']
 				items << t
 			end
 			items 
