@@ -1,0 +1,43 @@
+<div class="hat">
+  <h1>
+    <%= avatar_for(@tagging.object)  %>
+    <%= @tagging.object.label.capitalize %> 
+    <span class="service">
+      <%= " according to #{@service.capitalize}" if @service%>
+    </span> 
+  </h1>
+  <dl class="properties">
+    <dd><%= @tagging.object.kind %></dd> - 
+    <dd>
+      <% if @tagging.object.property('address').blank? -%>
+        <%= link_to("Locate", "/map/#{@tagging.id}") %>
+      <% else -%>
+        <%= @tagging.object.property('address') %>
+      <% end -%> 
+    </dd> -
+    <dd><%= @tagging.object.property('tel')%></dd> - 
+    <dd><%= @tagging.object.description %></dd> 
+  </dl>
+</div>
+<div id="right_column">
+  <%= render :partial => "map", :locals => {:tagging => @tagging} %>
+  <%= render :partial => "ads" %>
+  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+</div>
+<div id="left_column">
+  <div class="box">
+    <div class="options">
+      <%= link_to "Google this location", "/google/#{@tagging.id}" , :class => "option" %>
+      <%= link_to "Locate", "/map/#{@tagging.id}" , :class => "option" %>
+      <%= link_to "Images", "/taggings/#{@tagging.id}?service=images" , :class => "option" %>
+      <%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete, :class => "option" %>
+    </div>
+    <%= render :partial => "/nuniverse/connections", :locals => {
+      :service => @service,
+      :items => @items,
+      :selected => @selected,
+      :order => @order,
+      :tagging => @tagging
+    }%>
+  </div>
+</div>

@@ -10,42 +10,49 @@ function reset()
   }
   
   $$('.list .items').each(function(list){
-    var sortable = new Sortables(list, {
-      revert:{duration:500, transition:'elastic:out'},
-      onStart:function(item) {
-        
-        item.addClass('dragged');
-        
-      },
-      
-      onSort:function(item) {
-        
-        list.getElements('.item').each(function(item,i){
-          item.getElement('.rank').set('text', i+1);
-        });
-      },
-      onComplete:function(item) {
-        item.removeClass('dragged');
-      }
-    });
+    // var sortable = new Sortables(list, {
+    //      revert:{duration:500, transition:'elastic:out'},
+    //      onStart:function(item) {
+    //        
+    //        item.addClass('dragged');
+    //        
+    //      },
+    //      
+    //      onSort:function(item) {
+    //        
+    //        list.getElements('.item').each(function(item,i){
+    //          item.getElement('.rank').set('text', i+1);
+    //        });
+    //      },
+    //      onComplete:function(item) {
+    //        item.removeClass('dragged');
+    //      }
+    //    });
     
     list.getElements('.item').each(function(item){
       item.addEvents({
         'mouseenter':function() {
            item.addClass('hover');
         },
-        'click':function() {
-         
-          display = showElement(item);
-          return false;
-        },
+        // 'click':function() {
+        //          
+        //           display = showElement(item);
+        //           return false;
+        //         },
         'mouseleave':function() {
           item.removeClass('hover');
-          hideElement(item);
+          // hideElement(item);
         }
       });
     });
     
+  });
+  
+  $$('.save_button').each(function(button) {
+    button.addEvent('click', function(ev) {
+      button.getParent().getElement('form').submit();
+      return false;
+    });
   });
   
 

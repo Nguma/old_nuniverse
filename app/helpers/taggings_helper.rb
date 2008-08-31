@@ -23,5 +23,22 @@ module TaggingsHelper
 		else
 		end
 	end
+	
+	def save_button(item, tagging)
+		render :partial => "/taggings/bookmark", :locals => {:item => item, :tagging => tagging}
+	end
+	
+	def content_for_tagging(tagging)
+		render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging} rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+	end
+	
+	def title_for(object, options ={})
+		str = "<h1>"
+		str << avatar_for(object)
+		str << object.label.capitalize
+		str << " according to #{options[:service].capitalize}" if options[:service]
+		str << "</h1>"
+		str
+	end
 			
 end

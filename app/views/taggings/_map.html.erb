@@ -1,0 +1,10 @@
+<% @map = map(:source => tagging.object, :path => tagging.full_path ) %>
+<% if @map -%>
+  <% content_for :head do -%>
+    <%= GMap.header (:large_map => true, :with_vml => false) %>
+    <%= @map.to_html %>
+  <% end -%>
+  <div class="box" >
+    <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
+  </div>
+<% end -%>

@@ -2,6 +2,7 @@
 {
 	position:relative;
 	padding:30px 20px 20px 20px;
+
 	color:#333;
 	font-weight:normal;
 }
@@ -35,6 +36,14 @@
 
 .nuniverse .input {
 	border:none;
+	position:fixed;
+	bottom:0px;
+	padding:5px;
+	margin:0 370px 0 0;
+	background:#FFF;
+	width:auto;
+	display:block;
+	width:780px;
 }
 
 .nuniverse .input fieldset {
@@ -50,7 +59,6 @@
 	color:#333;
 	margin: 5px 0 0 0;
 	padding:1px 1px 3px 1px;
-	width:90%;
 }
 
 
@@ -64,9 +72,9 @@
 }
 
 .nuniverse .options {
-	position:fixed;
-	bottom:10px;
-	background:#EAEAEA;
+	position:relative;
+	
+/*	background:#EAEAEA;*/
 	padding:5px;
 }
 
@@ -112,64 +120,6 @@
 	
 }
 
-.nuniverse .items {
-	position:relative;
-	clear:both;
-	margin:5px 0 0 0;
-}
-
-.nuniverse .item {
-	position:relative;
-	clear:both;
-	margin:0 0 1px 0;
-	overflow:hidden;
-	cursor: move;
-	background:#ccc;
-	padding:5px;
-}
-
-.items .dragged {
-	cursor:-moz-grabbing;
-	background:#FFF;
-}
-
-.nuniverse .item .sort_actions {
-	position:relative;
-	float:left;
-	margin-right:5px;
-	width:20px;
-	height:20px;
-}
-
-.item .sort_actions a {
-	display:block;
-}
-
-.items .item .rank {
-	width:30px;
-	text-align:center;
-	color:#999;
-}
-
-.nuniverse .item h3 {
-	
-}
-
-.nuniverse .sorting_options {
-	font-size:13px;
-	color:#999;
-	position:relative;
-	float:left;
-}
-
-.nuniverse .sorting_options a {
-	margin-right:5px;
-}
-
-.nuniverse .sorting_options .current {
-	color:#333;
-}
-
 .nuniverse .pagination {
 	position:relative;
 	float:left;
@@ -182,14 +132,17 @@
 	color:#333;
 }
 
-#google_ads {
+/*#google_ads {
 	clear:both;
-	position:relative;
-	float:left;
+	position:fixed;
+	right:20px;
+	bottom:10px;
 	border:solid 2px #ccc;
 	padding:3px;
 	background:#FFF;
-}
+	z-index:1234567890123;
+}*/
+
 
 .list_button {
 	border:none;
@@ -215,4 +168,35 @@
 
 .items .hover h3 {
 	color:#333;
+}
+
+.box {
+	position:relative;
+/*	border:solid #eee 5px;*/
+	clear:none;
+	border:none;
+	padding:10px;
+	margin:0 0 5px 0;
+	width:auto;
+	background:#eee;
+}
+
+#left_column {
+	position:relative;
+	margin:0 380px 0 0;
+}
+
+#right_column {
+	position:relative;
+	float:right;
+	width:370px;
+	margin:0 0 0 0;
+}
+
+#google_ads {
+	background:#FFF;
+}
+
+#contributors ul {
+	list-style-type:none;
 }

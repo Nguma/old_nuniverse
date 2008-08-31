@@ -39,7 +39,7 @@ module Nuniverse
 		end
 		
 		def self.hash	
-			self.list.collect {|kind| Nuniverse::Kind::LabelValue.new(kind)}
+			self.list.collect {|kind| Nuniverse::LabelValue.new(kind)}
 		end
 		
 		def self.scan_entry(entry)
@@ -48,15 +48,17 @@ module Nuniverse
 			
 		end
 		
-		class LabelValue
-			attr_reader :label, :value
-			def initialize(label, value = nil)
-				@label = label
-				@value = value.nil? ? label : value
-			end
-		end
+
 	end
 	
+	class LabelValue
+		attr_reader :label, :value
+		def initialize(label, value = nil)
+			@label = label
+			@value = value.nil? ? label : value
+		end
+	end
+		
 	class Address
 		attr_reader :continent, :country, :region, :city, :street_address, :zip, :full_address, :latlng
 		def initialize(tag)

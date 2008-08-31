@@ -80,7 +80,7 @@ class UsersController < ApplicationController
 		@path = TaggingPath.new
 		@service = nil
 		@order = params[:order] || "name"
-		@items = @tag.subject_of.paginate(:page => params[:page] || 1, :per_page => 10)
+		@items = @tag.subject_of(:order => @order).paginate(:page => params[:page] || 1, :per_page => 10)
 	end
 	
 protected

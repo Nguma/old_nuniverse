@@ -1,24 +1,20 @@
-<div class="manage">
-  <% if connection  && connection.user == current_user -%>
+<div class="options">
+<% if tagging.owner == current_user -%>
     <%= link_to("-","/taggings/delete/#{connection.id}",:title => "Remove", :class => "remove") %>
-  <% else -%>
-    <%= link_to("+","/taggings/create",:title => "Bookmark", :class => "bookmark") %>
-  <% end -%>
-</div>
+<% else -%>
+    <%= link_to(image_tag("/images/icons/save_button.png"),"#",:title => "Bookmark", :class => "save_button") %>
+<% end -%>
 
-
-<div class="data hidden">
-  <% form_tag '/taggings/create' do -%>
-    <%= hidden_field_tag :path, path %>
-    <% if connection -%>
-      <%= hidden_field_tag :id, connection.id  %>
-    <% else -%>
-      <%= hidden_field_tag :service, tag.service %>
-      <%= hidden_field_tag :url, tag.url %>
-      <%= hidden_field_tag :description, tag.description %>
-      <%= hidden_field_tag :data, "##{tag.kind} #{tag.label} #{tag.data}"  %>
+  <div class="data hidden">
+    <% form_tag '/taggings/bookmark' do -%>
+      <%= hidden_field_tag :id, id  %>
+      <%= hidden_field_tag :label, tagging.object.label %>
+      <%= hidden_field_tag :service, tagging.object.service %>
+      <%= hidden_field_tag :kind, tagging.object.kind %>
+      <%= hidden_field_tag :url, tagging.object.url %>
+      <%= hidden_field_tag :description, tagging.object.description %>
+      <%= hidden_field_tag :data, tagging.object.data  %>
     <% end -%>
-    
-  <% end -%>
+  </div>
 </div>
 

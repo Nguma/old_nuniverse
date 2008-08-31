@@ -1,526 +1,98 @@
-.connections
-{
+/* ITEMS */
+.nuniverse .items {
 	position:relative;
-	clear:both;
-	padding:1px 0 0 0;
-	text-align:left;
-	width:100%;
+	clear:left;
+	margin:10px 0 5px 0;
 }
 
-#main_menu 
-{
+.nuniverse .items .options {
 	position:relative;
-	clear:both;
-	padding:0 0 0 0;
-	text-align:left;
-	width:100%;
-}
-
-#main_menu dd
-{
-	position:relative;
-	clear:both;
-	margin:0 0 0px 0px;
-	padding:8px;
-	font-size:12px;
-	font-weight:bold;
-}
-
-#main_menu .even
-{
-	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;
-}
-
-#main_menu .odd
-{
-	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
-}
-
-.content dt
-{
-	display:none;
-}
-
-.connections .connection
-{	
-	position:relative;
-	clear:both;
-	font-size:16px;
-	font-weight:bold;
-	color:#333;
-	width:auto;
-	cursor:pointer;
-	text-align:left;
-	padding:5px;
-	margin:0 0 1px 0;
-	height:auto;
-	min-height:auto;
-}
-
-.connections .even
-{
-/*	background:transparent url('/images/backgrounds/connection_even.png') 0 0 repeat;*/
-}
-
-.connections .odd
-{
-/*	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;*/
-}
-
-.current_section .even
-{
-	background:transparent url('/images/backgrounds/connection_even_heavy.png') 0 0 repeat;
-
-}
-
-.current_section .odd
-{
-	background:transparent url('/images/backgrounds/connection_odd_heavy.png') 0 0 repeat;
-	border-top:solid #eee 1px;
-}
-
-.connections .hover
-{
-	/*background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
-/*	background:#69c;*/
-	background:#FFF;
-	color:#333;
-/*	color:#FFF;*/
-}
-
-.connections .hover p,
-.connections .hover a
-{
-	color:#333;
-}
-
-.connection .manage,
-.connection p
-{
-	display:none;
-}
-
-.connections .selected p
-{
-	display:block;
-}
-
-.connections .details
-{
-	display:none;
-	font-size:11px;
-	font-weight:normal;
-}
-
-.connections .selected .details
-{
-	display:block;
-}
-
-.current_section .connections p
-{
-	display:block;
-}
-
-.current_section .connection 
-{
+	clear:left;
 	padding:5px;
 }
 
-.current_section .manage
-{
-	display:block;
-}
-
-.connections .selected
-{
-/*	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
-	/*background:#369;
-		height:140px;*/
-		background:#333;
-		color:#FFF;
-		height:auto;
-}
-
-.connections .selected h3
-{
-/*	background:transparent url('/images/backgrounds/connection_hover.png') left center no-repeat;*/
-	font-weight:bold;
-}
-
-.current_section .connections .selected
-{
-	height:auto;
-}
-
-
-
-.nuniverse .hover,
-.nuniverse .selected
-{
-	color:#FFF;
-}
-
-.connections .connection .avatar
-{
+.nuniverse .items .options .sorting_options{
+	font-size:13px;
+	color:#999;
 	position:relative;
 	float:left;
-	border:none;
-	margin-right:0;
-	height:30px;
-	padding:5px;
-	font-size:11px;
 }
 
-
-.current_section .connection .avatar
-{
-	height:40px;
-	display:block;
-	padding:10px;
-}
-
-.current_section .connection .avatar img
-{
-	height:40px;
-}
-
-.connections .connection h3
-{
-	position:relative;
-	font-family:Arial;
-	padding-top:10px;
-	font-size:14px;
-	font-weight:normal;
-	color:inherit;
-}
-
-.current_section .connection h3
-{
-	font-size:15px;
-	padding:10px 0 5px 0 ;
-}
-
-.nuniverse .connection p
-{
-	position:relative;
-	font-size:14px;
-	font-weight:normal;
-	color:#666;
-}
-
-.item .avatar {
-	height:15px;
-}
-
-.nuniverse .connection p a
-{
-	color:#69c;
-}
-
-.connections .selected p,
-.connections .hover a
-.connections .selected a
-{
-	color:#FFF;
-}
-
-.overview
-{
-	display:block;
-	position:absolute;
-	top:0;
-	right:0;
-}
-
-.current_section .overview
-{
-	display:none;
-}
-
-.new_connection
-{
-	padding:0;
-	position:relative;
-	clear:both;
-	top:0;
-	margin:0 0 0 0px;
-	font-size:16px;
-	font-weight:bold;
-	color:#369;
-	width:auto;
-	text-align:left;
-	z-index:12345678234567;
-}
-
-
-.new_connection select
-{
-	display:block;
-	padding:5px;
-	color:#333;
-	background:#CCC;
-	border:none;
-	font-size:14px;
-	font-weight:bold;
-}
-.new_connection select option
-{
-	margin:2px;
-}
-
-.new_connection fieldset
-{
-	background:#FFF;
-	border:none;
-	display:none;	
-	margin:0;
-	height:100%;
-	padding:10px 10px 10px 10px;
-}
-
-.new_connection a.toggle
-{
-	position:absolute;
-	padding:0;
-	right:20px;
-	font-size:14px;
-	top:-20px;
-	color:#FFF;
-	margin:0;
-}
-
-.current_section .new_connection
-{
-	display:block;
-}
-
-.expanded a.toggle
-{
-	background:#369;
-	color:#FFF;
-}
-
-.expanded fieldset
-{
-	display:block;
-}
-
-.new_connection .suggestions
-{	
-	position:relative;
-	float:right;
-	width:400px;
-}
-
-.new_connection .suggestions dd
-{
-	height:30px;
-	min-height:20px;
-	width:auto;
-	display:block;
-	padding:5px;
-	clear:both;
-}
-
-.new_connection .suggestions dd h3,
-.new_connection .suggestions dd h4
-{
-	position:relative;
-	font-size:12px;
-	font-weight:bold;
-}
-
-.suggestions dd p
-{
-	position:relative;
-	font-size:11px;
-	font-style:italic;
-	color:#666;
-	padding:0;
-	margin:0;
-	display:block;
-}
-
-.new_connection .suggestions .avatar
-{
-	height:20px;
-	padding:0;
-	position:relative;
-	float:left;
+.nuniverse .items .options a {
 	margin-right:5px;
 }
 
-.new_connection label
-{
-	display:block;
-	font-size:13px;
-	padding:3px 3px 3px 0;
-	color:#999;
+.nuniverse .items .options .sorting_options .current {
+	color:#333;
 }
 
-.new_connection label span
-{
-	font-size:11px;
-	font-style:italic;
-}
 
-.new_connection input,
-.new_connection textarea
-{
-	padding:5px;
-	background-color:#eee;
-	margin: 0 0 5px 0;
-}
-
-.new_connection input.title
-{
-	padding:10px;
-}
-
-.new_connection textarea
-{
-		width:80%;
-		font-size:12px;
-}
-
-.new_connection .blank
-{
-	color:#999;
-	background-color:#FFF;
-}
-
-.manage
-{
+/* ITEM */
+.nuniverse .item {
 	position:relative;
-	float:right;
-	padding:5px;
-	z-index:1234567890;
-	display:none;
-	font-weight:bold;
-}
-
-.article
-{
-	font-size:12px;
-}
-
-.connection .manage img
-{
-	height:15px;
-}
-
-.connection .manage a
-{
-	font-size:11px;
-}
-
-h3 span.source
-{
-	display:inline;
-	color:#999;
-	font-size:11px;
-	font-weight:normal;
-	padding:0;
-	margin:0;
-}
-
-.connections .section
-{
-	background:transparent url('/images/backgrounds/connection_odd.png') 0 0 repeat;
-	text-align:center;
-	font-size:11px;
-	color:#69c;
-	padding:5px;
-}
-
-
-.connections .top
-{
-	position:relative;
-}
-
-.connections .bottom
-{
-	position:absolute;
-	display:block;
-	width:100%;
-	bottom:0;
-	z-index:123456;
-}
-
-.connections .photo,
-.connections .images
-{
-	position:relative;
-	float:left;
-	width:120px;
-	clear:none;
-}
-
-.connection .images .avatar
-{
-	width:100px;
-	display:block;
-}
-
-.connection .images h3
-{
-	display:none;
-}
-.connection p span
-{
-	font-size:11px;
-}
-
-.kind_person {color:#669;}
-.kind_location {color:#966;}
-.kind_channel {color:#696;}
-
-
-.article .connections
-{
-	width:100%;
-	
-	position:relative;
-	float:left;
-	clear:none;
-	margin:0 5px 5px 0;
+	clear:left;
+	margin:0 0 1px 0;
 	overflow:hidden;
-}
-
-.article .connections .connection
-{
-
-}
-
-.article .connections dt
-{
-	position:relative;
-	width:auto;
-	display:block;
-	clear:both;
-	font-weight:normal;
-	font-weight:bold;
-	margin:5px 0 0 0;
+/*	cursor: move;*/
+	background:#ccc;
 	padding:5px;
-	color:#666;
-	font-size:15px;
-	border-bottom:dotted 2px #999;
-/*	border-top:dotted 1px #999;*/
 }
 
-.article .connections h3
-{
-	padding:8px 0 0 0;
+.nuniverse .items .item .options {
+	position:absolute;
+	top:5px;
+	right:5px;
+	z-index:1234567890;
+	background:none;
 }
 
-.article .connections h3 a
-{
-	font-size:12px;
+.nuniverse .items .item h3 {
+	position:relative;
 }
 
-.article .connection .avatar
-{
+.nuniverse .items .item .avatar {
 	height:20px;
+}
+
+.items .dragged {
+	cursor:-moz-grabbing;
+	background:#FFF;
+}
+
+.nuniverse .item .sort_actions {
+	position:relative;
+	float:left;
+	margin-right:5px;
+	width:20px;
+	height:20px;
+}
+
+.item .sort_actions a {
+	display:block;
+}
+
+.items .item .rank {
+	width:30px;
+	text-align:center;
+	color:#999;
+}
+
+.nuniverse .item h3 {
+	
+}
+
+.hat h1 {
+	margin:0 0 0 0;
+	padding:5px 0 0 0;
+	line-height:40px;
+}
+
+dl.properties {
+	padding:0 5px 5px 35px;
+	
+}
+
+dl.properties dd {
+	display:inline;
+	font-size:13px;
 }

@@ -2,7 +2,7 @@ class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
 	
 	before_filter :login_required, :except => [:preview]
-	before_filter :find_tagging, :only => [:edit, :show, :update, :share, :invite, :destroy, :preview]
+	before_filter :find_tagging, :only => [:bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
 	skip_before_filter :invitation_required
 
 	def index
@@ -18,8 +18,9 @@ class TaggingsController < ApplicationController
 		restrict_to([@tagging.owner])
 		@tagging.object.kind = params[:kind] if params[:kind]
 		@tagging.object.replace_property('address', params[:address].to_s) if params[:address]
-		
+		@tagging.object.replace_property("tel", params[:tel]) if params[:tel]		
 		@tagging.object.replace_property("latlng", params[:latlng]) if params[:latlng]
+		@tagging.object.description = params[:description] if params[:description]
 		@tagging.object.save
 		redirect_to @tagging
 	end
@@ -56,11 +57,14 @@ class TaggingsController < ApplicationController
 		@selected = params[:selected].to_i || nil
 		@service = params[:service] || nil
 		@page = params[:page] || 1
-		@order = params[:order] || "name"
+		@order = params[:order] || "date"
+		
 		
 		case @service
 		when "google"
-			@items = Finder::Search.find(:query => "#{@tagging.subject.label} #{@tagging.object.label}", :service => @service)
+			query = (@tagging.subject.kind == "user") ? "" : @tagging.subject.label
+			query << " #{@tagging.object.label}" 
+			@items = Finder::Search.find(:query => query, :service => @service)
 		when "map"
 			
 			
@@ -71,9 +75,10 @@ class TaggingsController < ApplicationController
 			render :action => "images"
 		when nil
 		else
-			@service = nil			
+			@service = nil		
+				
 		end
-		
+		@contributors = @tagging.contributors(:page => @page, :per_page => 10)
 		@items = @items.nil? ? @items = @tagging.connections(:order => @order).paginate(:page => @page, :per_page => 10) : @items
 
 	end
@@ -107,6 +112,24 @@ class TaggingsController < ApplicationController
 	
 	def preview
 		@items = @tagging.connections.paginate(:page => 1, :per_page => 5)
+	end
+	
+	def bookmark
+		@tag = Tag.create(
+			:label => params[:label],
+			:kind => params[:kind],
+			:url => params[:url],
+			:service =>params[:service],
+			:data => params[:data],
+			:description => params[:description] )
+			
+		Tagging.create(
+			:path => @tagging.full_path,
+			:object => @tag,
+			:subject => @tagging.object,
+			:owner => current_user)
+			
+		redirect_to @tagging, :service => params[:service] || nil	
 	end
 	
 	protected

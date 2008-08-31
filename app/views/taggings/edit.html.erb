@@ -1,25 +1,22 @@
 <% nuniverse(:dom_class => "edit") do -%>
     <%= breadcrumbs(@tagging.path)%>
-    
-    <h1>
-      <%= image_tag(@tagging.object.thumbnail) if @tagging.object.thumbnail %>
-      <%= @tagging.object.label.capitalize %> 
-      
-    </h1>
+    <%= title_for(@tagging.object) %>
     <div class="delimiter">&nbsp;</div>
-    <div class="items">
-      <% @items.each_with_index do |item, i| -%>
-        <div class="item">
-          <div class="sort_actions">
-            <%= link_to(image_tag('/images/icons/sort_up.png'), "#") %>
-            <%= link_to(image_tag('/images/icons/sort_down.png'), "#") %>
-          </div>
-          <h3> 
-            <span class="rank"><%= (i+1) %></span>
-            <%= item.object.label %>
-          </h3>
-        </div>
-      <% end -%>
-    </div>
-    
+    <% form_tag "/taggings/update/#{@tagging.id}" do -%>
+      <fieldset>
+      <label>Address</label>
+      <br/>
+      <%= text_field_tag "address", @tagging.object.property('address') %>
+      <br/>
+      <label>Telephone</label>
+      <br/>
+      <%= text_field_tag "tel", @tagging.object.property('tel') %>
+      <br/>
+      <label>Description</label>
+      <br/>
+      <%= text_area_tag "description", @tagging.object.description %>
+      <br/>
+      <%= submit_tag "update"%>
+      </fieldset>
+    <% end -%>
 <% end -%>

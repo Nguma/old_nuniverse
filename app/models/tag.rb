@@ -250,5 +250,9 @@ class Tag < ActiveRecord::Base
 	def object_of(params = {})
 		Tagging.with_object(self)
 	end
+	
+	def properties
+		data.scan(/#([\w]+)[\s]+([^#|\[|\]]+)*/).collect {|s| Nuniverse::LabelValue.new(s[0],s[1])}
+	end
   
 end

@@ -1,27 +1,3 @@
-<% nuniverse do %>
-    <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
-    <h1>Welcome, <%= current_user.login.capitalize %>, this is your nuniverse</h1>
-    <div class="delimiter">&nbsp;</div>
-    <h2>Browse your existing topics</h2>
-    <%= render :partial => "/nuniverse/connections", :locals => {
-      :items => @items,
-      :selected => nil,
-      :service => @service,
-      :tagging => nil,
-      :order => @order
-    }%>
-    <h2>or create a new one</h2>
-    <%= render :partial => "/taggings/find_or_create", :locals => {
-        :subject => @tag,
-        :path => @path} %>
-      
-    <% unless current_user.invitations.empty? %>
-    <h2>You have been invited to follow</h2>
-      <% current_user.invitations.each do |invitation| -%>
-        <h4><%= link_to(invitation.tagging.owner.login.capitalize, invitation.tagging.owner.tag) %>'s <%= link_to_item(invitation.tagging) %></h4>
-      <% end -%>
-    <% end -%>
-<% end -%>
 
 <div class="hidden">
  <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px",:id => "spinner") %>

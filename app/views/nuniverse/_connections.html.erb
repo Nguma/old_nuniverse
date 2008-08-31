@@ -1,38 +1,40 @@
-<%= will_paginate items if service.nil? %>
-<% if tagging.nil?  || tagging.is_a_list? %>
-  <div class="sorting_options">
-    <%= sorting_options(
-      [['By Name', 'name'],
-        ['By Latest', 'latest'],
-        ['By Rank', 'rank']
-      ], :selected => @order)%>
-  </div>
-<% end -%>
 <div class="items">
-  <div id="preview">
-  </div>
-<% items.each_with_index do |item,i| %>
-  <div class="item <%= (i == selected) ? '' : '' %>">
-  <h3>
-    <% if service == "google" -%>
-     <span class="rank"><%= (i+1)  %></span>
-      <%= link_to(item.label.capitalize, item.url)%>
-      <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
-    <% elsif service == "map" -%>
-      <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
-      <%= link_to_item(item)%>
-      
-    <% else -%>
-      <% if !@tagging || @tagging.is_a_list? -%>
-        <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
-        
-      <% end -%>
-      <%= avatar_for(item.object) %>
-      <%= link_to_item(item) %> <span style="font-size:12px"><%= item.object.property('address') %></span>
-      <div class="preview hidden">/taggings/preview/<%= item.id %></div>
+  <div class="options">
+    <%= will_paginate items if service.nil? %>
+    <% if tagging.nil?  || tagging.is_a_list? %>
+      <div class="sorting_options">
+        <%= sorting_options(
+          [['By Name', 'name'],
+            ['By Latest', 'latest'],
+            ['By Rank', 'rank']
+          ], :selected => @order)%>
+      </div>
     <% end -%>
-  </h3>
-  </div
-<% end -%>
+    <div class="delimiter">&nbsp;</div>
+  </div>
+  <% items.each_with_index do |item,i| %>
+    <div class="item <%= (i == selected) ? '' : '' %>">
+       <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
+
+     <h3>
+       <% if service == "google" -%>
+        <span class="rank"><%= (i+1)  %></span>
+        <%= link_to(item.label.capitalize, item.url)%>
+         <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
+       <% elsif service == "map" -%>
+         <span class="rank"><%= (i+1) + items.offset rescue 0 %></span>
+         <%= link_to_item(item)%>
+
+       <% else -%>
+         <% if !@tagging || @tagging.is_a_list? -%>
+           <span class="rank"><%= (i+1) + items.offset rescue 0 %></span> 
+         <% end -%>
+         <%= avatar_for(item.object) %>
+         <%= link_to_item(item) %> <span style="font-size:12px"><%= item.object.property('address') %></span>
+         <div class="preview hidden">/taggings/preview/<%= item.id %></div>
+       <% end -%>
+     </h3>
+    </div>
+  <% end -%>
 </div>
 

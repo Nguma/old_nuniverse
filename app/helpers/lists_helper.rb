@@ -5,8 +5,8 @@ module ListsHelper
 	end
 	
 	def link_to_item(item)
-		if item.object.url
-			link_to("<span style='color:#679' class='kind'>Bookmark</span> #{item.object.label.capitalize}", item.object.url)
+		if item.object.kind == "bookmark"
+			link_to("#{item.object.label.capitalize}", item.object.url)
 		else
 			link_to(item.object.label.capitalize, item)
 		end

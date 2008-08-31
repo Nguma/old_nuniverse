@@ -1,0 +1,13 @@
+<div class="box" id="contributors">
+  <h2>Contributors</h2>
+  <% if contributors.empty? -%>
+    <h3>No one has been invited yet.</h3>
+  <% else -%>
+    <ul>
+      <% contributors.each do |contributor| -%>
+       <li><%= contributor.login.capitalize %></li>
+      <% end -%>
+    </ul>
+  <% end -%>
+   <%= link_to "Share this topic with someone", "/taggings/share/#{@tagging.id}" , :class => "option" if current_user == @tagging.owner %>
+</div>
