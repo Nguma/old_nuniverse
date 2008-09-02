@@ -7,16 +7,11 @@
     </span> 
   </h1>
   <dl class="properties">
-    <dd><%= @tagging.object.kind %></dd> - 
-    <dd>
-      <% if @tagging.object.property('address').blank? -%>
-        <%= link_to("Locate", "/map/#{@tagging.id}") %>
-      <% else -%>
-        <%= @tagging.object.property('address') %>
-      <% end -%> 
-    </dd> -
-    <dd><%= @tagging.object.property('tel')%></dd> - 
-    <dd><%= @tagging.object.description %></dd> 
+    <%= property(@tagging.object.kind) %>
+    <%= property(@tagging.object.property('address')) %>
+    <%= property(@tagging.object.property('tel')) %>
+    <%= property(@tagging.object.url, :url => link_to(@tagging.object.url)) %>
+    <%= property(@tagging.object.description)%>
   </dl>
 </div>
 <div id="right_column">
@@ -26,12 +21,13 @@
 </div>
 <div id="left_column">
   <div class="box">
-    <div class="options">
-      <%= link_to "Google this location", "/google/#{@tagging.id}" , :class => "option" %>
-      <%= link_to "Locate", "/map/#{@tagging.id}" , :class => "option" %>
-      <%= link_to "Images", "/taggings/#{@tagging.id}?service=images" , :class => "option" %>
-      <%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete, :class => "option" %>
-    </div>
+    <ul class="tabs"> 
+      <li class="current"><%= link_to "Overview" %></li>
+      <li><%= link_to "Google this topic", "/google/#{@tagging.id}" %></li>
+      <li><%= link_to "Locate", "/map/#{@tagging.id}" %></li>
+      <li><%= link_to "Images", "/taggings/#{@tagging.id}?service=images"  %></li>
+      <li><%= link_to 'Edit', edit_tagging_path(@tagging) %></li>
+    </ul>
     <%= render :partial => "/nuniverse/connections", :locals => {
       :service => @service,
       :items => @items,
@@ -41,3 +37,7 @@
     }%>
   </div>
 </div>
+<%= render :partial => "/taggings/find_or_create" , :locals => {
+  :subject => tagging.object, 
+  :path => tagging.full_path
+ }%>

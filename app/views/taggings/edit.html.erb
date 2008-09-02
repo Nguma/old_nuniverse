@@ -4,6 +4,7 @@
     <div class="delimiter">&nbsp;</div>
     <% form_tag "/taggings/update/#{@tagging.id}" do -%>
       <fieldset>
+        
       <label>Address</label>
       <br/>
       <%= text_field_tag "address", @tagging.object.property('address') %>
@@ -12,6 +13,9 @@
       <br/>
       <%= text_field_tag "tel", @tagging.object.property('tel') %>
       <br/>
+       <label>Official Website</label>
+        <br/>
+        <%= text_area_tag "url", @tagging.object.url %>
       <label>Description</label>
       <br/>
       <%= text_area_tag "description", @tagging.object.description %>
@@ -20,3 +24,4 @@
       </fieldset>
     <% end -%>
 <% end -%>
+<%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete %>

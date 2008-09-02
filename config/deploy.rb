@@ -13,6 +13,8 @@ set :deploy_to, "/var/www/apps/#{application}"
 # If you aren't using Subversion to manage your source code, specify
 # your SCM below:
 set :scm, :git
+set :git_shallow_clone, 1     # only copy the most recent, not the entire repository (default:1)  
+set :copy_exclude, [".git", ".gitignore", ".sql"]
 
 set :user,            "deployer"
 set :password,        "wossname"
@@ -20,6 +22,8 @@ set :scm_passphrase,  "wossname"
 set :use_sudo,        false
 set :branch,          "master"
 set :runner,          nil # "root"
+
+set :keep_releases, 5
 
 role :app, "nuniverse.net"
 role :web, "nuniverse.net"

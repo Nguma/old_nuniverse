@@ -244,7 +244,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def subject_of(params = {})
-		Tagging.with_subject(self)
+		Tagging.with_subject(self).include_object.with_order(params[:order] || "rank")
 	end
 	
 	def object_of(params = {})

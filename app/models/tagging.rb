@@ -3,6 +3,8 @@ class Tagging < ActiveRecord::Base
 	belongs_to :subject, :class_name => "Tag"
 	belongs_to :owner, :class_name => "User", :foreign_key => "user_id"
 	
+	has_many :rankings
+	
 	before_save :clean_path
 	
 	before_destroy :destroy_connections
@@ -31,6 +33,10 @@ class Tagging < ActiveRecord::Base
 
 	def full_path
 		TaggingPath.new([path.taggings,self].flatten)
+	end
+	
+	def rank
+		rankings.sum :value
 	end
   
 
@@ -84,8 +90,10 @@ class Tagging < ActiveRecord::Base
 			{:include => :object, :order => "tags.label ASC"}
 		when "latest"
 			{:order => "taggings.updated_at DESC"}
+		when "rank"
+			{:select => "*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "rankings.tagging_id", :order => "SUM(rankings.value) DESC"}
 		else
-			{}
+			{:include => :object, :order => "tags.label ASC"}
 		end
 	}
 
@@ -113,7 +121,24 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		Tagging.with_exact_path(self.full_path).include_object.with_order(params[:order] || 'name')
+		 Tagging.with_exact_path(self.full_path).include_object.with_order(params[:order] || 'name')
+		# case params[:order]
+		# 		when "latest"
+		# 			order = "updated_at DESC"
+		# 		when "name"
+		# 			order = "tags.label ASC"
+		# 		when "rank"
+		# 			order = "rankings.value DESC"
+		# 		else
+		# 			order = "tags.label ASC"
+		# 		end
+		# 		Tagging.paginate( 
+		# 			:conditions => "path = '#{self.full_path}'",
+		# 			:include => [:rankings, :object],
+		# 			:order => order,
+		# 			:page => params[:page] || 1,
+		# 			:per_page => 10
+		# 			)
 	end
 	
 	def contributors(params = {})

@@ -1,16 +1,5 @@
 module TaggingsHelper
 	
-	def sentence_for(kind)
-		case kind
-		when "comment"
-			return "said"
-		when "nuniverse"
-			return "visited the nuniverse of "
-		else 
-			return "added a #{kind}: "
-		end
-	end
-	
 	def elements_proper_to_kind(tagging)
 		
 		case tagging.kind
@@ -28,17 +17,32 @@ module TaggingsHelper
 		render :partial => "/taggings/bookmark", :locals => {:item => item, :tagging => tagging}
 	end
 	
-	def content_for_tagging(tagging)
-		render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging} rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+	def content_for_tagging(tagging, params = {})
+		if params[:service]
+			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
+			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
+		else
+			render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging} rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+		end
 	end
 	
 	def title_for(object, options ={})
 		str = "<h1>"
 		str << avatar_for(object)
-		str << object.label.capitalize
+		if object.kind == "person"
+			str << object.label.titleize
+		else
+			str << object.label.capitalize
+		end
 		str << " according to #{options[:service].capitalize}" if options[:service]
 		str << "</h1>"
 		str
+	end
+	
+	def property(property)
+		unless !property || property.blank?
+			render :partial => "/taggings/property", :locals => {:property => property}
+		end
 	end
 			
 end

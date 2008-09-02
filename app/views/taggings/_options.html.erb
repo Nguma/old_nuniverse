@@ -1,0 +1,8 @@
+<div class="box" id="options">
+  <h2>Options</h2>
+  <ul>
+    <li><%= link_to "Google this topic", "/google/#{@tagging.id}" %></li>
+    <li><%= link_to "Locate", "/map/#{@tagging.id}" %></li>
+    <li><%= link_to 'Edit', edit_tagging_path(@tagging) %></li>
+  </ul>
+</div>

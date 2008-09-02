@@ -15,10 +15,17 @@
 	padding:0;
 }
 
+.nuniverse .hat {
+	position:relative;
+	margin:0 0 10px 0;
+	padding: 0 0 10px 0;
+}
+
 .nuniverse h1 {
-	font-size:50px;
+	font-size:45px;
 	font-weight:normal;
 	color:#4f4f4f;
+	margin:0 0 0 0;
 }
 
 .nuniverse h2 {
@@ -34,29 +41,28 @@
 	
 }
 
-.nuniverse .input {
+#input_box {
 	border:none;
 	position:fixed;
 	bottom:0px;
 	padding:5px;
 	margin:0 370px 0 0;
-	background:#FFF;
+	background:#333;
 	width:auto;
-	display:block;
 	width:780px;
 }
 
-.nuniverse .input fieldset {
+#input_box fieldset {
 	border:none;
 }
 
-.nuniverse .input input {
+#input_box input {
 	background:none;
 	border:none;
 /*	border-bottom:solid 1px #666;*/
 	font-size:30px;
 	font-weight:normal;
-	color:#333;
+	color:#FFF;
 	margin: 5px 0 0 0;
 	padding:1px 1px 3px 1px;
 }
@@ -67,22 +73,8 @@
 }
 
 .nuniverse .breadcrumbs a {
-	display:block;
-	color:#666;
-}
-
-.nuniverse .options {
-	position:relative;
-	
-/*	background:#EAEAEA;*/
 	padding:5px;
-}
-
-.nuniverse .options .option {
 	color:#666;
-	padding:0 0 0 20px;
-	margin:0 10px 0 0;
-	background:transparent url("/images/icons/option.png") 0 center no-repeat;
 }
 
 .nuniverse .item p {
@@ -181,9 +173,21 @@
 	background:#eee;
 }
 
+#right_column .box a {
+	color:#393;
+}
+
 #left_column {
 	position:relative;
 	margin:0 380px 0 0;
+}
+
+#left_column .box {
+	padding:0;
+}
+
+#left_column .box h2 {
+	padding:5px;
 }
 
 #right_column {
@@ -199,4 +203,8 @@
 
 #contributors ul {
 	list-style-type:none;
+}
+
+p strong {
+	font-weight:bold;
 }

@@ -1,4 +1,4 @@
-<% @map = map(:source => tagging.object, :path => tagging.full_path ) %>
+<% @map = map(:source => tagging.object, :path => tagging.full_path, :items => items ) %>
 <% if @map -%>
   <% content_for :head do -%>
     <%= GMap.header (:large_map => true, :with_vml => false) %>

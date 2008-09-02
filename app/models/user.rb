@@ -54,6 +54,10 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def connections_count 
+		Tagging.count(:conditions => ['user_id = ?',self.id])
+	end
+	
 	def invite(params)
 		Permission.create(
 			:tagging => params[:topic],

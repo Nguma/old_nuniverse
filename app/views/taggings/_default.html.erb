@@ -1,21 +1,21 @@
 <%= title_for(tagging.object, :service => @service)%>
 <%= kind_options(@tagging) %>
+<%= elements_proper_to_kind(@tagging) %>
 <div class="delimiter">&nbsp;</div>
 <div id="right_column">
-  <%= render :partial => "map", :locals => {:tagging => @tagging} %>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
   <%= render :partial => "ads" %>
+  <%= render :partial => "options", :locals => {:tagging => @tagging}%>
+  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
 </div>
 <div id="left_column">
   <div class="box">
-  <%= elements_proper_to_kind(@tagging) %>
-  <div class="options">
-   
-    <%= link_to "Google this topic", "/google/#{@tagging.id}" , :class => "option" %>
-    <%= link_to "Locate", "/map/#{@tagging.id}" , :class => "option" %>
-    <%= link_to "Images", "/taggings/#{@tagging.id}?service=images" , :class => "option" %>
-    <%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete, :class => "option" %>
-  </div>
+  
+  <ul class="tabs"> 
+    <li class="current"><%= link_to "Overview" %></li>
+    
+    <li><%= link_to "Images", "/taggings/#{@tagging.id}?service=images"  %></li>
+  </ul>
   <%= render :partial => "/nuniverse/connections", :locals => {
     :service => @service,
     :items => @items,

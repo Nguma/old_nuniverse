@@ -1,0 +1,9 @@
+<div class="star_rating">
+  <% 5.times do |time| -%>
+    <% if time < item.rank.to_i %>
+      <%= link_to(time+1,"/rate/#{item.id}/#{time+1}", :title => "stars: #{time+1}", :class => "full") %>
+    <% else %>
+      <%= link_to(time+1,"/rate/#{item.id}/#{time+1}",:title => "stars: #{time+1}") %>
+    <% end -%>
+  <% end -%>
+</div>

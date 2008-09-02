@@ -2,8 +2,8 @@
     <%#= menu_item(:label => "Home", :action => "/",  :selected => selected) %>
     <%= menu_item(:label => "Feedback", :action => "/feedback", :selected => selected)%>
     <% if logged_in? -%>
-
-      <%#= menu_item(:label => "My nuniverse", :action => "/my_nuniverse",  :selected => selected) %>
+      <%= menu_item(:label => "Upgrade", :action => "/upgrade",  :selected => selected) %>
+      <%= menu_item(:label => "My nuniverse", :action => "/my_nuniverse",  :selected => selected) %>
       <%= menu_item(:label => "Sign out", :action => "/logout",  :selected => selected) %>
     <% else -%>
       <%= menu_item(:label => "Sign in", :action => "/login",  :selected => selected) %>

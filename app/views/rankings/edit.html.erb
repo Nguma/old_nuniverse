@@ -1,0 +1,12 @@
+<h1>Editing rankings</h1>
+
+<% form_for(@rankings) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @rankings %> |
+<%= link_to 'Back', rankings_path %>

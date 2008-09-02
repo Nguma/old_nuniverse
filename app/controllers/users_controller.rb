@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge]
 	before_filter :login_required, :except => [:new, :create, :activate]
 	before_filter :invitation_required, :except => [:new, :create, :activate]
-  
+  after_filter :store_location, :only => [:show]
 
   # render new.rhtml
   def new
@@ -65,6 +65,7 @@ class UsersController < ApplicationController
 
 	def upgrade
 	end
+	
   
   # There's no page here to update or destroy a user.  If you add those, be
   # smart -- make sure you check that the visitor is authorized to do so, that they
@@ -79,7 +80,7 @@ class UsersController < ApplicationController
 		@tag = current_user.tag
 		@path = TaggingPath.new
 		@service = nil
-		@order = params[:order] || "name"
+		@order = params[:order] || "rank"
 		@items = @tag.subject_of(:order => @order).paginate(:page => params[:page] || 1, :per_page => 10)
 	end
 	

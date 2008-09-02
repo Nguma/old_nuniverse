@@ -1,9 +1,12 @@
-<% nuniverse do %>
+<% nuniverse(:selected => "My nuniverse") do -%>
     <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
     <h1>Welcome, <%= current_user.login.capitalize %>, this is your nuniverse</h1>
     <div class="delimiter">&nbsp;</div>
     
      <div id="right_column">
+        <div class="box">
+          <p>Your nuniverse size is <strong><%= current_user.connections_count%>/200</strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
+        </div>
         <div class="box">  
           <% unless current_user.invitations.empty? %>
           <h2>You have been invited to</h2>

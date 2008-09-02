@@ -81,13 +81,56 @@
 	
 }
 
-.hat h1 {
-	margin:0 0 0 0;
-	padding:5px 0 0 0;
-	line-height:40px;
+.nuniverse .item .rank_value {
+	position:absolute;
+	top:0;
+	right:5px;
+	width:30px;
+	height:auto;
+	padding:5px 18px 0 0;
+	text-align:center;
+	font-size:15px;
+	font-weight:bold;
+	color:#9c9;
+	background:transparent url('/images/icons/value.png') right center no-repeat;
 }
 
+.nuniverse .item .star_rating {
+	position:absolute;
+	top:0;
+	right:5px;
+}
+
+.nuniverse .item .star_rating a {
+	position:relative;
+	float:left;
+	display:block;
+	text-indent:-9000px;
+	width:25px;
+	
+	height:20px;
+	padding:0;
+	background:transparent url('/images/icons/stars.png') 0 0 no-repeat;	
+}
+
+.nuniverse .item .star_rating a.half {
+	background:transparent url('/images/icons/stars.png') -25px 0 no-repeat;
+}
+
+.nuniverse .item .star_rating a.full {
+	background:transparent url('/images/icons/stars.png') -50px 0 no-repeat;
+}
+
+.nuniverse .item .star_rating a.lit {
+	background:transparent url('/images/icons/stars.png') -74px 0 no-repeat;
+}
+
+
+
 dl.properties {
+	position:relative;
+	clear:both;
+	display:block;
 	padding:0 5px 5px 35px;
 	
 }
@@ -95,4 +138,5 @@ dl.properties {
 dl.properties dd {
 	display:inline;
 	font-size:13px;
+	line-height:20px;
 }

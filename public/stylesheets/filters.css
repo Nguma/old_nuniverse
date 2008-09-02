@@ -1,173 +1,29 @@
-.menu
-{
-	font-family:arial;
-	padding:0 0 0 300px;
-	display:block;
-	height:57px;
-	background:#333;
-	z-index:12345678901234567890;
-}
-
-dl.dropdown
-{
-	position:absolute;
-	width:auto;
-	color:#FFF;
-	padding:5px 0 0 0;
-	font-weight:bold;
-	margin:0 2px 0 0;
-	font-size:14px;
-	z-index:12345678901290;
-/*	background:#69c;*/
-	width:700px;
-}
-
-dl.dropdown dd.item
-{
+.box .tabs {
 	position:relative;
-	clear:both;
-	display:none;
-	padding:0;
-	background:#999;
-	color:#333;
+	display:block;
+	width:100%;
+	background:#ccc;
+	list-style-type:none;
+	margin:0 0 0 0;
 }
 
-dl.dropdown dt
-{
+.box .tabs li {
 	position:relative;
 	float:left;
-	background:#333;
-	color:#FFF;
-	padding:2px 3px 8px 0;
+	padding:5px 10px 5px 10px;
+
+	border-left:none;
+	background:#ddd;
+	margin:0 0 0 0;
 }
 
-dl.dropdown dt img
-{
-	height:17px;
-	padding:0px 0 0 5px;
-}
-
-dl.dropdown dd img
-{
-	height:20px;
-}
-
-dl.dropdown dd.item a.service
-{
-	position:relative;
-	clear:both;
-	padding:10px 10px 5px 10px;
-	color:#333;
-}
-
-.tabs
-{
-	position:relative;
-	padding:0;
-	margin:0;
-	font-family:arial;
-	color:#eee;
-	display:none;
-}
-
-.hover .tabs
-{
-	display:block;
-}
-
-.tabs a
-{
-	font-size:12px;
-	font-weight:normal;
-	padding:5px;
-	line-height:20px;
-	margin:0;
-}
-
-.tabs a
-{
-	color:inherit;
-}
-
-.tabs a.selected
-{
-	color:#333;
-	background:#FFF;
-}
-
-/* SELECTED */
-
-dl.dropdown dd.selected
-{
-	background:#333;
-	display:block;
-	color:#FFF;
-}
-
-dl.dropdown dd.selected a.service
-{
-	display:none;
-	color:#FFF;
-}
-
-dl.dropdown dd.selected .tabs
-{
-	display:block;
-	color:#eee;
-}
-
-
-dl.dropdown dd.hover
-{
-	background:#666;
-}
-
-
-/* EXPANDED */
-
-dl.expanded dt
-{
-	background:#333;
-	color:#FFF;
-}
-
-dl.expanded dd.item
-{
-	padding:5px;
-	display:block;
-	min-height:45px;
-}
-
-dl.expanded dd.selected a.service
-{
-	display:block;
-}
-
-dl.expanded dd.item .tabs
-{
-	padding:0 5px 5px 5px;
-}
-
-dl.expanded dd.hover a.service
-{
-	color:#FFF;
-}
-
-dl.expanded .tabs a.selected
-{
+.box .tabs li a {
+	color:#666;
 	background:none;
-	color:#FFF;
+	padding:0;
 }
 
-a.back
-{
-	display:none;
-	position:absolute;
-	top:0;
-	left:10px;
-	color:#FFF;
-	font-size:14px;
-	font-weight:bold;
-	padding:10px 10px 0 10px;
-	z-index:1234567890123456;
+.box .tabs .current {
+	border-bottom:none;
+	background:#eee;
 }

@@ -1,4 +1,4 @@
-<% nuniverse(:dom_class => @tagging.object.kind) do -%>
+<% nuniverse(:dom_class => @tagging.object.kind, :selected => "My nuniverse") do -%>
     <%= breadcrumbs(@tagging.path) %>
-    <%= content_for_tagging(@tagging)%>
+    <%= content_for_tagging(@tagging, :service => @service)%>
 <% end -%>

@@ -5,9 +5,44 @@ function reset()
 {
   // nuniverse = new Nuniverse();
   notice();
-  if($defined($('input'))) {
-    $('input').focus();
-  }
+  
+  window.document.addEvent('keydown',function(ev){
+    switch(ev.key){
+      case "esc":
+        $('input_box').addClass('hidden');
+        break;
+      default:
+        if($('input_box').hasClass('hidden')) {
+          $('input_box').removeClass('hidden');
+          $('input').focus();
+        }
+    }
+    
+  });
+  
+  $$('.star_rating a').each(function(star){
+    var selected_stars = star.getAllPrevious().concat([star])
+    star.addEvents({
+      'mouseenter': function(ev) {
+        selected_stars.each(function(prev){
+          prev.addClass('lit');
+        });
+      },
+      'mouseleave': function(ev) {
+        selected_stars.each(function(lit) {
+          lit.removeClass('lit');
+        });
+      }// ,
+      //       'click':function(ev) {
+      //         ev.preventDefault();
+      //         var call = new Request.HTML({
+      //           'url':star.getProperty('href')
+      //         }).get();
+      //         return false;
+      //       }
+    });
+  });
+  
   
   $$('.list .items').each(function(list){
     // var sortable = new Sortables(list, {
@@ -95,37 +130,3 @@ function onAvatar(img)
 {
   $('image').set('html',img)
 }
-
-// function setMap(params)
-// {
-//   //section = params['section'];
-//   var map;
-//   var map_div = $('map_div');//section.getElement('.map');
-//   
-//   if($defined(map_div))
-//   {
-//    
-//     if (GBrowserIsCompatible()) {
-//      
-//        map = new GMap2(map_div);
-//        map.setCenter(new GLatLng(params['center']['latitude'],params['center']['longitude']),params['zoom']);
-//        map.addControl(new GLargeMapControl());
-//        //this.map.addControl(new GMapTypeControl());
-//       // this.map.addControl(new google.maps.LocalSearch());
-//        //this.map.addControl( new GControlPosition(G_ANCHOR_BOTTOM_LEFT, new GSize(10,20)));
-//        //console.log(params['markers'])
-//        params['markers'].each(function(m)
-//        {
-//        
-//          var marker = new GMarker(new GLatLng(m['latitude'],m['longitude']), {title:m['title'], draggable:true});
-//        
-//          map.addOverlay(marker);
-//          GEvent.addListener(marker, "click", function() {
-//              marker.openInfoWindowHtml("<h2 style='color:#333'>"+m['title']+"</h2>");
-//            });
-//        
-//        });
-//       }
-//     }
-// }
-

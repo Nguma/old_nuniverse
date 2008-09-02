@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :rankings
+
   map.resources :lists
 
   map.resources :tags do |tag|
@@ -9,20 +11,6 @@ ActionController::Routing::Routes.draw do |map|
 	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
 	                                   :purge     => :delete }
-	
-	
-	map.beta "/beta",
-		:controller => "application",
-		:action => "beta"
-		
-	map.feedback "/feedback",
-		:controller => "application",
-		:action => "feedback"
-	
-	map.feedback "/thank_you",
-		:controller => "application",
-		:action => "thank_you"
-		
 		
 	map.activate '/activate/:activation_code', 
 		:controller => 'users', 
@@ -35,6 +23,18 @@ ActionController::Routing::Routes.draw do |map|
 	map.upgrade "/upgrade",
 		:controller => "users",
 		:action => "upgrade"
+
+	map.beta "/beta",
+		:controller => "application",
+		:action => "beta"
+
+	map.feedback "/feedback",
+		:controller => "application",
+		:action => "feedback"
+
+	map.feedback "/thank_you",
+		:controller => "application",
+		:action => "thank_you"
 	
 	map.my_nuniverse "/my_nuniverse",
 		:controller => 'users',
@@ -52,13 +52,9 @@ ActionController::Routing::Routes.draw do |map|
 		:controller => "taggings",
 		:action => "bookmark"
 		
-	map.videos "/videos",
-		:controller => "ws",
-		:action => "videos"
-		
-	map.video "/video",
-		:controller => "ws",
-		:action => "video"
+	map.videos "/rate/:id/:stars",
+		:controller => "taggings",
+		:action => "rate"
 		
 	map.details_for "/details_for/:source/:id",
 		:controller => "ws",

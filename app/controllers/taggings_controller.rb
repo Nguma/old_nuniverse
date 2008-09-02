@@ -2,8 +2,9 @@ class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
 	
 	before_filter :login_required, :except => [:preview]
-	before_filter :find_tagging, :only => [:bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
-	skip_before_filter :invitation_required
+	before_filter :find_tagging, :only => [:rate, :bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
+	# skip_before_filter :invitation_required
+	after_filter :store_location, :only => [:show]
 
 	def index
 		redirect_to "/my_nuniverse"
@@ -20,6 +21,7 @@ class TaggingsController < ApplicationController
 		@tagging.object.replace_property('address', params[:address].to_s) if params[:address]
 		@tagging.object.replace_property("tel", params[:tel]) if params[:tel]		
 		@tagging.object.replace_property("latlng", params[:latlng]) if params[:latlng]
+		@tagging.object.url = params[:url] if params[:url]
 		@tagging.object.description = params[:description] if params[:description]
 		@tagging.object.save
 		redirect_to @tagging
@@ -57,7 +59,7 @@ class TaggingsController < ApplicationController
 		@selected = params[:selected].to_i || nil
 		@service = params[:service] || nil
 		@page = params[:page] || 1
-		@order = params[:order] || "date"
+		@order = params[:order] || "rank"
 		
 		
 		case @service
@@ -75,9 +77,11 @@ class TaggingsController < ApplicationController
 			render :action => "images"
 		when nil
 		else
+			
 			@service = nil		
 				
 		end
+		@order = "name" if @tagging.object.kind != "list"
 		@contributors = @tagging.contributors(:page => @page, :per_page => 10)
 		@items = @items.nil? ? @items = @tagging.connections(:order => @order).paginate(:page => @page, :per_page => 10) : @items
 
@@ -130,6 +134,17 @@ class TaggingsController < ApplicationController
 			:owner => current_user)
 			
 		redirect_to @tagging, :service => params[:service] || nil	
+	end
+	
+	def rate
+		@ranking = Ranking.find_or_create(:tagging => @tagging, :user => current_user)
+		@ranking.value = params[:stars].to_i || 1
+		@ranking.save
+		redirect_to :back
+		# respond_to do |format|
+		# 		format.html {render :layout => false}
+		# 		format.js { render :layout => false}
+		# 	end
 	end
 	
 	protected

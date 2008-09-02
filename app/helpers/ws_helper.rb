@@ -74,8 +74,9 @@ module WsHelper
 		# 		
 
 		if params[:source].kind == "list"
-			
-			markers = markers_for(Tagging.with_path_ending(params[:path]).with_address_or_geocode().paginate(:page => 1, :per_page => 10).collect{|c| c.object })
+			# items = Tagging.with_path_ending(params[:path].with_address_or_geocode().paginate(:page => 1, :per_page => 10))
+			items = params[:items].collect{|c| c.object }
+			markers = markers_for(items)
 		else
 			markers = markers_for([params[:source]])
 		end
