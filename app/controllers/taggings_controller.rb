@@ -1,6 +1,6 @@
 class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
-	include SMSFu
+	#include SMSFu
 	
 	before_filter :login_required, :except => [:preview]
 	before_filter :find_tagging, :only => [:sms,:rate, :bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
