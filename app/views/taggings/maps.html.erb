@@ -21,7 +21,8 @@
       </div>
     <% else -%>
       <h2>Google suggests these possible addresses</h2>
-      <% @items = Finder::Search.find(:service => "google", :filter => "local", :query => @tagging.object.label ) %>
+      <% @items = google_localize(@tagging) %>
+      
       <div class="items">
       <% @items.each do |item| -%>
         <div class="item">

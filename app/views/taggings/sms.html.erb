@@ -1,0 +1,7 @@
+<% mess = "#{@tagging.subject.label}: #{@tagging.object.label}\n"
+@items.each_with_index do |item,i| 
+  mess << "- #{item.object.label.capitalize}\n"
+end
+-%>
+
+<%= deliver_sms("6466781468","AT&T",mess, :limit => 200, :email => current_user.email)  %>

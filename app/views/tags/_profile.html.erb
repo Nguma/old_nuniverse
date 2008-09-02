@@ -10,12 +10,14 @@
       <%= avatar_for(tag) %>
     <% else -%>
       <p>
-        <%= link_to("Add a public image","#") %> | 
+        <%#= link_to("Add a public image","#") %> | 
         <%= link_to 'Edit', edit_tag_path(tag) %>
       </p>
     <% end -%>
     <%= property(tag.description)%>
   <% else -%>
+  <%= link_to 'Edit', edit_tag_path(tag) %>
+  <%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete %>
   <% end -%>
   <% end -%>
   

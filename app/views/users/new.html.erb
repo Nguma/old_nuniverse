@@ -4,9 +4,12 @@
   <div class="header">
     <%= image_tag("/images/icons/logo_nuniverse.png") %>
   </div>
-  <h1>Signing up, Basics</h1>
-  <h4>Three quick and easy steps.</h4>
-  <%= error_messages_for :user %>
+  <% if (error_messages_for :user).blank? %>
+    <h1>Signing up, Basics</h1>
+    <h4>Three quick and easy steps.</h4>
+  <% else -%>
+    <%= error_messages_for :user, :header_message => "Wait a minute...", :message => ""%>
+  <% end -%>
   <% form_for :user, :url => user_path, :html => { :multipart => true } do |f| -%>
     <div class="avatar_picker"></div>
     <label for="login">Login</label>

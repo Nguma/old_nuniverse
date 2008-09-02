@@ -1,18 +1,28 @@
-<div class="content profile">
-  <h3>Edit Your Profile</h3>
-  <h4>If there's anything to change, here is the place.</h4>
+<% nuniverse do -%>
+  <h1>Edit Your Profile</h1>
+  <h2>If there's anything to change, here is the place.</h2>
     <%= error_messages_for :user %>
     <% form_for :user, :url => user_path, :html => {:method => :put, :multipart => true } do |f| -%>
+    <fieldset>
       <div class="avatar_picker"></div>
-      <label for="firstname">First Name</label>
-      <%= f.text_field :firstname %>
-
-      <label for="lastname">Last Name</label>
-      <%= f.text_field :lastname %>
-
-      <label for="email">Email</label>
-      <%= f.text_field :email %>
-
+      <ul>
+        <li>
+          <label for="firstname">First Name</label>
+          <%= f.text_field :firstname %>
+        </li>
+        <li>
+          <label for="lastname">Last Name</label>
+          <%= f.text_field :lastname %>
+        </li>
+        <li>
+          <label for="email">Email Address</label>
+          <%= f.text_field :email %>
+        </li>   
+        <li>   
+          <label for="zip">Your address</label>
+          <%= f.text_field :address %>
+        </li>
       <%= submit_tag 'Save Changes' , :class => 'submit' %>
+    </fieldset>
     <% end -%>
-</div>
+<% end -%>

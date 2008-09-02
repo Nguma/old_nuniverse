@@ -11,11 +11,11 @@ module Finder
 		def initialize(params)
 			@query = params[:query]
 			@mode = params[:filter] || "web"
-
+		
 		end
 		
 		def results
-			Googleizer::Request.new("#{@query} -amazon.com -ebay.com -youtube.com", :mode => @mode).response.results
+			Googleizer::Request.new("#{@query} -amazon.com -ebay.com -youtube.com", :mode => @mode).response(@extras).results
 		end
 	end
 

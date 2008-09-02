@@ -34,7 +34,7 @@ module TaggingsHelper
 		else
 			str << object.label.capitalize
 		end
-		str << " according to #{options[:service].capitalize}" if options[:service]
+		str << "<span class='service'> according to #{options[:service].capitalize}</span>" if options[:service]
 		str << "</h1>"
 		str
 	end

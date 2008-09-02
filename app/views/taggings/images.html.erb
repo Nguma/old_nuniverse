@@ -1,14 +1,19 @@
-<% nuniverse do -%>
+<% nuniverse(:dom_class => "images") do -%>
   <%= breadcrumbs(@tagging.path)%>
   <h1><%= @tagging.object.label.capitalize %> <span class="service">in images</span></h1>
+  
   <% if @items.empty? -%>
     <h2>You haven't added any images yet.</h2>
   <% else -%>
     <% @items.each do |item| -%>
-      <%= image_tag(item.public_filename(:large)) %>
+    <div class="box" style="width:370px;float:left;margin:0 5px 2px 0">
+      <h2><%= item.object.label.capitalize %></h2>
+      <%= avatar_for(item.object) %>
+    </div>
     <% end -%>
   <% end -%>
-  <%= render :partial => "/avatars/new", :locals => {:tagging => @tagging}%>
+  
+  
   <div class="options">
     <%= link_to "back to content", @tagging , :class => "option" %>
   </div>

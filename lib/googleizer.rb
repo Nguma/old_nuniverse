@@ -11,8 +11,9 @@ module Googleizer
 			@query = query
 		end
 		
-		def response
-			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=large&sll=#{Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"}"
+		def response(params = {})
+			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=large"
+			uri << "&sll=#{params[:sll]}" if params[:sll]
 			
 			Googleizer::Response.new(Net::HTTP.get_response(URI.parse(uri)),mode)
 		end

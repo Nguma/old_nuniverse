@@ -1,8 +1,9 @@
 class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
+	include SMSFu
 	
 	before_filter :login_required, :except => [:preview]
-	before_filter :find_tagging, :only => [:rate, :bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
+	before_filter :find_tagging, :only => [:sms,:rate, :bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
 	# skip_before_filter :invitation_required
 	after_filter :store_location, :only => [:show]
 
@@ -35,6 +36,11 @@ class TaggingsController < ApplicationController
 	end
 	
 	def connect
+		if current_user.connections_count >= current_user.max_connections
+			flash[:error] = "You have reached your max number of connections."
+			redirect_to "/upgrade"
+		else
+		
 		gums = params[:query].scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
 		unless gums.empty?
 			params[:kind] = gums[0][1]
@@ -50,6 +56,7 @@ class TaggingsController < ApplicationController
 		end
 		redirect_back_or_default("/taggings/#{@tagging.path.last}")
 	end
+	end
 	
 	def show
 		if @tagging.nil?
@@ -60,20 +67,22 @@ class TaggingsController < ApplicationController
 		@service = params[:service] || nil
 		@page = params[:page] || 1
 		@order = params[:order] || "rank"
+		@filter = params[:filter] || nil
 		
 		
 		case @service
 		when "google"
 			query = (@tagging.subject.kind == "user") ? "" : @tagging.subject.label
 			query << " #{@tagging.object.label}" 
-			@items = Finder::Search.find(:query => query, :service => @service)
+			@items = Googleizer::Request.new(query, :mode => "web").response.results
 		when "map"
 			
 			
 			@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
 			render :action => "maps"
 		when "images"
-			@items = @tagging.images.paginate(:page => @page, :per_page => 10)
+			@items = @tagging.connections(:order => @order, :filter => @filter).paginate(:page => @page, :per_page => 10)
+			# @items = @tagging.images.paginate(:page => @page, :per_page => 10)
 			render :action => "images"
 		when nil
 		else
@@ -83,7 +92,7 @@ class TaggingsController < ApplicationController
 		end
 		@order = "name" if @tagging.object.kind != "list"
 		@contributors = @tagging.contributors(:page => @page, :per_page => 10)
-		@items = @items.nil? ? @items = @tagging.connections(:order => @order).paginate(:page => @page, :per_page => 10) : @items
+		@items = @items.nil? ? @items = @tagging.connections(:order => @order, :filter => @filter).paginate(:page => @page, :per_page => 10) : @items
 
 	end
 	
@@ -147,9 +156,15 @@ class TaggingsController < ApplicationController
 		# 	end
 	end
 	
+	def sms
+		@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
+		
+	end
+	
 	protected
 	
 	def find_tagging
+		
 		@tagging = Tagging.find(params[:id]) rescue nil
 	end
 	

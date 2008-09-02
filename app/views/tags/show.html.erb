@@ -1,11 +1,16 @@
-<div class="nuniverse" id="nuniverse">
-  <div class="body">
+<% nuniverse do -%>
     <%= link_to '< Back to your nuniverse', "/my_nuniverse" %>
+  <div class="hat">
     <h1><%= @tag.label.capitalize %></h1>
-    <h2>has been added to</h2>
+    <h4><%= @tag.kind.capitalize %></h4>
+  </div>
+  <div id="right_column">
+    <%= render :partial => "/tags/map", :locals => {:tag => @tag}%>
+ 
+  </div>
+  <div id="left_column">
     <% @tag.connections.each do |connection| %>
       <h3><%= link_to connection.subject.label,connection.subject %></h3>
     <% end -%>
   </div>
-  
-</div>
+<% end -%>

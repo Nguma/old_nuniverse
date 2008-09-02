@@ -82,3 +82,7 @@ label {
 .pending {
 	color:#F30;
 }
+
+form ul li label {
+	min-width:50%;
+}

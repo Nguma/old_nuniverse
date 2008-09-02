@@ -4,9 +4,19 @@
     <div class="delimiter">&nbsp;</div>
     
      <div id="right_column">
+
         <div class="box">
-          <p>Your nuniverse size is <strong><%= current_user.connections_count%>/200</strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
+          <h2>Your nuniverse</h2>
+           <p>Your nuniverse size is <strong><%= current_user.connections_count%>/<%= current_user.max_connections %></strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
+          <p><%#= current_user.tag.weather %></p>
+          <%= avatar_for current_user.tag %>
+          <p>
+            <%= link_to "Edit your profile", "/users/edit" %>
+          </p>
+         
+          
         </div>
+          <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
         <div class="box">  
           <% unless current_user.invitations.empty? %>
           <h2>You have been invited to</h2>

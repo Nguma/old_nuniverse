@@ -7,6 +7,7 @@ function reset()
   notice();
   
   window.document.addEvent('keydown',function(ev){
+    if($('input_box').hasClass('disabled')) return;
     switch(ev.key){
       case "esc":
         $('input_box').addClass('hidden');
@@ -43,6 +44,16 @@ function reset()
     });
   });
   
+  
+  $$('.toggle').each(function(toggle) {
+    toggle.addEvent('click', function(ev) {
+      $('input_box').toggleClass('disabled');
+      $('address_form').toggleClass('hidden');
+      if(!$('address_form').hasClass('hidden')){
+        $('address_form').focus();
+      }
+    });
+  });
   
   $$('.list .items').each(function(list){
     // var sortable = new Sortables(list, {

@@ -140,6 +140,7 @@ module Nuniverse
 			coords
 		end
 		
+		
 		class Error < StandardError; end
 
 	end

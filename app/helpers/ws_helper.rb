@@ -130,6 +130,15 @@ module WsHelper
 		# 		}
 	end
 	
+	def google_localize(tagging)
+		if tagging.subject.has_address?
+			sll = tagging.subject.coordinates.join(',')
+		else
+			sll = Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"	
+		end
+		Googleizer::Request.new(tagging.object.label, :mode => "local").response(:sll => sll).results
+	end
+	
 	def details_for(params)
 		case params[:service]
 		when "ebay"

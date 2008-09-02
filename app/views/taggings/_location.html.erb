@@ -1,14 +1,8 @@
 <div class="hat">
   <%= title_for(@tagging.object, :service => @service)%>
-  <dl class="properties">
-    <%= property(@tagging.object.kind) %>
-    <%= property(@tagging.object.property('address')) %>
-    <%= property(@tagging.object.property('tel')) %>
-    <%= property(@tagging.object.url, :url => link_to(@tagging.object.url)) %>
-    <%= property(@tagging.object.description)%>
-  </dl>
 </div>
 <div id="right_column">
+  <%= render :partial => "/tags/profile", :locals => {:tag => @tagging.object}%>
   <%= render :partial => "map", :locals => {:tagging => @tagging} %>
   <%= render :partial => "ads" %>
   <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
@@ -17,10 +11,10 @@
   <div class="box">
     <ul class="tabs"> 
       <li class="current"><%= link_to "Overview" %></li>
-      <li><%= link_to "Google this topic", "/google/#{@tagging.id}" %></li>
-      <li><%= link_to "Locate", "/map/#{@tagging.id}" %></li>
+      <li><%= link_to "Bookmarks", "/taggings/#{@tagging.id}?filter=bookmark"  %></li>
+      <li><%= link_to "People", "/taggings/#{@tagging.id}?filter=person"  %></li>
+      <li><%= link_to "locations", "/taggings/#{@tagging.id}?filter=location"  %></li>
       <li><%= link_to "Images", "/taggings/#{@tagging.id}?service=images"  %></li>
-      <li><%= link_to 'Edit', edit_tagging_path(@tagging) %></li>
     </ul>
     <%= render :partial => "/nuniverse/connections", :locals => {
       :service => @service,

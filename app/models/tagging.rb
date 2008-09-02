@@ -36,7 +36,8 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def rank
-		rankings.sum :value
+		return 0 if rankings.length == 0
+		((rankings.sum :value).to_i / rankings.length).floor
 	end
   
 
@@ -121,7 +122,7 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		 Tagging.with_exact_path(self.full_path).include_object.with_order(params[:order] || 'name')
+		 Tagging.with_exact_path(self.full_path).include_object.with_object_kinds(params[:filter] || nil).with_order(params[:order] || 'name')
 		# case params[:order]
 		# 		when "latest"
 		# 			order = "updated_at DESC"

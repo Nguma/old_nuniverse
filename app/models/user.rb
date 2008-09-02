@@ -7,7 +7,9 @@ class User < ActiveRecord::Base
   include Authorization::StatefulRoles
   #validates_presence_of     :login
   validates_length_of       :login, :within => 3..40
-  validates_uniqueness_of   :login, :case_sensitive => false
+  validates_uniqueness_of   :login, :case_sensitive => false,
+																		:message	=> "Sorry, but someone already ses that login. Please choose another one."
+
   validates_format_of       :login, :with     => Authentication.login_regex,
                                     :message  => Authentication.bad_login_message
 
@@ -16,7 +18,8 @@ class User < ActiveRecord::Base
 
   validates_presence_of     :email
   validates_length_of       :email, :within => 6..100 #r@a.wk
-  validates_uniqueness_of   :email, :case_sensitive => false
+  validates_uniqueness_of   :email, :case_sensitive => false, 
+																		:message => "An account already exists with this email. Is it yours? <a href='/login'>Log in</a>"
   validates_format_of       :email, :with     => Authentication.email_regex,
                                     :message  => Authentication.bad_email_message
 
@@ -54,6 +57,15 @@ class User < ActiveRecord::Base
 		end
 	end
 	
+	def max_connections
+		case self.role
+		when "free"
+			return 200
+		when "admin"
+			return 9999999
+		end
+	end
+	
 	def connections_count 
 		Tagging.count(:conditions => ['user_id = ?',self.id])
 	end
@@ -63,6 +75,10 @@ class User < ActiveRecord::Base
 			:tagging => params[:topic],
 			:user => params[:user])
 		UserMailer.deliver_invitation(:topic => params[:topic], :user => params[:user], :sender => self)
+	end
+	
+	def address
+		tag.property('address')
 	end
 	
 

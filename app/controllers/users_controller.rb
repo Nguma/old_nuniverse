@@ -65,6 +65,17 @@ class UsersController < ApplicationController
 	def upgrade
 	end
 	
+	def edit
+		@user = current_user
+	end
+	
+	def update
+		@user = current_user
+		@user.tag.replace_property('address',params[:user]['address']) if params[:user]['address']
+		@user.tag.save
+		redirect_to "/my_nuniverse"
+	end
+	
   
   # There's no page here to update or destroy a user.  If you add those, be
   # smart -- make sure you check that the visitor is authorized to do so, that they

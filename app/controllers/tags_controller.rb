@@ -32,7 +32,7 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
     @tag = Tag.find(params[:id])
-		
+		# redirect_back_or_default(@tag)
   end
 
   # POST /tags
