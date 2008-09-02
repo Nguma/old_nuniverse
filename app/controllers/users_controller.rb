@@ -35,8 +35,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Signup complete! Please sign in to continue."
       redirect_to '/login'
     when params[:activation_code].blank?
-      flash[:notice] = "The activation code was missing.  Please follow the URL from your email."
-      redirect_to '/login'
+      flash[:notice] = "The activation code was missing."
     else 
       flash[:notice]  = "We couldn't find a user with that activation code -- check your email? Or maybe you've already activated -- try signing in."
       redirect_to '/login'
