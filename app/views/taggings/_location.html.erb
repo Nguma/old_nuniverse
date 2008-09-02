@@ -1,11 +1,5 @@
 <div class="hat">
-  <h1>
-    <%= avatar_for(@tagging.object)  %>
-    <%= @tagging.object.label.capitalize %> 
-    <span class="service">
-      <%= " according to #{@service.capitalize}" if @service%>
-    </span> 
-  </h1>
+  <%= title_for(@tagging.object, :service => @service)%>
   <dl class="properties">
     <%= property(@tagging.object.kind) %>
     <%= property(@tagging.object.property('address')) %>

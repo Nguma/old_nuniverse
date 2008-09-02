@@ -28,7 +28,7 @@ module TaggingsHelper
 	
 	def title_for(object, options ={})
 		str = "<h1>"
-		str << avatar_for(object)
+		str << icon_for(object)
 		if object.kind == "person"
 			str << object.label.titleize
 		else

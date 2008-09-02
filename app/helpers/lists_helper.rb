@@ -46,10 +46,12 @@ module ListsHelper
 			image_tag("/images/icons/list_button.png", :alt => "this is a list"), 
 			"/taggings/update/#{@tagging.id}?kind=list", :class => "list_button"
 		)
+		options << "<br/>"
 		options << link_to(
 			image_tag("/images/icons/location_button.png", :alt => "this is a location"), 
 			"/taggings/update/#{@tagging.id}?kind=location", :class => "list_button"
 		)
+		options << "<br/>"
 		options << link_to(
 			image_tag("/images/icons/person_button.png", :alt => "this is a person"), 
 			"/taggings/update/#{@tagging.id}?kind=person", :class => "list_button"

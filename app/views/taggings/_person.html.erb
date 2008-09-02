@@ -1,6 +1,28 @@
-<dd class="connection person <%= cycle('even', 'odd') %>">
-  <%= avatar_for(connection.object)%>
-  <%= link_to_nuniverse(connection.object) %>
-  <p><%= connection.description %></p>
-  
-</dd>
+<div class="hat">
+  <%= title_for(tagging.object, :service => @service)%>
+</div>
+<div id="right_column">
+  <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
+  <%= render :partial => "map", :locals => {:tagging => @tagging} %>
+  <%= render :partial => "ads" %>
+  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+</div>
+<div id="left_column">
+  <div class="box">
+    <ul class="tabs"> 
+      <li class="current"><%= link_to "Overview" %></li>
+      <li><%= link_to "Images", "/taggings/#{@tagging.id}?service=images"  %></li>
+    </ul>
+    <%= render :partial => "/nuniverse/connections", :locals => {
+      :service => @service,
+      :items => @items,
+      :selected => @selected,
+      :order => @order,
+      :tagging => @tagging
+    }%>
+  </div>
+</div>
+<%= render :partial => "/taggings/find_or_create" , :locals => {
+  :subject => tagging.object, 
+  :path => tagging.full_path
+ }%>

@@ -1,10 +1,21 @@
-<% @map = map(:source => tagging.object, :path => tagging.full_path, :items => items ) %>
-<% if @map -%>
-  <% content_for :head do -%>
-    <%= GMap.header (:large_map => true, :with_vml => false) %>
-    <%= @map.to_html %>
-  <% end -%>
+<% unless tagging.object.kind == 'list' -%>
+  <% @map = map(:source => tagging.object, :path => tagging.full_path, :items => items ) %>
+
   <div class="box" >
-    <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
+    <% if @map -%>
+      <% content_for :head do -%>
+        <%= GMap.header (:large_map => true, :with_vml => false) %>
+        <%= @map.to_html %>
+      <% end -%>
+      <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
+    <% else -%>
+
+      <p>
+        <strong>
+          <%= link_to("Add an Address", "#")%>
+          <%= link_to("Locate", "/map/#{tagging.id}")%>
+        </strong>
+      </p>
+    <% end -%>
   </div>
 <% end -%>

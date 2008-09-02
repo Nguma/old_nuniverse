@@ -63,6 +63,7 @@
 	font-size:30px;
 	font-weight:normal;
 	color:#FFF;
+	width:100%;
 	margin: 5px 0 0 0;
 	padding:1px 1px 3px 1px;
 }
@@ -207,4 +208,13 @@
 
 p strong {
 	font-weight:bold;
+}
+
+#profile {
+	position:relative;
+}
+
+#profile .avatar {
+	poston:relative;
+	width:100%;
 }

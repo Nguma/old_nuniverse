@@ -2,7 +2,6 @@ class UserMailer < ActionMailer::Base
   def signup_notification(user)
     setup_email(user)
 		@subject += "You just signed up for a beta account"
-		@bcc = "beta@nuniverse.net"
   end 
   
   def activation(user)

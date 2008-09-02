@@ -1,0 +1,22 @@
+<div class="box" id="profile">
+  <% if tag.kind.nil? -%>
+    <%= kind_options(@tagging)%>
+  <% else -%>
+  This is a <%= tag.kind %>
+  <% unless tag.kind == "list" -%>
+    <h2>Public Profile</h2>
+    
+    <% if avatar_for(tag) %>
+      <%= avatar_for(tag) %>
+    <% else -%>
+      <p>
+        <%= link_to("Add a public image","#") %> | 
+        <%= link_to 'Edit', edit_tag_path(tag) %>
+      </p>
+    <% end -%>
+    <%= property(tag.description)%>
+  <% else -%>
+  <% end -%>
+  <% end -%>
+  
+</div>

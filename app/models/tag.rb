@@ -86,8 +86,8 @@ class Tag < ActiveRecord::Base
 	
 	
 	def thumbnail
-		return avatar.public_filename(:small) unless avatar.nil?
-		return property('thumbnail') unless property('thumbnail').blank?
+		# return avatar.public_filename(:small) unless avatar.nil?
+		# return property('thumbnail') unless property('thumbnail').blank?
 		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
 		return nil
 	end
