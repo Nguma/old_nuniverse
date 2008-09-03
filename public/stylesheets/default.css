@@ -1,4 +1,3 @@
-
 p
 {
 	font-size:14px;
@@ -26,4 +25,29 @@ input
 	padding:10px;
 	background:#FFF;
 	border:solid #cc 1px;
+}
+
+div.table {
+	width:100%;
+
+}
+
+div.table .row {
+	position:relative;
+	clear:left;
+	height:30px;
+	background:#ccc;
+	border-top:solid 1px #999;
+	margin: 0 0 0 0;
+}
+
+div.table .pending {
+	color:#F60;
+}
+
+div.cell {
+	position:relative;
+	float:left;
+	padding:5px;
+	width:24%;
 }

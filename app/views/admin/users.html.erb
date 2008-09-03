@@ -1,13 +1,23 @@
 <% nuniverse do -%>
   <h1>Users</h1>
+  <div class="table">
   <% @users.each do |user| -%>
-    <div class="item">
-      <h3><%= user.login %>
-      <span class="state <%= user.state %>">
-        <%= user.state %>
-        <%= link_to("(send activation code)", "/admin/send_activation_code/#{user.id}") if user.pending? %>
-      </span>
-      </h3>
+    <div class="row <%= user.state %>">
+      <div class="cell">
+        <%= user.login %>
+      </div>
+      <div class="cell">
+        <%= user.email %>
+      </div>
+      <div class="cell">
+          <%= user.state %>
+      </div>
+      <div class="cell">
+          <%= link_to("Send activation code", "/admin/send_activation_code/#{user.id}") if user.pending? %>
+          <%#= link_to("delete", user, :confirm => 'Are you sure?', :method => :delete) %>
+      </div>
     </div>
+    
   <% end -%>
+  </div>
 <% end -%>
