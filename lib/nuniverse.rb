@@ -12,11 +12,10 @@ module Nuniverse
 		
 		def self.list
 			{
-				'topic' => 'topic',
-				'location' => 'location',
-				'person' => 'person#person',
-				'video' => 'video',
-				'bookmark' => 'bookmark',
+				'loc' => 'location',
+				'per' => 'person',
+				'vid' => 'video',
+				'link' => 'bookmark',
 				'website' => 'bookmark',
 				'video' => 'video',
 				'country' => 'location#country',
@@ -28,14 +27,23 @@ module Nuniverse
 				'band' => 'group#band',
 				'album' => 'item#album',
 				'camera' => 'item#camera',
-				'character' => 'person#character',
+				'character' => 'character',
 				'my trip to' => 'location',
 				'trip to' => 'location',
 				'on the way to' => 'location',
 				'event' => 'event',
 				'address' => 'address',
-				'message' => ''
+				'message' => '',
+				'lcoation' => 'location',
+				'lcoatuon' => 'location',
+				'perosn' => 'person',
+				'film' => 'movie',
+				'flick' => 'movie'
 			}
+		end
+		
+		def self.match(kind)
+			self.list[kind] || kind
 		end
 		
 		def self.hash	
@@ -140,6 +148,7 @@ module Nuniverse
 			coords
 		end
 		
+
 		
 		class Error < StandardError; end
 

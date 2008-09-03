@@ -4,6 +4,6 @@ class AddTaggingKind < ActiveRecord::Migration
   end
 
   def self.down
-		remove_column :taggings, :kind, :string
+		remove_column :taggings, :kind
   end
 end

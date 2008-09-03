@@ -1,12 +1,18 @@
 <div class="box" id="profile">
+  <span class="kind"><%= tag.kind %></span>
+  <h2><%= tag.label %></h2>
   <% if tag.kind.nil? -%>
     <%= kind_options(@tagging)%>
   <% else -%>
-  This is a <%= tag.kind %>
+  
   <% unless tag.kind == "list" -%>
-    <h2>Public Profile</h2>
     
+    <p>
+      <%= tag.property('address')%><br/>
+      <%= tag.property('tel')%>
+    </p>
     <%= property(tag.description)%>
+    
   <% else -%>
   
   <% end -%>

@@ -81,6 +81,10 @@ class User < ActiveRecord::Base
 		tag.property('address')
 	end
 	
+	def connections(params = {})
+		Tagging.with_user(self).with_kind_like(params[:kind]||nil).with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => 10)
+	end
+	
 
   protected
     

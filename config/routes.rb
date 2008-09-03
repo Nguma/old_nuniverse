@@ -43,7 +43,21 @@ ActionController::Routing::Routes.draw do |map|
 	map.my_nuniverse "/my_nuniverse",
 		:controller => 'users',
 		:action => 'show'
-	
+		
+	map.my_people "/my_people/",
+		:controller => "users",
+		:action => "show",
+		:kind => "person"
+
+	map.my_people "/my_places/",
+		:controller => "users",
+		:action => "show",
+		:kind => "location"
+		
+	map.with_kind "/display/:kind/of/:id",
+		:controller => "taggings",
+		:action => "show"
+		
 	map.restricted "/restricted",
 		:controller => "application",
 		:action => 'restricted'

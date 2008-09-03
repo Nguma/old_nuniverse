@@ -1,2 +1,0 @@
-class Location < Tag
-end

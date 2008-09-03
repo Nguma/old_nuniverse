@@ -199,4 +199,12 @@ module AuthenticatedSystem
         :expires => @current_user.remember_token_expires_at }
     end
 
+		# Checks if user has reached his connection limit, returns Boolean
+		def over_limit
+			return nil unless @current_user
+			return true if @current_user.connections_count >= @current_user.max_connections
+			false
+		end
+		
+
 end

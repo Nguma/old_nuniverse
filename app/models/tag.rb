@@ -84,6 +84,11 @@ class Tag < ActiveRecord::Base
 		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
 	end
 	
+	def kind
+		return nil if super.nil?
+		super.split('#')[0]
+	end
+	
 	
 	def thumbnail
 		# return avatar.public_filename(:small) unless avatar.nil?
@@ -218,7 +223,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.find_or_create(params)
-		tag = Tag.find(:first, :conditions => ['label = ? AND kind = ?', params[:label], params[:kind]])
+		tag = Tag.with_label_like(params[:label]).with_kind_like(params[:kind]).find(:first)
 		if tag.nil?
 			if params[:label].match(/^http:\/\/.+/)
 				tag = Tag.create(

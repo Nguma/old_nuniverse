@@ -17,24 +17,24 @@
           
         </div>
           <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
-        <div class="box">  
-          <% unless current_user.invitations.empty? %>
-          <h2>You have been invited to</h2>
-            <% current_user.invitations.each do |invitation| -%>
-              <h4><%= link_to(invitation.tagging.owner.login.capitalize, invitation.tagging.owner.tag) %>'s <%= link_to_item(invitation.tagging) %></h4>
-            <% end -%>
-          <% end -%>
-        </div>
+        
         <div class="box" id="google_ads">
           <script type="text/javascript"
              src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
            </script>
         </div>
     </div>
-
+<div id="left_column">
+  </div>
     <div id="left_column">
+
       <div class="box">
-        <h2>Your topics</h2>
+        <div class="tabs">
+          <%= link_to "Topics" , "/my_nuniverse"%>
+          <%= link_to "People" , "/my_people" %>
+          <%= link_to "Places", "/my_places"%>
+        </div>
+        
         <%= render :partial => "/nuniverse/connections", :locals => {
           :items => @items,
           :selected => nil,
@@ -42,6 +42,20 @@
           :tagging => nil,
           :order => @order
         }%>
+        
+      </div>
+      
+      <div class="box">  
+        <% unless current_user.invitations.empty? %>
+        <h2>You are following</h2>
+          <div class="items">
+            <% current_user.invitations.each do |invitation| -%>
+              <div class="item">
+                <h3><%= link_to_item(invitation.tagging) %></h3> <p>by <%= link_to(invitation.tagging.owner.login.capitalize, invitation.tagging.owner.tag) %> </p>
+              </div>
+            <% end -%>
+          </div>
+        <% end -%>
       </div>
     </div>
     

@@ -3,7 +3,7 @@ class CreateRankings < ActiveRecord::Migration
     create_table :rankings do |t|
 			t.integer	:tagging_id, :null => :no
 			t.integer :user_id, :null => :no
-			t.integer	:value, :default => 1
+			t.integer	:value, :default => 0
       t.timestamps
     end
 		add_index :rankings, [:tagging_id, :user_id], :unique => true

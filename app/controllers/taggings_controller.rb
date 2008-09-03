@@ -9,7 +9,6 @@ class TaggingsController < ApplicationController
 
 	def index
 		redirect_to "/my_nuniverse"
-		# @connections = Tagging.paginate(:all, :order => "created_at DESC", :page => 1, :per_page => 20)
 	end
 	
 	def edit
@@ -18,13 +17,8 @@ class TaggingsController < ApplicationController
 	
 	def update
 		restrict_to([@tagging.owner])
-		@tagging.object.kind = params[:kind] if params[:kind]
-		@tagging.object.replace_property('address', params[:address].to_s) if params[:address]
-		@tagging.object.replace_property("tel", params[:tel]) if params[:tel]		
-		@tagging.object.replace_property("latlng", params[:latlng]) if params[:latlng]
-		@tagging.object.url = params[:url] if params[:url]
-		@tagging.object.description = params[:description] if params[:description]
-		@tagging.object.save
+		
+		@tagging.update_with(params)
 		redirect_to @tagging
 	end
 	
@@ -32,30 +26,43 @@ class TaggingsController < ApplicationController
 		raise "You don't have the right to do this!" if current_user != @tagging.owner
 		@parent = @tagging.path.last
 		@tagging.destroy
-		redirect_back_or_default("/taggings/#{@parent}")
+		if @parent 
+			redirect_to("/taggings/#{@parent}")
+		else
+			redirect_to("/my_nuniverse")
+		end
+		
 	end
 	
 	def connect
-		if current_user.connections_count >= current_user.max_connections
+		if over_limit
 			flash[:error] = "You have reached your max number of connections."
 			redirect_to "/upgrade"
 		else
-		
-		gums = params[:query].scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
-		unless gums.empty?
-			params[:kind] = gums[0][1]
-			params[:query] = gums[0][2]
+			gums = Gum.parse(params[:query])
+			unless gums.empty?
+				params[:kind] = Nuniverse::Kind.match(gums[0][1])
+				params[:query] = gums[0][2]
+			end
+			@subject = Tag.find(params[:subject])
+			if params[:kind] == "address"
+				@subject.replace_property('address', params[:query])
+				@subject.save
+			else
+				@tag = Tag.find_or_create(
+					:label => Gum.purify(params[:query]), 
+					:kind => params[:kind]
+				) 
+				@tagging = Tagging.find_or_create(
+										:label => Gum.purify(params[:query]), 
+										:owner => current_user, 
+										:subject_id => @subject.id, 
+									 	:object_id => @tag.id || nil, 
+										:path => params[:path]
+									)
+			end
+			redirect_back_or_default("/taggings/#{@tagging.path.last}")
 		end
-		@subject = Tag.find(params[:subject])
-		if params[:kind] == "address"
-			@subject.replace_property('address', params[:query])
-			@subject.save
-		else
-			@tag = Tag.find_or_create(:label => params[:query], :kind => params[:kind] || nil)
-			@tagging = Tagging.find_or_create(:owner => current_user, :subject_id => @subject.id, :object_id => @tag.id, :path => params[:path])
-		end
-		redirect_back_or_default("/taggings/#{@tagging.path.last}")
-	end
 	end
 	
 	def show

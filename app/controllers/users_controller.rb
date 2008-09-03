@@ -87,11 +87,17 @@ class UsersController < ApplicationController
 		if @user && current_user != @user
 			redirect_to @user.tag 
 		end
+		
 		@tag = current_user.tag
 		@path = TaggingPath.new
 		@service = nil
 		@order = params[:order] || "rank"
-		@items = @tag.subject_of(:order => @order).paginate(:page => params[:page] || 1, :per_page => 10)
+		@kind = params[:kind] || nil
+		if @kind
+			@items = current_user.connections(:kind => params[:kind], :order => params[:order], :page => params[:page])
+		else
+			@items = @tag.subject_of(:order => @order).paginate(:page => params[:page] || 1, :per_page => 10)
+		end
 	end
 	
 protected

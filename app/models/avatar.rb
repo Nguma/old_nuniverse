@@ -42,4 +42,24 @@ class Avatar < ActiveRecord::Base
       file_system_path = (thumbnail ? thumbnail_class : self).attachment_options[:path_prefix].to_s
       File.join(RAILS_ROOT, file_system_path, thumbnail_name_for(thumbnail))
   end
+
+	def source_url=(url)
+	  return nil if not url
+	  http_getter = Net::HTTP
+	  uri = URI.parse(url)
+	  response = http_getter.start(uri.host, uri.port) {|http|
+	    http.get(uri.path)
+	  }
+	  case response
+	  when Net::HTTPSuccess
+	    file_data = response.body
+	    return nil if file_data.nil? || file_data.size == 0
+	    self.content_type = response.content_type
+	    self.temp_data = file_data
+	    self.filename = uri.path.split('/')[-1]
+	  else
+	    return nil
+	  end
+	end
+
 end

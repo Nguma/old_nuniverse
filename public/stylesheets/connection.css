@@ -172,3 +172,8 @@ dl.properties dd {
 	font-size:13px;
 	line-height:20px;
 }
+
+#map_box .item h3 {
+	font-size:14px;
+	color:#333;
+}

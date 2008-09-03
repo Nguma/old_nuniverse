@@ -18,6 +18,10 @@ class Tagging < ActiveRecord::Base
 		return object.info
 	end
 	
+	def label
+		super.nil? ? object.label : super
+	end
+	
 	def path
 	  TaggingPath.new(super)
   end
@@ -71,7 +75,7 @@ class Tagging < ActiveRecord::Base
   }
 
 	named_scope :with_kind_like, lambda { |kinds|
-    kinds.nil? ? {} : {:conditions => ["tags.kind rlike ?", "^#{kinds}$"], :include => :object}
+    kinds.nil? ? {} : {:conditions => ["tags.kind rlike ?", "^#{kinds}$"], :joins => :object}
   }
 
 	named_scope :with_address_or_geocode, lambda { |kind|
@@ -88,13 +92,13 @@ class Tagging < ActiveRecord::Base
 	named_scope :with_order, lambda { |order|
 		case order
 		when "name","label"
-			{:include => :object, :order => "tags.label ASC"}
+			{:select => "taggings.*", :joins => :object, :order => "tags.label ASC"}
 		when "latest"
 			{:order => "taggings.updated_at DESC"}
 		when "rank"
-			{:select => "*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "rankings.tagging_id", :order => "SUM(rankings.value) DESC"}
+			{:select => "taggings.*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "taggings.id", :order => "SUM(rankings.value) DESC"}
 		else
-			{:include => :object, :order => "tags.label ASC"}
+			{:joins => :object, :order => "tags.label ASC"}
 		end
 	}
 
@@ -122,7 +126,7 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		 Tagging.with_exact_path(self.full_path).include_object.with_object_kinds(params[:filter] || nil).with_order(params[:order] || 'name')
+		 Tagging.with_exact_path(self.full_path).with_object_kinds(params[:filter] || nil).with_order(params[:order] || 'name')
 		# case params[:order]
 		# 		when "latest"
 		# 			order = "updated_at DESC"
@@ -162,6 +166,17 @@ class Tagging < ActiveRecord::Base
 	def is_a_list?
 		return true if kind == "list"
 		return false
+	end
+	
+	
+	def update_with(params)
+		self.object.kind = params[:kind] if params[:kind]
+		self.object.replace_property('address', params[:address].to_s) if params[:address]
+		self.object.replace_property("tel", params[:tel]) if params[:tel]		
+		self.object.replace_property("latlng", params[:latlng]) if params[:latlng]
+		self.object.url = params[:url] if params[:url]
+		self.object.description = params[:description] if params[:description]
+		self.object.save
 	end
 	
 	protected

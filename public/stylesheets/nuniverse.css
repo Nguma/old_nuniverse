@@ -110,7 +110,6 @@
 	position:relative;
 	float:left;
 	margin-right:3px;
-	
 }
 
 
@@ -184,6 +183,20 @@ p strong {
 
 #profile {
 	position:relative;
+}
+
+#profile h2 {
+	font-size:20px;
+}
+
+#profile .kind {
+	font-size:12px;
+	color:#666;
+}
+
+#profile p {
+	font-size:13px;
+	color:#333;
 }
 
 #profile .avatar {
