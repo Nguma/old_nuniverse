@@ -77,10 +77,10 @@ namespace :deploy do
     #   ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
     # CMD
     
-    sudo <<-CMD
-      rm -fr #{release_path}/public/images &&
-      ln -nfs #{shared_path}/images #{release_path}/public/images
-    CMD
+    # sudo <<-CMD
+    #      rm -fr #{release_path}/public/images &&
+    #      ln -nfs #{shared_path}/images #{release_path}/public/images
+    #    CMD
     
     # sudo <<-CMD
     #   rm -fr #{release_path}/tmp/.ruby_inline &&
