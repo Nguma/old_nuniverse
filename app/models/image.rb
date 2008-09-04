@@ -7,6 +7,8 @@ class Image < ActiveRecord::Base
       							:large => '150x150>'
     							},
     							:processor  => :image_science,
+									:path_prefix => "public/avatars",
+									:partition => true,
     							:storage    => :file_system
 
   
@@ -38,10 +40,10 @@ class Image < ActiveRecord::Base
       end
   end
   
-  def full_filename(thumbnail = nil)
-      file_system_path = (thumbnail ? thumbnail_class : self).attachment_options[:path_prefix].to_s
-      File.join(RAILS_ROOT, file_system_path, thumbnail_name_for(thumbnail))
-  end
+  # def full_filename(thumbnail = nil)
+  #     file_system_path = (thumbnail ? thumbnail_class : self).attachment_options[:path_prefix].to_s
+  #     File.join(RAILS_ROOT, file_system_path, thumbnail_name_for(thumbnail))
+  # end
 
 	def source_url=(url)
 	  return nil if not url
@@ -55,9 +57,10 @@ class Image < ActiveRecord::Base
 	    file_data = response.body
 	    return nil if file_data.nil? || file_data.size == 0
 	    self.content_type = response.content_type
-	    self.temp_data = file_data
+	   	self.temp_data = file_data
+	
 	    self.filename = uri.path.split('/')[-1]
-	  else
+	else
 	    return nil
 	  end
 	end

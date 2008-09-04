@@ -1,25 +1,11 @@
-<div id="right_column">
-  <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
-  <%= render :partial => "image", :locals => {:tag=> @tagging.object} %>
+
+<div id="area">
+  <%= render :partial => "/tags/profile", :locals => {:tag => @tagging.object}%>
+  <%= render :partial => "image", :locals => {:tagging => @tagging}%>
   <%= render :partial => "map", :locals => {:tagging => @tagging} %>
+  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
   <%= render :partial => "ads" %>
   <%= render :partial => "options" %>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
-</div>
-<div id="left_column">
-  <div class="box">
-    <ul class="tabs"> 
-      <li class="current"><%= link_to "Overview" %></li>
-      <li><%= link_to "Bookmarks", "/taggings/#{@tagging.id}?filter=bookmark"  %></li>
-      <li><%= link_to "locations", "/taggings/#{@tagging.id}?filter=location"  %></li>
-      <li><%= link_to "Images", "/taggings/#{@tagging.id}?service=images"  %></li>
-    </ul>
-    <%= render :partial => "/nuniverse/connections", :locals => {
-      :service => @service,
-      :items => @items,
-      :selected => @selected,
-      :order => @order,
-      :tagging => @tagging
-    }%>
-  </div>
+  <%= render :partial => "comments", :locals => {:items => @items}%>
+  <%= render :partial => "bookmarks", :locals => {:tagging => @tagging}%>
 </div>

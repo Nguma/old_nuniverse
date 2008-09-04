@@ -229,7 +229,7 @@ class Tag < ActiveRecord::Base
 			if params[:label].match(/^http:\/\/.+/)
 				tag = Tag.create(
 					:label => params[:label], 
-					:kind => "link",
+					:kind => "bookmark",
 					:url => params[:label]
 				)
 			else

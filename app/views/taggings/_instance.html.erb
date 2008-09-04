@@ -1,15 +1,4 @@
-<dd class="connection <%= cycle('even','odd') %>"> 
-  <%= avatar_for(instance.object) %>
-  <h3>
-    <%= link_to_object(instance.object, :path => "#{section.path rescue ""}#{instance.object.id}") %>
-  </h3>
-
-         <% unless instance.path.taggings.empty? -%>
-         <p><%= instance.object.kind.capitalize %> added to  
-           <% instance.path.tags[1 .. -1].each do |tagging| -%>
-             <%= link_to_nuniverse(tagging) %>
-           <% end -%>
-           by <%= link_to_nuniverse(instance.user.tag) %>
-         </p>
-         <% end -%>
-</dd>
+<div class="item <%= cycle('even','odd') %>">
+  <%= icon_for(instance.object) %>
+  <h3><%= link_to_item(instance)%>
+</div>

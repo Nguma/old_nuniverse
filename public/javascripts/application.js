@@ -124,7 +124,7 @@ function reset()
     })
   });
   
-  patchwork($$('.images .box'));
+  patchwork($$('.box'));
 
 }
 
@@ -132,7 +132,7 @@ function patchwork(elements) {
   var cols = [0,0,0,0];
   elements.each(function(box,i){
 
-    var x = (i%4) * 275;
+    var x = (i%4) * (box.getCoordinates()['width']+5);
     
     box.setStyles({
       'position':'absolute',

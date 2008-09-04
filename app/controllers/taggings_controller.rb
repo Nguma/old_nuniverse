@@ -55,12 +55,13 @@ class TaggingsController < ApplicationController
 					:label => Gum.purify(params[:query]), 
 					:kind => @kind
 				) 
+				@path = @tagging ? @tagging.full_path : ""
 				@tagging = Tagging.find_or_create(
 										:label => Gum.purify(params[:query]), 
 										:owner => current_user, 
 										:subject_id => @subject.id, 
 									 	:object_id => @tag.id || nil, 
-										:path => @tagging.full_path || ""
+										:path => @path
 									)
 			end
 			redirect_back_or_default(@tagging)

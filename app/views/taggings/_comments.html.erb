@@ -1,0 +1,11 @@
+<div class="box" id="comments">
+
+      <%= render :partial => "/nuniverse/connections", :locals => {
+        :service => @service,
+        :items => @items,
+        :selected => @selected,
+        :order => @order,
+        :tagging => @tagging
+      }%>
+    
+</div>

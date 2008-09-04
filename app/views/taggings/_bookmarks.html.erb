@@ -1,0 +1,5 @@
+<div class="box" id="bookmarks">
+  <div class="items">
+  <%= render :partial => "instance", :collection => tagging.connections(:kind => 'bookmark') %>
+  </div>
+</div>
