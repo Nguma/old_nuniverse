@@ -1,23 +1,31 @@
- <div id="right_column">
-   
-   <div class="box">
-    
-     <h2><%= link_to("< Back",tagging)%></h2>
-   </div>
+ <div class="column">
+   <%= render :partial => "/tags/profile", :locals => {:tag => @tagging.object}%>
+   <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
    <%= render :partial => "ads" %>
+    <div class="box">
+
+       <h2><%= link_to("< Back",tagging)%></h2>
+     </div>
  </div>
- <div id="left_column">
- <div class="items">
-   <% @items.each_with_index do |item,i| -%>
-    <div class="item">
-      <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
-      
-      <h3 style="padding-right:100px">
-        <span class="rank"><%= (i+1)  %></span>
-        <%= link_to(item.label.capitalize, item.url)%>
-      </h3>
-      <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
+ <div class="column" style="width:50%">
+   <div class="box">
+     <div class="items">
+        <% @items.each_with_index do |item,i| -%>
+         <div class="item">
+           <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
+
+           <h3 style="padding-right:100px">
+             <span class="rank"><%= (i+1)  %></span>
+             <%= link_to(item.label.capitalize, item.url)%>
+           </h3>
+           <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
+         </div>
+        <% end -%>
+      </div>
     </div>
-   <% end -%>
  </div>
+
+ <div class="column">
+   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
+   <%= render :partial => "bookmarks", :locals => {:tagging => @tagging}%>
  </div>

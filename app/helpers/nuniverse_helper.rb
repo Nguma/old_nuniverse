@@ -38,4 +38,8 @@ module NuniverseHelper
 		link_to(object.label.capitalize, url, :class => dom_class || "inner")
 	end
 	
+	def empty_box
+		"<div class='box hidden'>&nbsp;</div>"
+	end
+	
 end

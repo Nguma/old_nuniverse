@@ -1,11 +1,5 @@
 <div class="box" id="image_box" >
-  <%= avatar_for(tagging.object) %>
-  <% form_tag "/taggings/add_image/#{tagging.id}", :html => {:multipart => true} do  -%>
-    <%= link_to("Add an image", "#image ", :class => "toggle")%>
-    <fieldset class="hidden">
-      <%= text_field_tag :image_source_url, ""%>
-      <%= submit_tag "Add"%>
-    </fieldset>
-  <% end -%>
+  <%= avatar_for(object) %>
+  <%= link_to("Add an image", "#image ", :class => "toggle")%>
 </div>
 

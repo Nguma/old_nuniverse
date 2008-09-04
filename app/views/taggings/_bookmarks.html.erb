@@ -1,5 +1,7 @@
 <div class="box" id="bookmarks">
+  <h2>Bookmarks</h2>
   <div class="items">
   <%= render :partial => "instance", :collection => tagging.connections(:kind => 'bookmark') %>
   </div>
+  <%= link_to("+ Add a bookmark", "#bookmark ", :class => "toggle")%>
 </div>

@@ -1,11 +1,18 @@
-
-<div id="area">
+<div class="column">
   <%= render :partial => "/tags/profile", :locals => {:tag => @tagging.object}%>
-  <%= render :partial => "image", :locals => {:tagging => @tagging}%>
-  <%= render :partial => "map", :locals => {:tagging => @tagging} %>
   <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
   <%= render :partial => "ads" %>
-  <%= render :partial => "options" %>
-  <%= render :partial => "comments", :locals => {:items => @items}%>
+  <%= render :partial => "map", :locals => {:tagging => @tagging} %>
+  <%= box_tag(:items => @tagging.connections(:kind => 'location'), :title => "Where?", :toggle => "#location ")%>
+</div>
+<div class="column" style="width:50%">
+   <%= box_tag(:items => @tagging.connections(:kind => 'fact'), :title => "Factsheet", :toggle => "#fact ")%>
+   <%= box_tag(:items => @tagging.connections(:kind => 'comment'), :title => "Comments", :toggle => "#comment ")%>
+  
+  <%= render :partial => "connections", :locals => {:tagging => @tagging}%>
+</div>
+
+<div class="column">
+  <%= render :partial => "image", :locals => {:object => @tagging.object}%>
   <%= render :partial => "bookmarks", :locals => {:tagging => @tagging}%>
 </div>

@@ -1,68 +1,25 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-    <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
-    <h1>Welcome, <%= current_user.login.capitalize %></h1>
-    <h2>this is your nuniverse</h2>
-    <div class="delimiter">&nbsp;</div>
-    
-     <div id="right_column">
-
-        <div class="box">
-          <h2>Your nuniverse</h2>
-           <p>Your nuniverse size is <strong><%= current_user.connections_count%>/<%= current_user.max_connections %></strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
-          <p><%#= current_user.tag.weather %></p>
-          <%= avatar_for current_user.tag %>
-          <p>
-            <%= link_to "Edit your profile", "/users/edit" %>
-          </p>
-         
-          
-        </div>
-          <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
-        
-        <div class="box" id="google_ads">
-          <script type="text/javascript"
-             src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-           </script>
-        </div>
-    </div>
-<div id="left_column">
+<%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
+<h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
+<div class="delimiter">&nbsp;</div>
+<div class="column">    
+  <div class="box">
+    <h2>Your nuniverse</h2>
+    <p>You used <strong><%= current_user.connections_count%>/<%= current_user.max_connections %></strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
+    <%= link_to "Edit your profile", "/users/edit" %>
   </div>
-    <div id="left_column">
-
-      <div class="box">
-        <ul class="tabs">
-          
-          <li class="current"><%= link_to "Topics" , "/my_nuniverse"%></li>
-          <li><%= link_to "People" , "/my_people" %></li>
-          <li><%= link_to "Places", "/my_places"%></li>
-        </ul>
-        
-        <%= render :partial => "/nuniverse/connections", :locals => {
-          :items => @items,
-          :selected => nil,
-          :service => @service,
-          :tagging => nil,
-          :order => @order
-        }%>
-        
-      </div>
-      
-      <div class="box">  
-        <% unless current_user.invitations.empty? %>
-        <h2>You are following</h2>
-          <div class="items">
-            <% current_user.invitations.each do |invitation| -%>
-              <div class="item">
-                <h3><%= link_to_item(invitation.tagging) %></h3> <p>by <%= link_to(invitation.tagging.owner.login.capitalize, invitation.tagging.owner.tag) %> </p>
-              </div>
-            <% end -%>
-          </div>
-        <% end -%>
-      </div>
-    </div>
-    
-
-    
-    <%= render :partial => "/taggings/find_or_create", :locals => {
-        :tagging => nil} %>
+  <%= render :partial => "/taggings/ads" %>
+</div>
+<div class="column" style="width:50%">
+   <%= box_tag(:items => @items, :title => "Your topics", :toggle => "#topic", :dom_id => "topics")%>
+   <%= render :partial => "invitations", :locals => {:invitations => current_user.invitations} %>
+  <%= box_tag(:items => current_user.connections(:kind => "person"), :title => "Your people", :toggle => "#person", :dom_id => "people")%>
+    <%= box_tag(:items => current_user.connections(:kind => "location"), :title => "Your places", :toggle => "#location", :dom_id => "locations")%>
+</div>
+<div class="column">
+  <%= render :partial => "/taggings/image", :locals => {:object => current_user.tag}%>
+  <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
+      <%= box_tag(:items => current_user.connections(:kind => "bookmark"), :title => "Your bookmarks", :toggle => "#bookmark", :dom_id => "bookmark")%>
+</div>
+<%= render :partial => "/taggings/find_or_create", :locals => {:tagging => nil} %>
 <% end -%>

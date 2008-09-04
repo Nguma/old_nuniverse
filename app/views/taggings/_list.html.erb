@@ -1,25 +1,17 @@
-<%= elements_proper_to_kind(@tagging) %>
-<div class="delimiter">&nbsp;</div>
-<div id="right_column">
+<div class="column">
   <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
-  <%= render :partial => "options", :locals => {:tagging => @tagging}%>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
-</div>
-<div id="left_column">
-  <div class="box">
-  
-  <ul class="tabs"> 
-    <li class="current"><%= link_to "Overview" %></li>  
-    <li><%= link_to "Images", "/taggings/#{@tagging.id}?service=images"  %></li>
-  </ul>
-  <%= render :partial => "/nuniverse/connections", :locals => {
-    :service => @service,
-    :items => @items,
-    :selected => @selected,
-    :order => @order,
-    :tagging => @tagging
-  }%>
-  </div>
   <%= render :partial => "ads" %>
+  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+  <%= render :partial => "options", :locals => {:tagging => @tagging}%>
+</div>
+<div class="column" style="width:50%">
+  <%= box_tag(:items => @tagging.connections, :title => "Connections", :toggle => "#")%>
+  
+  <%#= render :partial => "locations", :locals => {:tagging => @tagging}%>
+</div>
+<div class="column">
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
+  
+  <%= render :partial => "image", :locals => {:object => tagging.object }%>
+
 </div>

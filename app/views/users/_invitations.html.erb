@@ -1,0 +1,13 @@
+<div class="box">
+  <h2>You have been invited to</h2>
+  <% unless invitations.empty? %>
+    <div class="items">
+      <% invitations.each do |invitation| -%>
+        <div class="item">
+          <h3><%= link_to_item(invitation.tagging) %></h3> 
+          <p>by <%= link_to(invitation.tagging.owner.login.capitalize, invitation.tagging.owner.tag) %> </p>
+        </div>
+      <% end -%>
+    </div>
+  <% end -%>
+</div>

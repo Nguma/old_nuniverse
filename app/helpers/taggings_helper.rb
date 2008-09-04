@@ -29,7 +29,7 @@ module TaggingsHelper
 	def title_for(tagging, options ={})
 		str = "<h1>"
 		str << icon_for(tagging.object)
-		str << "#{tagging.subject.title}: #{tagging.object.title}"
+		str << "#{tagging.object.title}"
 		str << "<span class='service'> according to #{options[:service].capitalize}</span>" if options[:service]
 		str << "</h1>"
 		str
@@ -39,6 +39,12 @@ module TaggingsHelper
 		unless !property || property.blank?
 			render :partial => "/taggings/property", :locals => {:property => property}
 		end
+	end
+	
+	def box_tag(params)
+		params[:title] ||= ""
+		params[:dom_id] ||= ""
+		render :partial => "/taggings/box", :locals => params
 	end
 			
 			

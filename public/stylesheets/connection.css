@@ -69,8 +69,9 @@
 
 .nuniverse .items .item h3 {
 	position:relative;
-	font-size:17px;
-	padding: 0 100px 0 0;
+	font-size:15px;
+	font-weight:bold;
+	padding: 0 0 0 0;
 }
 
 .nuniverse .items .item .icon {

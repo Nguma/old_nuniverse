@@ -91,14 +91,14 @@ class Tagging < ActiveRecord::Base
   named_scope :by_latest, :order => "taggings.updated_at DESC"
 	named_scope :with_order, lambda { |order|
 		case order
-		when "name","label"
+		when "name"
 			{:select => "taggings.*", :joins => :object, :order => "tags.label ASC"}
 		when "latest"
 			{:order => "taggings.updated_at DESC"}
 		when "rank"
 			{:select => "taggings.*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "taggings.id", :order => "SUM(rankings.value) DESC"}
 		else
-			{:select => "taggings.*",:joins => :object, :order => "tags.label ASC"}
+			{:order => "taggings.created_at ASC"}
 		end
 	}
 
@@ -126,7 +126,9 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		 Tagging.with_exact_path(self.full_path).with_object_kinds(params[:filter] || nil).with_order(params[:order] || 'name')
+			params[:order] ||= "latest"
+			params[:kind] ||= nil
+			Tagging.with_exact_path(self.full_path).with_object_kinds(params[:kind]).with_order(params[:order])
 		# case params[:order]
 		# 		when "latest"
 		# 			order = "updated_at DESC"

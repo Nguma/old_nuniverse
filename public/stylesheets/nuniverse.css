@@ -166,11 +166,17 @@
 	position:relative;
 }
 
-#area .box {
+#nuniverse .column {
 	position:relative;
 	float:left;
-	width:22%;
+	width:23%;
 	margin:0 5px 0 0;
+}
+
+#nuniverse .column .box {
+	position:relative;
+	width:auto;
+	margin:0 0 5px 0;
 }
 
 #right_column {

@@ -1,0 +1,7 @@
+<div class="box" id="<%= dom_id %>">
+  <h2><%= title %></h2>
+  <div class="items">
+    <%= render :partial => "/taggings/instance", :collection => items %>
+  </div>
+  <%= link_to "+ Add", toggle, :class => "toggle"%>
+</div>
