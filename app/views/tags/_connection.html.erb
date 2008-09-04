@@ -7,7 +7,7 @@
   end -%>
 
 <dd class="connection <%= cycle('even', 'odd') %>"> 
-    <div class="avatar"><%= avatar_for(tag) %></div>
+    <div class="image"><%= avatar_for(tag) %></div>
     <h3><%= tag.kind %>: 
       <%= link_to(tag.label, "/section/#{connection.path}", :class =>"main inner") %>
     </h3>

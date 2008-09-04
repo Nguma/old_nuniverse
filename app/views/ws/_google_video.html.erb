@@ -8,7 +8,7 @@
           :path => path,
           :data => "#video #{video.titleNoFormatting} #url #{video.playUrl} #description #{video.content} #image #{video.tbUrl} #service video" 
         }%>
-        <%= image_tag(video.tbUrl,:class => 'avatar') %>
+        <%= image_tag(video.tbUrl,:class => 'image') %>
         <h3>
           <%= link_to_ws_object(video, :service => "video") %>
           <span class="source">@ Google</span>

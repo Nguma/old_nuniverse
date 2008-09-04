@@ -98,7 +98,7 @@ class Tagging < ActiveRecord::Base
 		when "rank"
 			{:select => "taggings.*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "taggings.id", :order => "SUM(rankings.value) DESC"}
 		else
-			{:joins => :object, :order => "tags.label ASC"}
+			{:select => "taggings.*",:joins => :object, :order => "tags.label ASC"}
 		end
 	}
 
@@ -160,7 +160,7 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def images
-		Avatar.find(:all, :conditions => ['tag_id = ?', object.id])
+		Image.find(:all, :conditions => ['tag_id = ?', object.id])
 	end
 	
 	def is_a_list?

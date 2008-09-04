@@ -78,8 +78,8 @@ namespace :deploy do
     # CMD
     
     sudo <<-CMD
-      rm -fr #{release_path}/public/avatars &&
-      ln -nfs #{shared_path}/avatars #{release_path}/public/avatars
+      rm -fr #{release_path}/public/images &&
+      ln -nfs #{shared_path}/images #{release_path}/public/images
     CMD
     
     # sudo <<-CMD

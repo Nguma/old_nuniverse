@@ -3,7 +3,7 @@
   <h4>If there's anything to change, here is the place.</h4>
     <%= error_messages_for :user %>
     <% form_for :user, :url => user_path, :html => {:method => :put, :multipart => true } do |f| -%>
-      <div class="avatar_picker"></div>
+      <div class="image_picker"></div>
       <label for="firstname">First Name</label>
       <%= f.text_field :firstname %>
 

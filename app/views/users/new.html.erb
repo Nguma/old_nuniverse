@@ -11,7 +11,7 @@
     <%= error_messages_for :user, :header_message => "Wait a minute...", :message => ""%>
   <% end -%>
   <% form_for :user, :url => user_path, :html => { :multipart => true } do |f| -%>
-    <div class="avatar_picker"></div>
+    <div class="image_picker"></div>
     <label for="login">Login</label>
     <%= f.text_field :login %>
 

@@ -6,7 +6,7 @@
         <div class="manage">
           <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
         </div>
-        <%= link_to(image_tag(tweet.user.profile_image_url),"#",:class => 'avatar')%>
+        <%= link_to(image_tag(tweet.user.profile_image_url),"#",:class => 'image')%>
         <h3><%= tweet.user.screen_name %></h3>
         <p><%= tweet.text %></p>
         <div class="data hidden">

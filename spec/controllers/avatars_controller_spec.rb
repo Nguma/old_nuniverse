@@ -1,10 +1,10 @@
 require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
-describe AvatarsController do
+describe ImagesController do
 
   #Delete this example and add some real ones
-  it "should use AvatarsController" do
-    controller.should be_an_instance_of(AvatarsController)
+  it "should use ImagesController" do
+    controller.should be_an_instance_of(ImagesController)
   end
 
 end

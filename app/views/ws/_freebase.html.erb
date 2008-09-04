@@ -12,7 +12,7 @@
       <% unless connections[0].property_value(el).nil? %>
         <% connections[0].property_value(el).each  do |c| %>
           <dd class="connection <%= cycle('even','odd') %>">
-            <%= image_tag("/images/icons/#{el}.png", :class => 'avatar') %>
+            <%= image_tag("/images/icons/#{el}.png", :class => 'image') %>
             <h3>
               <%= link_to(c, '#')%>
             </h3>
@@ -31,7 +31,7 @@
          :path => path,
          :data => "#{rst.kind} #{rst.name} #freebase_id #{rst.id}" 
        }%>
-     <%= image_tag("/images/icons/#{rst.kind}.png", :class => 'avatar') %>
+     <%= image_tag("/images/icons/#{rst.kind}.png", :class => 'image') %>
      <h3>
        <%= link_to(rst.name, "http://www.freebase.com/#{rst.id}") %>
        <span class="source">@ Freebase</span>

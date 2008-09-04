@@ -3,7 +3,7 @@ class TaggingsController < ApplicationController
 	#include SMSFu
 	
 	before_filter :login_required, :except => [:preview]
-	before_filter :find_tagging, :only => [:sms,:rate, :bookmark, :unbookmark, :edit, :show, :update, :share, :invite, :destroy, :preview]
+	before_filter :find_tagging, :except => [:index]
 	# skip_before_filter :invitation_required
 	after_filter :store_location, :only => [:show]
 
@@ -41,27 +41,29 @@ class TaggingsController < ApplicationController
 		else
 			gums = Gum.parse(params[:query])
 			unless gums.empty?
-				params[:kind] = Nuniverse::Kind.match(gums[0][1])
+				@kind = Nuniverse::Kind.match(gums[0][1])
 				params[:query] = gums[0][2]
 			end
-			@subject = Tag.find(params[:subject])
-			if params[:kind] == "address"
+			@subject = @tagging ? @tagging.object : current_user.tag
+			if @kind == "address"
 				@subject.replace_property('address', params[:query])
 				@subject.save
+			elsif @kind == "image"
+				@subject.add_image(:source_url => params[:query])
 			else
 				@tag = Tag.find_or_create(
 					:label => Gum.purify(params[:query]), 
-					:kind => params[:kind]
+					:kind => @kind
 				) 
 				@tagging = Tagging.find_or_create(
 										:label => Gum.purify(params[:query]), 
 										:owner => current_user, 
 										:subject_id => @subject.id, 
 									 	:object_id => @tag.id || nil, 
-										:path => params[:path]
+										:path => @tagging.full_path || ""
 									)
 			end
-			redirect_back_or_default("/taggings/#{@tagging.path.last}")
+			redirect_back_or_default(@tagging)
 		end
 	end
 	
@@ -112,23 +114,7 @@ class TaggingsController < ApplicationController
 		current_user.invite(:user => @user, :topic => @tagging)
 		redirect_back_or_default("/taggings/share/#{@tagging.id}")
 	end
-	
-	def add_image
-		@avatar = Avatar.new params[:image_url]
-    @avatar.tag = @tagging.object
-    
-    if @avatar.save
-      # Avatar.find(:all, :conditions => {:tag_id => params[:tag_id]}).each do |av|
-      #        av.destroy unless av.id == @avatar.id
-      #      end
 
-      
-      redirect_to @tagging
-    else
-      puts @avatar.errors.inspect
-      render :action => "new"
-    end
-	end
 	
 	def preview
 		@items = @tagging.connections.paginate(:page => 1, :per_page => 5)

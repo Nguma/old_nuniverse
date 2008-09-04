@@ -1,10 +1,9 @@
-<%= title_for(tagging, :service => @service)%>
 <%= elements_proper_to_kind(@tagging) %>
 <div class="delimiter">&nbsp;</div>
 <div id="right_column">
   <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
-  <%= render :partial => "ads" %>
+  <%= render :partial => "image", :locals => {:tagging => tagging }%>
+  <%#= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
   <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
 </div>
@@ -23,16 +22,5 @@
     :tagging => @tagging
   }%>
   </div>
+  <%= render :partial => "ads" %>
 </div>
-<% unless @service -%>
-  <%= render :partial => "/taggings/find_or_create" , :locals => {
-    :subject => tagging.object, 
-    :path => tagging.full_path
-   }%>
-  <%#= link_to 'Edit', edit_list_path(@tag) %> 
-  
-<% else -%>
-  <div class="options">
-    <%= link_to "back to content", @tagging , :class => "option" %>
-  </div>
-<% end -%>

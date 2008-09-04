@@ -26,14 +26,10 @@ module TaggingsHelper
 		end
 	end
 	
-	def title_for(object, options ={})
+	def title_for(tagging, options ={})
 		str = "<h1>"
-		str << icon_for(object)
-		if object.kind == "person"
-			str << object.label.titleize
-		else
-			str << object.label.capitalize
-		end
+		str << icon_for(tagging.object)
+		str << "#{tagging.subject.title}: #{tagging.object.title}"
 		str << "<span class='service'> according to #{options[:service].capitalize}</span>" if options[:service]
 		str << "</h1>"
 		str
@@ -45,4 +41,6 @@ module TaggingsHelper
 		end
 	end
 			
+			
+
 end

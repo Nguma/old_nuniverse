@@ -1,21 +1,21 @@
-class AvatarsController < ApplicationController
+class ImagesController < ApplicationController
 	protect_from_forgery :except => [:upload]
   def new
-    @avatar = Avatar.new
+    @image = Image.new
   end
   
   def create
-    @avatar = Avatar.new params[:avatar] 
-    @avatar.tag_id = params[:tag_id]
+    @image = Image.new params[:image] 
+    @image.tag_id = params[:tag_id]
     
-    if @avatar.save
-      Avatar.find(:all, :conditions => {:tag_id => params[:tag_id]}).each do |av|
-        av.destroy unless av.id == @avatar.id
+    if @image.save
+      Image.find(:all, :conditions => {:tag_id => params[:tag_id]}).each do |av|
+        av.destroy unless av.id == @image.id
       end
       
-      redirect_to tag_path(@avatar.tag)
+      redirect_to tag_path(@image.tag)
     else
-      puts @avatar.errors.inspect
+      puts @image.errors.inspect
       render :action => "new"
     end
   end
@@ -24,7 +24,7 @@ class AvatarsController < ApplicationController
 		@tag = Tag.create(
 			:label => params[:Filename],
 			:kind => 'image',
-			:avatar => Avatar.new (:uploaded_data => params[:Filedata]),
+			:image => Image.new (:uploaded_data => params[:Filedata]),
 			:description => '')
 		if params[:path] && @tag
 			subject = TaggingPath.new(params[:path]).last_tag
@@ -35,8 +35,8 @@ class AvatarsController < ApplicationController
 				:user_id => params[:user_id]
 			)
 		end
-		if subject.avatar.nil?
-			subject.avatar = @tag.avatar
+		if subject.image.nil?
+			subject.image = @tag.image
 			subject.save
 		end
 			render :layout => false

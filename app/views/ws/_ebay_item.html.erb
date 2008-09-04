@@ -1,6 +1,6 @@
 
 <div class="content ebay_item">
-  <%= render :partial => "/nuniverse/hat", :locals => {:tag => item, :show_avatar => false} %>
+  <%= render :partial => "/nuniverse/hat", :locals => {:tag => item, :show_image => false} %>
   <div class="article">
     <p><%= item.price %> | Ends <%= item.property('end_time') %><a href="#TODO">Bid on this item</a>(<%= item.property('bid_count') %> bids already)</p><br/>
     

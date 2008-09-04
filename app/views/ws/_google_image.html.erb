@@ -3,7 +3,7 @@
     <% connections.each do |rst| -%>
       <dd class="connection photo <%= cycle('even', 'odd') %>" style="height:auto">
       
-        <%= image_tag(rst.tbUrl, :class => 'avatar') %>
+        <%= image_tag(rst.tbUrl, :class => 'image') %>
         <h3>
           <%= link_to_ws_object(rst, :service => "google") %>
           <span class="source">@ Google</span>

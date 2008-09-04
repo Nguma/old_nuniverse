@@ -199,10 +199,12 @@ p strong {
 	color:#333;
 }
 
-#profile .avatar {
+#image_box .avatar {
 	position:relative;
 	width:100%;
 }
+
+
 
 .images .box .avatar {
 	width:100%;

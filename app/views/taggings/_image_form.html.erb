@@ -1,4 +1,4 @@
-<% form_for :avatar, @tag.avatar, :url => tag_avatar_path(@tag), :html => {:multipart => true} do |f| %>
+<% form_for :image, @tag.image, :url => tag_image_path(@tag), :html => {:multipart => true} do |f| %>
   <%= f.file_field :uploaded_data %>
   <%= f.submit "Upload" %>
 <% end %>

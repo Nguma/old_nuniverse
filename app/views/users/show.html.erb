@@ -1,6 +1,7 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
     <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
-    <h1>Welcome, <%= current_user.login.capitalize %>, this is your nuniverse</h1>
+    <h1>Welcome, <%= current_user.login.capitalize %></h1>
+    <h2>this is your nuniverse</h2>
     <div class="delimiter">&nbsp;</div>
     
      <div id="right_column">
@@ -29,11 +30,12 @@
     <div id="left_column">
 
       <div class="box">
-        <div class="tabs">
-          <%= link_to "Topics" , "/my_nuniverse"%>
-          <%= link_to "People" , "/my_people" %>
-          <%= link_to "Places", "/my_places"%>
-        </div>
+        <ul class="tabs">
+          
+          <li class="current"><%= link_to "Topics" , "/my_nuniverse"%></li>
+          <li><%= link_to "People" , "/my_people" %></li>
+          <li><%= link_to "Places", "/my_places"%></li>
+        </ul>
         
         <%= render :partial => "/nuniverse/connections", :locals => {
           :items => @items,
@@ -62,6 +64,5 @@
 
     
     <%= render :partial => "/taggings/find_or_create", :locals => {
-        :subject => @tag,
-        :path => @path} %>
+        :tagging => nil} %>
 <% end -%>

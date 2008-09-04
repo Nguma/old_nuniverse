@@ -8,7 +8,7 @@
               :data => "#location #{location.titleNoFormatting} #address #{location.streetAddress} #{location.city} #{location.region} #{location.country} #latlng #{location.lat},#{location.lng}" 
             }%>
             
-        <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'avatar') %>
+        <%= link_to(image_tag("/images/icons/google.png"),"#",:class => 'image') %>
         <h3>
           <%= link_to_ws_object(location, :service => "local")%>
           <span class="source">@ Google</span>

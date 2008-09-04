@@ -6,7 +6,7 @@
             :path => path,
             :data => "#bookmark #{rst.titleNoFormatting} #url #{rst.url} #description #{rst.content} #service google" 
           }%>
-        <%= image_tag("/images/icons/google.png", :class => 'avatar') %>
+        <%= image_tag("/images/icons/google.png", :class => 'image') %>
         <h3>
           <%= link_to_ws_object(rst, :service => "google") %>
           <span class="source">@ Google</span>

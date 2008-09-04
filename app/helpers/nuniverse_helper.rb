@@ -12,7 +12,7 @@ module NuniverseHelper
 	
 	def render_hat(params)
 		if params[:subject]
-			params[:avatar] ||= avatar_for(params[:subject])
+			params[:image] ||= avatar_for(params[:subject])
 			params[:label] ||= params[:subject].label
 			params[:kind] ||= params[:subject].kind
 			params[:description] ||= params[:subject].description

@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :lists
 
   map.resources :tags do |tag|
-    tag.resource :avatar
+    tag.resource :image
   end
 	map.resources :sessions
 	map.resources :taggings

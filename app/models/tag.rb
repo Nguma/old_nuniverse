@@ -1,5 +1,6 @@
 class Tag < ActiveRecord::Base
-  has_one :avatar
+  has_many :images,  	:conditions => ["images.parent_id is null"]
+	
 	
 	validates_presence_of :label
 	
@@ -11,7 +12,7 @@ class Tag < ActiveRecord::Base
 	def after_initialize
 		@address = Nuniverse::Address.new(self)
 	end
-	
+		
 	def self.connect(params)
 		gum =  params[:gum].collect { |k,v| "##{k} #{v}" }.join("") rescue ""
 		@object = Tag.find_by_label_and_kind_and_url(
@@ -91,14 +92,14 @@ class Tag < ActiveRecord::Base
 	
 	
 	def thumbnail
-		# return avatar.public_filename(:small) unless avatar.nil?
+		# return image.public_filename(:small) unless image.nil?
 		# return property('thumbnail') unless property('thumbnail').blank?
 		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
 		return nil
 	end
 	
-	def image
-		return avatar.public_filename unless avatar.nil?
+	def avatar
+		return images.first.public_filename unless images.empty?
 		return property('image') 
 	end
 	
@@ -249,7 +250,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def subject_of(params = {})
-		Tagging.with_subject(self).include_object.with_order(params[:order] || "rank")
+		Tagging.with_subject(self).with_order(params[:order] || "rank")
 	end
 	
 	def object_of(params = {})
@@ -258,6 +259,18 @@ class Tag < ActiveRecord::Base
 	
 	def properties
 		data.scan(/#([\w]+)[\s]+([^#|\[|\]]+)*/).collect {|s| Nuniverse::LabelValue.new(s[0],s[1])}
+	end
+	
+	def title
+		self.kind == "person" ? label.titleize  : label.capitalize
+	end
+	
+	def add_image(params)
+		if params[:source_url]
+	    image = Image.new(:source_url => params[:source_url])
+	    image.tag_id = self.id
+	    image.save!
+	  end
 	end
   
 end

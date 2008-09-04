@@ -18,9 +18,7 @@
   <% end -%>
   <% end -%>
   
-   <% if avatar_for(tag) %>
-      <%= avatar_for(tag) %>
-    <% end -%>
-    <%= link_to 'Edit', edit_tag_path(tag) %>
+
+    <%= link_to 'Edit', edit_tagging_path(@tagging) %>
     <%= link_to 'Delete', @tagging, :confirm => 'Are you sure?', :method => :delete %>
 </div>

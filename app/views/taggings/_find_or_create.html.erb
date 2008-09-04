@@ -2,8 +2,7 @@
   <h2>Add Something</h2>
   <div class="suggestions"></div>
   <% form_tag "/taggings/connect" do -%>
-    <%= hidden_field_tag "path", path %>
-    <%= hidden_field_tag "subject", subject.id %>
+      <%= hidden_field_tag("id", tagging.id) if tagging%>
     <%= text_field_tag "query", "", :id => "input" %>
   <% end -%>
 </div>

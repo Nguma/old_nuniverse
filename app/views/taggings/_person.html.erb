@@ -1,10 +1,9 @@
-<div class="hat">
-  <%= title_for(tagging.object, :service => @service)%>
-</div>
 <div id="right_column">
   <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
+  <%= render :partial => "image", :locals => {:tag=> @tagging.object} %>
   <%= render :partial => "map", :locals => {:tagging => @tagging} %>
   <%= render :partial => "ads" %>
+  <%= render :partial => "options" %>
   <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
 </div>
 <div id="left_column">
@@ -24,7 +23,3 @@
     }%>
   </div>
 </div>
-<%= render :partial => "/taggings/find_or_create" , :locals => {
-  :subject => tagging.object, 
-  :path => tagging.full_path
- }%>

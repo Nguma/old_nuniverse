@@ -1,4 +1,3 @@
-
 <% if items.empty? -%>
   <br/>
   <h2>To add a topic to this nuniverse, simply start typing in.</h2>
@@ -18,19 +17,20 @@
       <div class="delimiter">&nbsp;</div>
     </div>
     <% items.each_with_index do |item,i| %>
-      <div class="item <%= (i == selected) ? '' : '' %> <%= cycle('even','odd') %>">
+      <div class="item <%= (i == selected) ? '' : '' %> <%= cycle('even','odd') %>" title="connection_<%= item.id %>">
          <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
+         
+        <h3>
+          <%= check_box(@tagging, "select", :class => "check") %>
+         
+          <%= icon_for(item.object) %>
+          <%= link_to_item(item) %> <span style="font-size:12px"><%= item.object.property('address') %></span>
 
-       <h3>
-      
-           <% if !@tagging || @tagging.is_a_list? -%>
-             <span class="rank"><%= (i+1) + items.offset rescue 0 %></span> 
-           <% end -%>
-           <%= icon_for(item.object) %>
-           <%= link_to_item(item) %> <span style="font-size:12px"><%= item.object.property('address') %></span>
-           <%= render :partial => "/taggings/star_rating", :locals => {:item => item} %>
-           <div class="preview hidden">/taggings/preview/<%= item.id %></div>
-       </h3>
+
+          <%= render :partial => "/taggings/star_rating", :locals => {:item => item} %>
+
+          <div class="preview hidden">/taggings/preview/<%= item.id %></div>
+        </h3>
       </div>
     <% end -%>
   </div>

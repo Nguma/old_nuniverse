@@ -22,12 +22,13 @@
        <% end -%>
         <p>
           <strong>
-            <%= link_to("Add an Address", "#", :class => "toggle")%>
+            
             <%= link_to("Locate", "/map/#{tagging.id}")%>
           </strong>
         </p>
-        <% form_tag "/taggings/update/#{tagging.id}", :id => "address_form", :class => "hidden" do -%>
-          <fieldset>
+        <% form_tag "/taggings/update/#{tagging.id}", :id => "address_form" do -%>
+          <%= link_to("Add an Address", "#", :class => "toggle")%>
+          <fieldset class="hidden">
             <%= text_field_tag "address", "" %>
             <%= submit_tag %>
           </fieldset>
