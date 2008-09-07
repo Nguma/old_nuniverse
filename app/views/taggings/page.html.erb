@@ -1,0 +1,7 @@
+<%= will_paginate @items %>
+<% @items.each do |item| %>
+    <div class="item">
+      <%= thumbnail_tag(item)%>
+      <h3><%= link_to_item(item) %></h3>
+    </div>
+<% end -%>

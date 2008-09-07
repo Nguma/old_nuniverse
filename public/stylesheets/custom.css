@@ -1,13 +1,12 @@
-/*body {
-	background:#efefef url('/images/backgrounds/main.png') 0 0 repeat-x;
-}
+/*
+
 
 .box {
-	background:none ;
+	background:#333 ;
 }
 
 .box h2 {
-	color:#ccc;
+	color:#999;
 }
 
 .items {
@@ -19,14 +18,16 @@
 }
 
 .items .odd {
-	background:#dddddd;
+	background:#ddd;
 }
 
-#right_column .box {
-	background:#333;
-}
-#right_column .box a {
+
+.box a {
 	color:#cf9;
+}
+
+.box .item a {
+	color:#333;
 }
 
 p {
@@ -52,9 +53,12 @@ p {
 
 #google_ads {
 	background:#FFF;
-}*/
+}
 
-#left_column .box {
-	padding:10px;
-	background:#eee;
+*/
+
+
+
+#google_ads {
+	background:#fff;
 }

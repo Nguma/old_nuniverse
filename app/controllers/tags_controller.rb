@@ -102,6 +102,11 @@ class TagsController < ApplicationController
 			:page => 1
 		)
 	end
+	
+	def images
+		@tag = Tag.find(params[:id])
+		
+	end
 
 	
 end

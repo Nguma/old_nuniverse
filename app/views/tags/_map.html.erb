@@ -1,6 +1,6 @@
 <% @map = map(:source => tag, :path => nil, :items => nil ) %>
 
-<div class="box" >
+<div class="box" id="map_box">
   <% if @map -%>
     <% content_for :head do -%>
       <%= GMap.header (:large_map => true, :with_vml => false) %>

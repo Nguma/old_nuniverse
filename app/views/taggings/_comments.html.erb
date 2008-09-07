@@ -1,11 +1,19 @@
 <div class="box" id="comments">
-
-      <%= render :partial => "/nuniverse/connections", :locals => {
-        :service => @service,
-        :items => @items,
-        :selected => @selected,
-        :order => @order,
-        :tagging => @tagging
-      }%>
-    
+  <h2>Comments</h2>
+  <%= spinner %>
+  <% comments = source.connections(:kind => "comment") -%>
+  <div class="items hidden" >
+    <%= will_paginate comments %>
+    <% comments.each do |comment| -%>
+      <div class="item">
+        
+        <h3><%= thumbnail_tag(comment.owner.tag) %> "<%= comment.label.capitalize %>"</h3>
+      </div>
+    <% end -%>
+  </div>
+  <div class="actions">
+    <%= link_to "+ Add a comment", "#comment ", :class => "toggle" %>
+    <%= link_to "+ Add a pro", "#pro ", :class => "toggle" %>
+    <%= link_to "+ Add a con", "#con ", :class => "toggle" %>
+  </div>
 </div>

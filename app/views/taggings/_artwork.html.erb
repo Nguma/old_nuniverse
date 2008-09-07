@@ -2,24 +2,15 @@
   <%= render :partial => "profile", :locals => {:tagging => @tagging}%>
   <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
   <%= render :partial => "ads" %>
+  <%= render :partial => "options", :locals => {:tagging => @tagging }%>
 </div>
 <div class="column" style="width:50%">
-  <%= render :partial => "map", :locals => {:tagging => @tagging} %>
-  <% @tagging.connections(:kind => "list", :mode => 'exact').each do |list| -%>
-    <%= box(:source => @tagging, :kind => list.label.singularize) %>
-  <% end -%>
+  <%= render :partial => "image", :locals => {:object => @tagging.object}%>
   <%= render :partial => "comments", :locals => {:source => @tagging}%>
 </div>
 
 <div class="column">
-  <%= render :partial => "image", :locals => {:object => @tagging.object}%>
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location')}%>
+  <%= render :partial => "locations", :locals => {:source => @tagging }%>
   <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
-  <%= tag_box(:source => @tagging )%>
 </div>
-
-  
-  
-  
-  
-  
-  

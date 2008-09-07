@@ -1,23 +1,6 @@
-<div class="content" id="people_content">
-  <h2>People</h2>
-  
-  <dl class="connections">
-  <% Tagging.with_path(path).with_object_kinds('person').by_name.each do |connection| -%>
-    <%= render :partial => "/taggings/person", :locals => {:connection => connection }%>
-  <% end -%>
-  
-  </dl>
-  <br/>
-  <h4><a href="#" class="toggler">Add a person</a></h4>
-  <div class="toggable hidden">
-    <% form_tag '/taggings/create' do -%>
-      <%= hidden_field_tag :kind, "person" %>
-      <%= hidden_field_tag :path, path %>
-      <%= hidden_field_tag :restricted, 1 , :class => "restricted"%>
-      <%= text_field_tag :content, "", :size => 30 %><br/>
-      <label>What's your relationship? (not mandatory)</label><br/>
-      <%= text_field_tag :description, "", :size => 50  %><br/>
-      <input type="submit" value="Connect">
-    <% end -%>
+<% box_for(:title => "People", :kind => "person") do -%>
+  <div class="items">
+    <%= render :partial => "/taggings/instance", :collection => source.connections(:kind => 'bookmark') %>
   </div>
-</div>
+  <%= link_to("+ Add a bookmark", "#bookmark ", :class => "toggle")%>
+<% end -%>

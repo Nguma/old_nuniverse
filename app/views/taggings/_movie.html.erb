@@ -2,7 +2,7 @@
   <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
   <%= render :partial => "image", :locals => {:tagging => @tagging }%>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+  <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
 </div>
 <div id="left_column">
   <div class="box">

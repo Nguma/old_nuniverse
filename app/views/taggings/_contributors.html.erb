@@ -1,14 +1,16 @@
+<% contributors = tagging.contributors(:page => @page, :per_page => 10) -%>
 <% if current_user == @tagging.owner -%>
   <div class="box" id="contributors">
-    <h2><%= link_to("Share","/taggings/share/#{@tagging.id}") %></h2>
+    <h2>Shared with</h2>
     <% if contributors.empty? -%>
-      <h3>No one has been invited yet.</h3>
+      <h3>No one, yet.</h3>
     <% else -%>
       <ul>
         <% contributors.each do |contributor| -%>
-         <li><%= contributor.login.capitalize %></li>
+         <%= contributor.label %>
         <% end -%>
       </ul>
     <% end -%>
+    <%= link_to "+ Invite someone", "#invite ", :class => "toggle"%>
   </div>
 <% end -%>

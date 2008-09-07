@@ -1,6 +1,5 @@
  <div class="column">
-   <%= render :partial => "/tags/profile", :locals => {:tag => @tagging.object}%>
-   <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+   <%= render :partial => "/taggings/profile", :locals => {:tagging => @tagging}%>
    <%= render :partial => "ads" %>
     <div class="box">
 
@@ -27,5 +26,5 @@
 
  <div class="column">
    <%= render :partial => "image", :locals => {:object => @tagging.object}%>
-   <%= render :partial => "bookmarks", :locals => {:tagging => @tagging}%>
+   <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
  </div>

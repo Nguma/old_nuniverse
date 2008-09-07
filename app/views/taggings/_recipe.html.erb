@@ -1,6 +1,6 @@
 <div class="column">
   <%= render :partial => "/tags/profile", :locals => {:tag => @tagging.object}%>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+  <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
   <%= render :partial => "ads" %>
   <%= render :partial => "options", :locals => {:tagging => @tagging }%>
 </div>

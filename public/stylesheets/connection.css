@@ -1,8 +1,9 @@
 /* ITEMS */
 .nuniverse .items {
 	position:relative;
-	clear:left;
+	clear:both;
 	margin:10px 0 5px 0;
+	display:none;
 }
 
 .nuniverse .items .options {
@@ -36,7 +37,7 @@
 }
 
 .nuniverse .pagination .disabled {
-	color:#efefef;
+	color:#ccc;
 }
 
 .nuniverse .pagination .current {
@@ -47,16 +48,24 @@
 /* ITEM */
 .nuniverse .item {
 	position:relative;
-	clear:left;
+	clear:both;
 	margin:0 0 1px 0;
 	overflow:hidden;
 /*	cursor: move;*/
 	background:#ccc;
-	padding:5px 5px 10px 5px;
+	padding:0;
 }
 
 .nuniverse .odd {
 /*	background:#f9f9f9;*/
+}
+
+.item .thumbnail {
+	position:relative;
+	float:left;
+	padding:0;
+	margin:0 10px 0 0;
+	height:30px;
 }
 
 .nuniverse .items .item .options {
@@ -71,7 +80,7 @@
 	position:relative;
 	font-size:15px;
 	font-weight:bold;
-	padding: 0 0 0 0;
+	padding:5px 5px 5px 5px
 }
 
 .nuniverse .items .item .icon {
@@ -159,6 +168,10 @@
 }
 
 
+.box .toggle {
+	color:#9c6;
+	font-size:13px;
+}
 
 dl.properties {
 	position:relative;
@@ -174,7 +187,30 @@ dl.properties dd {
 	line-height:20px;
 }
 
+
 #map_box .item h3 {
 	font-size:14px;
 	color:#333;
 }
+
+#comments .item {
+	padding:3px 0 3px 0;
+	background:none;
+}
+
+#comments h3 {
+	color:#333;
+	font-size:15px;
+	padding:0;
+	font-weight:normal;
+}
+
+#comments .item .thumbnail {
+	height:40px;
+	border:solid 1px #999;
+	padding:1px;
+	margin-right:5px;
+	float:left;
+	
+}
+

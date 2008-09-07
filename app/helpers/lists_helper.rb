@@ -21,7 +21,7 @@ module ListsHelper
 			if tagging.object == current_user.tag
 				str << link_to("< To your nuniverse", "/my_nuniverse")
 			else
-				str << link_to("< #{tagging.object.label.capitalize}", tagging, :style => "font-size:#{starting_size}px")
+				str << link_to("< #{tagging.label.capitalize}", tagging, :style => "font-size:#{starting_size}px")
 			end
 		end
 		str << "</div>"

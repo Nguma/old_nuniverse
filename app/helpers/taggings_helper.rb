@@ -22,15 +22,15 @@ module TaggingsHelper
 			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
 			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
 		else
-			render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging} rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+			render :partial => "/taggings/#{tagging.kinds.first}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
 		end
 	end
 	
 	def title_for(tagging, options ={})
 		str = "<h1>"
 		str << icon_for(tagging.object)
-		str << "#{tagging.object.title}"
-		str << "<span class='service'> according to #{options[:service].capitalize}</span>" if options[:service]
+		str << "#{tagging.subject.title}: #{tagging.object.title}"
+		str << "<span class='service'>#{options[:service]}</span>" if options[:service]
 		str << "</h1>"
 		str
 	end
@@ -41,12 +41,30 @@ module TaggingsHelper
 		end
 	end
 	
-	def box_tag(params)
-		params[:title] ||= ""
-		params[:dom_id] ||= ""
-		render :partial => "/taggings/box", :locals => params
+
+	def box(params = {})
+			params[:source] ||= current_user
+			params[:kind] ||= nil
+			params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
+			params[:dom_id] ||= params[:kind] ? params[:kind].pluralize : ""
+
+		 	render :partial => "/taggings/box", :locals => {
+				:source => params[:source],
+				:items => params[:source].connections(:kind => params[:kind]), 
+				:kind => params[:kind],
+        :title => params[:title], 
+        :toggle => "##{params[:kind]} ",
+        :dom_id => params[:dom_id],
+				:dom_class => params[:class] || ""}
 	end
-			
-			
+	
+	def tag_box(params) 
+		params[:source] ||= current_user.tag
+		
+		render :partial => "/tags/box", :locals => {
+			:items => TaggingPath.new(Tagging.with_object(params[:source]).collect{|c| c.path}.join('')).tags,
+			:title => "Tags"
+		}
+	end
 
 end

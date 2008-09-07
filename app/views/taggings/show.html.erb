@@ -1,7 +1,10 @@
 <% nuniverse(:dom_class => @tagging.object.kind, :selected => "My nuniverse") do -%>
     <%= breadcrumbs(@tagging.path) %>
     <div class="hat">
-      <%= title_for(@tagging, :service => @service)%>
+
+      <%= title_for(@tagging)%>
+      
+      
     </div>
     <%= content_for_tagging(@tagging, :service => @service)%>
     <% unless @service -%>

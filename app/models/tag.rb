@@ -85,6 +85,10 @@ class Tag < ActiveRecord::Base
 		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
 	end
 	
+	def kinds
+		kind.split("#")
+	end
+	
 	def kind
 		return nil if super.nil?
 		super.split('#')[0]
@@ -92,11 +96,19 @@ class Tag < ActiveRecord::Base
 	
 	
 	def thumbnail
-		# return image.public_filename(:small) unless image.nil?
-		# return property('thumbnail') unless property('thumbnail').blank?
-		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
+		return images.first.public_filename(:small) unless images.empty?
+		return property('thumbnail') unless property('thumbnail').blank?
+		# return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
 		return nil
 	end
+	
+	def icon
+		kinds.each do |kind|
+			return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
+		end
+		return nil
+	end
+	
 	
 	def avatar
 		return images.first.public_filename unless images.empty?
@@ -250,7 +262,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def subject_of(params = {})
-		Tagging.with_subject(self).with_order(params[:order] || "rank")
+		Tagging.with_subject(self).with_order(params[:order] || "rank").paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 	end
 	
 	def object_of(params = {})

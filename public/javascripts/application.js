@@ -21,6 +21,17 @@ function reset()
     
   });
   
+  $$('.box').each(function(box){
+    box.addEvents({
+      'mouseenter':function(ev){box.addClass('hover');},
+      'mouseleave':function(ev){box.removeClass('hover');}
+    });
+    if(box.getElement('.expander') == null) return;
+    box.getElement('.expander').addEvent('click', function(ev){
+      box.toggleClass('expanded');
+    });
+  });
+  
   $$('.star_rating a').each(function(star){
     var selected_stars = star.getAllPrevious().concat([star])
     star.addEvents({
@@ -47,12 +58,9 @@ function reset()
   
   $$('.toggle').each(function(toggle) {
     toggle.addEvent('click', function(ev) {
-      
-      $('input_box').toggleClass('hidden');;
-      if(!$('input').hasClass('hidden')) {
-        $('input').setProperty('value', toggle.getProperty('href'))
-        $('input').focus();
-      }
+      $('input_box').removeClass('hidden');
+      $('input').setProperty('value', toggle.getProperty('href'));
+      $('input').focus();
     });
   });
   
@@ -125,7 +133,29 @@ function reset()
   });
   
   // patchwork($$('.box'));
+  setPagination($('nuniverse'))
 
+}
+
+function setPagination(source) {
+  source.getElements('.pagination a').each(function(pager){
+    pager.addEvent('click',function(ev){
+      ev.preventDefault();
+      var box = pager.getParent('.box');
+      var items = box.getElement('.items');
+      items.empty();
+      box.addClass('loading');
+      var call = new Request.HTML({
+        'url':pager.getProperty('href'),
+        'update':items,
+        'onComplete':function(){
+          box.removeClass('loading');
+          setPagination(items)
+        }
+      }).get();
+      
+    });
+  });
 }
 
 function patchwork(elements) {

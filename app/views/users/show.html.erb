@@ -1,25 +1,36 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-<%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
-<h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
-<div class="delimiter">&nbsp;</div>
-<div class="column">    
-  <div class="box">
-    <h2>Your nuniverse</h2>
-    <p>You used <strong><%= current_user.connections_count%>/<%= current_user.max_connections %></strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
-    <%= link_to "Edit your profile", "/users/edit" %>
+  <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
+  <h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
+  <div class="delimiter">&nbsp;</div>
+  <div class="column">  
+    <%= render :partial => "/taggings/image", :locals => {:object => current_user.tag}%>  
+    <div class="box">
+      <h2>Your nuniverse</h2>
+      <p>You used <strong><%= current_user.connections_count%>/<%= current_user.max_connections %></strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
+      <%= link_to "Edit your profile", "/users/edit" %>
+    </div>
+  
+    <%= render :partial => "/taggings/ads" %>
   </div>
-  <%= render :partial => "/taggings/ads" %>
-</div>
-<div class="column" style="width:50%">
-   <%= box_tag(:items => @items, :title => "Your topics", :toggle => "#topic", :dom_id => "topics")%>
-   <%= render :partial => "invitations", :locals => {:invitations => current_user.invitations} %>
-  <%= box_tag(:items => current_user.connections(:kind => "person"), :title => "Your people", :toggle => "#person", :dom_id => "people")%>
-    <%= box_tag(:items => current_user.connections(:kind => "location"), :title => "Your places", :toggle => "#location", :dom_id => "locations")%>
+  
+  
+  <div class="column" >
+    <%= box(:kind => "list")%>
+    
+    <%= box(:kind => "topic")%>
+    <%= render :partial => "invitations", :locals => {:invitations => current_user.invitations} %>  
 </div>
 <div class="column">
-  <%= render :partial => "/taggings/image", :locals => {:object => current_user.tag}%>
-  <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
-      <%= box_tag(:items => current_user.connections(:kind => "bookmark"), :title => "Your bookmarks", :toggle => "#bookmark", :dom_id => "bookmark")%>
+  <%= box(:kind => "person") %>
+  <%= box(:kind => "location", :title => "Places")%>
+  <%#= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
+  <%= render :partial => "/taggings/bookmarks", :locals => {:source => current_user}%>
+</div>
+
+<div class="column">
+  <%= box(:kind => "item", :title => "Products") %>
+  <%= box(:kind => "video")%>
+
 </div>
 <%= render :partial => "/taggings/find_or_create", :locals => {:tagging => nil} %>
 <% end -%>

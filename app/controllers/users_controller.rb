@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   # before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
   before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge]
 	before_filter :login_required, :except => [:new, :create, :activate]
-	before_filter :invitation_required, :except => [:new, :create, :activate]
+	skip_before_filter :invitation_required, :only => [:new, :create, :activate]
   after_filter :store_location, :only => [:show]
 
   # render new.rhtml
@@ -28,6 +28,7 @@ class UsersController < ApplicationController
 
   def activate
     logout_keeping_session!
+		raise params[:activation_code].inspect
     user = User.find_by_activation_code(params[:activation_code]) unless params[:activation_code].blank?
     case
     when (!params[:activation_code].blank?) && user && !user.active?
@@ -93,10 +94,13 @@ class UsersController < ApplicationController
 		@service = nil
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
-		if @kind
-			@items = current_user.connections(:kind => params[:kind], :order => params[:order], :page => params[:page])
-		else
-			@items = @tag.subject_of(:order => @order).paginate(:page => params[:page] || 1, :per_page => 10)
+		
+		respond_to do |format|
+			format.html {}	
+			format.js { 
+				@items = current_user.connections(:kind => params[:kind], :order => params[:order], :page => params[:page])
+				render :controller => 'taggings', :action => :page, :layout => false
+			}
 		end
 	end
 	

@@ -42,4 +42,8 @@ module NuniverseHelper
 		"<div class='box hidden'>&nbsp;</div>"
 	end
 	
+	def spinner
+		render :partial => "/nuniverse/spinner"
+	end
+	
 end

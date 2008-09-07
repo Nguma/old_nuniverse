@@ -1,17 +1,29 @@
 <div class="column">
-  <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
+  
+  
+  <%= render :partial => "image", :locals => {:object => @tagging.object }%>
   <%= render :partial => "ads" %>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
+  <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
 
 </div>
-<div class="column" style="width:44%">
-  <%= box_tag(:items => @tagging.connections(:kind => 'comment'), :title => "Comments", :toggle => "#comment ")%>
-  <%= box_tag(:items => @tagging.connections(:kind => 'bookmark'), :title => "Bookmarks", :toggle => "#bookmark ")%>
+<div class="column" >
+  <%#= render :partial => "profile", :locals => {:tagging=> @tagging} %>
+  <% @tagging.connections(:kind => "list", :mode => 'exact').each do |list| -%>
+    <%= box(:source => @tagging, :kind => list.label.singularize) %>
+    
+  <% end -%>
+  
 </div>
 
 <div class="column">
+  <%= render :partial => "comments", :locals => {:source => @tagging}%>
+  <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
+  
+  
+</div>
+<div class="column">
   <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
-  <%= render :partial => "image", :locals => {:object => @tagging.object }%>
+  <%= tag_box(:source => @tagging.object)%>
   
 </div>

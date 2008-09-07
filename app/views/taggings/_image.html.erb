@@ -1,5 +1,12 @@
 <div class="box" id="image_box" >
-  <%= avatar_for(object) %>
-  <%= link_to("Add an image", "#image ", :class => "toggle")%>
+  <% if avatar_for(object) %>
+    <%= avatar_for(object) %>
+    <div class="actions">
+      <%= link_to("+ Add another image", "#image ", :class => "toggle")%>
+      <%= link_to("See all images", "/tags/images/#{object.id}")%>
+    </div>
+  <% else -%>
+    <%= link_to("+ Add an image", "#image ", :class => "toggle")%>
+  <% end -%>
 </div>
 

@@ -50,6 +50,11 @@ class User < ActiveRecord::Base
 		u && u.authenticated?(password) ? u : nil
   end
 
+	def label
+		return login.capitalize if login
+		return email
+	end
+	
 	def avatar
 		if asset.image?
 			image_tag(asset.public_filename(:thumb))
@@ -82,7 +87,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		Tagging.with_user(self).with_kind_like(params[:kind]||nil).with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => 10)
+		Tagging.with_user(self).with_kind_like(params[:kind]||nil).groupped.with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 	end
 	
 

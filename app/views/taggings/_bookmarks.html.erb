@@ -1,7 +1,13 @@
 <div class="box" id="bookmarks">
-  <h2>Bookmarks</h2>
-  <div class="items">
-  <%= render :partial => "instance", :collection => tagging.connections(:kind => 'bookmark') %>
+  <h2>
+    <%= image_tag('/images/icons/bookmark.png',:class=>'icon',:alt => "bookmark") %>
+    Bookmarks
+  </h2>
+  <div class="items hidden">
+  <%= render :partial => "/taggings/instance", :collection => source.connections(:kind => 'bookmark') %>
   </div>
-  <%= link_to("+ Add a bookmark", "#bookmark ", :class => "toggle")%>
+  <div class="actions">
+    <%= link_to("+ Add a bookmark", "#bookmark ", :class => "toggle")%>
+    <%= link_to("Google.", "#")%>
+  </div>
 </div>

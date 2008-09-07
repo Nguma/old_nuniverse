@@ -18,6 +18,7 @@ module Nuniverse
 				'link' => 'bookmark',
 				'website' => 'bookmark',
 				'video' => 'video',
+				'place' => 'location',
 				'country' => 'location#country',
 				'city' => 'location#city',
 				'restaurant' => 'location#restaurant',
@@ -38,12 +39,27 @@ module Nuniverse
 				'lcoatuon' => 'location',
 				'perosn' => 'person',
 				'film' => 'movie',
-				'flick' => 'movie'
+				'flick' => 'movie',
+				'pro' => 'comment#pro',
+				'con' => 'comment#con',
+				'painting' => 'artwork#painting',
+				'sculpture' => 'artwork#sculpture',
+				'drawing' => 'artwork#drawing',
+				'artowrk' => 'artwork',
+				'country' => 'location#country',
+				'city' => 'location#city',
+				'town' => 'location#city',
+				'continent' => 'location#continent',
+				'planet' => 'location#planet',
+				'dvd' => 'item#dvd',
+				'cd' => 'item#cd',
+				'song' => 'item#song',
+				'book' => 'item#book'
 			}
 		end
 		
 		def self.match(kind)
-			self.list[kind] || kind
+			self.list[kind.singularize] || kind
 		end
 		
 		def self.hash	

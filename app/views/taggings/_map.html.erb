@@ -8,7 +8,7 @@
       <% end -%>
       <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
     <% else -%>
-      <% unless tagging.object.kind == 'list' -%>
+      <% if tagging.object.kind == 'lation' -%>
 
        <% item = google_localize(@tagging).first -%>
        <% if item -%>
@@ -19,12 +19,7 @@
                 <p><%= item.property('address') %></p>
               </div>
        <% end -%>
-        <p>
-          <strong>
-            
-            <%= link_to("Locate", "/map/#{tagging.id}")%>
-          </strong>
-        </p>
+    
         <% form_tag "/taggings/update/#{tagging.id}", :id => "address_form" do -%>
           <%= link_to("Add an Address", "#", :class => "toggle")%>
           <fieldset class="hidden">
@@ -33,5 +28,11 @@
           </fieldset>
         <% end -%>
     <% end -%>
+        <p>
+          <strong>
+            
+            <%= link_to("Locate", "/map/#{tagging.id}")%>
+          </strong>
+        </p>
     <% end -%>
   </div>

@@ -9,8 +9,12 @@ class Tagging < ActiveRecord::Base
 	
 	before_destroy :destroy_connections
 	
+	def kinds
+		object.kinds
+	end
+	
 	def kind
-		object.kind
+		kinds.last
 	end
 	
 	def info
@@ -47,48 +51,36 @@ class Tagging < ActiveRecord::Base
 
   named_scope :with_path, lambda { |path,degree|
 		return {} if path.nil?
-		return degree.nil? ? {:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
+		return degree.nil? ? {:select => "taggings.*",:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
   }
   named_scope :with_path_ending, lambda { |path|
-    path.nil? ? {} : {:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]}
+    path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]}
   }
   named_scope :with_path_beginning, lambda { |path|
-    path.nil? ? {} : {:conditions => ["path rlike ?", "^_%s_" % path.ids.join('(_.*)?_')]}
+    path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "^_%s_" % path.ids.join('(_.*)?_')]}
   }
   named_scope :with_exact_path, lambda { |path|
-    path.nil? ? {} : {:conditions => ["path rlike ?", "^_%s_$" % path.ids.join('_')]}
+    path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "^_%s_$" % path.ids.join('_')]}
   }
   named_scope :with_subject, lambda { |subject|
-    subject.nil? ? {} : {:conditions => ["subject_id = ?", subject.id]}
+    subject.nil? ? {} : {:select => "taggings.*",:conditions => ["subject_id = ?", subject.id]}
   }
   named_scope :with_object, lambda { |object|
-    object.nil? ? {} : {:conditions => ["object_id = ?", object.id]}
+    object.nil? ? {} : {:select => "taggings.*",:conditions => ["object_id = ?", object.id]}
   }
   named_scope :with_user, lambda { |user|
-    user.nil? ? {} : {:conditions => ["user_id = ?", user.id]}
-  }
-  named_scope :with_subject_kinds, lambda { |kind|
-    kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :subject}
-  }
-	named_scope :with_object_kinds, lambda { |kind|
-    kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], :include => :object}
+    user.nil? ? {} : {:select => "taggings.*",:conditions => ["taggings.user_id = ?", user.id]}
   }
 
 	named_scope :with_kind_like, lambda { |kinds|
-    kinds.nil? ? {} : {:conditions => ["tags.kind rlike ?", "^#{kinds}$"], :joins => :object}
+    kinds.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.kind rlike ?", "(^|#)#{kinds}($|#)"], :joins => :object}
   }
 
 	named_scope :with_address_or_geocode, lambda { |kind|
-    kind.nil? ? {} : {:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
+    kind.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
 
-	named_scope :with_kind, lambda {|kind| 
-		kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
-	}
-
-	named_scope :include_object, {:conditions => "tags.id > 0", :include => :object}
 	named_scope :groupped, :group => "object_id"
-  named_scope :by_latest, :order => "taggings.updated_at DESC"
 	named_scope :with_order, lambda { |order|
 		case order
 		when "name"
@@ -128,24 +120,13 @@ class Tagging < ActiveRecord::Base
 	def connections(params = {})
 			params[:order] ||= "latest"
 			params[:kind] ||= nil
-			Tagging.with_exact_path(self.full_path).with_object_kinds(params[:kind]).with_order(params[:order])
-		# case params[:order]
-		# 		when "latest"
-		# 			order = "updated_at DESC"
-		# 		when "name"
-		# 			order = "tags.label ASC"
-		# 		when "rank"
-		# 			order = "rankings.value DESC"
-		# 		else
-		# 			order = "tags.label ASC"
-		# 		end
-		# 		Tagging.paginate( 
-		# 			:conditions => "path = '#{self.full_path}'",
-		# 			:include => [:rankings, :object],
-		# 			:order => order,
-		# 			:page => params[:page] || 1,
-		# 			:per_page => 10
-		# 			)
+			params[:path] ||= nil
+			
+			if self.kind == "list"
+				query = Tagging.with_user(self.owner).with_path(self.full_path, true).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			else
+				query = Tagging.with_user(self.owner).with_subject(self.object).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			end
 	end
 	
 	def contributors(params = {})
@@ -168,6 +149,10 @@ class Tagging < ActiveRecord::Base
 	def is_a_list?
 		return true if kind == "list"
 		return false
+	end
+	
+	def toggle
+		return self.label.split(' ').last.singularize
 	end
 	
 	

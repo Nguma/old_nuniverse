@@ -17,8 +17,8 @@
 
 .nuniverse .hat {
 	position:relative;
-	margin:0 0 10px 0;
-	padding: 0 0 10px 0;
+	margin:0 0 0 0;
+	padding: 0 0 2px 0;
 }
 
 .nuniverse h1 {
@@ -46,17 +46,17 @@
 	position:fixed;
 	bottom:0px;
 	padding:5px;
-	margin:0 370px 0 0;
+	margin:0 0 0 0;
 	background:#333;
 	width:auto;
-	width:780px;
+	width:90%;
 }
 
 #input_box fieldset {
 	border:none;
 }
 
-#input_box input {
+#input_box #input {
 	background:none;
 	border:none;
 /*	border-bottom:solid 1px #666;*/
@@ -64,8 +64,13 @@
 	font-weight:normal;
 	color:#FFF;
 	width:100%;
+	display:block;
 	margin: 5px 0 0 0;
 	padding:1px 1px 3px 1px;
+}
+
+#input_box textarea {
+	height:100px;
 }
 
 
@@ -130,64 +135,11 @@
 	width:400px;
 }
 
-.box {
-	position:relative;
-/*	border:solid #eee 5px;*/
-	clear:none;
-	border:none;
-	padding:10px;
-	margin:0 0 5px 0;
-	width:auto;
-	background:#eee;
-}
-
-#left_column .box {
-	background:none;
-}
-
-#right_column .box a {
-	color:#6c3;
-}
-
-#left_column {
-	position:relative;
-	margin:0 380px 0 0;
-}
-
-#left_column .box {
-	padding:0;
-}
-
-#left_column .box h2 {
-	padding:5px;
-}
-
-#area {
-	position:relative;
-}
-
 #nuniverse .column {
 	position:relative;
 	float:left;
 	width:23%;
-	margin:0 5px 0 0;
-}
-
-#nuniverse .column .box {
-	position:relative;
-	width:auto;
-	margin:0 0 5px 0;
-}
-
-#right_column {
-	position:relative;
-	float:right;
-	width:370px;
-	margin:0 0 0 0;
-}
-
-#google_ads {
-	background:#fff;
+	margin:0 4px 0 0;
 }
 
 #contributors ul {
@@ -221,8 +173,17 @@ p strong {
 	width:100%;
 }
 
+#bookmarks {
+	
+}
 
 
 .images .box .avatar {
 	width:100%;
+}
+
+
+
+#google_ads {
+	background:#fff;
 }

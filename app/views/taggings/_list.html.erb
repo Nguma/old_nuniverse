@@ -1,17 +1,20 @@
-<div class="column">
-  <%= render :partial => "/tags/profile", :locals => {:tag=> @tagging.object} %>
+<div class="column" style="width:25%">
+  <%= render :partial => "profile", :locals => {:tagging=> @tagging} %>
   <%= render :partial => "ads" %>
-  <%= render :partial => "contributors", :locals => {:contributors => @contributors}%>
+  <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
-</div>
-<div class="column" style="width:50%">
-  <%= box_tag(:items => @tagging.connections, :title => "Connections", :toggle => "#")%>
   
-  <%#= render :partial => "locations", :locals => {:tagging => @tagging}%>
-</div>
-<div class="column">
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
+  <div class="box">
+    <h2><%= link_to("See it in images", "/taggings/#{@tagging.id}?service=images") %></h2>
+  </div>
+  
   
   <%= render :partial => "image", :locals => {:object => tagging.object }%>
+  <%#= render :partial => "locations", :locals => {:tagging => @tagging}%>
 
+</div>
+<div class="column" style="width:73%">
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location', :mode => 'exact')} %>
+  <%= box(:source => @tagging, :class => "expanded")%>
+  <%= render :partial => "comments", :locals => {:source => @tagging}%>
 </div>

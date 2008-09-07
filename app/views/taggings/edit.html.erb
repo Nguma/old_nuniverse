@@ -1,6 +1,6 @@
 <% nuniverse(:dom_class => "edit") do -%>
     <%= breadcrumbs(@tagging.path)%>
-    <%= title_for(@tagging.object) %>
+    <%= title_for(@tagging) %>
     <div class="delimiter">&nbsp;</div>
     <% form_tag "/taggings/update/#{@tagging.id}" do -%>
       <fieldset>

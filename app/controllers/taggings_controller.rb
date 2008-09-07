@@ -45,17 +45,28 @@ class TaggingsController < ApplicationController
 				params[:query] = gums[0][2]
 			end
 			@subject = @tagging ? @tagging.object : current_user.tag
-			if @kind == "address"
-				@subject.replace_property('address', params[:query])
+			case @kind
+			when "address","tel","zip"
+				@subject.replace_property(@kind, params[:query])
 				@subject.save
-			elsif @kind == "image"
+			when "image"
 				@subject.add_image(:source_url => params[:query])
+			when "description"
+				@tagging.description = params[:query]
+				@tagging.save
+			when "invite"
+				@user = User.find_by_email(params[:query]) || User.create(:email => params[:query])
+				current_user.invite(:user => @user, :topic => @tagging)
 			else
 				@tag = Tag.find_or_create(
 					:label => Gum.purify(params[:query]), 
 					:kind => @kind
 				) 
-				@path = @tagging ? @tagging.full_path : ""
+				@path = TaggingPath.new
+				if @tagging &&  @tagging.kind == "list"
+					@subject = @tagging.subject
+					@path = @tagging.full_path
+				end
 				@tagging = Tagging.find_or_create(
 										:label => Gum.purify(params[:query]), 
 										:owner => current_user, 
@@ -72,11 +83,11 @@ class TaggingsController < ApplicationController
 		if @tagging.nil?
 			@tagging = Tagging.with_exact_path(TaggingPath.new(params[:path])).first
 		end
-		restrict_to(@tagging.authorized_users)
+		#restrict_to(@tagging.authorized_users)
 		@selected = params[:selected].to_i || nil
 		@service = params[:service] || nil
 		@page = params[:page] || 1
-		@order = params[:order] || "rank"
+		@order = params[:order] || ((@tagging.object.kind != "list") ? "rank" : "name")
 		@filter = params[:filter] || nil
 		
 		
@@ -88,10 +99,11 @@ class TaggingsController < ApplicationController
 		when "map"
 			
 			
-			@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
+			@items = @tagging.connections(:mode => 'exact', :page => @page)
 			render :action => "maps"
 		when "images"
-			@items = @tagging.connections(:order => @order, :filter => @filter).paginate(:page => @page, :per_page => 10)
+			@items = @tagging.connections(:mode => 'exact', :order => @order, :filter => @filter, :page => @page, :per_page => 15)
+			
 			# @items = @tagging.images.paginate(:page => @page, :per_page => 10)
 			render :action => "images"
 		when nil
@@ -100,10 +112,13 @@ class TaggingsController < ApplicationController
 			@service = nil		
 				
 		end
-		@order = "name" if @tagging.object.kind != "list"
-		@contributors = @tagging.contributors(:page => @page, :per_page => 10)
+		
+		
 		@items = @items.nil? ? @items = @tagging.connections(:order => @order, :filter => @filter).paginate(:page => @page, :per_page => 10) : @items
-
+		respond_to do |format|
+			format.html {}	
+			format.js { render :action => :page, :layout => false}
+		end
 	end
 	
 	def share

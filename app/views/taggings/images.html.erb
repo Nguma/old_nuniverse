@@ -1,22 +1,40 @@
 <% nuniverse(:dom_class => "images") do -%>
   <%= breadcrumbs(@tagging.path)%>
-  <div class="hat">
-    <h1><%= @tagging.object.label.capitalize %> <span class="service">in images</span></h1>
-  </div>
-  <div class="items">
-  <% if @items.empty? -%>
-    <h2>You haven't added any images yet.</h2>
-  <% else -%>
-    <% @items.each do |item| -%>
-    <div class="box" style="width:250px;float:left;margin:0 5px 2px 0;clear:none">
-      <h2><%= link_to(item.object.label.capitalize,item) %></h2>
-      <%= avatar_for(item.object) %>
-    </div>
-    <% end -%>
-  <% end -%>
-  </div>
-  
   <div class="options">
     <%= link_to "back to content", @tagging , :class => "option" %>
   </div>
+  <div class="hat">
+    <%= title_for(@tagging, :service =>" in images") %>
+  </div>
+  <% cols = ["","","",""] %>
+  <% if @items.empty? -%>
+    <h2>You haven't added anything yet.</h2>
+  <% else -%>
+    <% @items.each_with_index do |item,i| -%>
+        <%= raise item.inspect if item.object.nil? %>
+        <% cols[i%4] << "<div class='box'>
+          <h2> #{link_to(item.label.capitalize,item)} </h2>
+          #{avatar_for(item.object)}
+        </div>" %>
+    <% end -%>
+  <% end -%>
+  <div class="column" >
+    <%= cols[0] %>
+  </div>
+  <div class="column" >
+     <%= cols[1] %>
+  </div>
+  <div class="column" id="col_3">
+     <%= cols[2] %>
+  </div>
+  <div class="column" id="col_4">
+     <%= cols[3] %>
+  </div>
+  
+  
+
+
+  
+  
+
 <% end -%>

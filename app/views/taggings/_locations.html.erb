@@ -2,7 +2,7 @@
   <h2>Places</h2>
   <div class="items">
     
-  <%= render :partial => "instance", :collection => tagging.connections(:kind => 'location') %>
+  <%= render :partial => "instance", :collection => source.connections(:kind => 'location') %>
   </div>
   <%= link_to("+ Add a location", "#location ", :class => "toggle")%>
 </div>

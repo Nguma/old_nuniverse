@@ -41,4 +41,9 @@ class ImagesController < ApplicationController
 		end
 			render :layout => false
 	end
+	
+	def destroy
+		@image = Image.find(params[:id])
+		@image.destroy
+	end
 end
