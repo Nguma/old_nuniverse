@@ -54,7 +54,17 @@ module Nuniverse
 				'dvd' => 'item#dvd',
 				'cd' => 'item#cd',
 				'song' => 'item#song',
-				'book' => 'item#book'
+				'book' => 'item#book',
+				'friend' => 'person#friend',
+				'enemy' => 'person#enemy',
+				'chef' => 'person#chef',
+				'singer' => 'person#artist#musician#singer',
+				'artist' => 'person#artist',
+				'drummer' => 'person#artist#musician#drummer',
+				'guitarist' => 'person#artist#musician#guitarist',
+				'actor' => 'person#artist#actor',
+				'painter' => 'person#artist#painter',
+				'sculptor' => 'person#artist#sculptor'
 			}
 		end
 		

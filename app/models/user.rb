@@ -37,7 +37,7 @@ class User < ActiveRecord::Base
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 
-
+	alias_attribute :title, :label
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
   # uff.  this is really an authorization, not authentication routine.  
@@ -50,6 +50,10 @@ class User < ActiveRecord::Base
 		u && u.authenticated?(password) ? u : nil
   end
 
+	def kind
+		"user"
+	end
+	
 	def label
 		return login.capitalize if login
 		return email
@@ -87,7 +91,11 @@ class User < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		Tagging.with_user(self).with_kind_like(params[:kind]||nil).groupped.with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		if params[:mode] == "direct"
+			Tagging.with_user(self).with_subject(self.tag).with_kind_like(params[:kind] || nil).groupped.with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		else
+			Tagging.with_user(self).with_kind_like(params[:kind]||nil).groupped.with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		end
 	end
 	
 

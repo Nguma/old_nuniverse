@@ -2,7 +2,7 @@
   <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
   <h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
   <div class="delimiter">&nbsp;</div>
-  <div class="column">  
+  <div class="column nav">  
     <%= render :partial => "/taggings/image", :locals => {:object => current_user.tag}%>  
     <div class="box">
       <h2>Your nuniverse</h2>
@@ -11,26 +11,28 @@
     </div>
   
     <%= render :partial => "/taggings/ads" %>
+    <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
   </div>
+  <% content_for("column_0") do -%>
+    <%= list(:kind => "topic")%>
+    <%#= render :partial => "invitations", :locals => {:invitations => current_user.invitations} %>  
+    <%= render :partial => "/taggings/bookmarks", :locals => {:source => current_user}%>
+  <% end -%>
   
+  <% content_for("column_1") do -%>
+    <%= list(:kind => "person") %>
+    <%= list(:kind => "item", :title => "Products") %>
+  <% end -%>
   
-  <div class="column" >
-    <%= box(:kind => "list")%>
+  <% content_for("column_2") do -%>
+    <%= list(:kind => "location", :title => "Places")%>
     
-    <%= box(:kind => "topic")%>
-    <%= render :partial => "invitations", :locals => {:invitations => current_user.invitations} %>  
-</div>
-<div class="column">
-  <%= box(:kind => "person") %>
-  <%= box(:kind => "location", :title => "Places")%>
-  <%#= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
-  <%= render :partial => "/taggings/bookmarks", :locals => {:source => current_user}%>
-</div>
+    <%= list(:kind => "video")%>
+  <% end -%>
+  <%= columnize(:source => current_user, :size => 3, :kind => "list", :mode => "direct") %>
 
-<div class="column">
-  <%= box(:kind => "item", :title => "Products") %>
-  <%= box(:kind => "video")%>
 
-</div>
+
+
 <%= render :partial => "/taggings/find_or_create", :locals => {:tagging => nil} %>
 <% end -%>

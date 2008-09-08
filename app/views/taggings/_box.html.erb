@@ -1,16 +1,13 @@
-<div class="box list <%= dom_class %>" id="<%= dom_id %>" >
-  <%= image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander") %>
+<div class="box <%= dom_class %>" id="<%= dom_id %>" >
   <% unless title.blank?%>
-    <%= image_tag("/images/icons/#{kind}.png", :class => "icon", :alt => "")  rescue ""%>
-    <h2><%= link_to(title.capitalize, source) rescue title.capitalize%></h2>
+    <%= thumbnail_tag(source.object) rescue ""%>
+    <h2><%= link_to(title, source) rescue title.capitalize%></h2>
   <% end -%>
   
   <%= spinner %>
   <div class="items" >
-    <%= will_paginate(items, :params => {:kind => kind}) %>
-    <%= render :partial => "/taggings/instance", :collection => items %>
+    <%#= will_paginate(items, :params => {:kind => kind}) %>
+    <%#= render :partial => "/taggings/instance", :collection => items %>
   </div>
-  <div class="actions">
-    <%= link_to "+ Add", toggle, :class => "toggle"%>
-  </div>
+
 </div>

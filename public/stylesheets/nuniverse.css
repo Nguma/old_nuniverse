@@ -142,6 +142,10 @@
 	margin:0 4px 0 0;
 }
 
+#nuniverse .small { width:23%;}
+#nuniverse .medium { width:50%;}
+#nuniverse .large {width:74%;}
+
 #contributors ul {
 	list-style-type:none;
 }

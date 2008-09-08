@@ -5,8 +5,41 @@
 	margin:0 0 3px 0;
 	padding:10px;
 	background:transparent url("/images/backgrounds/box.png") center left repeat;
+	
 	border:none;
 	overflow:hidden;
+	min-height:60px;
+}
+
+.nav .box {
+/*	background:#eef6ee;*/
+}
+
+.list .list {
+	padding:0;
+	background:none;
+}
+
+.list .list .expander {
+	display:none;
+}
+
+.list .list .items {
+	display:block;
+}
+
+.list .list .item {
+	min-height:50px;
+	background:#eee;
+}
+
+.list .list .item .thumbnail {
+	height:50px;
+}
+
+.list .list .item h3 {
+	line-height:30px;
+	font-size:20px;
 }
 
 .expanded {
@@ -67,3 +100,18 @@
 #lists {
 	background:#e8efbf;
 }
+
+.box .actions .toggle {
+	color:#9c6;
+	font-size:13px;
+}
+
+h2 .toggle {
+	color:#9c6;
+	font-size:25px;
+	font-weight:bold;
+	text-align:center;
+	line-height:50px;
+	display:block;
+}
+

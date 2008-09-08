@@ -22,7 +22,7 @@ module TaggingsHelper
 			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
 			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
 		else
-			render :partial => "/taggings/#{tagging.kinds.first}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+			render :partial => "/taggings/#{tagging.kinds.first}", :locals => {:tagging => tagging}  #rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
 		end
 	end
 	
@@ -41,21 +41,23 @@ module TaggingsHelper
 		end
 	end
 	
+	
+	def list(params)
+		params[:source] ||= current_user
+		params[:dom_class] ||= ""
+		params[:kind] ||= nil
+		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
+		params[:items] ||= params[:source].connections(:kind => params[:kind])
+		params[:toggle] ||= "##{params[:kind].downcase} " 
+		params[:dom_id] ||= params[:title].pluralize
+		render :partial => "/taggings/list_box", :locals => params
+	end
 
-	def box(params = {})
-			params[:source] ||= current_user
-			params[:kind] ||= nil
-			params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
-			params[:dom_id] ||= params[:kind] ? params[:kind].pluralize : ""
-
-		 	render :partial => "/taggings/box", :locals => {
-				:source => params[:source],
-				:items => params[:source].connections(:kind => params[:kind]), 
-				:kind => params[:kind],
-        :title => params[:title], 
-        :toggle => "##{params[:kind]} ",
-        :dom_id => params[:dom_id],
-				:dom_class => params[:class] || ""}
+	def box(params)
+		params[:dom_class] ||= ""
+		params[:title] ||= params[:source].title
+		params[:dom_id] ||= params[:title].pluralize.gsub(" ", "_")
+		render :partial => "/taggings/box", :locals => params
 	end
 	
 	def tag_box(params) 

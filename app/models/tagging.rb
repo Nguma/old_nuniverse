@@ -9,52 +9,9 @@ class Tagging < ActiveRecord::Base
 	
 	before_destroy :destroy_connections
 	
-	def kinds
-		object.kinds
-	end
-	
-	def kind
-		kinds.last
-	end
-	
-	def info
-		return description unless description.blank?
-		return object.info
-	end
-	
-	def label
-		super.nil? ? object.label : super
-	end
-	
-	def path
-	  TaggingPath.new(super)
-  end
-  
-  def path=(new_path)
-    case new_path
-    when TaggingPath
-      super(new_path.to_s)
-    else
-      super
-    end
-  end
-
-	def full_path
-		TaggingPath.new([path.taggings,self].flatten)
-	end
-	
-	def rank
-		return 0 if rankings.length == 0
-		((rankings.sum :value).to_i / rankings.length).floor
-	end
-  
-
-  named_scope :with_path, lambda { |path,degree|
+	named_scope :with_path, lambda { |path,degree|
 		return {} if path.nil?
 		return degree.nil? ? {:select => "taggings.*",:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
-  }
-  named_scope :with_path_ending, lambda { |path|
-    path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]}
   }
   named_scope :with_path_beginning, lambda { |path|
     path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "^_%s_" % path.ids.join('(_.*)?_')]}
@@ -93,7 +50,55 @@ class Tagging < ActiveRecord::Base
 			{:order => "taggings.created_at ASC"}
 		end
 	}
+	
+	named_scope :lists, :select => "taggings.*", :joins => :object, :conditions => "tags.kind rlike = (^|#)list(#|$)"
+	
+	
+	def kinds
+		object.kinds
+	end
+	
+	def kind
+		kinds.last
+	end
+	
+	def info
+		return description unless description.blank?
+		return object.info
+	end
+	
+	def label
+		super.nil? ? object.label : super
+	end
+	
+	def title
+		label.capitalize
+	end
+	
+	def path
+	  TaggingPath.new(super)
+  end
+  
+  def path=(new_path)
+    case new_path
+    when TaggingPath
+      super(new_path.to_s)
+    else
+      super
+    end
+  end
 
+	def full_path
+		TaggingPath.new([path.taggings,self].flatten)
+	end
+	
+	def rank
+		return 0 if rankings.length == 0
+		((rankings.sum :value).to_i / rankings.length).floor
+	end
+  
+
+  
 
 	def move(original_path, new_path)
 	  Tagging.transaction do

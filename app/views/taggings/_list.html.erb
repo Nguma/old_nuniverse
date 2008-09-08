@@ -1,4 +1,4 @@
-<div class="column" style="width:25%">
+<div class="column nav" style="width:25%">
   <%= render :partial => "profile", :locals => {:tagging=> @tagging} %>
   <%= render :partial => "ads" %>
   <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
@@ -13,8 +13,9 @@
   <%#= render :partial => "locations", :locals => {:tagging => @tagging}%>
 
 </div>
-<div class="column" style="width:73%">
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location', :mode => 'exact')} %>
-  <%= box(:source => @tagging, :class => "expanded")%>
-  <%= render :partial => "comments", :locals => {:source => @tagging}%>
+<div class="column large">
+  <%= list(:source => @tagging, :toggle => "##{@tagging.label.singularize.downcase} ")%>
 </div>
+
+  <%#= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location', :mode => 'exact')} %>
+<%#= render :partial => "comments", :locals => {:source => @tagging}%>

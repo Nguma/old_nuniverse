@@ -1,21 +1,17 @@
-<div class="column">
+<div class="column nav">
   
   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
   <%= render :partial => "profile", :locals => {:tagging => @tagging}%>
   <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
-  
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location', :mode => 'exact')} %>
-
-</div>
-<div class="column" style="width:50%">
-  <% @tagging.connections(:kind => "list", :mode => 'exact').each do |list| -%>
-    <%= box(:source => list, :kind => list.label.singularize) %>
-  <% end -%>
-   
-   <%#= render :partial => "comments", :locals => {:source => @tagging }%>
-</div>
-
-<div class="column">
   <%= render :partial => "ads" %>
-  <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
 </div>
+
+<% content_for "column_0" do -%> 
+  <%= list(:kind => "event", :title =>"timeline") %>
+<% end -%>
+<div class="column" >
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location', :mode => 'exact')} %>
+<%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
+</div>
+
+<%= columnize(:source => @tagging, :size => 1, :kind => "list", :dom_classes => ["medium"]) %>
