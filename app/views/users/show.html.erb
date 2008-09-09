@@ -11,25 +11,15 @@
     </div>
   
     <%= render :partial => "/taggings/ads" %>
-    <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag}%>
+    <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag} rescue ""%>
   </div>
-  <% content_for("column_0") do -%>
-    <%= list(:kind => "topic")%>
-    <%#= render :partial => "invitations", :locals => {:invitations => current_user.invitations} %>  
-    <%= render :partial => "/taggings/bookmarks", :locals => {:source => current_user}%>
-  <% end -%>
   
-  <% content_for("column_1") do -%>
-    <%= list(:kind => "person") %>
-    <%= list(:kind => "item", :title => "Products") %>
-  <% end -%>
   
-  <% content_for("column_2") do -%>
-    <%= list(:kind => "location", :title => "Places")%>
-    
-    <%= list(:kind => "video")%>
-  <% end -%>
-  <%= columnize(:source => current_user, :size => 3, :kind => "list", :mode => "direct") %>
+  <%= columnize(:boxes => lists_for(current_user, 
+                  :plus => ['bookmarks', 'people', 'places'],
+                  :add_box => "/taggings/new_item"
+                  ),
+                :size => 3) %>
 
 
 

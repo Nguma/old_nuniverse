@@ -41,7 +41,7 @@ class TaggingsController < ApplicationController
 		else
 			gums = Gum.parse(params[:query])
 			unless gums.empty?
-				@kind = Nuniverse::Kind.match(gums[0][1])
+				@kind = Nuniverse::Kind.match(gums[0][1]).strip
 				params[:query] = gums[0][2]
 			end
 			@subject = @tagging ? @tagging.object : current_user.tag
@@ -57,23 +57,43 @@ class TaggingsController < ApplicationController
 			when "invite"
 				@user = User.find_by_email(params[:query]) || User.create(:email => params[:query])
 				current_user.invite(:user => @user, :topic => @tagging)
+			when "list"
+				List.find_or_create(
+					:creator_id => current_user.id,
+					:label => Gum.purify(params[:query]),
+					:tag_id => @subject.id
+					)
 			else
 				@tag = Tag.find_or_create(
 					:label => Gum.purify(params[:query]), 
 					:kind => @kind
 				) 
 				@path = TaggingPath.new
-				if @tagging &&  @tagging.kind == "list"
-					@subject = @tagging.subject
-					@path = @tagging.full_path
-				end
-				@tagging = Tagging.find_or_create(
-										:label => Gum.purify(params[:query]), 
+
+				@kind.split('#').each do |k| 
+						t = Tag.find_or_create(
+						:label => k,
+						:kind => 'kind'
+						)
+				Tagging.find_or_create( 
 										:owner => current_user, 
 										:subject_id => @subject.id, 
-									 	:object_id => @tag.id || nil, 
-										:path => @path
+									 	:object_id => @tag.id, 
+										:kind => "tag",
+										:description => k
 									)
+				# @tagging = Tagging.find_or_create(
+				# 							:label => Gum.purify(params[:query]), 
+				# 							:owner => current_user, 
+				# 							:subject_id => @subject.id, 
+				# 						 	:object_id => @tag.id || nil, 
+				# 							:path => @path,
+				# 							:kind => @kind == "list" ? "list" : nil,
+				# 							:description =>  ""
+				# 						)
+				end
+				
+
 			end
 			redirect_back_or_default(@tagging)
 		end

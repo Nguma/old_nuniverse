@@ -22,6 +22,13 @@ module Nuniverse
 				'country' => 'location#country',
 				'city' => 'location#city',
 				'restaurant' => 'location#restaurant',
+				'bar' => 'location#bar',
+				'designer' => 'person#designer',
+				'camera' => 'item#camera',
+				'president' => 'person#president',
+				'director' => 'person#director',
+				'chef' => 'person#chef',
+				'host' => 'person#host',
 				'museum' => 'location#museum',
 				'company' => 'group#company',
 				'team' => 'group#team',
@@ -64,12 +71,23 @@ module Nuniverse
 				'guitarist' => 'person#artist#musician#guitarist',
 				'actor' => 'person#artist#actor',
 				'painter' => 'person#artist#painter',
-				'sculptor' => 'person#artist#sculptor'
+				'sculptor' => 'person#artist#sculptor',
+				'car' => 'vehicle#car',
+				'truck' => 'vehicle#truck',
+				'bike' => 'vehicle#bike',
+				'plane' => 'vehicle#plane',
+				'\'s' => nil,
+				'a'=> nil,
+				'the' => nil,
+				'of' => nil,
+				'and' => nil,
+				'at' => nil,
+				'l\'' => nil
 			}
 		end
 		
-		def self.match(kind)
-			self.list[kind.singularize] || kind
+		def self.match(kind_str)
+			kind_str.split(/_|\s/).collect {|k| self.list[k.singularize] || k.singularize }.join('#')
 		end
 		
 		def self.hash	

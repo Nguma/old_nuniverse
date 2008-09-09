@@ -55,38 +55,32 @@ module NuniverseHelper
 	# :mode = if set to direct, will require current_user to be subject
 	# :source = source to query from
 	# :dom_classes = Array of classes to assign to each column. Eg: ["","big_column","small_column"]
-	def columnize(params)
+	def columnize(params = {})
+		
 		html = ""
-		params[:size] ||= 4
+		params[:size] ||= 3
 		params[:dom_classes] ||= []
-		params[:kind] ||= nil
 		cols = []
-		items = params[:source].connections(:kind => params[:kind] , :mode => params[:mode] || nil)
-		params[:size].times do |time|
-			cols << ""
-		end
+		params[:boxes].each_with_index do |box, i|
+			(cols[i%params[:size]] ||= "") << box
 		
-		items.each_with_index do |item,i|
-				if item.kind == "list"
-					cols[i%params[:size]] << list(:source => item, :kind => item.label.singularize) 
-				else
-					cols[i%params[:size]] << box(:source => item) 
-				end
 		end
-		new_button = render :partial => "/taggings/new_list_box"
-		cols[(items.size) % params[:size]] << new_button
-		
 		cols.each_with_index do |col, i|
 			col_html = render :partial => "/nuniverse/column", :locals => {
 				:dom_class => params[:dom_classes][i] || "",
 				:dom_id => "column_#{i}",
-				:col_content => col
+				:col_content => cols[i]
 			}
 			
 			html << col_html
 		end
+		
 		html
 	end
 	
 	
+	def toggle(params)
+		command = "##{params[:kind].gsub(' ','_').singularize} "
+		link_to(params[:label],command,:class => 'toggle')
+	end
 end

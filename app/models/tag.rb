@@ -54,6 +54,10 @@ class Tag < ActiveRecord::Base
 		@tagging
 	end
 	
+	def tags
+		Tagging.tags(self)
+	end
+	
 	def has_address?
 		return true if self.kind == "address"
 		return true if !address.full_address.blank?
@@ -193,7 +197,7 @@ class Tag < ActiveRecord::Base
 	# }
 	
   named_scope :with_kind_like, lambda { |kind|
-   	return kind.nil? ? {} : {:conditions => ["kind like ?", "%#{kind}%"]}
+   	return kind.nil? ? {} : {:conditions => ["kind rlike ?", "(^|#)(#{kind.gsub('#','|')})(#|$)"]}
   }
 	
   named_scope :with_kind, lambda { |kind|
@@ -206,6 +210,10 @@ class Tag < ActiveRecord::Base
 
 	named_scope :with_label_like, lambda {|label|
 		return label.nil? ? {} : {:conditions => ["label rlike ?","^.\{0,4\}#{label}.\{0,6\}$"]}
+	}
+	
+	named_scope :with_label, lambda { |label| 
+		return label.nil? ? {} : {:conditions => ["label = ?", label]}
 	}
 
 
@@ -236,7 +244,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.find_or_create(params)
-		tag = Tag.with_label_like(params[:label]).with_kind_like(params[:kind]).find(:first)
+		tag = Tag.with_label(params[:label]).with_kind_like(params[:kind]).find(:first)
 		if tag.nil?
 			if params[:label].match(/^http:\/\/.+/)
 				tag = Tag.create(
@@ -257,8 +265,8 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		context = TaggingPath.new(params[:context])
-		Tagging.find(:all, :conditions => ['object_id = ?', self.id], :group => "subject_id")
+		
+		Tagging.find(:all, :conditions => ['description = ?', self.label], :group => "object_id")
 	end
 	
 	def subject_of(params = {})

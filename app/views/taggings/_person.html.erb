@@ -14,4 +14,4 @@
 <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
 </div>
 
-<%= columnize(:source => @tagging, :size => 1, :kind => "list", :dom_classes => ["medium"]) %>
+<%= columnize(:items => @tagging.lists, :size => 1, :dom_classes => ["medium"]) %>

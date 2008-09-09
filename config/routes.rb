@@ -54,6 +54,14 @@ ActionController::Routing::Routes.draw do |map|
 		:action => "show",
 		:kind => "location"
 		
+	map.tags "/about/:label",
+		:controller => "tags",
+		:action => "show"
+		
+	map.list "/list/:label",
+		:controller => 'lists',
+		:action => 'show'
+		
 	map.with_kind "/display/:kind/of/:id",
 		:controller => "taggings",
 		:action => "show"

@@ -115,3 +115,7 @@ h2 .toggle {
 	display:block;
 }
 
+.image_box .avatar {
+	width:100%;
+}
+

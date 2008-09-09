@@ -13,17 +13,17 @@ module ListsHelper
 	
 	end
 	
-	def breadcrumbs(path)
+	def breadcrumbs(tagging)
 		starting_size = 17
 		str = "<div class='breadcrumbs'>"
 		str << link_to("< To your nuniverse", "/my_nuniverse", :style => "font-size:#{starting_size}px")
-		path.taggings.each_with_index do |tagging,i|
-			if tagging.object == current_user.tag
-				str << link_to("< To your nuniverse", "/my_nuniverse")
-			else
-				str << link_to("< #{tagging.label.capitalize}", tagging, :style => "font-size:#{starting_size}px")
-			end
-		end
+		# path.taggings.each_with_index do |tagging,i|
+		# 		if tagging.object == current_user.tag
+		# 			str << link_to("< To your nuniverse", "/my_nuniverse")
+		# 		else
+		# 			str << link_to("< #{tagging.label.capitalize}", tagging, :style => "font-size:#{starting_size}px")
+		# 		end
+		# 	end
 		str << "</div>"
 		str
 	end
@@ -38,24 +38,27 @@ module ListsHelper
 		str
 	end
 	
-	def kind_options(tagging)
-		return nil if tagging.owner != current_user
-		return nil if tagging.kind
-		options = ""
-		options << link_to(
-			image_tag("/images/icons/list_button.png", :alt => "this is a list"), 
-			"/taggings/update/#{@tagging.id}?kind=list", :class => "list_button"
-		)
-		options << "<br/>"
-		options << link_to(
-			image_tag("/images/icons/location_button.png", :alt => "this is a location"), 
-			"/taggings/update/#{@tagging.id}?kind=location", :class => "list_button"
-		)
-		options << "<br/>"
-		options << link_to(
-			image_tag("/images/icons/person_button.png", :alt => "this is a person"), 
-			"/taggings/update/#{@tagging.id}?kind=person", :class => "list_button"
-		)
-		options
+	def list(params)
+		params[:dom_class] ||= ""
+		params[:kind] ||= params[:source].label.singularize
+		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
+		params[:items] ||= params[:source].items
+		params[:toggle] ||= "##{params[:kind].downcase.gsub(" ","_")} " 
+		params[:dom_id] ||= params[:title].pluralize
+		render :partial => "/taggings/list_box", :locals => params
+	end
+	
+	def lists_for(source, options = {})
+		boxes = []
+		(options[:plus] ||= []).each do |item|
+			boxes << list(:source => List.new(:creator => current_user, :label => item))
+		end
+		source.lists.each_with_index do |item,i|
+			boxes << list(:source => item) 
+		end
+		if options[:add_box]
+			boxes << "#{render :partial => options[:add_box]}"
+		end
+		boxes
 	end
 end

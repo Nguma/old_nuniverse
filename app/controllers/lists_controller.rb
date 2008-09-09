@@ -1,13 +1,13 @@
 class ListsController < ApplicationController
 	
 	before_filter :login_required
-	before_filter :admin_required, :except => [:show, :create, :find_or_create, :find_or_add_item]
-  # GET /lists
-  # GET /lists.xml
-  def index
-		
-    @lists = List.find(:all, :order => "created_at DESC")
+	#before_filter :admin_required, :except => [:show, :create, :find_or_create, :find_or_add_item]
+  after_filter :store_location, :only => [:show]
 
+	# GET /lists
+  # GET /lists.xml
+  def index		
+    @lists = List.find(:all, :order => "created_at DESC")
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @lists }
@@ -17,11 +17,23 @@ class ListsController < ApplicationController
   # GET /lists/1
   # GET /lists/1.xml
   def show
-    @list = List.find(params[:id])
-		restrict_to(@list.creator)
+   	if params[:id] 
+			@list = List.find(params[:id]) 
+		else
+			@list = List.find_by_label(params[:label])
+			@list = List.new(:creator => current_user, :label => params[:label]) if @list.nil?
+		end
+		
+		
 		@selected = params[:selected].to_i || nil
 		@page = params[:page] || 1
-		@items = @list.items.paginate(:page => @page, :per_page => 10)  
+		@mode = params[:mode] || nil
+		@items = @list.items(:page => @page, :per_page => 10)  
+		
+		respond_to do |format|
+			format.html {}
+			format.js {render :action => "page", :layout => false}
+		end
   end
 
   # GET /lists/new
@@ -78,10 +90,11 @@ class ListsController < ApplicationController
   # DELETE /lists/1.xml
   def destroy
     @list = List.find(params[:id])
+		restrict_to(@list.creator)
     @list.destroy
 
     respond_to do |format|
-      format.html { redirect_to(lists_url) }
+      format.html { redirect_back_or_default(lists_url) }
       format.xml  { head :ok }
     end
   end

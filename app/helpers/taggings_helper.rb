@@ -22,7 +22,7 @@ module TaggingsHelper
 			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
 			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
 		else
-			render :partial => "/taggings/#{tagging.kinds.first}", :locals => {:tagging => tagging}  #rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+			render :partial => "/taggings/#{tagging.kinds.first}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
 		end
 	end
 	
@@ -42,16 +42,7 @@ module TaggingsHelper
 	end
 	
 	
-	def list(params)
-		params[:source] ||= current_user
-		params[:dom_class] ||= ""
-		params[:kind] ||= nil
-		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
-		params[:items] ||= params[:source].connections(:kind => params[:kind])
-		params[:toggle] ||= "##{params[:kind].downcase} " 
-		params[:dom_id] ||= params[:title].pluralize
-		render :partial => "/taggings/list_box", :locals => params
-	end
+	
 
 	def box(params)
 		params[:dom_class] ||= ""
@@ -64,7 +55,7 @@ module TaggingsHelper
 		params[:source] ||= current_user.tag
 		
 		render :partial => "/tags/box", :locals => {
-			:items => TaggingPath.new(Tagging.with_object(params[:source]).collect{|c| c.path}.join('')).tags,
+			:items => params[:source].tags,
 			:title => "Tags"
 		}
 	end

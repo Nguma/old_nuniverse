@@ -6,8 +6,9 @@ class Tagging < ActiveRecord::Base
 	has_many :rankings
 	
 	before_save :clean_path
-	
-	before_destroy :destroy_connections
+	cattr_reader :per_page
+  @@per_page = 5
+	#before_destroy :destroy_connections
 	
 	named_scope :with_path, lambda { |path,degree|
 		return {} if path.nil?
@@ -26,7 +27,7 @@ class Tagging < ActiveRecord::Base
     object.nil? ? {} : {:select => "taggings.*",:conditions => ["object_id = ?", object.id]}
   }
   named_scope :with_user, lambda { |user|
-    user.nil? ? {} : {:select => "taggings.*",:conditions => ["taggings.user_id = ?", user.id]}
+    user.nil? ? {} : {:conditions => ["taggings.user_id = ?", user.id]}
   }
 
 	named_scope :with_kind_like, lambda { |kinds|
@@ -37,6 +38,25 @@ class Tagging < ActiveRecord::Base
     kind.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
 
+	named_scope :with_tags, lambda { |tags|
+		{
+			:select => "taggings.*",
+			:joins => :object,
+			
+			:conditions => ["taggings.kind IS NOT NULL AND CONCAT(taggings.description,'#',tags.label) rlike ?","(^|#)(#{tags.join("|")})($|#)"],
+			:group => "object_id HAVING COUNT(*) >= #{tags.length} "
+					
+		}
+
+	}
+	
+	named_scope :tags, lambda { |object|
+		{
+			:select => "taggings.* ", 
+			:conditions => ["taggings.kind = 'tag' AND object_id = ? ", object.id],
+			:group => 'description'
+		}	
+	}
 	named_scope :groupped, :group => "object_id"
 	named_scope :with_order, lambda { |order|
 		case order
@@ -51,7 +71,10 @@ class Tagging < ActiveRecord::Base
 		end
 	}
 	
-	named_scope :lists, :select => "taggings.*", :joins => :object, :conditions => "tags.kind rlike = (^|#)list(#|$)"
+	
+	def lists
+		List.bound_to(self.object)
+	end
 	
 	
 	def kinds
@@ -104,35 +127,37 @@ class Tagging < ActiveRecord::Base
 	  Tagging.transaction do
       Tagging.switch_paths("#{self.path}", "#{new_path}")
     
-      # Tagging.find(:first, :conditions => {
-      #         :subject_id => self.path.last_tag.id,
-      #         :object_id  => self.id,
-      #         :user_id    => self.user_id,
-      #         :path       => self.path
-      #       }).update_attributes(
-      #         :subject_id => new_path.split('_').last,
-      #         :path       => new_path
-      #       )
+     
     end
   end
 
 	def self.find_or_create(params)
-		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND path = ? AND user_id = ?', params[:subject_id], params[:object_id], params[:path], params[:owner]])
-		tagging = Tagging.create(:subject_id => params[:subject_id], :object_id => params[:object_id], :path => params[:path], :user_id => params[:owner].id) if tagging.nil?
+		params[:kind] ||= nil
+		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND description = ?', params[:subject_id], params[:object_id],  params[:owner], params[:description]])
+		tagging = Tagging.create(
+			:subject_id => params[:subject_id], 
+			:object_id => params[:object_id], 
+			:path => params[:path], 
+			:user_id => params[:owner].id,
+			:description => params[:description],
+			:kind => params[:kind] || nil
+		) if tagging.nil? rescue nil
 		tagging
 	end
 	
 	def connections(params = {})
 			params[:order] ||= "latest"
-			params[:kind] ||= nil
+			params[:kind] ||= ""
 			params[:path] ||= nil
-			
-			if self.kind == "list"
-				query = Tagging.with_user(self.owner).with_path(self.full_path, true).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			else
-				query = Tagging.with_user(self.owner).with_subject(self.object).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			end
+			Tagging.with_user(self.owner).with_subject(self.object).with_tags(Nuniverse::Kind.match(params[:kind]).split('#')).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			# if self.kind == "list"
+			# 	# query = Tagging.with_user(self.owner).with_path(self.full_path, true).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			# else
+			# 	#query = Tagging.with_user(self.owner).with_subject(self.object).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			# end
 	end
+	
+
 	
 	def contributors(params = {})
 		ids = self.full_path.ids || []

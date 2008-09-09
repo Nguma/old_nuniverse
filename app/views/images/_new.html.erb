@@ -1,0 +1,9 @@
+<h2>Add an image</h2>
+<div class="input" id="finder">
+  <div class="suggestions"></div>
+  <% form_tag "/taggings/add_image", { :multipart => true } do -%>
+    <%= hidden_field_tag "id", tagging.id %>
+    <%= file_field "image_url", :uploaded_data, :accept => "text/html"%>
+    <%= submit_tag %>
+  <% end -%>
+</div>

@@ -37,6 +37,11 @@ class User < ActiveRecord::Base
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 
+	def lists
+		List.created_by(self).bound_to(nil)
+	end
+	
+
 	alias_attribute :title, :label
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
@@ -76,7 +81,7 @@ class User < ActiveRecord::Base
 	end
 	
 	def connections_count 
-		Tagging.count(:conditions => ['user_id = ?',self.id])
+		Tagging.count(:select => "DISTINCT object_id", :conditions => ['user_id = ?',self.id])
 	end
 	
 	def invite(params)
@@ -92,9 +97,10 @@ class User < ActiveRecord::Base
 	
 	def connections(params = {})
 		if params[:mode] == "direct"
-			Tagging.with_user(self).with_subject(self.tag).with_kind_like(params[:kind] || nil).groupped.with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			#Tagging.with_user(self).with_subject(self.tag).with_kind_like(params[:kind] || nil).groupped.with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			Tagging.with_user(self).with_tags([params[:kind]] || nil).with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 		else
-			Tagging.with_user(self).with_kind_like(params[:kind]||nil).groupped.with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			Tagging.with_user(self).with_tags([params[:kind]] ||nil).with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 		end
 	end
 	

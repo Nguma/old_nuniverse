@@ -153,6 +153,7 @@ function setPagination(source) {
           setPagination(items)
         }
       }).get();
+      return false;
       
     });
   });

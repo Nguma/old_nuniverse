@@ -14,7 +14,11 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-		@tag = Tag.find(params[:id])
+		if params[:id]
+			@tag = Tag.find(params[:id]) 
+		else
+			@tag = Tag.find_by_label(params[:label])
+		end
 	
   end
 

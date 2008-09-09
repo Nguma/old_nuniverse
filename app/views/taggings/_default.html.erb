@@ -1,6 +1,4 @@
 <div class="column nav">
-  
-  
   <%= render :partial => "image", :locals => {:object => @tagging.object }%>
   <%= render :partial => "ads" %>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
@@ -9,8 +7,9 @@
 </div>
 <div class="column" >
   <%#= render :partial => "profile", :locals => {:tagging=> @tagging} %>
-  <% @tagging.connections(:kind => "list", :mode => 'exact').each do |list| -%>
-    <%= box(:source => @tagging, :kind => list.label.singularize) %>
+
+  <% @tagging.lists.each do |list| -%>
+    <%= list(:source => list) %>
     
   <% end -%>
   

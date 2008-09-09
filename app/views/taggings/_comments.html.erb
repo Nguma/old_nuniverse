@@ -1,8 +1,9 @@
 <div class="box" id="comments">
+  <%= image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander") %>
   <h2>Comments</h2>
   <%= spinner %>
   <% comments = source.connections(:kind => "comment") -%>
-  <div class="items hidden" >
+  <div class="items" >
     <%= will_paginate comments %>
     <% comments.each do |comment| -%>
       <div class="item">
