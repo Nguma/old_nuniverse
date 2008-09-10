@@ -119,6 +119,10 @@ class Tagging < ActiveRecord::Base
 		return 0 if rankings.length == 0
 		((rankings.sum :value).to_i / rankings.length).floor
 	end
+	
+	def add_image(params)
+		object.add_iamge(params)
+	end
   
 
   

@@ -56,7 +56,8 @@
 	border:none;
 }
 
-#input_box #input {
+#input_box #input,
+#extra_input {
 	background:none;
 	border:none;
 /*	border-bottom:solid 1px #666;*/

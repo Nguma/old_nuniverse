@@ -12,6 +12,18 @@ function reset()
       case "esc":
         $('input_box').addClass('hidden');
         break;
+      case "enter":
+        if($('input').getProperty('value').match(/^\#invite/) && $('extra_input').hasClass('hidden'))
+        {
+          $('extra_input').removeClass('hidden');
+          $('extra_input').focus();
+        } else
+        {
+          $('input_box').getElement('form').submit();
+        }
+        
+        
+        break;
       default:
         if($('input_box').hasClass('hidden')) {
           $('input_box').removeClass('hidden');

@@ -10,16 +10,13 @@
       <%= link_to "Edit your profile", "/users/edit" %>
     </div>
   
-    <%= render :partial => "/taggings/ads" %>
+    
     <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag} rescue ""%>
   </div>
   
+  <% boxes = [ people_box, locations_box, bookmarks_box, ad_box, lists_for(current_user),   new_item_box].flatten %>
   
-  <%= columnize(:boxes => lists_for(current_user, 
-                  :plus => ['bookmarks', 'people', 'places'],
-                  :add_box => "/taggings/new_item"
-                  ),
-                :size => 3) %>
+  <%= columnize(boxes,:size => 3) %>
 
 
 

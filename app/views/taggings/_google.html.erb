@@ -1,14 +1,17 @@
  <div class="column">
+   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
    <%= render :partial => "/taggings/profile", :locals => {:tagging => @tagging}%>
    <%= render :partial => "ads" %>
+   <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
     <div class="box">
 
        <h2><%= link_to("< Back",tagging)%></h2>
      </div>
  </div>
- <div class="column" style="width:50%">
+
+ <div class="column large" >
    <div class="box">
-     <div class="items">
+     <div class="items" style="display:block">
         <% @items.each_with_index do |item,i| -%>
          <div class="item">
            <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
@@ -24,7 +27,3 @@
     </div>
  </div>
 
- <div class="column">
-   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
-   <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
- </div>

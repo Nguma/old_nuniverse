@@ -27,8 +27,9 @@ class UserMailer < ActionMailer::Base
     @subject     = "#{params[:sender].login.capitalize} is inviting you."
     @sent_on     = Time.now
     @body[:sender] = params[:sender]
-		@body[:topic] = params[:topic]
-		@body[:url] = "http://www.nuniverse.net/taggings/#{params[:topic].id}"
+		@body[:to] = params[:to]
+		@body[:url] = "http://www.nuniverse.net/my_nuniverse/#{params[:to].label}"
+		@body[:message] = params[:message]
 		
 	end
 	
@@ -46,5 +47,7 @@ class UserMailer < ActionMailer::Base
       @subject     = "Nuniverse - "
       @sent_on     = Time.now
       @body[:user] = user
+			headers         "Reply-to" => "do-not-reply@nuniverse.net"
+			@content_type = "text/html"
     end
 end

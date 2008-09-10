@@ -29,7 +29,8 @@ module TaggingsHelper
 	def title_for(tagging, options ={})
 		str = "<h1>"
 		str << icon_for(tagging.object)
-		str << "#{tagging.subject.title}: #{tagging.object.title}"
+		str << "#{options[:list]}: " if options[:list]
+		str << tagging.object.title
 		str << "<span class='service'>#{options[:service]}</span>" if options[:service]
 		str << "</h1>"
 		str

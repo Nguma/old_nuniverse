@@ -15,6 +15,10 @@
 /*	background:#eef6ee;*/
 }
 
+.box .item h3 {
+	font-size:13px;
+}
+
 .list .list {
 	padding:0;
 	background:none;

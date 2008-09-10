@@ -6,16 +6,16 @@
     <%= columnize(:boxes => images_for(@items), :size => 3)%>
   <% end -%>
 <% else -%>
-  <% content_for :view_box do -%>
-    <%= link_to("See it in images", "/list/#{@list.label}?mode=image") %>
+  <%# content_for :view_box do -%>
+    <%#=  link_to("See it in images", "/list/#{@list.label}?mode=image") %>
     
-  <% end -%>
+  <%# end -%>
   <% content_for :right do -%>
     <div class="box"  id="list">
       
         <div class="items">
           <%= will_paginate @items %>
-          <%= render :partial => "/taggings/instance", :collection => @items %>
+          <%= render :partial => "/taggings/instance", :collection => @items, :locals => {:params => {:list => @list}} %>
         </div>
     </div>
   <% end -%>
@@ -28,19 +28,21 @@
     </div
     
     <div class="column" id="nav">
-      <%= render :partial => "/nuniverse/ads" %>
+      <%= ad_box %>
 
-      <div class="box">
-        <h2>
-          <%= yield :view_box %>
-        </h2>
-      </div>
+      <!-- <div class="box">
+             <h2>
+               <%#= yield :view_box %>
+             </h2>
+             
+           </div> -->
+           
+      <%= contributors_box(@list) %>
       <div class="box" >
         <h2><%= toggle(:label => "+ Add a new item", :kind => @list.label) %></h2>
       </div>
+      <%= render :partial => "map", :locals => {:items => @items}%>
     </div>
     <%= yield :right %>
 <% end -%>
-<%= render :partial => "/taggings/find_or_create" , :locals => {
-  :tagging => nil
- }%>
+<%= input(:source => @list)%>

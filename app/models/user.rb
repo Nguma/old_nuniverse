@@ -86,9 +86,9 @@ class User < ActiveRecord::Base
 	
 	def invite(params)
 		Permission.create(
-			:tagging => params[:topic],
+			:tagging_id => params[:to].id,
 			:user => params[:user])
-		UserMailer.deliver_invitation(:topic => params[:topic], :user => params[:user], :sender => self)
+		UserMailer.deliver_invitation(:to => params[:to], :user => params[:user], :message => params[:message] || "", :sender => self)
 	end
 	
 	def address
@@ -102,6 +102,10 @@ class User < ActiveRecord::Base
 		else
 			Tagging.with_user(self).with_tags([params[:kind]] ||nil).with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 		end
+	end
+	
+	def add_image(params)
+		tag.add_image(params)
 	end
 	
 

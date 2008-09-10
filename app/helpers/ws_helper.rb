@@ -59,21 +59,9 @@ module WsHelper
 	
 	def map(params)
 		map = GMap.new("map_div")
-	  map.control_init(:large_map => true)
-	  
-		# case params[:source]
-		# 		when "continent"
-		# 			zoom = 2
-		# 		when "country"
-		# 			zoom = 5
-		# 		when "city"
-		# 			zoom = 10
-		# 		else
-		# 			zoom = 15
-		# 		end
-		# 		
-
-		if params[:source].kind == "list" || !params[:source].has_address?
+	  map.control_init(:small_zoom => true)
+	
+		if !params[:source] || params[:source].is_a?(List) 
 			# items = Tagging.with_path_ending(params[:path].with_address_or_geocode().paginate(:page => 1, :per_page => 10))
 			items = params[:items].collect{|c| c.object }
 			markers = markers_for(items)

@@ -1,0 +1,9 @@
+<div id="input_box" class="hidden">
+  <div class="suggestions"></div>
+  <% form_tag "/command" do -%>
+    <%= hidden_field_tag("tagging", source.id) if source.is_a?(Tagging) %>
+    <%= hidden_field_tag("list", source.id) if source.is_a?(List)%>
+    <%= text_field_tag "input", "", :id => "input" %>
+    <%= text_field_tag "extra_input", "", :id => "extra_input", :class => 'hidden'%>
+  <% end -%>
+</div>

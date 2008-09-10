@@ -4,11 +4,13 @@ module ListsHelper
 		link_to(list.label.capitalize, list)
 	end
 	
-	def link_to_item(item)
+	def link_to_item(item, params = {})
 		if item.object.kind == "bookmark"
 			link_to("#{item.object.label.capitalize}", item.object.url)
 		else
-			link_to(item.object.label.capitalize, item)
+			url = "/taggings/#{item.id}?"
+			url << "list=#{params[:list].label}" if params[:list]
+			link_to(item.object.label.capitalize, url)
 		end
 	
 	end
@@ -50,9 +52,9 @@ module ListsHelper
 	
 	def lists_for(source, options = {})
 		boxes = []
-		(options[:plus] ||= []).each do |item|
-			boxes << list(:source => List.new(:creator => current_user, :label => item))
-		end
+		# (options[:plus] ||= []).each do |item|
+		# 	boxes << List.new(:creator => current_user, :label => item)
+		# end
 		source.lists.each_with_index do |item,i|
 			boxes << list(:source => item) 
 		end
@@ -60,5 +62,30 @@ module ListsHelper
 			boxes << "#{render :partial => options[:add_box]}"
 		end
 		boxes
+	end
+	
+	def people_box
+		list(:source => List.new(:creator => current_user, :label => "People"))
+	end
+	
+	def locations_box
+		list(:source => List.new(:creator => current_user, :label => "Places"))
+	end
+	
+	def bookmarks_box
+		list(:source => List.new(:creator => current_user, :label => "Bookmarks"))
+	end
+	
+	def ad_box
+		render :partial => "/nuniverse/ads"
+	end
+	
+	def new_item_box
+		render :partial => "/taggings/new_item"
+	end
+	
+	def contributors_box(source)
+		contributors = source.contributors(:page => @page, :per_page => 5)
+		render :partial => "/nuniverse/contributors", :locals => {:source => source, :contributors => contributors}
 	end
 end

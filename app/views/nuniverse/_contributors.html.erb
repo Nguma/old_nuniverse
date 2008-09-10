@@ -1,0 +1,13 @@
+<div class="box" id="contributors">
+  <h2>Shared with</h2>
+    <% if contributors.empty? -%>
+      <h3>No one, yet.</h3>
+    <% else -%>
+      <ul>
+        <% contributors.each do |contributor| -%>
+         <%= contributor.label %>
+        <% end -%>
+      </ul>
+    <% end -%>
+    <%= toggle(:label => "+ Invite someone", :command => "#invite ") %>
+</div>

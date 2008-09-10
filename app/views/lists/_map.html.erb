@@ -1,0 +1,10 @@
+<% @map = map(:items => items ) %>
+<div class="box" id="map_box">
+  <% if @map -%>
+    <% content_for :head do -%>
+      <%= GMap.header (:large_map => false, :with_vml => false) %>
+      <%= @map.to_html %>
+    <% end -%>
+    <%= @map.div(:width => "100%", :height => 240, :style=>"position:relative") %>
+  <% end -%>
+</div>

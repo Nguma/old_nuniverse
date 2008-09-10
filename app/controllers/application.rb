@@ -30,6 +30,10 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	
+	def method_missing
+		raise "METHOD MISSING!!!"
+	end
+	
 
 	protected
 	def invitation_required

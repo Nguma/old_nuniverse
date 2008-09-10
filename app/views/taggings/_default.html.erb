@@ -2,10 +2,15 @@
   <%= render :partial => "image", :locals => {:object => @tagging.object }%>
   <%= render :partial => "ads" %>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
-  <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
+  <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
 
 </div>
-<div class="column" >
+<div class="column">
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
+  <%= tag_box(:source => @tagging.object)%>
+  
+</div>
+<div class="column medium" >
   <%#= render :partial => "profile", :locals => {:tagging=> @tagging} %>
 
   <% @tagging.lists.each do |list| -%>
@@ -13,16 +18,9 @@
     
   <% end -%>
   
-</div>
 
-<div class="column">
   <%= render :partial => "comments", :locals => {:source => @tagging}%>
   <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
   
-  
-</div>
-<div class="column">
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
-  <%= tag_box(:source => @tagging.object)%>
   
 </div>

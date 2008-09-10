@@ -18,6 +18,10 @@ class List < ActiveRecord::Base
 		Tagging.with_user(self.creator).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label).split('#')).paginate(params)
 	end
 	
+	def contributors(params = {})
+		Permission.for(self).paginate(params).collect {|c| c.user}
+	end
+	
 	
 	def self.find_or_create(params)
 		l = List.find(:first, :conditions => params)

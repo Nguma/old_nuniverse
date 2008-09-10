@@ -55,13 +55,13 @@ module NuniverseHelper
 	# :mode = if set to direct, will require current_user to be subject
 	# :source = source to query from
 	# :dom_classes = Array of classes to assign to each column. Eg: ["","big_column","small_column"]
-	def columnize(params = {})
+	def columnize(boxes, params = {})
 		
 		html = ""
 		params[:size] ||= 3
 		params[:dom_classes] ||= []
 		cols = []
-		params[:boxes].each_with_index do |box, i|
+		boxes.each_with_index do |box, i|
 			(cols[i%params[:size]] ||= "") << box
 		
 		end
@@ -80,7 +80,13 @@ module NuniverseHelper
 	
 	
 	def toggle(params)
-		command = "##{params[:kind].gsub(' ','_').singularize} "
-		link_to(params[:label],command,:class => 'toggle')
+		params[:command]  ||= "##{params[:kind].gsub(' ','_').singularize} "
+		link_to(params[:label],params[:command],:class => 'toggle')
+	end
+	
+	def input(params)
+		render :partial => "/nuniverse/input" , :locals => {
+		  :source => params[:source]
+		 }
 	end
 end

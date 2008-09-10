@@ -23,83 +23,17 @@ ActionController::Routing::Routes.draw do |map|
 	map.signup '/signup', :controller => 'users', :action => 'new'
 	map.login '/login', :controller => 'sessions', :action => 'new'
 	map.logout '/logout', :controller => 'sessions', :action => 'destroy'
-	
-	map.upgrade "/upgrade",
-		:controller => "users",
-		:action => "upgrade"
 
-	map.beta "/beta",
-		:controller => "application",
-		:action => "beta"
-
-	map.feedback "/feedback",
-		:controller => "application",
-		:action => "feedback"
-
-	map.feedback "/thank_you",
-		:controller => "application",
-		:action => "thank_you"
-	
-	map.my_nuniverse "/my_nuniverse",
-		:controller => 'users',
-		:action => 'show'
-		
-	map.my_people "/my_people/",
-		:controller => "users",
-		:action => "show",
-		:kind => "person"
-
-	map.my_people "/my_places/",
-		:controller => "users",
-		:action => "show",
-		:kind => "location"
 		
 	map.tags "/about/:label",
 		:controller => "tags",
 		:action => "show"
-		
-	map.list "/list/:label",
-		:controller => 'lists',
-		:action => 'show'
-		
-	map.with_kind "/display/:kind/of/:id",
-		:controller => "taggings",
-		:action => "show"
+
 		
 	map.restricted "/restricted",
 		:controller => "application",
 		:action => 'restricted'
 		
-	map.visit "/visit/:path",
-		:controller => "taggings",
-		:action => "show"
-		
-	map.bookmark "/bookmark/:path",
-		:controller => "taggings",
-		:action => "bookmark"
-		
-	map.videos "/rate/:id/:stars",
-		:controller => "taggings",
-		:action => "rate"
-		
-	map.details_for "/details_for/:source/:id",
-		:controller => "ws",
-		:action => "show"
-		
-	map.overview_for "/overview_for/:path",
-		:controller => "nuniverse",
-		:action => "overview"
-	
-	map.google "/google/:id",
-		:controller => 'taggings',
-		:action => "show",
-		:service => "google"
-					
-	map.map "/map/:id",
-		:controller => "taggings",
-		:action => "show",
-		:service => "map"
-	
 	map.suggest "/suggest",
 		:controller => 'tags',
 		:action => "suggest"
@@ -107,6 +41,35 @@ ActionController::Routing::Routes.draw do |map|
 	map.connect "/connect",
 		:controller => '/nuniverse',
 		:action => 'connect'
+	
+	map.with_options :controller => 'application' do |m|
+		m.thank_you '/thank_you', :action => 'thank_you' 
+		m.feedback '/feedback', :action => 'feedback'
+		m.beta '/beta', :action => 'beta'
+	end
+			
+	map.with_options :controller => 'users' do |m|
+		m.home '/my_nuniverse', :action => 'show'
+		m.upgrade '/upgrade', :action => 'upgrade'
+	end
+	
+	map.with_options :controller => 'lists' do |m|
+		m.people '/my_nuniverse/people', :action => 'show', :label => 'people'
+		m.places '/my_nuniverse/places', :action => 'show', :label => 'places'
+		m.list '/my_nuniverse/:label/:page', :action => 'show', :requirements => {:page => /\d+/}, :page => nil
+	end
+		
+	map.with_options :controller => 'taggings' do |m|
+		m.google '/google/:id', :action => 'show', :service => 'google'
+		m.rate '/rate/:id/:stars', :action => 'rate'
+		m.map '/locate/:id', :action => 'show', :service => 'map'
+		m.bookmark '/bookmark/:path', :action => 'bookmark'
+	end
+	
+	map.command '/command', 
+		:controller => 'nuniverse',
+		:action => 'command'
+
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "nuniverse"

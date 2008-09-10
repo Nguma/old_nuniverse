@@ -1,0 +1,21 @@
+<p><%= h @message %></p>
+<p><%= h @sender.login.capitalize %> is sharing with you <h3><%= @to.label.capitalize %></h3></p>
+<table>
+  
+  <% @to.items(:page => 1, :per_page => 8).each do |item| %>
+    <tr>
+      <td>
+        <%= image_tag(item.object.thumbnail, :alt => item.object.kind) rescue nil%>
+      </td>
+      <td>
+        <p>
+          <b><%= item.object.label %></b>
+          <%= item.object.property('address') %>
+        </p>
+        
+      </td>
+    </tr>
+  <% end -%>
+</table>
+
+<p>There's more in his <a href="<%= @url %>">nuniverse</a></p>

@@ -61,7 +61,7 @@ class TaggingsController < ApplicationController
 				List.find_or_create(
 					:creator_id => current_user.id,
 					:label => Gum.purify(params[:query]),
-					:tag_id => @subject.id
+					:tag_id => @subject == current_user.tag ? nil : @subject.id 
 					)
 			else
 				@tag = Tag.find_or_create(
@@ -104,6 +104,7 @@ class TaggingsController < ApplicationController
 			@tagging = Tagging.with_exact_path(TaggingPath.new(params[:path])).first
 		end
 		#restrict_to(@tagging.authorized_users)
+		@list = params[:list] || nil
 		@selected = params[:selected].to_i || nil
 		@service = params[:service] || nil
 		@page = params[:page] || 1
@@ -166,10 +167,11 @@ class TaggingsController < ApplicationController
 			:description => params[:description] )
 			
 		Tagging.create(
-			:path => @tagging.full_path,
 			:object => @tag,
 			:subject => @tagging.object,
-			:owner => current_user)
+			:owner => current_user,
+			:kind => 'tag',
+			:description => 'bookmark')
 			
 		redirect_to @tagging, :service => params[:service] || nil	
 	end

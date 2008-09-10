@@ -1,4 +1,5 @@
+<% params ||= {}%>
 <div class="item <%= cycle('even','odd') %>">
   <%= thumbnail_tag(instance.object) %>
-  <h3><%= link_to_item(instance)%></h3>
+  <h3><%= link_to_item(instance, params)%></h3>
 </div>

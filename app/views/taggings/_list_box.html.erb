@@ -2,7 +2,7 @@
   <%= image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander") %>
   <% unless title.blank?%>
     <%= image_tag("/images/icons/#{kind}.png", :class => "icon", :alt => "")  rescue ""%>
-    <h2><%= link_to(title.capitalize, "/list/#{title}") rescue title.capitalize%></h2>
+    <h2><%= link_to(title.capitalize, list_url(title)) rescue title.capitalize%></h2>
   <% end -%>
   
   <%= spinner %>
@@ -11,7 +11,7 @@
     <%= render :partial => "/taggings/instance", :collection => items %>
   </div>
   <div class="actions">
-    <%= (link_to "Delete this list", source, :confirm => 'Are you sure?', :method => :delete) rescue "" %>
+    <%= (link_to "Delete this list", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete) rescue "" %>
     <%= link_to "+ Add", toggle, :class => "toggle" %>
   </div>
 </div>
