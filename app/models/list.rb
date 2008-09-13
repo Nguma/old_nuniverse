@@ -19,11 +19,12 @@ class List < ActiveRecord::Base
 	
 	def items(params = {})
 		params[:page] ||= 1
-		Tagging.with_user(self.creator).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label.singularize.downcase).split('#')).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
+		Tagging.with_users([self.contributors,self.creator].flatten).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label.singularize.downcase).split('#')).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	
 	def contributors(params = {})
-		Permission.for(self).paginate(params).collect {|c| c.user}
+		Permission.find(:all, :conditions => ["tags = ?", self.label]).collect {|c| c.user}
+		# Permission.for(self).paginate(params).collect {|c| c.user}
 	end
 	
 	

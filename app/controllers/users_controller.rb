@@ -28,7 +28,6 @@ class UsersController < ApplicationController
 
   def activate
     logout_keeping_session!
-		raise params[:activation_code].inspect
     user = User.find_by_activation_code(params[:activation_code]) unless params[:activation_code].blank?
     case
     when (!params[:activation_code].blank?) && user && !user.active?

@@ -62,18 +62,20 @@ ActionController::Routing::Routes.draw do |map|
 	  	
 	  	end
 	
+	# map.resources :admin, :page => 1 do |admin|
+	# 	admin.resources :users, :name_prefix => "user_"
+	# 	admin.resources :permissions, :name_prefix => "permission_"
+	# end
 
 			
 
   # 		
-  # 	map.with_options :controller => 'taggings' do |m|
-  # 		m.google '/google/:id', :action => 'show', :service => 'google'
-  # 		m.rate '/rate/:id/:stars', :action => 'rate'
-  # 		m.map '/locate/:id', :action => 'show', :service => 'map'
-  # 		m.bookmark '/bookmark/:path', :action => 'bookmark'
-  # 		m.connection '/my_nuniverse/:list/:id', :action => 'show', :list => 'all'
-  # 		# m.connection '/my_connections/:id', :action => 'show'
-  # 	end
+  	map.with_options :controller => 'taggings' do |m|
+  		m.google '/google/:id', :action => 'show', :service => 'google'
+  		m.rate '/rate/:id/:stars', :action => 'rate'
+  		m.map '/locate/:id', :action => 'show', :service => 'map'
+  		m.bookmark '/bookmark/:path', :action => 'bookmark'
+  	end
   # 	
   	map.command '/command', 
   		:controller => 'nuniverse',

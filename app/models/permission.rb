@@ -1,6 +1,6 @@
 class Permission < ActiveRecord::Base
 	belongs_to :user, :class_name => "User"
-	belongs_to :tagging, :class_name => "Tagging"
+	belongs_to :list, :class_name => "List", :foreign_key => 'tagging_id'
 	
 	validates_presence_of :tagging_id, :user_id
 	

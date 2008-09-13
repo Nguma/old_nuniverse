@@ -7,7 +7,8 @@ class ReaddTaggingKind < ActiveRecord::Migration
   end
 
   def self.down
-		add_index :taggings, [:subject_id, :object_id, :user_id], :unqiue => true
-		remove_column :taggings, :kind
+		add_index :taggings, [:subject_id, :object_id, :user_id], :unique => true
+		#remove_column :taggings, :kind
+		remove_index "unqiue_entries_index"
   end
 end

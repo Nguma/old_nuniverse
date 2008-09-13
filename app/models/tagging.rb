@@ -30,6 +30,10 @@ class Tagging < ActiveRecord::Base
     user.nil? ? {} : {:conditions => ["taggings.user_id = ?", user.id]}
   }
 
+	named_scope :with_users, lambda { |users| 
+		users.empty? ? {} : {:conditions => ["user_id in (?)", users]}
+	}
+
 	named_scope :with_kind_like, lambda { |kinds|
     kinds.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.kind rlike ?", "(^|#)#{kinds}($|#)"], :joins => :object}
   }

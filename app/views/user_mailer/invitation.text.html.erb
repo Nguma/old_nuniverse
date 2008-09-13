@@ -5,7 +5,9 @@
   <% @items.each_with_index do |item,i| %>
     <tr>
       <td>
-        <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="30px" />
+        <% unless item.object.thumbnail.blank? %>
+          <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="30px" />
+        <% end -%>
       </td>
       <td>
         <p>
@@ -19,5 +21,3 @@
 </table>
 
 <p>There's more in his <a href="<%= @url %>">nuniverse</a></p>
-
-<img src="cid:map@google.com" />

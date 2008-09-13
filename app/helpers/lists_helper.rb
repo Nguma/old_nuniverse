@@ -135,6 +135,7 @@ module ListsHelper
 	def contributors_box(params = {})
 		params[:source] ||= current_user
 		contributors = params[:source].contributors(:page => @page, :per_page => 5)
+		
 		render :partial => "/nuniverse/contributors", :locals => {:source => params[:source], :contributors => contributors}
 	end
 	

@@ -13,7 +13,7 @@ class UserMailer < ActionMailer::Base
   def activation(user)
     setup_email(user)
     @subject    += 'Your account has been activated!'
-    @body[:url]  = "http://www.nuniverse.net"
+    @body[:url]  = "http://www.nuniverse.net/my_nuniverse"
   end
 
 	def feedback(params)
@@ -43,13 +43,15 @@ class UserMailer < ActionMailer::Base
 		@body[:items].each_with_index do |item,i|
 
 		
-    part :content_type => "text/html",
-      :body => render_message('invitation.text.html.erb', @body)
-
-		inline_attachment :content_type => "image/jpeg", 
-		                  :body => File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
-		                  :filename => item.object.thumbnail,
-		                  :cid => "<#{item.object.thumbnail}@nuniverse.net>"
+			part 	:content_type => "text/html",
+			      		:body => render_message('invitation.text.html.erb', @body)
+		
+			unless item.object.thumbnail.blank?
+				inline_attachment :content_type => "image/jpeg", 
+				                  :body => File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
+				                  :filename => item.object.thumbnail,
+				                  :cid => "<#{item.object.thumbnail}@nuniverse.net>"
+			end
 		end
 		
 		
@@ -62,7 +64,7 @@ class UserMailer < ActionMailer::Base
 	
 	def activation_code(user)
 		setup_email(user)
-		@subject    += 'Please activate your new account'
+		@subject    += 'Your activation code'
 		@body[:user] = user
     @body[:url]  = "http://www.nuniverse.net/activate/#{user.activation_code}"
 	end

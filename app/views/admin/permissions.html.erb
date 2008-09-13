@@ -1,0 +1,23 @@
+<% nuniverse do -%>
+  <h1>Users</h1>
+  <div class="table">
+  <% @permissions.each do |permission| -%>
+    <div class="row">
+      <div class="cell">
+        <%= permission.list.label %>
+      </div>
+      <div class="cell">
+        granted by <%= permission.list.creator.label %>
+      </div>
+      <div class="cell">
+        to <%= permission.user.label %>
+      </div>
+      <div class="cell">
+          
+          <%#= link_to("delete", user, :confirm => 'Are you sure?', :method => :delete) %>
+      </div>
+    </div>
+    
+  <% end -%>
+  </div>
+<% end -%>
