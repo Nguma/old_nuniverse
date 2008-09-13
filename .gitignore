@@ -3,4 +3,5 @@ log/*.log
 **/*.DS_Store
 db/schema.rb
 public/avatars/*
+public/attachments/*
 tmp/*

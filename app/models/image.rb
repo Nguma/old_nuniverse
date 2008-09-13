@@ -7,7 +7,7 @@ class Image < ActiveRecord::Base
       							:large => '150x150>'
     							},
     							:processor  => :image_science,
-									:path_prefix => "public/avatars",
+									:path_prefix => "public/attachments",
 									:partition => true,
     							:storage    => :file_system
 
