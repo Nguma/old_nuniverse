@@ -3,7 +3,7 @@ module ImagesHelper
 	def avatar_for(source)
 		source = source.is_a?(Tagging) ? source.object : source
 		return nil if source.avatar.blank?
-		return image_tag(source.avatar, :alt => source.kind, :class => "avatar") rescue nil
+		return image_tag(source.avatar, :alt => source.avatar, :class => "avatar") rescue nil
 	end
 	
 	def icon_for(tag)
