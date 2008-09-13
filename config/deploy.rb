@@ -68,9 +68,9 @@ namespace :deploy do
 	  end
 	end
 	
-	after "deploy", "deploy:cleanup"
-	after "deploy:cleanup", "fix_attachment_fu"
-	after "fix_attachment_fu"
+	# after "deploy", "deploy:cleanup"
+	# 	after "deploy:cleanup", "fix_attachment_fu"
+	# 	after "fix_attachment_fu"
 	
 
   # task :after_cold do
