@@ -1,15 +1,32 @@
 module ListsHelper
 	
-	def link_to_list(list)
-		link_to(list.label.capitalize, list)
+	def list_hat(list)
+		title = ""
+		title << "#{list.tag.label.capitalize}: " if list.tag
+		title << list.label.capitalize
+		render :partial => "hat", :locals => {:title => title}
+	end
+	
+	def add_new_button(list)
+		command = "##{list.label} "
+		render :partial => "add_new_button", :locals => {:command => command}
 	end
 	
 	def link_to_item(item, params = {})
+		
 		if item.object.kind == "bookmark"
 			link_to("#{item.object.label.capitalize}", item.object.url)
 		else
-			url = "/taggings/#{item.id}?"
-			url << "list=#{params[:list].label}" if params[:list]
+			
+			if params[:source]
+				if params[:source].tag
+					url = item_with_tag_url(params[:source].tag,params[:source].label,  item)
+				else
+					url = item_url(params[:source].label, item)
+				end
+			else
+				url = item_url(item)
+			end
 			link_to(item.object.label.capitalize, url)
 		end
 	
@@ -30,14 +47,36 @@ module ListsHelper
 		str
 	end
 	
-	def sorting_options(elements, params = {})
-		str = '<div class="sorting_options">'
+	def sorting_options(params = {})
+		elements = [['By Name', 'name'],['By Latest', 'latest'],['By Rank', 'rank']]
+		str = '<ul class="tabs">'
 		elements.each do |element|
-			
-			str << link_to(element[0],same_uri_with(:order => element[1]), :class => (params[:selected] == element[1]) ? "current" : "")
+			str << "<li class=' #{params[:selected] == element[1] ? "current" : ""}'>"
+			str << link_to(element[0], listing_url(params[:source].label, :order => element[1]))
+			str << "</li>"
 		end
-		str << "</div>"
+		str << "</ul>"
 		str
+	end
+	
+	def view_options(source, params = {})
+		str = ""
+		options = [['View as list', 'list'],['View in images', 'image']]
+		options.each do |option|
+			str << "<li class ='#{params[:selected] == options[1] ? "current" : ""}'>"
+			str << link_to(option[0], listing_url(:list => source.label, :tag => source.tag, :mode => option[1]))
+			str << "</li>"
+		end
+		render :partial => "view_options", :locals => {:options => str} 
+	end
+	
+	def link_to_list(list, options = {})
+		title = options[:title] || list.label
+		if list.tag
+			link_to title.capitalize, listing_with_tag_url(list.tag,list.label)
+		else
+			link_to title.capitalize, listing_url(list.label)
+		end
 	end
 	
 	def list(params)
@@ -47,6 +86,7 @@ module ListsHelper
 		params[:items] ||= params[:source].items
 		params[:toggle] ||= "##{params[:kind].downcase.gsub(" ","_")} " 
 		params[:dom_id] ||= params[:title].pluralize
+		
 		render :partial => "/taggings/list_box", :locals => params
 	end
 	
@@ -64,16 +104,20 @@ module ListsHelper
 		boxes
 	end
 	
-	def people_box
-		list(:source => List.new(:creator => current_user, :label => "People"))
+	def people_box(params = {})
+		list(:source => List.new(:creator => @current_user, :label => "People", :tag => params[:source] || nil))
 	end
 	
-	def locations_box
-		list(:source => List.new(:creator => current_user, :label => "Places"))
+	def locations_box(params = {})
+		list(:source => List.new(:creator => @current_user, :label => "Locations", :tag => params[:source] || nil))
 	end
 	
-	def bookmarks_box
-		list(:source => List.new(:creator => current_user, :label => "Bookmarks"))
+	def bookmarks_box(params = {})
+		list(:source => List.new(:creator => @current_user, :label => "Bookmarks", :tag => params[:source] || nil))
+	end
+	
+	def comments_box(params = {})
+		render :partial => "/taggings/comments", :locals => {:source => params[:source]}
 	end
 	
 	def ad_box
@@ -84,8 +128,26 @@ module ListsHelper
 		render :partial => "/taggings/new_item"
 	end
 	
-	def contributors_box(source)
-		contributors = source.contributors(:page => @page, :per_page => 5)
-		render :partial => "/nuniverse/contributors", :locals => {:source => source, :contributors => contributors}
+	def new_list_button
+		render :partial => "/taggings/new_list"
+	end
+	
+	def contributors_box(params = {})
+		params[:source] ||= current_user
+		contributors = params[:source].contributors(:page => @page, :per_page => 5)
+		render :partial => "/nuniverse/contributors", :locals => {:source => params[:source], :contributors => contributors}
+	end
+	
+	def map_box(source)
+		@map = map(:source => source)
+		if @map
+			return render(:partial => "/nuniverse/map_box", :locals => {:map => @map})
+		elsif !source.is_a?(List)
+			return render(:partial => "/nuniverse/localize", :locals => {:items => google_localize(source)})
+		end
+	end
+	
+	def expander_icon
+		image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander")
 	end
 end

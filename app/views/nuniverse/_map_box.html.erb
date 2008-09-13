@@ -1,0 +1,10 @@
+<% content_for :head do -%>
+   <%= GMap.header (:small_zoom => true, :with_vml => false) %>
+   <%= map.to_html %>
+<% end -%>
+<div class="box" id="map_box">
+  <%= @map.div(:width => "100%", :height => 240, :style=>"position:relative") %>
+  <div class="actions">
+    <%= toggle(:label => "Change Address", :command => "#address ")%>
+  </div>
+</div>

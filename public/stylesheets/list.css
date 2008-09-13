@@ -7,17 +7,40 @@
 	clear:none;
 }
 
+#list .hover {
+	background:none;
+}
+
+#list .pagination {
+	padding:10px;
+}
+
+#list .pagination .current {
+	color:#FFF;
+}
+
 #list .items {
 	width:100%;
 	display:block;
+	padding:0;
+	margin:0;
+	background:#333;
 }
 
+
 #list .item {
+	position:relative;
 	padding:0;
-	background:#Efefef;
+	margin:0;
+	background:#efefef;
 	display:block;
 	width:100%;
 	min-height:60px;
+	border-top:dotted 2px #ccc;
+}
+
+#list .items .even {
+	
 }
 
 #list .item .thumbnail {
@@ -32,6 +55,11 @@
 #list .item h3 {
 	font-size:18px;
 	font-weight:bold;
-	line-height:3em;
-	padding:0 10px 0 10px;
+	line-height:1em;
+	padding:10px 10px 0 10px;
+}
+
+#list .item p {
+	font-size:12px;
+	
 }

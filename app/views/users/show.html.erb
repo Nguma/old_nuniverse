@@ -14,12 +14,12 @@
     <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag} rescue ""%>
   </div>
   
-  <% boxes = [ people_box, locations_box, bookmarks_box, ad_box, lists_for(current_user),   new_item_box].flatten %>
+  <% boxes = [ people_box, locations_box, bookmarks_box, ad_box, lists_for(current_user),   new_list_button].flatten %>
   
   <%= columnize(boxes,:size => 3) %>
 
 
 
 
-<%= render :partial => "/taggings/find_or_create", :locals => {:tagging => nil} %>
+<%= input(@source => nil)%>
 <% end -%>

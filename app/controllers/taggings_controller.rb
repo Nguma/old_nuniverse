@@ -79,18 +79,8 @@ class TaggingsController < ApplicationController
 										:owner => current_user, 
 										:subject_id => @subject.id, 
 									 	:object_id => @tag.id, 
-										:kind => "tag",
-										:description => k
+										:kind => k
 									)
-				# @tagging = Tagging.find_or_create(
-				# 							:label => Gum.purify(params[:query]), 
-				# 							:owner => current_user, 
-				# 							:subject_id => @subject.id, 
-				# 						 	:object_id => @tag.id || nil, 
-				# 							:path => @path,
-				# 							:kind => @kind == "list" ? "list" : nil,
-				# 							:description =>  ""
-				# 						)
 				end
 				
 
@@ -104,7 +94,9 @@ class TaggingsController < ApplicationController
 			@tagging = Tagging.with_exact_path(TaggingPath.new(params[:path])).first
 		end
 		#restrict_to(@tagging.authorized_users)
-		@list = params[:list] || nil
+		@list = params[:list] ? List.new(:label => params[:list], :creator => current_user, :tag_id => params[:tag]) : nil
+			
+
 		@selected = params[:selected].to_i || nil
 		@service = params[:service] || nil
 		@page = params[:page] || 1
@@ -170,8 +162,7 @@ class TaggingsController < ApplicationController
 			:object => @tag,
 			:subject => @tagging.object,
 			:owner => current_user,
-			:kind => 'tag',
-			:description => 'bookmark')
+			:kind => 'bookmark')
 			
 		redirect_to @tagging, :service => params[:service] || nil	
 	end

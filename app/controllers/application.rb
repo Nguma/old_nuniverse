@@ -34,6 +34,10 @@ class ApplicationController < ActionController::Base
 		raise "METHOD MISSING!!!"
 	end
 	
+	def redirect_to_default
+		raise "DEFAULT"
+	end
+	
 
 	protected
 	def invitation_required

@@ -3,7 +3,7 @@
     <%= link_to("See it as list", "/lists/#{@list.id}") %>
   <% end -%>
   <% content_for :right do -%>
-    <%= columnize(:boxes => images_for(@items), :size => 3)%>
+    <%= columnize(images_for(@items), :size => 3)%>
   <% end -%>
 <% else -%>
   <%# content_for :view_box do -%>
@@ -12,10 +12,12 @@
   <%# end -%>
   <% content_for :right do -%>
     <div class="box"  id="list">
-      
-        <div class="items">
+        <%= view_options(@list, :selected => "list")%>
+          
+        <div class="items" >
+          <%= sorting_options(:source => @list, :selected => @order)%>
           <%= will_paginate @items %>
-          <%= render :partial => "/taggings/instance", :collection => @items, :locals => {:params => {:list => @list}} %>
+          <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
         </div>
     </div>
   <% end -%>
@@ -23,26 +25,13 @@
 <% end -%>
 
 <% nuniverse(:selected => "My nuniverse") do -%>
-    <div class="hat">
-      <h1><%= @list.label.capitalize.pluralize %></h1>
-    </div
-    
+    <%= list_hat(@list)%>
     <div class="column" id="nav">
       <%= ad_box %>
-
-      <!-- <div class="box">
-             <h2>
-               <%#= yield :view_box %>
-             </h2>
-             
-           </div> -->
-           
-      <%= contributors_box(@list) %>
-      <div class="box" >
-        <h2><%= toggle(:label => "+ Add a new item", :kind => @list.label) %></h2>
-      </div>
-      <%= render :partial => "map", :locals => {:items => @items}%>
+      <%= add_new_button(@list) %>
+      <%= map_box(@list)%>
+      <%= contributors_box(:source => @list) %>
     </div>
     <%= yield :right %>
+    <%= input(:source => @list)%>
 <% end -%>
-<%= input(:source => @list)%>

@@ -1,8 +1,8 @@
 <div class="box list <%= dom_class %>" id="<%= dom_id %>" >
-  <%= image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander") %>
+  <%= expander_icon %>  
   <% unless title.blank?%>
     <%= image_tag("/images/icons/#{kind}.png", :class => "icon", :alt => "")  rescue ""%>
-    <h2><%= link_to(title.capitalize, list_url(title)) rescue title.capitalize%></h2>
+    <h2><%= link_to_list(source) %></h2>
   <% end -%>
   
   <%= spinner %>

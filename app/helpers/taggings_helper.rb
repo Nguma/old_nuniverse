@@ -1,17 +1,6 @@
 module TaggingsHelper
 	
-	def elements_proper_to_kind(tagging)
-		
-		case tagging.kind
-		when "list"
-			return ""
-		when "location"
-			return render :partial => "/taggings/info" , :locals => {:info => tagging.object.property('address')}
-		when "person"
-			return render :partial => "/taggings/info" , :locals => {:info => tagging.object.property('profession')}
-		else
-		end
-	end
+
 	
 	def save_button(item, tagging)
 		render :partial => "/taggings/bookmark", :locals => {:item => item, :tagging => tagging}
@@ -22,14 +11,25 @@ module TaggingsHelper
 			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
 			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
 		else
-			render :partial => "/taggings/#{tagging.kinds.first}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+			
+			render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
 		end
 	end
 	
 	def title_for(tagging, options ={})
-		str = "<h1>"
-		str << icon_for(tagging.object)
-		str << "#{options[:list]}: " if options[:list]
+		str = ""
+		str << "<h1><span style='font-size:30px;color:#999'>"
+		if options[:list]
+			
+			str << "#{options[:list].tag.label} " if options[:list].tag
+			# str << "#{options[:list].label}: " 
+		end
+		 
+		
+		#str << icon_for(tagging.object)
+		
+		str << link_to(tagging.kind.capitalize, "/my_nuniverse/all/#{tagging.kind}")
+		str << " </span>"
 		str << tagging.object.title
 		str << "<span class='service'>#{options[:service]}</span>" if options[:service]
 		str << "</h1>"

@@ -93,10 +93,10 @@ class Tag < ActiveRecord::Base
 		kind.split("#")
 	end
 	
-	def kind
-		return nil if super.nil?
-		super.split('#')[0]
-	end
+	# def kind
+	# 		return nil if super.nil?
+	# 		super.split('#').last
+	# 	end
 	
 	
 	def thumbnail
@@ -244,7 +244,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.find_or_create(params)
-		tag = Tag.with_label(params[:label]).with_kind_like(params[:kind]).find(:first)
+		tag = Tag.with_label(params[:label]).find(:first)
 		if tag.nil?
 			if params[:label].match(/^http:\/\/.+/)
 				tag = Tag.create(

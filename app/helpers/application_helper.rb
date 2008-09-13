@@ -72,4 +72,11 @@ module ApplicationHelper
 		new_uri
 		
 	end
+	
+	# this helper method takes a string, replaces all spaces with dashes, then strips out all non-letter, non-number, non-dashes
+	# it's good for generating URL-friendly titles
+	def strip_chars(string='')
+	  return '' if string.blank?
+	  string.gsub(' ','-').gsub(/[^a-z0-9\-]+/i, '')
+	end
 end

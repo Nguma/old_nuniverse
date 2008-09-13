@@ -1,14 +1,13 @@
 <div class="column nav">
   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
   <%= render :partial => "profile", :locals => {:tagging => @tagging}%>
-  <%= contributors_box(:source => @tagging)%>
-  <%= ad_box %>
+  
 </div>
 
 
 <div class="column" >
-  <%= map_box(@tagging) %>
-  <%= %>
+  <%= ad_box %>
+  <%= bookmarks_box(:source => @tagging.object) %>
 </div>
 
-<%= columnize([lists_for(@tagging), bookmarks_box(:source => @tagging.object)].flatten, :size => 2) %>
+<%= columnize([lists_for(@tagging),  amazon_box(:source => @tagging), new_list_button].flatten, :size => 1, :dom_classes => ['medium']) %>

@@ -6,16 +6,20 @@
 
 </div>
 <div class="column">
-  <%= map_box(@tagging) %>
   
+  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @items} %>
   <%= tag_box(:source => @tagging.object)%>
   
 </div>
-
 <div class="column medium" >
   <%#= render :partial => "profile", :locals => {:tagging=> @tagging} %>
 
-  <%= lists_for(@tagging)%>
+  <% @tagging.lists.each do |list| -%>
+    <%= list(:source => list) %>
+    
+  <% end -%>
+  
+
   <%= render :partial => "comments", :locals => {:source => @tagging}%>
   <%= bookmarks_box(:source => @tagging.object)%>
   

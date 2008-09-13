@@ -17,23 +17,25 @@ class ListsController < ApplicationController
   # GET /lists/1
   # GET /lists/1.xml
   def show
-   	if params[:id] 
-			@list = List.find(params[:id]) 
-		else
-			@list = List.find_by_label(params[:label])
-			@list = List.new(:creator => current_user, :label => params[:label]) if @list.nil?
+
+  	if params[:id] 
+   		@list = List.find(params[:id]) 
+   	else
+			@list = List.find(:first, :conditions => ['label = ? AND creator_id = ? AND tag_id = ?',params[:list],current_user, params[:tag]])
+			@list = List.new(:creator => current_user, :label => params[:list], :tag_id => params[:tag]) if @list.nil?
 		end
-		
-		
-		@selected = params[:selected].to_i || nil
-		@page = params[:page] || 1
-		@mode = params[:mode] || nil
-		@items = @list.items(:page => @page, :per_page => 10)  
-		
-		respond_to do |format|
-			format.html {}
-			format.js {render :action => "page", :layout => false}
-		end
+
+
+			@selected = params[:selected].to_i || nil
+			@page = params[:page]
+			@mode = params[:mode] || nil
+			@order = params[:order] || "name"
+			@items = @list.items(:page => @page, :per_page => 10, :order => @order)  
+
+			respond_to do |format|
+				format.html {}
+				format.js {render :action => "page", :layout => false}
+			end
   end
 
   # GET /lists/new

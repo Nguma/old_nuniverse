@@ -43,25 +43,17 @@ class Tagging < ActiveRecord::Base
 			:select => "taggings.*",
 			:joins => :object,
 			
-			:conditions => ["taggings.kind IS NOT NULL AND CONCAT(taggings.description,'#',tags.label) rlike ?","(^|#)(#{tags.join("|")})($|#)"],
+			:conditions => ["taggings.kind IS NOT NULL AND CONCAT(taggings.kind,'#',tags.label) rlike ?","(^|#)(#{tags.join("|")})($|#)"],
 			:group => "object_id HAVING COUNT(*) >= #{tags.length} "
 					
 		}
 
 	}
 	
-	named_scope :tags, lambda { |object|
-		{
-			:select => "taggings.* ", 
-			:conditions => ["taggings.kind = 'tag' AND object_id = ? ", object.id],
-			:group => 'description'
-		}	
-	}
-	named_scope :groupped, :group => "object_id"
-	named_scope :with_order, lambda { |order|
+	named_scope :order_by, lambda { |order|
 		case order
 		when "name"
-			{:select => "taggings.*", :joins => :object, :order => "tags.label ASC"}
+			{ :order => "tags.label ASC"}
 		when "latest"
 			{:order => "taggings.updated_at DESC"}
 		when "rank"
@@ -70,6 +62,16 @@ class Tagging < ActiveRecord::Base
 			{:order => "taggings.created_at ASC"}
 		end
 	}
+	
+	named_scope :tags, lambda { |object|
+		{
+			:select => "taggings.* ", 
+			:conditions => ["taggings.kind IS NOT NULL AND object_id = ? ", object.id],
+			:group => 'taggings.kind'
+		}	
+	}
+	named_scope :groupped, :group => "object_id"
+	
 	
 	
 	def lists
@@ -81,13 +83,10 @@ class Tagging < ActiveRecord::Base
 		object.kinds
 	end
 	
-	def kind
-		kinds.last
-	end
 	
 	def info
 		return description unless description.blank?
-		return object.info
+		return "#{object.property('address')} - #{object.property('tel')}"
 	end
 	
 	def label
@@ -121,7 +120,7 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def add_image(params)
-		object.add_iamge(params)
+		object.add_image(params)
 	end
   
 
@@ -137,14 +136,14 @@ class Tagging < ActiveRecord::Base
 
 	def self.find_or_create(params)
 		params[:kind] ||= nil
-		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND description = ?', params[:subject_id], params[:object_id],  params[:owner], params[:description]])
+		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND kind = ?', params[:subject_id], params[:object_id],  params[:owner], params[:kind]])
 		tagging = Tagging.create(
 			:subject_id => params[:subject_id], 
 			:object_id => params[:object_id], 
 			:path => params[:path], 
 			:user_id => params[:owner].id,
-			:description => params[:description],
-			:kind => params[:kind] || nil
+			:kind => params[:kind] || nil,
+			:description => params[:description] || nil
 		) if tagging.nil? rescue nil
 		tagging
 	end

@@ -1,9 +1,11 @@
 <% if @mode %>
   <%= columnize(:boxes => images_for(@items), :size => 3)%>
 <% else -%>
-  <%= will_paginate @items %>
+  
     <div class="items">
-      <%= render :partial => "/taggings/instance", :collection => @items %>
+      <%= sorting_options(:source => @list, :selected => @order)%>
+      <%= will_paginate @items %>
+      <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
     </div>
   
 <% end -%>

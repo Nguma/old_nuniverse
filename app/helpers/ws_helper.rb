@@ -19,6 +19,11 @@ module WsHelper
 		)
 	end
 	
+	def amazon_box(params)
+		items = Finder::Search.find(:query => params[:source].label, :service => 'amazon')
+		render :partial => "/nuniverse/amazon_box", :locals => {:source => params[:source], :items => items}
+	end
+	
 
 	
 	def page_from_wikipedia(params)
@@ -60,12 +65,16 @@ module WsHelper
 	def map(params)
 		map = GMap.new("map_div")
 	  map.control_init(:small_zoom => true)
+		#icon_loc = GIcon.new(:image => "public/images/icons/location.png", :icon_size => GSize.new(15,15),:icon_anchor => GPoint.new(7,7),:info_window_anchor => GPoint.new(9,2))
 	
-		if !params[:source] || params[:source].is_a?(List) 
-			# items = Tagging.with_path_ending(params[:path].with_address_or_geocode().paginate(:page => 1, :per_page => 10))
-			items = params[:items].collect{|c| c.object }
+		if params[:source].is_a?(List) 
+		#items = Tagging.with_path_ending(params[:path].with_address_or_geocode().paginate(:page => 1, :per_page => 10))
+			items = params[:source].items.collect{|c| c.object }
 			markers = markers_for(items)
+		elsif params[:source].is_a?(Tagging)
+			markers = markers_for([params[:source].object])
 		else
+			
 			markers = markers_for([params[:source]])
 		end
 		
@@ -74,9 +83,9 @@ module WsHelper
 			# return render(:partial => "/nuniverse/maps", :locals => {:no_map => true, :path => params[:path]})
 		else
 			 #@map.center_zoom_init([-37,-49],10)
-			map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],13)
+			map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],12)
 			markers.each do |marker|
-				map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => marker.label.rstrip))
+				map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "<b>#{marker.label.rstrip}</b> <p style='font-size:11px'>#{marker.property('address')}</p>"))
 			end
 			return map
 			# html = "<script type='text/javascript' charset='utf-8'>
@@ -118,13 +127,13 @@ module WsHelper
 		# 		}
 	end
 	
-	def google_localize(tagging)
-		if tagging.subject.has_address?
-			sll = tagging.subject.coordinates.join(',')
+	def google_localize(source)
+		if source.subject.has_address?
+			sll = source.subject.coordinates.join(',')
 		else
 			sll = Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"	
 		end
-		Googleizer::Request.new(tagging.object.label, :mode => "local").response(:sll => sll).results
+		Googleizer::Request.new("#{source.label} #{source.kind}", :mode => "local").response(:sll => sll).results
 	end
 	
 	def details_for(params)

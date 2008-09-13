@@ -14,15 +14,26 @@ class NuniverseController < ApplicationController
 			@input = params[:input]
 		end
 		
-		@source = params[:list] ? List.find(params[:list]) : Tagging.find(params[:tagging])
-		@source = @source.nil? ? current_user : @source
+		if params[:list]
+			@source =  List.labeled(params[:list]).created_by(current_user).first
+			@subject = @source.tag if @source && @source.tag
+		elsif params[:tagging]
+			@source = Tagging.find(params[:tagging])
+			@subject = @source.object
+		end
+			
+		@source = current_user if @source.nil?
+		@subject = current_user.tag if @subject.nil?		
 		
 		case @kind
+		when "address","tel","zip"
+			@subject.replace_property(@kind, @input)
+			@subject.save
 		when "image"
 			@source.add_image(:source_url => @input)
 		when "description"
-			@tagging.description = @input
-			@tagging.save
+			@source.description = @input
+			@source.save
 		when "invite"
 			@user = User.find(:first, :conditions => ["email = ?",@input])
 			if @user.nil?
@@ -37,6 +48,20 @@ class NuniverseController < ApplicationController
 				:label => Gum.purify(@input),
 				:tag_id => @source == current_user ? nil : @source.object.id 
 				)
+		when "tag"
+			
+			@tag = Tag.find_or_create(
+				:label => Gum.purify(@input), 
+				:kind => @kind
+			)
+			
+			Tagging.find_or_create(
+				:owner => current_user,
+				:subject_id => @subject.id,
+				:object_id => @tag.id,
+				:kind => @input,
+				:description => "#{@subject.label} #{@tag.label}"
+			)
 		else
 			@tag = Tag.find_or_create(
 				:label => Gum.purify(@input), 
@@ -50,10 +75,9 @@ class NuniverseController < ApplicationController
 			)
 			Tagging.find_or_create( 
 									:owner => current_user, 
-									:subject_id => @subject.id, 
+									:subject_id => @subject.id , 
 								 	:object_id => @tag.id, 
-									:kind => "tag",
-									:description => k
+									:kind => k
 								)
 			end
 		end

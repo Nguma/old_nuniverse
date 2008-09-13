@@ -1,7 +1,7 @@
 <div class="column">
   <%= render :partial => "profile", :locals => {:tagging => @tagging}%>
-  <%= render :partial => "contributors", :locals => {:tagging => @tagging}%>
-  <%= render :partial => "ads" %>
+  <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
+  <%= ad_box %>
   <%= render :partial => "options", :locals => {:tagging => @tagging }%>
 </div>
 <div class="column" style="width:50%">
@@ -10,7 +10,7 @@
 </div>
 
 <div class="column">
-  <%= render :partial => "map", :locals => {:tagging => @tagging, :items => @tagging.connections(:kind => 'location')}%>
-  <%= render :partial => "locations", :locals => {:source => @tagging }%>
-  <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
+  <%= map_box(@tagging) %>
+  <%= bookmarks_box(:source => @tagging.object )%>
+  <%#= render :partial => "bookmarks", :locals => {:source => @tagging}%>
 </div>

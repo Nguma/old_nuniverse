@@ -6,7 +6,7 @@
   <div class="items" >
     <%= will_paginate comments %>
     <% comments.each do |comment| -%>
-      <div class="item">
+      <div class="item <%= comment.kinds.last %>_kind">
         
         <h3><%= thumbnail_tag(comment.owner.tag) %> "<%= comment.label.capitalize %>"</h3>
       </div>

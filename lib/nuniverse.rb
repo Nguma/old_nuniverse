@@ -41,12 +41,14 @@ module Nuniverse
 				'on the way to' => 'location',
 				'event' => 'event',
 				'address' => 'address',
+				'favorite people' => 'favorite#person',
+				'favorite movie' => 'favorite#film',
 				'message' => '',
 				'lcoation' => 'location',
 				'lcoatuon' => 'location',
 				'perosn' => 'person',
-				'film' => 'movie',
-				'flick' => 'movie',
+				'movie' => 'film',
+				'flick' => 'film',
 				'pro' => 'comment#pro',
 				'con' => 'comment#con',
 				'painting' => 'artwork#painting',
@@ -76,6 +78,7 @@ module Nuniverse
 				'truck' => 'vehicle#truck',
 				'bike' => 'vehicle#bike',
 				'plane' => 'vehicle#plane',
+				'menu' => 'dish',
 				'\'s' => nil,
 				'a'=> nil,
 				'the' => nil,
@@ -87,7 +90,7 @@ module Nuniverse
 		end
 		
 		def self.match(kind_str)
-			kind_str.split(/_|\s/).collect {|k| self.list[k.singularize] || k.singularize }.join('#')
+			kind_str.downcase.gsub('_',' ').collect {|k| self.list[k.singularize] || k.singularize }.join('#')
 		end
 		
 		def self.hash	

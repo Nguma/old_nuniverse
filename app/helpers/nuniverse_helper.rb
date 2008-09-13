@@ -62,8 +62,8 @@ module NuniverseHelper
 		params[:dom_classes] ||= []
 		cols = []
 		boxes.each_with_index do |box, i|
-			(cols[i%params[:size]] ||= "") << box
 		
+			(cols[i%params[:size]] ||= "") << box
 		end
 		cols.each_with_index do |col, i|
 			col_html = render :partial => "/nuniverse/column", :locals => {

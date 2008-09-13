@@ -1,0 +1,18 @@
+<dl class="connections">
+<% connections.each do |item| %>
+  <dd class="connection <%= cycle('even','odd') %>">
+    <%= render :partial => "/taggings/manage" , :locals => {
+      :connection => nil,
+      :path => section.path,
+      :tag => item
+    }%>
+      <%= image_tag(item.thumbnail,:class => "image")%>
+     <h3>
+        <%= link_to_object(item) %>
+      </h3>
+      
+      <p><%=  "#{item.precision} #{item.price}" %></p>
+      <div class="delimiter">&nbsp;</div>
+  </dd>
+<% end -%>
+</dl>

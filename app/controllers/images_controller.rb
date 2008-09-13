@@ -24,7 +24,7 @@ class ImagesController < ApplicationController
 		@tag = Tag.create(
 			:label => params[:Filename],
 			:kind => 'image',
-			:image => Image.new (:uploaded_data => params[:Filedata]),
+			:image => Image.new(:uploaded_data => params[:Filedata]),
 			:description => '')
 		if params[:path] && @tag
 			subject = TaggingPath.new(params[:path]).last_tag

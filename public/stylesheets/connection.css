@@ -193,6 +193,15 @@ dl.properties dd {
 	background:none;
 }
 
+#comments .con_kind {
+	background:#ef9090;
+}
+
+#comments .pro_kind {
+	background:#cfef90;
+}
+
+
 #comments h3 {
 	color:#333;
 	font-size:15px;

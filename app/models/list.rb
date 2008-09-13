@@ -3,19 +3,23 @@ class List < ActiveRecord::Base
 	belongs_to :tag, :class_name => 'Tag'
 	belongs_to :creator, :class_name => 'User'
 	#after_create :create_tag
-	cattr_reader :per_page
-  @@per_page = 5
+
 
 	named_scope :bound_to, lambda { |bind| 
 			bind.nil? ? {:conditions => 'tag_id IS NULL'} : {:conditions => ['tag_id = ?', bind.id]}
 	}
+	
 	named_scope :created_by, lambda { |user| 
 		{:conditions => ['creator_id = ?', user.id]}
 	}
 	
+	named_scope :labeled, lambda { |label| 
+		{:conditions => ['label = ?', label]}
+	}
+	
 	def items(params = {})
 		params[:page] ||= 1
-		Tagging.with_user(self.creator).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label).split('#')).paginate(params)
+		Tagging.with_user(self.creator).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label.singularize.downcase).split('#')).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	
 	def contributors(params = {})

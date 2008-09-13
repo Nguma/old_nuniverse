@@ -2,10 +2,10 @@
 <p><%= h @sender.login.capitalize %> is sharing with you <h3><%= @to.label.capitalize %></h3></p>
 <table>
   
-  <% @to.items(:page => 1, :per_page => 8).each do |item| %>
+  <% @items.each_with_index do |item,i| %>
     <tr>
       <td>
-        <%= image_tag(item.object.thumbnail, :alt => item.object.kind) rescue nil%>
+        <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="30px" />
       </td>
       <td>
         <p>
@@ -19,3 +19,5 @@
 </table>
 
 <p>There's more in his <a href="<%= @url %>">nuniverse</a></p>
+
+<img src="cid:map@google.com" />

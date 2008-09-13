@@ -1,6 +1,6 @@
 <div class="box" id="tag_box">
   <h2>Tags</h2>
   <% items.each do |item| -%>
-    <%= link_to(item.description.capitalize, "/about/#{item.description}") %>
+    <%= link_to(item.kind.capitalize, "/about/#{item.kind}") %>
   <% end -%>
 </div>

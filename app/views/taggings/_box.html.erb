@@ -1,7 +1,7 @@
 <div class="box <%= dom_class %>" id="<%= dom_id %>" >
   <% unless title.blank?%>
     <%= thumbnail_tag(source.object) rescue ""%>
-    <h2><%= link_to(title, source) rescue title.capitalize%></h2>
+    <h2><%= link_to(title, "/my_nuniverse/#{title}") %></h2>
   <% end -%>
   
   <%= spinner %>

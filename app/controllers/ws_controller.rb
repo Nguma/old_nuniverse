@@ -14,8 +14,6 @@ class WsController < ApplicationController
 		render :co => false
 	end
 	
-	def grab
-		@content = params[:c]
-	end
+
 	
 end

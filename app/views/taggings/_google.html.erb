@@ -13,11 +13,10 @@
    <div class="box">
      <div class="items" style="display:block">
         <% @items.each_with_index do |item,i| -%>
-         <div class="item">
+         <div class="item" style="padding:8px 100px 8px 8px;">
            <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
 
-           <h3 style="padding-right:100px">
-             <span class="rank"><%= (i+1)  %></span>
+           <h3 style="font-weight:bold;font-size:16px;padding:0">
              <%= link_to(item.label.capitalize, item.url)%>
            </h3>
            <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
