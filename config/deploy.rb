@@ -93,10 +93,10 @@ namespace :deploy do
     #   ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
     # CMD
     
-    # sudo <<-CMD
-    #      rm -fr #{release_path}/public/avatars &&
-    #      ln -nfs #{shared_path}/images #{release_path}/public/avatars
-    #    CMD
+    sudo <<-CMD
+         rm -fr #{release_path}/public/attachments &&
+         ln -nfs #{shared_path}/attachments #{release_path}/public/attachments
+       CMD
     
     # sudo <<-CMD
     #   rm -fr #{release_path}/tmp/.ruby_inline &&
