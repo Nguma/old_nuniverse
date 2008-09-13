@@ -34,17 +34,7 @@ task :echo_vars do
   pp variables[:default_environment]
 end
 
-task :after_update_code, :roles => :app do
-  %w{attachments}.each do |share|
-    run "rm -rf #{release_path}/public/#{share}"
-    run "mkdir -p #{shared_path}/system/#{share}"
-    run "ln -nfs #{shared_path}/system/#{share} #{release_path}/public/#{share}"
-  end
-end
 
-after "deploy", "deploy:cleanup"
-after "deploy:cleanup", "fix_attachment_fu"
-after "fix_attachment_fu"
 
 namespace :deploy do
   task :after_setup do
@@ -69,6 +59,20 @@ namespace :deploy do
     start
   end
     
+
+	task :after_update_code, :roles => :app do
+	  %w{attachments}.each do |share|
+	    run "rm -rf #{release_path}/public/#{share}"
+	    run "mkdir -p #{shared_path}/system/#{share}"
+	    run "ln -nfs #{shared_path}/system/#{share} #{release_path}/public/#{share}"
+	  end
+	end
+	
+	after "deploy", "deploy:cleanup"
+	after "deploy:cleanup", "fix_attachment_fu"
+	after "fix_attachment_fu"
+	
+
   # task :after_cold do
   #   sphinx.index
   #   sphinx.start
