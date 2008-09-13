@@ -25,4 +25,4 @@ temp = Tempfile.new('ruby_inline', '/tmp')
 dir = temp.path
 temp.delete
 Dir.mkdir(dir, 0755)
-ENV['INLINEDIR'] = dir
+ENV['INLINEDIR'] = RAILS_ROOT + '/tmp'
