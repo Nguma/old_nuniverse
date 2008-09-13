@@ -50,9 +50,9 @@ namespace :deploy do
     image_science.install    
   end
   
-  task :after_update do
-    # sudo "cp #{release_path}/config/database.example.yml #{release_path}/config/database.yml"
-  end
+  # task :after_update do
+  #    # sudo "cp #{release_path}/config/database.example.yml #{release_path}/config/database.yml"
+  #  end
   
   task :restart do
     stop
@@ -60,7 +60,7 @@ namespace :deploy do
   end
     
 
-	task :after_update_code, :roles => :app do
+	task :after_update, :roles => :app do
 	  %w{attachments}.each do |share|
 	    run "rm -rf #{release_path}/public/#{share}"
 	    run "mkdir -p #{shared_path}/system/#{share}"
