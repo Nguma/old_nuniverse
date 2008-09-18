@@ -13,8 +13,8 @@
     <% end -%>
   </div>
   <div class="actions">
-    <%= link_to "+ Add a comment", "#comment ", :class => "toggle" %>
-    <%= link_to "+ Add a pro", "#pro ", :class => "toggle" %>
-    <%= link_to "+ Add a con", "#con ", :class => "toggle" %>
+    <%= command(:label => "+ Add a comment", :command => "comment ") %>
+    <%= command(:label => "+ Add a pro", :command => "pro ") %>
+    <%= command(:label => "+ Add a con", :command => "con ") %>
   </div>
 </div>

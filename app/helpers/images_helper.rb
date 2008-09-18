@@ -16,8 +16,11 @@ module ImagesHelper
 	end
 	
 	
-	def images_for(collection)
-		collection.collect {|c| render :partial => "/images/box", :locals => {:source => c}}
+	def images_for(collection, params = {})
+		params[:source] ||= nil
+		collection.collect {|c| 
+			render :partial => "/images/box", :locals => {:item => c, :source => params[:source]}
+		 }
 	end
 	
 end

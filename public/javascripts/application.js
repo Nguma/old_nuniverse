@@ -13,14 +13,23 @@ function reset()
         $('input_box').addClass('hidden');
         break;
       case "enter":
-        if($('input').getProperty('value').match(/^\#invite/) && $('extra_input').hasClass('hidden'))
+        
+        if(isCommand(/^invite/) && $('extra_input').hasClass('hidden'))
         {
           $('extra_input').removeClass('hidden');
           $('extra_input').focus();
+          $('input_info').set('text','Add a message or Press enter to send');
+        } else if(!isDoubleEnter() && !$('extra_input').hasClass('hidden'))
+        {
+          $('input_info').set('text','Are you done? Press Enter');
+          $('extra_input').setProperty('rows', (Number($('extra_input').getProperty('rows'))+1));
         } else
         {
-          $('input_box').getElement('form').submit();
+          
+          $('input_box').getElement('form').submit(); 
+          
         }
+        
         
         
         break;
@@ -28,6 +37,9 @@ function reset()
         if($('input_box').hasClass('hidden')) {
           $('input_box').removeClass('hidden');
           $('input').focus();
+        } else
+        {
+          $('input_info').set('text','');
         }
     }
     
@@ -68,10 +80,11 @@ function reset()
   });
   
   
-  $$('.toggle').each(function(toggle) {
-    toggle.addEvent('click', function(ev) {
+  $$('.command').each(function(command) {
+    command.addEvent('click', function(ev) {
+      ev.preventDefault();
       $('input_box').removeClass('hidden');
-      $('input').setProperty('value', toggle.getProperty('href'));
+      $('command').setProperty('value', command.getProperty('href'));
       $('input').focus();
     });
   });
@@ -221,4 +234,14 @@ function debug(msg)
 function onAvatar(img)
 {
   $('image').set('html',img)
+}
+
+function isCommand(command) {
+  return $('command').getProperty('value').match(command)
+}
+
+function isDoubleEnter() {
+  var str = $('extra_input').getProperty('value')
+  if(str.substr(-1,1) == '\n') { return true;}
+  return false;
 }

@@ -1,13 +1,24 @@
-<div class="box" id="contributors">
+<div class="box" id="permissions">
   <h2>Shared with</h2>
-    <% if contributors.empty? -%>
+    <% if permissions.empty? -%>
       <h3>No one, yet.</h3>
     <% else -%>
-      <ul>
-        <% contributors.each do |contributor| -%>
-         <%= contributor.label %>
+      <div class="items" style="display:block">
+        <% permissions.each do |permission| -%>
+          <div class="item" style="color:#666;padding:5px;background:#ececec">
+          <% if permission.grantor_id == current_user.id -%>
+          <%= image_tag("/images/icons/grantor.png", :class => "permission_icon", :alt => "Invited")%>
+            <%= permission.granted.label %> 
+          <% else -%>
+          <%= image_tag("/images/icons/granted.png", :class => "permission_icon", :alt => "Sharing his items")%>
+            <%= permission.grantor.label %>
+            
+          <% end -%>
+          </div>
         <% end -%>
-      </ul>
+      </div>
     <% end -%>
-    <%= toggle(:label => "+ Invite someone", :command => "#invite ") %>
+    <div class="actions">
+      <%= command(:label => "+ Invite someone", :command => "invite") %>
+    </div>
 </div>

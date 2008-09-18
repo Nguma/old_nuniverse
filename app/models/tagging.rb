@@ -21,7 +21,7 @@ class Tagging < ActiveRecord::Base
     path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "^_%s_$" % path.ids.join('_')]}
   }
   named_scope :with_subject, lambda { |subject|
-    subject.nil? ? {} : {:select => "taggings.*",:conditions => ["subject_id = ?", subject.id]}
+    subject.nil? ? {} : {:conditions => ["subject_id = ?", subject.id]}
   }
   named_scope :with_object, lambda { |object|
     object.nil? ? {} : {:select => "taggings.*",:conditions => ["object_id = ?", object.id]}
@@ -44,11 +44,11 @@ class Tagging < ActiveRecord::Base
 
 	named_scope :with_tags, lambda { |tags|
 		{
-			:select => "taggings.*",
+			:select => "DISTINCT taggings.*",
 			:joins => :object,
 			
 			:conditions => ["taggings.kind IS NOT NULL AND CONCAT(taggings.kind,'#',tags.label) rlike ?","(^|#)(#{tags.join("|")})($|#)"],
-			:group => "object_id HAVING COUNT(*) >= #{tags.length} "
+			:group => "object_id HAVING COUNT(object_id) >= #{tags.length} "
 					
 		}
 
@@ -75,6 +75,7 @@ class Tagging < ActiveRecord::Base
 		}	
 	}
 	named_scope :groupped, :group => "object_id"
+	
 	
 	
 	
@@ -127,8 +128,9 @@ class Tagging < ActiveRecord::Base
 		object.add_image(params)
 	end
   
-
-  
+	def properties
+		self.connections(:kind => "property")
+	end
 
 	def move(original_path, new_path)
 	  Tagging.transaction do
@@ -188,7 +190,7 @@ class Tagging < ActiveRecord::Base
 		return false
 	end
 	
-	def toggle
+	def command
 		return self.label.split(' ').last.singularize
 	end
 	

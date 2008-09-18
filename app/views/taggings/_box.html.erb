@@ -1,13 +1,4 @@
-<div class="box <%= dom_class %>" id="<%= dom_id %>" >
-  <% unless title.blank?%>
-    <%= thumbnail_tag(source.object) rescue ""%>
-    <h2><%= link_to(title, "/my_nuniverse/#{title}") %></h2>
-  <% end -%>
-  
-  <%= spinner %>
-  <div class="items" >
-    <%#= will_paginate(items, :params => {:kind => kind}) %>
-    <%#= render :partial => "/taggings/instance", :collection => items %>
-  </div>
-
+<div class="box" >
+  <%= thumbnail_tag(item.object)%>
+  <h3><%= link_to_item(item, :list => params[:list]) %></h3>
 </div>

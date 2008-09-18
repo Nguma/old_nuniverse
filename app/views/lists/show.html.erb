@@ -1,37 +1,26 @@
-<% if @mode %>
-  <% content_for :view_box do -%>
-    <%= link_to("See it as list", "/lists/#{@list.id}") %>
-  <% end -%>
-  <% content_for :right do -%>
-    <%= columnize(images_for(@items), :size => 3)%>
-  <% end -%>
-<% else -%>
-  <%# content_for :view_box do -%>
-    <%#=  link_to("See it in images", "/list/#{@list.label}?mode=image") %>
-    
-  <%# end -%>
-  <% content_for :right do -%>
-    <div class="box"  id="list">
-        <%= view_options(@list, :selected => "list")%>
-          
-        <div class="items" >
-          <%= sorting_options(:source => @list, :selected => @order)%>
-          <%= will_paginate @items %>
-          <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
-        </div>
-    </div>
-  <% end -%>
-  
-<% end -%>
-
 <% nuniverse(:selected => "My nuniverse") do -%>
     <%= list_hat(@list)%>
     <div class="column" id="nav">
       <%= ad_box %>
       <%= add_new_button(@list) %>
-      <%= map_box(@list)%>
+      <%= map_box(@list, :page => @Page)%>
       <%= contributors_box(:source => @list) %>
     </div>
-    <%= yield :right %>
+    <% if @mode ==  "image" -%>
+        <%= view_options(@list, :selected => "image")%>
+        <%= columnize(images_for(@items, :source => @list), :size => 3)%>
+    <% elsif @mode == "icon" -%>
+        <%= view_options(@list, :selected => "icon")%>
+        <%= columnize(boxes_for(@items, :source => @list), :size => 3)%>
+    <% else -%>
+        <%= view_options(@list, :selected => "list")%>
+        <div class="box"  id="list">  
+          <div class="items" >  
+            <%= sorting_options(:source => @list, :selected => @order)%>
+            <%= will_paginate @items %>
+            <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
+          </div>
+        </div>
+    <% end -%>
     <%= input(:source => @list)%>
 <% end -%>

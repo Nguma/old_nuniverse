@@ -31,7 +31,7 @@ class ListsController < ApplicationController
 			@mode = params[:mode] || nil
 			@order = params[:order] || "name"
 			@items = @list.items(:page => @page, :per_page => 10, :order => @order)  
-
+	
 			respond_to do |format|
 				format.html {}
 				format.js {render :action => "page", :layout => false}
@@ -96,7 +96,7 @@ class ListsController < ApplicationController
     @list.destroy
 
     respond_to do |format|
-      format.html { redirect_back_or_default(lists_url) }
+      format.html { redirect_back_or_default("/my_nuniverse") }
       format.xml  { head :ok }
     end
   end

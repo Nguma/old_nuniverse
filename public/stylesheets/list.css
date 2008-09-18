@@ -53,13 +53,22 @@
 }
 
 #list .item h3 {
-	font-size:18px;
+	font-size:14px;
 	font-weight:bold;
 	line-height:1em;
 	padding:10px 10px 0 10px;
 }
 
+#list .item h3 a {
+	font-weight:inherit;
+}
+
 #list .item p {
 	font-size:12px;
 	
+}
+
+#list .box h2 a {
+	font-size:16px;
+	font-weight:bold;
 }

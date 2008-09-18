@@ -41,39 +41,6 @@
 	
 }
 
-#input_box {
-	border:none;
-	position:fixed;
-	bottom:0px;
-	padding:5px;
-	margin:0 0 0 0;
-	background:#333;
-	width:auto;
-	width:90%;
-}
-
-#input_box fieldset {
-	border:none;
-}
-
-#input_box #input,
-#extra_input {
-	background:none;
-	border:none;
-/*	border-bottom:solid 1px #666;*/
-	font-size:30px;
-	font-weight:normal;
-	color:#FFF;
-	width:100%;
-	margin: 5px 0 0 0;
-	padding:1px 1px 3px 1px;
-}
-
-#input_box textarea {
-	height:100px;
-}
-
-
 .nuniverse .selected {
 	height:100px;
 }

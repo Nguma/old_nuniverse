@@ -4,5 +4,5 @@
     
   <%= render :partial => "instance", :collection => source.connections(:kind => 'location') %>
   </div>
-  <%= link_to("+ Add a location", "#location ", :class => "toggle")%>
+  <%= command(:label => "+ Add a location", :command => "location")%>
 </div>

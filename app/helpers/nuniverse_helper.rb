@@ -62,7 +62,6 @@ module NuniverseHelper
 		params[:dom_classes] ||= []
 		cols = []
 		boxes.each_with_index do |box, i|
-		
 			(cols[i%params[:size]] ||= "") << box
 		end
 		cols.each_with_index do |col, i|
@@ -79,9 +78,9 @@ module NuniverseHelper
 	end
 	
 	
-	def toggle(params)
-		params[:command]  ||= "##{params[:kind].gsub(' ','_').singularize} "
-		link_to(params[:label],params[:command],:class => 'toggle')
+	def command(params)
+		params[:command]  ||= "#{params[:kind].gsub(' ','_').singularize}"
+		link_to(params[:label],params[:command],:class => 'command')
 	end
 	
 	def input(params)

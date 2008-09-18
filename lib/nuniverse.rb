@@ -103,6 +103,14 @@ module Nuniverse
 			
 		end
 		
+		def self.analyze(input)
+			if pop = input.downcase.match(/\b(a|the|my|some|many|every|all|your|her|his|our)?\b(.+)\b(of|to|at|in)\b(.+)/)
+				raise "subject: #{pop[1]}"
+			elsif pop = input.downcase.match(/\b(a|the|my|some|many|every|all|your|her|his|our)?\b(.+)\b(.+)\b$/)
+				raise "subjects: #{pop[3]}"
+			end
+		end
+		
 
 	end
 	

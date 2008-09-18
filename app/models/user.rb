@@ -86,8 +86,9 @@ class User < ActiveRecord::Base
 	
 	def invite(params)
 		Permission.create(
-			:tagging_id => params[:to].id,
-			:user => params[:user])
+			:grantor_id => self.id,
+			:granted_id => params[:user].id,
+			:tags => params[:to].label)
 		UserMailer.deliver_invitation(:to => params[:to], :user => params[:user], :message => params[:message] || "", :sender => self)
 	end
 	

@@ -4,11 +4,11 @@
     <% items.each do |item| -%>
           <div class="item">
             <h3>
-              <%= link_to(item.label, "/taggings/update/#{@tagging.id}?address=#{CGI::escape(item.property('address'))}&latlng=#{item.property('latlng')}") %>
+              <%= link_to(item.label, "/taggings/update/#{@tagging.id}?address=#{CGI::escape(item.property('address'))}&latlng=#{item.property('latlng')}&tel=#{item.property('tel')}") %>
             </h3>
             <p><%= item.property('address') %></p>
           </div>
         <% end -%>
   </div>
-  <h4>or <%= toggle(:label => "+ Add your own", :command => "#address ")%></h4>
+  <h4>or <%= command(:label => "+ Add your own", :command => "address")%></h4>
 </div>

@@ -111,12 +111,12 @@
 	background:#e8efbf;
 }
 
-.box .actions .toggle {
+.box .actions .command {
 	color:#9c6;
 	font-size:13px;
 }
 
-h2 .toggle {
+h2 .command {
 	color:#9c6;
 	font-size:25px;
 	font-weight:bold;
@@ -134,3 +134,33 @@ h2 .toggle {
 	font-weight:bold;
 }
 
+
+#permissions {
+	
+}
+
+#permissions .permission_icon {
+	position:relative;
+	float:right;
+}
+
+.property {
+	padding:5px 0 4px 0;
+	background:#FFF;
+	display:block;
+}
+
+.property span {
+	margin:0;
+}
+
+#property_box .property .label {
+	padding:5px;
+	background:#eae6dd;
+}
+
+#property_box .value {
+	background:#FFF;
+	padding:5px;
+	
+}

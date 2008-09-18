@@ -1,17 +1,17 @@
 <div class="box list <%= dom_class %>" id="<%= dom_id %>" >
+  
   <%= expander_icon %>  
   <% unless title.blank?%>
     <%= image_tag("/images/icons/#{kind}.png", :class => "icon", :alt => "")  rescue ""%>
-    <h2><%= link_to_list(source) %></h2>
+    <h2><%= link_to_list(source) %> <span class="size" style="font-size:14px">(<%= items.total_entries %>)</span></h2>
   <% end -%>
-  
   <%= spinner %>
   <div class="items" >
     <%= will_paginate(items, :params => {:kind => kind}) %>
     <%= render :partial => "/taggings/instance", :collection => items, :locals => {:source => source} %>
   </div>
   <div class="actions">
-    <%= (link_to "Delete this list", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete) rescue "" %>
-    <%= link_to "+ Add", toggle, :class => "toggle" %>
+    <%= (link_to "x", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete, :style => "position:relative;float:left") rescue "" %>
+    <%= command(:label => "+ Add", :command => command) %>
   </div>
 </div>

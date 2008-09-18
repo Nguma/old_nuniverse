@@ -6,12 +6,7 @@ module ListsHelper
 		title << list.label.capitalize
 		render :partial => "hat", :locals => {:title => title}
 	end
-	
-	def add_new_button(list)
-		command = "##{list.label} "
-		render :partial => "add_new_button", :locals => {:command => command}
-	end
-	
+		
 	def link_to_item(item, params = {})
 		
 		if item.object.kind == "bookmark"
@@ -32,17 +27,11 @@ module ListsHelper
 	
 	end
 	
-	def breadcrumbs(tagging)
+	def breadcrumbs(tagging, params = {})
 		starting_size = 17
 		str = "<div class='breadcrumbs'>"
 		str << link_to("< To your nuniverse", "/my_nuniverse", :style => "font-size:#{starting_size}px")
-		# path.taggings.each_with_index do |tagging,i|
-		# 		if tagging.object == current_user.tag
-		# 			str << link_to("< To your nuniverse", "/my_nuniverse")
-		# 		else
-		# 			str << link_to("< #{tagging.label.capitalize}", tagging, :style => "font-size:#{starting_size}px")
-		# 		end
-		# 	end
+		str << link_to("< #{params[:list].title}", listing_url(:list => params[:list].label, :tag => params[:list].tag)) if params[:list]
 		str << "</div>"
 		str
 	end
@@ -61,10 +50,10 @@ module ListsHelper
 	
 	def view_options(source, params = {})
 		str = ""
-		options = [['View as list', 'list'],['View in images', 'image']]
+		options = [['View as list', 'list'],['View in icons','icon'],['View in images', 'image']]
 		options.each do |option|
 			str << "<li class ='#{params[:selected] == options[1] ? "current" : ""}'>"
-			str << link_to(option[0], listing_url(:list => source.label, :tag => source.tag, :mode => option[1]))
+			str << link_to(image_tag("/images/icons/view_as_#{option[1]}.png"), listing_url(:list => source.label, :tag => source.tag, :mode => option[1]))
 			str << "</li>"
 		end
 		render :partial => "view_options", :locals => {:options => str} 
@@ -80,11 +69,12 @@ module ListsHelper
 	end
 	
 	def list(params)
+		
 		params[:dom_class] ||= ""
 		params[:kind] ||= params[:source].label.singularize
 		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
 		params[:items] ||= params[:source].items
-		params[:toggle] ||= "##{params[:kind].downcase.gsub(" ","_")} " 
+		params[:command] ||= "#{params[:kind].downcase.gsub(" ","_")}" 
 		params[:dom_id] ||= params[:title].pluralize
 		
 		render :partial => "/taggings/list_box", :locals => params
@@ -104,7 +94,17 @@ module ListsHelper
 		boxes
 	end
 	
+	def boxes_for(source, options = {})
+		boxes = []
+		options[:list] ||= nil
+		source.each_with_index do |item, i|
+			boxes << "#{render :partial => "/taggings/box", :locals => {:item => item, :list => options[:list]}}"
+		end
+		boxes
+	end
+	
 	def people_box(params = {})
+		
 		list(:source => List.new(:creator => @current_user, :label => "People", :tag => params[:source] || nil))
 	end
 	
@@ -120,6 +120,11 @@ module ListsHelper
 		render :partial => "/taggings/comments", :locals => {:source => params[:source]}
 	end
 	
+	def property_box(params = {})
+		
+		render :partial => "/taggings/properties", :locals => {:source => params[:source],:properties => params[:source].properties}
+	end
+	
 	def ad_box
 		render :partial => "/nuniverse/ads"
 	end
@@ -128,19 +133,24 @@ module ListsHelper
 		render :partial => "/taggings/new_item"
 	end
 	
+	def add_new_button(list)
+		command = "#{list.label.singularize}"
+		render :partial => "add_new_button", :locals => {:command => command}
+	end
+	
 	def new_list_button
 		render :partial => "/taggings/new_list"
 	end
 	
 	def contributors_box(params = {})
 		params[:source] ||= current_user
-		contributors = params[:source].contributors(:page => @page, :per_page => 5)
+		permissions = params[:source].permissions(:page => @page, :per_page => 10)
 		
-		render :partial => "/nuniverse/contributors", :locals => {:source => params[:source], :contributors => contributors}
+		render :partial => "/nuniverse/contributors", :locals => {:source => params[:source], :permissions => permissions}
 	end
 	
-	def map_box(source)
-		@map = map(:source => source)
+	def map_box(source, params = {})
+		@map = map(:source => source, :page => params[:page] || 1)
 		if @map
 			return render(:partial => "/nuniverse/map_box", :locals => {:map => @map})
 		elsif !source.is_a?(List)

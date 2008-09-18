@@ -2,5 +2,5 @@
   <div class="items">
     <%= render :partial => "/taggings/instance", :collection => source.connections(:kind => 'bookmark') %>
   </div>
-  <%= link_to("+ Add a bookmark", "#bookmark ", :class => "toggle")%>
+  <%= command(:label => "+ Add a bookmark", :command => "bookmark")%>
 <% end -%>

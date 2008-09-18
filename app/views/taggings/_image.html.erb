@@ -2,11 +2,11 @@
   <% if avatar_for(object) %>
     <%= avatar_for(object) %>
     <div class="actions">
-      <%= link_to("+ Add another image", "#image ", :class => "toggle")%>
+      <%= command(:label => "+ Add another image", :command => "image")%>
       <%= link_to("See all images", "/tags/images/#{object.id}")%>
     </div>
   <% else -%>
-    <%= link_to("+ Add an image", "#image ", :class => "toggle")%>
+    <%= command(:label => "+ Add another image", :command => "image")%>
   <% end -%>
 </div>
 

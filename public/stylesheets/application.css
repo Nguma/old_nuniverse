@@ -22,12 +22,14 @@ body
 #notice
 {
 	position:fixed;
-	top:20px;
+	bottom:20px;
 	left:30px;
-	color:#339;
+	color:#333;
 	font-weight:bold;
 	font-size:15px;
 	z-index:123456;
+	background:#9F9;
+	padding:10px;
 }
 
 #wrap
@@ -86,4 +88,58 @@ body
 
 .hidden {
 	display:none;
+}
+
+#input_box {
+	border:none;
+	position:fixed;
+	bottom:0px;
+	padding:0;
+	margin:0 0 0 0;
+	background:#333;
+	width:90%;
+}
+
+#input_box fieldset {
+	border:none;
+}
+
+#input_box input {
+	background:none;
+	border:none;
+/*	border-bottom:solid 1px #666;*/
+	font-size:30px;
+	font-weight:normal;
+	color:#FFF;
+	width:97%;
+	margin: 0 0 0 0;
+	padding:5px;
+}
+
+#input_box textarea {
+}
+
+#input_box #command {
+	background:none;
+	border:none;
+	color:#9F0;
+}
+
+#input_info {
+	position:absolute;
+	right:0;
+	top:0;
+	color:#9F9;
+	padding:5px;
+}
+
+#extra_input {
+	background:none;
+	font-size:20px;
+	color:#FFF;
+	padding:5px;
+	line-height:20px;
+	width:97%;
+	height:auto;
+	margin:0 0 5px 0;
 }

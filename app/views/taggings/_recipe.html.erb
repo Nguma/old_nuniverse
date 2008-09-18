@@ -5,9 +5,9 @@
   <%= render :partial => "options", :locals => {:tagging => @tagging }%>
 </div>
 <div class="column" style="width:50%">
-  <%= box_tag(:items => @tagging.connections(:kind => 'ingredient'), :title => "Ingredients", :toggle => "#ingredient ")%>
-  <%= box_tag(:items => @tagging.connections(:kind => 'step', :order => "id"), :title => "Cooking Directions", :toggle => "#step ")%>
-  <%= box_tag(:items => @tagging.connections(:kind => 'comments'), :title => "Comments", :toggle => "#comment ")%>
+  <%= box_tag(:items => @tagging.connections(:kind => 'ingredient'), :title => "Ingredients", :command => "#ingredient ")%>
+  <%= box_tag(:items => @tagging.connections(:kind => 'step', :order => "id"), :title => "Cooking Directions", :command => "#step ")%>
+  <%= box_tag(:items => @tagging.connections(:kind => 'comments'), :title => "Comments", :command => "#comment ")%>
 </div>
 
 <div class="column">

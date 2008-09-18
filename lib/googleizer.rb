@@ -40,7 +40,7 @@ module Googleizer
 				:data => "#thumbnail #{item['tbUrl'] rescue ''}"
 				)
 				t.replace("address", "#{item['streetAddress']}, #{item['city']}, #{item['country']}") if item['streetAddress']
-				t.replace("tel", "#{item['phoneNumbers'][0]}") if item['phoneNumbers']
+				t.replace("tel", "#{item['phoneNumbers'][0]['number']}") if item['phoneNumbers']
 				t.replace("latlng", "#{item['lat']},#{item['lng']}") if item['lat']
 				items << t
 			end

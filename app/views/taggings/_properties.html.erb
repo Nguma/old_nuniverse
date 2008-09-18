@@ -1,0 +1,17 @@
+<div class="box" id="property_box">
+  <span class="kind"><%= source.kind %></span>
+  <h2><%= source.label.capitalize %></h2>
+  <% unless source.kind == "list" -%> 
+    <p>
+      <%= source.object.property('address')%>
+    </p>   
+  <% end -%>
+  <% properties.each do |property| %>
+    <div class="property">
+      <span class="label"><%= property.label.capitalize %></span><span class="value"><%= property.object.label.capitalize %></span>
+    </div>
+  <% end -%>
+  <div class="actions">
+    <%= command(:label => "Add a new property", :command => "property")%>
+  </div>
+</div>

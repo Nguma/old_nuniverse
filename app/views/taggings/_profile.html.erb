@@ -1,18 +1,15 @@
-<div class="box" id="profile">
+<div class="box" id="profile" style="height:240px">
   <span class="kind"><%= tagging.kind %></span>
   <h2><%= tagging.label %></h2>
   <% if tagging.kind.nil? -%>
     <%= kind_options(tagging)%>
   <% else -%>
   
-  <% unless tagging.kind == "list" -%>
-    
+  <% unless tagging.kind == "list" -%> 
     <p>
       <%= tagging.object.property('address')%><br/>
       <%= tagging.object.property('tel')%>
-    </p>
-    
-    
+    </p>   
   <% else -%>
   
   <% end -%>
@@ -21,7 +18,7 @@
   
     <p><%= h tagging.description %></p>
     <div class="actions">
-      <%= link_to '+ Add a description', "#description ", :class => "toggle long" %>
+      <%= command(:label => '+ Add a description', :command => "description") %>
       <%= link_to 'Edit', edit_tagging_path(tagging) %>
       <%= link_to 'Delete', tagging, :confirm => 'Are you sure?', :method => :delete %>
     </div>

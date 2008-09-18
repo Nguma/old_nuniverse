@@ -45,6 +45,7 @@ Inflector.inflections do |inflect|
   inflect.singular(/(vert|ind)ices$/i, '\1ex')
   inflect.singular(/(matr)ices$/i, '\1ix')
   inflect.singular(/(quiz)zes$/i, '\1')
+	inflect.singular(/(^|\s)(.+)ess/,'\2ess')
   inflect.irregular('person', 'people')
   inflect.irregular('man', 'men')
   inflect.irregular('child', 'children')

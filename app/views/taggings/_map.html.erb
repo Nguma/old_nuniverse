@@ -21,7 +21,7 @@
        <% end -%>
     
         <% form_tag "/taggings/update/#{tagging.id}", :id => "address_form" do -%>
-          <%= link_to("Add an Address", "#", :class => "toggle")%>
+          <%= command(:label => "Add an Address", :command => "address")%>
           <fieldset class="hidden">
             <%= text_field_tag "address", "" %>
             <%= submit_tag %>

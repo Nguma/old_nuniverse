@@ -19,20 +19,27 @@ class List < ActiveRecord::Base
 	
 	def items(params = {})
 		params[:page] ||= 1
-		Tagging.with_users([self.contributors,self.creator].flatten).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label.singularize.downcase).split('#')).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
+		Tagging.with_users([grantors,self.creator].flatten).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label.singularize.downcase).split('#')).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	
-	def contributors(params = {})
-		Permission.find(:all, :conditions => ["tags = ?", self.label]).collect {|c| c.user}
+	def permissions(params = {})
+		Permission.find(:all, :conditions => ["tags = ? AND (grantor_id = ? OR granted_id = ?)", self.label, self.creator_id, self.creator_id])
 		# Permission.for(self).paginate(params).collect {|c| c.user}
+	end
+	
+	def grantors(params = {})
+		Permission.find(:all, :conditions => ["tags = ? AND granted_id = ?", self.label, self.creator_id]).collect {|c| c.grantor}
 	end
 	
 	
 	def self.find_or_create(params)
 		l = List.find(:first, :conditions => params)
 		return l unless l.nil?
-		return List.create(params)
-		
+		return List.create(params)		
+	end
+	
+	def title
+		self.tag.nil?  ? self.label.capitalize : "#{self.tag.label.capitalize} #{self.label}"
 	end
 	
 	protected

@@ -1,6 +1,5 @@
 <div class="column nav">
   <%= render :partial => "image", :locals => {:object => @tagging.object }%>
-  <%= render :partial => "profile", :locals => {:tagging => @tagging}%>
   <%= ad_box %>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
   <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
@@ -14,6 +13,7 @@
 </div>
 <div class="column medium" >
   <%#= render :partial => "profile", :locals => {:tagging=> @tagging} %>
+  <%= property_box(:source => @tagging)%>
   <%= bookmarks_box(:source => @tagging.object)%>
   <% @tagging.lists.each do |list| -%>
     <%= list(:source => list) %>

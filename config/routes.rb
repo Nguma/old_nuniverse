@@ -7,11 +7,11 @@ ActionController::Routing::Routes.draw do |map|
   #     tag.resource :image
   #   end
 			map.resources :lists
-  		map.resources :sessions
+  		map.resource :sessions
    		map.resources :taggings
    		map.resource :user, :member => { :suspend   => :put,
   	                                   :unsuspend => :put,
-    	                                   :purge     => :delete }
+    	                                 :purge     => :delete }
     
     	map.activate '/activate', 
     		:controller => 'users', 
@@ -91,5 +91,5 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 
-	map.connect '*path', :controller => 'application', :action => 'redirect_to_default'
+	#map.connect '*path', :controller => 'application', :action => 'redirect_to_default'
 end

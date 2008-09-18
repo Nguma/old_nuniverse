@@ -6,14 +6,18 @@ class NuniverseController < ApplicationController
 	
 	def command
 		
-		gums = Gum.parse(params[:input])
-		unless gums.empty?
-			@kind = Nuniverse::Kind.match(gums[0][1]).strip
-			@input = gums[0][2]
-		else
-			@input = params[:input]
-		end
+		# gums = Gum.parse(params[:input])
+		# 		unless gums.empty?
+		# 			@kind = Nuniverse::Kind.match(gums[0][1]).strip
+		# 			@input = gums[0][2]
+		# 		else
+		# 			@input = params[:input]
+		# 		end
 		
+		@kind = Nuniverse::Kind.match(params[:command]).strip
+		@input = params[:input]
+		
+		# Nuniverse::Kind.analyze(@input)
 		if params[:list]
 			@source =  List.labeled(params[:list]).created_by(current_user).first
 			@subject = @source.tag if @source && @source.tag
@@ -68,18 +72,14 @@ class NuniverseController < ApplicationController
 				:kind => @kind
 			) 
 
-			@kind.split('#').each do |k| 
-				t = Tag.find_or_create(
-				:label => k,
-				:kind => 'kind'
-			)
 			Tagging.find_or_create( 
 									:owner => current_user, 
 									:subject_id => @subject.id , 
 								 	:object_id => @tag.id, 
-									:kind => k
+									:kind => @kind
 								)
-			end
+								
+
 		end
 	redirect_back_or_default(@source)
 	end

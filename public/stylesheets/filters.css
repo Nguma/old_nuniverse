@@ -30,3 +30,19 @@
 	border-bottom:none;
 	background:#FFF;
 }
+
+#view_options {
+	padding:0;
+	position:absolute;
+	right:0;
+	background:none;
+	z-index:1234567890;
+}
+
+#view_options li {
+	background:none;
+	float:right;
+	margin:0;
+	padding:3px;
+}
+

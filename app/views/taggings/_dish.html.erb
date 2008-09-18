@@ -3,18 +3,12 @@
   <%= ad_box %>
   <%= render :partial => "options", :locals => {:tagging => @tagging}%>
   <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
-
-</div>
-<div class="column">
-  <%= map_box(@tagging) %>
-  
   <%= tag_box(:source => @tagging.object)%>
-  
 </div>
 
-<div class="column medium" >
+<div class="column large" >
+  <%#= render :partial => "profile", :locals => {:tagging=> @tagging} %>
   <%= property_box(:source => @tagging)%>
-
   <%= lists_for(@tagging)%>
   <%= render :partial => "comments", :locals => {:source => @tagging}%>
   <%= bookmarks_box(:source => @tagging.object)%>
