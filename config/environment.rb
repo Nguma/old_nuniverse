@@ -15,6 +15,9 @@ Rails::Initializer.run do |config|
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
   # See Rails::Configuration for more options.
+  config.gem 'mislav-will_paginate', :version => '~> 2.3.2', :lib => 'will_paginate', 
+    :source => 'http://gems.github.com'
+
 
   # Skip frameworks you're not going to use (only works if using vendor/rails).
   # To use Rails without a database, you must remove the Active Record framework
@@ -61,7 +64,7 @@ Rails::Initializer.run do |config|
 	config.action_mailer.delivery_method = :sendmail
 end
 
-require 'will_paginate'
+#require 'will_paginate'
 # require 'google_geocode'
 require 'google_ajax'
 require 'flickr'

@@ -99,19 +99,9 @@ module WsHelper
 			# 			//]]>
 			# 			</script>"
 		end
-		
-		# return render(:partial => "/nuniverse/maps", :locals => {
-		# 			:no_map => false,
-		# 			:map => @map,
-		# 			:markers => markers,
-		# 			:html => html,
-		# 			:path => params[:path]
-		# 		})
 	end
 	
-	def markers_for(places)
-		# gg = GoogleGeocode.new "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
-	
+	def markers_for(places)	
 		markers = []
 		places.each do |place|
 			if place.has_coordinates?
@@ -122,18 +112,17 @@ module WsHelper
 			end
 		end
 		return markers
-		# return markers.collect {|marker| 
-		# 			"{'longitude':'#{marker.address.lng}','latitude':'#{marker.address.lat}', 'title':'#{h marker.label.rstrip}<br/>#{}'}"
-		# 		}
 	end
 	
-	def google_localize(source)
-		if source.subject.has_address?
-			sll = source.subject.coordinates.join(',')
+	def google_localize(params)
+		if params[:source].is_a?(Tagging) && params[:source].subject.has_address?
+			sll = params[:source].subject.coordinates.join(',')
+			query = "#{params[:source].label} #{params[:source].kind}"
 		else
 			sll = Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"	
+			query = params[:source]
 		end
-		Googleizer::Request.new("#{source.label} #{source.kind}", :mode => "local").response(:sll => sll).results
+		Googleizer::Request.new(query, :mode => "local").response(:sll => sll, :rsz => "small").results
 	end
 	
 	def details_for(params)

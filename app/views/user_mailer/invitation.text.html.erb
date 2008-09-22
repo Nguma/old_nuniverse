@@ -6,13 +6,13 @@
     <tr>
       <td>
         <% unless item.object.thumbnail.blank? %>
-          <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="30px" />
+          <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="30px" width:"30px" style="border:solid 5px #eee;"/>
         <% end -%>
       </td>
       <td>
         <p>
           <b><%= item.object.label %></b>
-          <%= item.object.property('address') %>
+          <%= item.info %>
         </p>
         
       </td>

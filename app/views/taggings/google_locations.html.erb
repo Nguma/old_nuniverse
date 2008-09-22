@@ -1,0 +1,11 @@
+<% items = google_localize(:source => @input)%>
+
+<% items.each do |item| -%>
+        <div class="item">
+          <h3>
+            <%= link_to(item.label, "/taggings/update/#{@tagging.id}?address=#{CGI::escape(item.property('address'))}&latlng=#{item.property('latlng')}&tel=#{item.property('tel')}") %>
+          </h3>
+          <p><%= item.property('address') %></p>
+          <p><%= item.property('tel') %></p>
+        </div>
+  <% end -%>

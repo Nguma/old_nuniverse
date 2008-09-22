@@ -12,10 +12,11 @@ module Googleizer
 		end
 		
 		def response(params = {})
-			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=large"
+			params[:rsz] ||= "large"
+			uri = "#{G_REST_URL}/#{mode}?v=1.0&q=#{query.gsub(" ", "+")}&rsz=#{params[:rsz]}"
 			uri << "&sll=#{params[:sll]}" if params[:sll]
 			
-			Googleizer::Response.new(Net::HTTP.get_response(URI.parse(uri)),mode)
+			Googleizer::Response.new(Net::HTTP.get_response(URI.parse(uri)),mode) rescue nil
 		end
 		
 	end

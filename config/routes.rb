@@ -77,11 +77,13 @@ ActionController::Routing::Routes.draw do |map|
   		m.bookmark '/bookmark/:path', :action => 'bookmark'
   	end
   # 	
-  	map.command '/command', 
-  		:controller => 'nuniverse',
-  		:action => 'command'
+ 	map.command '/command', 
+ 		:controller => 'nuniverse',
+ 		:action => 'command'
 
-
+	map.suggest '/suggest/:command/:input',
+		:controller => 'taggings',
+		:action => 'suggest'
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "nuniverse"
 

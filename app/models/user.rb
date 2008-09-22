@@ -99,9 +99,9 @@ class User < ActiveRecord::Base
 	def connections(params = {})
 		if params[:mode] == "direct"
 			#Tagging.with_user(self).with_subject(self.tag).with_kind_like(params[:kind] || nil).groupped.with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			Tagging.with_user(self).with_tags([params[:kind]] || nil).with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			Tagging.with_user(self).with_tags([params[:kind]] || nil).order_by(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 		else
-			Tagging.with_user(self).with_tags([params[:kind]] ||nil).with_order(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+			Tagging.with_user(self).with_tags([params[:kind]] ||nil).order_by(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 		end
 	end
 	

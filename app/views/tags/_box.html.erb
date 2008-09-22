@@ -3,4 +3,7 @@
   <% items.each do |item| -%>
     <%= link_to(item.kind.capitalize, "/about/#{item.kind}") %>
   <% end -%>
+  <div class="actions">
+    <%= command(:label => "+ Add tags", :command => "Add tag")%>
+  </div>
 </div>

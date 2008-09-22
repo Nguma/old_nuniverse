@@ -1,9 +1,9 @@
 <div class="options">
-<% if tagging.owner == current_user -%>
+  <% if tagging.owner == current_user -%>
     <%= link_to("-","/taggings/delete/#{connection.id}",:title => "Remove", :class => "remove") %>
-<% else -%>
+  <% else -%>
     <%= link_to(image_tag("/images/icons/save_button.png"),"#",:title => "Bookmark", :class => "save_button") %>
-<% end -%>
+  <% end -%>
 
   <div class="data hidden">
     <% form_tag '/taggings/bookmark' do -%>

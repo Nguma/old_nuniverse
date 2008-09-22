@@ -19,7 +19,8 @@ class List < ActiveRecord::Base
 	
 	def items(params = {})
 		params[:page] ||= 1
-		Tagging.with_users([grantors,self.creator].flatten).with_subject(self.tag).with_tags(Nuniverse::Kind.match(self.label.singularize.downcase).split('#')).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
+		tags = Nuniverse::Kind.find_tags(self.label)
+		Tagging.with_users([grantors,self.creator].flatten).labeled_like(params[:label] || nil).with_subject(self.tag).with_tags(tags).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	
 	def permissions(params = {})

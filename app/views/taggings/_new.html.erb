@@ -1,8 +1,6 @@
 <div class="new_connection">
   <%= command(:label => "+ Add", :command => "")
-  
-  
-    
+
     <% if logged_in? -%>
       <% form_tag '/taggings/create' do -%>
       <fieldset>

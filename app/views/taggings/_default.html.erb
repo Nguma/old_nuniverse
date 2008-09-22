@@ -1,23 +1,23 @@
-<div class="column nav">
+<div class="column" id="nav">
   <%= render :partial => "image", :locals => {:object => @tagging.object }%>
-  <%= ad_box %>
-  <%= render :partial => "options", :locals => {:tagging => @tagging}%>
-  <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
-
-</div>
-<div class="column">
-  <%= map_box(@tagging) %>
-  
+  <%#= property_box(:source => @tagging)%>
   <%= tag_box(:source => @tagging.object)%>
-  
+  <%= ad_box %>
+  <%#= render :partial => "options", :locals => {:tagging => @tagging}%>
+  <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
 </div>
-
-<div class="column medium" >
-  <%= property_box(:source => @tagging)%>
-
-  <%= lists_for(@tagging)%>
-  <%= render :partial => "comments", :locals => {:source => @tagging}%>
-  <%= bookmarks_box(:source => @tagging.object)%>
-  
-  
+<div id="content">
+  <div class="menu"> 
+    <%= perspectives(:source => @tagging, :selected => "you") %>
+  </div>
+  <div class="delimiter">&nbsp;</div>
+  <div class="column medium" >
+    <%= map_box(@tagging) %>
+    <%= lists_for(@tagging)%>
+    
+  </div>
+  <div class="column medium">
+    <%= render :partial => "comments", :locals => {:source => @tagging}%>
+    <%= bookmarks_box(:source => @tagging.object)%>
+  </div>
 </div>

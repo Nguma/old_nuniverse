@@ -1,74 +1,123 @@
-#list {
+#list.box {
 	position:relative;
-	float:left;
-	width:70%;
-	margin:0 0 0 0;
+	margin:0 0 0 0px;
 	padding:0;
 	clear:none;
+	border:none;
+	background:none;
+	/*top:-36px;*/
+}
+
+.menu {
+	background:#FFF;
+	height:40px;
+	margin:0 0 0 1px;
 }
 
 #list .hover {
-	background:none;
+	background:#FFF;
 }
 
 #list .pagination {
+	position:relative;
+	float:left;
 	padding:10px;
 }
 
-#list .pagination .current {
-	color:#FFF;
+#list .pagination a {
+	color:#999;
 }
 
-#list .items {
-	width:100%;
+#list .pagination .current {
+	color:#666;
+}
+
+#list.box .items {
+	width:auto;
 	display:block;
 	padding:0;
-	margin:0;
-	background:#333;
+	margin:0 0 0px 1px;
+	overflow:hidden;
+	background:none;
+/*	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;*/
 }
-
 
 #list .item {
 	position:relative;
 	padding:0;
 	margin:0;
-	background:#efefef;
 	display:block;
 	width:100%;
 	min-height:60px;
-	border-top:dotted 2px #ccc;
+	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;
+	margin: 0 0 1px 0;	
+/*	border-bottom:dashed 1px #fff;*/
 }
 
 #list .items .even {
 	
 }
 
-#list .item .thumbnail {
+#list .item .thumbnail,
+#list .box .thumbnail {
 	position:relative;
 	float:left;
 	height:40px;
-	padding:0px;
+	width:40px;
+	background:transparent url("/images/backgrounds/icon.png") 0 0 no-repeat;
+	padding:4px 6px 6px 4px;
 	margin:8px;
-	border:solid 2px #666;
+}
+
+#list .box .thumbnail {
+	margin:0 5px 0 0;
+}
+
+.list .item h3 {
+	padding:10px 30px 0 10px;
 }
 
 #list .item h3 {
-	font-size:14px;
+	font-size:16px;
 	font-weight:bold;
 	line-height:1em;
-	padding:10px 10px 0 10px;
+	padding:10px 20px 0 10px;
 }
 
 #list .item h3 a {
 	font-weight:inherit;
 }
 
-#list .item p {
+.list .item p {
 	font-size:12px;
-	
+	color:#999;
+	display:none;
 }
 
-#list .box h2 a {
+#list .item p {
+	font-size:12px;
+	display:block;
+	color:#666;
+	padding:0 50px 0 0;
+}
+
+#list .box h2 a,
+#list .box h3 a {
 	font-size:16px;
 	font-weight:bold;
+}
+
+#list .column {
+	width:25%;
+	margin:0 0px 0 0;
+}
+
+#list .box {
+	height:200px;
+	overflow:hidden;
+	margin:0 0 1px 1px;
+}
+
+#list .image_box {
+	height:auto;
 }

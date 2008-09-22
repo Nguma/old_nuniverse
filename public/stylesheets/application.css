@@ -22,8 +22,8 @@ body
 #notice
 {
 	position:fixed;
-	bottom:20px;
-	left:30px;
+	top:40px;
+	right:20px;
 	color:#333;
 	font-weight:bold;
 	font-size:15px;
@@ -102,6 +102,8 @@ body
 
 #input_box fieldset {
 	border:none;
+	position:relative;
+	padding:5px;
 }
 
 #input_box input {
@@ -113,7 +115,7 @@ body
 	color:#FFF;
 	width:97%;
 	margin: 0 0 0 0;
-	padding:5px;
+	padding:5px 0 5px 0;
 }
 
 #input_box textarea {
@@ -123,6 +125,8 @@ body
 	background:none;
 	border:none;
 	color:#9F0;
+	padding:0;
+	margin:0;
 }
 
 #input_info {
@@ -142,4 +146,38 @@ body
 	width:97%;
 	height:auto;
 	margin:0 0 5px 0;
+}
+
+#suggestions {
+	display:block;
+	color:#eee;
+	padding:5px;
+}
+
+#file_field {
+	position:relative;
+	cursor:pointer;
+}
+
+#input_box label {
+	display:block;
+	font-weight:normal;
+	font-size:22px;
+	line-height:20px;
+	color:#999;
+	margin:0;
+}
+
+#image_url_uploaded_data {
+	-moz-opacity:0 ;
+	filter:alpha(opacity: 0.0);
+	opacity: 0;
+	z-index: 2;
+	cursor:pointer;
+	position:absolute;
+	top:0;
+	left:340px;
+	width:300px;
+	padding:0;
+	font-size:14px;
 }

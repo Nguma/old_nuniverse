@@ -1,34 +1,44 @@
-.box .tabs {
+.tabs {
 	position:relative;
-	display:block;
-	width:100%;
-
+	float:left;
+	width:auto;	
 	list-style-type:none;
 	padding:0;
 }
 
-.box .tabs li {
+.tabs dt {
+	position:relative;
+	float:left;
+	padding:10px;
+	font-size:14px;
+	color:#666;
+}
+
+.tabs li,
+.tabs dd {
 	position:relative;
 	float:left;
 	top:0;
-	padding:10px;
+	padding:10px 10px 15px 10px;
 	font-size:14px;
-	font-weight:bold;
-	color:#FFF;
+	font-weight:normal;
+	color:#999;
 	border-left:none;
-	background:#333;
 	margin:0 0 0 0;
 }
 
-.box .tabs li a {
-	color:#999;
+.tabs li a,
+.tabs dd a {
 	background:none;
 	padding:0;
+	font-color:inherit;
+	font-weight:inherit;
 }
 
-.box .tabs .current {
+.tabs .current {
 	border-bottom:none;
-	background:#FFF;
+	font-weight:bold;
+	background:#efefef;
 }
 
 #view_options {

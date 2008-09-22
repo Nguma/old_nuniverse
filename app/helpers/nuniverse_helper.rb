@@ -56,7 +56,6 @@ module NuniverseHelper
 	# :source = source to query from
 	# :dom_classes = Array of classes to assign to each column. Eg: ["","big_column","small_column"]
 	def columnize(boxes, params = {})
-		
 		html = ""
 		params[:size] ||= 3
 		params[:dom_classes] ||= []
@@ -68,9 +67,9 @@ module NuniverseHelper
 			col_html = render :partial => "/nuniverse/column", :locals => {
 				:dom_class => params[:dom_classes][i] || "",
 				:dom_id => "column_#{i}",
+				:width => "#{(100/params[:size].to_i)}%",
 				:col_content => cols[i]
 			}
-			
 			html << col_html
 		end
 		
@@ -79,7 +78,7 @@ module NuniverseHelper
 	
 	
 	def command(params)
-		params[:command]  ||= "#{params[:kind].gsub(' ','_').singularize}"
+		params[:command]  ||= "Add to #{params[:kind]}"
 		link_to(params[:label],params[:command],:class => 'command')
 	end
 	

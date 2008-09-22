@@ -1,26 +1,33 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
+    <%= breadcrumbs()%>
     <%= list_hat(@list)%>
+   
     <div class="column" id="nav">
       <%= ad_box %>
       <%= add_new_button(@list) %>
       <%= map_box(@list, :page => @Page)%>
       <%= contributors_box(:source => @list) %>
     </div>
-    <% if @mode ==  "image" -%>
-        <%= view_options(@list, :selected => "image")%>
-        <%= columnize(images_for(@items, :source => @list), :size => 3)%>
-    <% elsif @mode == "icon" -%>
-        <%= view_options(@list, :selected => "icon")%>
-        <%= columnize(boxes_for(@items, :source => @list), :size => 3)%>
-    <% else -%>
-        <%= view_options(@list, :selected => "list")%>
-        <div class="box"  id="list">  
-          <div class="items" >  
-            <%= sorting_options(:source => @list, :selected => @order)%>
-            <%= will_paginate @items %>
-            <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
-          </div>
+    <div id="content">
+      <div class="box"  id="list"> 
+        <div class="menu"> 
+          <%= sorting_options(:source => @list, :selected => @order)%>
+          <%= view_options(@list, :selected => @mode)%>
+          <%= will_paginate @items %>
         </div>
-    <% end -%>
+        <div class="delimiter">&nbsp;</div>
+      
+      <% if @mode ==  "image" -%>
+        <%= columnize(images_for(@items, :source => @list), :size => 4)%>
+      <% elsif @mode == "icon" -%>
+        <%= columnize(boxes_for(@items, :source => @list), :size => 4)%>
+      <% else -%>
+        <div class="items" > 
+          <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
+        </div>
+      <% end -%>
+      
+      </div>
+    </div>
     <%= input(:source => @list)%>
 <% end -%>

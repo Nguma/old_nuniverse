@@ -1,5 +1,8 @@
 <% source ||= nil%>
 <div class="item <%= cycle('even','odd') %>">
+  <div class="options">
+    <%= check_box "/taggings/#{item.id}/update", item.restricted, :checked => item.restricted,  :class => "check"%>
+  </div>
   <%= thumbnail_tag(item.object) %>
   <h3><%= link_to_item(item, :source => source)%></h3>
   <p><%= item.info %></p>

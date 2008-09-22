@@ -11,8 +11,7 @@ module ImagesHelper
 	end
 	
 	def thumbnail_tag(tag)
-		return nil if tag.thumbnail.blank?
-		return image_tag(tag.thumbnail, :alt => tag.kind, :class => "thumbnail") rescue nil
+		return image_tag(tag.thumbnail, :alt => "", :class => "thumbnail") 
 	end
 	
 	

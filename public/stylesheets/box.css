@@ -2,19 +2,20 @@
 	position:relative;
 	clear:both;
 	width:auto;
-	margin:0 0 3px 0;
+	margin:0 0 1px 1px;
 	padding:10px;
-	background:transparent url("/images/backgrounds/box.png") center left repeat;
-	
+	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;	
 	border:none;
 	overflow:hidden;
 	min-height:60px;
-	
-	
-	border:solid 1px #ccc;
-	border-bottom:solid 1px #999;
+/*	border:solid 1px #ccc;
+	border-bottom:solid 1px #999;*/
 }
 
+.box h2 {
+	font-size:24px;
+	color:#999;
+}
 
 .nav .box {
 /*	background:#eef6ee;*/
@@ -40,7 +41,9 @@
 
 .list .list .item {
 	min-height:50px;
-	background:#eee;
+	background:#FFF;
+	margin:0 0 3px 0;
+	border-bottom:dashed 1px #999;
 }
 
 .list .list .item .thumbnail {
@@ -58,11 +61,6 @@
 
 .expanded .items {
 	display:block;
-}
-
-
-.hover {
-	background:#FFF;
 }
 
 .box .spinner {
@@ -83,11 +81,16 @@
 
 .box .actions {
 	text-align:right;
-	border-top:dotted 1px #ccc;
+	border-top:dotted 1px #999;
 	margin:3px 0 0 0;
 	padding:2px 0 0 0;
 	color:#6c3;
 	font-size:13px;
+	visibility:hidden;
+}
+
+.hover .actions {
+	visibility:visible;
 }
 
 .box .actions a {

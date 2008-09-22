@@ -79,6 +79,7 @@ module Nuniverse
 				'bike' => 'vehicle#bike',
 				'plane' => 'vehicle#plane',
 				'menu' => 'dish',
+				'recipe' => 'step',
 				'\'s' => nil,
 				'a'=> nil,
 				'the' => nil,
@@ -90,7 +91,7 @@ module Nuniverse
 		end
 		
 		def self.match(kind_str)
-			kind_str.downcase.gsub('_',' ').collect {|k| self.list[k.singularize] || k.singularize }.join('#')
+			kind_str.downcase.gsub(/^(add\s(a\s|to\s)?)?(new\s)?/,'').collect {|k| self.list[k.singularize] || k.singularize }.join('#')
 		end
 		
 		def self.hash	
@@ -101,6 +102,10 @@ module Nuniverse
 			
 			# entry.scan(/^(#{self.list.collect {|c| c[0]}.join('|')})?\:?\s?([^#|\[|\]]+)$/)[0]
 			
+		end
+		
+		def self.find_tags(input)
+			input.singularize.downcase.split(" ").collect {|c| Nuniverse::Kind.match(c).split("#").last}
 		end
 		
 		def self.analyze(input)

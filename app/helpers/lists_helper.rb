@@ -8,7 +8,6 @@ module ListsHelper
 	end
 		
 	def link_to_item(item, params = {})
-		
 		if item.object.kind == "bookmark"
 			link_to("#{item.object.label.capitalize}", item.object.url)
 		else
@@ -27,7 +26,11 @@ module ListsHelper
 	
 	end
 	
-	def breadcrumbs(tagging, params = {})
+	def render_item(item, params = {})
+		render :partial => "/lists/item", :locals => {:item => item, :source => params[:source] || nil}
+	end
+	
+	def breadcrumbs(params = {})
 		starting_size = 17
 		str = "<div class='breadcrumbs'>"
 		str << link_to("< To your nuniverse", "/my_nuniverse", :style => "font-size:#{starting_size}px")
@@ -69,14 +72,12 @@ module ListsHelper
 	end
 	
 	def list(params)
-		
 		params[:dom_class] ||= ""
 		params[:kind] ||= params[:source].label.singularize
 		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
 		params[:items] ||= params[:source].items
-		params[:command] ||= "#{params[:kind].downcase.gsub(" ","_")}" 
+		params[:command] ||= "#{params[:kind]}" 
 		params[:dom_id] ||= params[:title].pluralize
-		
 		render :partial => "/taggings/list_box", :locals => params
 	end
 	
@@ -94,17 +95,15 @@ module ListsHelper
 		boxes
 	end
 	
-	def boxes_for(source, options = {})
+	def boxes_for(items, params = {})
 		boxes = []
-		options[:list] ||= nil
-		source.each_with_index do |item, i|
-			boxes << "#{render :partial => "/taggings/box", :locals => {:item => item, :list => options[:list]}}"
+		items.each_with_index do |item, i|
+			boxes << "#{render :partial => "/taggings/box", :locals => {:item => item, :source => params[:source] || nil}}"
 		end
 		boxes
 	end
 	
-	def people_box(params = {})
-		
+	def people_box(params = {})	
 		list(:source => List.new(:creator => @current_user, :label => "People", :tag => params[:source] || nil))
 	end
 	
@@ -121,7 +120,6 @@ module ListsHelper
 	end
 	
 	def property_box(params = {})
-		
 		render :partial => "/taggings/properties", :locals => {:source => params[:source],:properties => params[:source].properties}
 	end
 	
@@ -152,9 +150,11 @@ module ListsHelper
 	def map_box(source, params = {})
 		@map = map(:source => source, :page => params[:page] || 1)
 		if @map
-			return render(:partial => "/nuniverse/map_box", :locals => {:map => @map})
+			return render(:partial => "/nuniverse/map_box", :locals => {:map => @map, :source => source})
 		elsif !source.is_a?(List)
-			return render(:partial => "/nuniverse/localize", :locals => {:items => google_localize(source)})
+			# items = google_localize(source)
+			items = []
+			return render(:partial => "/nuniverse/localize", :locals => {:items => items})
 		end
 	end
 	

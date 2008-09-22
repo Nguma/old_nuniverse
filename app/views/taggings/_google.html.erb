@@ -1,28 +1,30 @@
- <div class="column">
-   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
-   <%= render :partial => "/taggings/profile", :locals => {:tagging => @tagging}%>
-   <%= render :partial => "ads" %>
-   <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
-    <div class="box">
+<div class="column" id="nav">
+  <%= render :partial => "image", :locals => {:object => @tagging.object}%>
+  <%= render :partial => "/taggings/profile", :locals => {:tagging => @tagging}%>
+  <%= render :partial => "ads" %>
+  <%= render :partial => "bookmarks", :locals => {:source => @tagging}%>
+</div>
 
-       <h2><%= link_to("< Back",tagging)%></h2>
-     </div>
- </div>
-
- <div class="column large" >
-   <div class="box">
-     <div class="items" style="display:block">
-        <% @items.each_with_index do |item,i| -%>
-         <div class="item" style="padding:8px 100px 8px 8px;">
+<div id="content" >
+  <div class="box" id="list">
+    <div class="menu"> 
+      <%= perspectives(:source => @tagging, :selected => "google") %>
+       <%= image_tag("http://www.google.com.au/logos/powered_by_google_135x35.gif", :style => "position:relative;float:right;padding:2px") %>
+    </div>
+   
+    <div class="items" style="display:block;margin-left:1px">
+      <% @items.each_with_index do |item,i| -%>
+         <div class="item <%= cycle('even','odd') %>" >
            <%= render :partial => "/taggings/manage", :locals => {:tagging => Tagging.new(:path => tagging.path, :object => item), :id => tagging.id} rescue ""%>
 
-           <h3 style="font-weight:bold;font-size:16px;padding:0">
+           <h3>
              <%= link_to(item.label.capitalize, item.url)%>
            </h3>
-           <p><%= item.description %><br/><%= link_to(item.url,item.url)%></p>
+           <p style="padding:0 70px 10px 10px"><%= item.description %>
+            <br/><%= link_to(item.url,item.url)%></p>
          </div>
         <% end -%>
       </div>
     </div>
- </div>
+</div>
 

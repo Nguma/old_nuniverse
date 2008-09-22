@@ -2,7 +2,6 @@
 {
 	position:relative;
 	padding:30px 20px 20px 20px;
-
 	color:#333;
 	font-weight:normal;
 }
@@ -84,7 +83,6 @@
 	margin-right:3px;
 }
 
-
 .list_button {
 	border:none;
 	display:inline;
@@ -105,13 +103,21 @@
 .column {
 	position:relative;
 	float:left;
-	width:23%;
-	margin:0 4px 0 0;
+	width:auto;
+	margin:0 0 0 0;
 }
 
-#nuniverse .small { width:23%;}
+.menu {
+	display:block;
+	position:relative;
+	width:100%;
+	background:#eee;
+}
+
+#nuniverse .small { width:25%;}
 #nuniverse .medium { width:50%;}
-#nuniverse .large {width:74%;}
+#nuniverse .large {width:75%;}
+#nuniverse .xlarge {width:100%;}
 
 #contributors ul {
 	list-style-type:none;
@@ -153,8 +159,24 @@ p strong {
 	width:100%;
 }
 
-
-
 #google_ads {
 	background:#fff;
+}
+
+#page-tabs {
+	position:relative;
+	float:right;
+}
+
+#nav {
+	width:300px;
+}
+
+#content {
+	position:relative;
+	float:none;
+	width:auto;
+	margin:0 0 0 0px;
+	padding:0;
+	overflow:hidden;
 }

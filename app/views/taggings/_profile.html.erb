@@ -1,18 +1,17 @@
-<div class="box" id="profile" style="height:240px">
-  <span class="kind"><%= tagging.kind %></span>
+<div class="box" id="profile" >
   <h2><%= tagging.label %></h2>
   <% if tagging.kind.nil? -%>
     <%= kind_options(tagging)%>
   <% else -%>
   
-  <% unless tagging.kind == "list" -%> 
-    <p>
-      <%= tagging.object.property('address')%><br/>
-      <%= tagging.object.property('tel')%>
-    </p>   
-  <% else -%>
+    <% unless tagging.kind == "list" -%> 
+      <p>
+        <%= tagging.object.property('address')%><br/>
+        <%= tagging.object.property('tel')%>
+      </p>   
+    <% else -%>
   
-  <% end -%>
+    <% end -%>
     
   <% end -%>
   

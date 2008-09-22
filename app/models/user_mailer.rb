@@ -39,13 +39,13 @@ class UserMailer < ActionMailer::Base
 		@body[:items] = params[:to].items(:page => 1, :per_page => 8)
 		
 		TMail::HeaderField::FNAME_TO_CLASS.delete 'content-id'
-		
+		# include_thumbnail_img
+		part 	:content_type => "text/html",
+		      :body => render_message('invitation.text.html.erb', @body)
 		@body[:items].each_with_index do |item,i|
 
 		
-			part 	:content_type => "text/html",
-			      		:body => render_message('invitation.text.html.erb', @body)
-		
+
 			unless item.object.thumbnail.blank?
 				inline_attachment :content_type => "image/jpeg", 
 				                  :body => File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
@@ -87,5 +87,12 @@ class UserMailer < ActionMailer::Base
 		 	params[:headers] ||= {} 
 		 	params[:headers]['Content-ID'] = params[:cid] 
 		 	part(params, &block) 
+		end
+		
+		def include_thumbnail_img
+			inline_attachment :content_type => "image/png", 
+			                  :body => File.read("#{RAILS_ROOT}/public/images/backgrounds/icon.png"),
+			                  :filename => "icon_bg",
+			                  :cid => "<icon_bg@nuniverse.net>"
 		end
 end

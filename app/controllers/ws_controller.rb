@@ -14,6 +14,4 @@ class WsController < ApplicationController
 		render :co => false
 	end
 	
-
-	
 end

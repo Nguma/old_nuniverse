@@ -1,0 +1,7 @@
+<dl class="tabs" id="perspectives">
+  <dt>According to</dt>
+  <% perspectives.each do |pers| -%>
+    
+    <dd class="<%= (pers[0] == selected) ? "current" : "" %>"><%= link_to(pers[0],pers[1]) %></dd>
+  <% end -%>
+</dl> 

@@ -1,11 +1,6 @@
 <div class="box" id="property_box">
-  <span class="kind"><%= source.kind %></span>
   <h2><%= source.label.capitalize %></h2>
-  <% unless source.kind == "list" -%> 
-    <p>
-      <%= source.object.property('address')%>
-    </p>   
-  <% end -%>
+  <p><%= source.description %></p>
   <% properties.each do |property| %>
     <div class="property">
       <span class="label"><%= property.label.capitalize %></span><span class="value"><%= property.object.label.capitalize %></span>

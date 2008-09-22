@@ -33,6 +33,10 @@ class Tagging < ActiveRecord::Base
 	named_scope :with_users, lambda { |users| 
 		users.empty? ? {} : {:conditions => ["user_id in (?)", users]}
 	}
+	
+	named_scope :labeled_like, lambda { |label| 
+		label.nil? ? {} : {:conditions => ["tags.label rlike ?", "^.?#{label}"]}
+	}
 
 	named_scope :with_kind_like, lambda { |kinds|
     kinds.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.kind rlike ?", "(^|#)#{kinds}($|#)"], :joins => :object}
@@ -91,7 +95,20 @@ class Tagging < ActiveRecord::Base
 	
 	def info
 		return description unless description.blank?
-		return "#{object.property('address')} - #{object.property('tel')}"
+		info = ""
+		unless object.property('address').blank?
+			# info << kinds.last.capitalize
+			info << "#{object.property('address')}"
+			info << " - #{object.property('tel')}" unless object.property('tel').blank?
+		else 
+			# info << object.tags.collect {|c| c.kind.gsub('#',' ').capitalize }.join(', ')
+		end
+		return info
+	end
+	
+	def specific_info
+		return  " - \"#{self.connections(:kind => 'comment').first.label.capitalize}\"" unless self.connections(:kind => 'comment').empty?
+		return ""
 	end
 	
 	def label

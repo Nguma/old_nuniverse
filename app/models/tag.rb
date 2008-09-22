@@ -93,17 +93,11 @@ class Tag < ActiveRecord::Base
 		kind.split("#")
 	end
 	
-	# def kind
-	# 		return nil if super.nil?
-	# 		super.split('#').last
-	# 	end
-	
-	
 	def thumbnail
 		return images.first.public_filename(:small) unless images.empty?
 		return property('thumbnail') unless property('thumbnail').blank?
-		# return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
-		return nil
+		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
+		return ""
 	end
 	
 	def icon
@@ -286,11 +280,14 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def add_image(params)
-		if params[:source_url]
-	    image = Image.new(:source_url => params[:source_url])
-	    image.tag_id = self.id
-	    image.save!
-	  end
+		if !params[:uploaded_data].blank?
+
+	    image = Image.new(:uploaded_data => params[:uploaded_data])
+	  else
+			image = Image.new(:source_url => params[:source_url])
+		end
+		image.tag_id = self.id
+    image.save!
 	end
   
 end

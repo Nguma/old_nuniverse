@@ -1,11 +1,24 @@
 <div id="input_box" class="hidden">
   <div id="input_info"></div>
-  <div class="suggestions"></div>
-  <% form_tag "/command" do -%>
+  
+  <% form_tag "/command", { :multipart => true } do -%>
+    <fieldset>
     <%= hidden_field_tag("tagging", source.id) if source.is_a?(Tagging) %>
+    <%= hidden_field_tag("title", source.label) if source%>
     <%= hidden_field_tag("list", source.label) if source.is_a?(List)%>
     <%= text_field_tag "command", "", :id => "command" %>
+    <div id="file_field" class="hidden">
+      <label>
+        <span style="color:#fff">Copy and paste an image url or </span>Browse your files
+      </label>
+      <%= file_field "image_url", :uploaded_data, :accept => "text/html", :style=> "font-size:12px" %>
+    </div>
+    <label id="info_label"></label>
     <%= text_field_tag "input", "", :id => "input" %>
+    <label id="extra_input_label"></label>
     <%= text_area_tag "extra_input", "", :id => "extra_input", :class => 'hidden', :rows => 1, :wrap => "virtual"%>
+    
+    </fieldset>
   <% end -%>
+  <div class="suggestions" id="suggestions" title="/suggest"></div>
 </div>

@@ -17,21 +17,19 @@ module TaggingsHelper
 	end
 	
 	def title_for(tagging, options ={})
-		str = ""
-		str << "<h1><span style='font-size:30px;color:#999'>"
-		if options[:list]
-			
-			str << "#{options[:list].tag.label} " if options[:list].tag
-			# str << "#{options[:list].label}: " 
-		end
-		 
-		
+		str = "<h1>"
+		# str << "<span style='font-size:30px;color:#999'>"
+		# 		if options[:list]
+		# 			
+		# 			#str << "#{options[:list].tag.label} " if options[:list].tag
+		# 			# str << "#{options[:list].label}: " 
+		# 		end
 		#str << icon_for(tagging.object)
 		
-		str << link_to(tagging.kind.capitalize, "/my_nuniverse/all/#{tagging.kind}")
-		str << " </span>"
+		# str << link_to(tagging.kind.capitalize, "/my_nuniverse/all/#{tagging.kind}")
+		# str << " </span>"
 		str << tagging.object.title
-		str << "<span class='service'>#{options[:service]}</span>" if options[:service]
+		str << "<span class='service'> on #{options[:service]}</span>" if options[:service]
 		str << "</h1>"
 		str
 	end
@@ -42,8 +40,14 @@ module TaggingsHelper
 		end
 	end
 	
-	
-	
+	def perspectives(params = {})
+		perspectives = [
+			["you",""], 
+			["all contributors",""],
+			["google","/google/#{params[:source].id}"]
+		]
+		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source], :selected => params[:selected]}
+	end
 
 	def box(params)
 		params[:dom_class] ||= ""

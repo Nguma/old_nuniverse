@@ -82,9 +82,4 @@ module TagsHelper
 			), block.binding
 		)
 	end
-	
-
-	
-	
-
 end

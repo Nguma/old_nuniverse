@@ -2,7 +2,7 @@
   <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
   <h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
   <div class="delimiter">&nbsp;</div>
-  <div class="column nav">  
+  <div class="column" id="nav">  
     <%= render :partial => "/taggings/image", :locals => {:object => current_user.tag}%>  
     <div class="box">
       <h2>Your nuniverse</h2>
@@ -13,10 +13,10 @@
     
     <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag} rescue ""%>
   </div>
-  
-  <% boxes = [ people_box, locations_box, bookmarks_box, ad_box, lists_for(current_user),   new_list_button].flatten %>
-  
+    <% boxes = [ people_box, locations_box, bookmarks_box, ad_box, lists_for(current_user),   new_list_button].flatten %>
+  <div id="content">
   <%= columnize(boxes,:size => 3) %>
+  </div>
 
 
 

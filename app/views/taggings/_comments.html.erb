@@ -1,20 +1,21 @@
-<div class="box" id="comments">
+<% comments = source.connections(:kind => "comment") -%>
+<div class="box list" id="comments">
   <%= image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander") %>
-  <h2>Comments</h2>
+  <h2>Comments<span class="size" style="font-size:14px"> (<%= comments.total_entries %>)</span></h2>
   <%= spinner %>
-  <% comments = source.connections(:kind => "comment") -%>
   <div class="items" >
     <%= will_paginate comments %>
     <% comments.each do |comment| -%>
       <div class="item <%= comment.kinds.last %>_kind">
-        
-        <h3><%= thumbnail_tag(comment.owner.tag) %> "<%= comment.label.capitalize %>"</h3>
+        <%= image_tag("/images/icons/#{comment.kinds.last}.png", :class => "icon") %>
+        <p><%= comment.owner.login.capitalize %>, <%= comment.created_at.strftime("%B %d at %H:%m") %></p>
+        <h3>"<%= comment.label.capitalize %>"</h3>
       </div>
     <% end -%>
   </div>
   <div class="actions">
-    <%= command(:label => "+ Add a comment", :command => "comment ") %>
-    <%= command(:label => "+ Add a pro", :command => "pro ") %>
-    <%= command(:label => "+ Add a con", :command => "con ") %>
+    <%= command(:label => "+ Add a comment", :command => "Add to comments") %>
+    <%= command(:label => "+ Add a pro", :command => "Add to pros") %>
+    <%= command(:label => "+ Add a con", :command => "Add to cons") %>
   </div>
 </div>

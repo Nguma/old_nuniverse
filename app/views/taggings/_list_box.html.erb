@@ -1,5 +1,4 @@
 <div class="box list <%= dom_class %>" id="<%= dom_id %>" >
-  
   <%= expander_icon %>  
   <% unless title.blank?%>
     <%= image_tag("/images/icons/#{kind}.png", :class => "icon", :alt => "")  rescue ""%>
@@ -12,6 +11,6 @@
   </div>
   <div class="actions">
     <%= (link_to "x", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete, :style => "position:relative;float:left") rescue "" %>
-    <%= command(:label => "+ Add", :command => command) %>
+    <%= command(:label => "+ Add", :command => "Add to #{source.label}") %>
   </div>
 </div>

@@ -2,9 +2,9 @@ class TaggingsController < ApplicationController
 	protect_from_forgery :except => [:create]
 	#include SMSFu
 	
-	before_filter :login_required, :except => [:preview]
+	before_filter :login_required, :except => [:preview, :suggest]
 	before_filter :find_tagging, :except => [:index]
-	# skip_before_filter :invitation_required
+	skip_before_filter :invitation_required, :only => [:suggest]
 	after_filter :store_location, :only => [:show]
 
 	def index
@@ -180,6 +180,20 @@ class TaggingsController < ApplicationController
 	
 	def sms
 		@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
+		
+	end
+	
+	def suggest
+	
+		case params[:command]
+		when "localize":
+			@input = params[:input]
+			render :action => "google_locations", :layout => false
+		else
+			@list = List.new(:creator => current_user, :label => Nuniverse::Kind.match(params[:command]))
+			@items = @list.items(:label => params[:input])
+			
+		end
 		
 	end
 	

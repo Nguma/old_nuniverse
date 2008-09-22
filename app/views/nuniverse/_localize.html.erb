@@ -1,14 +1,7 @@
 <div class="box" id="localize">
-  <h4><%= link_to("Select an address from google local search", "#", :class => "expander") %></h4>
+  <h4><%= command(:label => "Select an address from google local search", :command => "localize") %></h4>
   <div class="items" class="hidden">
-    <% items.each do |item| -%>
-          <div class="item">
-            <h3>
-              <%= link_to(item.label, "/taggings/update/#{@tagging.id}?address=#{CGI::escape(item.property('address'))}&latlng=#{item.property('latlng')}&tel=#{item.property('tel')}") %>
-            </h3>
-            <p><%= item.property('address') %></p>
-          </div>
-        <% end -%>
+   
   </div>
   <h4>or <%= command(:label => "+ Add your own", :command => "address")%></h4>
 </div>
