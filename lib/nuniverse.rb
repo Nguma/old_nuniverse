@@ -79,14 +79,7 @@ module Nuniverse
 				'bike' => 'vehicle#bike',
 				'plane' => 'vehicle#plane',
 				'menu' => 'dish',
-				'recipe' => 'step',
-				'\'s' => nil,
-				'a'=> nil,
-				'the' => nil,
-				'of' => nil,
-				'and' => nil,
-				'at' => nil,
-				'l\'' => nil
+				'recipe' => 'step'
 			}
 		end
 		
@@ -105,7 +98,7 @@ module Nuniverse
 		end
 		
 		def self.find_tags(input)
-			input.singularize.downcase.split(" ").collect {|c| Nuniverse::Kind.match(c).split("#").last}
+			input.singularize.downcase.split(/\s|,/).collect {|c| Nuniverse::Kind.match(c).split("#").last}
 		end
 		
 		def self.analyze(input)
@@ -114,6 +107,13 @@ module Nuniverse
 			elsif pop = input.downcase.match(/\b(a|the|my|some|many|every|all|your|her|his|our)?\b(.+)\b(.+)\b$/)
 				raise "subjects: #{pop[3]}"
 			end
+		end
+		
+		
+		def self.parse(input)
+			input = input.gsub(/\s|,/,"#")
+			input = input.downcase.gsub(/\b(a|to|at|in|i|of|my|the|his|her|our|all|some|all|every|each)\b#/,'\1 ')
+			input
 		end
 		
 

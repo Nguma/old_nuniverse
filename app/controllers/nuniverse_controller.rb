@@ -43,33 +43,34 @@ class NuniverseController < ApplicationController
 				:label => Gum.purify(@input),
 				:tag_id => @source == current_user ? nil : @source.object.id 
 				)
-		when "tag"
+		when "tag", "tags"
+			@input.split(",").each do |input|
+				@tag = Tag.find_or_create(
+					:label => Gum.purify(input), 
+					:kind => "tag"
+				)
 			
-			@tag = Tag.find_or_create(
-				:label => Gum.purify(@input), 
-				:kind => @kind
-			)
-			
-			Tagging.find_or_create(
-				:owner => current_user,
-				:subject_id => @tag.id,
-				:object_id => @subject.id,
-				:kind => @input,
-				:description => "#{@subject.label} #{@tag.label}"
-			)
+				Tagging.find_or_create(
+					:owner => current_user,
+					:subject_id => @tag.id,
+					:object_id => @subject.id,
+					:kind => input,
+					:description => "#{@subject.label} #{@tag.label}"
+				)
+			end
 		else
 			@tag = Tag.find_or_create(
 				:label => Gum.purify(@input), 
 				:kind => @kind
 			) 
-			@kind.split(" ").each do |kind|
+			# Nuniverse::Kind.parse(@kind).split("#").each do |kind|
 				Tagging.find_or_create( 
 										:owner => current_user, 
 										:subject_id => @subject.id , 
 									 	:object_id => @tag.id, 
-										:kind => kind
+										:kind => @kind
 									)
-			end
+			#end
 								
 
 		end

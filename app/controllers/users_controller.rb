@@ -97,7 +97,7 @@ class UsersController < ApplicationController
 		respond_to do |format|
 			format.html {}	
 			format.js { 
-				@items = current_user.connections(:kind => params[:kind], :order => params[:order], :page => params[:page])
+				@items = List.new(:creator => current_user, :label => @kind).items(:page => params[:page])#current_user.connections(:kind => params[:kind], :order => params[:order], :page => params[:page])
 				render :controller => 'taggings', :action => :page, :layout => false
 			}
 		end

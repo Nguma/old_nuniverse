@@ -1,9 +1,9 @@
 <div class="box" id="tag_box">
   <h2>Tags</h2>
   <% items.each do |item| -%>
-    <%= link_to(item.kind.capitalize, "/about/#{item.kind}") %>
+    <%= link_to(item.kind.capitalize, "/about/#{item.kind}", :style => "font-size:12px") %>
   <% end -%>
   <div class="actions">
-    <%= command(:label => "+ Add tags", :command => "Add tag")%>
+    <%= command(:label => "+ Add tags", :command => "Add tags")%>
   </div>
 </div>

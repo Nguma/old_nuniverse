@@ -19,8 +19,21 @@ class List < ActiveRecord::Base
 	
 	def items(params = {})
 		params[:page] ||= 1
-		tags = Nuniverse::Kind.find_tags(self.label)
-		Tagging.with_users([grantors,self.creator].flatten).labeled_like(params[:label] || nil).with_subject(self.tag).with_tags(tags).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
+		# tags = Nuniverse::Kind.parse(self.label).split("#")
+		tags = self.label.downcase.split(/\s/)
+		clause = tags.collect {|t| "(T.kind rlike '(^| )(#{t}|#{t.singularize})s?( |$)')"}.join('+')
+		
+		users = params[:perspective] ? [self.creator] : [grantors, self.creator].flatten 
+		params[:order] = "updated_at DESC"
+		
+		sql = "SELECT DISTINCT T.*, SUM((#{clause})) AS S, COUNT(DISTINCT object_id) from taggings T WHERE "
+		sql << "user_id IN (#{users.collect {|u| u.id}.join(',')}) "
+		sql << "AND subject_id = #{self.tag.id} " if self.tag
+		sql << "GROUP BY object_id HAVING (S >= #{tags.length}) "
+		sql << "ORDER BY #{params[:order]} "
+		
+		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		# Tagging.with_users().labeled_like(params[:label] || nil).with_subject(self.tag).with_tags(tags).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	
 	def permissions(params = {})
@@ -29,7 +42,7 @@ class List < ActiveRecord::Base
 	end
 	
 	def grantors(params = {})
-		Permission.find(:all, :conditions => ["tags = ? AND granted_id = ?", self.label, self.creator_id]).collect {|c| c.grantor}
+		Permission.find(:all, :conditions => ["tags RLIKE ? AND granted_id = ?", "#{self.label}|#{self.label.pluralize}", self.creator_id]).collect {|c| c.grantor}
 	end
 	
 	

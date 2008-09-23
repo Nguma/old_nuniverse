@@ -9,6 +9,7 @@ var Input = new Class({
   
   onKey:function(key) {
     if(this.el.hasClass('disabled')) return;
+    if(!this.isInUse()) return;
      switch(key){
         case "esc":
           this.hide();
@@ -33,12 +34,7 @@ var Input = new Class({
 
           break;
         default:
-          
-          if(this.isInUse()) {
-            this.setCommandDisplay();
-            //this.getSuggestions();
-          }
-          
+          this.setCommandDisplay();
       }
   },
   
@@ -152,7 +148,10 @@ var Input = new Class({
         this.getFileFieldArea().removeClass('hidden');
         break;
       case "invite":
-      this.setLabel("Send this invite to (email address)")
+        this.setLabel("Send this invite to (email address)");
+        break;
+      case "tags":
+        this.setLabel("Enter as many tags as desired, comma separated");
         break;
       case "localize":
         this.setInput($('title').getProperty('value'));

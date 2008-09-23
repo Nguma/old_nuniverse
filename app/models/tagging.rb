@@ -47,12 +47,15 @@ class Tagging < ActiveRecord::Base
   }
 
 	named_scope :with_tags, lambda { |tags|
+	
+		clause = tags.collect {|t| "(CONCAT(taggings.kind) rlike '(^| )(#{t}|#{t.singularize})s?( |$)')"}.join('+')
+		tags.empty? ? {} :
 		{
 			:select => "DISTINCT taggings.*",
 			:joins => :object,
 			
-			:conditions => ["taggings.kind IS NOT NULL AND CONCAT(taggings.kind,'#',tags.label) rlike ?","(^|#)(#{tags.join("|")})($|#)"],
-			:group => "object_id HAVING COUNT(object_id) >= #{tags.length} "
+			:conditions => "taggings.kind IS NOT NULL",
+			:group => "object_id HAVING (#{clause}) >= #{tags.length} "
 					
 		}
 
