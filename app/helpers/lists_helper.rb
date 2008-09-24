@@ -83,9 +83,6 @@ module ListsHelper
 	
 	def lists_for(source, options = {})
 		boxes = []
-		# (options[:plus] ||= []).each do |item|
-		# 	boxes << List.new(:creator => current_user, :label => item)
-		# end
 		source.lists.each_with_index do |item,i|
 			boxes << list(:source => item) 
 		end
@@ -112,7 +109,8 @@ module ListsHelper
 	end
 	
 	def bookmarks_box(params = {})
-		list(:source => List.new(:creator => @current_user, :label => "Bookmarks", :tag => params[:source] || nil))
+		tag = params[:source].is_a?(Tagging) ? params[:source].object : params[:source]
+		list(:source => List.new(:creator => @current_user, :label => "Bookmarks", :tag => tag))
 	end
 	
 	def comments_box(params = {})

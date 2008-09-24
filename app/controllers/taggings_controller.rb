@@ -184,14 +184,17 @@ class TaggingsController < ApplicationController
 	end
 	
 	def suggest
-	
-		case params[:command]
-		when "localize":
+		@command = Command.new(params[:command])
+		case @command.action
+		when "localize"
 			@input = params[:input]
 			render :action => "google_locations", :layout => false
-		else
-			@list = List.new(:creator => current_user, :label => Nuniverse::Kind.match(params[:command]))
+		when "find","search"
+			@list = List.new(:creator => current_user, :label => @command.argument)
 			@items = @list.items(:label => params[:input])
+		else
+			#@list = List.new(:creator => current_user, :label => "")
+			@items = current_user.connections(:label => params[:input])
 			
 		end
 		

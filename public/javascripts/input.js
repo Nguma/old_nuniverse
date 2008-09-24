@@ -9,7 +9,10 @@ var Input = new Class({
   
   onKey:function(key) {
     if(this.el.hasClass('disabled')) return;
-    if(!this.isInUse()) return;
+    if(!this.isInUse()) {
+      if(this.el.hasClass('hidden')) {this.show();}
+      return;
+    }
      switch(key){
         case "esc":
           this.hide();
@@ -34,6 +37,7 @@ var Input = new Class({
 
           break;
         default:
+          
           this.setCommandDisplay();
       }
   },
@@ -124,7 +128,7 @@ var Input = new Class({
   expand:function(command) {
     this.setCommand(command);
     this.setInput("");
-    this.setCommandDisplay();
+    this.setCommandDisplay(true);
     $('input').focus();    
     if(this.el.hasClass('hidden')) {
       this.show();  
@@ -138,9 +142,11 @@ var Input = new Class({
       'change':this.submit.bind(this)
     },this);
     this.getCommandField().addEvent('change', this.setCommandDisplay.bind(this));
+    this.el.getElement('a.close').addEvent('click', this.hide.bind(this));
   },
   
-  setCommandDisplay:function() {
+  setCommandDisplay:function(reset) {
+    
     $('suggestions').empty();
     this.getFileFieldArea().addClass('hidden');
     switch(this.getCommandValue()) {
@@ -154,7 +160,7 @@ var Input = new Class({
         this.setLabel("Enter as many tags as desired, comma separated");
         break;
       case "localize":
-        this.setInput($('title').getProperty('value'));
+        if(reset == true) { this.setInput($('title').getProperty('value'));}
         this.getSuggestions();
         break;
       case "address":

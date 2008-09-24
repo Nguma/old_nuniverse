@@ -97,12 +97,12 @@ class User < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		if params[:mode] == "direct"
-			#Tagging.with_user(self).with_subject(self.tag).with_kind_like(params[:kind] || nil).groupped.with_order(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			Tagging.with_user(self).with_tags([params[:kind]] || nil).order_by(params[:order]||nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-		else
-			Tagging.with_user(self).with_tags([params[:kind]] ||nil).order_by(params[:order] || nil).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-		end
+		Tagging.select(
+			:users => [self],
+			:label => params[:label] || nil,
+			:page => params[:page],
+			:per_page => params[:per_page]
+		)
 	end
 	
 	def add_image(params)

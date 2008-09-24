@@ -18,21 +18,17 @@ class List < ActiveRecord::Base
 	}
 	
 	def items(params = {})
-		params[:page] ||= 1
-		# tags = Nuniverse::Kind.parse(self.label).split("#")
-		tags = self.label.downcase.split(/\s/)
-		clause = tags.collect {|t| "(T.kind rlike '(^| )(#{t}|#{t.singularize})s?( |$)')"}.join('+')
-		
+		tags = Nuniverse::Kind.find_tags(self.label.downcase)
 		users = params[:perspective] ? [self.creator] : [grantors, self.creator].flatten 
-		params[:order] = "updated_at DESC"
-		
-		sql = "SELECT DISTINCT T.*, SUM((#{clause})) AS S, COUNT(DISTINCT object_id) from taggings T WHERE "
-		sql << "user_id IN (#{users.collect {|u| u.id}.join(',')}) "
-		sql << "AND subject_id = #{self.tag.id} " if self.tag
-		sql << "GROUP BY object_id HAVING (S >= #{tags.length}) "
-		sql << "ORDER BY #{params[:order]} "
-		
-		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		Tagging.select(
+			:users => users, 
+			:tags => tags, 
+			:order => params[:order], 
+			:subject => self.tag, 
+			:label => params[:label] || nil,
+			:page => params[:page], 
+			:per_page => params[:per_page]
+		)
 		# Tagging.with_users().labeled_like(params[:label] || nil).with_subject(self.tag).with_tags(tags).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	

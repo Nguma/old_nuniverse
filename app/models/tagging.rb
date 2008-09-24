@@ -9,17 +9,7 @@ class Tagging < ActiveRecord::Base
 	cattr_reader :per_page
   @@per_page = 5
 	#before_destroy :destroy_connections
-	
-	named_scope :with_path, lambda { |path,degree|
-		return {} if path.nil?
-		return degree.nil? ? {:select => "taggings.*",:conditions => ["path rlike ?", "_%s_$" % path.ids.join('(_.*)?_')]} : {:conditions => ["path rlike ?", "_%s_" % path.ids.join('(_.*)?_')]}
-  }
-  named_scope :with_path_beginning, lambda { |path|
-    path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "^_%s_" % path.ids.join('(_.*)?_')]}
-  }
-  named_scope :with_exact_path, lambda { |path|
-    path.nil? ? {} : {:select => "taggings.*", :conditions => ["path rlike ?", "^_%s_$" % path.ids.join('_')]}
-  }
+
   named_scope :with_subject, lambda { |subject|
     subject.nil? ? {} : {:conditions => ["subject_id = ?", subject.id]}
   }
@@ -31,57 +21,55 @@ class Tagging < ActiveRecord::Base
   }
 
 	named_scope :with_users, lambda { |users| 
-		users.empty? ? {} : {:conditions => ["user_id in (?)", users]}
+		users.empty? ? {} : {:conditions => ["user_id in (?)", users.collect {|u| u.id}]}
 	}
 	
 	named_scope :labeled_like, lambda { |label| 
 		label.nil? ? {} : {:conditions => ["tags.label rlike ?", "^.?#{label}"]}
 	}
 
-	named_scope :with_kind_like, lambda { |kinds|
-    kinds.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.kind rlike ?", "(^|#)#{kinds}($|#)"], :joins => :object}
-  }
+	# named_scope :with_kind_like, lambda { |kinds|
+	#     kinds.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.kind rlike ?", "(^|#)#{kinds}($|#)"], :joins => :object}
+	#   }
 
 	named_scope :with_address_or_geocode, lambda { |kind|
     kind.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
 
-	named_scope :with_tags, lambda { |tags|
+	# Sad, but paginate doesnt seem to work with the following:
+	# named_scope :with_tags, lambda { |tags|
+	# 		clause = tags.collect {|t| "(taggings.kind rlike '(^| )(#{t}|#{t.singularize})s?( |$)')"}.join('+')
+	# 		tags.empty? ? {} :
+	# 		{
+	# 			:select => "DISTINCT taggings.*, SUM((#{clause})) AS S, COUNT(DISTINCT object_id)",
+	# 			:include => :object,
+	# 			:conditions => "taggings.kind IS NOT NULL",
+	# 			:group => "taggings.object_id HAVING (S >= #{tags.length}) "
+	# 		}
+	# 
+	# 	}
 	
-		clause = tags.collect {|t| "(CONCAT(taggings.kind) rlike '(^| )(#{t}|#{t.singularize})s?( |$)')"}.join('+')
-		tags.empty? ? {} :
-		{
-			:select => "DISTINCT taggings.*",
-			:joins => :object,
-			
-			:conditions => "taggings.kind IS NOT NULL",
-			:group => "object_id HAVING (#{clause}) >= #{tags.length} "
-					
+	# named_scope :order_by, lambda { |order|
+	# 		case order
+	# 		when "name"
+	# 			{ :order => "tags.label ASC"}
+	# 		when "latest"
+	# 			{:order => "taggings.updated_at DESC"}
+	# 		when "rank"
+	# 			{:select => "taggings.*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "taggings.id", :order => "SUM(rankings.value) DESC"}
+	# 		else
+	# 			{:order => "taggings.created_at ASC"}
+	# 		end
+	# 	}
+	# 	
+		named_scope :tags, lambda { |object|
+			{
+				:select => "taggings.* ", 
+				:conditions => ["taggings.kind IS NOT NULL AND object_id = ? ", object.id],
+				:group => 'taggings.kind'
+			}	
 		}
-
-	}
-	
-	named_scope :order_by, lambda { |order|
-		case order
-		when "name"
-			{ :order => "tags.label ASC"}
-		when "latest"
-			{:order => "taggings.updated_at DESC"}
-		when "rank"
-			{:select => "taggings.*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "taggings.id", :order => "SUM(rankings.value) DESC"}
-		else
-			{:order => "taggings.created_at ASC"}
-		end
-	}
-	
-	named_scope :tags, lambda { |object|
-		{
-			:select => "taggings.* ", 
-			:conditions => ["taggings.kind IS NOT NULL AND object_id = ? ", object.id],
-			:group => 'taggings.kind'
-		}	
-	}
-	named_scope :groupped, :group => "object_id"
+	# 	named_scope :groupped, :group => "object_id"
 	
 	
 	
@@ -175,17 +163,39 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-			params[:order] ||= "latest"
-			params[:kind] ||= ""
-			params[:path] ||= nil
-			Tagging.with_user(self.owner).with_subject(self.object).with_tags(Nuniverse::Kind.match(params[:kind]).split('#')).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			# if self.kind == "list"
-			# 	# query = Tagging.with_user(self.owner).with_path(self.full_path, true).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			# else
-			# 	#query = Tagging.with_user(self.owner).with_subject(self.object).with_kind_like(params[:kind]).with_order(params[:order]).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
-			# end
+		Tagging.select(
+			:users => [self.owner], 
+			:subject => self.object, 
+			:tags => Nuniverse::Kind.match(params[:kind] ||= "").split('#'), 
+			:page => params[:page], 
+			:per_page => params[:per_page], 
+			:order => params[:order] ||= "latest"
+		)
+		# Tagging.with_user(self.owner).with_subject(self.object).with_tags(Nuniverse::Kind.match(params[:kind]).split('#')).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 	end
 	
+	def self.select(params = {})
+		params[:users] ||= []
+		params[:tags] ||= []
+		params[:subject] ||= nil
+		params[:order] ||= "latest"	
+		# I Wish i could use named_scope here but will_paginate gets apparently capricious with group and having clauses
+		# Tagging.with_users(params[:users]).with_tags(params[:tags]).with_subject(params[:subject]).order_by('latest').paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		
+		clause = params[:tags].collect {|t| "(T.kind rlike '(^| )(#{t.pluralize}|#{t.singularize})( |$)')"}.join('+')
+		
+		sql = "SELECT DISTINCT T.*, COUNT(DISTINCT object_id) "
+		sql << ", SUM((#{clause})) AS S " unless params[:tags].empty?
+		sql << "FROM taggings T LEFT OUTER JOIN tags on (object_id = tags.id) "
+		sql << "WHERE user_id IN (#{params[:users].collect {|u| u.id}.join(',')}) "
+		sql << "AND subject_id = #{params[:subject].id} " if params[:subject]
+		sql << "AND tags.label rlike '^.?#{params[:label]}'" if params[:label]
+		sql << "GROUP BY object_id "
+		sql << "HAVING (S >= #{params[:tags].length}) " unless params[:tags].empty?
+		sql << "ORDER BY #{Tagging.order(params[:order])} "
+
+		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 5)
+	end
 
 	
 	def contributors(params = {})
@@ -236,14 +246,25 @@ class Tagging < ActiveRecord::Base
     SQL
   end	
 
+	def self.order(ord)
+		case ord
+		when "name"
+			return "tags.label ASC"
+		when "rank"
+			return "T.created_at DESC"
+		else
+			return "T.updated_at DESC"
+		end
+		
+	end
+
+	private
+	
 	def destroy_connections
 		self.connections.each do |c|
 			c.destroy
 		end
 	end
-
-
-	private
 	
 	def clean_path
 	  self.path = self.path.to_s

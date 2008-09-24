@@ -1,11 +1,16 @@
 <div id="input_box" class="hidden">
+  <%= link_to "x", "#", :title =>"close", :class => "close" %> 
   <div id="input_info"></div>
   
   <% form_tag "/command", { :multipart => true } do -%>
     <fieldset>
     <%= hidden_field_tag("tagging", source.id) if source.is_a?(Tagging) %>
     <%= hidden_field_tag("title", source.label) if source%>
-    <%= hidden_field_tag("list", source.label) if source.is_a?(List)%>
+    <% if source.is_a?(List) -%>
+      <%= hidden_field_tag("list", source.label) %>
+      <%= hidden_field_tag("tag", source.tag_id) %>
+    <% end -%>
+    
     <%= text_field_tag "command", "", :id => "command" %>
     <div id="file_field" class="hidden">
       <label>

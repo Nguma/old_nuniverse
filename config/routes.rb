@@ -23,18 +23,14 @@ ActionController::Routing::Routes.draw do |map|
     		
     	map.signup '/signup', :controller => 'users', :action => 'new'
     	map.login '/login', :controller => 'sessions', :action => 'new'
-    	map.logout '/logout', :controller => 'sessions', :action => 'destroy'
-
-    	map.tags "/about/:label",
-    		:controller => "tags",
-    		:action => "show"
-    
+    	map.logout '/logout', :controller => 'sessions', :action => 'destroy'    
     		
     	map.restricted "/restricted",
     		:controller => "application",
     		:action => 'restricted'
  	
 	  	map.with_options :controller => 'application' do |m|
+				m.about "/about", :action => "about"
 	  		m.thank_you '/thank_you', :action => 'thank_you' 
 	  		m.feedback '/feedback', :action => 'feedback'
 	  		m.beta '/beta', :action => 'beta'

@@ -9,7 +9,7 @@ class NuniverseController < ApplicationController
 		@kind = Nuniverse::Kind.match(params[:command]).strip
 		@input = params[:input]
 		if params[:list]
-			@source =  List.labeled(params[:list]).created_by(current_user).first
+			@source =  List.new(:label => params[:list], :creator => current_user, :tag_id => params[:tag] || nil)
 			@subject = @source.tag if @source && @source.tag
 		elsif params[:tagging]
 			@source = Tagging.find(params[:tagging])
@@ -63,14 +63,14 @@ class NuniverseController < ApplicationController
 				:label => Gum.purify(@input), 
 				:kind => @kind
 			) 
-			# Nuniverse::Kind.parse(@kind).split("#").each do |kind|
+			@kind.split("#").each do |kind|
 				Tagging.find_or_create( 
 										:owner => current_user, 
 										:subject_id => @subject.id , 
 									 	:object_id => @tag.id, 
-										:kind => @kind
+										:kind => kind
 									)
-			#end
+			end
 								
 
 		end

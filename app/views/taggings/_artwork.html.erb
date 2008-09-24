@@ -1,16 +1,18 @@
-<div class="column">
+<div class="column" id="nav">
   <%= render :partial => "profile", :locals => {:tagging => @tagging}%>
   <%#= render :partial => "contributors", :locals => {:tagging => @tagging}%>
   <%= ad_box %>
-  <%= render :partial => "options", :locals => {:tagging => @tagging }%>
+  <%= map_box(@tagging) %>
 </div>
-<div class="column" style="width:50%">
+<div id="content">
+<div class="column large" >
   <%= render :partial => "image", :locals => {:object => @tagging.object}%>
   <%= render :partial => "comments", :locals => {:source => @tagging}%>
 </div>
 
-<div class="column">
-  <%= map_box(@tagging) %>
+<div class="column small">
+  <%= tag_box(:source => @tagging.object)%>
   <%= bookmarks_box(:source => @tagging.object )%>
   <%#= render :partial => "bookmarks", :locals => {:source => @tagging}%>
+</div>
 </div>

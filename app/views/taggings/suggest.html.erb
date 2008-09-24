@@ -1,3 +1,6 @@
 <% @items.each do |tagging| %>
-  <div class="suggestion"><%= tagging.object.label.capitalize %></div>
+  <div class="suggestion" style="clear:both">
+    <%= thumbnail_tag(tagging.object)%>
+    <h3><%= tagging.object.label.capitalize %></h3>
+  </div>
 <% end -%>

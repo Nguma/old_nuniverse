@@ -152,6 +152,7 @@ body
 	display:block;
 	color:#eee;
 	padding:5px;
+	margin-bottom:10px;
 }
 
 #file_field {
@@ -180,4 +181,17 @@ body
 	width:300px;
 	padding:0;
 	font-size:14px;
+}
+
+#input_box a.close {
+	padding:0;
+	line-height:16px;
+	color:#666;
+	font-size:20px;
+	font-weight:bold;
+	position:absolute;
+	right:6px;
+	cursor:pointer;
+	z-index:123456789;
+	top:3px;
 }

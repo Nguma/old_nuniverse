@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 	include AuthenticatedSystem
 	
-	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you]
+	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about]
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -15,8 +15,10 @@ class ApplicationController < ActionController::Base
 		
 	end
 	
+	def about
+	end
+	
 	def beta
-		
 	end
 	
 	def thank_you
