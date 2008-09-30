@@ -87,21 +87,28 @@ class TaggingsController < ApplicationController
 	end
 	
 	def bookmark
+		@tag = Tag.find(:first, :conditions => ['url = ?', params[:url]])
+		
 		@tag = Tag.create(
 			:label => params[:label],
 			:kind => params[:kind],
 			:url => params[:url],
 			:service =>params[:service],
 			:data => params[:data],
-			:description => params[:description] )
+			:description => params[:description] ) if @tag.nil?
 			
 		Tagging.create(
 			:object => @tag,
 			:subject => @tagging.object,
 			:owner => current_user,
-			:kind => 'bookmark')
+			:kind => params[:kind])
 			
-		redirect_to @tagging, :service => params[:service] || nil	
+		respond_to do |format|
+			format.html {redirect_back_or_default @tagging, :service => params[:service] || nil	}
+			format.js { head :ok}
+		end
+		
+		
 	end
 	
 	def rate
@@ -121,10 +128,10 @@ class TaggingsController < ApplicationController
 	end
 	
 	def suggest
-		@command = Command.new(params[:command])
+		@command = Command.new(current_user, params)
 		case @command.action
 		when "localize"
-			@input = params[:input]
+			@input = @command.input
 			render :action => "google_locations", :layout => false
 		when "find","search"
 			if @command.argument

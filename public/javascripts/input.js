@@ -14,6 +14,7 @@ var Input = new Class({
           this.hide();
           break;
         case "enter":
+          if(!this.isInUse()) return; 
           if(this.getCommandValue() == "invite" || this.getCommandValue() == "email") {
             if($('extra_input').hasClass('hidden')) {
               $('extra_input_label').set('text','Add a personal note or Press enter to send');

@@ -1,3 +1,4 @@
+<div class="actions">
 <% if @order == "by_vote" -%>
   <div class="votes">
     <%= link_to(image_tag("/images/icons/star.png", 
@@ -6,9 +7,9 @@
         "/rate/#{item.id}/1")%><%= item.votes %>
   </div>
 <% else -%>
-  <div class="options">
+  
     <%= (link_to "x", "/taggings/#{item.id}", :confirm => 'Are you sure?', :method => :delete) %>
     <%#= check_box "/taggings/#{item.id}/update", item.restricted, :checked => item.restricted,  :class => "check"%>
-  </div>
-  
+
 <% end -%>
+</div>

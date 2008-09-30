@@ -13,7 +13,7 @@ module ListsHelper
 		else
 			
 			if params[:source]
-				if params[:source].tag
+				if !params[:source].is_a?(Tagging) && params[:source].tag
 					url = item_with_tag_url(params[:source].tag,params[:source].label,  item)
 				else
 					url = item_url(params[:source].label, item)
@@ -52,12 +52,12 @@ module ListsHelper
 	end
 	
 	def perspectives(params = {})
-		
+		list_label = @list.label rescue params[:source].kind
 		perspectives = [
-			["you",	item_url(:id => params[:source].id, :list => @list.label, :service => "you"), "you"], 
-			["all contributors",	item_url(:id => params[:source].id, :list => @list.label, :service => "everyone"), "everyone"],
-			["Google",item_url(:id => params[:source].id, :list => @list.label, :service => "google"), "google"],
-			["Amazon", item_url(:id => params[:source].id, :list => @list.label, :service => "amazon"), "amazon"]
+			["you",	item_url(:id => params[:source].id, :list => list_label, :service => "you"), "you"], 
+			["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :service => "everyone"), "everyone"],
+			["Google",item_url(:id => params[:source].id, :list =>  list_label, :service => "google"), "google"],
+			["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :service => "amazon"), "amazon"]
 		]
 		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source]}
 	end
@@ -65,6 +65,7 @@ module ListsHelper
 	
 	def link_to_list(list, options = {})
 		title = options[:title] || list.label
+		title = title.singularize if options[:item_size] && options[:item_size] <= 1
 		if list.tag
 			link_to title.capitalize, listing_with_tag_url(list.tag,list.label)
 		else

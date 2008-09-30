@@ -1,7 +1,13 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-    <%= breadcrumbs()%>
-    <%= list_hat(@list)%>
-
+  <%= breadcrumbs()%>
+  <%= list_hat(@list)%>
+  
+  <% if @items.empty? -%>
+    <h2>You haven't added anything to <%= @list.label %> yet.</h2>
+    <h3>
+      <%= command(:label => "+ Add something now", :command => "Add to #{@list.label}") %>
+    </h3>
+  <% else -%>
     <div id="nav">
       <% boxes = [
           # pagination_box(:items => @items),
@@ -14,25 +20,26 @@
       <%= columnize(boxes, :size => 4) %>
     </div>
     <div id="content">
-      <div class="box list"  id="list"> 
-      <div class="delimiter">&nbsp;</div>
-      <% if @mode ==  "image" -%>
-        <%= columnize(images_for(@items, :source => @list), :size => 4)%>
-      <% elsif @mode == "card" -%>
-        <%= columnize(boxes_for(@items, :source => @list), :size => 4)%>
-      <% else -%>
-        <div class="items" > 
+        
+        <% if @mode ==  "image" -%>
+          <%= columnize(images_for(@items, :source => @list), :size => 4)%>
+        <% elsif @mode == "card" -%>
+          <%= columnize(boxes_for(@items, :source => @list), :size => 4)%>
+        <% else -%>
+        <div class="list" id="item_list">
+          <div class="items"> 
          
-          <% @items.each_with_index do |item, i| -%>
+            <% @items.each_with_index do |item, i| -%>
             
 
-            <%= render :partial => "item", :locals => {:source => @list, :item => item, :order => @order } %>
-          <% end -%>
+              <%= render :partial => "item", :locals => {:source => @list, :item => item, :order => @order } %>
+            <% end -%>
           
+          </div>
         </div>
-      <% end -%>
-      
-      </div>
+        <% end -%>
+        
     </div>
+          <% end -%>
     <%= input(:source => @list)%>
 <% end -%>

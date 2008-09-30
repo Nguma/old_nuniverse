@@ -1,4 +1,4 @@
-#list.box {
+#item_list {
 	position:relative;
 	margin:0 0 0 0px;
 	padding:0;
@@ -7,72 +7,29 @@
 	background:none;
 }
 
-.menu {
-	background:#FFF;
-	height:40px;
-	margin:0 0 0 1px;
-}
-
-#list .items .hover {
-	background:#666;
-}
-
-#list .hover h3 {
-	color:#FFF;
-}
-
-.list .pagination {
-	visibility:hidden;
-}
-
-.hover .pagination {
-	visibility:visible;
-}
-
-#list .pagination {
-	position:relative;
-	float:left;
-	padding:10px;
-	display:block;
-}
-
-#list .pagination a {
-	color:#999;
-}
-
-#list .pagination .current {
-	color:#666;
-}
-
-#list.box .items {
+#item_list .items {
 	width:auto;
 	display:block;
 	padding:0;
 	margin:0 0 0px 1px;
 	overflow:hidden;
 	background:none;
-/*	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;*/
+
 }
 
-#list .item {
+#item_list .item {
 	position:relative;
-	padding:0;
+	padding:10px;
 	margin:0;
 	display:block;
 	width:100%;
 	min-height:60px;
 	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;
-	margin: 0 0 1px 0;	
-	
-/*	border-bottom:dashed 1px #fff;*/
+	margin: 0 0 1px 0;		
 }
 
-#list .items .even {
-	
-}
-
-#list .item .thumbnail,
-#list .box .thumbnail {
+#item_list .thumbnail,
+#item_list .thumbnail {
 	position:relative;
 	float:left;
 	height:40px;
@@ -83,28 +40,74 @@
 	z-index:123456789;
 }
 
-#list .box .thumbnail {
+#item_list .thumbnail {
 	margin:0 5px 0 0;
 }
+
+#item_list .item h3 {
+	font-size:20px;
+	font-weight:bold;
+	line-height:1em;
+	color:#666;
+	padding:10px 20px 0 10px;
+}
+
+
+#item_list .actions {
+	display:none;
+}
+
+
+/* HOVER */
+#item_list .hover {
+	background:#333;
+}
+
+#item_list .hover h3 {
+	color:#FFF;
+}
+
+.menu {
+	background:#FFF;
+	height:40px;
+	margin:0 0 0 1px;
+}
+
+.list .pagination {
+	visibility:hidden;
+}
+
+.hover .pagination {
+	visibility:visible;
+}
+
+#item_list .pagination {
+	position:relative;
+	float:left;
+	padding:10px;
+	display:block;
+}
+
+#item_list .pagination a {
+	color:#999;
+}
+
+#item_list .pagination .current {
+	color:#666;
+}
+
+#item_list .items .even {
+	
+}
+
+
 
 .list .item h3 {
 	padding:10px 30px 0 10px;
 	z-index:12345678;
 }
 
-#list .item h3 {
-	font-size:16px;
-	font-weight:bold;
-	line-height:1em;
-	color:#666;
-	padding:10px 20px 0 10px;
-	
-}
 
-#list .item h3 a {
-	font-weight:inherit;
-	color:inherit;
-}
 
 .list .item p {
 	font-size:12px;
@@ -112,13 +115,13 @@
 	display:none;
 }
 
-#list .item p {
+#item_list .item p {
 	display:block;
 	
 	padding:0 50px 0 0;
 }
 
-#list .hover h3 {
+#item_list .hover h3 {
 	color:#fff;
 }
 
@@ -126,24 +129,8 @@
 	color:#ccc;
 }
 
-#list .box h2 a,
-#list .box h3 a {
-	font-size:16px;
-	font-weight:bold;
-}
 
-#list .column {
-	width:25%;
-	margin:0 0px 0 0;
-}
-
-#list .box {
-	height:200px;
-	overflow:hidden;
-	margin:0 0 1px 1px;
-}
-
-#list .image_box {
+#item_list .image_box {
 	height:auto;
 }
 
@@ -163,7 +150,7 @@
 }
 
 
-#list .item .votes {
+#item_list .item .votes {
 /*	background:#fff;*/
 	position:absolute;
 	top:0;
@@ -177,12 +164,12 @@
 	text-align:right;
 }
 
-#list .votes img {
+#item_list .votes img {
 	width:40px;
 	height:40px;
 }
 
-#list .hover .ranking {
+#item_list .hover .ranking {
 	background:#333;
 }
 
@@ -190,6 +177,19 @@
 	display:none;
 }
 
-#list .options {
+#item_list .options {
+	display:block;
+}
+
+#nuniverse .single .item h3 a {
+	font-size:22px;
+	color:#666;
+}
+
+.list .content {
+	display:none;
+}
+
+.expanded .content {
 	display:block;
 }

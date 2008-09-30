@@ -7,9 +7,8 @@
 	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;	
 	border:none;
 	overflow:hidden;
-	min-height:60px;
-/*	border:solid 1px #ccc;
-	border-bottom:solid 1px #999;*/
+	min-height:30px;
+	height:auto;
 }
 
 .box h2 {
@@ -34,16 +33,16 @@
 	display:none;
 }
 
-.list .list .items {
-	display:block;
-
-}
-
 .list .list .item {
 	min-height:50px;
 	background:#FFF;
 	margin:0 0 3px 0;
 	border-bottom:dashed 1px #999;
+}
+
+.item h3 a {
+	font-weight:inherit;
+	color:inherit;
 }
 
 .list .list .item .thumbnail {
@@ -78,15 +77,25 @@
 	height:40px;
 }
 
-
 .box .actions {
 	text-align:right;
-	border-top:dotted 1px #999;
+	position:absolute;
+	top:5px;
+	right:5px;
+/*	border-top:dotted 1px #999;*/
 	margin:3px 0 0 0;
-	padding:2px 0 0 0;
-	color:#6c3;
-	font-size:13px;
+	padding:5px;
+	color:#9c6;
+	font-size:16px;
+	font-weight:bold;
 	visibility:hidden;
+	background:#333;
+	
+}
+
+.box .actions a {
+	font-size:inherit;
+	font-weight:inherit;
 }
 
 .column .hover {
@@ -105,13 +114,15 @@
 	visibility:visible;
 }
 
+.hover p {
+	color:#ccc;
+}
 .box .actions a {
 	margin-right:5px;
 }
 
 .box .expander {
 	position:relative;
-	float:right;
 	padding:0 0 5px 5px;
 	cursor:pointer;
 	z-index:123456;
@@ -125,11 +136,6 @@
 
 #lists {
 	background:#e8efbf;
-}
-
-.box .actions .command {
-	color:#9c6;
-	font-size:13px;
 }
 
 h2 .command {
@@ -188,6 +194,8 @@ h2 .command {
 
 #nav .expander{
 	background:#efefef;
+	position:relative;
+	float:right;
 }
 
 #sorting_options.expanded,
@@ -201,4 +209,3 @@ h2 .command {
 #nav #ad_box {
 	background:#fff;
 }
-

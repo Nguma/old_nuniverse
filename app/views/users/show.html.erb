@@ -7,13 +7,16 @@
   </div>
   <div id="content" >
     <div class="column small">
-      <%= image_box(:source => current_user) %>
-    
+      <%= map_box(current_user.tag)%>
     </div>
     <div class="column large">
+      
       <%= bookmarks_box %>
       <%= people_box %>  
       <%= locations_box %>
+    <!-- </div> -->
+    <!-- <div class="column medium"> -->
+      
       <%= lists_for(current_user) %> 
     </div>
 

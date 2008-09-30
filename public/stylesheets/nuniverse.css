@@ -195,5 +195,5 @@ a.save_button {
 }
 
 a.saved {
-	background:transparent url('/images/icons/saved_button.png') 0 0 no-repeat;
+	opacity:.3;
 }

@@ -1,18 +1,18 @@
-<div class="box list"  id="list"> 
-  <div class="items">
+
     <% @items.each_with_index do |item,i| -%>
-      <div class="item <%= cycle('even','odd') %>" >
-        <%= render :partial => "/taggings/manage", :locals => {
-              :tagging => Tagging.new(:path => tagging.path, :object => item), 
-              :id => tagging.id} rescue ""%>
+      <div class="box <%= cycle('even','odd') %>" >
+  
         <h3>
          <%= link_to(item.label.capitalize, item.url)%>
         </h3>
-        <p style="padding:0 70px 10px 10px">
+        <p style="padding:0 70px 10px 0">
           <%= item.description %><br/>
           <%= link_to(item.url,item.url)%>
         </p>
+        <div class="actions">
+                <%= render :partial => "/taggings/manage", :locals => {
+                      :tagging => tagging, 
+                      :id => tagging.id} rescue ""%>
+        </div>
       </div>
     <% end -%>
-  </div>
-</div>

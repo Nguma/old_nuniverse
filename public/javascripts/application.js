@@ -4,7 +4,7 @@ function reset()
 {
   var inputBox = new Input($('input_box'));
 
-  $$('.box').each(function(box,i) {
+  $$('.box','.list').each(function(box,i) {
     if(box.hasClass('list')) {
       var b = new ListBox(box)
     } else { 
@@ -23,7 +23,7 @@ function reset()
   // Expands the box if of class list.
   $$('.command').each(function(command) {
     command.addEvent('click', function(ev) {
-      if(command.getParent('.box').hasClass('list')) {
+      if(command.getParent('.box') && command.getParent('.box').hasClass('list')) {
         command.getParent('.box').addClass('expanded');
       }
       ev.preventDefault();
@@ -34,10 +34,12 @@ function reset()
   $$('.save_button').each(function(button) {
     button.addEvent('click', function(ev) {
       var call = new Request.HTML({
-        onSuccess:function() {
+        'url':button.getParent('.actions').getElement('form').getProperty('action'),
+        'onComplete':function() {
           button.addClass('.saved');
+          notice("Bookmarked!")
         }
-      }).send(button.getParent().getElement('form'));
+      }).post(button.getParent('.box').getElement('form'));
       return false;
     });
   });
@@ -77,6 +79,7 @@ function notice(msg)
   }
   else
   {
+    $('notice').setProperty('opacity',1);
     $('notice').fade.delay('5000',$('notice'),'out');
   }
   

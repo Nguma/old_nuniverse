@@ -62,7 +62,7 @@ class Command
 				List.find_or_create(
 					:creator_id => 	@current_user.id,
 					:label => Gum.purify(@input),
-					:tag_id => (params[:subject] != @current_user.tag) ? params[:subject].id : nil
+					:tag_id => subject_is_user?(params[:subject]) ? nil :params[:subject].id
 					)
 			when "tag", "tags"
 				@input.split(",").each do |input|
@@ -73,7 +73,7 @@ class Command
 					:label => Gum.purify(@input), 
 					:kind => @argument
 				) 
-			
+				@argument << "##{params[:subject].label}" unless 	subject_is_user?(params[:subject])
 				@argument.split("#").each do |kind|
 					Tagging.find_or_create( 
 											:owner => @current_user, 
@@ -83,6 +83,10 @@ class Command
 										)
 				end
 			end
+	end
+	
+	def subject_is_user?(subject)
+		subject == @current_user.tag
 	end
 	
 	def to_myself?

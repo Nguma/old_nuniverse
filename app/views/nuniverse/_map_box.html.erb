@@ -6,8 +6,10 @@
   <%= @map.div(:width => "100%", :height => 240, :style=>"position:relative") %>
    
   <div class="actions" style="display:block">
-    <% if !source.is_a?(List) %>
-      <p style="color:#666"><%= source.object.property('address')%></p>
+    <% if source.is_a?(Tagging) %>
+      <p style="color:#666">
+        <%= source.object.property('address')%>
+      </p>
     <% end -%>
     <%= command(:label => "Change Address", :command => "new address")%>
   </div>

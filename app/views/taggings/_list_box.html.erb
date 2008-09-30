@@ -1,23 +1,35 @@
-<div class="box list <%= dom_class %>" id="<%= dom_id %>" >
-  <%= expander_icon %>  
-  <% unless title.blank?%>
-    <%#= image_tag("/images/icons/#{kind}.png", :class => "icon", :alt => "")  rescue ""%>
+<div class="box  <%= dom_class %> <%= (items.total_entries <= 1) ? "single" : "list" %>" id="<%= dom_id %>" >
+
+     
     <h2>
-      <span class="size" style="color:#ccc"><%= items.total_entries %></span>
-      <%= link_to_list(source) %> 
+      <span class="size" style="color:#ccc">
+        <%= items.total_entries %>
+      </span>
+      <%= link_to_list(source, :item_size => items.total_entries) %> 
+      <% if items.total_entries >= 1 -%>
+        <span class="unique_item">
+          <%= link_to_item(items.first, :source => source)%>
+        </span>
+      <% end -%>
+      
+      <%= expander_icon unless items.total_entries <= 1 %>
+
     </h2>
-  <% end -%>
-  <%= spinner %>
-  <div class="content">
-    <div class="items" >
-        <%= will_paginate(items, :params => {:kind => kind}) %>
-        <% items.each do |item| -%>
-          <%= render_item(item, :source => source)%>
-        <% end -%>     
-    </div>
-  </div>
+    <%= spinner %>
+    <% if items.total_entries > 1 -%>
+      <div class="content">
+        <div class="items" >
+            <%= will_paginate(items, :params => {:kind => kind}) %>
+            <% items.each do |item| -%>
+              <%= render_item(item, :source => source)%>
+            <% end -%>     
+        </div>
+      </div>
+    <% end -%>
+
+  
   <div class="actions">
-    <%= (link_to "x", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete, :style => "position:relative;float:left") rescue "" %>
+    <%#= (link_to "x", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete, :style => "position:relative;float:left") rescue "" %>
     <%= command(:label => "Email to", :command => "Email #{source.label} to")%>
     <%= command(:label => "+ Add", :command => "Add to #{source.label}") %>
   </div>
