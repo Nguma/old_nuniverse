@@ -25,8 +25,8 @@ class ListsController < ApplicationController
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
-			@mode = params[:mode] || nil
-			@order = params[:order] || "name"
+			@mode = params[:mode] || "list"
+			@order = params[:order] || "by_name"
 			
 			@items = @list.items(:page => @page, :per_page => 10, :order => @order, :perspective => params[:perspective] || nil)  
 	

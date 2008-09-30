@@ -1,24 +1,20 @@
 var Input = new Class({
   initialize:function(el) {
-    this.el = el;
+    this.el = $(el);
     if(this.el != undefined) {
       this.setBehaviors();
     }
-    
   },
   
   onKey:function(key) {
     if(this.el.hasClass('disabled')) return;
-    if(!this.isInUse()) {
-      if(this.el.hasClass('hidden')) {this.show();}
-      return;
-    }
+
      switch(key){
         case "esc":
           this.hide();
           break;
         case "enter":
-          if(this.getCommandValue() == "invite") {
+          if(this.getCommandValue() == "invite" || this.getCommandValue() == "email") {
             if($('extra_input').hasClass('hidden')) {
               $('extra_input_label').set('text','Add a personal note or Press enter to send');
               $('extra_input').removeClass('hidden');
@@ -36,8 +32,11 @@ var Input = new Class({
 
 
           break;
-        default:
-          
+        case "space":
+          if(!this.isInUse()) {
+            if(this.el.hasClass('hidden')) {this.show();}
+          }
+        default:    
           this.setCommandDisplay();
       }
   },
@@ -53,12 +52,25 @@ var Input = new Class({
     var call = new Request.HTML({
       'url':this.suggestUrl(),
       'update':$('suggestions'),
-      'autoCancel':'true'
-    }).get();
+      'cancel':true,
+      'cancelBubble':true,
+      'onSuccess':this.addSuggestionsBehaviors.bind(this)
+    }, this).get();
   },
   
   submit:function() {
     this.el.getElement('form').submit();
+  },
+  
+  addSuggestionsBehaviors:function() {
+    this.el.getElements('.suggestion a').each(function(suggestion) {
+      suggestion.addEvent('click', this.onSuggestionClick.bindWithEvent(this, suggestion));
+    },this);
+  },
+  
+  onSuggestionClick:function(ev,suggestion) {
+    ev.preventDefault();
+    this.submit(suggestion.getProperty('href'))
   },
   
   getInputValue:function() {
@@ -66,7 +78,7 @@ var Input = new Class({
   },
   
   getCommandValue:function() {
-    var match = $('command').getProperty('value').match(/^(New\s)?(\b.+\b)$/);
+    var match = $('command').getProperty('value').toLowerCase().match(/^(new)?\s?(\b\w+\b)/);
     if(match != null) {
       return match[2];
     } else {
@@ -141,22 +153,30 @@ var Input = new Class({
     this.getFileField().addEvents({
       'change':this.submit.bind(this)
     },this);
-    this.getCommandField().addEvent('change', this.setCommandDisplay.bind(this));
+    this.getCommandField().addEvent('change', this.onCommandChange.bind(this));
     this.el.getElement('a.close').addEvent('click', this.hide.bind(this));
+  },
+  
+  onCommandChange:function() {
+     $('suggestions').empty();
+     this.setCommandDisplay();
   },
   
   setCommandDisplay:function(reset) {
     
-    $('suggestions').empty();
+    if(reset == true) {this.el.getElement('.suggestions').empty();}
     this.getFileFieldArea().addClass('hidden');
     switch(this.getCommandValue()) {
       case "image":
+        
         this.getFileFieldArea().removeClass('hidden');
         break;
       case "invite":
-        this.setLabel("Send this invite to (email address)");
+      case "email":
+        this.setLabel("Send to (email address)");
         break;
       case "tags":
+        
         this.setLabel("Enter as many tags as desired, comma separated");
         break;
       case "localize":

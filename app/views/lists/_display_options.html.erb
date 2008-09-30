@@ -1,0 +1,14 @@
+<div class="box" id="display_options">
+  <%= expander_icon %>
+  <dl class='tabs'>
+    <dt>Display</dt>
+    <% options.each do |option| -%>
+      <dd class=" <%= selected == option[1] ? 'current' : '' %>">
+        <%= link_to("#{image_tag("/images/icons/view_as_#{option[1]}.png")} #{option[0]}", 
+                    listing_url(source.label, :tag => source.tag, :mode => option[1]), 
+                    :title => "#{source.label} #{option[0]}" ) 
+        %>
+      </dd>
+    <% end -%>
+  </dl>
+</div>

@@ -27,78 +27,18 @@ class TaggingsController < ApplicationController
 		@parent = @tagging.path.last
 		@tagging.destroy
 		if @parent 
-			redirect_to("/taggings/#{@parent}")
+			redirect_back_or_default("/taggings/#{@parent}")
 		else
-			redirect_to("/my_nuniverse")
+			redirect_back_or_default("/my_nuniverse")
 		end
 		
 	end
 	
-	def connect
-		if over_limit
-			flash[:error] = "You have reached your max number of connections."
-			redirect_to "/upgrade"
-		else
-			gums = Gum.parse(params[:query])
-			unless gums.empty?
-				@kind = Nuniverse::Kind.match(gums[0][1]).strip
-				params[:query] = gums[0][2]
-			end
-			@subject = @tagging ? @tagging.object : current_user.tag
-			case @kind
-			when "address","tel","zip"
-				@subject.replace_property(@kind, params[:query])
-				@subject.save
-			when "image"
-				@subject.add_image(:source_url => params[:query])
-			when "description"
-				@tagging.description = params[:query]
-				@tagging.save
-			when "invite"
-				@user = User.find_by_email(params[:query]) || User.create(:email => params[:query])
-				current_user.invite(:user => @user, :topic => @tagging)
-			when "list"
-				List.find_or_create(
-					:creator_id => current_user.id,
-					:label => Gum.purify(params[:query]),
-					:tag_id => @subject == current_user.tag ? nil : @subject.id 
-					)
-			else
-				@tag = Tag.find_or_create(
-					:label => Gum.purify(params[:query]), 
-					:kind => @kind
-				) 
-				@path = TaggingPath.new
-
-				@kind.split('#').each do |k| 
-						t = Tag.find_or_create(
-						:label => k,
-						:kind => 'kind'
-						)
-				Tagging.find_or_create( 
-										:owner => current_user, 
-										:subject_id => @subject.id, 
-									 	:object_id => @tag.id, 
-										:kind => k
-									)
-				end
-				
-
-			end
-			redirect_back_or_default(@tagging)
-		end
-	end
-	
 	def show
-		if @tagging.nil?
-			@tagging = Tagging.with_exact_path(TaggingPath.new(params[:path])).first
-		end
-		#restrict_to(@tagging.authorized_users)
-		@list = params[:list] ? List.new(:label => params[:list], :creator => current_user, :tag_id => params[:tag]) : nil
-			
 
+		@list = params[:list] ? List.new(:label => params[:list], :creator => current_user, :tag_id => params[:tag]) : nil
 		@selected = params[:selected].to_i || nil
-		@service = params[:service] || nil
+		@service = params[:service] || "you"
 		@page = params[:page] || 1
 		@order = params[:order] || ((@tagging.object.kind != "list") ? "rank" : "name")
 		@filter = params[:filter] || nil
@@ -109,9 +49,9 @@ class TaggingsController < ApplicationController
 			query = (@tagging.subject.kind == "user") ? "" : @tagging.subject.label
 			query << " #{@tagging.object.label}" 
 			@items = Googleizer::Request.new(query, :mode => "web").response.results
+		when "amazon"
+			@items = Finder::Search.find(:query => @tagging.object.label, :service => 'amazon')
 		when "map"
-			
-			
 			@items = @tagging.connections(:mode => 'exact', :page => @page)
 			render :action => "maps"
 		when "images"
@@ -121,9 +61,6 @@ class TaggingsController < ApplicationController
 			render :action => "images"
 		when nil
 		else
-			
-			@service = nil		
-				
 		end
 		
 		
@@ -169,7 +106,7 @@ class TaggingsController < ApplicationController
 	
 	def rate
 		@ranking = Ranking.find_or_create(:tagging => @tagging, :user => current_user)
-		@ranking.value = params[:stars].to_i || 1
+		@ranking.value += 1
 		@ranking.save
 		redirect_to :back
 		# respond_to do |format|
@@ -190,8 +127,12 @@ class TaggingsController < ApplicationController
 			@input = params[:input]
 			render :action => "google_locations", :layout => false
 		when "find","search"
-			@list = List.new(:creator => current_user, :label => @command.argument)
-			@items = @list.items(:label => params[:input])
+			if @command.argument
+				@list = List.new(:creator => current_user, :label => @command.argument)
+				@items = @list.items(:label => params[:input])
+			else
+				@items = current_user.connections(:label => params[:input])
+			end
 		else
 			#@list = List.new(:creator => current_user, :label => "")
 			@items = current_user.connections(:label => params[:input])

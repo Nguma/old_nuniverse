@@ -1,18 +1,15 @@
-<dl class="connections">
-<% connections.each do |item| %>
-  <dd class="connection <%= cycle('even','odd') %>">
-    <%= render :partial => "/taggings/manage" , :locals => {
-      :connection => nil,
-      :path => section.path,
-      :tag => item
-    }%>
-      <%= image_tag(item.thumbnail,:class => "image")%>
+<div class="box list"  id="list"> 
+  <div class="items">
+<% @items.each do |item| %>
+  <div class="item <%= cycle('even','odd') %>"> 
+      <%= image_tag(item.thumbnail,:class => "thumbnail")%>
      <h3>
         <%= link_to_object(item) %>
       </h3>
       
       <p><%=  "#{item.precision} #{item.price}" %></p>
       <div class="delimiter">&nbsp;</div>
-  </dd>
+  </div>
 <% end -%>
-</dl>
+</div>
+</div>

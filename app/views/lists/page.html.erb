@@ -3,9 +3,7 @@
 <% else -%>
   
     <div class="items">
-      <%= sorting_options(:source => @list, :selected => @order)%>
-      <%= will_paginate @items %>
-      <%= render :partial => "item", :collection => @items, :locals => {:source => @list} %>
+      <%= render :partial => "item", :collection => @items, :locals => {:source => @list, :order => @order} %>
     </div>
   
 <% end -%>

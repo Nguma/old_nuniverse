@@ -1,6 +1,6 @@
 .tabs {
 	position:relative;
-	float:left;
+	display:block;
 	width:auto;	
 	list-style-type:none;
 	padding:0;
@@ -8,8 +8,8 @@
 
 .tabs dt {
 	position:relative;
-	float:left;
-	padding:10px;
+	display:block;
+	padding:0 5px 5px 5px;
 	font-size:14px;
 	color:#666;
 }
@@ -17,14 +17,19 @@
 .tabs li,
 .tabs dd {
 	position:relative;
-	float:left;
+	display:none;
 	top:0;
-	padding:10px 10px 15px 10px;
-	font-size:14px;
+	padding:10px;
+	line-height:20px;
+	font-size:20px;
 	font-weight:normal;
 	color:#999;
 	border-left:none;
 	margin:0 0 0 0;
+}
+
+.expanded dd {
+	display:block;
 }
 
 .tabs li a,
@@ -38,21 +43,6 @@
 .tabs .current {
 	border-bottom:none;
 	font-weight:bold;
-	background:#efefef;
+	background:#ddd;
+	display:block;
 }
-
-#view_options {
-	padding:0;
-	position:absolute;
-	right:0;
-	background:none;
-	z-index:1234567890;
-}
-
-#view_options li {
-	background:none;
-	float:right;
-	margin:0;
-	padding:3px;
-}
-

@@ -56,7 +56,7 @@
 }
 
 .expanded {
-	min-height:235px;
+/*	min-height:235px;*/
 }
 
 .expanded .items {
@@ -89,6 +89,18 @@
 	visibility:hidden;
 }
 
+.column .hover {
+	background:#333;
+}
+
+.column .hover h2 {
+	color:#FFF;
+}
+
+.column .hover .current {
+	color:#FFF;
+}
+
 .hover .actions {
 	visibility:visible;
 }
@@ -100,8 +112,9 @@
 .box .expander {
 	position:relative;
 	float:right;
-	padding:0 0 0 5px;
+	padding:0 0 5px 5px;
 	cursor:pointer;
+	z-index:123456;
 }
 
 .box .icon {
@@ -165,5 +178,27 @@ h2 .command {
 #property_box .value {
 	background:#FFF;
 	padding:5px;
-	
 }
+
+#nav .box {
+	background:#efefef;
+	height:60px;
+	overflow:hidden;
+}
+
+#nav .expander{
+	background:#efefef;
+}
+
+#sorting_options.expanded,
+#display_options.expanded,
+#perspectives.expanded,
+#add_new_box.expanded {
+	height:auto;
+	overflow:auto;
+}
+
+#nav #ad_box {
+	background:#fff;
+}
+

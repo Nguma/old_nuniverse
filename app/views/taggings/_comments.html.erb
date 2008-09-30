@@ -1,7 +1,10 @@
 <% comments = source.connections(:kind => "comment") -%>
 <div class="box list" id="comments">
   <%= image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander") %>
-  <h2>Comments<span class="size" style="font-size:14px"> (<%= comments.total_entries %>)</span></h2>
+  <h2>
+    <span class="size" style="color:#ccc"><%= comments.total_entries %></span>
+    Comments
+  </h2>
   <%= spinner %>
   <div class="items" >
     <%= will_paginate comments %>

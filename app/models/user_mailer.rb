@@ -34,9 +34,9 @@ class UserMailer < ActionMailer::Base
     @sent_on     = Time.now
     @body[:sender] = params[:sender]
 		@body[:to] = params[:to]
-		@body[:url] = "http://www.nuniverse.net/my_nuniverse/#{params[:to].label}"
+		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{params[:to].label}"
 		@body[:message] = params[:message]
-		@body[:items] = params[:to].items(:page => 1, :per_page => 8)
+		@body[:items] = params[:to].items(:page => 1, :per_page => 10)
 		
 		TMail::HeaderField::FNAME_TO_CLASS.delete 'content-id'
 		# include_thumbnail_img

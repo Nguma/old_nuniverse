@@ -79,7 +79,8 @@ module Nuniverse
 				'bike' => 'vehicle#bike',
 				'plane' => 'vehicle#plane',
 				'menu' => 'dish',
-				'recipe' => 'step'
+				'recipe' => 'step',
+				'todo' => 'to do'
 			}
 		end
 		

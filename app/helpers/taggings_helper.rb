@@ -1,18 +1,16 @@
 module TaggingsHelper
 	
-
-	
 	def save_button(item, tagging)
 		render :partial => "/taggings/bookmark", :locals => {:item => item, :tagging => tagging}
 	end
 	
 	def content_for_tagging(tagging, params = {})
-		if params[:service]
-			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
+		if params[:service] == "you" || params[:service] == "everyone"
+				render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
 			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
 		else
-			
-			render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
+			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
+		
 		end
 	end
 	
@@ -29,7 +27,7 @@ module TaggingsHelper
 		# str << link_to(tagging.kind.capitalize, "/my_nuniverse/all/#{tagging.kind}")
 		# str << " </span>"
 		str << tagging.object.title
-		str << "<span class='service'> on #{options[:service]}</span>" if options[:service]
+		str << "<span class='service'> by #{options[:service]}</span>" if options[:service]
 		str << "</h1>"
 		str
 	end
@@ -38,15 +36,6 @@ module TaggingsHelper
 		unless !property || property.blank?
 			render :partial => "/taggings/property", :locals => {:property => property}
 		end
-	end
-	
-	def perspectives(params = {})
-		perspectives = [
-			["you",""], 
-			["all contributors",""],
-			["google","/google/#{params[:source].id}"]
-		]
-		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source], :selected => params[:selected]}
 	end
 
 	def box(params)
@@ -64,5 +53,15 @@ module TaggingsHelper
 			:title => "Tags"
 		}
 	end
+	
+	
+	def content_for_service(params)
+		params[:service] ||= @service
+		render :partial => "/taggings/#{service}", :locals => {:source => params[:source]}
+	else
+		render :partial => "/taggings/default_content", :locals => {:source => params[:source]}
+	end
+	
+	
 
 end

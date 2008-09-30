@@ -2,24 +2,22 @@
   <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
   <h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
   <div class="delimiter">&nbsp;</div>
-  <div class="column" id="nav">  
-    <%= render :partial => "/taggings/image", :locals => {:object => current_user.tag}%>  
-    <div class="box">
-      <h2>Your nuniverse</h2>
-      <p>You used <strong><%= current_user.connections_count%>/<%= current_user.max_connections %></strong> connections. <%= link_to("Upgrade", "/upgrade") %></p>
-      <%= link_to "Edit your profile", "/users/edit" %>
-    </div>
-  
+  <div id="nav">
+    <%= columnize([account_box, ad_box, ad_box, new_list_button], :size => 4)%>
+  </div>
+  <div id="content" >
+    <div class="column small">
+      <%= image_box(:source => current_user) %>
     
-    <%= render :partial => "/tags/map", :locals => {:tag => current_user.tag} rescue ""%>
+    </div>
+    <div class="column large">
+      <%= bookmarks_box %>
+      <%= people_box %>  
+      <%= locations_box %>
+      <%= lists_for(current_user) %> 
+    </div>
+
   </div>
-    <% boxes = [ people_box, locations_box, bookmarks_box, ad_box, lists_for(current_user),   new_list_button].flatten %>
-  <div id="content">
-  <%= columnize(boxes,:size => 3) %>
-  </div>
-
-
-
-
-<%= input(@source => nil)%>
+  
+  <%= input(@source => nil)%>
 <% end -%>

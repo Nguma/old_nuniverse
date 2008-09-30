@@ -14,8 +14,8 @@
   <meta http-equiv="imagetoolbar" content="no" />
   <meta name="verify-v1" content="/b/gBK4McPYhBKaszdoH2V4g8APPQuLR+gAg4gpteUs=" />
 
-  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'path', 'connection', 'filters', 'box', 'list', 'items', 'custom'%>
-  <%= javascript_include_tag  'mootools', 'application',  'list', 'input' %>
+  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'path', 'connection', 'filters', 'box', 'list', 'items', 'input', 'custom'%>
+  <%= javascript_include_tag  'mootools', 'application', 'Box', 'list', 'input' %>
   <%#= GMap.header(:with_vml => false) %>
   <%#= @map.to_html if @map%>
 
@@ -40,11 +40,8 @@
         pageTracker._trackPageview();
       </script>
 </head>
-<body>
-  <div id="notice">
-    <%= flash[:notice] %>
-    <%= flash[:error]%>
-  </div>
+<body onunload="javascript:onUnload()">
+  <div id="notice"><%= flash[:notice] %><%= flash[:error]%></div>
   
   
   <div id="wrap">

@@ -1,16 +1,14 @@
-#control_panel
-{
-
+#control_panel {
 	position:fixed;
 	background:none;
-	right:10px;
+	right:20px;
 	top:0px;
 	padding:0;
 	font-size:12px;
 	font-weight:bold;
 	color:#FFF;
-	z-index:1234567;
-
+	z-index:1234567890123;
+	background:#c3c3c3;
 }
 
 #control_panel dd
@@ -25,7 +23,6 @@
 {
 	background:#333;
 	color:#FFF;
-	border:solid 1px #ccc;
 	border-bottom:none;
 }
 

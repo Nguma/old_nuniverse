@@ -2,13 +2,16 @@
 # also defines the available scripting commands
 class Command
 	
-	attr_reader :raw_command, :action, :argument
+	attr_reader :raw_command, :action, :argument, :input, :current_user, :extra_input
 	
-	def initialize(command)
-		@raw_command = command.downcase.scan(/^(add|create|localize|find|search|invite)\s?(a\s|to\s|on\s|in\s|at\s)?(new\s)?(.*)?/)[0]
-
+	def initialize(current_user, params)
+		@input = params[:input]
+		@current_user = current_user
+		@extra_input = params[:extra_input]
+		@image_url = params[:image_url] || nil
+		@raw_command = params[:command].downcase.scan(/^(add|email|create|localize|find|search|invite|new)\s?(a\s|to\s|on\s|in\s|at\s)?(new\s)?(.*)?/)[0]
 		@action = @raw_command[0].nil? ? @raw_command[2] : @raw_command[0]
-		@argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3]) 
+		@argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3].gsub(/\sto$/,'')) 
 	end
 	
 	def self.match(action)
@@ -21,6 +24,99 @@ class Command
 		# 		elsif action.match(/^(localize)\s)(.*)/)
 		# 		else
 		# 		end
+	end
+	
+	def execute(params)
+		case @action
+		when "email"
+			if to_myself?
+				params[:email] = @current_user.email
+			else
+				params[:email] = @input
+			end
+			email_user(	:email => params[:email], 
+									:current_user => @current_user,
+									:content => params[:source], 
+									:message => @extra_input
+								)
+		when "invite"
+		when "search", "find"
+		when "localize"
+		when "add","new","create"
+			add_content(params)
+		end
+		
+	end
+	
+	def add_content(params)
+			case @argument
+			when "image"
+				add_image_to(params[:source])
+			when "address","tel","zip"
+				params[:subject].replace_property(@action, @input)
+				params[:subject].save
+			when "description"
+				params[:source].description = @input
+				params[:source].save
+			when "list"
+				List.find_or_create(
+					:creator_id => 	@current_user.id,
+					:label => Gum.purify(@input),
+					:tag_id => (params[:subject] != @current_user.tag) ? params[:subject].id : nil
+					)
+			when "tag", "tags"
+				@input.split(",").each do |input|
+					add_tag(:subject => params[:subject])
+				end
+			else
+				tag = Tag.find_or_create(
+					:label => Gum.purify(@input), 
+					:kind => @argument
+				) 
+			
+				@argument.split("#").each do |kind|
+					Tagging.find_or_create( 
+											:owner => @current_user, 
+											:subject_id => params[:subject].id , 
+										 	:object_id => tag.id, 
+											:kind => kind
+										)
+				end
+			end
+	end
+	
+	def to_myself?
+		return false if @raw_command[1] != "to" 
+		return false if @argument != "myself"
+		return true
+	end
+
+	def email_user(params)
+		user = User.find(:first, :conditions => ["email = ?",params[:email]])
+		if user.nil?
+			user = User.new(:email => params[:email], :login => params[:email], :password => "welcome")
+			user.save
+		end
+		@current_user.invite(:user => user, :to => params[:content], :message => params[:message])
+	end
+	
+	def add_image_to(source)
+		source.add_image(:uploaded_data => @image_url[:uploaded_data]|| nil, :source_url => @input)
+	end
+	
+	def add_tag(params)
+		tag = Tag.find_or_create(
+			:label => Gum.purify(@input), 
+			:kind => "tag"
+		)
+
+		Tagging.find_or_create(
+			:owner => @current_user,
+			:subject_id => tag.id,
+			:object_id => params[:subject].id,
+			:kind => @input,
+			:description => "#{params[:subject].label} #{tag.label}"
+		)	
 	end
 
 end

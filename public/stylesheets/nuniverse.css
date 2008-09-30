@@ -45,10 +45,20 @@
 	height:100px;
 }
 
+.nuniverse .breadcrumbs {
+	position:fixed;
+	left:20px;
+	top:0;
+	padding:5px;
+	background:#c3c3c3;
+	z-index:1234567890123;
+}
+
 .nuniverse .breadcrumbs a {
 	padding:5px;
 	color:#666;
 }
+
 
 .nuniverse .item p {
 	font-size:13px;
@@ -155,13 +165,8 @@ p strong {
 	
 }
 
-
 .images .box .avatar {
 	width:100%;
-}
-
-#google_ads {
-	background:#fff;
 }
 
 #page-tabs {
@@ -170,14 +175,25 @@ p strong {
 }
 
 #nav {
-	width:300px;
+	position:absolute;
+	width:100%;
+	z-index:123456789;
 }
 
 #content {
 	position:relative;
 	float:none;
 	width:auto;
-	margin:0 0 0 0px;
+	margin:81px 0 0 0px;
 	padding:0;
 	overflow:hidden;
+	z-index:123;
+}
+
+a.save_button {
+
+}
+
+a.saved {
+	background:transparent url('/images/icons/saved_button.png') 0 0 no-repeat;
 }

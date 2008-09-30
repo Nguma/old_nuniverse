@@ -113,10 +113,10 @@
 }
 
 .items .hover {
-	background:#eee;
-	color:#333;
+/*	background:#eee;*/
+	color:#FFF;
 }
 
 .items .hover h3 {
-	color:#333;
+	color:#FFF;
 }

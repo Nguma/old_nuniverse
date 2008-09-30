@@ -1,6 +1,8 @@
 var ListBox = new Class({
+  Extends:Box,
+  
   initialize:function(el) {
-    this.el = el;
+    this.parent(el);
     this.refresh();
   },
   
@@ -38,7 +40,7 @@ var ListBox = new Class({
   },
   
   setItemBehaviors:function() {
-    items().each(function(item){
+    this.items().each(function(item){
       item.addEvents({
         'mouseenter':function() {
            item.addClass('hover');
@@ -48,6 +50,7 @@ var ListBox = new Class({
         }
       });
     });
+    // this.makeItemsDraggable();
   },
   
   setPagination:function() {
@@ -76,6 +79,7 @@ var ListBox = new Class({
   
   refresh:function() {
     this.setPagination();
+    this.setItemBehaviors();
   },
   
   hideLoader:function() {
@@ -84,5 +88,24 @@ var ListBox = new Class({
   
   showLoader:function() {
     this.el.addClass('loading');
+  },
+  
+  makeItemsDraggable:function() {
+    var sortable = new Sortables(this.itemContainer(), {
+      constrain:true,
+      clone:false,
+      revert:true,
+      onStart:function(item) {
+        item.addClass('dragged');
+      },
+      onSort:function(item) { 
+        // this.getElements('.item').each(function(item,i){
+          // item.getElement('.rank').set('text', i+1);
+        // });
+      },
+      onComplete:function(item) {
+        item.removeClass('dragged');
+      }
+    });
   }
 });

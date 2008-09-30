@@ -11,7 +11,13 @@
       </td>
       <td>
         <p>
-          <b><%= item.object.label %></b>
+          <b>
+            <% if item.object.kind == "bookmark" -%>
+              <%= link_to("#{item.object.label.capitalize}", item.object.url) %>
+            <% else -%>
+              <%= link_to(item.object.label, "http://www.nuniverse.net/my_nuniverse/all/#{@to.label}/item/#{item.object.id}") %>
+            <% end -%>
+          </b>
           <%= item.info %>
         </p>
         

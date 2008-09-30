@@ -1,0 +1,14 @@
+<div class="box" id="sorting_options">
+  <%= expander_icon %>
+  <dl class='tabs'>
+    <dt>Sort</dt>
+    <% options.each do |option| -%>
+      <dd class=" <%= selected == option[1] ? 'current' : '' %>">
+        <%= link_to(option[0], 
+                    listing_url(source.label, :order => option[1], :mode => @mode), 
+                    :title => "#{source.label} #{option[0]}" ) 
+        %>
+      </dd>
+    <% end -%>
+  </dl>
+</div>

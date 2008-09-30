@@ -41,17 +41,20 @@ ActionController::Routing::Routes.draw do |map|
 	  		m.upgrade '/upgrade', :action => 'upgrade'
 	  	end
   	
-	  	map.with_options :controller => 'lists', :action => 'show', :path_prefix => '/my_nuniverse' do |m|
+	  	map.with_options :controller => 'lists', :action => 'show', :service => nil, :path_prefix => '/my_nuniverse' do |m|
 				
-	  		m.item_with_tag '/:tag/:list/item/:id', :controller => 'taggings', :requirements => {:tag => /\d+/}
+	  		m.item_with_tag '/:tag/:list/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
 	  		m.item '/all/:list/item/:id', :controller => 'taggings'
-	
+				m.item '/all/:list/item/:id/service/:service', :controller => 'taggings'
+				
+				
 	  		m.with_options :page => 1, :order => nil do |page|
 					page.listing '/all/:list/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
 					page.listing '/all/:list/:page/:order', :requirements => {:page => /\d+/}
 					page.listing_with_tag '/:tag/:list/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
 					
 					#page.listing_in_images '/all/:list/in_images/:page/:order', :mode => 'image', :requirements => {:page => /\d+/, :tag => nil}
+					page.list_in_cards	'/:tag/:list/in_cards/:page/:order', :mode => 'card', :requirements => {:tag => /\d+/,:page => /\d+/}
 					page.list_in_images '/:tag/:list/in_images/:page/:order', :mode => 'image', :requirements => {:tag => /\d+/,:page => /\d+/}
 				end
 	  					
@@ -67,7 +70,6 @@ ActionController::Routing::Routes.draw do |map|
 
   # 		
   	map.with_options :controller => 'taggings' do |m|
-  		m.google '/google/:id', :action => 'show', :service => 'google'
   		m.rate '/rate/:id/:stars', :action => 'rate'
   		m.map '/locate/:id', :action => 'show', :service => 'map'
   		m.bookmark '/bookmark/:path', :action => 'bookmark'

@@ -17,8 +17,17 @@ class List < ActiveRecord::Base
 		{:conditions => ['label = ?', label]}
 	}
 	
+	# items
+	# Extracts the tags from the list label, and performs a search against them as well as the full label
+	# Filters are the following
+	# users: list creator + users with permission
+	# tags: inflected tags against Nuniverse::Kinds + list label
+	# order: name, latest or votes
+	# label: item label, used a lot for returning suggestions
+	# page: page number
+	# per_page: number of results per page
 	def items(params = {})
-		tags = Nuniverse::Kind.find_tags(self.label.downcase)
+		tags = [Nuniverse::Kind.find_tags(self.label.downcase),self.label.downcase].flatten
 		users = params[:perspective] ? [self.creator] : [grantors, self.creator].flatten 
 		Tagging.select(
 			:users => users, 
@@ -38,6 +47,7 @@ class List < ActiveRecord::Base
 	end
 	
 	def grantors(params = {})
+		return [] if self.label.blank?
 		Permission.find(:all, :conditions => ["tags RLIKE ? AND granted_id = ?", "#{self.label}|#{self.label.pluralize}", self.creator_id]).collect {|c| c.grantor}
 	end
 	
