@@ -25,7 +25,8 @@ class TagsController < ApplicationController
 		@title = @tag.label.capitalize
 		
 		respond_to do |format|
-			
+			format.html {}
+			format.js {}
 		end
 	
   end

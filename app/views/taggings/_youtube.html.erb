@@ -9,9 +9,7 @@
       <%= link_to(item.url,item.url)%>
     </p>
     <div class="actions">
-      <%= render :partial => "/taggings/manage", :locals => {
-            :item => item, 
-            :id => tagging.id} rescue ""%>
+      <%= save_button_for(item, :id => tagging.id)%>
     </div>
   </div>
 <% end -%>

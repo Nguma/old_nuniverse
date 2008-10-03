@@ -1,4 +1,15 @@
-<%= map_box(@tagging) %>
+<%= description_box(@tagging) %>
+<%#= map_box(@tagging) %>
+<% unless @tagging.lists(:user => current_user).empty? -%>
 <%= lists_for(@tagging) %>
-<%= bookmarks_box(:source => @tagging.object) %>
-<%= comments_box(:source => @tagging) %>
+<% else -%>
+ <h2>You haven't added anything to <%= @tagging.title %> yet.</h2>
+  <h3>
+    <%= command(:label => "+ Add a new category now", :command => "Add a new category") %>
+  </h3>
+  <br/>
+  <p>Do you need to localize this item?</p>
+  <p><%= command(:label => "Find an address on Google", :command => "localize") %></p>
+  <p><%= command(:label => "Add an address", :command => "add new address") %></p>
+</div>
+<% end -%>

@@ -70,9 +70,9 @@ module ListsHelper
 		title = options[:title] || list.label
 		title = title.singularize if options[:item_size] && options[:item_size] <= 1
 		if list.tag
-			link_to title.capitalize, listing_with_tag_url(list.tag,list.label)
+			link_to title.capitalize, listing_with_tag_url(list.tag,list.label), :class => "link_to_list"
 		else
-			link_to title.capitalize, listing_url(list.label)
+			link_to title.capitalize, listing_url(list.label), :class => "link_to_list"
 		end
 	end
 	

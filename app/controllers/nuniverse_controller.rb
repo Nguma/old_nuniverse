@@ -19,8 +19,16 @@ class NuniverseController < ApplicationController
 		@subject = current_user.tag if @subject.nil?
 		params[:source] = @source
 		params[:subject] = @subject
-		@command.execute(params)		
-		redirect_back_or_default(@source)
+		@result = @command.execute(params)	
+		
+		respond_to do |format|
+			format.html {
+				redirect_back_or_default(@source)
+			}
+			format.js {
+				render :action => :property, :layout => false
+			}	
+		end
 	end
 	
 	

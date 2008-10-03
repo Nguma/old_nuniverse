@@ -7,9 +7,7 @@
       
       <p><%=  "#{item.precision} #{item.price}" %></p>
       <div class="actions">
-        <%= render :partial => "/taggings/manage", :locals => {
-              :tagging => Tagging.new(:object => item), 
-              :id => tagging.id} rescue ""%>
+        <%= save_button_for(item, :id => tagging.id)%>
       </div>
   </div>
 <% end -%>

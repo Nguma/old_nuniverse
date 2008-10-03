@@ -81,6 +81,10 @@ ActionController::Routing::Routes.draw do |map|
  		:controller => 'nuniverse',
  		:action => 'command'
 
+	map.command '/command/:command/:input', 
+ 		:controller => 'nuniverse',
+ 		:action => 'command'
+
 	map.suggest '/suggest/:command/:input',
 		:controller => 'taggings',
 		:action => 'suggest'

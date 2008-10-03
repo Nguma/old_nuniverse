@@ -30,11 +30,7 @@
         <div class="column large" id="item_list" >
             <% @items.each_with_index do |item, i| -%>
             <div class="box">
-              <%= render :partial => "item", :locals => {
-                  :source => @list, 
-                  :item => item, 
-                  :order => @order } 
-              %>
+              <%= render_item(item, :kind => @list.label) %>
             </div>
             <% end -%>
         </div>

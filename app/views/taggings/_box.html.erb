@@ -4,12 +4,12 @@
   <%= render :partial => "/lists/item_options", :locals => {:item => item}%>
   
   <p style="font-size:12px;color:#666">
-    <%= item.info %>
+    <%= item.info(:kind => source.label) %>
   </p>
   <div class="delimiter">&nbsp;</div>
   
   <p style="font-size:14px;color:#999;font-weight:bold;font-style:italic;padding:5px">
-    <%= item.specific_info %>
+    <%#= item.specific_info %>
   </p>
      
 </div>

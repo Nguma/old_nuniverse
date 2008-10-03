@@ -44,7 +44,7 @@ class Command
 			search_for(params)
 		when "localize"
 		when "add","new","create"
-			add_content(params)
+			return add_content(params)
 		end
 		
 	end
@@ -57,7 +57,7 @@ class Command
 				params[:source].description = @input
 				params[:source].save
 			when "list", "category"
-				List.find_or_create(
+			return List.find_or_create(
 					:creator_id => 	@current_user.id,
 					:label => Gum.purify(@input),
 					:tag_id => subject_is_user?(params[:subject]) ? nil :params[:subject].id
@@ -71,7 +71,7 @@ class Command
 					:label => Gum.purify(@input), 
 					:kind => @argument
 				) 
-				@argument << "##{params[:subject].label}" unless 	subject_is_user?(params[:subject])
+				# @argument << "##{params[:subject].label}" unless 	subject_is_user?(params[:subject])
 				@argument.split("#").each do |kind|
 					Tagging.find_or_create( 
 											:owner => @current_user, 

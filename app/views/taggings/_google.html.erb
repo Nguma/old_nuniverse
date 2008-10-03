@@ -1,6 +1,6 @@
+
 <% @items.each_with_index do |item,i| -%>
   <div class="box <%= cycle('even','odd') %>" >
-
     <h3>
      <%= link_to(item.label.capitalize, item.url)%>
     </h3>
@@ -9,9 +9,8 @@
       <%= link_to(item.url,item.url)%>
     </p>
     <div class="actions">
-            <%= render :partial => "/taggings/manage", :locals => {
-                  :tagging => tagging, 
-                  :id => tagging.id} rescue ""%>
+       <%= save_button_for(item, :id => tagging.id)%>
     </div>
   </div>
 <% end -%>
+<%= image_tag("/images/icons/powered_by_google.gif")%>

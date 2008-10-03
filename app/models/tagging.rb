@@ -86,23 +86,15 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	
-	def info
-		return "Added to #{subject.label.capitalize}" if kind == "bookmark"
-		return description unless description.blank?
-		info = ""
-		unless object.property('address').blank?
-			# info << kinds.last.capitalize
-			info << "#{object.property('address')}"
-			info << " - #{object.property('tel')}" unless object.property('tel').blank?
-		else 
-			# info << object.tags.collect {|c| c.kind.gsub('#',' ').capitalize }.join(', ')
+	def info(params)
+		params[:kind] ||= self.kind
+		info = Nuniverse::Kind.matching_info(params[:kind])
+		if info == 'price'
+			return "#{object.property('price')} on #{object.service.capitalize}" unless object.service.nil?
 		end
-		return info
-	end
-	
-	def specific_info
-		return  " - \"#{self.connections(:kind => 'comment').first.label.capitalize}\"" unless self.connections(:kind => 'comment').empty?
-		return ""
+		return description if info == 'description'
+		return object.property('address') if info == 'address'
+		return self.connections(:kind => info).first.label rescue ""
 	end
 	
 	def label
@@ -189,7 +181,7 @@ class Tagging < ActiveRecord::Base
 		# Pluralized and singularized versions of each tag is passed as a regexp match.
 		# Same is done with title if exists.
 		clause = params[:tags].collect {|t| " (T.kind rlike '(^| )(#{t.pluralize}|#{t.singularize})( |$)')"}.join('+')
-		clause << " + (CONCAT(SUBJ.label, ' ', T.kind) rlike '(^| )(#{params[:title].pluralize}|#{params[:title].singularize})( |$)') " if params[:title]
+		clause << " + (CONCAT(SUBJ.label,' ', T.kind) rlike '^(#{params[:title].pluralize}|#{params[:title].singularize})$') " if params[:title]
 		user_ids = params[:users].collect {|u| u.id}.join(',')
 		
 		sql = "SELECT DISTINCT T.*, COUNT(DISTINCT object_id) "
@@ -230,6 +222,11 @@ class Tagging < ActiveRecord::Base
 	
 	def is_a_list?
 		return true if kind == "list"
+		return false
+	end
+	
+	def has_description?
+		return true if !description.blank?
 		return false
 	end
 	

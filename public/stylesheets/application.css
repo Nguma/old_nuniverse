@@ -1,40 +1,7 @@
-* {
-	font-weight:normal;
-	color:#333;
-	font-family:Arial;
-	padding:0;
-	margin:0;
-	border:none;
-	color:inherit;
-	background:none;
-	text-decoration:none;
-	outline:0;
-	list-style-type:none;
-}
-
 body
 {
 	background:#efefef url('/images/backgrounds/main.png') 0 0 repeat-x;
 	padding:0px 0 0 0px;
-}
-
-
-#notice
-{
-	position:fixed;
-	top:40px;
-	right:20px;
-	color:#333;
-	font-weight:bold;
-	font-size:15px;
-	z-index:123456;
-	background:#9F9;
-	padding:10px;
-}
-
-#wrap
-{
-	padding:0 0;
 }
 
 .delimiter
@@ -58,34 +25,53 @@ body
 	background:#CFC;
 }
 
-#preview {
+.hidden {
 	display:none;
-	position:absolute;
-	width:600px;
-	height:325px;
-	left:405px;
-/*	border:solid #666 10px;*/
-	background:#eee;
-	z-index:1234567;
 }
 
-#preview .items {
+#notice
+{
+	position:fixed;
+	top:40px;
+	right:20px;
+	color:#333;
+	font-weight:bold;
+	font-size:15px;
+	z-index:123456;
+	background:#9F9;
 	padding:10px;
 }
 
-#preview .item {
-	display:block;
-	margin:3px 0 2px 0;
-	border-bottom:dotted 2px #666;
-	background:#FFF;
+#control_panel {
+	position:fixed;
+	background:none;
+	right:20px;
+	top:0px;
+	padding:0;
+	
+	z-index:1234567890123;
+	background:#c3c3c3;
 }
 
-.left {
+#control_panel dd
+{
 	position:relative;
 	float:left;
-	margin: 0 10px 0 0;
+	padding:5px 10px 5px 10px;
+	margin:0 0 0 0;
+	color:#FFF;
 }
 
-.hidden {
-	display:none;
+#control_panel dd a,
+#control_panel dd a:visited {
+	font-size:12px;
+	font-weight:bold;
+	color:#FFF;
+}
+
+#control_panel .selected 
+{
+	background:#333;
+	color:#FFF;
+	border-bottom:none;
 }

@@ -24,7 +24,6 @@ class TaggingsController < ApplicationController
 	
 	def destroy
 		raise "You don't have the right to do this!" if current_user != @tagging.owner
-		@parent = @tagging.path.last
 		@tagging.destroy
 		if @parent 
 			redirect_back_or_default("/taggings/#{@parent}")

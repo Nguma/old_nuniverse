@@ -26,7 +26,6 @@ module TaggingsHelper
 		}
 	end
 	
-	
 	def content_for_service(params)
 		params[:service] ||= @service
 		render :partial => "/taggings/#{service}", :locals => {:source => params[:source]}
@@ -34,6 +33,8 @@ module TaggingsHelper
 		render :partial => "/taggings/default_content", :locals => {:source => params[:source]}
 	end
 	
-	
+	def save_button_for(item, params = {})
+		render :partial => "/taggings/manage", :locals => {:item => item, :id => params[:id]}
+	end
 
 end

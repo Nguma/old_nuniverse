@@ -8,7 +8,7 @@
   </div>
 <% else -%>
   
-    <%= (link_to "x", "/taggings/#{item.id}", :confirm => 'Are you sure?', :method => :delete) %>
+    <%= link_to "x", item, :confirm => 'Are you sure?', :method => :delete %>
     <%#= check_box "/taggings/#{item.id}/update", item.restricted, :checked => item.restricted,  :class => "check"%>
 
 <% end -%>

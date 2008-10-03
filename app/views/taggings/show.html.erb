@@ -3,23 +3,36 @@
     <div class="hat">
       <%= title_for(@tagging, :list => @list)%>
     </div>
-    		
+     
+
     <div id="nav">
       <%= perspectives(:source => @tagging) %>
       <% if service_is_nuniverse? -%>
         <%= new_list_button %>
       <% end -%>
     </div>
-    
     <div id="content">
-      <div class="column large">
+      <div class="column large" id="left-content">
         <%= content_for_item(@tagging) %>
+        <%= tag_box(:source => @tagging.object) %>
       </div>
       <div class="column small">
         <%= ad_box %>
         <%= image_box(:source => @tagging) %>
-        <%= tag_box(:source => @tagging.object) %>
+        <div class="x" id="lego_box">
+          <h2>Create a new property</h2>
+          <h5>Drag and drop any item from that list to the left to create a new category</h5>
+          <div id="possible_categories">
+            <%= drop_command(:category => "People", :tagging => @tagging)%>
+            <%= drop_command(:category => "Bookmarks", :tagging => @tagging)%>
+            <%= drop_command(:category => "Videos", :tagging => @tagging)%>
+            <%= drop_command(:category => "Items", :tagging => @tagging)%>
+            <%= drop_command(:category => "Address", :tagging => @tagging)%>
+            <%= drop_command(:category => "Comments", :tagging => @tagging)%>
+          </div>
+        </div>
       </div>
+        
     </div>
     <%= input(:source => @tagging)%>  
 <% end -%>

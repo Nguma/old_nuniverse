@@ -47,48 +47,34 @@ function reset()
       return false;
     });
   });
+
+
+  if($defined($('possible_categories'))) {
+    $('possible_categories').getElements('a').each(function(cat){
+      cat.makeDraggable({
+        droppables:$('left-content'),
+        onDrop:function(el, droppable) {
+          if(droppable) {
+            var call = new Request.HTML({
+              url:el.getProperty('href'),
+              onSuccess:function(a,b,c,d) {
+                $('left-content').adopt(a[0]);
+              }
+
+            }).get();
+          }
+
+        },
+        onEnter:function() {
+          cat.setStyle('color','#FC0')
+        },
+        onLeave:function() {
+          cat.setStyle('color', '#CCC')
+        }
+      })
+    });
+  }
   
-  var cards = $$('.card');
-  
-  cards.each(function(card){
-    // var cardDrag = new Drag.Move(card, {
-    //       snap:50,
-    //       droppables:cards,
-    //       onDrop:function() {
-    //         
-    //       },
-    //       onEnter:function(el,droppable){
-    //         el.setStyle('background-color','#9F0')
-    //       },
-    //       
-    //       onStart:function(el){
-    //         el.setStyle('z-index', 234567890)
-    //       },
-    //       
-    //       onComplete:function(el) {
-    //         
-    //       }
-    // });
-  });
-  // if($defined($('content.content_card'))) {
-  //     
-  //     var sortable = new Sortables($('item_list'), {
-  //       constrain:true,
-  //       clone:false,
-  //       revert:true,
-  //       onStart:function(item) {
-  //         item.addClass('dragged');
-  //       },
-  //       onSort:function(item) { 
-  //         // this.getElements('.item').each(function(item,i){
-  //           // item.getElement('.rank').set('text', i+1);
-  //         // });
-  //       },
-  //       onComplete:function(item) {
-  //         item.removeClass('dragged');
-  //       }
-  //     });
-  //   }
 
 }
 

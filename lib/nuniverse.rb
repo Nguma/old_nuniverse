@@ -32,7 +32,7 @@ module Nuniverse
 				'company' => 'group#company',
 				'team' => 'group#team',
 				'band' => 'group#band',
-				'album' => 'item#album',
+				'album' => 'artwork#album',
 				'camera' => 'item#camera',
 				'character' => 'character',
 				'my trip to' => 'location',
@@ -117,6 +117,25 @@ module Nuniverse
 			input
 		end
 		
+		
+		def self.matching_info(kind)
+		
+			info = self.infos[self.match(kind).split('#').first]
+			return info unless info.nil?
+			return 'description'
+		end
+		
+		def self.infos
+			{
+				'person' => 'profession',
+				'artwork' => 'artist',
+				'location' => 'address',
+				'restaurant' => 'address',
+				'museum' => 'address',
+				'album' => 'artist',
+				'item' => 'price'
+			}
+		end
 
 	end
 	

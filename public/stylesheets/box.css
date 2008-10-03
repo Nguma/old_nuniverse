@@ -78,24 +78,7 @@
 	overflow:hidden;
 }
 
-#map_box .content {
-	visibility:hidden;
-	display:block;
-}
 
-#map_box .prop {
-	color:#666;
-	font-size:18px;
-	font-weight:normal;
-}
-
-#map_box {
-	height:30px;
-}
-
-#map_box.expanded {
-	height:250px;
-}
 
 #nuniverse .expanded .content {
 	display:block;
@@ -280,10 +263,58 @@ h2 .command {
 	color:#999;
 }
 
+
+h2 span.size {
+	color:#ccc;
+}
+
+#map_box .content {
+	visibility:hidden;
+	display:block;
+}
+
+#map_box .prop {
+	color:#666;
+	font-size:18px;
+	font-weight:normal;
+}
+
+#map_box {
+	height:30px;
+}
+
+#map_box.expanded {
+	height:250px;
+}
+
 #ad_box {
 	background:#FFF;
 }
 
-h2 span.size {
-	color:#ccc;
+
+#tag_box {
+	background:none;
+}
+
+#lego_box {
+	height:200px;
+	overflow:visible;
+}
+
+#lego_box #possible_categories {
+	display:block;
+}
+
+#lego_box a {
+	position:relative;
+	clear:both;
+	float:none;
+	background:#ccc;
+	padding:5px;
+	line-height:15px;
+	margin:5px 0 5px 0;
+}
+
+#lego_box .hover a {
+	color:#FFF;
 }

@@ -38,8 +38,9 @@ module NuniverseHelper
 		link_to(object.label.capitalize, url, :class => dom_class || "inner")
 	end
 	
-	def empty_box
-		"<div class='box hidden'>&nbsp;</div>"
+	def description_box(source)
+		return nil if !source.has_description?
+		render :partial => "description", :locals => {:source => source }
 	end
 	
 	def spinner
@@ -110,5 +111,9 @@ module NuniverseHelper
 			render :partial => "/taggings/#{@service}", :locals => {:tagging => item} 
 		
 		end
+	end
+	
+	def drop_command(params) 
+		link_to(params[:category], "/command/add category/#{params[:category]}?tagging=#{params[:tagging].id}")
 	end
 end
