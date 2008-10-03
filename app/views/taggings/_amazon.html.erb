@@ -1,7 +1,7 @@
 <% @items.each do |item| %>
   <div class="box <%= cycle('even','odd') %>"> 
       <%= image_tag(item.thumbnail,:class => "thumbnail")%>
-     <h3>
+      <h3>
         <%= link_to_object(item) %>
       </h3>
       

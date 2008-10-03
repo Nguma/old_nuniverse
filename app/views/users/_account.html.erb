@@ -1,9 +1,3 @@
-<div class="box">
-  <p style="color:#999;text-align:center;padding-top:10px;font-size:20px">
-    <strong><%= current_user.connections_count %></strong> connections.
-  </p>
-  <div class="actions">
-  <%= link_to("Upgrade", "/upgrade") %>
-  <%= link_to "Edit your profile", "/users/edit" %>
-  </div>
+<div class="command_box">
+  <%=  link_to("<strong>#{current_user.connections_count}</strong> connections.", "/my_nuniverse/all_items") %>
 </div>

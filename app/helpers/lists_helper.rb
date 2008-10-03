@@ -7,40 +7,42 @@ module ListsHelper
 		render :partial => "hat", :locals => {:title => title}
 	end
 		
-	def link_to_item(item, params = {})
-		if item.object.kind == "bookmark"
+	def link_to_item(item, params = {})	
+		list = params[:kind] ? params[:kind] : item.kind 	
+		if item.kind == "bookmark"
 			link_to("#{item.object.label.capitalize}", item.object.url)
 		else
-			
-			if params[:source]
-				if !params[:source].is_a?(Tagging) && params[:source].tag
-					url = item_with_tag_url(params[:source].tag,params[:source].label,  item)
-				else
-					url = item_url(params[:source].label, item)
-				end
-			else
-				url = item_url(item)
-			end
-			link_to(item.object.label.capitalize, url)
+			link_to(item.label.capitalize, item_url(:id => item.id, :list => list))
 		end
 	
 	end
 	
 	def render_item(item, params = {})
-		render :partial => "/lists/item", :locals => {:item => item, :source => params[:source] || nil}
+		params[:source] ||= nil
+		params[:kind] ||= nil
+		params[:item] = item
+		render :partial => "/lists/item", :locals => params
 	end
 	
-	def breadcrumbs(params = {})
-		starting_size = 17
-		str = "<div class='breadcrumbs'>"
-		str << link_to("< To your nuniverse", "/my_nuniverse", :style => "font-size:#{starting_size}px")
-		str << link_to("< #{params[:list].title}", listing_url(:list => params[:list].label, :tag => params[:list].tag)) if params[:list]
-		str << "</div>"
-		str
+	def breadcrumbs_for(source, params = {})
+		breadcrumbs = []
+		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse")
+		case source.class.to_s
+		when 'Tagging'
+			breadcrumbs << link_to("< #{@list.tag.title}", tag_url(:id => @list.tag.id)) if @list.tag
+			breadcrumbs << link_to("< #{@list.label}", listing_url(:list => @list.label, :tag => @list.tag))
+		when 'List'
+			breadcrumbs << link_to("< #{source.tag.title}", tag_url(:id =>source.tag.id)) if source.tag
+		when 'Tag'
+			breadcrumbs << link_to("< #{source.kind.split('#').last}", listing_url(:list => source.kind.split('#').last))
+		else
+			
+		end
+		render :partial => "/nuniverse/breadcrumbs", :locals => {:breadcrumbs => breadcrumbs}
 	end
 	
 	def sorting_options(params = {})
-		options = [['By Name', 'by_name'],['By Latest', 'by_latest'],['By Vote', 'by_vote']]
+		options = [['Name', 'by_name'],['Latest', 'by_latest'],['Vote', 'by_vote']]
 		render :partial => "/lists/sorting_options", :locals => {:options => options, :source => params[:source], :selected => params[:selected]}
 
 	end
@@ -57,7 +59,8 @@ module ListsHelper
 			["you",	item_url(:id => params[:source].id, :list => list_label, :service => "you"), "you"], 
 			["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :service => "everyone"), "everyone"],
 			["Google",item_url(:id => params[:source].id, :list =>  list_label, :service => "google"), "google"],
-			["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :service => "amazon"), "amazon"]
+			["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :service => "amazon"), "amazon"],
+			["Youtube", item_url(:id => params[:source].id, :list =>  list_label, :service => "youtube"), "youtube"]
 		]
 		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source]}
 	end
@@ -86,7 +89,7 @@ module ListsHelper
 	
 	def lists_for(source, options = {})
 		boxes = []
-		source.lists.each_with_index do |item,i|
+		source.lists(:user => current_user).each_with_index do |item,i|
 			boxes << list(:source => item) 
 		end
 		if options[:add_box]
@@ -164,7 +167,7 @@ module ListsHelper
 	def map_box(source, params = {})
 		@map = map(:source => source, :page => params[:page] || 1)
 		if @map
-			return render(:partial => "/nuniverse/map_box", :locals => {:map => @map, :source => source})
+			return render(:partial => "map_box", :locals => {:map => @map, :source => source})
 		elsif !source.is_a?(List)
 			# items = google_localize(source)
 			items = []
@@ -173,6 +176,6 @@ module ListsHelper
 	end
 	
 	def expander_icon
-		image_tag('/images/icons/expander.png', :alt => 'expand', :class => "expander")
+		link_to("#{image_tag('/images/icons/expander.png', :alt => 'expand', :class => 'expand_icon', :title => 'expand')} #{image_tag('/images/icons/collapser.png', :alt => 'collapse', :class => 'collapse_icon', :title => 'collapse')}", "#", :class => "expander")
 	end
 end

@@ -1,30 +1,25 @@
 <% nuniverse(:dom_class => @tagging.object.kind, :selected => "My nuniverse") do -%>
-    <%= breadcrumbs(:list => @list) %>
-    
+    <%= breadcrumbs_for(@tagging) %>
     <div class="hat">
-      <%= title_for(@tagging, :list => @list, :service => @service)%>
+      <%= title_for(@tagging, :list => @list)%>
     </div>
     		
     <div id="nav">
-      <% boxes = [
-        ad_box,
-        tag_box(:source => @tagging.object),
-        perspectives(:source => @tagging),
-        new_list_button]%>
-
-      <%= columnize(boxes, :size => 4) %>
+      <%= perspectives(:source => @tagging) %>
+      <% if service_is_nuniverse? -%>
+        <%= new_list_button %>
+      <% end -%>
     </div>
     
     <div id="content">
-      <div class="column small">
-        <%= image_box(:source => @tagging) %>
-        <%= map_box(@tagging) %>
-      </div>
       <div class="column large">
-        <%= content_for_tagging(@tagging, :service => @service) %>
+        <%= content_for_item(@tagging) %>
+      </div>
+      <div class="column small">
+        <%= ad_box %>
+        <%= image_box(:source => @tagging) %>
+        <%= tag_box(:source => @tagging.object) %>
       </div>
     </div>
-    
-      <%= input(:source => @tagging)%>
-    
+    <%= input(:source => @tagging)%>  
 <% end -%>

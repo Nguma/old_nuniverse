@@ -7,24 +7,36 @@ var ListBox = new Class({
   },
   
   itemContainer:function() {
-    return this.el.getElement('.items')
+    return this.el.getElement('.items');
   },
   
   items:function() {
-    return this.el.getElements('.item')
+    return this.el.getElements('.item');
+  },
+  
+  hat:function() {
+    return this.el.getElement('h2')
+  },
+  
+  actions:function() {
+    return this.el.getElement('.actions');
+  },
+  
+  options:function() {
+    return this.el.getElement('.options');
   },
   
   checkBoxes:function() {
-    return this.itemContainer.getElements('.check') 
+    return this.itemContainer.getElements('.check');
   },
   
   pages:function() {
-    return this.el.getElements('.pagination a')
+    return this.el.getElements('.pagination a');
   },
   
   setCheckBoxes:function() {
     this.checkBoxes().each(function(checkbox){
-      checkbox.addEvent('click', this.toggleCheckBox.bind(this,checkbox))
+      checkbox.addEvent('click', this.toggleCheckBox.bind(this,checkbox));
     });
   },
   
@@ -39,18 +51,30 @@ var ListBox = new Class({
     return checkbox.getProperty('title');
   },
   
+  setBehaviors:function() {
+    this.parent();
+    this.setOptionsBehaviors();
+    this.makeListSortable();
+  },
+  
   setItemBehaviors:function() {
     this.items().each(function(item){
       item.addEvents({
-        'mouseenter':function() {
-           item.addClass('hover');
-        },
-        'mouseleave':function() {
-          item.removeClass('hover');
-        }
-      });
-    });
-    // this.makeItemsDraggable();
+        'mouseenter':this.focusItem.bind(this,item),
+        'mouseleave':this.unfocusItem.bind(this,item)
+      },this);
+    },this);
+  },
+  
+  setOptionsBehaviors:function() {
+    var expand_options_bt = this.el.getElement('.expand_options');
+    var collapse_options_bt = this.el.getElement('.collapse_options');
+    if($defined(expand_options_bt)) {
+      expand_options_bt.addEvent('click', this.expandOptions.bindWithEvent(this));
+    }
+    if($defined(collapse_options_bt)) {
+      collapse_options_bt.addEvent('click', this.collapseOptions.bindWithEvent(this));
+    }
   },
   
   setPagination:function() {
@@ -62,11 +86,11 @@ var ListBox = new Class({
   pageTo:function(ev,page) {
       ev.preventDefault();
       this.showLoader();
-      this.itemContainer().empty();
+      this.content().empty();
       
       var call = new Request.HTML({
         'url':page.getProperty('href'),
-        'update':this.itemContainer(),
+        'update':this.content(),
         'onSuccess':this.onPage.bind(this)
       }, this).get();
       return false;
@@ -90,8 +114,23 @@ var ListBox = new Class({
     this.el.addClass('loading');
   },
   
-  makeItemsDraggable:function() {
-    var sortable = new Sortables(this.itemContainer(), {
+  unfocus:function() {
+    this.parent();
+    this.collapseOptions();
+  },
+  
+  unfocusItem:function(item) {
+    item.removeClass('hover');
+    
+  },
+  
+  focusItem:function(item) {
+    item.addClass('hover');  
+  },
+  
+  makeListSortable:function() {
+   
+    var sortable = new Sortables(this.content(), {
       constrain:true,
       clone:false,
       revert:true,
@@ -107,5 +146,21 @@ var ListBox = new Class({
         item.removeClass('dragged');
       }
     });
+  },
+  
+  expandOptions:function(ev) {
+    ev.preventDefault();
+    
+    this.expand();
+    this.options['scroll'].toElement(this.options());
+   
+  },
+  
+  collapseOptions:function() {
+   
+    if($defined(this.options['scroll'])) {
+      this.options['scroll'].toTop()
+    }
+     
   }
 });

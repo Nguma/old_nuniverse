@@ -76,6 +76,14 @@ module NuniverseHelper
 		html
 	end
 	
+	# Service_is_nuniverse?
+	# Returns true if selecte dservice / perspective is prioritary to nuniverse.
+	def service_is_nuniverse?
+		return true if @service == "you"
+		return true if @service == "everyone"
+		return false
+	end
+	
 	
 	def command(params)
 		params[:command]  ||= "Add to #{params[:kind]}"
@@ -86,5 +94,21 @@ module NuniverseHelper
 		render :partial => "/nuniverse/input" , :locals => {
 		  :source => params[:source]
 		 }
+	end
+	
+	def title_for(source, options ={})
+		str = "<h1>#{source.title} "
+		str << "<span class='service'> on #{@service}</span>" unless service_is_nuniverse?
+		str << "</h1>"
+		str
+	end
+	
+	def content_for_item(item, params = {})
+		if service_is_nuniverse?
+			render :partial => "/taggings/#{item.kind}", :locals => {:tagging => item}  rescue render :partial => "/taggings/default", :locals => {:tagging => item}		
+		else
+			render :partial => "/taggings/#{@service}", :locals => {:tagging => item} 
+		
+		end
 	end
 end

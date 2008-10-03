@@ -8,8 +8,9 @@
 
 .tabs dt {
 	position:relative;
-	display:block;
-	padding:0 5px 5px 5px;
+	float:left;
+	padding:5px 5px 5px 5px;
+	line-height:20px;
 	font-size:14px;
 	color:#666;
 }
@@ -17,11 +18,11 @@
 .tabs li,
 .tabs dd {
 	position:relative;
-	display:none;
+	float:left;
 	top:0;
-	padding:10px;
+	padding:5px;
 	line-height:20px;
-	font-size:20px;
+	font-size:14px;
 	font-weight:normal;
 	color:#999;
 	border-left:none;
@@ -38,11 +39,16 @@
 	padding:0;
 	font-color:inherit;
 	font-weight:inherit;
+	font-size:inherit;
 }
 
 .tabs .current {
 	border-bottom:none;
 	font-weight:bold;
 	background:#ddd;
-	display:block;
+}
+
+.tabs dd img {
+	position:relative;
+	float:left;
 }

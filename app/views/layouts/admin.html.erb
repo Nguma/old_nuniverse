@@ -3,42 +3,23 @@
        
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>* <%= @title.blank? ? "Nuniverse" : @title %> *</title>
+  <title>* nuniverse admin *</title>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Language" content="en-us" />
   <meta name="Author" content="#TODO" />
-  <meta name="ROBOTS" content="all" />
+  <meta name="ROBOTS" content="noindex, nofollow" />
   <meta name="MSSmartTagsPreventParsing" content="true" />
   <meta name="Description" content="." />
   <meta name="Keywords" content="" />
   <meta http-equiv="imagetoolbar" content="no" />
   <meta name="verify-v1" content="/b/gBK4McPYhBKaszdoH2V4g8APPQuLR+gAg4gpteUs=" />
 
-  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'filters', 'box', 'list', 'items', 'input', 'custom'%>
+  <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'admin', 'connection', 'filters', 'box', 'list', 'items', 'input', 'custom'%>
   <%= javascript_include_tag  'mootools', 'application', 'box', 'list', 'input' %>
-  <%#= GMap.header(:with_vml => false) %>
-  <%#= @map.to_html if @map%>
-
+ 
   <%= yield :head %>
   <%= head_for(controller.controller_name )%>
-  <script type="text/javascript"><!--
-   google_ad_client = "pub-8435960507166132";
-   google_ad_slot = "4376243957";
-   
-   
-   google_ad_width = 300;
-   google_ad_height = 60;
-   //-->
-   </script>
  
-    <script type="text/javascript">
-      var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-         document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-      </script>
-     <script type="text/javascript">
-        var pageTracker = _gat._getTracker("UA-5475085-1");
-        pageTracker._trackPageview();
-      </script>
 </head>
 <body onunload="javascript:onUnload()">
   <div id="notice"><%= flash[:notice] %><%= flash[:error]%></div>

@@ -76,8 +76,8 @@ class Tagging < ActiveRecord::Base
 	
 	
 	
-	def lists
-		List.bound_to(self.object)
+	def lists(params = {})
+		List.created_by(params[:user] || nil).bound_to(self.object)
 	end
 	
 	
@@ -171,7 +171,6 @@ class Tagging < ActiveRecord::Base
 			:per_page => params[:per_page], 
 			:order => params[:order] ||= "latest"
 		)
-		# Tagging.with_user(self.owner).with_subject(self.object).with_tags(Nuniverse::Kind.match(params[:kind]).split('#')).paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
 	end
 
 	# Select
@@ -186,16 +185,18 @@ class Tagging < ActiveRecord::Base
 		params[:tags] ||= []
 		params[:subject] ||= nil
 		order = Tagging.order(params[:order])
-		match_length = [params[:tags].length-1,1].max
-		
-		clause = params[:tags].collect {|t| " ( CONCAT(SUBJ.label,' ',T.kind) rlike '(^| )(#{t.pluralize}|#{t.singularize})( |$)')"}.join('+')
+		# Building clause out of tags and title if present
+		# Pluralized and singularized versions of each tag is passed as a regexp match.
+		# Same is done with title if exists.
+		clause = params[:tags].collect {|t| " (T.kind rlike '(^| )(#{t.pluralize}|#{t.singularize})( |$)')"}.join('+')
+		clause << " + (CONCAT(SUBJ.label, ' ', T.kind) rlike '(^| )(#{params[:title].pluralize}|#{params[:title].singularize})( |$)') " if params[:title]
 		user_ids = params[:users].collect {|u| u.id}.join(',')
 		
 		sql = "SELECT DISTINCT T.*, COUNT(DISTINCT object_id) "
 		sql << ", SUM((#{clause})) AS S " unless params[:tags].empty?
 		sql << ", SUM(K.value) AS votes " if params[:order] == "by_vote"
 		sql << "FROM taggings T LEFT OUTER JOIN tags on (object_id = tags.id) "
-		sql << "LEFT OUTER JOIN tags SUBJ on subject_id = SUBJ.id "
+		sql << "LEFT OUTER JOIN tags SUBJ on subject_id = SUBJ.id " unless params[:tags].empty?
 		sql << "LEFT OUTER JOIN rankings K on (K.tagging_id = T.id AND K.user_id in (#{user_ids})) " if params[:order] == "by_vote"
 		sql << "WHERE T.user_id IN (#{user_ids}) " 
 		sql << "AND T.subject_id = #{params[:subject].id} " if params[:subject]
@@ -203,10 +204,10 @@ class Tagging < ActiveRecord::Base
 		
 		sql << "GROUP BY object_id "
 		
-		sql << "HAVING (S >= #{match_length}) " unless params[:tags].empty?
+		sql << "HAVING (S >= #{params[:tags].length}) " unless params[:tags].empty?
 		sql << "ORDER BY #{order} "
 
-		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 5)
+		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)
 	end
 
 	

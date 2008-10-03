@@ -4,34 +4,6 @@ module TaggingsHelper
 		render :partial => "/taggings/bookmark", :locals => {:item => item, :tagging => tagging}
 	end
 	
-	def content_for_tagging(tagging, params = {})
-		if params[:service] == "you" || params[:service] == "everyone"
-				render :partial => "/taggings/#{tagging.kind}", :locals => {:tagging => tagging}  rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}
-			# rescue render :partial => "/taggings/default", :locals => {:tagging => tagging}			
-		else
-			render :partial => "/taggings/#{params[:service]}", :locals => {:tagging => tagging} 
-		
-		end
-	end
-	
-	def title_for(tagging, options ={})
-		str = "<h1>"
-		# str << "<span style='font-size:30px;color:#999'>"
-		# 		if options[:list]
-		# 			
-		# 			#str << "#{options[:list].tag.label} " if options[:list].tag
-		# 			# str << "#{options[:list].label}: " 
-		# 		end
-		#str << icon_for(tagging.object)
-		
-		# str << link_to(tagging.kind.capitalize, "/my_nuniverse/all/#{tagging.kind}")
-		# str << " </span>"
-		str << tagging.object.title
-		str << "<span class='service'> by #{options[:service]}</span>" if options[:service]
-		str << "</h1>"
-		str
-	end
-	
 	def property(property)
 		unless !property || property.blank?
 			render :partial => "/taggings/property", :locals => {:property => property}

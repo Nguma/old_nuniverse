@@ -17,6 +17,10 @@ class List < ActiveRecord::Base
 		{:conditions => ['label = ?', label]}
 	}
 	
+	named_scope :order_by, lambda { |order| 
+		order.nil? ? {} : {:order => order }
+	}
+	
 	# items
 	# Extracts the tags from the list label, and performs a search against them as well as the full label
 	# Filters are the following
@@ -27,13 +31,14 @@ class List < ActiveRecord::Base
 	# page: page number
 	# per_page: number of results per page
 	def items(params = {})
-		tags = [Nuniverse::Kind.find_tags(self.label.downcase),self.label.downcase].flatten
+		tags = Nuniverse::Kind.find_tags(self.label.downcase)
 		users = params[:perspective] ? [self.creator] : [grantors, self.creator].flatten 
 		Tagging.select(
 			:users => users, 
 			:tags => tags, 
 			:order => params[:order], 
 			:subject => self.tag, 
+			:title => self.label,
 			:label => params[:label] || nil,
 			:page => params[:page], 
 			:per_page => params[:per_page]

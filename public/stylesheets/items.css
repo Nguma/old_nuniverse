@@ -1,3 +1,19 @@
+
+.list .item h3 {
+	padding:10px 30px 0 10px;
+	z-index:12345;
+	font-size:16px;
+}
+
+.list .item p {
+	font-size:12px;
+	color:#888;
+}
+
+.list .hover p {
+	color:#ccc;
+}
+
 /* ITEM */
 .box .item {
 	position:relative;
@@ -11,10 +27,14 @@
 	position:relative;
 	float:left;
 	padding:0;
-	margin:0 10px 0 0;
+	margin:0 5px 0 0;
 	height:30px;
 	width:30px;
 	line-height:-999999px;
+	height:40px;
+	width:40px;
+	background:transparent url("/images/backgrounds/icon.png") 0 0 no-repeat;
+	padding:4px 6px 6px 4px;
 }
 
 .box .items .item .options {
@@ -25,16 +45,19 @@
 	background:none;
 }
 
-.box .items .item h3 {
+.box .item h3 {
 	position:relative;
-	font-size:15px;
+	font-size:16px;
 	font-weight:normal;
 	line-height:20px;
-	padding:5px 5px 5px 5px
+	padding:5px 5px 0 5px;
+	color:#666;
 }
 
 .box .item h3 a {
 	font-weight:inherit;
+	font-size:inherit;
+	color:inherit;
 }
 
 .box .items .item .icon {
@@ -117,11 +140,19 @@
 	color:#FFF;
 }
 
-.items .hover h3 {
-	color:#FFF;
+.hover .item h3 {
+	color:#ccc;
+}
+
+.box .hover h3 {
+	color:#9F0 !important;
 }
 
 .unique_item {
 	color:#666;
-	font-size:20px;
+	font-size:18px;
+}
+
+.expanded .unique_item {
+	display:none;
 }

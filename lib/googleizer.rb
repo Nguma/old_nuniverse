@@ -40,9 +40,12 @@ module Googleizer
 				:url => url(item) ,
 				:data => "#thumbnail #{item['tbUrl'] rescue ''}"
 				)
-				t.replace("address", "#{item['streetAddress']}, #{item['city']}, #{item['country']}") if item['streetAddress']
-				t.replace("tel", "#{item['phoneNumbers'][0]['number']}") if item['phoneNumbers']
-				t.replace("latlng", "#{item['lat']},#{item['lng']}") if item['lat']
+				t.replace_property("address", "#{item['streetAddress']}, #{item['city']}, #{item['country']}") if item['streetAddress']
+				# item['phoneNumbers'].each do |tel|
+					# t.connect(:label => tel['number'], :kind => 'telephone', :public => 1)
+				# end
+				t.replace_property("tel", "#{item['phoneNumbers'][0]['number']}") if item['phoneNumbers']
+				t.replace_property("latlng", "#{item['lat']},#{item['lng']}") if item['lat']
 				items << t
 			end
 			items 

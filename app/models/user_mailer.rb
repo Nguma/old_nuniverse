@@ -37,30 +37,29 @@ class UserMailer < ActionMailer::Base
 		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{params[:to].label}"
 		@body[:message] = params[:message]
 		@body[:items] = params[:to].items(:page => 1, :per_page => 10)
-		
-		TMail::HeaderField::FNAME_TO_CLASS.delete 'content-id'
-		# include_thumbnail_img
 		part 	:content_type => "text/html",
 		      :body => render_message('invitation.text.html.erb', @body)
-		@body[:items].each_with_index do |item,i|
-
-		
-
-			unless item.object.thumbnail.blank?
-				inline_attachment :content_type => "image/jpeg", 
-				                  :body => File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
-				                  :filename => item.object.thumbnail,
-				                  :cid => "<#{item.object.thumbnail}@nuniverse.net>"
-			end
-		end
-		
-		
-		# inline_attachment :content_type => "image/jpeg",
-		# 										:body => File.read("http://maps.google.com/staticmap?center=40.718,-73.998672&span=0.05,0.05&markers=40.700147,-74.015794,bluea|&maptype=mobile&size=400x400&key=ABQIAAAA8l8NOquAug7TyWVBqeUUKBTJQa0g3IQ9GZqIMmInSLzwtGDKaBTkRKFsYU1nJXs7m0cuhHHmMYXxNg"),
-		# 										:filename => "google_map",
-		# 										:cid => "<map@google.com>"
-		# 										
+		include_thumbnails(@body[:items])			
+						
 	end
+	
+	
+	def list(params)
+		@recipients  = params[:user].email
+    @from        = params[:sender].email
+    @subject     = "#{params[:sender].login.capitalize} is inviting you."
+    @sent_on     = Time.now
+    @body[:sender] = params[:sender]
+		@body[:content] = params[:content]
+		@body[:title] = params[:content].label.split('#')[1]
+		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{@body[:title]}"
+		@body[:message] = params[:message]
+		@body[:items] = params[:content].items(:page => 1, :per_page => 10)
+		part 	:content_type => "text/html",
+		      :body => render_message('list.text.html.erb', @body)
+		include_thumbnails(@body[:items])		
+		
+	end	
 	
 	def activation_code(user)
 		setup_email(user)
@@ -77,7 +76,7 @@ class UserMailer < ActionMailer::Base
       @sent_on     = Time.now
       @body[:user] = user
 			headers         "Reply-to" => "do-not-reply@nuniverse.net"
-			
+			TMail::HeaderField::FNAME_TO_CLASS.delete 'content-id'
     end
 
 		def inline_attachment(params, &block) 
@@ -89,10 +88,22 @@ class UserMailer < ActionMailer::Base
 		 	part(params, &block) 
 		end
 		
-		def include_thumbnail_img
+		def include_nuniverse_icon
 			inline_attachment :content_type => "image/png", 
 			                  :body => File.read("#{RAILS_ROOT}/public/images/backgrounds/icon.png"),
 			                  :filename => "icon_bg",
 			                  :cid => "<icon_bg@nuniverse.net>"
+		end
+		
+		
+		def include_thumbnails(items)
+			items.each_with_index do |item,i|
+				unless item.object.thumbnail.blank?
+					inline_attachment :content_type => "image/jpeg", 
+					                  :body => File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
+					                  :filename => item.object.thumbnail,
+					                  :cid => "<#{item.object.thumbnail}@nuniverse.net>"
+				end
+			end
 		end
 end

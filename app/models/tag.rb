@@ -12,47 +12,63 @@ class Tag < ActiveRecord::Base
 	def after_initialize
 		@address = Nuniverse::Address.new(self)
 	end
-		
-	def self.connect(params)
-		gum =  params[:gum].collect { |k,v| "##{k} #{v}" }.join("") rescue ""
-		@object = Tag.find_by_label_and_kind_and_url(
-		  params[:label], params[:kind], params[:url]
+	
+	def connect(params)
+		@tagging = Tagging.select(
+			:subject => self,
+			:tags => [params[:kind], params[:label]]
 		)
 		if @object.nil?
-			@object = Tag.create(
-				:label        => params[:label], 
-				:kind         => params[:kind],
-				:description  => params[:description] || "",
-				:url          => params[:url],
-				:service      => params[:service],
-				:data         => gum
-			)
-		else
-			@object.description = params[:description] || @object.description
-			@object.url = params[:url] || @object.url
-			@object.update_data(params[:gum]) if params[:gum]
-			@object.find_coordinates
-			
-			@object.save!
-		end
-		
-		
-		
-		unless params[:user_id].nil?
-			@subject = Tag.find(TaggingPath.new(params[:path]).last_tag.id)
-
+			@object = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
 			@tagging = Tagging.create(
-				:subject 	=> @subject,
-				:object 	=> @object,
-				:path    	=> "_#{params[:path]}_",
-				:user_id	=> params[:user_id],
-				:restricted => params[:restricted],
-				:description => params[:relationship]
+						:subject => self, 
+						:object => @object,
+						:kind => params[:kind],
+						:public => params[:public] || 0
 			)
 		end
-		
-		@tagging
 	end
+		
+	# def self.connect(params)
+	# 		gum =  params[:gum].collect { |k,v| "##{k} #{v}" }.join("") rescue ""
+	# 		@object = Tag.find_by_label_and_kind_and_url(
+	# 		  params[:label], params[:kind], params[:url]
+	# 		)
+	# 		if @object.nil?
+	# 			@object = Tag.create(
+	# 				:label        => params[:label], 
+	# 				:kind         => params[:kind],
+	# 				:description  => params[:description] || "",
+	# 				:url          => params[:url],
+	# 				:service      => params[:service],
+	# 				:data         => gum
+	# 			)
+	# 		else
+	# 			@object.description = params[:description] || @object.description
+	# 			@object.url = params[:url] || @object.url
+	# 			@object.update_data(params[:gum]) if params[:gum]
+	# 			@object.find_coordinates
+	# 			
+	# 			@object.save!
+	# 		end
+		# 
+		# 	
+		# 	
+		# 	unless params[:user_id].nil?
+		# 		@subject = Tag.find(TaggingPath.new(params[:path]).last_tag.id)
+		# 
+		# 		@tagging = Tagging.create(
+		# 			:subject 	=> @subject,
+		# 			:object 	=> @object,
+		# 			:path    	=> "_#{params[:path]}_",
+		# 			:user_id	=> params[:user_id],
+		# 			:restricted => params[:restricted],
+		# 			:description => params[:relationship]
+		# 		)
+		# 	end
+		# 	
+		# 	@tagging
+		# end
 	
 	def tags
 		Tagging.tags(self)
@@ -70,6 +86,10 @@ class Tag < ActiveRecord::Base
 	
 	def coordinates
 		address.coordinates
+	end
+	
+	def find_coordinates
+		Nuniverse::Address.find_coordinates(self)
 	end
 	
 	def precision
@@ -131,11 +151,11 @@ class Tag < ActiveRecord::Base
 		"#{description.capitalize} #{property('price')} #{property('address')} #{property('tel')}"
 	end
 	
-	def replace(property,value)
-		data = self.data || ""
-		new_data = data.gsub(/##{property}[\s]+([^#|\[|\]]+)/,'')
-		self.data = "#{new_data}##{property} #{value}"
-	end
+	# def replace(property,value)
+	# 	data = self.data || ""
+	# 	new_data = data.gsub(/##{property}[\s]+([^#|\[|\]]+)/,'')
+	# 	self.data = "#{new_data}##{property} #{value}"
+	# end
 	
 	def replace_property(property,value)
 		data = self.data || ""
@@ -159,37 +179,7 @@ class Tag < ActiveRecord::Base
 		return if property('rss').blank?
 		Rssr.news(property('rss'))
 	end
-	
-	# def self.find_taggeds_with(params)
-	# 		
-	# 		@context = params[:context].collect {|s| s.id}.join('_')
-	# 		# @subjects = params[:subjects].collect {|s| s.id}.join(',')
-	# 		# @objects = params[:objects].collect {|o| o.id}.join(',') if params[:objects]
-	# 		if params[:reverse]
-	# 			oid = "subject_id"
-	# 			sid = "object_id"
-	# 			
-	# 		else
-	# 			oid = "object_id"
-	# 			sid = "subject_id"
-	# 		end
-	# 		
-	# 		sub_query = "SELECT #{oid} FROM taggings WHERE path rlike '_#{@context}_'"
-	# 		sub_query << " AND #{sid} in (#{@subjects}) " if @subjects
-	# 		sub_query << " AND #{oid} in (#{@objects}) " if @objects
-	# 		sub_query << " AND user_id in (#{params[:user_id]})" if params[:user_id]
-	# 		sub_query << " GROUP BY #{oid} HAVING count(#{oid}) >= 1 ORDER BY path ASC"
-	# 		query = "SELECT tags.* FROM tags WHERE tags.id in (#{sub_query})"
-	# 		query << " AND kind = '#{params[:kind]}'" if params[:kind]
-	# 		query << " ORDER BY label DESC"
-	# 		
-	# 		Tag.find_by_sql(query)
-	# 	end
-	
-	# named_scope :with_label_like, lambda { |label| 
-	# 	return label.nil? ? {} : {:conditions => ["label like ?","%#{label}%"]}
-	# }
-	
+		
   named_scope :with_kind_like, lambda { |kind|
    	return kind.nil? ? {} : {:conditions => ["kind rlike ?", "(^|#)(#{kind.gsub('#','|')})(#|$)"]}
   }
@@ -209,12 +199,6 @@ class Tag < ActiveRecord::Base
 	named_scope :with_label, lambda { |label| 
 		return label.nil? ? {} : {:conditions => ["label = ?", label]}
 	}
-
-
-
-	def find_coordinates
-		Nuniverse::Address.find_coordinates(self)
-	end
 	
 	def match_freebase_record(record)
 		description = record.article if description.blank?
@@ -259,18 +243,17 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		
-		Tagging.find(:all, :conditions => ['description = ?', self.label], :group => "object_id")
+		Tagging.select(
+			:user => params[:user],
+			:subject => self,
+			:tags => Nuniverse::Kind.match(params[:kind] ||= "").split("#")
+		)
 	end
 	
-	def subject_of(params = {})
-		Tagging.with_subject(self).with_order(params[:order] || "rank").paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 5)
+	def lists(params = {})
+		List.created_by(params[:user] || nil).bound_to(self)
 	end
-	
-	def object_of(params = {})
-		Tagging.with_object(self)
-	end
-	
+
 	def properties
 		data.scan(/#([\w]+)[\s]+([^#|\[|\]]+)*/).collect {|s| Nuniverse::LabelValue.new(s[0],s[1])}
 	end

@@ -37,8 +37,8 @@ class User < ActiveRecord::Base
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 
-	def lists
-		List.created_by(self).bound_to(nil)
+	def lists(params = {})
+		List.created_by(self).bound_to(nil).order_by("label ASC")
 	end
 	
 
@@ -92,6 +92,10 @@ class User < ActiveRecord::Base
 		UserMailer.deliver_invitation(:to => params[:to], :user => params[:user], :message => params[:message] || "", :sender => self)
 	end
 	
+	def email_to(params)
+		UserMailer.deliver_list(:content => params[:content], :user => params[:user], :message => params[:message] || "", :sender => self)		
+	end
+	
 	def address
 		tag.property('address')
 	end
@@ -100,8 +104,8 @@ class User < ActiveRecord::Base
 		Tagging.select(
 			:users => [self],
 			:label => params[:label] || nil,
-			:page => params[:page],
-			:per_page => params[:per_page]
+			:page => params[:page] || 1,
+			:per_page => params[:per_page] || 3
 		)
 	end
 	

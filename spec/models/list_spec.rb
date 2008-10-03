@@ -9,4 +9,5 @@ describe List do
   it "should create a new instance given valid attributes" do
     List.create!(@valid_attributes)
   end
+
 end

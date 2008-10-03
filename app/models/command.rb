@@ -41,6 +41,7 @@ class Command
 								)
 		when "invite"
 		when "search", "find"
+			search_for(params)
 		when "localize"
 		when "add","new","create"
 			add_content(params)
@@ -52,13 +53,10 @@ class Command
 			case @argument
 			when "image"
 				add_image_to(params[:source])
-			when "address","tel","zip"
-				params[:subject].replace_property(@action, @input)
-				params[:subject].save
 			when "description"
 				params[:source].description = @input
 				params[:source].save
-			when "list"
+			when "list", "category"
 				List.find_or_create(
 					:creator_id => 	@current_user.id,
 					:label => Gum.purify(@input),
@@ -101,7 +99,7 @@ class Command
 			user = User.new(:email => params[:email], :login => params[:email], :password => "welcome")
 			user.save
 		end
-		@current_user.invite(:user => user, :to => params[:content], :message => params[:message])
+		@current_user.email_to(:user => user, :content => params[:content], :message => params[:message])
 	end
 	
 	def add_image_to(source)
@@ -121,6 +119,10 @@ class Command
 			:kind => @input,
 			:description => "#{params[:subject].label} #{tag.label}"
 		)	
+	end
+	
+	def search_for(params)
+
 	end
 
 end

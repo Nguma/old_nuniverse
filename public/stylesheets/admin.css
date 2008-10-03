@@ -1,0 +1,30 @@
+div.table {
+	color:#666;
+	border:solid 2px #333;
+	font-size:14px;
+}
+
+div.row {
+	padding:5px;
+	height:100%;
+	border:none;
+}
+
+div.pending .cell {
+	color:#666;
+}
+
+div.pending  .cell  a {
+	color:#9F0;
+}
+
+div.table .even {
+	background:#f6f6f8;
+	border:none;
+}
+
+div.table .odd {
+	background:#ffffff;
+	border:none;
+}
+

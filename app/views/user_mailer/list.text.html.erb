@@ -1,0 +1,36 @@
+<html>
+<body style="background-color:#FFF">
+<p>
+  <%= h @sender.login.capitalize %> wants you to take a look at 
+  <h1 style="margin:0 0 5px 0;color:#999"><%= @title.capitalize %></h1>
+  <h2><%= h @message %></h2>
+</p>
+<table style="padding:0;margin:0;border:none;width:100%">
+  
+  <% @items.each_with_index do |item,i| %>
+    <tr style="height:50px;background:#eee;margin:0 0 0 0;border:none">
+      <td style="border:none;margin:0;width:50px">
+        <% unless item.object.thumbnail.blank? %>
+          <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="50px" width="50px" style="border:solid 5px #eee;"/>
+        <% end -%>
+      </td>
+      <td style="border:none;padding:5px;margin:0">
+        <h3>
+            <% if item.object.kind == "bookmark" -%>
+              <%= link_to("#{item.object.label.capitalize}", item.object.url, :style => "color:#666") %>
+            <% else -%>
+              <%= link_to(item.object.label, "http://www.nuniverse.net/my_nuniverse/all/#{@content.label}/item/#{item.object.id}", :style => "color:#666") %>
+            <% end -%>
+          </h3>
+        <p style="color:#999">
+          <%= item.info %>
+        </p>
+        
+      </td>
+    </tr>
+  <% end -%>
+</table>
+
+<p>There's more in his <a href="<%= @url %>">nuniverse</a></p>
+</body>
+</html>

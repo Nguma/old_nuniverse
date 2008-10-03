@@ -42,7 +42,7 @@ class TaggingsController < ApplicationController
 		@page = params[:page] || 1
 		@order = params[:order] || ((@tagging.object.kind != "list") ? "rank" : "name")
 		@filter = params[:filter] || nil
-		
+		@title = "#{@list.label}: #{@tagging.label}"
 		
 		case @service
 		when "google"
@@ -51,6 +51,10 @@ class TaggingsController < ApplicationController
 			@items = Googleizer::Request.new(query, :mode => "web").response.results
 		when "amazon"
 			@items = Finder::Search.find(:query => @tagging.object.label, :service => 'amazon')
+		when "youtube"
+			query = (@tagging.subject.kind == "user") ? "" : @tagging.subject.label
+			query << " #{@tagging.object.label}" 
+			@items = Googleizer::Request.new(query, :mode => "video").response.results
 		when "map"
 			@items = @tagging.connections(:mode => 'exact', :page => @page)
 			render :action => "maps"
@@ -63,11 +67,18 @@ class TaggingsController < ApplicationController
 		else
 		end
 		
-		
-		@items = @items.nil? ? @items = @tagging.connections(:order => @order, :filter => @filter).paginate(:page => @page, :per_page => 10) : @items
 		respond_to do |format|
 			format.html {}	
-			format.js { render :action => :page, :layout => false}
+			format.js { 
+				@kind = params[:kind]
+				@items = @tagging.connections(
+						:order => @order, 
+						:kind => params[:kind], 
+						:page => params[:page], 
+						:per_page => 3
+				)
+				render :action => :page, :layout => false
+			}
 		end
 	end
 	
@@ -129,15 +140,17 @@ class TaggingsController < ApplicationController
 	
 	def suggest
 		@command = Command.new(current_user, params)
+	
 		case @command.action
 		when "localize"
 			@input = @command.input
 			render :action => "google_locations", :layout => false
 		when "find","search"
-			if @command.argument
+			if @command.argument && !@command.argument.blank?
 				@list = List.new(:creator => current_user, :label => @command.argument)
 				@items = @list.items(:label => params[:input])
 			else
+				
 				@items = current_user.connections(:label => params[:input])
 			end
 		else

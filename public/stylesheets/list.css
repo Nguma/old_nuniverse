@@ -14,17 +14,17 @@
 	margin:0 0 0px 1px;
 	overflow:hidden;
 	background:none;
-
 }
 
 #item_list .item {
 	position:relative;
-	padding:10px;
+	padding:0;
 	margin:0;
 	display:block;
 	width:100%;
 	min-height:60px;
-	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;
+/*	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;*/
+	background:none;
 	margin: 0 0 1px 0;		
 }
 
@@ -49,7 +49,7 @@
 	font-weight:bold;
 	line-height:1em;
 	color:#666;
-	padding:10px 20px 0 10px;
+	padding:5px 20px 0 10px;
 }
 
 
@@ -74,6 +74,10 @@
 }
 
 .list .pagination {
+	position:relative;
+	float:none;
+	clear:both;
+	padding:3px 0 3px 0;
 	visibility:hidden;
 }
 
@@ -86,6 +90,7 @@
 	float:left;
 	padding:10px;
 	display:block;
+	
 }
 
 #item_list .pagination a {
@@ -100,21 +105,6 @@
 	
 }
 
-
-
-.list .item h3 {
-	padding:10px 30px 0 10px;
-	z-index:12345678;
-}
-
-
-
-.list .item p {
-	font-size:12px;
-	color:#888;
-	display:none;
-}
-
 #item_list .item p {
 	display:block;
 	
@@ -124,11 +114,6 @@
 #item_list .hover h3 {
 	color:#fff;
 }
-
-.list .hover p {
-	color:#ccc;
-}
-
 
 #item_list .image_box {
 	height:auto;
@@ -173,23 +158,19 @@
 	background:#333;
 }
 
-.list .options {
-	display:none;
-}
-
-#item_list .options {
-	display:block;
-}
-
 #nuniverse .single .item h3 a {
 	font-size:22px;
 	color:#666;
 }
 
-.list .content {
+.box .content {
 	display:none;
+	height:200px;
 }
 
-.expanded .content {
-	display:block;
+.list .window {
+	position:absolute;
+	padding:5px;
+	border:5px solid #CCC;
+	background:#FFF;
 }

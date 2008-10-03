@@ -1,5 +1,5 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <%= breadcrumbs()%>
+  <%= breadcrumbs_for(@list)%>
   <%= list_hat(@list)%>
   
   <% if @items.empty? -%>
@@ -9,33 +9,38 @@
     </h3>
   <% else -%>
     <div id="nav">
-      <% boxes = [
-          # pagination_box(:items => @items),
-          ad_box,
-          sorting_options(:source => @list, :selected => @order),
-          display_options(:source => @list, :selected => @mode),
-          add_new_button(@list),
-        ] 
-      -%>
-      <%= columnize(boxes, :size => 4) %>
+          
+          <%= sorting_options(:source => @list, :selected => @order) %>
+          <%= display_options(:source => @list, :selected => @mode) %>
+          <%= pagination_box(:items => @items)%>
+          <%= add_new_button(@list) %>
+          
+          <div class="command_box">
+            <%= image_tag("/images/icons/email_to.png")%>
+            <%= command(:label => "Email this list", :command => "email #{@list.label} to")%>
+          </div>
+          
     </div>
-    <div id="content">
-        
+    <div id="content" >
         <% if @mode ==  "image" -%>
           <%= columnize(images_for(@items, :source => @list), :size => 4)%>
         <% elsif @mode == "card" -%>
-          <%= columnize(boxes_for(@items, :source => @list), :size => 4)%>
+          <%= columnize([ad_box,boxes_for(@items, :source => @list)].flatten, :size => 4)%>
         <% else -%>
-        <div class="list" id="item_list">
-          <div class="items"> 
-         
+        <div class="column large" id="item_list" >
             <% @items.each_with_index do |item, i| -%>
-            
-
-              <%= render :partial => "item", :locals => {:source => @list, :item => item, :order => @order } %>
+            <div class="box">
+              <%= render :partial => "item", :locals => {
+                  :source => @list, 
+                  :item => item, 
+                  :order => @order } 
+              %>
+            </div>
             <% end -%>
-          
-          </div>
+        </div>
+        <div class="column small">
+          <%= ad_box %>
+          <%= map_box(@list)%>
         </div>
         <% end -%>
         

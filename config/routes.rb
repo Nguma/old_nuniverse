@@ -38,12 +38,14 @@ ActionController::Routing::Routes.draw do |map|
   			
 	  	map.with_options :controller => 'users' do |m|
 	  		m.home '/my_nuniverse', :action => 'show'
+				m.all '/my_nuniverse/all_items', :action => 'show', :mode => 'cards' 
 	  		m.upgrade '/upgrade', :action => 'upgrade'
 	  	end
   	
 	  	map.with_options :controller => 'lists', :action => 'show', :service => nil, :path_prefix => '/my_nuniverse' do |m|
 				
 	  		m.item_with_tag '/:tag/:list/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
+				m.tag '/all_items/:id', :controller => 'tags'
 	  		m.item '/all/:list/item/:id', :controller => 'taggings'
 				m.item '/all/:list/item/:id/service/:service', :controller => 'taggings'
 				

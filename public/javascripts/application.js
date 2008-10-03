@@ -1,9 +1,13 @@
 window.addEvent('domready',reset);
-
+var windowScroll;
 function reset()
 {
+  
   var inputBox = new Input($('input_box'));
-
+  windowScroll = new Fx.Scroll($(document.body), {
+    offset:{'x':0,'y':-200}
+  });
+ 
   $$('.box','.list').each(function(box,i) {
     if(box.hasClass('list')) {
       var b = new ListBox(box)
@@ -43,6 +47,48 @@ function reset()
       return false;
     });
   });
+  
+  var cards = $$('.card');
+  
+  cards.each(function(card){
+    // var cardDrag = new Drag.Move(card, {
+    //       snap:50,
+    //       droppables:cards,
+    //       onDrop:function() {
+    //         
+    //       },
+    //       onEnter:function(el,droppable){
+    //         el.setStyle('background-color','#9F0')
+    //       },
+    //       
+    //       onStart:function(el){
+    //         el.setStyle('z-index', 234567890)
+    //       },
+    //       
+    //       onComplete:function(el) {
+    //         
+    //       }
+    // });
+  });
+  // if($defined($('content.content_card'))) {
+  //     
+  //     var sortable = new Sortables($('item_list'), {
+  //       constrain:true,
+  //       clone:false,
+  //       revert:true,
+  //       onStart:function(item) {
+  //         item.addClass('dragged');
+  //       },
+  //       onSort:function(item) { 
+  //         // this.getElements('.item').each(function(item,i){
+  //           // item.getElement('.rank').set('text', i+1);
+  //         // });
+  //       },
+  //       onComplete:function(item) {
+  //         item.removeClass('dragged');
+  //       }
+  //     });
+  //   }
 
 }
 
@@ -69,6 +115,7 @@ function onunLoad()
   window.document.getElements().each(function(el){
     el.destroy();
   });
+  windowScroll.destroy();
 }
 
 function notice(msg)

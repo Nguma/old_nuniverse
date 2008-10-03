@@ -11,7 +11,7 @@
       <%= hidden_field_tag("tag", source.tag_id) %>
     <% end -%>
     
-    <%= text_field_tag "command", "", :id => "command" %>
+    <%= text_field_tag "command", "", :id => "command", :autocomplete => 'off' %>
     <div id="file_field" class="hidden">
       <label>
         <span style="color:#fff">Copy and paste an image url or </span>Browse your files
@@ -19,7 +19,7 @@
       <%= file_field "image_url", :uploaded_data, :accept => "text/html", :style=> "font-size:12px" %>
     </div>
     <label id="info_label"></label>
-    <%= text_field_tag "input", "", :id => "input" %>
+    <%= text_field_tag "input", "", :id => "input" ,:autocomplete => 'off'%>
     <label id="extra_input_label"></label>
     <%= text_area_tag "extra_input", "", :id => "extra_input", :class => 'hidden', :rows => 1, :wrap => "virtual"%>
     

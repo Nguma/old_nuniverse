@@ -16,6 +16,17 @@
 	color:#999;
 }
 
+.box h3 {
+	font-size:16px;
+	font-weight:bold;
+	color:#666;
+}
+
+.box p {
+	color:#777;
+	font-size:13px;
+}
+
 .nav .box {
 /*	background:#eef6ee;*/
 }
@@ -33,6 +44,18 @@
 	display:none;
 }
 
+.box .collapse_icon {
+	display:none;
+}
+
+.expanded .expand_icon {
+	display:none;
+}
+
+.expanded .collapse_icon {
+	display:inline;
+}
+
 .list .list .item {
 	min-height:50px;
 	background:#FFF;
@@ -40,10 +63,6 @@
 	border-bottom:dashed 1px #999;
 }
 
-.item h3 a {
-	font-weight:inherit;
-	color:inherit;
-}
 
 .list .list .item .thumbnail {
 	height:50px;
@@ -51,11 +70,42 @@
 
 .list .list .item h3 {
 	line-height:30px;
-	font-size:20px;
+	font-size:18px;
 }
 
 .expanded {
-/*	min-height:235px;*/
+	height:220px;
+	overflow:hidden;
+}
+
+#map_box .content {
+	visibility:hidden;
+	display:block;
+}
+
+#map_box .prop {
+	color:#666;
+	font-size:18px;
+	font-weight:normal;
+}
+
+#map_box {
+	height:30px;
+}
+
+#map_box.expanded {
+	height:250px;
+}
+
+#nuniverse .expanded .content {
+	display:block;
+	visibility:visible;
+}
+
+
+
+.expanded .options {
+	display:block;
 }
 
 .expanded .items {
@@ -82,7 +132,6 @@
 	position:absolute;
 	top:5px;
 	right:5px;
-/*	border-top:dotted 1px #999;*/
 	margin:3px 0 0 0;
 	padding:5px;
 	color:#9c6;
@@ -90,12 +139,15 @@
 	font-weight:bold;
 	visibility:hidden;
 	background:#333;
-	
 }
 
 .box .actions a {
 	font-size:inherit;
 	font-weight:inherit;
+}
+
+.hover h3 {
+	color:#FFF;
 }
 
 .column .hover {
@@ -123,7 +175,7 @@
 
 .box .expander {
 	position:relative;
-	padding:0 0 5px 5px;
+	padding:0 0 0;
 	cursor:pointer;
 	z-index:123456;
 }
@@ -176,6 +228,31 @@ h2 .command {
 	margin:0;
 }
 
+.options {
+	min-height:220px;
+	display:none;
+}
+
+.options dt {
+	font-size:22px;
+	padding:0 0 5px 0;
+	color:#FFF;
+	
+}
+
+.options dd {
+	font-size:14px;
+	padding:4px 0 2px 0;
+	color:#ccc;
+	display:block;
+}
+
+.options dd i {
+	color:#999;
+	font-size:12px;
+}
+
+
 #property_box .property .label {
 	padding:5px;
 	background:#eae6dd;
@@ -186,26 +263,27 @@ h2 .command {
 	padding:5px;
 }
 
-#nav .box {
-	background:#efefef;
-	height:60px;
+#nav .box,
+#nav .command_box {
+	background:#ccc;
+	height:10px;
 	overflow:hidden;
-}
-
-#nav .expander{
-	background:#efefef;
 	position:relative;
-	float:right;
+	float:left;
+	width:auto;
+	clear:none;
 }
 
-#sorting_options.expanded,
-#display_options.expanded,
-#perspectives.expanded,
-#add_new_box.expanded {
-	height:auto;
-	overflow:auto;
+.command_box {
+	padding:10px 10px 15px 10px;
+	font-size:20px;
+	color:#999;
 }
 
-#nav #ad_box {
-	background:#fff;
+#ad_box {
+	background:#FFF;
+}
+
+h2 span.size {
+	color:#ccc;
 }

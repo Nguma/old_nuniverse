@@ -1,36 +1,46 @@
-<div class="box  <%= dom_class %> <%= (items.total_entries <= 1) ? "single" : "list" %>" id="<%= dom_id %>" >
-
-     
+<div class="box  <%= dom_class %> <%= cycle('even','odd') %> list" id="<%= dom_id %>" >
     <h2>
-      <span class="size" style="color:#ccc">
+      <span class="size">
         <%= items.total_entries %>
       </span>
       <%= link_to_list(source, :item_size => items.total_entries) %> 
+      <%= expander_icon %>
       <% if items.total_entries >= 1 -%>
         <span class="unique_item">
           <%= link_to_item(items.first, :source => source)%>
         </span>
       <% end -%>
       
-      <%= expander_icon unless items.total_entries <= 1 %>
+      
 
     </h2>
     <%= spinner %>
-    <% if items.total_entries > 1 -%>
+    
       <div class="content">
-        <div class="items" >
-            <%= will_paginate(items, :params => {:kind => kind}) %>
-            <% items.each do |item| -%>
-              <%= render_item(item, :source => source)%>
-            <% end -%>     
-        </div>
+        <% if items.total_entries > 1 -%>
+          <%= will_paginate(items, :params => {:kind => kind}) %>
+          <div class="items" >
+              
+              <% items.each do |item| -%>
+                <%= render_item(item, :kind => source.label)%>
+              <% end -%>     
+          </div>
+        <% elsif items.total_entries == 1 -%>
+            <%= render_item(items.first, :source => source)%>
+        <% else -%>
+          <h3>No <%= source.label %> has been added yet.</h3>
+          <p>
+            <%= command(:label => "+ Add to #{source.label} now", :command => "Add to #{source.label}") %>
+          </p>
+        <% end -%>
       </div>
-    <% end -%>
+    
 
-  
+  <%= render :partial => "/lists/list_options", :locals => {:list => source}%>
   <div class="actions">
-    <%#= (link_to "x", "/lists/#{source.id}", :confirm => 'Are you sure?', :method => :delete, :style => "position:relative;float:left") rescue "" %>
-    <%= command(:label => "Email to", :command => "Email #{source.label} to")%>
+    <%= link_to("Options", "#", :class => "expand_options" )%> 
     <%= command(:label => "+ Add", :command => "Add to #{source.label}") %>
   </div>
+  
 </div>
+

@@ -1,7 +1,7 @@
 <% @items.each_with_index do |item,i| -%>
   <div class="box <%= cycle('even','odd') %>" >
-
     <h3>
+    <%= thumbnail_tag(item)%>
      <%= link_to(item.label.capitalize, item.url)%>
     </h3>
     <p style="padding:0 70px 10px 0">
@@ -9,9 +9,9 @@
       <%= link_to(item.url,item.url)%>
     </p>
     <div class="actions">
-            <%= render :partial => "/taggings/manage", :locals => {
-                  :tagging => tagging, 
-                  :id => tagging.id} rescue ""%>
+      <%= render :partial => "/taggings/manage", :locals => {
+            :item => item, 
+            :id => tagging.id} rescue ""%>
     </div>
   </div>
 <% end -%>

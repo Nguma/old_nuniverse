@@ -3,23 +3,26 @@
   <h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
   <div class="delimiter">&nbsp;</div>
   <div id="nav">
-    <%= columnize([account_box, ad_box, ad_box, new_list_button], :size => 4)%>
+    <%= account_box %>
+    <div class="command_box">
+      <%= command(:label => "Search your nuniverse", :command => "Search") %>
+    </div>
+    <%= new_list_button %>
   </div>
   <div id="content" >
-    <div class="column small">
-      <%= map_box(current_user.tag)%>
-    </div>
-    <div class="column large">
+    <% if @mode == "cards" -%>
+      <%= columnize([ad_box,boxes_for(current_user.connections(:per_page => 20, :order => 'latest'), :source => current_user)].flatten, :size => 4)%>
       
-      <%= bookmarks_box %>
-      <%= people_box %>  
-      <%= locations_box %>
-    <!-- </div> -->
-    <!-- <div class="column medium"> -->
-      
-      <%= lists_for(current_user) %> 
-    </div>
-
+    <% else -%>
+      <div class="column large">
+        <%= lists_for(current_user) %> 
+      </div>
+      <div class="column small">
+        <%= ad_box %>
+        <%#= map_box(current_user.tag)%>
+      </div>
+    <% end -%>
+    
   </div>
   
   <%= input(@source => nil)%>

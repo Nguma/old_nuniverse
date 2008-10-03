@@ -16,7 +16,6 @@ module Nuniverse
 				'per' => 'person',
 				'vid' => 'video',
 				'link' => 'bookmark',
-				'website' => 'bookmark',
 				'video' => 'video',
 				'place' => 'location',
 				'country' => 'location#country',
@@ -80,7 +79,8 @@ module Nuniverse
 				'plane' => 'vehicle#plane',
 				'menu' => 'dish',
 				'recipe' => 'step',
-				'todo' => 'to do'
+				'todo' => 'to do',
+				'telephone' => 'telephone'
 			}
 		end
 		

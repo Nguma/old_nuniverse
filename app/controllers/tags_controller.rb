@@ -19,6 +19,14 @@ class TagsController < ApplicationController
 		else
 			@tag = Tag.find_by_label(params[:label])
 		end
+		@service = params[:service] || "you"
+		@page = params[:page] || 1
+		@order = params[:order] || "name"
+		@title = @tag.label.capitalize
+		
+		respond_to do |format|
+			
+		end
 	
   end
 

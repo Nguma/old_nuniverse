@@ -1,3 +1,6 @@
-<% @items.each do |item| %>
+<%= will_paginate @items %>
+<div class="items">
+  <% @items.each do |item| %>
     <%= render_item(item, :source => @tagging)%>
-<% end -%>
+  <% end -%>
+</div>

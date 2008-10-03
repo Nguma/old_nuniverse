@@ -1,4 +1,6 @@
 <%= will_paginate @items %>
-<% @items.each do |item| %>
-    <%= render_item(item, :source => current_user)%>
-<% end -%>
+<div class="items">
+  <% @items.each do |item| %>
+      <%= render_item(item, :kind => @kind)%>
+  <% end -%>
+</div>

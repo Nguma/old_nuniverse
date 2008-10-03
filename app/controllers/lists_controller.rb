@@ -27,6 +27,7 @@ class ListsController < ApplicationController
 			@page = params[:page]
 			@mode = params[:mode] || "list"
 			@order = params[:order] || "by_name"
+			@title = @list.title
 			
 			@items = @list.items(:page => @page, :per_page => 10, :order => @order, :perspective => params[:perspective] || nil)  
 	

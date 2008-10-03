@@ -6,7 +6,7 @@ class AdminController < ApplicationController
 	end
 	
 	def users
-		@users = User.find(:all).paginate(:page => params[:page] || 1, :per_page => 10)
+		@users = User.find(:all).paginate(:page => params[:page] || 1, :per_page => 20)
 	end
 	
 	def send_activation_code

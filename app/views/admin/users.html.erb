@@ -1,8 +1,10 @@
 <% nuniverse do -%>
   <h1>Users</h1>
+  <%= will_paginate @users %>
   <div class="table">
+  
   <% @users.each do |user| -%>
-    <div class="row <%= user.state %>">
+    <div class="row <%= user.state %> <%= cycle('even','odd')%>">
       <div class="cell">
         <%= user.login %>
       </div>
@@ -10,11 +12,11 @@
         <%= user.email %>
       </div>
       <div class="cell">
-          <%= user.state %>
+        <%= user.state %>
       </div>
       <div class="cell">
-          <%= link_to("Send activation code", "/admin/send_activation_code/#{user.id}") if user.pending? %>
-          <%#= link_to("delete", user, :confirm => 'Are you sure?', :method => :delete) %>
+        <%= link_to("Send activation code", "/admin/send_activation_code/#{user.id}") if user.pending? %>
+        <%#= link_to("delete", user, :confirm => 'Are you sure?', :method => :delete) %>
       </div>
     </div>
     

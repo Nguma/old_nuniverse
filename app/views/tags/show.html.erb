@@ -1,15 +1,20 @@
-<% nuniverse do -%>
-    <%= link_to '< Back to your nuniverse', "/my_nuniverse" %>
+<% nuniverse(:selected => "My nuniverse") do -%>
+  <%= breadcrumbs_for(@tag) %>
   <div class="hat">
-    <h1><%= @tag.label.capitalize %></h1>
+    <%= title_for(@tag)%>
   </div>
-  <div class="column">
-    <%= render :partial => "/taggings/image", :locals => {:object => @tag}%>
-  </div>
-  
-  <div id="left_column">
-    <% @tag.connections.each do |connection| %>
-      <h3><%= link_to connection.object.label,"/about/#{connection.object.label}" %></h3>
+  <div id="nav">
+    <%= perspectives(:source => @tag) %>
+    <% if service_is_nuniverse? -%>
+      <%= new_list_button %>
     <% end -%>
   </div>
+  <div id="content">
+    <div class="column large">
+      <%= lists_for(@tag) %>
+      <%= bookmarks_box(:source => @tag) %>
+      <%#= comments_box(:source => @tag) %>
+    </div>
+  </div>
+  <%= input(:source => @tag)%>
 <% end -%>
