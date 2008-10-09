@@ -1,15 +1,17 @@
-<div class="actions">
+<dl class="options">
+  <dt>Options for <%= item.label.capitalize %></dt>
 <% if @order == "by_vote" -%>
-  <div class="votes">
+  
+  <dd class="votes">
     <%= link_to(image_tag("/images/icons/star.png", 
                 :alt => "vote for  #{item.label} ", 
                 :style => "position:relative;float:right"), 
         "/rate/#{item.id}/1")%><%= item.votes %>
-  </div>
-<% else -%>
-  
-    <%= link_to "x", item, :confirm => 'Are you sure?', :method => :delete %>
-    <%#= check_box "/taggings/#{item.id}/update", item.restricted, :checked => item.restricted,  :class => "check"%>
-
+  </dd>
 <% end -%>
-</div>
+    <dd><%= link_to "Remove", item, :confirm => 'Are you sure?', :method => :delete %></dd>
+    <dd class="actions">
+      <%= link_to("< Back", "#", :class => "collapse_options")%>
+    </dd>
+    <%#= check_box "/taggings/#{item.id}/update", item.restricted, :checked => item.restricted,  :class => "check"%>
+</dl>

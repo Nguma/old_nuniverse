@@ -85,15 +85,22 @@ class Tagging < ActiveRecord::Base
 		object.kinds
 	end
 	
+	def url
+		object.url
+	end
+	
 	
 	def info(params)
 		params[:kind] ||= self.kind
-		info = Nuniverse::Kind.matching_info(params[:kind])
+		info = params[:info] || Nuniverse::Kind.matching_info(params[:kind])
+		
 		if info == 'price'
 			return "#{object.property('price')} on #{object.service.capitalize}" unless object.service.nil?
 		end
+		# return "#{self.owner.login.capitalize}" if info == "comment"
 		return description if info == 'description'
 		return object.property('address') if info == 'address'
+
 		return self.connections(:kind => info).first.label rescue ""
 	end
 	
@@ -177,15 +184,19 @@ class Tagging < ActiveRecord::Base
 		params[:tags] ||= []
 		params[:subject] ||= nil
 		order = Tagging.order(params[:order])
-		# Building clause out of tags and title if present
-		# Pluralized and singularized versions of each tag is passed as a regexp match.
-		# Same is done with title if exists.
-		clause = params[:tags].collect {|t| " (T.kind rlike '(^| )(#{t.pluralize}|#{t.singularize})( |$)')"}.join('+')
-		clause << " + (CONCAT(SUBJ.label,' ', T.kind) rlike '^(#{params[:title].pluralize}|#{params[:title].singularize})$') " if params[:title]
 		user_ids = params[:users].collect {|u| u.id}.join(',')
 		
 		sql = "SELECT DISTINCT T.*, COUNT(DISTINCT object_id) "
-		sql << ", SUM((#{clause})) AS S " unless params[:tags].empty?
+		# Building clause out of tags and title if present
+		# Pluralized and singularized versions of each tag is passed as a regexp match.
+		# Same is done with title if exists.
+		having_clauses = []
+		
+		params[:tags].each_with_index do |tag, i|
+			sql << ", SUM(T.kind rlike '(^| )(#{tag.pluralize}|#{tag.singularize})( |$)') AS S#{i} "
+			having_clauses << "S#{i}"
+		end
+		sql << ", (CONCAT(SUBJ.label,' ', T.kind) rlike '^(#{params[:title].pluralize}|#{params[:title].singularize})$') AS ST " if params[:title]
 		sql << ", SUM(K.value) AS votes " if params[:order] == "by_vote"
 		sql << "FROM taggings T LEFT OUTER JOIN tags on (object_id = tags.id) "
 		sql << "LEFT OUTER JOIN tags SUBJ on subject_id = SUBJ.id " unless params[:tags].empty?
@@ -196,7 +207,7 @@ class Tagging < ActiveRecord::Base
 		
 		sql << "GROUP BY object_id "
 		
-		sql << "HAVING (S >= #{params[:tags].length}) " unless params[:tags].empty?
+		sql << "HAVING ((#{having_clauses.join('*')}) #{params[:title] ? "+ ST " : ""} >= 1) " unless params[:tags].empty?
 		sql << "ORDER BY #{order} "
 
 		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)

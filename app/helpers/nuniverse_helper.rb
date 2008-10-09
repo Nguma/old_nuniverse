@@ -88,7 +88,8 @@ module NuniverseHelper
 	
 	def command(params)
 		params[:command]  ||= "Add to #{params[:kind]}"
-		link_to(params[:label],params[:command],:class => 'command')
+		params[:description] ||= params[:label]
+		link_to(params[:label],params[:command],:class => 'command', :title => params[:description])
 	end
 	
 	def input(params)
@@ -114,6 +115,7 @@ module NuniverseHelper
 	end
 	
 	def drop_command(params) 
-		link_to(params[:category], "/command/add category/#{params[:category]}?tagging=#{params[:tagging].id}")
+		
+		link_to("<span class='pls'>+</span> #{params[:category]}", "/command/add/#{params[:category]}?tagging=#{params[:tagging].id}", :class => params[:class] || nil)
 	end
 end

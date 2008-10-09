@@ -9,8 +9,8 @@ module ListsHelper
 		
 	def link_to_item(item, params = {})	
 		list = params[:kind] ? params[:kind] : item.kind 	
-		if item.kind == "bookmark"
-			link_to("#{item.object.label.capitalize}", item.object.url)
+		if item.kind == "bookmark" 
+			link_to("#{item.label.capitalize}", item.url, :target => "_blank")
 		else
 			link_to(item.label.capitalize, item_url(:id => item.id, :list => list))
 		end
@@ -29,8 +29,10 @@ module ListsHelper
 		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse")
 		case source.class.to_s
 		when 'Tagging'
+			if @list
 			breadcrumbs << link_to("< #{@list.tag.title}", tag_url(:id => @list.tag.id)) if @list.tag
-			breadcrumbs << link_to("< #{@list.label}", listing_url(:list => @list.label, :tag => @list.tag))
+			breadcrumbs << link_to_list(@list, :title =>"< #{@list.label}")
+		end
 		when 'List'
 			breadcrumbs << link_to("< #{source.tag.title}", tag_url(:id =>source.tag.id)) if source.tag
 		when 'Tag'
@@ -55,13 +57,21 @@ module ListsHelper
 	
 	def perspectives(params = {})
 		list_label = @list.label rescue params[:source].kind
-		perspectives = [
-			["you",	item_url(:id => params[:source].id, :list => list_label, :service => "you"), "you"], 
-			["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :service => "everyone"), "everyone"],
-			["Google",item_url(:id => params[:source].id, :list =>  list_label, :service => "google"), "google"],
-			["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :service => "amazon"), "amazon"],
-			["Youtube", item_url(:id => params[:source].id, :list =>  list_label, :service => "youtube"), "youtube"]
-		]
+		
+		if params[:source].is_a?(Tagging)
+			perspectives = [
+				["you",	item_url(:id => params[:source].id, :list => list_label, :service => "you"), "you"], 
+				["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :service => "everyone"), "everyone"],
+				["Google",item_url(:id => params[:source].id, :list =>  list_label, :service => "google"), "google"],
+				["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :service => "amazon"), "amazon"],
+				["Youtube", item_url(:id => params[:source].id, :list =>  list_label, :service => "youtube"), "youtube"]
+			]
+		else
+			perspectives = [
+				["you", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode, :order => @order, :page => 1, :service => "you"), "you"],
+				["everyone", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode,  :order => @order, :page => 1, :service => "everyone"), "everyone"],
+			]
+		end
 		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source]}
 	end
 	
@@ -69,22 +79,20 @@ module ListsHelper
 	def link_to_list(list, options = {})
 		title = options[:title] || list.label
 		title = title.singularize if options[:item_size] && options[:item_size] <= 1
-		if list.tag
-			link_to title.capitalize, listing_with_tag_url(list.tag,list.label), :class => "link_to_list"
-		else
-			link_to title.capitalize, listing_url(list.label), :class => "link_to_list"
-		end
+		link_to title.capitalize, listing_url(:list => list.label, :tag => list.tag, :mode => @mode || nil, :page => @page || 1, :order => @order, :service => @service || nil), :class => "link_to_list"
 	end
 	
 	def list(params)
 		params[:dom_class] ||= ""
-		params[:kind] ||= params[:source].label.singularize
+		params[:kind] ||= params[:source].label.singularize.downcase
 		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
 		params[:items] ||= params[:source].items
 		params[:command] ||= "#{params[:kind]}" 
 		params[:order] ||= "latest"
 		params[:dom_id] ||= params[:title].pluralize
-		render :partial => "/taggings/list_box", :locals => params
+	
+		render :partial => "/taggings/#{params[:kind]}_box", :locals => params rescue render :partial => "/taggings/list_box", :locals => params
+		#render :partial => "/taggings/#{params[:kind]}_box", :locals => params
 	end
 	
 	def lists_for(source, options = {})
@@ -144,6 +152,10 @@ module ListsHelper
 		render :partial => "/nuniverse/ads"
 	end
 	
+	def empty_box
+		render :partial => "/nuniverse/empty_box"
+	end
+	
 	def new_item_box
 		render :partial => "/taggings/new_item"
 	end
@@ -177,5 +189,25 @@ module ListsHelper
 	
 	def expander_icon
 		link_to("#{image_tag('/images/icons/expander.png', :alt => 'expand', :class => 'expand_icon', :title => 'expand')} #{image_tag('/images/icons/collapser.png', :alt => 'collapse', :class => 'collapse_icon', :title => 'collapse')}", "#", :class => "expander")
+	end
+	
+	def content_size(size)
+		"<span class='size'>#{size}</span>"
+	end
+	
+	def options_for_kind(list)
+		options = []
+		case list.label.singularize
+		when "Video"
+			options << command(:label => "Find videos on google", :command => "google videos")
+		when "Bookmark"
+			options << command(:label => "Find on google", :command => "Find on google")
+		when "Item"
+			options << command(:label => "Find items on Amazon", :command => "Find on amazon")
+		when "Address"
+			options << command(:label => "Find Address on google", :command => "localize")
+		else
+		end
+		options
 	end
 end

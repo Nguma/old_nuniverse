@@ -53,11 +53,6 @@
 }
 
 
-#item_list .actions {
-	display:none;
-}
-
-
 /* HOVER */
 #item_list .hover {
 	background:#333;
@@ -158,15 +153,16 @@
 	background:#333;
 }
 
+#content #item_list  .box h3 a {
+	font-size:16px;
+	font-weight:bold;
+}
+
 #nuniverse .single .item h3 a {
 	font-size:22px;
 	color:#666;
 }
 
-.box .content {
-	display:none;
-	height:200px;
-}
 
 .list .window {
 	position:absolute;

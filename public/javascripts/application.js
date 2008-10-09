@@ -1,9 +1,10 @@
 window.addEvent('domready',reset);
 var windowScroll;
+var inputBox;
 function reset()
 {
   
-  var inputBox = new Input($('input_box'));
+  
   windowScroll = new Fx.Scroll($(document.body), {
     offset:{'x':0,'y':-200}
   });
@@ -16,7 +17,7 @@ function reset()
     }
   });
   
-  
+  inputBox = new Input($('input_box'));
   window.document.addEvent('keyup',function(ev){
     inputBox.onKey(ev.key);
   });
@@ -25,15 +26,18 @@ function reset()
   
   // Sets all links classed .command to open up the input and assign the correct command.
   // Expands the box if of class list.
-  $$('.command').each(function(command) {
-    command.addEvent('click', function(ev) {
-      if(command.getParent('.box') && command.getParent('.box').hasClass('list')) {
-        command.getParent('.box').addClass('expanded');
-      }
-      ev.preventDefault();
-      inputBox.expand(command.getProperty('href'));
-    });
-  });
+  // $$('.command').each(function(command) {
+  //    command.addEvent('click', function(ev) {
+  //      // if(command.getParent('.box') && command.getParent('.box').hasClass('list')) {
+  //      //        command.getParent('.box').adopt($('input_box'));
+  //      //        
+  //      //        command.getParent('.box').addClass('expanded');
+  //      //      }
+  //      // ev.preventDefault();
+  //      
+  //      inputBox.expand(command.getProperty('href'));
+  //    });
+  //  });
   
   $$('.save_button').each(function(button) {
     button.addEvent('click', function(ev) {
@@ -41,7 +45,7 @@ function reset()
         'url':button.getParent('.actions').getElement('form').getProperty('action'),
         'onComplete':function() {
           button.addClass('.saved');
-          notice("Bookmarked!")
+          notice("Bookmarked!");
         }
       }).post(button.getParent('.box').getElement('form'));
       return false;
@@ -52,18 +56,39 @@ function reset()
   if($defined($('possible_categories'))) {
     $('possible_categories').getElements('a').each(function(cat){
       cat.makeDraggable({
-        droppables:$('left-content'),
+        droppables:$('categories').getChildren(),
         onDrop:function(el, droppable) {
+          cat.removeClass('dragged');
           if(droppable) {
-            var call = new Request.HTML({
-              url:el.getProperty('href'),
-              onSuccess:function(a,b,c,d) {
-                $('left-content').adopt(a[0]);
-              }
+            
+              var call = new Request.HTML({
+                url:el.getProperty('href'),
+                onSuccess:function(a,b,c,d) {
+                  $('categories').adopt(a);
+                  var n = $('categories').getChildren().getLast();
+                  n.inject(droppable, 'before')
+                  var k = new ListBox(n);
+                  el.destroy();
+                  if(el.hasClass('custom')) {
+                    k.expandInput('Add new category');
+                  }
+                  else
+                  {
+                    k.expand();
+                  }
+                  
 
-            }).get();
+                }
+
+              }).get();
+            
+            
           }
 
+        },
+        
+        onStart:function() {
+          cat.addClass('dragged');
         },
         onEnter:function() {
           cat.setStyle('color','#FC0')
@@ -71,16 +96,29 @@ function reset()
         onLeave:function() {
           cat.setStyle('color', '#CCC')
         }
-      })
+      });
+      cat.addEvent('click', function(ev){ev.preventDefault()});
     });
   }
+  
+  if($defined($('nav'))) {
+    $('nav').getElements('.command').each(function(command) {
+       command.addEvents({
+         click:function(ev) {
+           ev.preventDefault();
+           inputBox.expand(command.getProperty('href'), command.getProperty('title'));
+         }
+       });
+     });
+  }
+ 
   
 
 }
 
 
 function onUnload() {
-  delete(inputBox);
+  //delete(inputBox);
 }
 
 function showElement() {
@@ -102,6 +140,7 @@ function onunLoad()
     el.destroy();
   });
   windowScroll.destroy();
+  inputBox.destroy();
 }
 
 function notice(msg)

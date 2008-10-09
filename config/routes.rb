@@ -50,9 +50,10 @@ ActionController::Routing::Routes.draw do |map|
 				m.item '/all/:list/item/:id/service/:service', :controller => 'taggings'
 				
 				
-	  		m.with_options :page => 1, :order => nil do |page|
+	  		m.with_options :page => 1, :order => nil, :service => nil do |page|
 					page.listing '/all/:list/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
 					page.listing '/all/:list/:page/:order', :requirements => {:page => /\d+/}
+					page.listing '/all/:list/:page/:order/according-to/:service', :requirements => {:page => /\d+/, :service => /\w+/}
 					page.listing_with_tag '/:tag/:list/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
 					
 					#page.listing_in_images '/all/:list/in_images/:page/:order', :mode => 'image', :requirements => {:page => /\d+/, :tag => nil}
@@ -77,17 +78,16 @@ ActionController::Routing::Routes.draw do |map|
   		m.bookmark '/bookmark/:path', :action => 'bookmark'
   	end
   # 	
- 	map.command '/command', 
- 		:controller => 'nuniverse',
- 		:action => 'command'
 
-	map.command '/command/:command/:input', 
- 		:controller => 'nuniverse',
- 		:action => 'command'
+	map.with_options :controller => 'nuniverse', :action => 'command' do |m|
+		m.command '/command'
+		m.command '/command/:command'
+		m.command '/command/:command/:input'
+		m.suggest '/suggest/:command'
+		m.suggest '/suggest/:command/:input'
+	end
 
-	map.suggest '/suggest/:command/:input',
-		:controller => 'taggings',
-		:action => 'suggest'
+
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "nuniverse"
 

@@ -41,7 +41,9 @@ class TaggingsController < ApplicationController
 		@page = params[:page] || 1
 		@order = params[:order] || ((@tagging.object.kind != "list") ? "rank" : "name")
 		@filter = params[:filter] || nil
-		@title = "#{@list.label}: #{@tagging.label}"
+		@title = "#{@list.label}: #{@tagging.label}" rescue @tagging.label
+		@source = @tagging
+		@mode = params[:mode] || "list"
 		
 		case @service
 		when "google"
@@ -136,29 +138,7 @@ class TaggingsController < ApplicationController
 		@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
 		
 	end
-	
-	def suggest
-		@command = Command.new(current_user, params)
-	
-		case @command.action
-		when "localize"
-			@input = @command.input
-			render :action => "google_locations", :layout => false
-		when "find","search"
-			if @command.argument && !@command.argument.blank?
-				@list = List.new(:creator => current_user, :label => @command.argument)
-				@items = @list.items(:label => params[:input])
-			else
-				
-				@items = current_user.connections(:label => params[:input])
-			end
-		else
-			#@list = List.new(:creator => current_user, :label => "")
-			@items = current_user.connections(:label => params[:input])
-			
-		end
-		
-	end
+
 	
 	protected
 	

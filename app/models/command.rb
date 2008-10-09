@@ -2,28 +2,50 @@
 # also defines the available scripting commands
 class Command
 	
-	attr_reader :raw_command, :action, :argument, :input, :current_user, :extra_input
+	attr_reader :raw_command, :action, :argument, :input, :current_user, :extra_input, :list, :service
 	
 	def initialize(current_user, params)
 		@input = params[:input]
 		@current_user = current_user
 		@extra_input = params[:extra_input]
 		@image_url = params[:image_url] || nil
-		@raw_command = params[:command].downcase.scan(/^(add|email|create|localize|find|search|invite|new)\s?(a\s|to\s|on\s|in\s|at\s)?(new\s)?(.*)?/)[0]
-		@action = @raw_command[0].nil? ? @raw_command[2] : @raw_command[0]
-		@argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3].gsub(/\sto$/,'')) 
+		# @raw_command = params[:command].downcase.scan()[0]
+		@raw_command = self.match(params[:command].downcase)
+		# @action = @raw_command[0].nil? ? @raw_command[2] : @raw_command[0]
+		# @argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3].gsub(/\sto$/,'')) 
+		@list = List.new(:creator => current_user, :label => @argument, :tag_id => params[:tagging].object_id || nil)
 	end
 	
-	def self.match(action)
-		# if action.match(/^(add|create)\s?((a|to)\s)?(new\s)?(.*)/)
-		# 			@action = "add"
-		# 			@argument = Nuniverse::Kind.match(@full_command[3])
-		# 		elsif action.match(/^(google|((find|search)\s(on\s)?google))\s?$/)
-		# 		elsif action.match(/^(find|search)\s(on\s)?(.*)/)
-		# 		elsif action.match(/^(invite|email)\s(.*)/)
-		# 		elsif action.match(/^(localize)\s)(.*)/)
-		# 		else
-		# 		end
+	def match(action)
+		
+		if m = action.match(/^(add|create|new)\s?((a|to)\s)?(new\s)?(.*)/)
+			@action = "add"
+			@argument = Nuniverse::Kind.match(m[5]) || "category"
+			@service = nil
+			return m
+		elsif m = action.match(/^(find|search)\s(.*\s)?(on\s(google|amazon))?$/)
+			@action = "find"
+			@argument = Nuniverse::Kind.match(m[2])
+			@service = m[4] || nil
+			return m
+		elsif m = action.match(/^email\s(.*)\sto$/)
+			@action = "email"
+			@argument = Nuniverse::Kind.match(m[1])
+			@service = nil
+			return m
+		elsif m = action.match(/^share\s?(.*)\swith$/)
+			@action = "share"
+			@argument = m[1]
+			@service = nil
+			return m
+		elsif m = action.match(/^(email|edit|invite)\s?(a\s|to\s|on\s|in\s|at\s|for\s)?(new\s)?(.*)?/)
+			@action = m[1]
+			@argument = m[3]
+			@service = nil
+			return m
+		else
+			return false
+		end
 	end
 	
 	def execute(params)
@@ -36,17 +58,32 @@ class Command
 			end
 			email_user(	:email => params[:email], 
 									:current_user => @current_user,
-									:content => params[:source], 
+									:content => @list, 
 									:message => @extra_input
 								)
-		when "invite"
+		when "share"
+			invite_user(:email => @input, 
+									:current_user => @current_user,
+									:content => @list, 
+									:message => @extra_input
+			)
 		when "search", "find"
-			search_for(params)
+			
 		when "localize"
 		when "add","new","create"
 			return add_content(params)
+		when "edit"
+			return edit_content(params)
 		end
 		
+	end
+	
+	
+	def edit_content(params)
+		case @argument
+		when "description"
+			return add_description(params[:source])
+		end
 	end
 	
 	def add_content(params)
@@ -54,33 +91,62 @@ class Command
 			when "image"
 				add_image_to(params[:source])
 			when "description"
-				params[:source].description = @input
-				params[:source].save
-			when "list", "category"
-			return List.find_or_create(
-					:creator_id => 	@current_user.id,
-					:label => Gum.purify(@input),
-					:tag_id => subject_is_user?(params[:subject]) ? nil :params[:subject].id
-					)
+				add_description(params[:source])
+			when "","list", "category"
+				# raise self.pretty_inspect
+				if @input.nil?
+				return List.new(
+						:creator_id => @current_user.id,
+						:tag_id  => subject_is_user?(params[:subject]) ? nil :params[:subject].id,
+						:label => nil
+						) 
+				else
+				return List.find_or_create(
+						:creator_id => 	@current_user.id,
+						:label => Gum.purify(@input),
+						:tag_id => subject_is_user?(params[:subject]) ? nil :params[:subject].id
+				)
+				end
 			when "tag", "tags"
 				@input.split(",").each do |input|
 					add_tag(:subject => params[:subject])
 				end
+				
 			else
+				
 				tag = Tag.find_or_create(
 					:label => Gum.purify(@input), 
 					:kind => @argument
 				) 
+			
 				# @argument << "##{params[:subject].label}" unless 	subject_is_user?(params[:subject])
 				@argument.split("#").each do |kind|
+	
 					Tagging.find_or_create( 
 											:owner => @current_user, 
 											:subject_id => params[:subject].id , 
 										 	:object_id => tag.id, 
 											:kind => kind
 										)
+						unless params[:subject] == @current_user.tag				
+						Tagging.find_or_create( 
+												:owner => @current_user, 
+												:subject_id =>  tag.id, 
+											 	:object_id => params[:subject].id, 
+												:kind => params[:subject].kind
+											)
+						end
 				end
+				
+				
+			
 			end
+	end
+	
+	def add_description(source)
+		source.description = @input
+		source.save
+		
 	end
 	
 	def subject_is_user?(subject)
@@ -102,8 +168,19 @@ class Command
 		@current_user.email_to(:user => user, :content => params[:content], :message => params[:message])
 	end
 	
+	def invite_user(params)
+		user = User.find(:first, :conditions => ["email = ?",params[:email]])
+		if user.nil?
+			user = User.new(:email => params[:email], :login => params[:email], :password => "welcome")
+			user.save
+		end
+		@current_user.invite(:user => user, :to => params[:content], :message => params[:message])
+	end
+	
 	def add_image_to(source)
-		source.add_image(:uploaded_data => @image_url[:uploaded_data]|| nil, :source_url => @input)
+		# raise self.pretty_inspect
+		uploaded_data = @image_url[:uploaded_data] rescue nil
+		source.add_image(:uploaded_data => uploaded_data, :source_url => @input)
 	end
 	
 	def add_tag(params)
@@ -121,8 +198,33 @@ class Command
 		)	
 	end
 	
-	def search_for(params)
+	def search_results(request)
+		
+		case @service
+		when "google"
+			return Googleizer::Request.new(@input, :mode => @argument || "web").response.results
+		when "amazon"
+			return Finder::Search.find(:query => @input, :service => 'amazon')
+		else
+			if @argument
+				return @list.items(:label => @input)
+			else
+				return @current_user.connections(:label => @input)
+			end
+		end
+	end
+	
+	def localize(source, request)
+		if source.is_a?(Tagging) && source.subject.has_address?
+			sll = source.subject.coordinates.join(',')
+			query = "#{source.label} #{source.kind}"
+		else
+			
+			sll = Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"	
+			query = source
 
+		end
+		Googleizer::Request.new(query, :mode => "local").response(:sll => sll, :rsz => "small").results
 	end
 
 end

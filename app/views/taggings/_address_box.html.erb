@@ -1,0 +1,33 @@
+<div class="box" id="map_box">
+  <h2>
+    <%= content_size((@source.object.has_address? ? 1 : 0)) %>
+    Address 
+    <%= expander_icon %>
+    <span class="prop editable"><%= @source.object.property('address') %></span>
+  </h2>
+  <div class="content">
+    <% if @source.object.has_address? -%>
+      <% @map = map(:source => @source) %>
+       <% content_for :head do -%>
+            <%= GMap.header (:small_zoom => true, :with_vml => false) %>
+            <%= @map.to_html %>
+         <% end -%>
+        <%= @map.div(:width => "100%", :height => 210) %>
+    <% end -%>
+  </div>
+  <dl class="options">
+    <dt>Options for Address</dt>
+    <dd><%= link_to "Remove", source, :confirm => 'Are you sure?', :method => :delete %></dd>
+    <dd class="actions">
+      <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+    </dd>
+  </dl>
+  <div class="actions">
+      <%= link_to("Options", "#", :class => "expand_options" )%> 
+    <% if @source.object.has_address? %>
+      <%= command(:label => "Edit", :command => "Edit address")%>
+    <% else -%>
+      <%= command(:label => "+ Add", :command => "Add address")%>
+    <% end -%>
+  </div>
+</div>

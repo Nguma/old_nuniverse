@@ -1,7 +1,4 @@
 <div id="input_box" class="hidden">
-  <%= link_to "x", "#", :title =>"close", :class => "close" %> 
-  <div id="input_info"></div>
-  
   <% form_tag "/command", { :multipart => true } do -%>
     <fieldset>
     <%= hidden_field_tag("tagging", source.id) if source.is_a?(Tagging) %>
@@ -21,9 +18,14 @@
     <label id="info_label"></label>
     <%= text_field_tag "input", "", :id => "input" ,:autocomplete => 'off'%>
     <label id="extra_input_label"></label>
-    <%= text_area_tag "extra_input", "", :id => "extra_input", :class => 'hidden', :rows => 1, :wrap => "virtual"%>
+    <%= text_area_tag "extra_input", "", :id => "extra_input", :class => 'hidden', :rows => 2, :wrap => "virtual"%>
     
     </fieldset>
   <% end -%>
+  <%= spinner %>
   <div class="suggestions" id="suggestions" title="/suggest"></div>
+  <div class="delimiter">&nbsp;</div>
+  <div class="actions">
+    <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+  </div>
 </div>

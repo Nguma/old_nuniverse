@@ -158,11 +158,6 @@ p strong {
 	color:#333;
 }
 
-#image_box .avatar {
-	position:relative;
-	width:100%;
-}
-
 #bookmarks {
 	
 }
@@ -196,7 +191,7 @@ p strong {
 }
 
 #left-content {
-	
+	position:relative;
 }
 
 a.save_button {
@@ -206,3 +201,4 @@ a.save_button {
 a.saved {
 	opacity:.3;
 }
+

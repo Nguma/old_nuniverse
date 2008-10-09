@@ -18,14 +18,6 @@ var ListBox = new Class({
     return this.el.getElement('h2')
   },
   
-  actions:function() {
-    return this.el.getElement('.actions');
-  },
-  
-  options:function() {
-    return this.el.getElement('.options');
-  },
-  
   checkBoxes:function() {
     return this.itemContainer.getElements('.check');
   },
@@ -53,8 +45,9 @@ var ListBox = new Class({
   
   setBehaviors:function() {
     this.parent();
-    this.setOptionsBehaviors();
     this.makeListSortable();
+    this.makeListDraggable();
+    
   },
   
   setItemBehaviors:function() {
@@ -64,17 +57,6 @@ var ListBox = new Class({
         'mouseleave':this.unfocusItem.bind(this,item)
       },this);
     },this);
-  },
-  
-  setOptionsBehaviors:function() {
-    var expand_options_bt = this.el.getElement('.expand_options');
-    var collapse_options_bt = this.el.getElement('.collapse_options');
-    if($defined(expand_options_bt)) {
-      expand_options_bt.addEvent('click', this.expandOptions.bindWithEvent(this));
-    }
-    if($defined(collapse_options_bt)) {
-      collapse_options_bt.addEvent('click', this.collapseOptions.bindWithEvent(this));
-    }
   },
   
   setPagination:function() {
@@ -116,7 +98,7 @@ var ListBox = new Class({
   
   unfocus:function() {
     this.parent();
-    this.collapseOptions();
+    //this.collapseOptions();
   },
   
   unfocusItem:function(item) {
@@ -148,19 +130,13 @@ var ListBox = new Class({
     });
   },
   
-  expandOptions:function(ev) {
-    ev.preventDefault();
-    
-    this.expand();
-    this.options['scroll'].toElement(this.options());
-   
-  },
-  
-  collapseOptions:function() {
-   
-    if($defined(this.options['scroll'])) {
-      this.options['scroll'].toTop()
-    }
-     
+  makeListDraggable:function() {
+    // this.el.makeDraggable({
+    //      'droppables':$('possible_categories'),
+    //      onDrop:function(el,drop){
+    //        if(drop) {el.destroy();}
+    //        else {}
+    //      }
+    //    });
   }
 });

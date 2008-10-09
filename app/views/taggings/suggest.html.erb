@@ -1,6 +1,0 @@
-<% @items.each do |tagging| %>
-  <div class="suggestion" style="clear:both">
-    <%= thumbnail_tag(tagging.object)%>
-    <h3><%= link_to(tagging.object.label.capitalize, "/#{tagging.object_id}") %></h3>
-  </div>
-<% end -%>

@@ -1,4 +1,29 @@
 <div class="box" id="description">
-  <h2>Description</h2>
-  <p><%= source.description %></p>
+  <h2>
+    Description 
+    <%= expander_icon %>
+  </h2>
+  <div class="preview">
+    <%= @source.description[0..80]  if @source.has_description? %>...
+  </div>
+  <div class="content">
+    <p class="editable">
+      <%= @source.description  if @source.has_description? %>
+    </p>
+  </div>
+  <dl class="options">
+    <dt>Options for Address</dt>
+    <dd><%= link_to "Remove", source, :confirm => 'Are you sure?', :method => :delete %></dd>
+    <dd class="actions">
+      <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+    </dd>
+  </dl>
+  <div class="actions">
+    <%= link_to("Options", "#", :class => "expand_options" )%> 
+    <% if @source.has_description? %>
+      <%= command(:label => "Edit", :command => "Edit description")%>
+    <% else -%>
+      <%= command(:label => "+ Add", :command => "Add description")%>
+    <% end -%>
+  </div>
 </div>

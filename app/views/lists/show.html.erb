@@ -12,6 +12,7 @@
           
           <%= sorting_options(:source => @list, :selected => @order) %>
           <%= display_options(:source => @list, :selected => @mode) %>
+          <%= perspectives(:source => @list, :selected => @perspective) %>
           <%= pagination_box(:items => @items)%>
           <%= add_new_button(@list) %>
           
@@ -29,18 +30,19 @@
         <% else -%>
         <div class="column large" id="item_list" >
             <% @items.each_with_index do |item, i| -%>
-            <div class="box">
-              <%= render_item(item, :kind => @list.label) %>
-            </div>
+              <%= render :partial => "item_box", :locals => {:item => item, :kind => @list.label} %>
             <% end -%>
         </div>
-        <div class="column small">
+        <div class="column small" id="small-column">
           <%= ad_box %>
           <%= map_box(@list)%>
+          <%= contributors_box(:source => @list) %>
         </div>
         <% end -%>
         
     </div>
           <% end -%>
-    <%= input(:source => @list)%>
+    <div id="input_wrap">
+      <%= input(:source => @list)%>
+    </div>
 <% end -%>

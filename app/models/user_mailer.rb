@@ -34,6 +34,7 @@ class UserMailer < ActionMailer::Base
     @sent_on     = Time.now
     @body[:sender] = params[:sender]
 		@body[:to] = params[:to]
+	
 		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{params[:to].label}"
 		@body[:message] = params[:message]
 		@body[:items] = params[:to].items(:page => 1, :per_page => 10)
@@ -51,7 +52,7 @@ class UserMailer < ActionMailer::Base
     @sent_on     = Time.now
     @body[:sender] = params[:sender]
 		@body[:content] = params[:content]
-		@body[:title] = params[:content].label.split('#')[1]
+		@body[:title] = params[:content].label.split('#').last
 		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{@body[:title]}"
 		@body[:message] = params[:message]
 		@body[:items] = params[:content].items(:page => 1, :per_page => 10)

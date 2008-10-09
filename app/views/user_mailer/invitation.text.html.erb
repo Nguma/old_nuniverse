@@ -18,7 +18,7 @@
               <%= link_to(item.object.label, "http://www.nuniverse.net/my_nuniverse/all/#{@to.label}/item/#{item.object.id}") %>
             <% end -%>
           </b>
-          <%= item.info %>
+          <%= item.info(:kind => item.kind) %>
         </p>
         
       </td>

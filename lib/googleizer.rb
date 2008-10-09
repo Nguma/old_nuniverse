@@ -7,7 +7,8 @@ module Googleizer
 	class Request
 		attr_reader :query, :mode
 		def initialize(query, params = {})
-			@mode = params[:mode] ||= DEFAULT_SEARCH_MODE
+			
+			@mode = self.map_mode(params[:mode].strip)
 			@query = query
 		end
 		
@@ -17,6 +18,18 @@ module Googleizer
 			uri << "&sll=#{params[:sll]}" if params[:sll]
 			
 			Googleizer::Response.new(Net::HTTP.get_response(URI.parse(uri)),mode) rescue nil
+		end
+		
+		def map_mode(mode)
+			maps = {
+				'address' => 'local',
+				'local' => 'local',
+				'bookmark' => 'web',
+				'video' => 'video',
+				'image' => 'image',
+				'news' => 'news'
+			}
+			return maps[mode] || DEFAULT_SEARCH_MODE
 		end
 		
 	end
@@ -53,7 +66,7 @@ module Googleizer
 		
 		def url(item)
 			return item['playUrl'] if @mode == "video"
-			return item['url']
+			return CGI.unescape(item['url'])
 		end
 		
 		def mode_to_kind

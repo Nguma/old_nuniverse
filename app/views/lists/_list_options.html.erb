@@ -1,17 +1,21 @@
-
-  <dl class="options">
-    <dt>Options for <%= list.label %></dt>
+<dl class="options">
+  <dt>Options for <%= list.label %></dt>
+  <% options_for_kind(list).each do |option| -%>
     <dd>
-      <%= command(:label => "Email this list to someone", :command => "Email #{list.label} to")%>
+      <%= option %>
     </dd>
-    <dd>
-      <%= link_to("Delete", list, :method => :delete) %>
-      <i>Note: Just the reference to that list will be deleted, the items remain</i>
-    </dd>
-    <dd>
-      <%= command(:label => "Rename", :command => "Rename #{list} to") %>
-    </dd>
-    <dd>
-      <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
-    </dd>
-  </dl>
+  <% end -%>
+  <dd>
+    <%= command(:label => "Email this list to someone", :command => "Email #{list.label} to")%>
+  </dd>
+  <dd>
+    <%= link_to("Remove", list, :method => :delete) %>
+    <i>Note: Just the reference to that list will be deleted, the items remain</i>
+  </dd>
+  <dd>
+    <%= command(:label => "Rename", :command => "Rename #{list} to") %>
+  </dd>
+  <dd class="actions">
+    <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+  </dd>
+</dl>

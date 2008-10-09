@@ -4,7 +4,7 @@
       <% options.each do |option| -%>
         <dd class=" <%= selected == option[1] ? 'current' : '' %>">
           <%= link_to(option[0], 
-                      listing_url(source.label, :order => option[1], :mode => @mode), 
+                      listing_url(source.label, :order => option[1], :mode => @mode, :page => 1, :service => @perspective, :tag => source.tag), 
                       :title => "#{source.label} #{option[0]}" ) 
           %>
         </dd>

@@ -5,17 +5,30 @@
   <div id="nav">
     <%= account_box %>
     <div class="command_box">
-      <%= command(:label => "Search your nuniverse", :command => "Search") %>
+      <%= command(:label => "Search your nuniverse", :command => "Search", :description => "Find what you're connected to.") %>
     </div>
-    <%= new_list_button %>
+    <div class="command_box">
+      <%= command(:label => "+ Create a new category", :command => "Create a new category", :description => "Enter the title of the category you want to create.") %>
+    </div>
   </div>
-  <div id="content" >
+  <div id="content" class="<%= @mode %>_mode">
     <% if @mode == "cards" -%>
-      <%= columnize([ad_box,boxes_for(current_user.connections(:per_page => 20, :order => 'latest'), :source => current_user)].flatten, :size => 4)%>
+      <%= columnize([ad_box, lists_for(current_user)].flatten, :size => 4)%>
       
     <% else -%>
-      <div class="column large">
-        <%= lists_for(current_user) %> 
+   
+      <div class="column large" id="left_content;">
+         <% if lists_for(current_user).empty? -%>
+          <div class="box">
+            
+            <h2>Your nuniverse is empty.</h2>
+            <h3><%= command(:label => "+ Create a new category", :command => "Create a new category", :description => "Enter the title of the category you want to create.") %></h3>
+            <div class="content"></div>
+            </div>
+         <% else -%>
+          <%= lists_for(current_user) %>
+         <% end -%>
+           
       </div>
       <div class="column small">
         <%= ad_box %>
@@ -24,6 +37,6 @@
     <% end -%>
     
   </div>
-  
-  <%= input(@source => nil)%>
+   <%= input(@source => nil)%>
+ 
 <% end -%>

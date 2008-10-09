@@ -28,8 +28,10 @@ class ListsController < ApplicationController
 			@mode = params[:mode] || "list"
 			@order = params[:order] || "by_name"
 			@title = @list.title
+			@info = params[:info] || nil
+			@perspective = params[:service] || "you"
 			
-			@items = @list.items(:page => @page, :per_page => 10, :order => @order, :perspective => params[:perspective] || nil)  
+			@items = @list.items(:page => @page, :per_page => 10, :order => @order, :perspective => @perspective)  
 	
 			respond_to do |format|
 				format.html {}

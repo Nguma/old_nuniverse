@@ -1,0 +1,8 @@
+<div class="box">
+  <%= render_item(item, :kind => kind)%>
+  <div class="content"></div>
+  <%= render :partial => "item_options", :locals => {:item => item} %>
+  <div class="actions">
+    <%= link_to("Options", "#", :class => "expand_options" )%> 
+  </div>
+</div>

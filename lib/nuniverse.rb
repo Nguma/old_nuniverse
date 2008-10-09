@@ -85,6 +85,7 @@ module Nuniverse
 		end
 		
 		def self.match(kind_str)
+			return if kind_str.nil?
 			kind_str.downcase.gsub(/^(add\s(a\s|to\s)?)?(new\s)?/,'').collect {|k| self.list[k.singularize] || k.singularize }.join('#')
 		end
 		
@@ -99,7 +100,7 @@ module Nuniverse
 		end
 		
 		def self.find_tags(input)
-			input.singularize.downcase.split(/\s|,/).collect {|c| Nuniverse::Kind.match(c).split("#").last}
+			input.singularize.downcase.split(/\s|,/).collect {|c| c.singularize}
 		end
 		
 		def self.analyze(input)

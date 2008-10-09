@@ -1,9 +1,11 @@
 <div class="box" id="tag_box">
   <h2>Tags</h2>
+  <div class="content" style="display:block;height:auto">
   <% items.each do |item| -%>
     <%= link_to(item.kind.capitalize, "/my_nuniverse/all/#{item.kind}", :style => "font-size:12px") %>
   <% end -%>
+  </div>
   <div class="actions">
-    <%= command(:label => "+ Add tags", :command => "Add tags")%>
+    <%= command(:label => "+ Add tags", :command => "Add tags", :description => "Enter your tags, comma separated.")%>
   </div>
 </div>

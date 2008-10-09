@@ -26,11 +26,17 @@ module TaggingsHelper
 		}
 	end
 	
+	def lego_box 
+		render :partial => "/taggings/lego_box"
+	end
+	
 	def content_for_service(params)
 		params[:service] ||= @service
-		render :partial => "/taggings/#{service}", :locals => {:source => params[:source]}
-	else
-		render :partial => "/taggings/default_content", :locals => {:source => params[:source]}
+		if !service_is_nuniverse?
+			render :partial => "/taggings/#{service}", :locals => {:source => params[:source]}
+		else
+			render :partial => "/taggings/default_content", :locals => {:source => params[:source]}
+		end
 	end
 	
 	def save_button_for(item, params = {})

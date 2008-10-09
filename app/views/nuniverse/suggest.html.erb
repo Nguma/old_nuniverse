@@ -1,0 +1,13 @@
+<%= image_tag("/images/icons/powered_by_google.gif", :style=>"position:absolute;right:5px;top:5px") if @command.service == "google" %>
+<% @items[0..2].each do |item| %>
+  <% item = item.object if item.is_a?(Tagging) %>
+  <div class="suggestion <%= item.kind %>" style="position:relative;clear:both">
+    <%= thumbnail_tag(item)%>
+    <h3><%= link_to_item(item) %></h3>
+    
+    <p><%= item.info %></p>
+    <div class="actions">
+      <%= save_button_for(item, :id => @command.list.tag_id) if @command.service != nil%>
+    </div>
+  </div>
+<% end -%>
