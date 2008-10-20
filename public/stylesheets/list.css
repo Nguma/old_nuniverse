@@ -82,9 +82,12 @@
 
 #item_list .pagination {
 	position:relative;
-	float:left;
+	text-align:left;
+	float:none;
 	padding:10px;
+	margin:0 0 1px 0;
 	display:block;
+	background:#efefef;
 	
 }
 
@@ -129,7 +132,6 @@
 	height:30px;
 }
 
-
 #item_list .item .votes {
 /*	background:#fff;*/
 	position:absolute;
@@ -153,20 +155,61 @@
 	background:#333;
 }
 
-#content #item_list  .box h3 a {
-	font-size:16px;
-	font-weight:bold;
-}
-
 #nuniverse .single .item h3 a {
 	font-size:22px;
 	color:#666;
 }
-
 
 .list .window {
 	position:absolute;
 	padding:5px;
 	border:5px solid #CCC;
 	background:#FFF;
+}
+
+.pagination_box {
+	min-height:0px;
+	height:20px;
+	padding:10px;
+	text-align:center;
+}
+
+.pagination_box .pagination {
+	padding:20px 0;
+	float:none;
+	margin:0;
+	font-size:16px;
+}
+
+.pagination_box a {
+	font-size:14px;
+}
+
+
+#item_list .pagination_box {
+	width:49.7%;
+	clear:none;
+	float:left;
+	min-height:40px;
+	height:40px;
+}
+
+.list_mode #options_box {
+	height:auto;
+	min-height:0;
+
+	background:#efefef;
+}
+
+/*.list .actions {
+	position:relative;
+}
+*/
+.list_mode .actions {
+	position:absolute;
+}
+
+.list_mode .box {
+	min-height:0;
+	height:auto;
 }

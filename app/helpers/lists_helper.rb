@@ -9,12 +9,12 @@ module ListsHelper
 		
 	def link_to_item(item, params = {})	
 		list = params[:kind] ? params[:kind] : item.kind 	
+		params[:title] ||= item.label.capitalize
 		if item.kind == "bookmark" 
-			link_to("#{item.label.capitalize}", item.url, :target => "_blank")
+			link_to("#{params[:title]}", item.url, :target => "_blank")
 		else
-			link_to(item.label.capitalize, item_url(:id => item.id, :list => list))
+			link_to(params[:title], item_url(:id => item.id, :list => list, :mode => params[:mode] || @mode, :service => @service))
 		end
-	
 	end
 	
 	def render_item(item, params = {})
@@ -22,6 +22,11 @@ module ListsHelper
 		params[:kind] ||= nil
 		params[:item] = item
 		render :partial => "/lists/item", :locals => params
+	end
+	
+	def render_item_box(item, params = {})
+		params[:item] = item
+		render :partial => "/lists/item_box", :locals => params
 	end
 	
 	def breadcrumbs_for(source, params = {})
@@ -45,14 +50,17 @@ module ListsHelper
 	
 	def sorting_options(params = {})
 		options = [['Name', 'by_name'],['Latest', 'by_latest'],['Vote', 'by_vote']]
+		params[:source] ||= @source
+		params[:selected] ||= @order
 		render :partial => "/lists/sorting_options", :locals => {:options => options, :source => params[:source], :selected => params[:selected]}
 
 	end
 	
 	def display_options(params = {})
 		options = [['As list', 'list'],['As cards','card'],['As images', 'image']]
-		params[:selected] ||= 'list'
-		render :partial => "display_options", :locals => {:options => options, :source => params[:source], :selected => params[:selected]} 
+		params[:selected] ||=  @mode
+		params[:source] ||= @source
+		render :partial => "/lists/display_options", :locals => {:options => options, :source => params[:source], :selected => params[:selected]} 
 	end
 	
 	def perspectives(params = {})
@@ -60,16 +68,16 @@ module ListsHelper
 		
 		if params[:source].is_a?(Tagging)
 			perspectives = [
-				["you",	item_url(:id => params[:source].id, :list => list_label, :service => "you"), "you"], 
-				["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :service => "everyone"), "everyone"],
-				["Google",item_url(:id => params[:source].id, :list =>  list_label, :service => "google"), "google"],
-				["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :service => "amazon"), "amazon"],
-				["Youtube", item_url(:id => params[:source].id, :list =>  list_label, :service => "youtube"), "youtube"]
+				["you",	item_url(:id => params[:source].id, :list => list_label, :mode => @mode,  :service => "you"), "you"], 
+				["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :mode => @mode,  :service => "everyone"), "everyone"],
+				["Google",item_url(:id => params[:source].id, :list =>  list_label, :mode => @mode,  :service => "google"), "google"],
+				["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :mode => @mode,  :service => "amazon"), "amazon"],
+				["Youtube", item_url(:id => params[:source].id, :list =>  list_label,:mode => @mode,   :service => "youtube"), "youtube"]
 			]
 		else
 			perspectives = [
-				["you", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode, :order => @order, :page => 1, :service => "you"), "you"],
-				["everyone", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode,  :order => @order, :page => 1, :service => "everyone"), "everyone"],
+				["you", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode,  :order => @order || nil, :page => 1, :service => "you"), "you"],
+				["everyone", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode,  :order => @order || nil, :page => 1, :service => "everyone"), "everyone"],
 			]
 		end
 		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source]}
@@ -79,7 +87,13 @@ module ListsHelper
 	def link_to_list(list, options = {})
 		title = options[:title] || list.label
 		title = title.singularize if options[:item_size] && options[:item_size] <= 1
-		link_to title.capitalize, listing_url(:list => list.label, :tag => list.tag, :mode => @mode || nil, :page => @page || 1, :order => @order, :service => @service || nil), :class => "link_to_list"
+		link_to title.capitalize, listing_url(:list => list.label, 
+																					:tag => list.tag, 
+																					:mode => options[:mode] || @mode, 
+																					:page => options[:page] || @page, 
+																					:order => options[:order] || @order, 
+																					:service => options[:service] || @service
+																), :class => "link_to_list"
 	end
 	
 	def list(params)
@@ -90,32 +104,37 @@ module ListsHelper
 		params[:command] ||= "#{params[:kind]}" 
 		params[:order] ||= "latest"
 		params[:dom_id] ||= params[:title].pluralize
-	
+		params[:ord] = cycle('even','odd')
 		render :partial => "/taggings/#{params[:kind]}_box", :locals => params rescue render :partial => "/taggings/list_box", :locals => params
 		#render :partial => "/taggings/#{params[:kind]}_box", :locals => params
 	end
 	
 	def lists_for(source, options = {})
 		boxes = []
-		source.lists(:user => current_user).each_with_index do |item,i|
-			boxes << list(:source => item) 
-		end
-		if options[:add_box]
-			boxes << "#{render :partial => options[:add_box]}"
+		source.lists(:user => current_user).each_with_index do |list,i|
+			boxes << list(:source => list) 
 		end
 		boxes
 	end
 	
 	def boxes_for(items, params = {})
+		params[:source] ||= @source
+		params[:kind] ||= params[:source].label
 		boxes = []
 		items.each_with_index do |item, i|
-			boxes << "#{render :partial => "/taggings/box", :locals => {:item => item, :source => params[:source] || nil}}"
+			case @mode 
+			when "card"
+				boxes << render_item_box(item, params)
+			when "image"
+				boxes << "#{render :partial => "/images/box", :locals => {:item => item, :source => params[:source]}}"
+			else	
+			end
 		end
 		boxes
 	end
 	
 	def pagination_box(params) 
-		render :partial => "/lists/pagination", :locals => {:items => params[:items]}
+		render :partial => "/lists/pagination", :locals => {:items => params[:items]} 
 	end
 	
 	def people_box(params = {})	
@@ -131,9 +150,10 @@ module ListsHelper
 		list(:source => List.new(:creator => @current_user, :label => "Bookmarks", :tag => tag))
 	end
 	
-	def image_box(params)
-		object = params[:source].is_a?(User) ? params[:source].tag : params[:source].object
-		render :partial => "/taggings/image", :locals => {:object => object}
+	def image_box(params = {})
+		params[:source] ||= @source
+		params[:expanded] ||= false
+		render :partial => "/taggings/image_box", :locals => params
 	end
 	
 	def comments_box(params = {})
@@ -153,11 +173,22 @@ module ListsHelper
 	end
 	
 	def empty_box
-		render :partial => "/nuniverse/empty_box"
+		render :partial => "/nuniverse/empty_box", :locals => {:source => @source}
+	end
+	
+	def command_box(label,action, options = {})
+		str = "<div class='command_box'>"
+		str << command(:label => label, :command => action)
+		str << "</div>"
+		str		
 	end
 	
 	def new_item_box
 		render :partial => "/taggings/new_item"
+	end
+	
+	def address_box
+		render :partial => "/taggings/address_box"
 	end
 	
 	def add_new_button(list)
@@ -209,5 +240,14 @@ module ListsHelper
 		else
 		end
 		options
+	end
+	
+	def pagination_box(items)
+		render :partial => "/lists/pagination_box", :locals => {:items => items}
+	end
+	
+	def list_options(params = {})
+		params[:items] ||= @source.items
+		render :partial => "/lists/options", :locals => params
 	end
 end

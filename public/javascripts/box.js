@@ -39,7 +39,10 @@ var Box = new Class({
     this.options['scroll'] = new Fx.Scroll(this.el,{
       transition: Fx.Transitions.Cubic.easeOut
     });
-    this.content().removeClass('hidden');
+    if($defined(this.content())) {
+      this.content().removeClass('hidden');
+    }
+    
     this.el.addClass('expanded');
     // windowScroll.toElement(this.el);
   },

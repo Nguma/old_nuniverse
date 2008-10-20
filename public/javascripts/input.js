@@ -13,11 +13,36 @@ var Input = new Class({
   },
   
   addSuggestionsBehaviors:function() {
+    
     this.el.getElements('.suggestion').each(function(suggestion) {
       if(!suggestion.hasClass('bookmark')) {
-        suggestion.getElement('h3 a').addEvent('click', this.onSuggestionClick.bindWithEvent(this, suggestion)); 
+        suggestion.makeDraggable({
+          'droppables':$('content'),
+          'clone':true,
+          'onDrop':function(el, droppable) {
+            var call = new Request.HTML({
+              'url':el.getElement('.save').getProperty('href'),
+              'onSuccess':function(a,b,c,d) {
+                $('content').adopt(a);
+                el.destroy();
+              }
+              
+            }).get();
+          }
+        })
+        // suggestion.getElement('h3 a').addEvent('click', this.onSuggestionClick.bindWithEvent(this, suggestion)); 
       }
     },this);
+    var obj = this;
+    if($defined(this.el.getElement('.pagination'))) {
+      
+      this.el.getElement('.pagination').getElements('a').each(function(page){
+        page.addEvent('click', function(ev) {
+          ev.preventDefault();
+          obj.getSuggestions(page.getProperty('href'));
+        },this);
+      },this);
+    }
   },
   
   box:function() {
@@ -78,28 +103,15 @@ var Input = new Class({
     return $('input').getProperty('value');
   },
   
-  getSuggestions:function() {
-    if($defined(this.options['call']))
-    {
-   //    this.options['call'].cancel();
-    };
+  getSuggestions:function(url) {
+    if($defined(this.options['delay'])) {$clear(this.options['delay']);}
+    this.options['delay'] = this.suggest.delay(500, this, url);
     this.spinner().setStyle('display','block');
-    
-    this.options['call'] = new Request.HTML({
-      'url':this.suggestUrl(),
-      'update':$('suggestions'),
-      'cancel':true,
-      'autoCancel':true,
-      'cancelBubble':true,
-      'onSuccess':this.addSuggestionsBehaviors.bind(this),
-      'onComplete':this.onSuggestComplete.bind(this)
-    }, this).get();
+     $('suggestions').empty();
   },
   
-  onCommandChange:function() {
-    console.log("change")
+  onCommandChange:function() {  
      $('suggestions').empty();
-     this.setCommandDisplay();
   },
   
   onKey:function(ev) {
@@ -185,8 +197,10 @@ var Input = new Class({
         break;
       case "search":
       case "find":
-        if(reset == true) { this.setInput($('title').getProperty('value'));}
-        
+        if(reset == true) { 
+          this.setInput($('context').getProperty('value'));
+        }
+        this.setLabel('Drag and drop any of those');
         this.getSuggestions();
         break;
       case "address":
@@ -199,8 +213,7 @@ var Input = new Class({
       default:
         
         if(this.isInUse()){
-          if($defined(this.options['delay'])) {$clear(this.options['delay']);}
-          this.options['delay'] = this.getSuggestions.delay(500, this);
+          this.getSuggestions();
         }
     }
   },
@@ -224,12 +237,30 @@ var Input = new Class({
   
   submit:function(url) {
     var obj = this;
-    // var call = new Request.HTML({
-    //       url:url,
-    //       'update':this.box(),
-    //       onSuccess:this.onSubmitSuccess.bind(this)
-    //       },this).post(this.el.getElement('form'));
-    this.el.getElement('form').submit();
+    var call = new Request.HTML({
+          url:url,
+          // 'update':$('content'),
+          
+          onSuccess:function(a,b,c,d) {
+             $('content').adopt(a);
+             obj.setInput('');
+             obj.setLabel('Add another one?');
+          }
+          },this).post(this.el.getElement('form'));
+ 
+  },
+  
+  suggest:function(url) {
+    url = url || this.suggestUrl();
+    this.options['call'] = new Request.HTML({
+      'url':url,
+      'update':$('suggestions'),
+      'cancel':true,
+      'autoCancel':true,
+      'cancelBubble':true,
+      'onSuccess':this.addSuggestionsBehaviors.bind(this),
+      'onComplete':this.onSuggestComplete.bind(this)
+    }, this).post(this.el.getElement('form'));  
   },
   
   suggestUrl:function() {

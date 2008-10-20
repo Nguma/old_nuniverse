@@ -3,6 +3,9 @@ var windowScroll;
 var inputBox;
 function reset()
 {
+  var r = new MooRainbow('myRainbow', {
+  		'startColor': [58, 142, 246],
+  	});
   
   
   windowScroll = new Fx.Scroll($(document.body), {
@@ -101,6 +104,17 @@ function reset()
     });
   }
   
+  if($defined($('control_panel'))) {
+    $('control_panel').getElements('.command').each(function(command) {
+       command.addEvents({
+         click:function(ev) {
+           ev.preventDefault();
+           inputBox.expand(command.getProperty('href'), command.getProperty('title'));
+         }
+       });
+     });
+  }
+  
   if($defined($('nav'))) {
     $('nav').getElements('.command').each(function(command) {
        command.addEvents({
@@ -110,8 +124,7 @@ function reset()
          }
        });
      });
-  }
- 
+  } 
   
 
 }

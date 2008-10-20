@@ -204,12 +204,12 @@ module Nuniverse
 			gg = Graticule.service(:google).new(GOOG_GEO_KEY).locate(full_address.to_s) rescue nil
 			
 			if gg
-				tag.replace("latlng","#{gg.latitude},#{gg.longitude}")
-				tag.replace("city",gg.locality) unless gg.locality.nil?
-				tag.replace("zip",gg.postal_code) unless gg.postal_code.nil?
-				tag.replace("country", gg.country) unless gg.country.nil?
-				tag.replace("address", gg.to_s)
-				tag.replace("address_precision",gg.precision.to_s)
+				tag.replace_property("latlng","#{gg.latitude},#{gg.longitude}")
+				tag.replace_property("city",gg.locality) unless gg.locality.nil?
+				tag.replace_property("zip",gg.postal_code) unless gg.postal_code.nil?
+				tag.replace_property("country", gg.country) unless gg.country.nil?
+				tag.replace_property("address", gg.to_s)
+				tag.replace_property("address_precision",gg.precision.to_s)
 				tag.save
 				return ([gg.latitude, gg.longitude])
 			end

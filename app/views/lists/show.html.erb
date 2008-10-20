@@ -1,48 +1,40 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <%= breadcrumbs_for(@list)%>
-  <%= list_hat(@list)%>
-  
+  <%= list_options(:items => @items) %>
   <% if @items.empty? -%>
-    <h2>You haven't added anything to <%= @list.label %> yet.</h2>
-    <h3>
-      <%= command(:label => "+ Add something now", :command => "Add to #{@list.label}") %>
-    </h3>
+    <%= empty_box %>
   <% else -%>
-    <div id="nav">
-          
-          <%= sorting_options(:source => @list, :selected => @order) %>
-          <%= display_options(:source => @list, :selected => @mode) %>
-          <%= perspectives(:source => @list, :selected => @perspective) %>
-          <%= pagination_box(:items => @items)%>
-          <%= add_new_button(@list) %>
-          
-          <div class="command_box">
-            <%= image_tag("/images/icons/email_to.png")%>
-            <%= command(:label => "Email this list", :command => "email #{@list.label} to")%>
-          </div>
-          
-    </div>
-    <div id="content" >
-        <% if @mode ==  "image" -%>
-          <%= columnize(images_for(@items, :source => @list), :size => 4)%>
-        <% elsif @mode == "card" -%>
-          <%= columnize([ad_box,boxes_for(@items, :source => @list)].flatten, :size => 4)%>
-        <% else -%>
+      <% if @mode == "list" %>
         <div class="column large" id="item_list" >
-            <% @items.each_with_index do |item, i| -%>
-              <%= render :partial => "item_box", :locals => {:item => item, :kind => @list.label} %>
-            <% end -%>
+         
+          
+          <% @items.each_with_index do |item, i| -%>
+             <%= render_item_box(item, :kind => @list.label) %>
+          <% end -%>
+          
         </div>
         <div class="column small" id="small-column">
           <%= ad_box %>
           <%= map_box(@list)%>
           <%= contributors_box(:source => @list) %>
         </div>
-        <% end -%>
+      <% else -%>
+        <%= columnize([ ad_box, boxes_for(@items, :source => @list)].flatten)%>
+      <% end -%>
         
-    </div>
-          <% end -%>
-    <div id="input_wrap">
-      <%= input(:source => @list)%>
-    </div>
+  <% end -%>
+
+  <% content_for :nav do -%>
+    
+   
+    <%= perspectives(:source => @list, :selected => @perspective) %>
+    
+    <%= add_new_button(@list) %>
+    <%= command_box("Search", "search") %>
+    <div class="command_box">
+       <%= image_tag("/images/icons/email_to.png")%>
+       <%= command(:label => "Email this list", :command => "email #{@list.label} to")%>
+     </div>
+  <% end -%>
+    
+
 <% end -%>

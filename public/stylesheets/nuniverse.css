@@ -1,9 +1,10 @@
 .nuniverse
 {
 	position:relative;
-	padding:30px 20px 20px 20px;
+	padding:40px 20px 20px 20px;
 	color:#333;
 	font-weight:normal;
+	z-index:123;
 }
 
 .nuniverse .body
@@ -171,11 +172,15 @@ p strong {
 	float:right;
 }
 
+
 #nav {
 	position:relative;
-	
+	clear:both;
 	width:100%;
+	height:30px;
 	z-index:123456789;
+	background:#666;
+	margin:0 0 0 1px;
 }
 
 #content {
@@ -187,7 +192,6 @@ p strong {
 	padding:0;
 	overflow:hidden;
 	z-index:123;
-	min-height:1000px;
 }
 
 #left-content {
@@ -200,5 +204,42 @@ a.save_button {
 
 a.saved {
 	opacity:.3;
+}
+
+#control_panel {
+	position:fixed;
+	top:0;
+	right:20px;
+	background:none;
+	padding:0;
+	z-index:456789;
+	
+}
+
+#control_panel dd
+{
+	position:relative;
+	float:left;
+	padding:10px 10px 10px 10px;
+	
+	margin:0 0 0 0;
+	color:#FFF;
+	background:none;
+
+}
+
+#control_panel dd a,
+#control_panel dd a:visited {
+	font-size:12px;
+	font-weight:bold;
+	line-height:14px;
+	color:#666;
+}
+
+#control_panel .selected 
+{
+	background:#333;
+	color:#FFF;
+	border-bottom:none;
 }
 

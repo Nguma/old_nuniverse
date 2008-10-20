@@ -2,8 +2,8 @@
 <% order ||= nil %>
 <div class="item <%= cycle('even','odd') %>" >
   <%= thumbnail_tag(item.object) %>
-  <h3><%= link_to_item(item, :kind => kind)%></h3>
-  <p><%= item.info(:kind => kind, :info => @info) %></p>
+   <h3><%= link_to_item(item, :kind => kind)%></h3>
+   <p><%= item.info(:kind => kind, :info => @info) %></p>
 
 </div>
 

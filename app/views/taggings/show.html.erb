@@ -1,42 +1,27 @@
 <% nuniverse(:dom_class => @tagging.object.kind, :selected => "My nuniverse") do -%>
-    <%= breadcrumbs_for(@tagging) %>
-    <div class="hat">
-      <%= title_for(@tagging, :list => @list)%>
-    </div>
-     
 
-    <div id="nav">
-      <%= perspectives(:source => @tagging) %>
-      <div class="box" id="display_options">
-        <%#= expander_icon %>
-       
+      <div class="column small" id="left-column">
+        <%= image_box%>
+        <%= tag_box(:source => @tagging.object) %>
       </div>
+      <div class="column large" id="right-column">
+        <% if @mode == "image" %>
+          <%= columnize([ ad_box, content_for_item(@tagging) ].flatten, :size => 3)%>
+        <% elsif @mode == "card" %>
+          <%= columnize([ ad_box, lists_for(@tagging) ].flatten, :size => 2)%>
+        <% else -%>
+          <%= ad_box %>
+          <%= content_for_item(@tagging) %>
+        <% end -%>  
+      </div>
+      
+    <% content_for :nav do -%>
+    
+      <%= perspectives(:source => @tagging) %>
       <% if service_is_nuniverse? -%>
         <%= new_list_button %>
       <% end -%>
-    </div>
-    <div id="content" class="<%= @mode %>_mode">
-      <% if @mode == "cards" %>
-        <%= columnize([ad_box,lists_for(@tagging), tag_box(:source => @tagging.object) ].flatten, :size => 4)%>
-     
-      <% else -%>
-      <div class="column large" id="left-content">
-        <div id="categories">
-          
-          <%= content_for_item(@tagging) %>
-        </div>
-       <%= ad_box %>
-       
-      </div>
-      <div class="column small">
-        <%= lego_box %>
-        <%= tag_box(:source => @tagging.object) %>
-         
-      </div>
-      <% end -%>
-        
-    </div>
-    <div id="input_wrap">
-     <%= input(:source => @tagging)%> 
-    </div>
+       <%= command_box("Search","search") %>
+    <% end -%>
+  
 <% end -%>

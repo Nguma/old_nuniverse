@@ -1,7 +1,7 @@
-<div class="box">
+<div class="box <%= cycle('even','odd') %>">
   <%= render_item(item, :kind => kind)%>
   <div class="content"></div>
-  <%= render :partial => "item_options", :locals => {:item => item} %>
+  <%= render :partial => "/lists/item_options", :locals => {:item => item} %>
   <div class="actions">
     <%= link_to("Options", "#", :class => "expand_options" )%> 
   </div>

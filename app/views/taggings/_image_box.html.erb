@@ -1,26 +1,37 @@
-<div class="box list" id="image_box" >
-  <h2>
-    <span class="size"><%= @source.object.images.size %></span>
-    Images
-    <%= expander_icon %>
-  </h2>
-  <div class="content">
-    <% @source.object.images.each do |image| -%>
-      <%= image_tag(image.public_filename(), :class => "avatar") %>
-    <% end -%>
+<div class="box list <%= expanded ? "expanded" : "" %>" id="image_box" >
+  <% if @source.object.images.empty? %>
+    <div style="padding:5px">
+      <h4>This item doesn't have any image yet.</h4>
+      <%= command(:label => "+ Add one now", :command => "New image")%>
+    </div>
+  <% else -%>
+    <%= avatar_for(@source) %>
+    <div class="content">
+       <% @source.object.images.each do |image| -%>
+         <%= image_tag(image.public_filename(), :class => "avatar") %>
+       <% end -%>
 
-  </div>
-  <dl class="options">
-     <dt>Images options</dt>
-     <dd><%= link_to "Remove", source, :confirm => 'Are you sure?', :method => :delete %></dd>
-     <dd class="actions">
-       <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
-     </dd>
-   </dl>
-  <div class="actions">
-    <%= link_to("Options", "#", :class => "expand_options" )%> 
-    <%= command(:label => "+ Add", :command => "New image")%>
-   </div>
+     </div>
+     <dl class="options">
+        <dt>Images options</dt>
+
+        <dd class="actions">
+          <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+        </dd>
+      </dl>
+     <div class="actions">
+       <%= link_to("Options", "#", :class => "expand_options" )%> 
+       <%= command(:label => "+ Add", :command => "New image")%>
+      </div>
+  <% end -%>
+  
+  <!-- <h2> -->
+    <!-- <span class="size"><%= @source.object.images.size %></span> -->
+    <!-- Images -->
+    <!-- <%= expander_icon %> -->
+    
+  <!-- </h2> -->
+ 
 
 </div>
 

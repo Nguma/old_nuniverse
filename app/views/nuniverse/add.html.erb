@@ -1,0 +1,7 @@
+<% if @result.is_a?(List) -%>
+  <%= list(:source => @result) %>
+<% elsif @result.is_a?(Image) -%>
+  <%= @result %>
+<% else -%>
+  <%= render_item_box(@result) %>
+<% end -%>

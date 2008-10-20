@@ -1,19 +1,18 @@
 #input_box {
 	border:none;
-	
+	position:relative;
+	clear:both;
 	padding:10px 20px 10px 20px;
 	margin:0 0 0 0;
 	background:#333;
-	width:100%;
+	width:auto;
 	min-height:200px;
-	
-	overflow:hidden;
-	border-top:solid #555 20px;
-	
 }
 
-#input_wrap {
-	width:100%;
+
+#input_wrap h1 {
+	font-size:25px;
+	color:#000;
 }
 
 #input_box .spinner {
@@ -72,8 +71,25 @@
 #suggestions {
 	display:block;
 	color:#eee;
-	padding:5px;
 	margin-bottom:10px;
+	width:100%;
+}
+
+#suggestions .pagination {
+	position:relative;
+	float:none;
+	clear:both;
+}
+
+.suggestion {
+	position:relative;
+	float:left;
+	width:200px;
+}
+
+.suggestion h3 {
+	font-size:17px;
+	color:#ccc;
 }
 
 #file_field {
@@ -133,17 +149,6 @@
 
 #input_box #command {
 	font-size:22px;
-}
-
-#input_wrap {
-	margin:0;
-	background:none;
-	display:block;
-	width:100%;
-	position:fixed;
-	left:0;
-	bottom:0;
-	z-index:1234567890123;
 }
 
 .box #info_label {

@@ -41,37 +41,3 @@ body
 	background:#9F9;
 	padding:10px;
 }
-
-#control_panel {
-	position:fixed;
-	background:none;
-	right:20px;
-	top:0px;
-	padding:0;
-	
-	z-index:1234567890123;
-	background:#c3c3c3;
-}
-
-#control_panel dd
-{
-	position:relative;
-	float:left;
-	padding:5px 10px 5px 10px;
-	margin:0 0 0 0;
-	color:#FFF;
-}
-
-#control_panel dd a,
-#control_panel dd a:visited {
-	font-size:12px;
-	font-weight:bold;
-	color:#FFF;
-}
-
-#control_panel .selected 
-{
-	background:#333;
-	color:#FFF;
-	border-bottom:none;
-}

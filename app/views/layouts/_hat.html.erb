@@ -1,14 +1,24 @@
-<% menu(:name => "control_panel") do -%>
-    <%#= menu_item(:label => "Home", :action => "/",  :selected => selected) %>
-    <%= menu_item(:label => "About", :action => "/about", :selected => selected)%>
-    <%= menu_item(:label => "Feedback", :action => "/feedback", :selected => selected)%>
-    <% if logged_in? -%>
-      <%#= menu_item(:label => "Upgrade", :action => "/upgrade",  :selected => selected) %>
-      <%= menu_item(:label => "My nuniverse", :action => "/my_nuniverse",  :selected => selected) %>
-      <%= menu_item(:label => "Sign out", :action => "/logout",  :selected => selected) %>
-    <% else -%>
-      <%= menu_item(:label => "Sign in", :action => "/login",  :selected => selected) %>
-      <%= menu_item(:label => "Register", :action => "/signup",  :selected => selected) %>
-     
-    <% end -%>
+
+<% if logged_in? %>
+
+    <% menu = [
+      link_to("Home", home_url),
+      link_to("About", about_url),
+      link_to("Feedback", feedback_url),
+      link_to("Log out", logout_url)
+      ] -%>
+<% else -%>
+<% menu = [
+  link_to("About", about_url),
+  link_to("Feedback", feedback_url),
+  link_to("Login", login_url),
+  link_to("Register", signup_url)
+  ] -%>
 <% end -%>
+
+
+<dl id="control_panel">
+  <% menu.each do |item| -%>
+    <dd><%= item %></dd>
+  <% end -%>
+</dl>

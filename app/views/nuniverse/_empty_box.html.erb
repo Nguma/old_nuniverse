@@ -1,3 +1,7 @@
-<div class="list box">
+<div class="box">
+  <h2>You haven't added anything to <%= source.label %> yet.</h2>
+  <h3>
+    <%= command(:label => "+ Add something now", :command => "Add to #{source.label}") %>
+  </h3>
   <div class="content"></div>
 </div>

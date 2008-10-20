@@ -5,7 +5,7 @@ module NuniverseHelper
 		params[:selected] ||= ""
 		concat(
 			render(
-				:partial => "/nuniverse/page",
+				:partial => "/nuniverse/instance",
 				:locals => params
 		), block.binding)		
 	end
@@ -58,7 +58,7 @@ module NuniverseHelper
 	# :dom_classes = Array of classes to assign to each column. Eg: ["","big_column","small_column"]
 	def columnize(boxes, params = {})
 		html = ""
-		params[:size] ||= 3
+		params[:size] ||= 4
 		params[:dom_classes] ||= []
 		cols = []
 		boxes.each_with_index do |box, i|
@@ -67,7 +67,7 @@ module NuniverseHelper
 		cols.each_with_index do |col, i|
 			col_html = render :partial => "/nuniverse/column", :locals => {
 				:dom_class => params[:dom_classes][i] || "",
-				:dom_id => "column_#{i}",
+				:dom_id => params[:dom_id] || "column_#{i}",
 				:width => "#{(100/params[:size].to_i)}%",
 				:col_content => cols[i]
 			}
@@ -80,6 +80,7 @@ module NuniverseHelper
 	# Service_is_nuniverse?
 	# Returns true if selecte dservice / perspective is prioritary to nuniverse.
 	def service_is_nuniverse?
+		return true if @service.nil?
 		return true if @service == "you"
 		return true if @service == "everyone"
 		return false
@@ -92,22 +93,27 @@ module NuniverseHelper
 		link_to(params[:label],params[:command],:class => 'command', :title => params[:description])
 	end
 	
+
 	def input(params)
+		params[:source] ||= @source
 		render :partial => "/nuniverse/input" , :locals => {
 		  :source => params[:source]
 		 }
 	end
 	
-	def title_for(source, options ={})
-		str = "<h1>#{source.title} "
-		str << "<span class='service'> on #{@service}</span>" unless service_is_nuniverse?
-		str << "</h1>"
-		str
+	def title(params ={})
+		params[:source] ||= @source
+		return if params[:source].nil?
+		render(:partial => "/nuniverse/title_box", :locals => params)
 	end
 	
+	
+	
 	def content_for_item(item, params = {})
+		params[:kind] ||= @list.label.singularize
+
 		if service_is_nuniverse?
-			render :partial => "/taggings/#{item.kind}", :locals => {:tagging => item}  rescue render :partial => "/taggings/default", :locals => {:tagging => item}		
+			render :partial => "/taggings/#{params[:kind]}", :locals => {:tagging => item}  rescue render :partial => "/taggings/default", :locals => {:tagging => item}		
 		else
 			render :partial => "/taggings/#{@service}", :locals => {:tagging => item} 
 		

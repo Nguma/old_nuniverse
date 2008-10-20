@@ -1,24 +1,11 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <%= image_tag('/images/icons/small_nuniverse.png', :style => "position:relative;float:left;height:60px")%>
-  <h1><%= current_user.login.capitalize %>, this is your nuniverse.</h1>
-  <div class="delimiter">&nbsp;</div>
-  <div id="nav">
-    <%= account_box %>
-    <div class="command_box">
-      <%= command(:label => "Search your nuniverse", :command => "Search", :description => "Find what you're connected to.") %>
-    </div>
-    <div class="command_box">
-      <%= command(:label => "+ Create a new category", :command => "Create a new category", :description => "Enter the title of the category you want to create.") %>
-    </div>
-  </div>
-  <div id="content" class="<%= @mode %>_mode">
-    <% if @mode == "cards" -%>
-      <%= columnize([ad_box, lists_for(current_user)].flatten, :size => 4)%>
-      
-    <% else -%>
+
+    <% if @mode == "list" -%>
    
-      <div class="column large" id="left_content;">
-         <% if lists_for(current_user).empty? -%>
+      <div class="column xlarge" id="left_content;">
+        
+       
+         <% if current_user.lists.empty? -%>
           <div class="box">
             
             <h2>Your nuniverse is empty.</h2>
@@ -26,17 +13,22 @@
             <div class="content"></div>
             </div>
          <% else -%>
-          <%= lists_for(current_user) %>
+            <%= lists_for(current_user)%>
          <% end -%>
-           
+            <%= ad_box%>
       </div>
-      <div class="column small">
-        <%= ad_box %>
-        <%#= map_box(current_user.tag)%>
-      </div>
+      
+    <% else -%>
+      <%= columnize([ad_box, lists_for(current_user)].flatten, :size => 4)%>
     <% end -%>
-    
-  </div>
-   <%= input(@source => nil)%>
+
+
+  <% content_for :nav do -%>
+
+    <%= command_box("+ Create a new category","Create a new category", :description => "Enter the title of the category you want to create.") %>
+    <%= command_box("Search","search") %>
+  <% end -%>
+
+  
  
 <% end -%>

@@ -1,22 +1,3 @@
-
-<div id="nav">
-  <% boxes = [
-    ad_box,
-    tag_box(:source => @tagging.object),
-    perspectives(:source => @tagging, :list => @list, :selected => "you"),
-    new_list_button]
-    %>
-    
-  <%= columnize(boxes, :size => 4) %>
-</div>
-<div id="content">
-  <div class="column small">
-    <%= image_box(:source => @tagging) %>
-    <%= bookmarks_box(:source => @tagging.object) %>
-  </div>
-  <div class="column large">
-    <%= lists_for(@tagging) %>
-    <%= amazon_box(:source => @tagging) %>
-  </div>
-  
-</div>
+<%= bookmarks_box(:source => @tagging)%>
+<%= lists_for(@tagging) %>
+<%= amazon_box(:source => @tagging) %>

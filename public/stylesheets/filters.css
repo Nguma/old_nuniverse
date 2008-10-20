@@ -4,14 +4,16 @@
 	width:auto;	
 	list-style-type:none;
 	padding:0;
+	margin:0;
 }
 
 .tabs dt {
 	position:relative;
 	float:left;
-	padding:5px 5px 5px 5px;
-	line-height:20px;
-	font-size:14px;
+	padding:5px;
+	line-height:14px;
+	font-size:13px;
+	font-weight:bold;
 	color:#666;
 }
 
@@ -19,10 +21,10 @@
 .tabs dd {
 	position:relative;
 	float:left;
-	top:0;
+
 	padding:5px;
-	line-height:20px;
-	font-size:14px;
+	line-height:14px;
+	font-size:13px;
 	font-weight:normal;
 	color:#999;
 	border-left:none;
@@ -51,4 +53,11 @@
 .tabs dd img {
 	position:relative;
 	float:left;
+}
+
+
+#display_options {
+	position:absolute;
+	right:5px;
+	top:10px;
 }

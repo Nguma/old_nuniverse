@@ -25,13 +25,13 @@ class ListsController < ApplicationController
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
-			@mode = params[:mode] || "list"
+			@mode = params[:mode] || "card"
 			@order = params[:order] || "by_name"
 			@title = @list.title
 			@info = params[:info] || nil
-			@perspective = params[:service] || "you"
-			
-			@items = @list.items(:page => @page, :per_page => 10, :order => @order, :perspective => @perspective)  
+			@perspective = params[:service] || "everyone"
+			@source = @list
+			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @perspective)  
 	
 			respond_to do |format|
 				format.html {}

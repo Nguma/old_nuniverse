@@ -1,11 +1,14 @@
 <div id="input_box" class="hidden">
   <% form_tag "/command", { :multipart => true } do -%>
     <fieldset>
-    <%= hidden_field_tag("tagging", source.id) if source.is_a?(Tagging) %>
-    <%= hidden_field_tag("title", source.label) if source%>
+    
+    <%= hidden_field_tag("context", @list ? @list.label : "")  %>
     <% if source.is_a?(List) -%>
       <%= hidden_field_tag("list", source.label) %>
-      <%= hidden_field_tag("tag", source.tag_id) %>
+      <%= hidden_field_tag("tag_id", source.tag_id) %>
+    <% elsif source.is_a?(Tagging) -%>
+      <%= hidden_field_tag("list", @source.kind)  %>
+      <%= hidden_field_tag("tag_id", @source.object_id )%>
     <% end -%>
     
     <%= text_field_tag "command", "", :id => "command", :autocomplete => 'off' %>
@@ -28,4 +31,5 @@
   <div class="actions">
     <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
   </div>
+  <div class="delimiter">&nbsp;</div>
 </div>

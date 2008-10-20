@@ -11,24 +11,25 @@ class Command
 		@image_url = params[:image_url] || nil
 		# @raw_command = params[:command].downcase.scan()[0]
 		@raw_command = self.match(params[:command].downcase)
+	
 		# @action = @raw_command[0].nil? ? @raw_command[2] : @raw_command[0]
 		# @argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3].gsub(/\sto$/,'')) 
-		@list = List.new(:creator => current_user, :label => @argument, :tag_id => params[:tagging].object_id || nil)
+		@list = List.new(:creator => current_user, :label => @argument.split('#').last, :tag_id => params[:tag_id] || nil)
 	end
 	
 	def match(action)
-		
+		action = action.gsub('_',' ');
 		if m = action.match(/^(add|create|new)\s?((a|to)\s)?(new\s)?(.*)/)
 			@action = "add"
 			@argument = Nuniverse::Kind.match(m[5]) || "category"
 			@service = nil
 			return m
-		elsif m = action.match(/^(find|search)\s(.*\s)?(on\s(google|amazon))?$/)
+		elsif m = action.match(/^(find|search)\s(.*)?(\son\s(google|amazon))?$/)
 			@action = "find"
-			@argument = Nuniverse::Kind.match(m[2])
+			@argument = m[2]
 			@service = m[4] || nil
 			return m
-		elsif m = action.match(/^email\s(.*)\sto$/)
+		elsif m = action.match(/^email\s(.*)(\sto)?$/)
 			@action = "email"
 			@argument = Nuniverse::Kind.match(m[1])
 			@service = nil
@@ -89,56 +90,60 @@ class Command
 	def add_content(params)
 			case @argument
 			when "image"
-				add_image_to(params[:source])
+				return add_image_to(@list.tag)
 			when "description"
-				add_description(params[:source])
+				return add_description(params[:source])
 			when "","list", "category"
 				# raise self.pretty_inspect
 				if @input.nil?
 				return List.new(
 						:creator_id => @current_user.id,
-						:tag_id  => subject_is_user?(params[:subject]) ? nil :params[:subject].id,
+						:tag_id  => @list.tag_id ? @list.tag_id : nil,
 						:label => nil
 						) 
 				else
 				return List.find_or_create(
 						:creator_id => 	@current_user.id,
 						:label => Gum.purify(@input),
-						:tag_id => subject_is_user?(params[:subject]) ? nil :params[:subject].id
+						:tag_id =>  @list.tag_id ? @list.tag_id : nil
+						# :tag_id => subject_is_user?(params[:subject]) ? nil :params[:subject].id
 				)
 				end
 			when "tag", "tags"
 				@input.split(",").each do |input|
-					add_tag(:subject => params[:subject])
+					add_tag(:subject => @list.tag, :input => input)
 				end
 				
 			else
-				
-				tag = Tag.find_or_create(
-					:label => Gum.purify(@input), 
-					:kind => @argument
-				) 
-			
-				# @argument << "##{params[:subject].label}" unless 	subject_is_user?(params[:subject])
+				if params[:item]
+					tag = Tag.find(params[:item])
+				else
+					tag = Tag.find_or_create(
+						:label => Gum.purify(@input), 
+						:kind => @argument
+					)
+				end
+		
+				subj_id = @list.tag_id ? @list.tag_id : current_user.tag_id
 				@argument.split("#").each do |kind|
 	
-					Tagging.find_or_create( 
+					@t = Tagging.find_or_create( 
 											:owner => @current_user, 
-											:subject_id => params[:subject].id , 
+											:subject_id =>  subj_id, 
 										 	:object_id => tag.id, 
 											:kind => kind
 										)
 						unless params[:subject] == @current_user.tag				
-						Tagging.find_or_create( 
+							Tagging.find_or_create( 
 												:owner => @current_user, 
 												:subject_id =>  tag.id, 
-											 	:object_id => params[:subject].id, 
+											 	:object_id => subj_id, 
 												:kind => params[:subject].kind
 											)
 						end
 				end
 				
-				
+				return @t
 			
 			end
 	end
@@ -181,11 +186,12 @@ class Command
 		# raise self.pretty_inspect
 		uploaded_data = @image_url[:uploaded_data] rescue nil
 		source.add_image(:uploaded_data => uploaded_data, :source_url => @input)
+		source.images.last
 	end
 	
 	def add_tag(params)
 		tag = Tag.find_or_create(
-			:label => Gum.purify(@input), 
+			:label => Gum.purify(params[:input]), 
 			:kind => "tag"
 		)
 
@@ -193,13 +199,13 @@ class Command
 			:owner => @current_user,
 			:subject_id => tag.id,
 			:object_id => params[:subject].id,
-			:kind => @input,
+			:kind => params[:input],
 			:description => "#{params[:subject].label} #{tag.label}"
 		)	
 	end
 	
-	def search_results(request)
-		
+	def search_results(params = {})
+		params[:page] ||= 1
 		case @service
 		when "google"
 			return Googleizer::Request.new(@input, :mode => @argument || "web").response.results
@@ -207,9 +213,10 @@ class Command
 			return Finder::Search.find(:query => @input, :service => 'amazon')
 		else
 			if @argument
-				return @list.items(:label => @input)
+				
+				return @list.items(:label => @input, :page => params[:page], :per_page => params[:per_page], :perspective => "everyone")
 			else
-				return @current_user.connections(:label => @input)
+				return @current_user.connections(:label => @input, :page => params[:page], :per_page => params[:per_page], :kind => @argument.split('#').last)
 			end
 		end
 	end

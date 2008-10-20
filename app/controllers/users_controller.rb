@@ -88,13 +88,14 @@ class UsersController < ApplicationController
 			redirect_to @user.tag 
 		end
 		
-		@mode = params[:mode] || 'list'
+		@mode = params[:mode] || 'card'
 		@tag = current_user.tag
 		@path = TaggingPath.new
 		@service = nil
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
 		@title = "#{current_user.login}'s nuniverse"
+		@source = current_user
 		
 		respond_to do |format|
 			format.html {}	

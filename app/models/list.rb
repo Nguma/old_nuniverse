@@ -32,8 +32,7 @@ class List < ActiveRecord::Base
 	# per_page: number of results per page
 	def items(params = {})
 		tags = Nuniverse::Kind.find_tags(self.label.downcase)
-		users = params[:perspective] == "you" ? [self.creator] : [grantors, self.creator].flatten 
-		
+		users = params[:perspective] == "you" ? [self.creator] : [grantors, self.creator, User.find(0)].flatten 
 		Tagging.select(
 			:users => users, 
 			:tags => tags, 

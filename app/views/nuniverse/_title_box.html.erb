@@ -1,0 +1,7 @@
+<div class='box' id="title_box">
+  <%= display_options %>
+  <h1><%= source.title %><h1>
+  <% unless service_is_nuniverse? -%>
+    <span class='service'>on <%= @service %></span>
+  <% end -%>
+</div>
