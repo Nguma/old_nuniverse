@@ -153,7 +153,7 @@ class Tagging < ActiveRecord::Base
 		sql << " WHERE (T.user_id IN (#{user_ids}) "
 		sql << " OR T.public = 1 " if params[:perspective] == 'everyone'
 		sql << ")"
-		sql << " AND CONCAT(S.label,' ',t.kind) rlike ('(#{params[:tags].join('|')})$') " if params[:tags]
+		sql << " AND CONCAT(S.label,' ',T.kind) rlike ('(#{params[:tags].join('|')})$') " if params[:tags]
 		sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
 		sql << " AND tags.label rlike '^.?#{params[:label]}'" if params[:label]
 		sql << " GROUP BY object_id "
@@ -163,7 +163,6 @@ class Tagging < ActiveRecord::Base
 
 		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)
 	end
-
 	
 	def contributors(params = {})
 		ids = self.full_path.ids || []
