@@ -1,5 +1,5 @@
-<div class="item <%= cycle('even','odd') %>" >
+<div class="item <%= cycle('even','odd') %> <%= item.public ? 'public' : 'private' %> <%= (item.personal.to_i == 1 ? 'personal' : '') rescue '' %>" >
   <%= thumbnail_tag(item.object) %>
   <h3><%= link_to_item(item, :kind => kind)%></h3>
-  <p><%= item.info(:kind => kind, :info => @info) %></p>
+  <p><%= tag_info(item.object, :kind => kind, :info => @info) %></p>
 </div>

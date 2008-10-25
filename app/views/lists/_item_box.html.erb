@@ -1,4 +1,4 @@
-<div class="box <%= item.public ? 'public' : 'private' %> <%= item.personal.to_i == 1 ? 'personal' : '' %>">
+<div class="box ">
   <%= render_item(item, :kind => kind)%>
   <div class="content"></div>
   <%= render :partial => "/lists/item_options", :locals => {:item => item} %>

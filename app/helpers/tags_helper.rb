@@ -28,4 +28,18 @@ module TagsHelper
 		else
 		end
 	end
+	
+	def tag_info(tag, params = {})
+		params[:kind] ||= @list.label
+		
+		case params[:kind].singularize
+		when "film"
+			return tag.property("release_date")
+		when "location","restaurant","museum"
+			return tag.address.full_address
+		else
+			return tag.description
+		end
+			
+	end
 end

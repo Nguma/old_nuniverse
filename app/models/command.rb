@@ -88,22 +88,27 @@ class Command
 		when "edit"
 			return edit_content(params)
 		when "set_privacy"
-			p = @argument == 'public' ? 1 : 0
-			params[:tagging].public = p
-			return params[:tagging].save
+			return set_privacy(params[:tagging])
 		when "save"
 			t = params[:tagging].clone
 			t.owner = @current_user
 			return t.save
 		when "forget"
 			# Returned tagging not forcefully the one owned by the current_user. 
-			# Have to requery it
-			t = Tagging.find(:first, 
-					:conditions => ['user_id = ? AND kind = ? AND subject_id = ? AND object_id = ? ',	@current_user,params[:tagging].kind,params[:tagging].subject_id,params[:tagging].object_id])
+			# Have to requery it if not the current user's 
+			# raise Tagging.find(:first, :conditions => ['user_id = ? AND object_id = ?'])
+			t = (params[:tagging].user_id == @current_user.id) ? params[:tagging] : Tagging.find(:first, 
+					:conditions => ['user_id = ? AND kind = ?  AND object_id = ? ',	@current_user,params[:tagging].kind,params[:tagging].object_id])
 			t.user_id = 0
 			return t.save
 		end
 		
+	end
+	
+	def set_privacy(tagging, level = nil)
+		p = level.nil? ? (@argument == 'public' ? 1 : 0) : level
+		tagging.public = p
+		return tagging.save
 	end
 	
 	
@@ -152,20 +157,24 @@ class Command
 				end
 		
 				subj_id = @list.tag_id ? @list.tag_id : current_user.tag_id
+
+				is_public = (params[:service] == "everyone") ? 1 : 0
 				@argument.split("#").each do |kind|
 	
 					@t = Tagging.find_or_create( 
 											:owner => @current_user, 
-											:subject_id =>  subj_id, 
+											:subject_id => subj_id, 
 										 	:object_id => tag.id, 
-											:kind => kind
+											:kind => kind,
+											:public => is_public
 										)
 						if subj_id != @current_user.tag_id			
 							Tagging.find_or_create( 
 												:owner => @current_user, 
 												:subject_id =>  tag.id, 
 											 	:object_id => subj_id, 
-												:kind => @list.tag.kind
+												:kind => @list.tag.kind,
+												:public => is_public
 											)
 						end
 				end
@@ -230,7 +239,8 @@ class Command
 			:subject_id => tag.id,
 			:object_id => params[:subject].id,
 			:kind => params[:input],
-			:description => "#{params[:subject].label} #{tag.label}"
+			:description => "#{params[:subject].label} #{tag.label}",
+			:public => 1
 		)	
 	end
 	

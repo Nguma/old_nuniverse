@@ -243,3 +243,15 @@ a.saved {
 	border-bottom:none;
 }
 
+#private_button {
+	background:#82529b;
+}
+
+#personal_button {
+	background:#9c6;
+}
+
+#public_button {
+	background:#ccc;
+}
+
