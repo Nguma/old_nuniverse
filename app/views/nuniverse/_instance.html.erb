@@ -2,12 +2,14 @@
 
 <div class="nuniverse <%= dom_class rescue "" %>" id="nuniverse" >
   <% unless @source.nil? %>
-    <%= breadcrumbs_for(@source)  %>
+    <%= breadcrumbs_for(@source)  unless @source.is_a?(User)%>
     <%= title %>
+
     <div id="nav">
       <%= yield :nav %>
       <%= input(:source => @source) unless @source.nil? %>
     </div>
+    
   <% end -%>
     
   <div id="content" class="<%= @mode %>_mode">

@@ -1,6 +1,7 @@
 class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
+	before_filter :find_tag, :except => [:index]
   # GET /tags
   # GET /tags.xml
   def index
@@ -14,15 +15,17 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-		if params[:id]
-			@tag = Tag.find(params[:id]) 
-		else
-			@tag = Tag.find_by_label(params[:label])
-		end
-		@service = params[:service] || "you"
+
+		@list = List.new(:label => params[:list], :creator => current_user, :tag_id => @tag.id)
+		@tag.kind = @list.label.singularize
+		@source = @tag
 		@page = params[:page] || 1
-		@order = params[:order] || "name"
 		@title = @tag.label.capitalize
+		
+		@service = params[:service] || "everyone"
+		@order = params[:order] || "latest"
+		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
+		update_session
 		
 		respond_to do |format|
 			format.html {}
@@ -51,14 +54,7 @@ class TagsController < ApplicationController
   # POST /tags
   # POST /tags.xml
   def create
-		#	gumies = params[:gum].to_s.scan(/\s*\[?(#([\w_]+)\s+([^#|\[\]]+))\]?/)
-		# @tags = []
-		# 		for gumi in gumies
-		#     	tag = Tag.new(:kind => gumi[1], :label => gumi[2])
-		# 			tag.save
-		# 			@tags << tag
-		# 		end
-		# raise params[:description].inspect
+		
 		@tagging = Tag.connect(
 			:label 	=> params[:label],
 			:kind			=> params[:kind],
@@ -80,10 +76,8 @@ class TagsController < ApplicationController
   # PUT /tags/1.xml
   def update
     @tag = Tag.find(params[:id])
-
-		if(params[:address])
-			@tag.replace('address',params[:address])
-		end
+		@tag.update_with(params)
+		
 		
     respond_to do |format|
       if @tag.update_attributes(params[:tag])
@@ -119,6 +113,43 @@ class TagsController < ApplicationController
 	def images
 		@tag = Tag.find(params[:id])
 		
+	end
+	
+	def bookmark
+		@object = Tag.find_by_url(params[:url])
+		@object = Tag.create(
+			:label => params[:label],
+			:kind => params[:kind],
+			:url => params[:url],
+			:service =>params[:service],
+			:data => params[:data],
+			:description => params[:description] ) if @object.nil?
+			
+		Tagging.create(
+			:object => @object,
+			:subject => @tag,
+			:owner => current_user,
+			:kind => params[:kind])
+			
+		respond_to do |format|
+			format.html {redirect_back_or_default @tag, :service => params[:service] || nil	}
+			format.js { head :ok}
+		end
+		
+		
+	end
+	
+	protected
+	
+	def find_tag
+		if params[:id]
+			@tag = Tag.find(params[:id]) 
+		else
+			conditions = []
+			conditions << "label = #{params[:label]}" if params[:label]
+			
+			@tag = Tag.find(:first, :conditions => conditions.join(" AND "))
+		end
 	end
 
 	

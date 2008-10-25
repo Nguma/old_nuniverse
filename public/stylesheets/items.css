@@ -37,6 +37,14 @@
 	padding:4px 6px 6px 4px;
 }
 
+.personal .thumbnail {
+	background:transparent url("/images/backgrounds/icon_personal.png") 0 0 no-repeat;
+}
+
+.private .thumbnail {
+	background:transparent url("/images/backgrounds/icon_private.png") 0 0 no-repeat;
+}
+
 .box .items .item .options {
 	position:absolute;
 	top:5px;

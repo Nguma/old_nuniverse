@@ -33,9 +33,11 @@ class User < ActiveRecord::Base
 	has_one :asset
 	belongs_to :tag
 	
+	alias_attribute :object, :tag
 	after_create :assign_tag
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
+	
 
 	def lists(params = {})
 		List.created_by(self).bound_to(nil).order_by("label ASC")
@@ -93,7 +95,8 @@ class User < ActiveRecord::Base
 	end
 	
 	def email_to(params)
-		UserMailer.deliver_list(:content => params[:content], :user => params[:user], :message => params[:message] || "", :sender => self)		
+		params[:sender] ||= self
+		UserMailer.deliver_list(params)		
 	end
 	
 	def address

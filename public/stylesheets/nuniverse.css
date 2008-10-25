@@ -177,7 +177,7 @@ p strong {
 	position:relative;
 	clear:both;
 	width:100%;
-	height:30px;
+	min-height:30px;
 	z-index:123456789;
 	background:#666;
 	margin:0 0 0 1px;

@@ -1,7 +1,17 @@
 <% if @result.is_a?(List) -%>
-  <%= list(:source => @result) %>
+   <%= list(:source => @result) %>
+   <% updated = 'content'%>
 <% elsif @result.is_a?(Image) -%>
-  <%= @result %>
+  <%= image_tag(@result.public_filename(), :class => 'avatar') %>
+  <% updated = 'image_box'%>
 <% else -%>
   <%= render_item_box(@result) %>
+  <% updated = 'content' %>
 <% end -%>
+
+  <script type="javascript">
+  //<![CDATA[
+      inputBox.options['updated'] = '<%= updated.to_s %>';
+      inputBox.addAnotherPrompt();
+  //]]> 
+  </script>

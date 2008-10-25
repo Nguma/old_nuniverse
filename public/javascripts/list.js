@@ -52,6 +52,7 @@ var ListBox = new Class({
   
   setItemBehaviors:function() {
     this.items().each(function(item){
+      item.removeEvents();
       item.addEvents({
         'mouseenter':this.focusItem.bind(this,item),
         'mouseleave':this.unfocusItem.bind(this,item)

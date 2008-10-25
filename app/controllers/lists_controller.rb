@@ -20,18 +20,20 @@ class ListsController < ApplicationController
   	if params[:id] 
    		@list = List.find(params[:id]) 
    	else
+			params[:list].gsub!('_',' ')
 			@list = List.find(:first, :conditions => ['label = ? AND creator_id = ? AND tag_id = ?',params[:list],current_user, params[:tag]])
 			@list = List.new(:creator => current_user, :label => params[:list], :tag_id => params[:tag]) if @list.nil?
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
-			@mode = params[:mode] || "card"
+			@mode = params[:mode] || (session[:mode].nil? ? 'card' : session[:mode])
 			@order = params[:order] || "by_name"
 			@title = @list.title
 			@info = params[:info] || nil
-			@perspective = params[:service] || "everyone"
+			@service = params[:service] || "everyone"
+			session[:service] == @service
 			@source = @list
-			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @perspective)  
+			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @service)  
 	
 			respond_to do |format|
 				format.html {}

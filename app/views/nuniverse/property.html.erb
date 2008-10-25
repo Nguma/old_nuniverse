@@ -1,9 +1,0 @@
-<% if @result.is_a?(List) %>
-  <% if  @result.label.nil? %>
-    <%= empty_box %>
-  <% else -%>
-    <%= list(:source => @result)%>
-  <% end -%>
-<% else -%>
-  <%= list(:source => @command.list)%>
-<% end -%>

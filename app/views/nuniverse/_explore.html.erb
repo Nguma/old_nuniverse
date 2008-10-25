@@ -1,9 +1,0 @@
-<div class="content explore">
-  <h3>Explore</h3>
-  <h4>These are the adventures you either created or joined.</h4>
-  <dl class="connections">
-    <% @connections.each do |adventure| -%>
-        <%= render :partial => "/tags/connection", :locals => {:connection => adventure}%>
-    <% end -%>
-  </dl>
-</div>

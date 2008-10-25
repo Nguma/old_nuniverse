@@ -1,16 +1,12 @@
-
-<% @items.each_with_index do |item,i| -%>
   <div class="box <%= cycle('even','odd') %>" >
     <h3>
-     <%= link_to(item.label.capitalize, item.url)%>
+     <%= link_to(result.label.capitalize, result.url)%>
     </h3>
     <p style="padding:0 70px 10px 0">
-      <%= item.description %><br/>
-      <%= link_to(item.url,item.url)%>
+      <%= result.description %><br/>
+      <%= link_to(result.url,result.url)%>
     </p>
     <div class="actions">
-       <%= save_button_for(item, :id => tagging.id)%>
+       <%= save_button_for(result, :id => tag.id)%>
     </div>
-  </div>
-<% end -%>
-<%= image_tag("/images/icons/powered_by_google.gif")%>
+</div>

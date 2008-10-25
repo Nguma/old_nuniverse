@@ -27,7 +27,7 @@
     <% if @source.object.has_address? %>
       <%= command(:label => "Edit", :command => "Edit address")%>
     <% else -%>
-      <%= command(:label => "+ Add", :command => "Add address")%>
+      <%= command(:label => "Find address", :command => "Find address", :description => "")%>
     <% end -%>
   </div>
 </div>

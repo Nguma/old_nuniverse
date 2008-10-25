@@ -6,13 +6,13 @@
       </div>
       <div class="column large" id="right-column">
         <% if @mode == "image" %>
-          <%= columnize([ ad_box, content_for_item(@tagging) ].flatten, :size => 3)%>
+          <% size = 3 %>
         <% elsif @mode == "card" %>
-          <%= columnize([ ad_box, lists_for(@tagging) ].flatten, :size => 2)%>
+          <% size = 2 %>
         <% else -%>
-          <%= ad_box %>
-          <%= content_for_item(@tagging) %>
+          <% size = 1%>
         <% end -%>  
+         <%= columnize(content_for_item(@tagging), :size => size)%>
       </div>
       
     <% content_for :nav do -%>

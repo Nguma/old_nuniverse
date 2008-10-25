@@ -48,5 +48,9 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	
+	def update_session
+		session[:mode] = @mode
+	end
+	
 
 end

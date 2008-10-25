@@ -1,6 +1,0 @@
-<% box_for(:title => "People", :kind => "person") do -%>
-  <div class="items">
-    <%= render :partial => "/taggings/instance", :collection => source.connections(:kind => 'bookmark') %>
-  </div>
-  <%= command(:label => "+ Add a bookmark", :command => "bookmark")%>
-<% end -%>

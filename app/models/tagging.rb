@@ -2,11 +2,8 @@ class Tagging < ActiveRecord::Base
   belongs_to :object, :class_name => "Tag"
 	belongs_to :subject, :class_name => "Tag"
 	belongs_to :owner, :class_name => "User", :foreign_key => "user_id"
-	
-	
+
 	has_many :rankings
-	
-	before_save :clean_path
 	
 	cattr_reader :per_page
   @@per_page = 5
@@ -30,10 +27,6 @@ class Tagging < ActiveRecord::Base
 		label.nil? ? {} : {:conditions => ["tags.label rlike ?", "^.?#{label}"]}
 	}
 
-	# named_scope :with_kind_like, lambda { |kinds|
-	#     kinds.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.kind rlike ?", "(^|#)#{kinds}($|#)"], :joins => :object}
-	#   }
-
 	named_scope :with_address_or_geocode, lambda { |kind|
     kind.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
@@ -50,32 +43,16 @@ class Tagging < ActiveRecord::Base
 	# 		}
 	# 
 	# 	}
+
+	named_scope :tags, lambda { |object|
+		{
+			:select => "taggings.* ", 
+			:conditions => ["taggings.kind IS NOT NULL AND object_id = ? ", object.id],
+			:group => 'taggings.kind'
+		}	
+	}	
 	
-	# named_scope :order_by, lambda { |order|
-	# 		case order
-	# 		when "name"
-	# 			{ :order => "tags.label ASC"}
-	# 		when "latest"
-	# 			{:order => "taggings.updated_at DESC"}
-	# 		when "rank"
-	# 			{:select => "taggings.*", :joins => "LEFT JOIN rankings on taggings.id = rankings.tagging_id", :group => "taggings.id", :order => "SUM(rankings.value) DESC"}
-	# 		else
-	# 			{:order => "taggings.created_at ASC"}
-	# 		end
-	# 	}
-	# 	
-		named_scope :tags, lambda { |object|
-			{
-				:select => "taggings.* ", 
-				:conditions => ["taggings.kind IS NOT NULL AND object_id = ? ", object.id],
-				:group => 'taggings.kind'
-			}	
-		}
-	# 	named_scope :groupped, :group => "object_id"
-	
-	
-	
-	
+	# Lists associated with this tagging
 	def lists(params = {})
 		List.created_by(params[:user] || nil).bound_to(self.object)
 	end
@@ -112,23 +89,6 @@ class Tagging < ActiveRecord::Base
 		label.capitalize
 	end
 	
-	def path
-	  TaggingPath.new(super)
-  end
-  
-  def path=(new_path)
-    case new_path
-    when TaggingPath
-      super(new_path.to_s)
-    else
-      super
-    end
-  end
-
-	def full_path
-		TaggingPath.new([path.taggings,self].flatten)
-	end
-	
 	def votes
 		super rescue nil
 	end
@@ -140,12 +100,6 @@ class Tagging < ActiveRecord::Base
 	def properties
 		self.connections(:kind => "property")
 	end
-
-	def move(original_path, new_path)
-	  Tagging.transaction do
-      Tagging.switch_paths("#{self.path}", "#{new_path}")
-    end
-  end
 
 	def self.find_or_create(params)
 		params[:kind] ||= nil
@@ -175,10 +129,7 @@ class Tagging < ActiveRecord::Base
 	# Select
 	# Selects matching taggings according to passed arguments
 	# I Wish i could use named_scope here but will_paginate gets apparently capricious 
-	# with group and having clauses
-	# -- NOTE --
-	# HAVING clause simulates the requirement that all tags should be present. 
-	# -1 is added to simulate the "OR" statement of the fact that the list label is also passed.
+	# Performs a rlike against each tag to validate their existence.
 	def self.select(params = {})
 		params[:users] ||= []
 		params[:tags] ||= []
@@ -186,29 +137,29 @@ class Tagging < ActiveRecord::Base
 		order = Tagging.order(params[:order])
 		user_ids = params[:users].collect {|u| u.id}.join(',')
 		
-		sql = "SELECT DISTINCT T.*, COUNT(DISTINCT object_id) "
+		
 		# Building clause out of tags and title if present
 		# Pluralized and singularized versions of each tag is passed as a regexp match.
 		# Same is done with title if exists.
 		having_clauses = []
 		
-		params[:tags].each_with_index do |tag, i|
-			sql << ", SUM(T.kind rlike '(^| )(#{tag.pluralize}|#{tag.singularize})( |$)') AS S#{i} "
-			having_clauses << "S#{i}"
-		end
-		sql << ", (CONCAT(SUBJ.label,' ', T.kind) rlike '^(#{params[:title].pluralize}|#{params[:title].singularize})$') AS ST " if params[:title]
-		sql << ", SUM(K.value) AS votes " if params[:order] == "by_vote"
-		sql << "FROM taggings T LEFT OUTER JOIN tags on (object_id = tags.id) "
-		sql << "LEFT OUTER JOIN tags SUBJ on subject_id = SUBJ.id " unless params[:tags].empty?
-		sql << "LEFT OUTER JOIN rankings K on (K.tagging_id = T.id AND K.user_id in (#{user_ids})) " if params[:order] == "by_vote"
-		sql << "WHERE T.user_id IN (#{user_ids}) " 
-		sql << "AND T.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << "AND tags.label rlike '^.?#{params[:label]}'" if params[:label]
-		
-		sql << "GROUP BY object_id "
-		
-		sql << "HAVING ((#{having_clauses.join('*')}) #{params[:title] ? "+ ST " : ""} >= 1) " unless params[:tags].empty?
-		sql << "ORDER BY #{order} "
+		# params[:tags].each_with_index do |tag, i|
+		# 		having_clauses << "(GC rlike '##(#{tag.pluralize}|#{tag.singularize})##')"
+		# 	end
+
+		sql = "SELECT DISTINCT T.*, CONCAT('##',GROUP_CONCAT(DISTINCT S.label, ' ', T.kind, '##', T.kind SEPARATOR '##'),'##') AS GC , (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:users].first.id}') AS personal "
+		sql << "	FROM taggings T LEFT OUTER JOIN tags S on S.id = T.subject_id "
+		sql << " LEFT OUTER JOIN tags on (object_id = tags.id) " 
+		sql << " WHERE (T.user_id IN (#{user_ids}) "
+		sql << " OR T.public = 1 " if params[:perspective] == 'everyone'
+		sql << ")"
+		sql << " AND CONCAT(S.label,' ',t.kind) rlike ('(#{params[:tags].join('|')})$') " if params[:tags]
+		sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
+		sql << " AND tags.label rlike '^.?#{params[:label]}'" if params[:label]
+		sql << " GROUP BY object_id "
+		# sql << " HAVING (#{having_clauses.join(' * ')} = 1)" if params[:tags]
+		sql << " HAVING (GC rlike '###{params[:tags].join(' ')}##') " if params[:tags].length > 1
+		sql << " ORDER BY #{order} "
 
 		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)
 	end
@@ -247,13 +198,7 @@ class Tagging < ActiveRecord::Base
 	
 	
 	def update_with(params)
-		self.object.kind = params[:kind] if params[:kind]
-		self.object.replace_property('address', params[:address].to_s) if params[:address]
-		self.object.replace_property("tel", params[:tel]) if params[:tel]		
-		self.object.replace_property("latlng", params[:latlng]) if params[:latlng]
-		self.object.url = params[:url] if params[:url]
-		self.object.description = params[:description] if params[:description]
-		self.object.save
+			self.object.update_with(params)
 	end
 	
 	protected

@@ -2,6 +2,7 @@ var Input = new Class({
   Implements:[Events, Options],
   
   options: {
+    
   },
   
   initialize:function(el, options) {
@@ -10,6 +11,11 @@ var Input = new Class({
     if(this.el != undefined) {
       this.setBehaviors();
     }
+  },
+  
+  addAnotherPrompt:function() {
+    this.setInput('');
+    this.setLabel('Add another one?');
   },
   
   addSuggestionsBehaviors:function() {
@@ -50,6 +56,13 @@ var Input = new Class({
     return this.el.getParent('.box');
   },
   
+  collapse:function(ev) {
+    if($defined(ev)) {
+      ev.preventDefault();
+    }
+    this.hide();
+  },
+  
   expand:function(command, description) {
     this.setCommand(command, description);
     this.setInput("");
@@ -68,7 +81,7 @@ var Input = new Class({
   
   isInUse:function() {
    if(this.getCommandValue() == null) return false
-   if(this.getInputValue().length <= 2) return false 
+   if(this.getInputValue().length < 1) return false 
    return true
   },
   
@@ -162,13 +175,14 @@ var Input = new Class({
   
   setBehaviors:function() {
     this.getFileField().addEvents({
-      'change':this.submit.bind(this)
+      'change':this.submit.bind(this,this.submitUrl())
     },this);
     this.getCommandField().addEvent('change', this.onCommandChange.bind(this));
-    if($defined(this.el.getElement('a.close'))){
-      this.el.getElement('a.close').addEvent('click', this.hide.bind(this));
+    if($defined(this.el.getElement('a.collapse'))){
+      this.el.getElement('a.collapse').addEvent('click', this.hide.bindWithEvent(this));
     }
-    this.el.addEvent('keyup', this.onKey.bindWithEvent(this))
+    this.el.addEvent('keyup', this.onKey.bindWithEvent(this));
+
   },
   
   setCommand:function(command, description) {
@@ -178,7 +192,11 @@ var Input = new Class({
   
   setCommandDisplay:function(reset) {
     
-    if(reset == true) {this.el.getElement('.suggestions').empty();}
+    if(reset == true) {
+      this.el.getElement('.suggestions').empty();
+      
+      
+    }
     this.getFileFieldArea().addClass('hidden');
     switch(this.getCommandValue()) {
       case "image": 
@@ -237,17 +255,42 @@ var Input = new Class({
   
   submit:function(url) {
     var obj = this;
-    var call = new Request.HTML({
-          url:url,
-          // 'update':$('content'),
-          
-          onSuccess:function(a,b,c,d) {
-             $('content').adopt(a);
-             obj.setInput('');
-             obj.setLabel('Add another one?');
-          }
-          },this).post(this.el.getElement('form'));
- 
+    if(this.getCommandValue() == 'search') {
+      this.el.getElement('form').submit();
+    } else {
+      
+      var call = new Request.HTML({
+               url:url,
+               // 'update':$('content'),
+
+               onSuccess:function(a,b,c,d) {
+                   if(obj.options['updated'] == 'content') {
+                     if($('content').hasClass('list_mode')) {
+                         $('item_list').adopt(a);
+                         var t = new ListBox($('item_list').getChildren().getLast());
+                     } else {
+
+                       var col =  $("column_"+(($('content').getElements('.box').length)%4))
+                       col.adopt(a);
+                       
+                       var t = new ListBox(col.getChildren().getLast());
+
+                     }
+
+                   } else {
+                     $(obj.options['updated']).empty();
+                     $(obj.options['updated']).adopt(a);
+                   }
+                   obj.fireEvent('success')
+               },
+               'headers':{'enctype':'multipart/form-data'},
+               evalScripts:true,
+               'evalResponse':true
+
+               },this).post(this.el.getElement('form'));
+    }
+    
+   
   },
   
   suggest:function(url) {

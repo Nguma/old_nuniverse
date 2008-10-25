@@ -14,9 +14,9 @@ function reset()
  
   $$('.box','.list').each(function(box,i) {
     if(box.hasClass('list')) {
-      var b = new ListBox(box)
+      var b = new ListBox(box);
     } else { 
-      var b = new Box(box)
+      var b = new Box(box);
     }
   });
   

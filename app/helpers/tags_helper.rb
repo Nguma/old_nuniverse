@@ -1,85 +1,31 @@
 module TagsHelper
 
 
-	def h3_for(path)
-		
-		sentence = ""
-		path.tags.each do |tag|
-			
-			case tag.kind
-		    when "location"
-		      sentence << "you're at #{tag.label} "
-		    when "person"
-		       sentence << "you are meeting with #{tag.label} "
-				when "quest"
-					sentence << "your quest is to #{tag.label} "
-				when "item"
-					sentence << "you have a #{tag.label} "
-				when "channel"
-					sentence << "you talk about #{tag.label}"
-		    else
-		       "Are you ready for this adventure?"
+	def tag_content
+		params[:kind] ||= @list.label.singularize
+
+		if service_is_nuniverse?
+			lists_for(@tag)
+		else
+			results = []
+			service_items.each_with_index do |result,i|
+				results << "#{render :partial => "/taggings/#{@service}", :locals => {:result => result, :tag => @tag}}"
 			end
+			results
+		
 		end
-		sentence
-		
-	end
-	
-	def header_for(params, &block)
-		params[:body] = capture(&block)
-		concat(
-			render(
-				:partial => "/nuniverse/header", 
-				:locals => params
-			), block.binding
-		)		
-	end
-	
-	def nuniverse_for(params)
-		# params[:left] = render( 
-		#         			:partial => "/nuniverse/#{params[:tag].kind}_left", 
-		#         			:locals => {:tag => params[:tag], :path => @path}
-		#       			) 
-
-		params[:body] = render(
-	            :partial => "/nuniverse/#{params[:tag].kind}", 
-	            :locals => {:tag => params[:tag], :path => @path}
-	          ) 
-
-	     render(
-	        :partial => '/nuniverse/instance',
-	        :locals => params
-	      )			
 	end
 	
 	
-	def new_tag_form(params)
-		params[:title] ||= "Add a new #{params[:kind]}"
-		render(
-			:partial => "/tags/new", 
-			:locals => params
-			)
-	end
-	
-	
-	def list_for(params, &block)
-		params[:path]     ||= TaggingPath.new
-		params[:header]    = capture(&block)
-		params[:reverse]  ||= false
-    
-		params[:connections] = Tagging.with_path(params[:path]).by_latest
-		
-		if params[:reverse]
-		  params[:connections] = params[:connections].with_subject_kinds(params[:kind])
-	  else
-	    params[:connections] = params[:connections].with_object_kinds(params[:kind])
-    end
-			
-		concat(
-			render(
-				:partial => "/nuniverse/list", 
-				:locals => params
-			), block.binding
-		)
+	def service_items
+		case @service
+		when "google"	
+			Googleizer::Request.new(@list.title , :mode => "web").response.results
+		when "amazon"
+			Finder::Search.find(:query => @list.title, :service => 'amazon')
+		when "youtube"
+			Googleizer::Request.new(@list.title , :mode => "video").response.results
+		else
+		end
 	end
 end

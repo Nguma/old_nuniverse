@@ -1,26 +1,20 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
   <%= list_options(:items => @items) %>
-  <% if @items.empty? -%>
-    <%= empty_box %>
-  <% else -%>
-      <% if @mode == "list" %>
-        <div class="column large" id="item_list" >
-         
-          
-          <% @items.each_with_index do |item, i| -%>
-             <%= render_item_box(item, :kind => @list.label) %>
-          <% end -%>
-          
-        </div>
-        <div class="column small" id="small-column">
-          <%= ad_box %>
-          <%= map_box(@list)%>
-          <%= contributors_box(:source => @list) %>
-        </div>
-      <% else -%>
-        <%= columnize([ ad_box, boxes_for(@items, :source => @list)].flatten)%>
+ 
+  <% if @mode == "list" %>
+    <div class="column large" id="item_list" >
+      
+      <% @items.each_with_index do |item, i| -%>
+         <%= render_item_box(item, :kind => @list.label) %>
       <% end -%>
-        
+    </div>
+    <div class="column small" id="small-column">
+      <%= ad_box %>
+      <%= map_box(@list)%>
+      <%= contributors_box(:source => @list) %>
+    </div>
+  <% else -%>
+    <%= columnize([ ad_box, boxes_for(@items, :source => @list)].flatten)%>
   <% end -%>
 
   <% content_for :nav do -%>
@@ -36,5 +30,5 @@
      </div>
   <% end -%>
     
-
+  <%#= image_tag("/images/icons/powered_by_google.gif")%>
 <% end -%>

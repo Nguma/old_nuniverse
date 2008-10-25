@@ -1,13 +1,12 @@
-<% @items.each do |item| %>
+
   <div class="box <%= cycle('even','odd') %>"> 
-      <%= image_tag(item.thumbnail,:class => "thumbnail")%>
+      <%= image_tag(result.thumbnail,:class => "thumbnail")%>
       <h3>
-        <%= link_to_object(item) %>
+        <%= link_to_object(result) %>
       </h3>
       
-      <p><%=  "#{item.precision} #{item.price}" %></p>
+      <p><%=  "#{result.precision} #{result.price}" %></p>
       <div class="actions">
-        <%= save_button_for(item, :id => tagging.id)%>
+        <%= save_button_for(result, :id => tag.id)%>
       </div>
   </div>
-<% end -%>

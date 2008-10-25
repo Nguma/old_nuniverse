@@ -1,20 +1,19 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <%= breadcrumbs_for(@tag) %>
-  <div class="hat">
-    <%= title_for(@tag)%>
+
+  <div class="column small" id="left-column">
+    <%= image_box%>
+    <%= tag_box(:source => @tag) %>
   </div>
-  <div id="nav">
+  <div class="column large">
+    
+    <%= columnize(tag_content) %>
+  </div>
+  
+  
+  <% content_for :nav do -%>
     <%= perspectives(:source => @tag) %>
-    <% if service_is_nuniverse? -%>
-      <%= new_list_button %>
-    <% end -%>
-  </div>
-  <div id="content">
-    <div class="column large">
-      <%= lists_for(@tag) %>
-      <%= bookmarks_box(:source => @tag) %>
-      <%#= comments_box(:source => @tag) %>
-    </div>
-  </div>
-  <%= input(:source => @tag)%>
+    <%= new_list_button if service_is_nuniverse? %>
+    <%= command_box("Search","search") %>
+  <% end -%>
+ 
 <% end -%>

@@ -29,46 +29,9 @@ class Tag < ActiveRecord::Base
 		end
 	end
 		
-	# def self.connect(params)
-	# 		gum =  params[:gum].collect { |k,v| "##{k} #{v}" }.join("") rescue ""
-	# 		@object = Tag.find_by_label_and_kind_and_url(
-	# 		  params[:label], params[:kind], params[:url]
-	# 		)
-	# 		if @object.nil?
-	# 			@object = Tag.create(
-	# 				:label        => params[:label], 
-	# 				:kind         => params[:kind],
-	# 				:description  => params[:description] || "",
-	# 				:url          => params[:url],
-	# 				:service      => params[:service],
-	# 				:data         => gum
-	# 			)
-	# 		else
-	# 			@object.description = params[:description] || @object.description
-	# 			@object.url = params[:url] || @object.url
-	# 			@object.update_data(params[:gum]) if params[:gum]
-	# 			@object.find_coordinates
-	# 			
-	# 			@object.save!
-	# 		end
-		# 
-		# 	
-		# 	
-		# 	unless params[:user_id].nil?
-		# 		@subject = Tag.find(TaggingPath.new(params[:path]).last_tag.id)
-		# 
-		# 		@tagging = Tagging.create(
-		# 			:subject 	=> @subject,
-		# 			:object 	=> @object,
-		# 			:path    	=> "_#{params[:path]}_",
-		# 			:user_id	=> params[:user_id],
-		# 			:restricted => params[:restricted],
-		# 			:description => params[:relationship]
-		# 		)
-		# 	end
-		# 	
-		# 	@tagging
-		# end
+	def object
+		self
+	end
 	
 	def tags
 		Tagging.tags(self)
@@ -273,4 +236,13 @@ class Tag < ActiveRecord::Base
     image.save!
 	end
   
+def update_with(params)
+	self.kind = params[:kind] if params[:kind]
+	self.replace_property('address', params[:address].to_s) if params[:address]
+	self.replace_property("tel", params[:tel]) if params[:tel]		
+	self.replace_property("latlng", params[:latlng]) if params[:latlng]
+	self.url = params[:url] if params[:url]
+	self.description = params[:description] if params[:description]
+	self.save
+end
 end

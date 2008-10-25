@@ -7,6 +7,7 @@
 	background:#333;
 	width:auto;
 	min-height:200px;
+	height:200px;
 }
 
 
@@ -173,10 +174,12 @@
 }
 
 
-#suggestions .actions {
+#input_box .actions {
 	position:absolute;
-	top:0;
 	left:auto;
-	right:5px;
-	bottom:0;
+	right:10px;
+	top:5px;
+	color:#eee;
+	font-size:12px;
 }
+

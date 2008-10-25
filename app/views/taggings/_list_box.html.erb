@@ -11,7 +11,7 @@
           <%= avatar_for(items.first)%>
         <% else -%>
           <span class="unique_item">
-            <%= link_to_item(items.first, :kind => source.label)%>
+            <%= link_to_item(items.first, :kind => source.kind)%>
           </span>
         <% end -%>
       

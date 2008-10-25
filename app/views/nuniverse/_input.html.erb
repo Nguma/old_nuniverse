@@ -2,13 +2,13 @@
   <% form_tag "/command", { :multipart => true } do -%>
     <fieldset>
     
-    <%= hidden_field_tag("context", @list ? @list.label : "")  %>
+    <%= hidden_field_tag("context", @source.title)  %>
     <% if source.is_a?(List) -%>
       <%= hidden_field_tag("list", source.label) %>
       <%= hidden_field_tag("tag_id", source.tag_id) %>
-    <% elsif source.is_a?(Tagging) -%>
+    <% elsif source.is_a?(Tag) -%>
       <%= hidden_field_tag("list", @source.kind)  %>
-      <%= hidden_field_tag("tag_id", @source.object_id )%>
+      <%= hidden_field_tag("tag_id", @source.id )%>
     <% end -%>
     
     <%= text_field_tag "command", "", :id => "command", :autocomplete => 'off' %>
@@ -16,7 +16,7 @@
       <label>
         <span style="color:#fff">Copy and paste an image url or </span>Browse your files
       </label>
-      <%= file_field "image_url", :uploaded_data, :accept => "text/html", :style=> "font-size:12px" %>
+      <%= file_field "image_url", :uploaded_data, :style=> "font-size:12px" %>
     </div>
     <label id="info_label"></label>
     <%= text_field_tag "input", "", :id => "input" ,:autocomplete => 'off'%>
@@ -29,7 +29,7 @@
   <div class="suggestions" id="suggestions" title="/suggest"></div>
   <div class="delimiter">&nbsp;</div>
   <div class="actions">
-    <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+    <%= link_to("x Close", "#", :class => 'collapse')%>
   </div>
   <div class="delimiter">&nbsp;</div>
 </div>

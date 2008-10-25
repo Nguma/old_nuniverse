@@ -68,6 +68,9 @@ var Box = new Class({
     //       }
     //     });
     inputBox.expand(command.getProperty('href'), command.getProperty('title'));
+    inputBox.addEvent('success', function() {
+      
+    });
   },
   
   expandOptions:function(ev) {

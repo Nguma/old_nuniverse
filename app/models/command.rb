@@ -14,7 +14,9 @@ class Command
 	
 		# @action = @raw_command[0].nil? ? @raw_command[2] : @raw_command[0]
 		# @argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3].gsub(/\sto$/,'')) 
-		@list = List.new(:creator => current_user, :label => @argument.split('#').last, :tag_id => params[:tag_id] || nil)
+		if @argument
+			@list = List.new(:creator => current_user, :label => @argument.split('#').last, :tag_id => params[:tag_id] || nil)
+		end
 	end
 	
 	def match(action)
@@ -24,12 +26,16 @@ class Command
 			@argument = Nuniverse::Kind.match(m[5]) || "category"
 			@service = nil
 			return m
-		elsif m = action.match(/^(find|search)\s(.*)?(\son\s(google|amazon))?$/)
+		elsif m = action.match(/^make (private|public)/)
+			@action = "set_privacy"
+			@argument = m[1]
+			@service = nil
+		elsif m = action.match(/^(find|search)\b(.*)?(\son\s(google|amazon))?$/)
 			@action = "find"
 			@argument = m[2]
 			@service = m[4] || nil
 			return m
-		elsif m = action.match(/^email\s(.*)(\sto)?$/)
+		elsif m = action.match(/^email\s(.*)\sto$/)
 			@action = "email"
 			@argument = Nuniverse::Kind.match(m[1])
 			@service = nil
@@ -44,6 +50,10 @@ class Command
 			@argument = m[3]
 			@service = nil
 			return m
+		elsif m = action.match(/^(save|forget)$/)
+			@action = m[1]
+			@argument = nil
+			@service = nil
 		else
 			return false
 		end
@@ -60,13 +70,15 @@ class Command
 			email_user(	:email => params[:email], 
 									:current_user => @current_user,
 									:content => @list, 
-									:message => @extra_input
+									:message => @extra_input,
+									:perspective => params[:service]
 								)
 		when "share"
 			invite_user(:email => @input, 
 									:current_user => @current_user,
 									:content => @list, 
-									:message => @extra_input
+									:message => @extra_input,
+									:perspective => params[:service]
 			)
 		when "search", "find"
 			
@@ -75,6 +87,21 @@ class Command
 			return add_content(params)
 		when "edit"
 			return edit_content(params)
+		when "set_privacy"
+			p = @argument == 'public' ? 1 : 0
+			params[:tagging].public = p
+			return params[:tagging].save
+		when "save"
+			t = params[:tagging].clone
+			t.owner = @current_user
+			return t.save
+		when "forget"
+			# Returned tagging not forcefully the one owned by the current_user. 
+			# Have to requery it
+			t = Tagging.find(:first, 
+					:conditions => ['user_id = ? AND kind = ? AND subject_id = ? AND object_id = ? ',	@current_user,params[:tagging].kind,params[:tagging].subject_id,params[:tagging].object_id])
+			t.user_id = 0
+			return t.save
 		end
 		
 	end
@@ -133,12 +160,12 @@ class Command
 										 	:object_id => tag.id, 
 											:kind => kind
 										)
-						unless params[:subject] == @current_user.tag				
+						if subj_id != @current_user.tag_id			
 							Tagging.find_or_create( 
 												:owner => @current_user, 
 												:subject_id =>  tag.id, 
 											 	:object_id => subj_id, 
-												:kind => params[:subject].kind
+												:kind => @list.tag.kind
 											)
 						end
 				end
@@ -170,7 +197,9 @@ class Command
 			user = User.new(:email => params[:email], :login => params[:email], :password => "welcome")
 			user.save
 		end
-		@current_user.email_to(:user => user, :content => params[:content], :message => params[:message])
+		items = params[:content].items(:page => 1, :per_page => 10, :perspective => params[:service])
+		
+		@current_user.email_to(:user => user, :content => params[:content], :message => params[:message], :items => items)
 	end
 	
 	def invite_user(params)
@@ -179,7 +208,8 @@ class Command
 			user = User.new(:email => params[:email], :login => params[:email], :password => "welcome")
 			user.save
 		end
-		@current_user.invite(:user => user, :to => params[:content], :message => params[:message])
+		items = params[:content].items(:page => 1, :per_page => 10, :perspective => params[:service])
+		@current_user.invite(:user => user, :to => params[:content], :items => items, :message => params[:message])
 	end
 	
 	def add_image_to(source)

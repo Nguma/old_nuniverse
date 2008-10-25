@@ -37,14 +37,15 @@ class TaggingsController < ApplicationController
 
 		@list = List.new(:label => params[:list], :creator => current_user, :tag_id => params[:tag] || nil)
 		@selected = params[:selected].to_i || nil
-		@service = params[:service] || "you"
+		@service = params[:service] || "everyone"
 		@page = params[:page] || 1
 	# 	@order = params[:order] || ((@tagging.object.kind != "list") ? "rank" : "name")
 		@order = params[:order] || "name"
 		@filter = params[:filter] || nil
 		@title = "#{@list.label}: #{@tagging.label}" rescue @tagging.label
 		@source = @tagging
-		@mode = params[:mode] || "card"
+		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
+		update_session
 		
 		case @service
 		when "google"

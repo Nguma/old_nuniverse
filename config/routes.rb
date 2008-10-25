@@ -48,13 +48,14 @@ ActionController::Routing::Routes.draw do |map|
 	  		m.item_with_tag '/:tag/:list/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
 				m.tag '/all_items/:id', :controller => 'tags'
 	  		
-				m.item '/all/:list/item/:id/service/:service', :controller => 'taggings',  :requirements => { :service => /\w+/}
-				m.item '/all/:list/item/:id', :controller => 'taggings'
+				m.item '/all/:list/item/:id/service/:service', :controller => 'tags',  :requirements => { :service => /\w+/}
+				m.item '/all/:list/item/:id', :controller => 'tags'
 				
 	  		m.with_options :page => 1, :order => "by_name" do |page|
 					page.listing '/all/:list/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
 					page.listing '/all/:list/:page/:order/according-to/:service', :requirements => {:page => /\d+/, :service => /\w+/}
 					page.listing '/all/:list/:page/:order', :requirements => {:page => /\d+/}
+					
 					page.listing_with_tag '/:tag/:list/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
 					
 					#page.listing_in_images '/all/:list/in_images/:page/:order', :mode => 'image', :requirements => {:page => /\d+/, :tag => nil}

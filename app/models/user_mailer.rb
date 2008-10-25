@@ -37,7 +37,7 @@ class UserMailer < ActionMailer::Base
 	
 		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{params[:to].label}"
 		@body[:message] = params[:message]
-		@body[:items] = params[:to].items(:page => 1, :per_page => 10)
+		@body[:items] = params[:items]
 		part 	:content_type => "text/html",
 		      :body => render_message('invitation.text.html.erb', @body)
 		include_thumbnails(@body[:items])			
@@ -82,7 +82,7 @@ class UserMailer < ActionMailer::Base
 
 		def inline_attachment(params, &block) 
 		 	params = { :content_type => params } if String === params 
-		 	params = { :disposition => "inline", 
+		 	params = { :disposition => "inline",
 		 	          :transfer_encoding => "base64" }.merge(params) 
 		 	params[:headers] ||= {} 
 		 	params[:headers]['Content-ID'] = params[:cid] 

@@ -1,5 +1,5 @@
 <div class="box list <%= expanded ? "expanded" : "" %>" id="image_box" >
-  <% if @source.object.images.empty? %>
+  <% if source.images.empty? %>
     <div style="padding:5px">
       <h4>This item doesn't have any image yet.</h4>
       <%= command(:label => "+ Add one now", :command => "New image")%>
@@ -7,7 +7,7 @@
   <% else -%>
     <%= avatar_for(@source) %>
     <div class="content">
-       <% @source.object.images.each do |image| -%>
+       <% source.images.each do |image| -%>
          <%= image_tag(image.public_filename(), :class => "avatar") %>
        <% end -%>
 
@@ -25,12 +25,7 @@
       </div>
   <% end -%>
   
-  <!-- <h2> -->
-    <!-- <span class="size"><%= @source.object.images.size %></span> -->
-    <!-- Images -->
-    <!-- <%= expander_icon %> -->
-    
-  <!-- </h2> -->
+
  
 
 </div>
