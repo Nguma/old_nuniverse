@@ -7,10 +7,9 @@ class NuniverseController < ApplicationController
 	def command
 
 		params[:service] ||= "everyone" 
-		params[:tagging] = Tagging.find(params[:id]) if params[:id]
 		@command = Command.new(current_user, params)
-
-		
+		@source = @command.list
+		@kind = @command.kind
 		@result = @command.execute(params)	
 
 		respond_to do |format|
@@ -31,6 +30,7 @@ class NuniverseController < ApplicationController
 	
 	def suggest
 		@save_command = "add to #{params[:context] || ""}".gsub(' ', '_')
+
 		@input = params[:input]
 		if params[:command].downcase == "find address"
 			@source = Tag.find(params[:tag_id])
@@ -38,6 +38,7 @@ class NuniverseController < ApplicationController
 		else
 			@command = Command.new(current_user, params)
 			@input = @command.input	
+			@kind = @command.kind
 			@items = @command.search_results(:page => params[:page], :per_page => 5)	
 		end
 	end

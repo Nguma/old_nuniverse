@@ -1,14 +1,24 @@
 <%= image_tag("/images/icons/powered_by_google.gif", :style=>"position:absolute;right:5px;top:5px") if @command.service == "google" %>
 <%= will_paginate @items  %>
-<% @items[0..2].each do |item| %>
+<% if @command.action == "add" && !@input.blank? %>
+  <div class="suggestion" style= "position:relative;float:left;width:auto">
+    <%= link_to(image_tag("/images/icons/add_button.png"), command_url) %>
+  </div>
+
+<% end -%>
+<% @items.each do |item| %>
   <% item = item.object if item.is_a?(Tagging) %>
-  <div class="suggestion <%= item.kind %>" style="position:relative;float:left">
+
+  <div class="suggestion <%= item.kind %>" style="position:relative;float:left;margin-right:5px">
     <%= thumbnail_tag(item)%>
-    <h3><%= link_to_item(item) %></h3>
-    <p><%= item.info %></p>
-    <div class="actions">
-      <%= save_button_for(item, :id => @command.list.tag_id) if @command.service != nil%>
-      <%= link_to("save",command_url(:command => @save_command, :item => item, :tag => @command.list.tag_id), :class => "save hidden") %>
-    </div>
+    <% if @command.action == "add" -%>
+      <h3>
+      <%= link_to(item.title, command_with_item_url(:command => @command.full_command, :item => item.id)) %>
+      </h3>
+    <% else -%>
+      <h3><%= link_to_item(item) %></h3>
+    <% end -%>
+    <p><%= tag_info(item) %></p>
+   
   </div>
 <% end -%>

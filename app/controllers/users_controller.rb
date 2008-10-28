@@ -6,6 +6,7 @@ class UsersController < ApplicationController
 	before_filter :login_required, :except => [:new, :activate, :create]
 	skip_before_filter :invitation_required, :only => [:new, :create, :activate]
   after_filter :store_location, :only => [:show]
+	after_filter :update_session, :only => [:show]
 
   # render new.rhtml
   def new

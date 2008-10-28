@@ -36,7 +36,7 @@ var Input = new Class({
             }).get();
           }
         })
-        // suggestion.getElement('h3 a').addEvent('click', this.onSuggestionClick.bindWithEvent(this, suggestion)); 
+        suggestion.getElement('a').addEvent('click', this.onSuggestionClick.bindWithEvent(this, suggestion)); 
       }
     },this);
     var obj = this;
@@ -163,7 +163,8 @@ var Input = new Class({
   onSuggestionClick:function(ev,suggestion) {
     if(this.getCommandValue() != "search") {
       ev.preventDefault(); 
-      this.submit(suggestion.getProperty('href'))
+      this.setInput(suggestion.getElement('a').get('text'));
+      this.submit(suggestion.getElement('a').getProperty('href'));
     }
 
   },

@@ -9,15 +9,15 @@
         "/rate/#{item.id}/1")%><%= item.votes %>
   </dd>
 <% end -%>
-    
+   
     <% if item.personal == '1' -%>
       
-      <dd><%= link_to("Remove from your connections",   command_url(:command => "forget", :id => item.id)) %></dd>
+      <dd><%= link_to("Remove from your connections",   command_with_id_url(:command => "forget", :id => item.id)) %></dd>
       
-      <dd><%= link_to("Make #{item.public ? 'private' : 'public'}", command_url(:command => "make_#{item.public ? 'private' : 'public'}", :id => item.id)) %></dd>
+      <dd><%= link_to("Make #{item.public ? 'private' : 'public'}", command_with_id_url(:command => "make_#{item.public ? 'private' : 'public'}", :id => item.id)) %></dd>
     <% else -%>
       <dd>
-        <%= link_to("Save", command_url(:command => "save", :id => item.id)) %>
+        <%= link_to("Save", command_with_id_url(:command => "save", :id => item.id)) %>
       </dd>
     <% end -%>
     <dd class="actions">

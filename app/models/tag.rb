@@ -78,9 +78,8 @@ class Tag < ActiveRecord::Base
 	
 	def thumbnail
 		return images.first.public_filename(:small) unless images.empty?
-		return property('thumbnail') unless property('thumbnail').blank?
-		return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
-		return ""
+		return property('thumbnail') unless property('thumbnail').blank?		
+		return nil
 	end
 	
 	def icon
@@ -109,16 +108,6 @@ class Tag < ActiveRecord::Base
 		return url unless url.nil? || url.blank?
 		return property('url')
 	end
-	
-	def details
-		"#{description.capitalize} #{property('price')} #{property('address')} #{property('tel')}"
-	end
-	
-	# def replace(property,value)
-	# 	data = self.data || ""
-	# 	new_data = data.gsub(/##{property}[\s]+([^#|\[|\]]+)/,'')
-	# 	self.data = "#{new_data}##{property} #{value}"
-	# end
 	
 	def replace_property(property,value)
 		data = self.data || ""
@@ -206,10 +195,12 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
+	
 		Tagging.select(
-			:user => params[:user],
+			:users => [params[:user]],
+			:perspective => params[:perspective] || 'everyone',
 			:subject => self,
-			:tags => Nuniverse::Kind.match(params[:kind] ||= "").split("#")
+			:tags => [params[:kind]]
 		)
 	end
 	

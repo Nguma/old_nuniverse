@@ -19,6 +19,7 @@
   <%= spinner %>
   <div class="content">
     <% if items.total_entries > 1 -%>
+
       <%= will_paginate(items, :params => {:kind => kind}) %>
       <div class="items" >
         <% items.each do |item| -%>
@@ -30,7 +31,7 @@
     <% else -%>
       <h3>No <%= source.label %> has been added yet.</h3>
       <p>
-        <%= command(:label => "+ Add to #{source.label} now", :command => "Add to #{source.label}") %>
+        <%= command(:label => "+ Add to #{source.label} now", :command => "Add to #{@source.label} #{source.label}") %>
       </p>
     <% end -%>
 
@@ -38,10 +39,10 @@
   <%= render :partial => "/lists/list_options", :locals => {:list => source}%>
   <div class="actions">
     <%= link_to("Options", "#", :class => "expand_options" )%> 
-    <%= command(:label => "+ Add", :command => "Add to #{source.label}", :description => "Enter what you want to add now") %>
+    <%= command(:label => "+ Add", :command => "Add to #{@source.label} #{source.label}", :description => "Enter what you want to add now") %>
     <div class="secondary">
       <%= command(:label => "Email this to someone", :command => "Email #{source.label} to", :description => "Enter an email address")%>
-      <%= link_to("Close", "#", :class =>"collapse_icon") %>
+      <%#= link_to("Close", "#", :class =>"collapse_icon") %>
     </div>
   </div>
   

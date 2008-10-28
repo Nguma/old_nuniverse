@@ -67,22 +67,6 @@
 	display:inline;
 }
 
-.list .list .item {
-	min-height:50px;
-	background:#FFF;
-	margin:0 0 3px 0;
-	border-bottom:dashed 1px #999;
-}
-
-
-.list .list .item .thumbnail {
-	height:50px;
-}
-
-.list .list .item h3 {
-	line-height:30px;
-	font-size:18px;
-}
 
 .expanded {
 	height:240px;

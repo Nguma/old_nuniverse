@@ -2,6 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index]
+	after_filter :update_session, :only => [:show]
   # GET /tags
   # GET /tags.xml
   def index
@@ -15,9 +16,9 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-
-		@list = List.new(:label => params[:list], :creator => current_user, :tag_id => @tag.id)
-		@tag.kind = @list.label.singularize
+		@kind = params[:kind].singularize
+		@list = List.new(:label => @kind, :creator => current_user)
+		@tag.kind = @kind
 		@source = @tag
 		@page = params[:page] || 1
 		@title = @tag.label.capitalize
@@ -25,11 +26,22 @@ class TagsController < ApplicationController
 		@service = params[:service] || "everyone"
 		@order = params[:order] || "latest"
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
-		update_session
+
+		
 		
 		respond_to do |format|
 			format.html {}
-			format.js {}
+			format.js {
+				@items = Tagging.select(
+					:page => @page,
+					:per_page => 3,
+					:users => [current_user],
+					:tags => [@tag.label, @kind],
+					:perspective => @service
+				)
+				
+				render :action => :page, :layout => false
+			}
 		end
 	
   end

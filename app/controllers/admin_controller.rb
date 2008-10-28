@@ -33,4 +33,19 @@ class AdminController < ApplicationController
 			end
 		end
 	end
+	
+	def batch
+
+		if params[:batch]
+			@batch = params[:batch].split("--")
+			@batch.each do |item|
+				t = Tag.new(:label => item, :kind => params[:kind])
+				t.save
+				Tagging.create(:subject_id => 0, :object_id => t.id, :user_id => 0, :kind => t.kind, :public => 1)
+			end	
+			@batch = ""
+			flash[:notice] = "batch is a done deal."
+		end
+		
+	end
 end

@@ -2,7 +2,7 @@
 
 <div class="nuniverse <%= dom_class rescue "" %>" id="nuniverse" >
   <% unless @source.nil? %>
-    <%= breadcrumbs_for(@source)  unless @source.is_a?(User)%>
+    <%= breadcrumbs %>
     <%= title %>
 
     <div id="nav">

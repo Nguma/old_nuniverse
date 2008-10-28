@@ -5,7 +5,7 @@
     <div class="column large" id="item_list" >
       
       <% @items.each_with_index do |item, i| -%>
-         <%= render_item_box(item, :kind => @list.label) %>
+         <%= render_item_box(item, :kind => @list.kind) %>
       <% end -%>
     </div>
     <div class="column small" id="small-column">
@@ -18,8 +18,6 @@
   <% end -%>
 
   <% content_for :nav do -%>
-    
-   
     <%= perspectives(:source => @list, :selected => @perspective) %>
     
     <%= add_new_button(@list) %>

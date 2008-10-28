@@ -3,13 +3,13 @@ class Image < ActiveRecord::Base
   
   has_attachment	:content_type => :image,
     							:thumbnails => {
-      							:small => '80x80',
-      							:large => '150x150'
+      							:small => '80x80!',
+      							:large => '150x150!'
     							},
     							:processor  => :image_science,
 									:path_prefix => "public/attachments",
 									:partition => true,
-									:max_size => 5.megabytes,
+									:max_size => 4.megabytes,
     							:storage    => :file_system
 
   

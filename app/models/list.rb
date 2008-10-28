@@ -66,11 +66,15 @@ class List < ActiveRecord::Base
 	end
 	
 	def title
-		self.tag.nil?  ? self.label.capitalize : "#{self.tag.label.capitalize} #{self.label}"
+		self.tag.nil?  ? self.label.capitalize.pluralize : "#{self.tag.label.capitalize} #{self.label.pluralize}"
 	end
 	
 	def kind
-		self.title
+		self.label.split(' ').last.downcase.singularize
+	end
+	
+	def context
+		self.label.gsub(/\s?\w+$/,'')
 	end
 	
 	def uri_name

@@ -10,7 +10,7 @@
         <% elsif @mode == "card" %>
           <% size = 2 %>
         <% else -%>
-          <% size = 1%>
+          <% size = 1 %>
         <% end -%>  
          <%= columnize(content_for_item(@tagging), :size => size)%>
       </div>

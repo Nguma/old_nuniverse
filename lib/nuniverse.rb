@@ -235,4 +235,9 @@ module Nuniverse
 
 	end
 	
+	def self.tokenize(str)
+		str.gsub!(/^(The|a)?(.*)\s\bof\b\s(.*)$\g/,'\3 \2')
+		raise str.inspect
+	end
+	
 end

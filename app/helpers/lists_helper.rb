@@ -1,5 +1,24 @@
 module ListsHelper
 	
+	def breadcrumbs(params = {})
+		params[:source] ||= @source
+		breadcrumbs = []
+		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse")
+		case params[:source].class.to_s
+		when 'List'
+			if !@list.context.blank?
+				breadcrumbs << link_to("< #{@list.context.capitalize}", item_url(:kind => params[:source].context)) 
+				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize)) 
+			end
+		when 'Tag'
+			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title)) unless @list.context.blank?
+			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize)) 
+		else
+			
+		end
+		render :partial => "/nuniverse/breadcrumbs", :locals => {:breadcrumbs => breadcrumbs}
+	end
+	
 	def list_hat(list)
 		title = ""
 		title << "#{list.tag.label.capitalize}: " if list.tag
@@ -9,14 +28,40 @@ module ListsHelper
 		
 	def link_to_item(item, params = {})	
 		item = item.is_a?(Tagging) ? item.object : item
-		list = params[:kind] ? params[:kind] : item.kind 	
+		kind = params[:kind] ? params[:kind] : item.kind 	
 		
 		params[:title] ||= item.label.capitalize
 		if item.kind == "bookmark" 
-			link_to("#{params[:title]}", item.url, :target => "_blank")
+			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title], item_url(:id => item.id, :list => list, :mode => params[:mode] || @mode, :service => @service))
+			link_to(params[:title], item_url(:id => item.id, :kind => kind, :mode => params[:mode] || @mode, :service => @service))
 		end
+	end
+	
+	def link_to_list(list, options = {})
+		title = options[:title] || list.label
+		title = title.singularize if options[:item_size] && options[:item_size] <= 1
+		link_to title.capitalize, listing_url(:kind => "#{list.uri_name}", 
+							
+																					:mode => options[:mode] || @mode, 
+																					:page => options[:page] || @page, 
+																					:order => options[:order] || @order, 
+																					:service => options[:service] || @service
+																), :class => "link_to_list"
+	end
+	
+	def list(params)
+		params[:dom_class] ||= ""
+		params[:source] ||= @source
+		params[:kind] ||= params[:source].label.singularize.downcase
+		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
+		params[:items] ||= params[:source].items(:perspective => @service) 
+		params[:command] ||= "#{params[:kind]}" 
+		params[:order] ||= "latest"
+		params[:dom_id] ||= params[:title].pluralize
+		params[:ord] = cycle('even','odd')
+		render :partial => "/taggings/#{params[:kind]}_box", :locals => params rescue render :partial => "/taggings/list_box", :locals => params
+		#render :partial => "/taggings/#{params[:kind]}_box", :locals => params
 	end
 	
 	def render_item(item, params = {})
@@ -31,31 +76,11 @@ module ListsHelper
 		render :partial => "/lists/item_box", :locals => params
 	end
 	
-	def breadcrumbs_for(source, params = {})
-		breadcrumbs = []
-		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse")
-		case source.class.to_s
-		when 'Tagging'
-			if @list
-			breadcrumbs << link_to("< #{@list.tag.title}", tag_url(:id => @list.tag.id)) if @list.tag
-			breadcrumbs << link_to_list(@list, :title =>"< #{@list.label}")
-		end
-		when 'List'
-			breadcrumbs << link_to("< #{source.tag.title}", tag_url(:id =>source.tag.id)) if source.tag
-		when 'Tag'
-			breadcrumbs << link_to("< #{source.kind.split('#').last}", listing_url(:list => source.kind.split('#').last))
-		else
-			
-		end
-		render :partial => "/nuniverse/breadcrumbs", :locals => {:breadcrumbs => breadcrumbs}
-	end
-	
 	def sorting_options(params = {})
 		options = [['Name', 'by_name'],['Latest', 'by_latest'],['Vote', 'by_vote']]
 		params[:source] ||= @source
 		params[:selected] ||= @order
 		render :partial => "/lists/sorting_options", :locals => {:options => options, :source => params[:source], :selected => params[:selected]}
-
 	end
 	
 	def display_options(params = {})
@@ -85,33 +110,6 @@ module ListsHelper
 		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source]}
 	end
 	
-	
-	def link_to_list(list, options = {})
-		title = options[:title] || list.label
-		title = title.singularize if options[:item_size] && options[:item_size] <= 1
-		link_to title.capitalize, listing_url(:list => "#{list.uri_name}", 
-							
-																					:mode => options[:mode] || @mode, 
-																					:page => options[:page] || @page, 
-																					:order => options[:order] || @order, 
-																					:service => options[:service] || @service
-																), :class => "link_to_list"
-	end
-	
-	def list(params)
-		params[:dom_class] ||= ""
-		params[:source] ||= @source
-		params[:kind] ||= params[:source].label.singularize.downcase
-		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
-		params[:items] ||= params[:source].items(:perspective => @service) 
-		params[:command] ||= "#{params[:kind]}" 
-		params[:order] ||= "latest"
-		params[:dom_id] ||= params[:title].pluralize
-		params[:ord] = cycle('even','odd')
-		render :partial => "/taggings/#{params[:kind]}_box", :locals => params rescue render :partial => "/taggings/list_box", :locals => params
-		#render :partial => "/taggings/#{params[:kind]}_box", :locals => params
-	end
-	
 	def lists_for(source, options = {})
 		presets = ['bookmarks','comments','videos','items']
 
@@ -122,14 +120,24 @@ module ListsHelper
 			presets << ['address', 'telephone']
 		when 'actor'
 			presets << ['films', 'plays', 'characters']
+		when 'artist'
+			presets << ['artworks']
 		when 'character'
 			presets << ['films', 'plays', 'actors']
 		when 'location'
 			presets << ['address']
+		when 'museum'
+			presets << ['address','exhibitions']
 		when 'restaurant'
 			presets << ['address','menu']
-		end
-		boxes = make_lists(presets.flatten)
+		when 'artwork','album','painting','sculpture'
+			presets << ['artist']
+		when 'song'
+			presets << ['artists', 'albums']
+		when 'company'
+			presets << ['members', 'products','address', 'telephone']
+ 		end
+		boxes = make_lists(presets.flatten.uniq)
 		source.lists(:user => current_user).each_with_index do |list,i|
 			boxes << list(:source => list) 
 		end
@@ -138,7 +146,7 @@ module ListsHelper
 	
 	def boxes_for(items, params = {})
 		params[:source] ||= @source
-		params[:kind] ||= params[:source].label
+		params[:kind] ||= params[:source].kind
 		boxes = []
 		items.each_with_index do |item, i|
 			case @mode 
@@ -160,7 +168,7 @@ module ListsHelper
 		lists = []
 		params[:source] ||= @source
 		list_names.each do |list|
-			lists << list(:source => List.new(:label => list, :creator => @current_user, :tag => @source.object))
+			lists << list(:source => List.new(:label => list, :creator => current_user, :tag => (@source == current_user) ? nil : @source.object ))
 		end
 		lists
 	end

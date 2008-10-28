@@ -37,6 +37,12 @@
 	padding:0 0 0 0;
 }
 
+#input_box #input {
+	font-size:25px;
+	padding:0;
+	margin:0 0 5px 0;
+}
+
 #input_box textarea {
 }
 
@@ -44,6 +50,7 @@
 	background:none;
 	border:none;
 /*	color:#9F0;*/
+	font-size:18px;
 	color:#ccc;
 	padding:0;
 	margin:0;
@@ -93,6 +100,12 @@
 	color:#ccc;
 }
 
+.suggestion h3 a {
+	font-size:inherit;
+	font-weight:inherit;
+	color:inherit;
+}
+
 #file_field {
 	position:relative;
 	clear:both;
@@ -102,7 +115,7 @@
 #input_box label {
 	display:block;
 	font-weight:normal;
-	font-size:16px;
+	font-size:12px;
 	line-height:20px;
 	color:#999;
 	margin:0;
@@ -148,18 +161,12 @@
 	display:none;
 }
 
-#input_box #command {
-	font-size:22px;
-}
 
 .box #info_label {
 	display:none;
 }
 
-#input_box #input {
-	font-size:18px;
-	padding:0;
-}
+
 
 .expanded #input_box {
 	display:block;

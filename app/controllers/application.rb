@@ -50,6 +50,16 @@ class ApplicationController < ActionController::Base
 	
 	def update_session
 		session[:mode] = @mode
+		session[:service] = @service
+		if @tag
+			
+			session[:previous] = session[:current] unless session[:current] == @tag.id
+			session[:current] = @tag.id
+	
+		else
+			session[:tag] = nil
+			session[:current] = nil
+		end
 	end
 	
 

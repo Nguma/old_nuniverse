@@ -109,3 +109,29 @@ span.unique_item a:visited {
 .expanded .unique_item {
 	display:none;
 }
+
+.#content .list .item {
+	min-height:50px;
+	background:#FFF;
+	margin:0 0 3px 0;
+	border-bottom:dashed 1px #999;
+}
+
+
+.list .list .item .thumbnail {
+	height:50px;
+}
+
+#content .list .item h3 {
+	line-height:14px;
+	font-size:14px;
+	padding:0;
+	margin:3px 0 0 0;
+}
+
+#content .list .item h3 a,
+#content .list .item h3 a:visited {
+	font-weight:inherit;
+	font-size:inherit;
+	line-height:inherit;
+}

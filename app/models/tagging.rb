@@ -2,11 +2,14 @@ class Tagging < ActiveRecord::Base
   belongs_to :object, :class_name => "Tag"
 	belongs_to :subject, :class_name => "Tag"
 	belongs_to :owner, :class_name => "User", :foreign_key => "user_id"
-
+	
+	
 	has_many :rankings
 	
-	cattr_reader :per_page
+	attr_accessor :personal
+	cattr_reader :per_page 
   @@per_page = 5
+
 	#before_destroy :destroy_connections
 
   named_scope :with_subject, lambda { |subject|
@@ -156,7 +159,7 @@ class Tagging < ActiveRecord::Base
 		sql << ")"
 		sql << " AND CONCAT(S.label,' ',T.kind) rlike (\"(#{Regexp.escape(params[:tags].join('|'))})$\") " if params[:tags]
 		sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << " AND tags.label rlike '^.?#{Regexp.escape(params[:label])}'" if params[:label]
+		sql << " AND tags.label rlike '^(.*\s)?#{Regexp.escape(params[:label])}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "
 		# sql << " HAVING (#{having_clauses.join(' * ')} = 1)" if params[:tags]
 		sql << " HAVING (GC rlike \"###{Regexp.escape(params[:tags].join(' '))}##\") " if params[:tags].length > 1
@@ -219,7 +222,7 @@ class Tagging < ActiveRecord::Base
 		when "by_vote"
 			return "votes DESC"
 		else
-			return "T.updated_at DESC"
+			return "T.created_at DESC"
 		end
 		
 	end

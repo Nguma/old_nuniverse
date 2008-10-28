@@ -2,21 +2,26 @@
 # also defines the available scripting commands
 class Command
 	
-	attr_reader :raw_command, :action, :argument, :input, :current_user, :extra_input, :list, :service
+	attr_reader :raw_command, :action, :argument, :input, :current_user, :kind, :extra_input, :list, :service, :origin
 	
 	def initialize(current_user, params)
 		@input = params[:input]
 		@current_user = current_user
 		@extra_input = params[:extra_input]
 		@image_url = params[:image_url] || nil
-		# @raw_command = params[:command].downcase.scan()[0]
+		if params[:tag_id]
+			@origin = Tag.find(params[:tag_id])
+			@origin.kind = params[:kind]
+		end
+		
 		@raw_command = self.match(params[:command].downcase)
-	
-		# @action = @raw_command[0].nil? ? @raw_command[2] : @raw_command[0]
-		# @argument = @raw_command[3].nil? ? nil : Nuniverse::Kind.match(@raw_command[3].gsub(/\sto$/,'')) 
-		if @argument
+		
+		if @argument && !@argument.blank?
+			
+			@kind = @argument.split(' ').last.singularize
 			@list = List.new(:creator => current_user, :label => @argument.split('#').last, :tag_id => params[:tag_id] || nil)
 		end
+		
 	end
 	
 	def match(action)
@@ -105,6 +110,10 @@ class Command
 		
 	end
 	
+	def full_command
+		"#{@action} #{@argument}"
+	end
+	
 	def set_privacy(tagging, level = nil)
 		p = level.nil? ? (@argument == 'public' ? 1 : 0) : level
 		tagging.public = p
@@ -147,16 +156,17 @@ class Command
 				end
 				
 			else
+				
 				if params[:item]
 					tag = Tag.find(params[:item])
 				else
 					tag = Tag.find_or_create(
-						:label => Gum.purify(@input), 
-						:kind => @argument
+						:label => @input.strip, 
+						:kind => @kind
 					)
 				end
 		
-				subj_id = @list.tag_id ? @list.tag_id : current_user.tag_id
+				subj_id = @origin ? @origin.id : current_user.tag_id
 
 				is_public = (params[:service] == "everyone") ? 1 : 0
 				@argument.split("#").each do |kind|
@@ -168,15 +178,17 @@ class Command
 											:kind => kind,
 											:public => is_public
 										)
-						if subj_id != @current_user.tag_id			
+					
+						if @origin			
 							Tagging.find_or_create( 
 												:owner => @current_user, 
 												:subject_id =>  tag.id, 
-											 	:object_id => subj_id, 
-												:kind => @list.tag.kind,
+											 	:object_id => @origin.id, 
+												:kind => @origin.kind,
 												:public => is_public
 											)
 						end
+					@t.personal = @t.public
 				end
 				
 				return @t
@@ -252,11 +264,18 @@ class Command
 		when "amazon"
 			return Finder::Search.find(:query => @input, :service => 'amazon')
 		else
-			if @argument
+			if @argument && @action != 'add'
 				
 				return @list.items(:label => @input, :page => params[:page], :per_page => params[:per_page], :perspective => "everyone")
 			else
-				return @current_user.connections(:label => @input, :page => params[:page], :per_page => params[:per_page], :kind => @argument.split('#').last)
+				return Tagging.select(
+					:users => [@current_user],
+					:perspective => "everyone",
+					:page => params[:page],
+					:per_page => params[:per_page],
+					:label => @input,
+					:tags => [@kind])
+				# return @current_user.connections(:label => @input, :page => params[:page], :per_page => params[:per_page],  :perspective => "everyone")
 			end
 		end
 	end

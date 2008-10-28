@@ -45,22 +45,22 @@ ActionController::Routing::Routes.draw do |map|
   	
 	  	map.with_options :controller => 'lists', :action => 'show', :path_prefix => '/my_nuniverse' do |m|
 				
-	  		m.item_with_tag '/:tag/:list/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
+	  		m.item_with_tag '/:tag/:kind/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
 				m.tag '/all_items/:id', :controller => 'tags'
 	  		
-				m.item '/all/:list/item/:id/service/:service', :controller => 'tags',  :requirements => { :service => /\w+/}
-				m.item '/all/:list/item/:id', :controller => 'tags'
+				m.item '/all/:kind/item/:id/service/:service', :controller => 'tags',  :requirements => { :service => /\w+/}
+				m.item '/all/:kind/item/:id', :controller => 'tags'
 				
 	  		m.with_options :page => 1, :order => "by_name" do |page|
-					page.listing '/all/:list/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
-					page.listing '/all/:list/:page/:order/according-to/:service', :requirements => {:page => /\d+/, :service => /\w+/}
-					page.listing '/all/:list/:page/:order', :requirements => {:page => /\d+/}
+					page.listing '/all/:kind/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
+					page.listing '/all/:kind/:page/:order/according-to/:service', :requirements => {:page => /\d+/, :service => /\w+/}
+					page.listing '/all/:kind/:page/:order', :requirements => {:page => /\d+/}
 					
-					page.listing_with_tag '/:tag/:list/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
+					page.listing_with_tag '/:tag/:kind/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
 					
 					#page.listing_in_images '/all/:list/in_images/:page/:order', :mode => 'image', :requirements => {:page => /\d+/, :tag => nil}
-					page.list_in_cards	'/:tag/:list/in_cards/:page/:order', :mode => 'card', :requirements => {:tag => /\d+/,:page => /\d+/}
-					page.list_in_images '/:tag/:list/in_images/:page/:order', :mode => 'image', :requirements => {:tag => /\d+/,:page => /\d+/}
+					page.list_in_cards	'/:tag/:kind/in_cards/:page/:order', :mode => 'card', :requirements => {:tag => /\d+/,:page => /\d+/}
+					page.list_in_images '/:tag/:kind/in_images/:page/:order', :mode => 'image', :requirements => {:tag => /\d+/,:page => /\d+/}
 				end
 	  					
 	  	
@@ -81,11 +81,14 @@ ActionController::Routing::Routes.draw do |map|
   	end
   # 	
 
-	map.with_options :controller => 'nuniverse', :action => 'command', :tag => nil, :item => nil do |m|
+	map.with_options :controller => 'nuniverse', :action => 'command',  :tag => nil  do |m|
 		m.command '/command'
+		
 		m.command '/command/:command'
+		
 		m.command '/command/:command/:input'
-		m.command '/command_with_item/:command/:item', :requirements => {:item => /\d+/}
+		m.command_with_item '/command/:command/with_item/:item', :requirements => {:item => /\d+/}
+		m.command_with_id '/command/:command/with_id/:id',  :requirements => {:id => /\d+/}
 		m.suggest '/suggest/:command', :action => 'suggest'
 		m.suggest '/suggest/:command/:input', :action => 'suggest'
 	end

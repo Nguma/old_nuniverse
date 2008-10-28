@@ -3,6 +3,7 @@ class ListsController < ApplicationController
 	before_filter :login_required
 	#before_filter :admin_required, :except => [:show, :create, :find_or_create, :find_or_add_item]
   after_filter :store_location, :only => [:show]
+	after_filter :update_session, :only => [:show]
 
 	# GET /lists
   # GET /lists.xml
@@ -20,9 +21,8 @@ class ListsController < ApplicationController
   	if params[:id] 
    		@list = List.find(params[:id]) 
    	else
-			params[:list].gsub!('_',' ')
-			@list = List.find(:first, :conditions => ['label = ? AND creator_id = ? AND tag_id = ?',params[:list],current_user, params[:tag]])
-			@list = List.new(:creator => current_user, :label => params[:list], :tag_id => params[:tag]) if @list.nil?
+			params[:kind].gsub!('_',' ')
+			@list = List.new(:creator => current_user, :label => params[:kind], :tag_id => params[:tag]) 
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
@@ -31,8 +31,9 @@ class ListsController < ApplicationController
 			@title = @list.title
 			@info = params[:info] || nil
 			@service = params[:service] || "everyone"
-			session[:service] == @service
+			
 			@source = @list
+			@kind = @list.kind
 			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @service)  
 	
 			respond_to do |format|
