@@ -157,9 +157,9 @@ class Tagging < ActiveRecord::Base
 		sql << " WHERE (T.user_id IN (#{user_ids}) "
 		sql << " OR T.public = 1 " if params[:perspective] == 'everyone'
 		sql << ")"
-		sql << " AND CONCAT(S.label,' ',T.kind) rlike (\"(#{Regexp.escape(params[:tags].join('|'))})$\") " if params[:tags]
+		sql << " AND CONCAT(S.label,' ',T.kind) rlike (\"(#{Regexp.escape(params[:tags].join(' '))})$\") " if params[:tags]
 		sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << " AND tags.label rlike '^(.*\s)?#{Regexp.escape(params[:label])}(\s.*)?'" if params[:label]
+		sql << " AND tags.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "
 		# sql << " HAVING (#{having_clauses.join(' * ')} = 1)" if params[:tags]
 		sql << " HAVING (GC rlike \"###{Regexp.escape(params[:tags].join(' '))}##\") " if params[:tags].length > 1
@@ -221,6 +221,8 @@ class Tagging < ActiveRecord::Base
 			return "tags.label ASC"
 		when "by_vote"
 			return "votes DESC"
+		when "by_related_date"
+			return "tags.related_date DESC"
 		else
 			return "T.created_at DESC"
 		end

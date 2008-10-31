@@ -14,12 +14,10 @@ module NuniverseHelper
 		params[:size] ||= column_size
 		params[:dom_classes] ||= []
 		cols = Array.new(params[:size])
-		
+		boxes = [ad_box,boxes].flatten
 		boxes.each_with_index do |box, i|
 			(cols[i%params[:size]] ||= "") << box
 		end
-		
-		
 		
 		cols.each_with_index do |col, i|
 			col_html = render :partial => "/nuniverse/column", :locals => {
@@ -39,7 +37,7 @@ module NuniverseHelper
 		when "card"
 			3
 		when "image"
-			4
+			3
 		when "list"
 			1
 		else
@@ -68,9 +66,9 @@ module NuniverseHelper
 		end
 	end
 	
-	def description_box(source)
-		return nil if !source.has_description?
-		render :partial => "description", :locals => {:source => source }
+	def description_box(params = {})
+		params[:source] ||= @source
+		render :partial => "description_box", :locals => {:source => params[:source] }
 	end
 	
 	def drop_command(params) 

@@ -1,13 +1,17 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
 
+<% if @tag.kind == 'video' %>
+  <%= render :partial => 'video', :locals => {:tag => @tag} %>
+<% else -%>
   <div class="column small" id="left-column">
-    <%= image_box%>
+    <%= image_box %>
+    <%= description_box %>
     <%= tag_box(:source => @tag) %>
   </div>
   <div class="column large">   
     <%= columnize(tag_content) %>
   </div>
-
+<% end -%>
   <% content_for :nav do -%>
     <%= perspectives(:source => @tag) %>
     <%= new_list_button if service_is_nuniverse? %>

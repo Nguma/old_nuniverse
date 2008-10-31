@@ -18,7 +18,7 @@ class Command
 		
 		if @argument && !@argument.blank?
 			
-			@kind = @argument.split(' ').last.singularize
+			@kind = @argument.split(' ').last
 			@list = List.new(:creator => current_user, :label => @argument.split('#').last, :tag_id => params[:tag_id] || nil)
 		end
 		
@@ -26,11 +26,17 @@ class Command
 	
 	def match(action)
 		action = action.gsub('_',' ');
-		if m = action.match(/^(add|create|new)\s?((a|to)\s)?(new\s)?(.*)/)
+		
+		if m = action.match(/^create a list of/)
 			@action = "add"
-			@argument = Nuniverse::Kind.match(m[5]) || "category"
+			@argument = "list"
 			@service = nil
 			return m
+		elsif  m = action.match(/^(add|create|new)\s?((a|to)\s)?(new\s)?(.*)/)
+			@action = "add"
+			@argument = Nuniverse::Kind.match(m[5]).last || "category"
+			@service = nil
+			return m		
 		elsif m = action.match(/^make (private|public)/)
 			@action = "set_privacy"
 			@argument = m[1]
@@ -42,7 +48,7 @@ class Command
 			return m
 		elsif m = action.match(/^email\s(.*)\sto$/)
 			@action = "email"
-			@argument = Nuniverse::Kind.match(m[1])
+			@argument = Nuniverse::Kind.match(m[1]).last
 			@service = nil
 			return m
 		elsif m = action.match(/^share\s?(.*)\swith$/)
@@ -129,11 +135,12 @@ class Command
 	end
 	
 	def add_content(params)
-			case @argument
+
+			case @kind
 			when "image"
 				return add_image_to(@list.tag)
 			when "description"
-				return add_description(params[:source])
+				return add_description(@origin)
 			when "","list", "category"
 				# raise self.pretty_inspect
 				if @input.nil?
@@ -160,31 +167,38 @@ class Command
 				if params[:item]
 					tag = Tag.find(params[:item])
 				else
+					
+					if @kind == 'date'
+						date =  DateTime.parse(@input.strip) rescue nil
+					end
+
+
 					tag = Tag.find_or_create(
 						:label => @input.strip, 
-						:kind => @kind
+						:kind => @kind.split(' ').last,
+						:related_date => date,
+						:new => params[:new]
 					)
 				end
-		
-				subj_id = @origin ? @origin.id : current_user.tag_id
+				subj = @origin ? @origin : current_user.tag
 
 				is_public = (params[:service] == "everyone") ? 1 : 0
-				@argument.split("#").each do |kind|
-	
+				@argument.each do |kind|
+					k = kind.gsub(/#{subj.label.downcase} /,'')
+					
 					@t = Tagging.find_or_create( 
 											:owner => @current_user, 
-											:subject_id => subj_id, 
+											:subject_id => subj.id, 
 										 	:object_id => tag.id, 
-											:kind => kind,
+											:kind => k,
 											:public => is_public
 										)
-					
 						if @origin			
 							Tagging.find_or_create( 
 												:owner => @current_user, 
 												:subject_id =>  tag.id, 
 											 	:object_id => @origin.id, 
-												:kind => @origin.kind,
+												:kind => @origin.kind.split('#').last,
 												:public => is_public
 											)
 						end

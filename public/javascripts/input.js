@@ -210,6 +210,8 @@ var Input = new Class({
       case "tags":
         this.setLabel("Enter as many tags as desired, comma separated");
         break;
+      case"description":
+        break;
       case "localize":
         if(reset == true) { this.setInput($('title').getProperty('value'));}
         this.getSuggestions();

@@ -9,7 +9,7 @@ class Image < ActiveRecord::Base
     							:processor  => :image_science,
 									:path_prefix => "public/attachments",
 									:partition => true,
-									:max_size => 4.megabytes,
+									:max_size => 8.megabytes,
     							:storage    => :file_system
 
   

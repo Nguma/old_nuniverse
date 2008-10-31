@@ -9,7 +9,7 @@
           <div class="box">
             
             <h2>Your nuniverse is empty.</h2>
-            <h3><%= command(:label => "+ Create a new category", :command => "Create a new category", :description => "Enter the title of the category you want to create.") %></h3>
+            <h3><%= command(:label => "+ Create a new list", :command => "Create a list of", :description => "Enter the title of the category you want to create.") %></h3>
             <div class="content"></div>
             </div>
          <% else -%>
@@ -19,13 +19,13 @@
       </div>
       
     <% else -%>
-      <%= columnize([ad_box, lists_for(current_user)].flatten, :size => 4)%>
+      <%= columnize(lists_for(current_user), :size => 4)%>
     <% end -%>
 
 
   <% content_for :nav do -%>
 
-    <%= command_box("+ Create a new category","Create a new category", :description => "Enter the title of the category you want to create.") %>
+    <%= command_box("+ Create a list of","Create a list of", :description => "Enter the title of the list you want to create. Try to end with the type of things you are listing. Eg: Favorite Movies, japanese restaurants, Our project's members...") %>
     <%= command_box("Search","search") %>
   <% end -%>
 

@@ -56,7 +56,7 @@ module ListsHelper
 		params[:kind] ||= params[:source].label.singularize.downcase
 		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
 		params[:items] ||= params[:source].items(:perspective => @service) 
-		params[:command] ||= "#{params[:kind]}" 
+		params[:command] ||= params[:kind] 
 		params[:order] ||= "latest"
 		params[:dom_id] ||= params[:title].pluralize
 		params[:ord] = cycle('even','odd')
@@ -111,37 +111,9 @@ module ListsHelper
 	end
 	
 	def lists_for(source, options = {})
-		presets = ['bookmarks','comments','videos','items']
-
-		case @tag.kind.split(' ').last.singularize
-		when 'film'
-			presets << ['characters', 'actors']
-		when 'person'
-			presets << ['address', 'telephone']
-		when 'actor'
-			presets << ['films', 'plays', 'characters']
-		when 'artist'
-			presets << ['artworks']
-		when 'character'
-			presets << ['films', 'plays', 'actors']
-		when 'location'
-			presets << ['address']
-		when 'museum'
-			presets << ['address','exhibitions']
-		when 'restaurant'
-			presets << ['address','menu']
-		when 'artwork','album','painting','sculpture'
-			presets << ['artist']
-		when 'song'
-			presets << ['artists', 'albums']
-		when 'company'
-			presets << ['members', 'products','address', 'telephone']
- 		end
-		boxes = make_lists(presets.flatten.uniq)
-		source.lists(:user => current_user).each_with_index do |list,i|
-			boxes << list(:source => list) 
-		end
-		boxes
+		presets =  presets(@tag.kind)
+		presets << source.lists(:user => current_user).collect {|c| c.label}
+		make_lists(presets.flatten.uniq)
 	end
 	
 	def boxes_for(items, params = {})

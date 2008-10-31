@@ -67,7 +67,6 @@
 	display:inline;
 }
 
-
 .expanded {
 	height:240px;
 	overflow:hidden;
@@ -88,8 +87,6 @@
 	display:block;
 	visibility:visible;
 }
-
-
 
 .image_box .avatar {
 	width:100%;
@@ -137,6 +134,10 @@
 
 .image_mode .box {
 	padding:0;
+}
+
+#content.card_mode .box .unqiue_item {
+	display:block;
 }
 
 #content.image_mode .box h2 {
@@ -440,8 +441,9 @@ h2 span.size {
 
 #map_box .prop {
 	color:#666;
-	font-size:18px;
+	font-size:14px;
 	font-weight:normal;
+	display:block;
 }
 
 #map_box {
@@ -531,4 +533,13 @@ h2 span.size {
 
 #options_box {
 	min-height:0;
+}
+
+#description_box {
+	font-size:13px;
+	color:#333;
+}
+
+#description_box.hover {
+	color:#FFF;
 }

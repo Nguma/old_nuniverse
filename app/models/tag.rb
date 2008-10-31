@@ -174,8 +174,10 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.find_or_create(params)
-		tag = Tag.with_label(params[:label]).find(:first)
-		if tag.nil?
+		
+		
+		tag = Tag.with_label(params[:label]).with_kind(params[:kind]).find(:first)
+		if tag.nil? || params[:new]
 			if params[:label].match(/^http:\/\/.+/)
 				tag = Tag.create(
 					:label => params[:label], 
@@ -183,10 +185,11 @@ class Tag < ActiveRecord::Base
 					:url => params[:label]
 				)
 			else
-				
+
 			tag = Tag.create(
 				:label => params[:label], 
-				:kind => params[:kind]
+				:kind => params[:kind],
+				:related_date => params[:related_date] || nil
 			) 
 			end
 		
@@ -194,8 +197,10 @@ class Tag < ActiveRecord::Base
 		tag
 	end
 	
-	def connections(params = {})
 	
+	def connections(params = {})
+		params[:users] ||= 0
+		
 		Tagging.select(
 			:users => [params[:user]],
 			:perspective => params[:perspective] || 'everyone',

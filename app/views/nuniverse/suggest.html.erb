@@ -2,7 +2,7 @@
 <%= will_paginate @items  %>
 <% if @command.action == "add" && !@input.blank? %>
   <div class="suggestion" style= "position:relative;float:left;width:auto">
-    <%= link_to(image_tag("/images/icons/add_button.png"), command_url) %>
+    <%= link_to(image_tag("/images/icons/add_button.png"), command_url(:new => 1)) %>
   </div>
 
 <% end -%>

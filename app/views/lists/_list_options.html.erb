@@ -9,7 +9,7 @@
     <%= command(:label => "Email this list to someone", :command => "Email #{list.label} to")%>
   </dd>
   <dd>
-    <%= link_to("Remove", list, :method => :delete) %>
+    <%= link_to("Remove", list_url(list.id), :method => :delete) %>
     <i>Note: Just the reference to that list will be deleted, the items remain</i>
   </dd>
   <dd>

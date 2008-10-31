@@ -25,10 +25,7 @@ module TaggingsHelper
 			:title => "Tags"
 		}
 	end
-	
-	def lego_box 
-		render :partial => "/taggings/lego_box"
-	end
+
 	
 	def content_for_service(params)
 		params[:service] ||= @service
@@ -41,6 +38,15 @@ module TaggingsHelper
 	
 	def save_button_for(item, params = {})
 		render :partial => "/taggings/manage", :locals => {:item => item, :id => params[:id]}
+	end
+	
+	def connections(params = {})
+		Tagging.select(
+			:users => params[:users] || [current_user],
+			:tags => [params[:kind]] || [@kind],
+			:subject => params[:subject] || @source,
+			:order => params[:order] || @order
+		)
 	end
 
 end

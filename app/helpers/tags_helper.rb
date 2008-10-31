@@ -3,7 +3,6 @@ module TagsHelper
 
 	def tag_content
 		params[:kind] ||= @kind
-
 		if service_is_nuniverse?
 			lists_for(@tag)
 		else
@@ -41,9 +40,9 @@ module TagsHelper
 			return tag.url.scan(/http.{1,3}\/\/([^\/]*).*/)[0]
 		when "album","artwork","painting","sculpture"
 			# raise tag.connections.inspect
-			info = ["#{tag.connections(:kind => 'artist', :user => current_user).first.label} "] rescue []
-			info << tag.property("release_date")
-			info.join(' - ')
+			info = [tag.connections(:kind => 'artist|painter|musician|sculptor', :user => current_user).first] rescue []
+			info << tag.connections(:kind => 'creation date', :user => current_user).first
+			info.collect {|c| c.nil? ?  "" : c.title}.join(' - ')
 		else
 			return tag.description
 		end

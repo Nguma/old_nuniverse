@@ -14,7 +14,7 @@
       <%= contributors_box(:source => @list) %>
     </div>
   <% else -%>
-    <%= columnize([ ad_box, boxes_for(@items, :source => @list)].flatten)%>
+    <%= columnize(boxes_for(@items, :source => @list))%>
   <% end -%>
 
   <% content_for :nav do -%>
