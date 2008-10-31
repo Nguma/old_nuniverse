@@ -35,7 +35,7 @@ module TagsHelper
 		when "film"
 			return tag.property("release_date")
 		when "location","restaurant","museum"
-			return tag.address.full_address
+			return "#{tag.address.full_address} - #{tag.property("tel")}"
 		when "bookmark"
 			return tag.url.scan(/http.{1,3}\/\/([^\/]*).*/)[0]
 		when "album","artwork","painting","sculpture"

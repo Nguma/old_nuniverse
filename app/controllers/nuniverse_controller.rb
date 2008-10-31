@@ -34,7 +34,7 @@ class NuniverseController < ApplicationController
 		@input = params[:input]
 		if params[:command].downcase == "find address"
 			@source = Tag.find(params[:tag_id])
-			render :action => "google_locations" if @input
+			render(:action => "google_locations", :layout => false) if @input
 		else
 			@command = Command.new(current_user, params)
 			@input = @command.input	

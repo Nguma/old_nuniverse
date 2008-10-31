@@ -39,7 +39,7 @@ module WsHelper
 		  "#catlinks"           #category links
 		  ]
 
-		doc = Hpricot open('http://en.wikipedia.org/wiki/'+params[:query].titleize.gsub(/\s|,/,'_'))
+		doc = Hpricot open('http://en.wikipedia.org'+params[:query].titleize.gsub(/\s|,/,'_'))
 		@article = (doc/"#content").each do |content|
 		  #change /wiki/ links to point to full wikipedia path
 		  (content/:a).each do |link|
