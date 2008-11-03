@@ -1,1 +1,1 @@
-<div class="item <%= item_classes || "" %>" ><%= thumbnail_tag(item.object, :kind => kind) %><h3><%= link_to_item(item, :kind => kind)%></h3><p><%= tag_info(item.object, :kind => kind, :info => @info) %></p></div>
+<div class="item <%= item_classes rescue "" %>" ><%= thumbnail_tag(item.object, :kind => kind) %><h3><%= link_to_item(item, :kind => kind)%></h3><p><%= tag_info(item.object, :kind => kind, :info => @info) %></p></div>
