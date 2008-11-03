@@ -92,7 +92,7 @@ class UsersController < ApplicationController
 		@mode = params[:mode] || 'card'
 		@tag = current_user.tag
 		@path = TaggingPath.new
-		@service = params[:service] ||= nil
+		@service = params[:service] ||= "you"
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
 		@title = "#{current_user.login}'s nuniverse"

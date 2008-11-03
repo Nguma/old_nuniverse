@@ -45,5 +45,6 @@ class ImagesController < ApplicationController
 	def destroy
 		@image = Image.find(params[:id])
 		@image.destroy
+		redirect_back_or_default('/')
 	end
 end

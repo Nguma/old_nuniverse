@@ -1,7 +1,7 @@
-<div class='box' id="title_box">
+<div class='box heading' id="title_box">
   <%= display_options %>
-  <h1><%= source.title %><h1>
+  <h1 class="title"><span class='hidden'><%= @kind %></span><%= source.title %><h1>
   <% unless @service.nil? %>
-    <span class='service'>according to <%= @service %></span>
+    <span class='service'>according to <%= @user.login %></span>
   <% end -%>
 </div>

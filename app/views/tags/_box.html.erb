@@ -2,7 +2,7 @@
   <h2>Tags</h2>
   <div class="content" style="display:block;height:auto">
   <% items.each do |item| -%>
-    <%= link_to(item.kind.capitalize, item_url(:kind => item.kind, :id => @source.id),:style => "font-size:14px") %>
+    <%= link_to(item.kind.capitalize, tag_url(item, :kind => item.kind),:style => "font-size:14px") %>
   <% end -%>
   </div>
   <div class="actions">

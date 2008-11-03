@@ -1,6 +1,7 @@
 class ListsController < ApplicationController
 	
 	before_filter :login_required
+	before_filter :find_user, :only => [:show]
 	#before_filter :admin_required, :except => [:show, :create, :find_or_create, :find_or_add_item]
   after_filter :store_location, :only => [:show]
 	after_filter :update_session, :only => [:show]
@@ -18,11 +19,12 @@ class ListsController < ApplicationController
   # GET /lists/1
   # GET /lists/1.xml
   def show
+		
   	if params[:id] 
    		@list = List.find(params[:id]) 
    	else
 			params[:kind].gsub!('_',' ')
-			@list = List.new(:creator => current_user, :label => params[:kind], :tag_id => params[:tag]) 
+			@list = List.new(:creator => @user, :label => params[:kind], :tag_id => params[:tag])
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
@@ -31,6 +33,7 @@ class ListsController < ApplicationController
 			@title = @list.title
 			@info = params[:info] || nil
 			@service = params[:service] || "everyone"
+
 			
 			@source = @list
 			@kind = @list.kind
@@ -122,4 +125,15 @@ class ListsController < ApplicationController
 		@tagging = Tagging.find_or_create(:subject_id => @list.tag.id, :object_id => @tag.id)
 		redirect_to @list
 	end
+	
+	protected
+	
+	def find_user
+		if params[:user]
+			@user = User.find_by_login(params[:user])
+		else
+			@user = current_user
+		end
+	end
+		
 end

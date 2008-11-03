@@ -1,12 +1,16 @@
-
-  <div class="box <%= cycle('even','odd') %>"> 
-      <%= image_tag(result.thumbnail,:class => "thumbnail")%>
-      <h3>
-        <%= link_to_object(result) %>
-      </h3>
-      
-      <p><%=  "#{result.precision} #{result.price}" %></p>
-      <div class="actions">
-        <%= save_button_for(result, :id => tag.id)%>
+<div class="amazon_item box <%= cycle('even','odd') %>"> 
+    <%= image_tag(result.thumbnail,:class => "thumbnail") rescue nil %>
+    <h3 style="font-size:15px">
+      <%= link_to(result.label.capitalize, result.url, :target => "_blank", :style => "font-size:15px;line-height:15px") %>
+    </h3>
+    
+    <p><%=  "#{result.kind.split('#').last.downcase.capitalize} #{result.price}" %></p>
+    <div class="content">
+      <div class="description">
+        <%= result.description[0..300] %>
       </div>
-  </div>
+    </div>
+    <div class="actions">
+      <%= save_button(result)%>
+    </div>
+</div>

@@ -9,8 +9,8 @@
         "/rate/#{item.id}/1")%><%= item.votes %>
   </dd>
 <% end -%>
-   
-    <% if item.personal == '1' -%>
+   <% personal = item.personal rescue item.public %>
+    <% if personal == '1' -%>
       
       <dd><%= link_to("Remove from your connections",   command_with_id_url(:command => "forget", :id => item.id)) %></dd>
       

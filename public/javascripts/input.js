@@ -80,7 +80,7 @@ var Input = new Class({
   },
   
   isInUse:function() {
-   if(this.getCommandValue() == null) return false
+   if(this.getCommandAction() == null) return false
    if(this.getInputValue().length < 1) return false 
    return true
   },
@@ -89,13 +89,16 @@ var Input = new Class({
     return $('extra_input').getProperty('value');
   },
   
-  
-  getCommandField:function() {
-    return $('command');
+  getCommandAction:function() {
+    return $('command').getProperty('value').match(/\w+/)[0].toLowerCase();
   },
   
+  getCommandArgument:function() {
+    return $('command').getProperty('value').match(/\w+\s(a\s|to\s)?(.*)/)[2].toLowerCase();
+  }, 
+  
   getCommandValue:function() {
-    var match = $('command').getProperty('value').toLowerCase().match(/^(new)?\s?(\b\w+\b)/);
+    var match = $('command').getProperty('value').toLowerCase().match(/^(Add)\s(a\s|to\s)?(\b\w+\b)/);
     if(match != null) {
       return match[2];
     } else {
@@ -135,7 +138,7 @@ var Input = new Class({
           break;
         case "enter":
           if(!this.isInUse()) return; 
-          if(this.getCommandValue() == "invite" || this.getCommandValue() == "email") {
+          if(this.getCommandAction() == "invite" || this.getCommandAction() == "email") {
             if($('extra_input').hasClass('hidden')) {
               $('extra_input_label').set('text','Add a personal note or Press enter to send');
               $('extra_input').removeClass('hidden');
@@ -161,7 +164,7 @@ var Input = new Class({
   },
   
   onSuggestionClick:function(ev,suggestion) {
-    if(this.getCommandValue() != "search") {
+    if(this.getCommandAction() != "search") {
       ev.preventDefault(); 
       this.setInput(suggestion.getElement('a').get('text'));
       this.submit(suggestion.getElement('a').getProperty('href'));
@@ -169,16 +172,11 @@ var Input = new Class({
 
   },
   
-  onSubmitSuccess:function() {
-    this.hide();
-    this.fireEvent('success');
-  },
-  
   setBehaviors:function() {
     this.getFileField().addEvents({
       'change':this.submit.bind(this,this.submitUrl())
     },this);
-    this.getCommandField().addEvent('change', this.onCommandChange.bind(this));
+    $('command').addEvent('change', this.onCommandChange.bind(this));
     if($defined(this.el.getElement('a.collapse'))){
       this.el.getElement('a.collapse').addEvent('click', this.hide.bindWithEvent(this));
     }
@@ -187,7 +185,7 @@ var Input = new Class({
   },
   
   setCommand:function(command, description) {
-    this.getCommandField().setProperty('value', command);
+    $('command').setProperty('value', command);
     if($defined(description)) {this.setLabel(description);}
   },
   
@@ -195,26 +193,17 @@ var Input = new Class({
     
     if(reset == true) {
       this.el.getElement('.suggestions').empty();
-      
-      
     }
     this.getFileFieldArea().addClass('hidden');
-    switch(this.getCommandValue()) {
-      case "image": 
-        this.getFileFieldArea().removeClass('hidden');
-        break;
-      case "invite":
-      case "email":
-        this.setLabel("Send to (email address)");
-        break;
-      case "tags":
-        this.setLabel("Enter as many tags as desired, comma separated");
-        break;
-      case"description":
-        break;
-      case "localize":
-        if(reset == true) { this.setInput($('title').getProperty('value'));}
-        this.getSuggestions();
+    switch(this.getCommandAction()) {
+      case "add":
+      case "new":
+        if(this.getCommandArgument() == "image") {
+          this.getFileFieldArea().removeClass('hidden');
+        }
+        if(this.isInUse()){
+          this.getSuggestions();
+        }
         break;
       case "search":
       case "find":
@@ -224,19 +213,16 @@ var Input = new Class({
         this.setLabel('Drag and drop any of those');
         this.getSuggestions();
         break;
-      case "address":
-        break;
-      case "edit":
-        if(reset == true ) {
-          this.setInput(this.el.getParent('.box').getElement('.editable').get('text'));
-        }
+      case "invite":
+      case "email":
+        this.setLabel("Send to (email address). You can add more than one, comma-separated.");
         break;
       default:
-        
         if(this.isInUse()){
           this.getSuggestions();
-        }
+        }     
     }
+
   },
   
   setLabel:function(label) {
@@ -245,6 +231,10 @@ var Input = new Class({
   
   setInput:function(input) {
     $('input').setProperty('value', input)
+  },
+  
+  setUpdatable:function(updatable) {
+    this.options['updatable'] = updatable;
   },
   
   show:function() {
@@ -258,7 +248,7 @@ var Input = new Class({
   
   submit:function(url) {
     var obj = this;
-    if(this.getCommandValue() == 'search') {
+    if(this.getCommandAction() == 'search') {
       this.el.getElement('form').submit();
     } else {
       
@@ -267,27 +257,11 @@ var Input = new Class({
                // 'update':$('content'),
 
                onSuccess:function(a,b,c,d) {
-                   if(obj.options['updated'] == 'content') {
-                     if($('content').hasClass('list_mode')) {
-                         $('item_list').adopt(a);
-                         var t = new ListBox($('item_list').getChildren().getLast());
-                     } else {
-
-                       var col =  $("column_"+(($('content').getElements('.box').length)%4))
-                       col.adopt(a);
-                       
-                       var t = new ListBox(col.getChildren().getLast());
-
-                     }
-
-                   } else {
-                     $(obj.options['updated']).empty();
-                     $(obj.options['updated']).adopt(a);
-                   }
-                   obj.fireEvent('success')
+                  
+                   obj.fireEvent('success');
                },
                'headers':{'enctype':'multipart/form-data'},
-               evalScripts:true,
+               'evalScripts':true,
                'evalResponse':true
 
                },this).post(this.el.getElement('form'));

@@ -5,8 +5,7 @@ class Tagging < ActiveRecord::Base
 	
 	
 	has_many :rankings
-	
-	attr_accessor :personal
+
 	cattr_reader :per_page 
   @@per_page = 5
 
@@ -106,12 +105,12 @@ class Tagging < ActiveRecord::Base
 
 	def self.find_or_create(params)
 		params[:kind] ||= nil
-		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND kind = ?', params[:subject_id], params[:object_id],  params[:owner], params[:kind]])
+		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND kind = ?', params[:subject_id], params[:object_id],  params[:user], params[:kind]])
 		tagging = Tagging.create(
 			:subject_id => params[:subject_id], 
 			:object_id => params[:object_id], 
 			:path => params[:path], 
-			:user_id => params[:owner].id,
+			:user_id => params[:user].id,
 			:kind => params[:kind] || nil,
 			:description => params[:description] || nil,
 			:public => params[:public] || 1

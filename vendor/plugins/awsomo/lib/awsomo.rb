@@ -51,11 +51,12 @@ module Awsomo
 		
 		# This method builds the actual request
 		def build(params)
+			params[:search_index] ||= aws_default_category
 			req = "#{AWS_REST_URL}?Service=#{AWS_SERVICE}&Version=#{AWS_VERSION}&Operation=#{params[:operation] || aws_default_operation}"
 			req << "&ContentType=text%2Fxml&SubscriptionId=#{aws_key_id}&XMLEscaping=Double"
-			req << "&SearchIndex=#{params[:category].capitalize || aws_default_category}&ItemPage=#{params[:page] || 1}&Keywords=#{params[:query].split(" ").join("_")}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,ItemIds" if params[:query]
+
+			req << "&SearchIndex=#{params[:search_index].capitalize}&ItemPage=#{params[:page] || 1}&Keywords=#{params[:query].gsub(' ','_')}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,ItemIds" if params[:query]
 			req << "&ItemId=#{params[:item_id]}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,EditorialReview" if params[:item_id]
-			
 			req
 		end
 	end
@@ -78,14 +79,15 @@ module Awsomo
 			xml_items(body).each do |item|
 				items << Tag.new(
 					:label => parse(item, "ItemAttributes/Title"),
-					:url => parse(item, "ASIN"),
-					:kind => map_kind(parse(item, "//ItemAttributes/Binding")),
+					:url => parse(item,"DetailPageURL"),
+					:kind => map_kind(parse(item, "ItemAttributes/Binding")),
 					:service => 'amazon',
-					:description => parse(item,"//EditorialReview/Content"),
-					:data => "#price #{parse(item,"ItemAttributes/ListPrice/FormattedPrice")} #thumbnail #{parse(item,"SmallImage/URL")} #image #{parse(item,"LargeImage/URL")} #sub_type #{parse(item, "//ItemAttributes/Binding")}"
+					:description => parse(item,"EditorialReviews//EditorialReview/Content"),
+					:data => "#price #{parse(item,"OfferSummary//FormattedPrice")} #thumbnail #{parse(item,"SmallImage/URL")} #image #{parse(item,"LargeImage/URL")} #amazon_id #{parse(item, "ASIN")}"
 					)
 			end
 			items
+		
 		end
 		
 		def item
@@ -100,8 +102,15 @@ module Awsomo
 			item.elements[q].text rescue ""
 		end
 		
-		def map_kind(binding)
-			return "item"
+		def map_kind(productGroup)
+			case productGroup.strip.downcase
+			when "kitchen","misc."
+				"product"
+			when "paperback"
+				"product#book"
+			else 
+				"product##{productGroup}"
+			end
 		end
 		
 	end

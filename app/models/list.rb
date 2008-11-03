@@ -66,7 +66,7 @@ class List < ActiveRecord::Base
 	end
 	
 	def title
-		self.tag.nil?  ? self.label.capitalize.pluralize : "#{self.tag.label.capitalize} #{self.label.pluralize}"
+		self.tag.nil?  ? self.label.capitalize : "#{self.tag.label.capitalize} #{self.label.pluralize}"
 	end
 	
 	def kind

@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
 			map.resources :lists
   		map.resource :sessions
    		map.resources :taggings
+			map.resources :tags
+			map.resources :images
    		map.resource :user, :member => { :suspend   => :put,
   	                                   :unsuspend => :put,
     	                                 :purge     => :delete }
@@ -45,12 +47,12 @@ ActionController::Routing::Routes.draw do |map|
   	
 	  	map.with_options :controller => 'lists', :action => 'show', :path_prefix => '/my_nuniverse' do |m|
 				
-	  		m.item_with_tag '/:tag/:kind/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
-				m.tag '/all_items/:id', :controller => 'tags'
-	  		
-				m.item '/all/:kind/item/:id/service/:service', :controller => 'tags',  :requirements => { :service => /\w+/}
-				m.item '/all/:kind/item/:id', :controller => 'tags'
-				
+	  		# m.item_with_tag '/:tag/:kind/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
+				# m.tag '/all_items/:id', :controller => 'tags'
+				# 	  		
+				# m.item '/all/:kind/item/:id/service/:service', :controller => 'tags',  :requirements => { :service => /\w+/}
+				# m.item '/all/:kind/item/:id', :controller => 'tags'
+				# 				
 	  		m.with_options :page => 1, :order => "by_name" do |page|
 					page.listing '/all/:kind/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
 					page.listing '/all/:kind/:page/:order/according-to/:service', :requirements => {:page => /\d+/, :service => /\w+/}
@@ -66,6 +68,7 @@ ActionController::Routing::Routes.draw do |map|
 	  	
 	  	end
 	
+			map.item '/items/:kind/:label/:id/according-to/:service', :controller => 'tags', :action => 'show'
 	# map.resources :admin, :page => 1 do |admin|
 	# 	admin.resources :users, :name_prefix => "user_"
 	# 	admin.resources :permissions, :name_prefix => "permission_"
@@ -83,9 +86,7 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.with_options :controller => 'nuniverse', :action => 'command',  :tag => nil  do |m|
 		m.command '/command'
-		
 		m.command '/command/:command'
-		
 		m.command '/command/:command/:input'
 		m.command_with_item '/command/:command/with_item/:item', :requirements => {:item => /\d+/}
 		m.command_with_id '/command/:command/with_id/:id',  :requirements => {:id => /\d+/}

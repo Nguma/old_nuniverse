@@ -2,13 +2,14 @@
 # also defines the available scripting commands
 class Command
 	
-	attr_reader :raw_command, :action, :argument, :input, :current_user, :kind, :extra_input, :list, :service, :origin
+	attr_reader :raw_command, :action, :argument, :input, :current_user, :kind, :extra_input, :list, :service, :origin,:tagging
 	
 	def initialize(current_user, params)
 		@input = params[:input]
 		@current_user = current_user
 		@extra_input = params[:extra_input]
 		@image_url = params[:image_url] || nil
+		@tagging = Tagging.find(params[:id]) if params[:id]
 		if params[:tag_id]
 			@origin = Tag.find(params[:tag_id])
 			@origin.kind = params[:kind]
@@ -32,9 +33,10 @@ class Command
 			@argument = "list"
 			@service = nil
 			return m
-		elsif  m = action.match(/^(add|create|new)\s?((a|to)\s)?(new\s)?(.*)/)
+		elsif  m = action.match(/^(add|create|new)\s?((a|to)\s)?(.*)/)
 			@action = "add"
-			@argument = Nuniverse::Kind.match(m[5]).last || "category"
+			@argument = Nuniverse::Kind.match(m[4]).last || "category"
+			
 			@service = nil
 			return m		
 		elsif m = action.match(/^make (private|public)/)
@@ -99,17 +101,17 @@ class Command
 		when "edit"
 			return edit_content(params)
 		when "set_privacy"
-			return set_privacy(params[:tagging])
+			return set_privacy(@tagging)
 		when "save"
-			t = params[:tagging].clone
+			t = @tagging.clone
 			t.owner = @current_user
 			return t.save
 		when "forget"
 			# Returned tagging not forcefully the one owned by the current_user. 
 			# Have to requery it if not the current user's 
 			# raise Tagging.find(:first, :conditions => ['user_id = ? AND object_id = ?'])
-			t = (params[:tagging].user_id == @current_user.id) ? params[:tagging] : Tagging.find(:first, 
-					:conditions => ['user_id = ? AND kind = ?  AND object_id = ? ',	@current_user,params[:tagging].kind,params[:tagging].object_id])
+			t = (@tagging.user_id == @current_user.id) ? @tagging : Tagging.find(:first, 
+					:conditions => ['user_id = ? AND kind = ?  AND object_id = ? ',	@current_user,@tagging.kind,@tagging.object_id])
 			t.user_id = 0
 			return t.save
 		end
@@ -167,16 +169,9 @@ class Command
 				if params[:item]
 					tag = Tag.find(params[:item])
 				else
-					
-					if @kind == 'date'
-						date =  DateTime.parse(@input.strip) rescue nil
-					end
-
-
 					tag = Tag.find_or_create(
 						:label => @input.strip, 
 						:kind => @kind.split(' ').last,
-						:related_date => date,
 						:new => params[:new]
 					)
 				end
@@ -187,7 +182,7 @@ class Command
 					k = kind.gsub(/#{subj.label.downcase} /,'')
 					
 					@t = Tagging.find_or_create( 
-											:owner => @current_user, 
+											:user => @current_user, 
 											:subject_id => subj.id, 
 										 	:object_id => tag.id, 
 											:kind => k,
@@ -195,14 +190,14 @@ class Command
 										)
 						if @origin			
 							Tagging.find_or_create( 
-												:owner => @current_user, 
+												:user => @current_user, 
 												:subject_id =>  tag.id, 
 											 	:object_id => @origin.id, 
 												:kind => @origin.kind.split('#').last,
 												:public => is_public
 											)
 						end
-					@t.personal = @t.public
+					
 				end
 				
 				return @t
@@ -251,7 +246,7 @@ class Command
 		# raise self.pretty_inspect
 		uploaded_data = @image_url[:uploaded_data] rescue nil
 		source.add_image(:uploaded_data => uploaded_data, :source_url => @input)
-		source.images.last
+		source.images.last.public_filename()
 	end
 	
 	def add_tag(params)
@@ -261,7 +256,7 @@ class Command
 		)
 
 		Tagging.find_or_create(
-			:owner => @current_user,
+			:user => @current_user,
 			:subject_id => tag.id,
 			:object_id => params[:subject].id,
 			:kind => params[:input],

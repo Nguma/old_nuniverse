@@ -7,7 +7,7 @@ module ListsHelper
 		case params[:source].class.to_s
 		when 'List'
 			if !@list.context.blank?
-				breadcrumbs << link_to("< #{@list.context.capitalize}", item_url(:kind => params[:source].context)) 
+				breadcrumbs << link_to("< #{@list.context.capitalize}", tag_url(params[:source].tag, :kind => params[:source].context)) 
 				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize)) 
 			end
 		when 'Tag'
@@ -31,10 +31,10 @@ module ListsHelper
 		kind = params[:kind] ? params[:kind] : item.kind 	
 		
 		params[:title] ||= item.label.capitalize
-		if item.kind == "bookmark" 
+		if item.kind == "bookmark" || !item.service.nil?
 			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title], item_url(:id => item.id, :kind => kind, :mode => params[:mode] || @mode, :service => @service))
+			link_to(params[:title], tag_url(item, :kind => kind, :service => params[:service] || @service, :mode => params[:mode] || @mode))
 		end
 	end
 	
@@ -91,15 +91,15 @@ module ListsHelper
 	end
 	
 	def perspectives(params = {})
-		list_label = @list.label rescue params[:source].kind
+		kind = @list.kind rescue params[:source].kind
 		
 		if params[:source].is_a?(Tag)
 			perspectives = [
-				["you",	item_url(:id => params[:source].id, :list => list_label, :mode => @mode,  :service => "you"), "you"], 
-				["all contributors",	item_url(:id => params[:source].id, :list =>  list_label, :mode => @mode,  :service => "everyone"), "everyone"],
-				["Google",item_url(:id => params[:source].id, :list =>  list_label, :mode => @mode,  :service => "google"), "google"],
-				["Amazon", item_url(:id => params[:source].id, :list =>  list_label, :mode => @mode,  :service => "amazon"), "amazon"],
-				["Youtube", item_url(:id => params[:source].id, :list =>  list_label,:mode => @mode,   :service => "youtube"), "youtube"]
+				["you",	tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "you"), "you"], 
+				["all contributors",	tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "everyone"), "everyone"],
+				["Google",tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "google"), "google"],
+				["Amazon", tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "amazon"), "amazon"],
+				["Youtube", tag_url(params[:source], :kind => kind,:mode => @mode,   :service => "youtube"), "youtube"]
 			]
 		else
 			perspectives = [

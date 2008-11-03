@@ -22,7 +22,8 @@ module TagsHelper
 		when "google"	
 			Googleizer::Request.new(query , :mode => "web").response.results
 		when "amazon"
-			Finder::Search.find(:query => query, :service => 'amazon')
+			query = "#{@source.label}"
+			Finder::Search.find(:query => query, :kind => @kind,:service => 'amazon')
 		when "youtube"
 			Googleizer::Request.new(query , :mode => "video").response.results
 		else
@@ -43,9 +44,29 @@ module TagsHelper
 			info = [tag.connections(:kind => 'artist|painter|musician|sculptor', :user => current_user).first] rescue []
 			info << tag.connections(:kind => 'creation date', :user => current_user).first
 			info.collect {|c| c.nil? ?  "" : c.title}.join(' - ')
+		when "person"
+			return connections(:subject => tag, :kind => 'occupation|profession').first rescue []
+		when "product"
+			return "#{tag.property('price')} on #{tag.service.capitalize}"
 		else
-			return tag.description
+			return ""
 		end
-			
+	end
+	
+	def tag_links(tag, params = {})
+		params[:kind] ||= @kind
+		case params[:kind].singularize
+		when 'film'
+			[link_to("Rent it on Netflix","#"),link_to("Buy it on Amazon",tag_url(tag, :service => 'amazon', :kind => params[:kind]))]
+		when 'location'
+		when 'restaurant','bar','club'
+			[link_to("Reviews from yelp","#")]
+		when 'bookmark'
+			[]
+		when 'album'
+			[]
+		else
+			[]
+		end
 	end
 end

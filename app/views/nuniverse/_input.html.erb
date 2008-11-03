@@ -3,8 +3,9 @@
     <fieldset>
     
     <%= hidden_field_tag("context", @source.title)  %>
+    <%= hidden_field_tag("context_type",source.class.to_s)%>
     <% if source.is_a?(List) -%>
-      <%= hidden_field_tag("kind", source.label) %>
+      <%= hidden_field_tag("kind", source.kind) %>
       <%= hidden_field_tag("tag_id", source.tag_id) %>
     <% elsif source.is_a?(Tag) -%>
       <%= hidden_field_tag("kind", @source.kind)  %>

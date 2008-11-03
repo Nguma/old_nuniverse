@@ -26,41 +26,6 @@ module WsHelper
 	
 
 	
-	def page_from_wikipedia(params)
-		items_to_remove = [
-		  "#contentSub",        #redirection notice
-		  "div.messagebox",     #cleanup data
-		  "#siteNotice",        #site notice
-		  "#siteSub",           #"From Wikipedia..." 
-		  "table.infobox",      #sidebar box
-		  "#jump-to-nav",       #jump-to-nav
-		  "div.editsection",    #edit blocks
-		  "table.toc",          #table of contents 
-		  "#catlinks"           #category links
-		  ]
-
-		doc = Hpricot open('http://en.wikipedia.org'+params[:query].titleize.gsub(/\s|,/,'_'))
-		@article = (doc/"#content").each do |content|
-		  #change /wiki/ links to point to full wikipedia path
-		  (content/:a).each do |link|
-		    unless link.attributes['href'].nil?
-		      if (link.attributes['href'][0..5] == "/wiki/")
-		        link.attributes['href'].sub!('/wiki/', 'http://en.wikipedia.org/wiki/')
-		      end
-		    end
-		  end  
-
-		  #remove unnecessary content and edit links
-		  items_to_remove.each { |x| (content/x).remove }
-
-		  #replace links to create new entries with plain text
-		  (content/"a.new").each do |link|
-		    link.parent.insert_before Hpricot.make(link.attributes['title']), link
-		  end.remove
-		end 
-
-		return "<div class='article'>#{@article.inner_html}</div>"
-	end
 	
 	def map(params)
 		map = GMap.new("map_div")

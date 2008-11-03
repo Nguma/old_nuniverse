@@ -89,7 +89,7 @@ module Nuniverse
 		
 		def self.match(kind_str)
 			return if kind_str.nil?
-			kind_str.strip.downcase.gsub(/^(add\s(a\s|to\s)?)?(new\s)?/,'').collect {|k| self.list[k.singularize] || k.singularize }.flatten
+			kind_str.strip.downcase.collect {|k| self.list[k.singularize] || k.singularize }.flatten
 		end
 		
 		def self.hash	
@@ -242,5 +242,46 @@ module Nuniverse
 		str.gsub!(/^(The|a)?(.*)\s\bof\b\s(.*)$\g/,'\3 \2')
 		raise str.inspect
 	end
+	
+	def self.get_description_from_wikipedia(url)
+			items_to_remove = [
+			  "#contentSub",        #redirection notice
+			  "div.messagebox",     #cleanup data
+			  "#siteNotice",        #site notice
+			  "#siteSub",           #"From Wikipedia..." 
+			  # "table.infobox",      #sidebar box
+			  "#jump-to-nav",       #jump-to-nav
+			  "div.editsection",    #edit blocks
+			  "table.toc",          #table of contents 
+			  "#catlinks",           #category links
+				"#cite_note-0"
+			  ]
+
+			doc = Hpricot open('http://en.wikipedia.org'+url.gsub(/\s|,/,'_'))
+			
+			@article = (doc/"#content").each do |content|
+			  #change /wiki/ links to point to full wikipedia path
+
+			  (content/:a).each do |link|
+			    unless link.attributes['href'].nil?
+			      if (link.attributes['href'][0..5] == "/wiki/")
+			        link.attributes['href'].sub!('/wiki/', 'http://en.wikipedia.org/wiki/')
+			      end
+			    end
+			  end  
+
+			  #remove unnecessary content and edit links
+			  items_to_remove.each { |x| (content/x).remove }
+
+			  #replace links to create new entries with plain text
+			  (content/"a.new").each do |link|
+			    link.parent.insert_before Hpricot.make(link.attributes['title']), link
+			  end.remove
+			end 
+		
+			return @article
+			return "#{(@article/:p)[0..1]}"
+	end
+		
 	
 end

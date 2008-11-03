@@ -1,3 +1,5 @@
 <div style="padding:40px">
- <%= page_from_wikipedia(@url) %>
+ <% w =  Nuniverse.get_description_from_wikipedia(@wiki_url) %>
+ <%= w/'table.infobox'/:img%>
+
 </div>

@@ -9,6 +9,7 @@ class NuniverseController < ApplicationController
 		params[:service] ||= "everyone" 
 		@command = Command.new(current_user, params)
 		@source = @command.list
+		@context_type = params[:context_type]
 		@kind = @command.kind
 		@result = @command.execute(params)	
 

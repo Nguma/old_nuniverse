@@ -37,7 +37,7 @@ module NuniverseHelper
 		when "card"
 			3
 		when "image"
-			3
+			4
 		when "list"
 			1
 		else

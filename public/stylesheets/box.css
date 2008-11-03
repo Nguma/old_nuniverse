@@ -11,8 +11,12 @@
 	height:auto;
 }
 
+.personal {
+	background: #ccc url("/images/backgrounds/box_personal.png") 0 0 repeat-x;;
+}
+
 .private {
-/*	background:#ccc url("/images/backgrounds/box_private.png") 0 0 repeat-x;*/
+	background:#ccc url("/images/backgrounds/box_private.png") 0 0 repeat-x;
 	margin:0 0 1px 1px;	
 }
 
@@ -78,6 +82,11 @@
 	padding-top:10px;
 }
 
+.box .content .description {
+	font-size:13px;
+	color:#666;
+}
+
 #small-column .content {
 	display:block;
 }
@@ -117,12 +126,12 @@
 .box .actions {
 	text-align:right;
 	position:absolute;
-	top:5px;
+	bottom:5px;
 	right:5px;
 	margin:3px 0 0 0;
 	padding:5px;
 	color:#9c6;
-	font-size:14px;
+	font-size:13px;
 	font-weight:normal;
 	visibility:hidden;
 	background:#333;
@@ -535,6 +544,11 @@ h2 span.size {
 	min-height:0;
 }
 
+#options_box.expanded,
+#title_box.expanded {
+	height:auto;
+}
+
 #description_box {
 	font-size:13px;
 	color:#333;
@@ -543,3 +557,4 @@ h2 span.size {
 #description_box.hover {
 	color:#FFF;
 }
+

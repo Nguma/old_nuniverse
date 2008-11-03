@@ -1,9 +1,24 @@
-<div class="box ">
+<div class="box <%= (item.personal.to_i == 1 ? 'personal' : '') rescue 'personal' %> <%= item.public ? 'public' : 'private' %>" >
 
   <%= render_item(item, :kind => kind)%>
-  <div class="content"></div>
+  <div class="content">
+    <div class="description">
+      <%= h item.object.description[0..400] unless item.object.description.blank? %>
+
+    </div>
+    <% tag_links(item.object, :kind => kind).each do |lnk| -%>
+      <%= lnk %>
+    <% end -%>
+  </div>
   <%= render :partial => "/lists/item_options", :locals => {:item => item} %>
   <div class="actions">
+    <% personal = item.personal rescue item.public %>
+     <% if personal == '1' -%>
+
+       <%= link_to("Make #{item.public ? 'private' : 'public'}", command_with_id_url(:command => "make_#{item.public ? 'private' : 'public'}", :id => item.id)) %>
+      <% else -%>
+        <%= link_to("Save", command_with_id_url(:command => "save", :id => item.id)) %>
+      <% end -%>
     <%= link_to("Options", "#", :class => "expand_options" )%> 
   </div>
 </div>

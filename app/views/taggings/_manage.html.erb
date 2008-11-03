@@ -1,7 +1,7 @@
   <%= link_to(image_tag("/images/icons/save_button.png"),"#",:title => "Bookmark", :class => "save_button") %>
   <div class="data hidden">
     <% form_tag '/tags/bookmark' do -%>
-      <%= hidden_field_tag :id, id  %>
+      <%= hidden_field_tag :id, @tag.id  %>
       <%= hidden_field_tag :label, item.label %>
       <%= hidden_field_tag :service, item.service %>
       <%= hidden_field_tag :kind, item.kind %>

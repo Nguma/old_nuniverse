@@ -2,7 +2,7 @@
   <% if source.images.empty? %>
     <div style="padding:5px">
       <h4>This item doesn't have any image yet.</h4>
-      <%= command(:label => "+ Add one now", :command => "New image")%>
+      <%= command(:label => "+ Add one now", :command => "Add image")%>
     </div>
   <% else -%>
     <%= avatar_for(@source) %>
@@ -16,6 +16,7 @@
         <dt>Images options</dt>
 
         <dd class="actions">
+          <%= link_to("Remove first image", "/images/#{source.images.first.id}", :method => :delete)%>
           <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
         </dd>
       </dl>

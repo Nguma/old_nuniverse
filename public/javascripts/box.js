@@ -67,9 +67,10 @@ var Box = new Class({
     //         console.log("BLAH");
     //       }
     //     });
+    inputBox.setUpdatable(this);
     inputBox.expand(command.getProperty('href'), command.getProperty('title'));
     inputBox.addEvent('success', function() {
-      
+      console.log("YEAH")
     });
   },
   
@@ -102,6 +103,8 @@ var Box = new Class({
   
   onExpandInputClick:function(ev,command) {
     ev.preventDefault();
+    ev.stopPropagation();
+    
     this.expandInput(command);
   },
   
@@ -126,21 +129,21 @@ var Box = new Class({
   setBehaviors:function() {
     this.el.addEvents({
       'mouseenter':this.focus.bind(this),
-      'mouseleave':this.unfocus.bind(this)
+      'mouseleave':this.unfocus.bind(this),
+      'click':this.toggle.bindWithEvent(this)
     },this);
-    
-    // if(this.el.hasClass('card')) {
-    //       this.el.addEvents({
-    //        'mousedown':this.startDrag.bind(this),
-    //        'mouseup':this.stopDrag.bind(this)
-    //       },this);
-    //     }
     
     this.setCommands();
     this.setOptionsBehaviors();
-     
+    this.el.getElements('a').each(function(lnk){
+      lnk.addEvent('click',function(ev) {
+        ev.stopPropagation();
+      })
+    });
+         
     if(!this.isExpandable()) return;
     this.expandButton().addEvent('click', this.toggle.bind(this));
+
   },
   
   setCommands:function() {

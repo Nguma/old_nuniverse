@@ -21,7 +21,7 @@ class TagsController < ApplicationController
 		@tag.kind = @kind
 		@source = @tag
 		@page = params[:page] || 1
-		@title = @tag.label.capitalize
+		@title = "#{@kind.capitalize}: #{@tag.label.capitalize}"
 		
 		@service = params[:service] || "everyone"
 		@order = params[:order] || "latest"
@@ -136,12 +136,14 @@ class TagsController < ApplicationController
 			:service =>params[:service],
 			:data => params[:data],
 			:description => params[:description] ) if @object.nil?
-			
-		Tagging.create(
-			:object => @object,
-			:subject => @tag,
-			:owner => current_user,
-			:kind => params[:kind])
+		
+		params[:kind].split('#').each do |k|	
+			Tagging.create(
+				:object => @object,
+				:subject => @tag,
+				:owner => current_user,
+				:kind => k)
+		end
 			
 		respond_to do |format|
 			format.html {redirect_back_or_default @tag, :service => params[:service] || nil	}

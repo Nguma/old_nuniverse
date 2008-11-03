@@ -36,8 +36,9 @@ module TaggingsHelper
 		end
 	end
 	
-	def save_button_for(item, params = {})
-		render :partial => "/taggings/manage", :locals => {:item => item, :id => params[:id]}
+	def save_button(item, params = {})
+		params[:item] = item
+		render :partial => "/taggings/manage", :locals => params
 	end
 	
 	def connections(params = {})

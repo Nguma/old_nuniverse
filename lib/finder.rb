@@ -41,13 +41,13 @@ module Finder
 	class Amazon
 		def initialize(params)
 			@query = params[:query]
-			@category = params[:filter] || "All"
+			@kind = params[:kind] || "All"
 		end
 		
 		def results
 			Awsomo::Request.new(
 				:query => @query, 
-				:category => @category
+				:kind => @kind
 				).response.items
 		end
 	end
