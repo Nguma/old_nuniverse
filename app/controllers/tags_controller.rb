@@ -2,6 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index]
+	before_filter :find_user, :only => [:show]
 	after_filter :update_session, :only => [:show]
   # GET /tags
   # GET /tags.xml
@@ -16,7 +17,7 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show		
-		@kind = params[:kind].singularize
+		@kind = params[:kind].singularize rescue @tag.kind
 		@list = List.new(:label => @kind, :creator => current_user)
 		@tag.kind = @kind
 		@source = @tag

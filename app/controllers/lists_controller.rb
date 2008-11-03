@@ -23,8 +23,7 @@ class ListsController < ApplicationController
   	if params[:id] 
    		@list = List.find(params[:id]) 
    	else
-			params[:kind].gsub!('_',' ')
-			@list = List.new(:creator => @user, :label => params[:kind], :tag_id => params[:tag])
+			@list = List.new(:creator => @user, :label => params[:kind].gsub(/\_|\-/,' '), :tag_id => params[:tag])
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
@@ -32,7 +31,7 @@ class ListsController < ApplicationController
 			@order = params[:order] || "by_name"
 			@title = @list.title
 			@info = params[:info] || nil
-			@service = params[:service] || "everyone"
+			@service = params[:user]
 
 			
 			@source = @list
@@ -128,12 +127,6 @@ class ListsController < ApplicationController
 	
 	protected
 	
-	def find_user
-		if params[:user]
-			@user = User.find_by_login(params[:user])
-		else
-			@user = current_user
-		end
-	end
+
 		
 end

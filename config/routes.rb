@@ -47,16 +47,9 @@ ActionController::Routing::Routes.draw do |map|
   	
 	  	map.with_options :controller => 'lists', :action => 'show', :path_prefix => '/my_nuniverse' do |m|
 				
-	  		# m.item_with_tag '/:tag/:kind/item/:id/service/:service', :controller => 'taggings', :requirements => {:tag => /\d+/}
-				# m.tag '/all_items/:id', :controller => 'tags'
-				# 	  		
-				# m.item '/all/:kind/item/:id/service/:service', :controller => 'tags',  :requirements => { :service => /\w+/}
-				# m.item '/all/:kind/item/:id', :controller => 'tags'
-				# 				
+			
 	  		m.with_options :page => 1, :order => "by_name" do |page|
-					page.listing '/all/:kind/in/:mode/:page/:order', :requirements => {:mode => /image/, :page => /\d+/}
-					page.listing '/all/:kind/:page/:order/according-to/:service', :requirements => {:page => /\d+/, :service => /\w+/}
-					page.listing '/all/:kind/:page/:order', :requirements => {:page => /\d+/}
+
 					
 					page.listing_with_tag '/:tag/:kind/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
 					
@@ -67,16 +60,12 @@ ActionController::Routing::Routes.draw do |map|
 	  					
 	  	
 	  	end
+			
+			map.listing '/my_nuniverse/all/:kind/',:controller => 'lists', :action => 'show'
+			map.listing '/all/:kind/according-to/:user', :controller => 'lists', :action => 'show', :requirements => {:user => /\w+/}
 	
 			map.item '/items/:kind/:label/:id/according-to/:service', :controller => 'tags', :action => 'show'
-	# map.resources :admin, :page => 1 do |admin|
-	# 	admin.resources :users, :name_prefix => "user_"
-	# 	admin.resources :permissions, :name_prefix => "permission_"
-	# end
-
-			
-
-  # 		
+	
   	map.with_options :controller => 'taggings' do |m|
   		m.rate '/rate/:id/:stars', :action => 'rate'
   		m.map '/locate/:id', :action => 'show', :service => 'map'

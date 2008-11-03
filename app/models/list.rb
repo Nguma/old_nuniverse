@@ -35,8 +35,9 @@ class List < ActiveRecord::Base
 		tags = self.tag ? [self.tag.label.downcase, self.label.downcase.singularize] : [self.label.downcase.singularize] 
 		users = params[:perspective] == "you" ? [self.creator] : [grantors, self.creator].flatten 
 		subject = (self.tag && self.tag.kind != 'user') ? self.tag : nil
+
 		Tagging.select(
-			:users => users, 
+			:users => [self.creator], 
 			:tags => tags, 
 			:order => params[:order], 
 			:title => self.label,
@@ -78,7 +79,7 @@ class List < ActiveRecord::Base
 	end
 	
 	def uri_name
-		self.title.downcase
+		self.title.downcase.gsub(' ','-')
 	end
 	
 	protected

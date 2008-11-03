@@ -134,6 +134,7 @@ class Tagging < ActiveRecord::Base
 	# I Wish i could use named_scope here but will_paginate gets apparently capricious 
 	# Performs a rlike against each tag to validate their existence.
 	def self.select(params = {})
+	
 		params[:users] ||= []
 		params[:tags] ||= []
 		params[:subject] ||= nil

@@ -26,21 +26,7 @@ function reset()
   });
   
   notice();
-  
-  // Sets all links classed .command to open up the input and assign the correct command.
-  // Expands the box if of class list.
-  // $$('.command').each(function(command) {
-  //    command.addEvent('click', function(ev) {
-  //      // if(command.getParent('.box') && command.getParent('.box').hasClass('list')) {
-  //      //        command.getParent('.box').adopt($('input_box'));
-  //      //        
-  //      //        command.getParent('.box').addClass('expanded');
-  //      //      }
-  //      // ev.preventDefault();
-  //      
-  //      inputBox.expand(command.getProperty('href'));
-  //    });
-  //  });
+ 
   
   $$('.save_button').each(function(button) {
     button.addEvent('click', function(ev) {
@@ -56,53 +42,12 @@ function reset()
   });
 
 
-  if($defined($('possible_categories'))) {
-    $('possible_categories').getElements('a').each(function(cat){
-      cat.makeDraggable({
-        droppables:$('categories').getChildren(),
-        onDrop:function(el, droppable) {
-          cat.removeClass('dragged');
-          if(droppable) {
-            
-              var call = new Request.HTML({
-                url:el.getProperty('href'),
-                onSuccess:function(a,b,c,d) {
-                  $('categories').adopt(a);
-                  var n = $('categories').getChildren().getLast();
-                  n.inject(droppable, 'before')
-                  var k = new ListBox(n);
-                  el.destroy();
-                  if(el.hasClass('custom')) {
-                    k.expandInput('Add new category');
-                  }
-                  else
-                  {
-                    k.expand();
-                  }
-                  
-
-                }
-
-              }).get();
-            
-            
-          }
-
-        },
-        
-        onStart:function() {
-          cat.addClass('dragged');
-        },
-        onEnter:function() {
-          cat.setStyle('color','#FC0')
-        },
-        onLeave:function() {
-          cat.setStyle('color', '#CCC')
-        }
-      });
-      cat.addEvent('click', function(ev){ev.preventDefault()});
-    });
-  }
+ $$('.perspective_link').each(function(lnk) {
+   lnk.addEvent('click',function(ev){
+     ev.preventDefault();
+     $('perspective_box').toggleClass('expanded');
+   });
+ });
   
   if($defined($('control_panel'))) {
     $('control_panel').getElements('.command').each(function(command) {

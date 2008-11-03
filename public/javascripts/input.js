@@ -94,7 +94,10 @@ var Input = new Class({
   },
   
   getCommandArgument:function() {
-    return $('command').getProperty('value').match(/\w+\s(a\s|to\s)?(.*)/)[2].toLowerCase();
+    var match =  $('command').getProperty('value').match(/\w+\s(a\s|to\s)?(.*)/);
+    if(match != null) return match[2].toLowerCase();
+    return false
+    
   }, 
   
   getCommandValue:function() {
@@ -207,7 +210,7 @@ var Input = new Class({
         break;
       case "search":
       case "find":
-        if(reset == true) { 
+        if(reset == true && this.getCommandArgument() == "address") { 
           this.setInput($('context').getProperty('value'));
         }
         this.setLabel('Drag and drop any of those');

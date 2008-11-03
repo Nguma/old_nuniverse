@@ -1,6 +1,6 @@
-<div class="box <%= (item.personal.to_i == 1 ? 'personal' : '') rescue 'personal' %> <%= item.public ? 'public' : 'private' %>" >
+<div class="box <%= item_classes || "" %>" >
 
-  <%= render_item(item, :kind => kind)%>
+  <%= render_item(item, :kind => kind, :item_classes => item_classes)%>
   <div class="content">
     <div class="description">
       <%= h item.object.description[0..400] unless item.object.description.blank? %>

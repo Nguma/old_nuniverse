@@ -1,17 +1,3 @@
- <% if logged_in? -%>
-    <% perspectives = ['you','your entourage','everyone','google', 'ebay','amazon','freebase','flickr','daylife', 'twitter'] -%>
-  <% else -%>
-    <% perspectives = ['everyone','google','map','local','ebay','amazon','videos','freebase', 'flickr','daylife','wikipedia', 'twitter'] -%>
-  <% end -%>
-  
-<dl class="dropdown">
-  <dt>According to <span class="label"><%= section.perspective %></span>
-    <%= image_tag("/images/icons/down.png", :alt => "Change perspective") %>
-  </dt>
-   <% perspectives.each do |perspective| -%>
-    <dd class="item <%= perspective == section.perspective ? 'selected' : '' %>">
-         <%= link_to(perspective.capitalize, "/section/according_to/#{perspective}?kind=", :class => 'service') %>
-         <%= render :partial => "/nuniverse/tabs", :locals => {:section => section, :service => perspective} %>
-      </dd>
-    <% end -%>
-</dl>
+<div  id="perspective_box">
+  <%= links.to_s%>
+</div>

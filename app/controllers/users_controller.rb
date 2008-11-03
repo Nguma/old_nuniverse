@@ -88,7 +88,7 @@ class UsersController < ApplicationController
 		if @user && current_user != @user
 			redirect_to @user.tag 
 		end
-		
+		@user = current_user
 		@mode = params[:mode] || 'card'
 		@tag = current_user.tag
 		@path = TaggingPath.new

@@ -62,5 +62,15 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	
+	def find_user
+		if !params[:user] || ["you","me"].include?(params[:user])
+			@user = current_user
+		else
+			@user = User.find_by_login(params[:user]) || current_user
+			
+			
+		end
+	end
+	
 
 end

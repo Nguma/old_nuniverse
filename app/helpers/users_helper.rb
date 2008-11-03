@@ -90,4 +90,13 @@ module UsersHelper
     end
   end
 
+	def link_to_user(user, options = {})
+		if user == current_user
+			link_to("You", "/my_nuniverse", options)
+		else
+			link_to(user.login.capitalize, "/users/#{user.id}", options)
+		end
+	end
+
+
 end

@@ -40,6 +40,7 @@ class NuniverseController < ApplicationController
 			@command = Command.new(current_user, params)
 			@input = @command.input	
 			@kind = @command.kind
+			@service = params[:service] || "everyone"
 			@items = @command.search_results(:page => params[:page], :per_page => 5)	
 		end
 	end

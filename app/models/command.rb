@@ -76,22 +76,22 @@ class Command
 		case @action
 		when "email"
 			if to_myself?
-				params[:email] = @current_user.email
+				params[:emails] = [@current_user.email]
 			else
-				params[:email] = @input
+				params[:emails] = @input.split(/,|;/)
 			end
-			email_user(	:email => params[:email], 
-									:current_user => @current_user,
-									:content => @list, 
-									:message => @extra_input,
-									:perspective => params[:service]
+			email_users(	:emails => params[:emails], 
+										:current_user => @current_user,
+										:content => @list, 
+										:message => @extra_input,
+										:perspective => params[:service]
 								)
 		when "share"
-			invite_user(:email => @input, 
-									:current_user => @current_user,
-									:content => @list, 
-									:message => @extra_input,
-									:perspective => params[:service]
+			invite_users(:emails => @input.split(/,|;/), 
+										:current_user => @current_user,
+										:content => @list, 
+										:message => @extra_input,
+										:perspective => params[:service]
 			)
 		when "search", "find"
 			
@@ -221,15 +221,11 @@ class Command
 		return true
 	end
 
-	def email_user(params)
-		user = User.find(:first, :conditions => ["email = ?",params[:email]])
-		if user.nil?
-			user = User.new(:email => params[:email], :login => params[:email], :password => "welcome")
-			user.save
-		end
-		items = params[:content].items(:page => 1, :per_page => 10, :perspective => params[:service])
-		
-		@current_user.email_to(:user => user, :content => params[:content], :message => params[:message], :items => items)
+	def email_users(params)
+
+		params[:items] = params[:content].items(:page => 1, :per_page => 10, :perspective => params[:service])
+		params[:sender] ||= @current_user
+		UserMailer.deliver_list(params)
 	end
 	
 	def invite_user(params)

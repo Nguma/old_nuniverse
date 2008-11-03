@@ -8,11 +8,11 @@ module ListsHelper
 		when 'List'
 			if !@list.context.blank?
 				breadcrumbs << link_to("< #{@list.context.capitalize}", tag_url(params[:source].tag, :kind => params[:source].context)) 
-				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize)) 
+				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login)) 
 			end
 		when 'Tag'
-			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title)) unless @list.context.blank?
-			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize)) 
+			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title, :user => @user.login)) unless @list.context.blank?
+			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login)) 
 		else
 			
 		end
@@ -29,24 +29,24 @@ module ListsHelper
 	def link_to_item(item, params = {})	
 		item = item.is_a?(Tagging) ? item.object : item
 		kind = params[:kind] ? params[:kind] : item.kind 	
-		
+		params[:service] ||= @service
 		params[:title] ||= item.label.capitalize
 		if item.kind == "bookmark" || !item.service.nil?
 			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title], tag_url(item, :kind => kind, :service => params[:service] || @service, :mode => params[:mode] || @mode))
+			link_to(params[:title], tag_url(item, :kind => kind, :service => params[:service], :mode => params[:mode] || @mode))
 		end
 	end
 	
 	def link_to_list(list, options = {})
 		title = options[:title] || list.label
 		title = title.singularize if options[:item_size] && options[:item_size] <= 1
-		link_to title.capitalize, listing_url(:kind => "#{list.uri_name}", 
-							
+		link_to title.capitalize, listing_url(list.uri_name, 
+																					:user => options[:user] || @user.login,
 																					:mode => options[:mode] || @mode, 
 																					:page => options[:page] || @page, 
-																					:order => options[:order] || @order, 
-																					:service => options[:service] || @service
+																					:order => options[:order] || @order
+																					
 																), :class => "link_to_list"
 	end
 	
@@ -73,6 +73,14 @@ module ListsHelper
 	
 	def render_item_box(item, params = {})
 		params[:item] = item
+		params[:item_classes] = ""
+		if @service == "you" || @service == "everyone"
+			
+			params[:item_classes] <<  (item.personal.to_i == 1 ? 'personal' : '') rescue 'personal'
+			params[:item_classes] <<  (item.public ? ' public' : ' private')
+		end
+
+		
 		render :partial => "/lists/item_box", :locals => params
 	end
 	
@@ -91,23 +99,20 @@ module ListsHelper
 	end
 	
 	def perspectives(params = {})
+		return if @list.nil?
 		kind = @list.kind rescue params[:source].kind
-		
-		if params[:source].is_a?(Tag)
-			perspectives = [
-				["you",	tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "you"), "you"], 
-				["all contributors",	tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "everyone"), "everyone"],
-				["Google",tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "google"), "google"],
-				["Amazon", tag_url(params[:source], :kind => kind, :mode => @mode,  :service => "amazon"), "amazon"],
-				["Youtube", tag_url(params[:source], :kind => kind,:mode => @mode,   :service => "youtube"), "youtube"]
-			]
-		else
-			perspectives = [
-				["you", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode,  :order => @order || nil, :page => 1, :service => "you"), "you"],
-				["everyone", listing_url(:list => @list.label, :tag => @list.tag, :mode => @mode,  :order => @order || nil, :page => 1, :service => "everyone"), "everyone"],
-			]
-		end
-		render :partial => "/taggings/perspectives", :locals => {:perspectives => perspectives, :source => params[:source]}
+		users = [current_user, User.find(:all, :conditions => ["login in (?) ", ["nuniverse","google","amazon","youtube"]])].flatten
+    links = []
+		users.each do |user|
+     	if @source.is_a?(List)
+        url = listing_url(:kind => @list.label, :tag => @list.tag, :mode => @mode, :order => @order || nil, :page => 1, :user => user.login)
+      else
+				url = tag_url(params[:source], :kind => kind, :mode => @mode, :user => user.login)
+      end
+			links << link_to(thumbnail_tag(user.tag, :kind => 'user'),url, :class => "#{@user == user.login ? "current" : ""}")
+    end
+		 
+		render :partial => "/nuniverse/perspectives", :locals => {:links => links}
 	end
 	
 	def lists_for(source, options = {})
@@ -119,10 +124,12 @@ module ListsHelper
 	def boxes_for(items, params = {})
 		params[:source] ||= @source
 		params[:kind] ||= params[:source].kind
+		
 		boxes = []
 		items.each_with_index do |item, i|
 			case @mode 
 			when "card"
+
 				boxes << render_item_box(item, params)
 			when "image"
 				boxes << "#{render :partial => "/images/box", :locals => {:item => item, :source => params[:source]}}"

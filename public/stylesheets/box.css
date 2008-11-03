@@ -558,3 +558,11 @@ h2 span.size {
 	color:#FFF;
 }
 
+
+#perspective_box {
+	display:none;
+}
+
+#perspective_box.expanded {
+	display:block;
+}
