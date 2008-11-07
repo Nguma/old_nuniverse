@@ -9,3 +9,5 @@
 # :development: 
   #:aws_key_id: 
   #:aws_associate_id:
+    
+  :yelp_api_id: "3hJ2kdHDjDaaS17YBzmOzw"

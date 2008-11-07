@@ -24,11 +24,9 @@ class TagsController < ApplicationController
 		@page = params[:page] || 1
 		@title = "#{@kind.capitalize}: #{@tag.label.capitalize}"
 		
-		@service = params[:service] || "everyone"
+		@service = @user.login
 		@order = params[:order] || "latest"
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
-
-		
 		
 		respond_to do |format|
 			format.html {}
@@ -137,18 +135,38 @@ class TagsController < ApplicationController
 			:service =>params[:service],
 			:data => params[:data],
 			:description => params[:description] ) if @object.nil?
-		
-		params[:kind].split('#').each do |k|	
-			Tagging.create(
-				:object => @object,
-				:subject => @tag,
-				:owner => current_user,
-				:kind => k)
-		end
+			
+
+				params[:kind].split('#').each do |k|	
+					Tagging.create(
+						:object => @object,
+						:subject => @tag,
+						:owner => current_user,
+						:kind => k)
+				end
+				
+
+				begin
+					if params[:kind] == 'bookmark'  && @object.url.match('en.wikipedia.org/wiki/')
+							t = @object.url.gsub(/.*\/wiki/,'/wiki')
+
+							@tag.replace_property('wikipedia_url',t)
+							wiki_content = Nuniverse.get_content_from_wikipedia(t)
+							@tag.description = Nuniverse.wikipedia_description(wiki_content) if @tag.description.nil?
+
+							img = (wiki_content/'table.infobox'/:img).first
+							unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/) && @tag.images.empty?)
+								@image = @tag.add_image(:source_url => img.attributes['src'])
+							end
+							@tag.save
+					end
+				rescue
+				end
+			
 			
 		respond_to do |format|
 			format.html {redirect_back_or_default @tag, :service => params[:service] || nil	}
-			format.js { head :ok}
+			format.js { render :layout => false}
 		end
 		
 		

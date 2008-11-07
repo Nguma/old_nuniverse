@@ -1,0 +1,8 @@
+<% if @image %>
+<script type="javascript">
+  //<![CDATA[
+    $('image_box').set('html','<%= avatar_for(@tag) %>');
+    $('description_box').set('html','<%= @tag.description.gsub(/\n/,'')%>')
+  //]]> 
+  </script>
+<% end -%>

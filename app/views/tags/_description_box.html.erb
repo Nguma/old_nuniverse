@@ -1,4 +1,6 @@
 <div class="box" id="description_box">
   <%= @source.description %>
- 
+  <div class="actions">
+    <%= command(:label => "Add/Edit the description", :command => "Edit description")%>
+  </div>
 </div>

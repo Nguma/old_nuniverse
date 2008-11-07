@@ -1,0 +1,46 @@
+<% comments = source.connections(:kind => "comment") -%>
+<div class="box list" id="comments">
+  
+  <h2>
+    <span class="size" style="color:#ccc"><%= comments.total_entries %></span>
+    Comments
+    <%= expander_icon %>
+    <% if comments.total_entries >= 1 -%>
+      <span class="unique_item">
+        "<%= link_to_item(comments.first, :source => source)%>" 
+        <span style="color:#999;font-size:16px">
+          - <%= comments.first.owner.login.capitalize %>
+        </span>
+      </span>
+      
+    <% end -%>
+    
+   
+  </h2>
+  <%= spinner %>
+  <div class="content">
+    <% if comments.empty? -%>
+      <h3>No Comments have been made yet.</h3>
+      <%= command(:label => "+ Add a comment now", :command => "Add to comments") %>
+    <% else -%>
+      <%= will_paginate comments %>
+      <div class="items" >
+      
+        <% comments.each do |comment| -%>
+          <div class="item <%= comment.kinds.last %>_kind">
+            <%= image_tag("/images/icons/#{comment.kinds.last}.png", :class => "icon") %>
+            <p><%= comment.owner.login.capitalize %>, <%= comment.created_at.strftime("%B %d at %H:%m") %></p>
+            <h3>"<%= comment.label.capitalize %>"</h3>
+          </div>
+        <% end -%>
+      </div>
+    <% end -%>
+  </div>
+   <%= render :partial => "/lists/list_options", :locals => {:list => source}%>
+  <div class="actions">
+    <%= link_to("Options", "#", :class => "expand_options" )%> 
+    <%= command(:label => "+ Add", :command => "Add to comments") %>
+    <%#= command(:label => "+ Add a pro", :command => "Add to pros") %>
+    <%#= command(:label => "+ Add a con", :command => "Add to cons") %>
+  </div>
+</div>

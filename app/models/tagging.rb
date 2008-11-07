@@ -136,6 +136,7 @@ class Tagging < ActiveRecord::Base
 	def self.select(params = {})
 	
 		params[:users] ||= []
+		params[:current_user] ||= params[:users].first
 		params[:tags] ||= []
 		params[:subject] ||= nil
 		order = Tagging.order(params[:order])
@@ -146,23 +147,32 @@ class Tagging < ActiveRecord::Base
 		# Pluralized and singularized versions of each tag is passed as a regexp match.
 		# Same is done with title if exists.
 		having_clauses = []
+		query = Regexp.escape(params[:tags].join(' '))
+		# 
+		# sql = "SELECT DISTINCT T.*, CONCAT('##',GROUP_CONCAT(DISTINCT S.label, ' ', T.kind, '##', T.kind SEPARATOR '##'),'##') AS GC , (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:current_user].id}') AS personal "
+		# sql << "	FROM taggings T LEFT OUTER JOIN tags S on S.id = T.subject_id "
+		# sql << " LEFT OUTER JOIN tags on (object_id = tags.id) " 
+		# sql << " WHERE (T.user_id IN (#{user_ids}) "
+		# sql << " OR T.public = 1 " if params[:perspective] == 'everyone'
+		# sql << ")"
+		# sql << " AND CONCAT(S.label,' ',T.kind) rlike (\"(#{query})$\") " if params[:tags]
+		# sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
+		# sql << " AND tags.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
+		# sql << " GROUP BY object_id "
+		# sql << " HAVING (GC rlike \"###{query}##\") " if params[:tags].length > 1
+		# sql << " ORDER BY #{order} "
 		
-		# params[:tags].each_with_index do |tag, i|
-		# 		having_clauses << "(GC rlike '##(#{tag.pluralize}|#{tag.singularize})##')"
-		# 	end
-
-		sql = "SELECT DISTINCT T.*, CONCAT('##',GROUP_CONCAT(DISTINCT S.label, ' ', T.kind, '##', T.kind SEPARATOR '##'),'##') AS GC , (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:users].first.id}') AS personal "
-		sql << "	FROM taggings T LEFT OUTER JOIN tags S on S.id = T.subject_id "
-		sql << " LEFT OUTER JOIN tags on (object_id = tags.id) " 
-		sql << " WHERE (T.user_id IN (#{user_ids}) "
-		sql << " OR T.public = 1 " if params[:perspective] == 'everyone'
-		sql << ")"
-		sql << " AND CONCAT(S.label,' ',T.kind) rlike (\"(#{Regexp.escape(params[:tags].join(' '))})$\") " if params[:tags]
-		sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << " AND tags.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
+		
+		sql = "SELECT DISTINCT TA.*, (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:current_user].id}') AS personal "
+		sql << " FROM taggings TA LEFT OUTER JOIN tags S on S.id = TA.subject_id "
+		sql << " LEFT OUTER JOIN tags O on O.id = TA.object_id "
+		sql << " WHERE (TA.user_id IN (#{user_ids}) "
+		sql << " OR TA.public = 1 " if params[:perspective] == 'everyone'
+		sql << " )"
+		sql << " AND '#{query}' rlike CONCAT('(',S.label,'|',S.kind,')?.*(',O.kind,'|',TA.kind,')$') " if params[:tags]
+		sql << " AND TA.subject_id = #{params[:subject].id} " if params[:subject]
+		sql << " AND O.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "
-		# sql << " HAVING (#{having_clauses.join(' * ')} = 1)" if params[:tags]
-		sql << " HAVING (GC rlike \"###{Regexp.escape(params[:tags].join(' '))}##\") " if params[:tags].length > 1
 		sql << " ORDER BY #{order} "
 
 		Tagging.paginate_by_sql( sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)
@@ -218,13 +228,13 @@ class Tagging < ActiveRecord::Base
 	def self.order(ord)
 		case ord
 		when "by_name"
-			return "tags.label ASC"
+			return "O.label ASC"
 		when "by_vote"
 			return "votes DESC"
 		when "by_related_date"
-			return "tags.related_date DESC"
+			return "O.related_date DESC"
 		else
-			return "T.created_at DESC"
+			return "created_at DESC"
 		end
 		
 	end

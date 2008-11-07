@@ -19,7 +19,9 @@
 
   <% content_for :nav do -%>
     <%= add_new_button(@list) %>
-    <%= command_box("Search", "search") %>
+    <%= command_box("Filter", "filter") %>
+    <%= command_box("Search nuniverse", "search") %>
+    
     <div class="command_box">
        <%= image_tag("/images/icons/email_to.png")%>
        <%= command(:label => "Email this list", :command => "email #{@list.label} to")%>

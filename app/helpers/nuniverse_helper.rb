@@ -48,7 +48,7 @@ module NuniverseHelper
 	def command(params)
 		params[:command]  ||= "Add to #{params[:kind]}"
 		params[:description] ||= params[:label]
-		link_to(params[:label],params[:command],:class => 'command', :title => params[:description])
+		link_to(params[:label],params[:command],:class => "command", :title => params[:description])
 	end
 	
 	def content_for_item(item, params = {})
@@ -127,11 +127,12 @@ module NuniverseHelper
 	
 	# Service_is_nuniverse?
 	# Returns true if selecte dservice / perspective is prioritary to nuniverse.
-	def service_is_nuniverse?
-		return true if @service.nil?
-		return true if @service == "you"
-		return true if @service == "everyone"
-		return false
+	def service_is_nuniverse?(params = {})
+		if params[:service]
+			@user = User.find(:first, :conditions => ['login = ?', params[:service]] )
+		end
+		return false if !@user.nil? && @user.role == "service"
+		return true
 	end
 	
 	def title(params ={})

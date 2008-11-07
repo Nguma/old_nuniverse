@@ -115,11 +115,7 @@ class Tag < ActiveRecord::Base
 		self.data = "#{new_data}##{property} #{value}"
 	end
 	
-	def update_data(gums)		
-		gums.each do |prop|
-			replace(prop[0],prop[1])
-		end
-	end
+
 	
 	def weather
 		return nil unless has_coordinates?
@@ -165,7 +161,7 @@ class Tag < ActiveRecord::Base
 	def find_similars
 		Tag.with_label_like(self.label).paginate(:page => 1, :per_page => 8)
 	end
-	
+
 
 	def update_data(new_data)
 		new_data.scan(/\s*#([\w_]+)[\s]+([^#|\[|\]]+)*/).each do |gum|
@@ -231,14 +227,22 @@ class Tag < ActiveRecord::Base
 		image.tag_id = self.id
     image.save!
 	end
+	
+	def tag_with(tags, params = {})
+		tags.each do |t|
+			Tagging.create!(:subject_id => params[:context] || 0, :object => self, :kind => t, :public => params[:public] || 1)
+		end
+	end
   
-def update_with(params)
-	self.kind = params[:kind] if params[:kind]
-	self.replace_property('address', params[:address].to_s) if params[:address]
-	self.replace_property("tel", params[:tel]) if params[:tel]		
-	self.replace_property("latlng", params[:latlng]) if params[:latlng]
-	self.url = params[:url] if params[:url]
-	self.description = params[:description] if params[:description]
-	self.save
-end
+	def update_with(params)
+		self.kind = params[:kind] if params[:kind]
+		self.replace_property('address', params[:address].to_s) if params[:address]
+		self.replace_property("tel", params[:tel]) if params[:tel]		
+		self.replace_property("latlng", params[:latlng]) if params[:latlng]
+		self.url = params[:url] if params[:url]
+		self.description = params[:description] if params[:description]
+		self.save
+	end
+	
+
 end

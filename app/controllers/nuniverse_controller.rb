@@ -1,5 +1,7 @@
 class NuniverseController < ApplicationController
 	
+	before_filter :find_user, :only => [:suggest, :show, :command]
+	
 	def index
 		redirect_to "/my_nuniverse" if logged_in?
 	end
@@ -31,7 +33,6 @@ class NuniverseController < ApplicationController
 	
 	def suggest
 		@save_command = "add to #{params[:context] || ""}".gsub(' ', '_')
-
 		@input = params[:input]
 		if params[:command].downcase == "find address"
 			@source = Tag.find(params[:tag_id])

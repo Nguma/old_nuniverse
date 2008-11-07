@@ -1,0 +1,11 @@
+<div class="box card" style="overflow:hidden">
+  <%= thumbnail_tag(item.object)%>
+  <h3><%= link_to_item(item, :kind => source.kind) %></h3>
+  <%= render :partial => "/lists/item_options", :locals => {:item => item}%>
+  
+  <p style="font-size:12px;color:#666;display:block">
+    <%= item.info(:kind => source.label, :info => @info) %>
+    <%#= raise item.info(:kind => source.label, :info => @info).inspect %>
+  </p>
+  <div class="delimiter">&nbsp;</div>
+</div>

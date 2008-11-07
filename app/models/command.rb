@@ -19,8 +19,10 @@ class Command
 		
 		if @argument && !@argument.blank?
 			
-			@kind = @argument.split(' ').last
+		
 			@list = List.new(:creator => current_user, :label => @argument.split('#').last, :tag_id => params[:tag_id] || nil)
+			@kind = @list.kind
+
 		end
 		
 	end
@@ -33,7 +35,7 @@ class Command
 			@argument = "list"
 			@service = nil
 			return m
-		elsif  m = action.match(/^(add|create|new)\s?((a|to)\s)?(.*)/)
+		elsif  m = action.match(/^(add|create|new|edit)\s?((a|to)\s)?(.*)/)
 			@action = "add"
 			@argument = Nuniverse::Kind.match(m[4]).last || "category"
 			
@@ -58,7 +60,7 @@ class Command
 			@argument = m[1]
 			@service = nil
 			return m
-		elsif m = action.match(/^(email|edit|invite)\s?(a\s|to\s|on\s|in\s|at\s|for\s)?(new\s)?(.*)?/)
+		elsif m = action.match(/^(email|invite)\s?(a\s|to\s|on\s|in\s|at\s|for\s)?(new\s)?(.*)?/)
 			@action = m[1]
 			@argument = m[3]
 			@service = nil
@@ -110,10 +112,11 @@ class Command
 			# Returned tagging not forcefully the one owned by the current_user. 
 			# Have to requery it if not the current user's 
 			# raise Tagging.find(:first, :conditions => ['user_id = ? AND object_id = ?'])
+
 			t = (@tagging.user_id == @current_user.id) ? @tagging : Tagging.find(:first, 
-					:conditions => ['user_id = ? AND kind = ?  AND object_id = ? ',	@current_user,@tagging.kind,@tagging.object_id])
+					:conditions => ['user_id = ? AND kind = ?  AND object_id = ? ',	@current_user.id,@tagging.kind,@tagging.object_id])
 			t.user_id = 0
-			return t.save
+			return t.save rescue t.destroy
 		end
 		
 	end
@@ -188,15 +191,19 @@ class Command
 											:kind => k,
 											:public => is_public
 										)
-						if @origin			
-							Tagging.find_or_create( 
-												:user => @current_user, 
-												:subject_id =>  tag.id, 
-											 	:object_id => @origin.id, 
-												:kind => @origin.kind.split('#').last,
-												:public => is_public
-											)
+						
+
+						if @origin && @origin != current_user.tag
+							
+								Tagging.find_or_create( 
+													:user => @current_user, 
+													:subject_id =>  tag.id, 
+												 	:object_id => @origin.id, 
+													:kind => @origin.kind.split('#').last,
+													:public => is_public
+												)
 						end
+						
 					
 				end
 				

@@ -81,7 +81,7 @@ module Nuniverse
 				'bike' => ['vehicle','bike'],
 				'plane' => ['vehicle','plane'],
 				'menu' => ['dish'],
-				'recipe' => ['step'],
+				'recipe' => ['recipe'],
 				'todo' => ['to do'],
 				'tel' => ['telephone']
 			}
@@ -89,6 +89,9 @@ module Nuniverse
 		
 		def self.match(kind_str)
 			return if kind_str.nil?
+			# if k = kind_str.match(/^(.*)\s(that)?(is|are)?\s(around|((next|close) to)|over|by|of|in|at|i)\s(.*)/)
+			# 			k = k[1]
+			# 		elsif k = kind_str.match(/^(.*)\s(around|((next|close) to)|over|by|of|in|at)\s(.*)/)
 			kind_str.strip.downcase.collect {|k| self.list[k.singularize] || k.singularize }.flatten
 		end
 		
@@ -243,7 +246,7 @@ module Nuniverse
 		raise str.inspect
 	end
 	
-	def self.get_description_from_wikipedia(url)
+	def self.get_content_from_wikipedia(url)
 			items_to_remove = [
 			  "#contentSub",        #redirection notice
 			  "div.messagebox",     #cleanup data
@@ -281,6 +284,26 @@ module Nuniverse
 		
 			return @article
 			return "#{(@article/:p)[0..1]}"
+	end
+	
+	def self.wikipedia_description(wiki_content)
+		dc = (wiki_content/:p).first
+		(dc/:sup).remove
+		(dc/:span).remove
+		(dc/:br).remove
+		(dc/:p).each do |a|
+			a.swap(a.inner_html)
+		end
+		(dc/:a).each do |a|
+			a.swap(a.inner_html)
+		end
+		(dc/:b).each do |a|
+			a.swap(a.inner_html)
+		end
+		(dc/:i).each do |a|
+			a.swap(a.inner_html)
+		end
+		dc.to_s
 	end
 		
 	

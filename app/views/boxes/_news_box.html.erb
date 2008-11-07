@@ -1,0 +1,12 @@
+<div class="box" id="news_box">
+  <h2>News</h2>
+  
+  <div class="content">
+     <% Googleizer::Request.new(@source.label, :mode => "news").response.results.each do |news| -%>
+      <div class="item">
+        <h3><%= link_to news.label, news.url %></h3>
+        <p><%= news.description %></p>
+      </div>
+      <% end -%>
+  </div>
+</div>

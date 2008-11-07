@@ -32,13 +32,15 @@ class List < ActiveRecord::Base
 	# per_page: number of results per page
 	def items(params = {})
 		# tags =  Nuniverse::Kind.find_tags(self.label.downcase)
-		tags = self.tag ? [self.tag.label.downcase, self.label.downcase.singularize] : [self.label.downcase.singularize] 
+		tags = self.tag ? [self.tag.label.downcase, self.kind.downcase.singularize] : [self.label.downcase.singularize] 
+		# tags << self.lookup.split(',')
 		users = params[:perspective] == "you" ? [self.creator] : [grantors, self.creator].flatten 
 		subject = (self.tag && self.tag.kind != 'user') ? self.tag : nil
 
 		Tagging.select(
 			:users => [self.creator], 
-			:tags => tags, 
+			:current_user => params[:current_user] || nil,
+			:tags => tags.flatten, 
 			:order => params[:order], 
 			:title => self.label,
 			:label => params[:label] || nil,
@@ -71,7 +73,11 @@ class List < ActiveRecord::Base
 	end
 	
 	def kind
-		self.label.split(' ').last.downcase.singularize
+		if k = self.label.match(/^(.*)\s(((wh|th)(ere|o|at|ich|ose))|(near|next\sto|close\sto|by|of|at|in|from|around))/)
+			k[1].scan(/\w+/).last.singularize.downcase
+		else
+			self.label.scan(/\w+/).last.singularize.downcase
+		end 
 	end
 	
 	def context

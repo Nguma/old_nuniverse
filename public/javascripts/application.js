@@ -42,13 +42,20 @@ function reset()
   });
 
 
- $$('.perspective_link').each(function(lnk) {
+ $$('a#perspective_link').each(function(lnk) {
    lnk.addEvent('click',function(ev){
      ev.preventDefault();
-     $('perspective_box').toggleClass('expanded');
+     $('perspectives').toggleClass('expanded');
    });
  });
   
+ $$('a.perspective').each(function(lnk){
+   lnk.addEvents({
+     'mouseover':function(ev) { $('perspective_link').set('text',lnk.getProperty('title'));},
+     'mouseout':function(ev) {$('perspective_link').set('text', $('perspectives').getElement('.current').getProperty('title'))}
+   });
+ });
+ 
   if($defined($('control_panel'))) {
     $('control_panel').getElements('.command').each(function(command) {
        command.addEvents({

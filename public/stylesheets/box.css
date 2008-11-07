@@ -559,10 +559,11 @@ h2 span.size {
 }
 
 
-#perspective_box {
+#perspectives {
 	display:none;
 }
 
-#perspective_box.expanded {
+#perspectives.expanded {
 	display:block;
+	height:auto;
 }

@@ -1,0 +1,11 @@
+<div class="x" id="lego_box">
+  <h2>Create a new Category</h2>
+  <h5>Drag and drop any item from that list to the left to create a new category</h5>
+  <% cats = ['Address','Bookmarks','Comments','Companies','Description', 'Images','items','News','People','Videos']%>
+  <div id="possible_categories">
+    <% cats.each do |cat| -%>
+      <%= drop_command(:category => cat, :tagging => @tagging)%>
+    <% end -%>
+    <%= link_to("<span class='pls'>+</span> Create your own", "/command/add/?tagging=#{@tagging.id}", :class => 'custom') %>
+  </div>
+</div>

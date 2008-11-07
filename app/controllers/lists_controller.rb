@@ -19,7 +19,6 @@ class ListsController < ApplicationController
   # GET /lists/1
   # GET /lists/1.xml
   def show
-		
   	if params[:id] 
    		@list = List.find(params[:id]) 
    	else
@@ -36,7 +35,7 @@ class ListsController < ApplicationController
 			
 			@source = @list
 			@kind = @list.kind
-			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @service)  
+			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @service, :current_user => current_user)  
 	
 			respond_to do |format|
 				format.html {}
@@ -97,7 +96,7 @@ class ListsController < ApplicationController
   # DELETE /lists/1
   # DELETE /lists/1.xml
   def destroy
-    @list = List.find(params[:id])
+    @list = List.find(:params[:id])
 		restrict_to(@list.creator)
     @list.destroy
 

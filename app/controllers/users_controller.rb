@@ -87,12 +87,16 @@ class UsersController < ApplicationController
 	def show
 		if @user && current_user != @user
 			redirect_to @user.tag 
+			
+		else
+			@service = nil
+			
 		end
 		@user = current_user
 		@mode = params[:mode] || 'card'
 		@tag = current_user.tag
 		@path = TaggingPath.new
-		@service = params[:service] ||= "you"
+		
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
 		@title = "#{current_user.login}'s nuniverse"

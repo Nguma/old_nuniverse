@@ -1,0 +1,33 @@
+<div class="box list <%= expanded ? "expanded" : "" %>" id="image_box" >
+  <% if source.images.empty? %>
+    <div style="padding:5px">
+      <h4>This item doesn't have any image yet.</h4>
+      <%= command(:label => "+ Add one now", :command => "Add image")%>
+    </div>
+  <% else -%>
+    <%= avatar_for(@source) %>
+    <div class="content">
+       <% source.images.each do |image| -%>
+         <%= image_tag(image.public_filename(), :class => "avatar") %>
+       <% end -%>
+
+     </div>
+     <dl class="options">
+        <dt>Images options</dt>
+
+        <dd class="actions">
+          <%= link_to("Remove first image", "/images/#{source.images.first.id}", :method => :delete)%>
+          <%= link_to("< Back to the list", "#", :class => "collapse_options")%>
+        </dd>
+      </dl>
+     <div class="actions">
+       <%= link_to("Options", "#", :class => "expand_options" )%> 
+       <%= command(:label => "+ Add", :command => "New image")%>
+      </div>
+  <% end -%>
+  
+
+ 
+
+</div>
+

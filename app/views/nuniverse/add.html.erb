@@ -18,8 +18,10 @@
 <% when 'list' -%>
   <script type="javascript">
   //<![CDATA[
+    var pl = $('content').getElements('.column .box').length % $('content').getElements('.column').length
     var el = new Element('div');
-    el.set('html',<%= list(:source => @result) %>);
+    
+    el.set('html','<%= list(:source => @result).gsub(/>\s+</,'><') %>');
     $('content').adopt(el);
     inputBox.addAnotherPrompt();
   //]]> 
@@ -28,8 +30,6 @@
 <% when 'tag' -%>
   <script type="javascript">
   //<![CDATA[
- 
-   
       inputBox.addAnotherPrompt();
   //]]> 
   </script>
@@ -37,12 +37,10 @@
   <% if @context_type == "List" -%>
     <script type="javascript">
     //<![CDATA[
-     
       var pl = $('content').getElements('.column .box').length % $('content').getElements('.column').length
       var el = new Element('div');
       el.set('html','<%= render_item_box(@result).gsub(/\n/,'') %>');
       $('column_'+pl).adopt(el);
-      
       inputBox.addAnotherPrompt();
     //]]> 
     </script>

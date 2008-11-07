@@ -26,6 +26,7 @@ var Input = new Class({
           'droppables':$('content'),
           'clone':true,
           'onDrop':function(el, droppable) {
+           
             var call = new Request.HTML({
               'url':el.getElement('.save').getProperty('href'),
               'onSuccess':function(a,b,c,d) {
@@ -199,12 +200,17 @@ var Input = new Class({
     }
     this.getFileFieldArea().addClass('hidden');
     switch(this.getCommandAction()) {
+      case "create":
+        if(this.getInputValue().split(' ').length > 1) {
+          this.setLabel("DId you mean?")
+        }
       case "add":
       case "new":
+
         if(this.getCommandArgument() == "image") {
           this.getFileFieldArea().removeClass('hidden');
         }
-        if(this.isInUse()){
+        if(this.isInUse()) {
           this.getSuggestions();
         }
         break;
@@ -256,21 +262,18 @@ var Input = new Class({
     } else {
       
       var call = new Request.HTML({
-               url:url,
-               // 'update':$('content'),
+         url:url,
+         // 'update':$('content'),
 
-               onSuccess:function(a,b,c,d) {
-                  
-                   obj.fireEvent('success');
-               },
-               'headers':{'enctype':'multipart/form-data'},
-               'evalScripts':true,
-               'evalResponse':true
-
-               },this).post(this.el.getElement('form'));
+         onSuccess:function(a,b,c,d) {
+            
+             obj.fireEvent('success');
+         },
+         'headers':{'enctype':'multipart/form-data'},
+         'evalScripts':true,
+         'evalResponse':true
+         },this).post(this.el.getElement('form'));
     }
-    
-   
   },
   
   suggest:function(url) {

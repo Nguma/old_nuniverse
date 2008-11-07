@@ -41,6 +41,7 @@ module ListsHelper
 	def link_to_list(list, options = {})
 		title = options[:title] || list.label
 		title = title.singularize if options[:item_size] && options[:item_size] <= 1
+		
 		link_to title.capitalize, listing_url(list.uri_name, 
 																					:user => options[:user] || @user.login,
 																					:mode => options[:mode] || @mode, 
@@ -55,12 +56,13 @@ module ListsHelper
 		params[:source] ||= @source
 		params[:kind] ||= params[:source].label.singularize.downcase
 		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
-		params[:items] ||= params[:source].items(:perspective => @service) 
+		params[:subject] ||= params[:source].tag
+		params[:items] ||= connections(:perspective => @service, :source => params[:source], :kind => params[:kind], :subject => params[:subject]) 
 		params[:command] ||= params[:kind] 
 		params[:order] ||= "latest"
 		params[:dom_id] ||= params[:title].pluralize
 		params[:ord] = cycle('even','odd')
-		render :partial => "/taggings/#{params[:kind]}_box", :locals => params rescue render :partial => "/taggings/list_box", :locals => params
+		render :partial => "/boxes/#{params[:kind]}_box", :locals => params rescue render :partial => "/boxes/list_box", :locals => params
 		#render :partial => "/taggings/#{params[:kind]}_box", :locals => params
 	end
 	
@@ -74,7 +76,8 @@ module ListsHelper
 	def render_item_box(item, params = {})
 		params[:item] = item
 		params[:item_classes] = ""
-		if @service == "you" || @service == "everyone"
+	
+		if @service == current_user.login || @service == "everyone"
 			
 			params[:item_classes] <<  (item.personal.to_i == 1 ? 'personal' : '') rescue 'personal'
 			params[:item_classes] <<  (item.public ? ' public' : ' private')
@@ -101,15 +104,15 @@ module ListsHelper
 	def perspectives(params = {})
 		return if @list.nil?
 		kind = @list.kind rescue params[:source].kind
-		users = [current_user, User.find(:all, :conditions => ["login in (?) ", ["nuniverse","google","amazon","youtube"]])].flatten
+		users = [current_user, User.find(:all, :conditions => ["login in (?) ", ["everyone","nuniverse","google","amazon","youtube"]])].flatten
     links = []
 		users.each do |user|
      	if @source.is_a?(List)
         url = listing_url(:kind => @list.label, :tag => @list.tag, :mode => @mode, :order => @order || nil, :page => 1, :user => user.login)
       else
-				url = tag_url(params[:source], :kind => kind, :mode => @mode, :user => user.login)
+				url = tag_url(@source, :kind => kind, :mode => @mode, :user => user.login)
       end
-			links << link_to(thumbnail_tag(user.tag, :kind => 'user'),url, :class => "#{@user == user.login ? "current" : ""}")
+			links << link_to(thumbnail_tag(user.tag, :kind => 'user'),url, :class => "perspective #{@user == user ? "current" : ""}", :title => "#{user == current_user ? "You" : user.login.capitalize}")
     end
 		 
 		render :partial => "/nuniverse/perspectives", :locals => {:links => links}
@@ -156,7 +159,7 @@ module ListsHelper
 		params[:source] ||= @source
 		params[:source] = params[:source].is_a?(Tagging) ? params[:source].object : params[:source]
 		params[:expanded] ||= false
-		render :partial => "/taggings/image_box", :locals => params
+		render :partial => "/boxes/image_box", :locals => params
 	end
 	
 	def account_box
@@ -181,12 +184,17 @@ module ListsHelper
 		str		
 	end
 	
+	def reviews_box(params = {})
+
+		render :partial => "/boxes/reviews", :locals => {:reviews => reviews}
+	end
+	
 	def address_box
-		render :partial => "/taggings/address_box"
+		render :partial => "/boxes/address_box"
 	end
 	
 	def new_item_box
-		render :partial => "/taggings/new_item"
+		render :partial => "/boxes/new_item"
 	end
 	
 	def add_new_button(list)
@@ -221,7 +229,7 @@ module ListsHelper
 	end
 	
 	def content_size(size)
-		"<span class='size'>#{size}</span>"
+		'<span class="size">#{size}</span>'
 	end
 	
 	def options_for_kind(list)
@@ -248,4 +256,6 @@ module ListsHelper
 		params[:items] ||= @source.items
 		render :partial => "/lists/options", :locals => params
 	end
+	
+
 end

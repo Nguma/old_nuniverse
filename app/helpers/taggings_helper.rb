@@ -42,12 +42,27 @@ module TaggingsHelper
 	end
 	
 	def connections(params = {})
-		Tagging.select(
-			:users => params[:users] || [current_user],
-			:tags => [params[:kind]] || [@kind],
-			:subject => params[:subject] || @source,
-			:order => params[:order] || @order
-		)
+		params[:service] ||= @service
+		
+		
+		if service_is_nuniverse?(:service => params[:service])
+			tags = [params[:kind]] || [@kind]
+			params[:source] ||= @source
+			Tagging.select(
+				:current_user => current_user || nil,
+				:users => params[:users] || [current_user],
+				:tags => tags.flatten,
+				:subject => params[:subject] || nil,
+				:order => params[:order] || params[:order],
+				:page => params[:page], 
+				:per_page => params[:per_page],
+				:perspective => params[:perspective],
+				:title => params[:source].label,
+				:label => params[:label] || nil
+			)
+		else
+			service_items(:service => params[:service])
+		end
 	end
 
 end

@@ -54,6 +54,23 @@ module Finder
 
 	class Ebay
 	end
+	
+	class Yelp
+		def initialize(params)
+			@location = params[:tag]
+			@request_url = "http://api.yelp.com/business_review_search?ywsid=3hJ2kdHDjDaaS17YBzmOzw&term=#{@location.label}&category=#{@location.kind.pluralize}"
+			@request_url << "&lat=#{@location.coordinates[0]}&long=#{@location.coordinates[1]}&num_biz_requested=1"
+			
+		end
+		
+		def results
+			@response = Net::HTTP.get_response(URI.parse(@request_url))
+			@business = JSON.parse(@response.body)['businesses'][0]
+			@reviews = @business['reviews']
+			@reviews['total_entries'] = @business['review_count']
+			@reviews
+		end
+	end
 
 	class Daylife
 		def initialize(params)
