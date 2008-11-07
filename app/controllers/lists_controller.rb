@@ -30,12 +30,14 @@ class ListsController < ApplicationController
 			@order = params[:order] || "by_name"
 			@title = @list.title
 			@info = params[:info] || nil
-			@service = params[:user]
-
 			
+			@group = Tag.find(:first, :conditions => ['label = ? AND kind in ("group","user","service")', params[:user]])
+			
+			@service = params[:user]
 			@source = @list
 			@kind = @list.kind
-			@items = @list.items(:page => @page, :per_page => 11, :order => @order, :perspective => @service, :current_user => current_user)  
+			
+			@items = @list.items(:group => @group, :page => @page, :per_page => 11, :order => @order, :perspective => @service, :current_user => current_user)  
 	
 			respond_to do |format|
 				format.html {}

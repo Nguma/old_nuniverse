@@ -7,11 +7,11 @@ module ListsHelper
 		case params[:source].class.to_s
 		when 'List'
 			if !@list.context.blank?
-				breadcrumbs << link_to("< #{@list.context.capitalize}", tag_url(params[:source].tag, :kind => params[:source].context)) 
-				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login)) 
+				breadcrumbs << link_to("< #{@list.context.capitalize}", tag_url(params[:source].tag, :kind => params[:source].context), :mode => @mode) 
+				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login, :mode => @mode)) 
 			end
 		when 'Tag'
-			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title, :user => @user.login)) unless @list.context.blank?
+			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title, :user => @user.login, :mode => @mode)) unless @list.context.blank?
 			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login)) 
 		else
 			
@@ -208,9 +208,9 @@ module ListsHelper
 	
 	def contributors_box(params = {})
 		params[:source] ||= current_user
-		permissions = params[:source].permissions(:page => @page, :per_page => 10)
+		# permissions = params[:source].permissions(:page => @page, :per_page => 10)
 		
-		render :partial => "/nuniverse/contributors", :locals => {:source => params[:source], :permissions => permissions}
+		# render :partial => "/nuniverse/contributors", :locals => {:source => params[:source], :permissions => permissions}
 	end
 	
 	def map_box(source, params = {})

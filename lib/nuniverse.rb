@@ -143,6 +143,14 @@ module Nuniverse
 				'item' => 'price'
 			}
 		end
+		
+		def self.format
+				if k = self.label.match(/^(.*)\s(((wh|th)(ere|o|at|ich|ose))|(near|next\sto|close\sto|by|of|at|in|from|around))/)
+					k[1].scan(/\w+/).last.singularize.downcase
+				else
+					self.label.scan(/\w+/).last.singularize.downcase
+				end
+		end
 
 	end
 	

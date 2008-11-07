@@ -128,7 +128,7 @@ class Command
 	def set_privacy(tagging, level = nil)
 		p = level.nil? ? (@argument == 'public' ? 1 : 0) : level
 		tagging.public = p
-		return tagging.save
+		return tagging.save!
 	end
 	
 	

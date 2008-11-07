@@ -67,8 +67,6 @@ class ApplicationController < ActionController::Base
 			@user = current_user
 		else
 			@user = User.find_by_login(params[:user]) || current_user
-			
-			
 		end
 	end
 	

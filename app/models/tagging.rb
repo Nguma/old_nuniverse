@@ -140,6 +140,7 @@ class Tagging < ActiveRecord::Base
 		params[:tags] ||= []
 		params[:subject] ||= nil
 		order = Tagging.order(params[:order])
+	
 		user_ids = params[:users].collect {|u| u.id}.join(',')
 		
 		
@@ -166,10 +167,16 @@ class Tagging < ActiveRecord::Base
 		sql = "SELECT DISTINCT TA.*, (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:current_user].id}') AS personal "
 		sql << " FROM taggings TA LEFT OUTER JOIN tags S on S.id = TA.subject_id "
 		sql << " LEFT OUTER JOIN tags O on O.id = TA.object_id "
-		sql << " WHERE (TA.user_id IN (#{user_ids}) "
-		sql << " OR TA.public = 1 " if params[:perspective] == 'everyone'
-		sql << " )"
-		sql << " AND '#{query}' rlike CONCAT('(',S.label,'|',S.kind,')?.*(',O.kind,'|',TA.kind,')$') " if params[:tags]
+		
+		case params[:perspective]
+		when "you"
+			sql << " WHERE (TA.user_id = #{params[:current_user].id}) "
+		when "everyone"
+			sql << " WHERE (TA.user_id = (#{params[:current_user].id}) OR  public = 1 ) "
+		else
+			sql << " WHERE (TA.user_id IN (#{user_ids}) AND public = 1) "
+		end
+		sql << " AND '#{query}' rlike CONCAT('^(',S.label,'|',S.kind,')?\s?(',O.kind,'|',TA.kind,')$') " if params[:tags]
 		sql << " AND TA.subject_id = #{params[:subject].id} " if params[:subject]
 		sql << " AND O.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "

@@ -31,14 +31,19 @@ class List < ActiveRecord::Base
 	# page: page number
 	# per_page: number of results per page
 	def items(params = {})
-		# tags =  Nuniverse::Kind.find_tags(self.label.downcase)
 		tags = self.tag ? [self.tag.label.downcase, self.kind.downcase.singularize] : [self.label.downcase.singularize] 
-		# tags << self.lookup.split(',')
-		users = params[:perspective] == "you" ? [self.creator] : [grantors, self.creator].flatten 
+		
+		if params[:group] && params[:group].kind == "group"
+			users = Permission.find(:all, :conditions => ['group_id = ?', params[:group].id]).collect {|c| c.user_id }
+		
+		else
+			users = [self.creator]
+		end
+		
 		subject = (self.tag && self.tag.kind != 'user') ? self.tag : nil
 
 		Tagging.select(
-			:users => [self.creator], 
+			:users => users, 
 			:current_user => params[:current_user] || nil,
 			:tags => tags.flatten, 
 			:order => params[:order], 
@@ -48,7 +53,6 @@ class List < ActiveRecord::Base
 			:per_page => params[:per_page],
 			:perspective => params[:perspective]
 		)
-		# Tagging.with_users().labeled_like(params[:label] || nil).with_subject(self.tag).with_tags(tags).order_by(params[:order]).paginate(:page => params[:page], :per_page => params[:per_page])
 	end
 	
 	def permissions(params = {})
