@@ -1,3 +1,13 @@
-<div id="perspectives">
-  <%= links.to_s%>
+<div id="perspectives"  style="position:relative;height:auto;">
+   <div id='perspective_hat'>
+     
+    <%= link_to(" #{@perspective.tag == current_user.tag ? "you" : @perspective.tag.label}", "#", :title => @perspective.tag.label.capitalize, :style=>"margin-top:10px", :id => "perspective_selected") %> 
+    <%= link_to image_tag('/images/icons/down.png',:style => "height:20px;"), "/groups", :style => "padding-top:5px"%></div>
+    <div id="perspective_fav_list">
+      <% perspectives.each do |pers| -%>
+      
+        <%= link_to(thumbnail_tag(pers.tag, :kind => pers.tag.kind, :class=> "icon"), urize(:perspective => pers.tag.label), :class =>"pers", :title => pers.tag.label) %>
+      <% end -%>
+    </div>
+  <div class="delimiter">&nbsp;</div>
 </div>

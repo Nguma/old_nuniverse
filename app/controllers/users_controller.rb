@@ -86,27 +86,24 @@ class UsersController < ApplicationController
 	# GET /my_nuniverse
 	def show
 		if @user && current_user != @user
-			redirect_to @user.tag 
-			
+			redirect_to @user.tag 	
 		else
-			@service = nil
-			
+			@service = nil	
 		end
+
 		@user = current_user
 		@mode = params[:mode] || 'card'
 		@tag = current_user.tag
-		@path = TaggingPath.new
-		
+		@perspective = session[:perspective] || current_user.self_perspective
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
 		@title = "#{current_user.login}'s nuniverse"
 		@source = current_user
-		
+		@items = current_user.connections(:label => params[:input], :per_page => 15)
 		respond_to do |format|
 			format.html {}	
 			format.js { 
-				@items = List.new(:creator => current_user, :label => @kind).items(:page => params[:page])#current_user.connections(:kind => params[:kind], :order => params[:order], :page => params[:page])
-				render :controller => 'taggings', :action => :page, :layout => false
+				render :controller => 'user', :action => :page, :layout => false
 			}
 		end
 	end

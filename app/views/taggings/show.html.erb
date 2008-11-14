@@ -22,6 +22,7 @@
         <%= new_list_button %>
       <% end -%>
        <%= command_box("Search","search") %>
+       <%= input(:source => @source) unless @source.nil? %>
     <% end -%>
   
 <% end -%>

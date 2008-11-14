@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index]
-	before_filter :find_user, :only => [:show]
+	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show]
 	after_filter :update_session, :only => [:show]
   # GET /tags
   # GET /tags.xml
@@ -65,16 +65,8 @@ class TagsController < ApplicationController
   # POST /tags
   # POST /tags.xml
   def create
-		
-		@tagging = Tag.connect(
-			:label 	=> params[:label],
-			:kind			=> params[:kind],
-			:path			=> params[:path],
-			:restricted => params[:restricted] || 1,
-			:description => params[:description],
-			:user_id	=> current_user.id
-		)
-		
+		@tag = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
+
     respond_to do |format|
         flash[:notice] = 'Tags were successfully created.'
         format.html { redirect_back_or_default("/my_nuniverse") }
@@ -115,8 +107,22 @@ class TagsController < ApplicationController
   end
 
 	def suggest
-		@tags = Tag.with_label_like(params[:label]).with_kind_like(params[:kind]).paginate(
-			:per_page => 10,
+		@input = params[:input]
+		@nuniverse = params[:nuniverse]
+		@kind = params[:kind]
+		
+		if params[:kind].nil?
+			if @input.match(/(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/)
+				if @input.match(/.*\.(jpg|jpeg|gif|png)/)
+					@kind = "image"
+				else
+					@kind = "bookmark"
+				end
+			end
+		end
+		
+		@tags = Tag.with_label_like(@input).with_kind(@kind).paginate(
+			:per_page => 3,
 			:page => 1
 		)
 	end

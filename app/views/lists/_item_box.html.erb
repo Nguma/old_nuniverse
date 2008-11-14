@@ -1,6 +1,6 @@
 <div class="box <%= item_classes rescue "" %>" >
 
-  <%= render_item(item, :kind => kind, :item_classes => item_classes) %>
+  <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
   <div class="content">
     <div class="description">
       <%= h item.object.description[0..400] unless item.object.description.blank? %>
@@ -13,7 +13,7 @@
   <%= render :partial => "/lists/item_options", :locals => {:item => item} %>
   <div class="actions">
     <% personal = item.personal rescue item.public %>
-     <% if personal == '1' -%>
+     <% if personal.to_i == 1 -%>
 
        <%= link_to("Make #{item.public ? 'private' : 'public'}", command_with_id_url(:command => "make_#{item.public ? 'private' : 'public'}", :id => item.id)) %>
       <% else -%>

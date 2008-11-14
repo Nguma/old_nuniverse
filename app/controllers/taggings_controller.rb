@@ -35,54 +35,7 @@ class TaggingsController < ApplicationController
 	
 	def show
 
-		@list = List.new(:label => params[:list], :creator => current_user, :tag_id => params[:tag] || nil)
-		@selected = params[:selected].to_i || nil
-		@service = params[:service] || "everyone"
-		@page = params[:page] || 1
-	# 	@order = params[:order] || ((@tagging.object.kind != "list") ? "rank" : "name")
-		@order = params[:order] || "name"
-		@filter = params[:filter] || nil
-		@title = "#{@list.label}: #{@tagging.label}" rescue @tagging.label
-		@source = @tagging
-		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
-		update_session
-		
-		case @service
-		when "google"
-			query = (@tagging.subject.kind == "user") ? "" : @tagging.subject.label
-			query << " #{@tagging.object.label}" 
-			@items = Googleizer::Request.new(query, :mode => "web").response.results
-		when "amazon"
-			@items = Finder::Search.find(:query => @tagging.object.label, :service => 'amazon')
-		when "youtube"
-			query = (@tagging.subject.kind == "user") ? "" : @tagging.subject.label
-			query << " #{@tagging.object.label}" 
-			@items = Googleizer::Request.new(query, :mode => "video").response.results
-		when "map"
-			@items = @tagging.connections(:mode => 'exact', :page => @page)
-			render :action => "maps"
-		when "images"
-			@items = @tagging.connections(:mode => 'exact', :order => @order, :filter => @filter, :page => @page, :per_page => 15)
-			
-			# @items = @tagging.images.paginate(:page => @page, :per_page => 10)
-			render :action => "images"
-		when nil
-		else
-		end
-		
-		respond_to do |format|
-			format.html {}	
-			format.js { 
-				@kind = params[:kind]
-				@items = @tagging.connections(
-						:order => @order, 
-						:kind => params[:kind], 
-						:page => params[:page], 
-						:per_page => 3
-				)
-				render :action => :page, :layout => false
-			}
-		end
+	
 	end
 	
 	def share
@@ -125,6 +78,20 @@ class TaggingsController < ApplicationController
 		
 	end
 	
+	def find_or_create
+		if params[:id]
+			@tagging = Tagging.find(params[:id])
+			@tagging = @tagging.clone
+				@tagging.user_id = current_user.id
+				@tagging.kind = params[:kind]
+				@tagging.save
+		else
+		end
+	
+		
+		redirect_back_or_default("/")
+	end
+	
 	def rate
 		@ranking = Ranking.find_or_create(:tagging => @tagging, :user => current_user)
 		@ranking.value += 1
@@ -140,7 +107,15 @@ class TaggingsController < ApplicationController
 		@items = @tagging.connections.paginate(:page => @page, :per_page => 10)
 		
 	end
-
+	
+	def suggest
+		@kind = params[:kind]
+		@taggings = Tagging.select(
+		:users => [current_user],
+		:current_user => current_user,
+		:label => params[:label],
+		:perspective => "everyone")
+	end
 	
 	protected
 	

@@ -276,19 +276,17 @@ class Command
 		when "amazon"
 			return Finder::Search.find(:query => @input, :service => 'amazon')
 		else
-			if @argument && @action != 'add'
-				
-				return @list.items(:label => @input, :page => params[:page], :per_page => params[:per_page], :perspective => "everyone")
-			else
+			
 				return Tagging.select(
 					:users => [@current_user],
+					:current_user => @current_user,
 					:perspective => "everyone",
 					:page => params[:page],
 					:per_page => params[:per_page],
 					:label => @input,
-					:tags => [@kind])
+					:tags => @kind.nil? ? nil : [@kind] )
 				# return @current_user.connections(:label => @input, :page => params[:page], :per_page => params[:per_page],  :perspective => "everyone")
-			end
+
 		end
 	end
 	

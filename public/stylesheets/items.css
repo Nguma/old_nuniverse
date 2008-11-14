@@ -1,12 +1,12 @@
-.list .item h3 {
+.list .connection h3 {
 	padding:10px 30px 0 10px;
 	z-index:12345;
 	font-size:16px;
 	color:#6C9;
 }
 
-.list .item p {
-	font-size:12px;
+.list .connection p {
+	font-size:11px;
 	color:#888;
 }
 
@@ -15,7 +15,7 @@
 }
 
 /* ITEM */
-.box .item {
+.box .connection {
 	position:relative;
 	clear:both;
 	margin:0 0 1px 0;
@@ -46,7 +46,7 @@
 	background:transparent url("/images/backgrounds/icon_private.png") 0 0 no-repeat;
 }
 
-.box .items .item .options {
+.box .connections .connection .options {
 	position:absolute;
 	top:5px;
 	right:5px;
@@ -82,11 +82,11 @@ span.unique_item a:visited {
 	font-size:14px;
 }
 
-.box .items .item .icon {
+.box .connections .connection .icon {
 	height:20px;
 }
 
-.box .item .sort_actions {
+.box .connection .sort_actions {
 	position:relative;
 	float:left;
 	margin-right:5px;
@@ -94,16 +94,16 @@ span.unique_item a:visited {
 	height:20px;
 }
 
-.item .sort_actions a {
+.connection .sort_actions a {
 	display:block;
 }
 
-.items .hover {
+.connections .hover {
 /*	background:#eee;*/
 	color:#FFF;
 }
 
-.hover .item h3 {
+.hover .connection h3 {
 	color:#ccc;
 }
 
@@ -115,7 +115,7 @@ span.unique_item a:visited {
 	display:none;
 }
 
-.#content .list .item {
+.#content .list .connection {
 	min-height:50px;
 	background:#FFF;
 	margin:0 0 3px 0;
@@ -123,20 +123,29 @@ span.unique_item a:visited {
 }
 
 
-.list .list .item .thumbnail {
+.list .list .connection .thumbnail {
 	height:50px;
 }
 
-#content .list .item h3 {
+#content .list .connection h3 {
 	line-height:14px;
 	font-size:14px;
 	padding:0;
 	margin:3px 0 0 0;
 }
 
-#content .list .item h3 a,
-#content .list .item h3 a:visited {
+#content .list .connection h3 a,
+#content .list .connection h3 a:visited {
 	font-weight:inherit;
 	font-size:inherit;
 	line-height:inherit;
+}
+
+img.icon {
+	background:#FFF url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
+	padding:3px;
+	margin:0 3px 0 0;
+	width:28px;
+	height:28px;
+	
 }

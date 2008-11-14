@@ -11,7 +11,7 @@
       <%= hidden_field_tag("kind", @source.kind)  %>
       <%= hidden_field_tag("tag_id", @source.id )%>
     <% end -%>
-    
+    <div class="section">
     <%= text_field_tag "command", "", :id => "command", :autocomplete => 'off' %>
     <div id="file_field" class="hidden">
       <label>
@@ -23,7 +23,7 @@
     <%= text_field_tag "input", "", :id => "input" ,:autocomplete => 'off'%>
     <label id="extra_input_label"></label>
     <%= text_area_tag "extra_input", "", :id => "extra_input", :class => 'hidden', :rows => 2, :wrap => "virtual"%>
-    
+    </div>
     </fieldset>
   <% end -%>
   <%= spinner %>

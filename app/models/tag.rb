@@ -1,6 +1,9 @@
 class Tag < ActiveRecord::Base
   has_many :images,  	:conditions => ["images.parent_id is null"]
-	
+	has_many :taggings_from, :dependent => :destroy, :foreign_key => :subject_id, :class_name => :taggings
+	has_many :taggings_to, :dependent => :destroy, :foreign_key => :object_id, :class_name => :taggings
+	has_many :subjects, :through => :taggings_to
+	has_many :objects, :through => :taggings_from
 	
 	validates_presence_of :label
 	
@@ -141,13 +144,19 @@ class Tag < ActiveRecord::Base
   }
 
 	named_scope :with_label_like, lambda {|label|
-		return label.nil? ? {} : {:conditions => ["label rlike ?","^.\{0,4\}#{label}.\{0,6\}$"]}
+		return label.nil? ? {} : {:conditions => ["label rlike ?","#{label}"]}
 	}
 	
 	named_scope :with_label, lambda { |label| 
-		return label.nil? ? {} : {:conditions => ["label = ?", label]}
+		return label.nil? ? {} : {:conditions => ["label = ?","#{label}"]}
 	}
 	
+	named_scope :with_tags, lambda { |kind| 
+		return kind.nil? ? {} : {
+			:joins => "LEFT OUTER JOIN tagggings.TA on TA.subject_id = tags.id",
+			:conditions => ["TA.kind = #{kind} OR tags.kind = #{kind} "]}
+	}
+		
 	def match_freebase_record(record)
 		description = record.article if description.blank?
 		self.replace('freebase_id', record.id)
@@ -177,7 +186,7 @@ class Tag < ActiveRecord::Base
 			if params[:label].match(/^http:\/\/.+/)
 				tag = Tag.create(
 					:label => params[:label], 
-					:kind => "bookmark",
+					:kind => params[:kind] || "bookmark",
 					:url => params[:label]
 				)
 			else
@@ -190,6 +199,8 @@ class Tag < ActiveRecord::Base
 			end
 		
 		end
+		
+
 		tag
 	end
 	

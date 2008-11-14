@@ -1,5 +1,7 @@
+<%= render :partial => "/tags/new" %>
+
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <%= list_options(:items => @items) %>
+  <%#= list_options(:items => @items) %>
  
   <% if @mode == "list" %>
     <div class="column large" id="item_list" >
@@ -18,15 +20,18 @@
   <% end -%>
 
   <% content_for :nav do -%>
-    <%= add_new_button(@list) %>
-    <%= command_box("Filter", "filter") %>
-    <%= command_box("Search nuniverse", "search") %>
+    <%= link_to("Add to this nuniverse", "#", :id => "select_tag_lnk", :class => "select_form_lnk", :style => "display:inline") %>
+    <%#= link_to("Add to this nuniverse", "#", :id => "select_tag_lnk", :style => "display:inline") %>
+    <%#= link_to("Add to this nuniverse", "#", :id => "select_tag_lnk", :style => "display:inline") %>
     
-    <div class="command_box">
-       <%= image_tag("/images/icons/email_to.png")%>
-       <%= command(:label => "Email this list", :command => "email #{@list.label} to")%>
-     </div>
+    <!-- <div class="command_box"> -->
+       <%#= image_tag("/images/icons/email_to.png")%>
+       <%#= command(:label => "Email this list", :command => "email #{@list.label} to")%>
+     <!-- </div> -->
+     <%= render :partial => '/taggings/new' %>
   <% end -%>
     
   <%#= image_tag("/images/icons/powered_by_google.gif")%>
+
 <% end -%>
+

@@ -3,6 +3,8 @@ class List < ActiveRecord::Base
 	belongs_to :tag, :class_name => 'Tag'
 	belongs_to :creator, :class_name => 'User'
 	#after_create :create_tag
+	
+	before_create :create_tag
 
 
 	named_scope :bound_to, lambda { |bind| 
@@ -73,11 +75,11 @@ class List < ActiveRecord::Base
 	end
 	
 	def title
-		self.tag.nil?  ? self.label.capitalize : "#{self.tag.label.capitalize} #{self.label.pluralize}"
+		self.tag.nil?  ? self.label.capitalize : "#{self.tag.label.capitalize} "
 	end
 	
 	def kind
-		if k = self.label.match(/^(.*)\s(((wh|th)(ere|o|at|ich|ose))|(near|next\sto|close\sto|by|of|at|in|from|around))/)
+		if k = self.label.match(/^(.*)\s(((wh|th)(ere|o|at|ich|ose))|(near|next\sto|close\sto|by|of|at|in|from|around|to))/)
 			k[1].scan(/\w+/).last.singularize.downcase
 		else
 			self.label.scan(/\w+/).last.singularize.downcase
@@ -96,9 +98,9 @@ class List < ActiveRecord::Base
 	def create_tag
 		self.tag = Tag.create(
 			:label => self.label,
-			:kind => 'list'
+			:kind => 'nuniverse'
 		)
-		self.save
+		
 	end
 	
 

@@ -1,0 +1,15 @@
+<% if @users.empty? -%>
+  <h3 style="margin:5px 0 0 0">No user has been found</h3>
+  <% if @input.match(/^.*@\w+\.\w+/) %>
+    <h4><%= link_to "Send an invite to #{@input}", "#" %></h4>
+    
+  <% end -%>
+<% else -%>
+  <% @users.each do |user| -%>
+    <div style="position:relative;clear:both;margin:0 0 5px 0">
+      
+      <h3><%= link_to("#{thumbnail_tag(user.tag, :kind => 'user')} <span style='font-weight:bold'>#{user.login}</span>","#" ) %></h3>
+      <p><%= user.email %></p>
+    </div>
+  <%  end %>
+<% end -%>

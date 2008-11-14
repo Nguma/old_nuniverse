@@ -34,7 +34,7 @@ class NuniverseController < ApplicationController
 	def suggest
 		@save_command = "add to #{params[:context] || ""}".gsub(' ', '_')
 		@input = params[:input]
-		if params[:command].downcase == "find address"
+		if params[:command] && params[:command].downcase == "find address"
 			@source = Tag.find(params[:tag_id])
 			render(:action => "google_locations", :layout => false) if @input
 		else

@@ -1,24 +1,33 @@
 <%= image_tag("/images/icons/powered_by_google.gif", :style=>"position:absolute;right:5px;top:5px") if @command.service == "google" %>
-<%= will_paginate @items  %>
+
+
+  <% if @items.size > 0 %>
+    <label class="pagination">You might be looking for <%= will_paginate @items, :inner_window => 2, :container => false  %></label>
+  <% else -%>
+    <label >Sorry, no suggestions...</label>
+    <%= link_to("Search only certain kinds","#") %>
+  <% end -%>
+
 <% if @command.action == "add" && !@input.blank? %>
   <div class="suggestion" style= "position:relative;float:left;width:auto">
-    <%= link_to(image_tag("/images/icons/add_button.png"), command_url(:new => 1)) %>
+    <%#= link_to(image_tag("/images/icons/add_button.png"), command_url(:new => 1)) %>
   </div>
 
 <% end -%>
+
 <% @items.each do |item| %>
   <% item = item.object if item.is_a?(Tagging) %>
-
+  
   <div class="suggestion <%= item.kind %>" style="position:relative;float:left;margin-right:5px">
-    <%= thumbnail_tag(item)%>
+    <%= thumbnail_tag(item,  :kind => item.kind)%>
     <% if @command.action == "add" -%>
       <h3>
       <%= link_to(item.title, command_with_item_url(:command => @command.full_command, :item => item.id)) %>
       </h3>
     <% else -%>
-      <h3><%= link_to_item(item) %></h3>
+      <h3><%= link_to_item(item, :kind => @kind || item.kind) %></h3>
     <% end -%>
-    <p><%= tag_info(item) %></p>
+    <p style="font-size:11px;color:#ddd"><%= tag_info(item) %></p>
    
   </div>
 <% end -%>

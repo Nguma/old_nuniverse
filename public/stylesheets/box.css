@@ -42,7 +42,7 @@
 /*	background:#eef6ee;*/
 }
 
-.box .item h3 {
+.box .connection h3 {
 	font-size:13px;
 }
 
@@ -267,11 +267,6 @@
 	z-index:123456;
 }
 
-.box .icon {
-	position:relative;
-	float:left;
-	height:30px;
-}
 
 #lists {
 	background:#e8efbf;
@@ -397,6 +392,22 @@ h2 .command {
 	height:auto;
 	margin:0 1px 0 0;
 	padding:5px;
+}
+
+#nav #command_add_new {
+	background: transparent url("/images/icons/plus_sign.png") left center no-repeat;
+	margin:3px;
+	padding:5px 5px 5px 30px;
+	color:#9F0;
+	font-size:14px;
+}
+
+#nav #command_add_new_list {
+	background: transparent url("/images/icons/create_a_list.png") left center no-repeat;
+	margin:3px;
+	padding:5px 5px 5px 30px;
+	color:#9F0;
+	font-size:14px;	
 }
 
 #nav .command_box dl {
@@ -532,7 +543,7 @@ h2 span.size {
 }
 
 #title_box {
-	background:#fff;
+	background:none;
 }
 
 #title_box h1 {
@@ -558,12 +569,53 @@ h2 span.size {
 	color:#FFF;
 }
 
-
 #perspectives {
-	display:none;
+	position:relative;
+	margin:5px 0 0 0;
 }
 
 #perspectives.expanded {
 	display:block;
 	height:auto;
+}
+
+#perspectives a {
+	padding:0;
+	z-index:123456;
+	position:relative;
+}
+
+#perspective a span {
+	display:none;
+}
+
+#perspectives .thumbnail {
+	position:relative;
+	margin:0;
+	float:none;
+}
+
+#perspectives .empty_slot {
+	z-index:123;
+}
+
+#perspectives .section {
+	position:relative;
+	float:left;
+	width:275px;
+	margin:0 20px 0 0;
+}
+
+#perspectives h5 {
+	color:#666;
+	margin:0 0 5px 0;
+}
+
+
+#title_box h3 a {
+	padding:5px 10px 5px 0;
+}
+
+#title_box {
+	
 }

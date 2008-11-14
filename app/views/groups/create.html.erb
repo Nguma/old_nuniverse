@@ -1,0 +1,22 @@
+<div style="padding:40px;position:relative;width:auto">
+  <h2><%= @group.name.capitalize %> has been created.</h2>
+  <% form_tag "/groups/add_user" do -%>
+    <fieldset>
+      <label>Add users to this group.</label>
+      <div class="slots" style="position:relative;margin:5px 0 5px 0">
+        <% 7.times do |time| -%>
+          <%= empty_slot %>  
+        <% end -%>
+      </div>
+      <%= hidden_field_tag "group", @group.id %>
+      <%= hidden_field_tag "kind", "user"%>
+      <%= text_field_tag "input", "", :class => "input" %>
+    </fieldset>
+  <% end -%>
+  <div class="suggestions" style="margin:20px 0 20px 0">
+  </div>
+
+</div>
+<div style="position:absolute;bottom:70px;right:70px;clear:both">
+  <%= link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"cancel_button"%>
+</div>

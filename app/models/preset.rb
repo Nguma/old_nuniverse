@@ -6,7 +6,7 @@ class Preset
 			p << sets[k] unless sets[k].nil?
 		end
 		
-		return ["bookmarks","comments","videos"] if p.empty?
+		return [] if p.empty?
 		p.flatten.uniq
 	end
 	
@@ -14,7 +14,7 @@ class Preset
 		{
 			"genre" => ['films'],
 			"topic" => ["bookmarks","videos","comments"],
-			"user" => ["bookmarks","products","videos","people", "topics"],
+			# "user" => ["bookmarks","products","videos","people", "topics"],
 			"friend" => ["address","telephone"],
 			"person" => ["comments","videos","bookmarks"],
 			"location" => ["address","telephone","bookmarks","videos","comments"],

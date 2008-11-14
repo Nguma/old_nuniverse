@@ -11,6 +11,7 @@ var Input = new Class({
     if(this.el != undefined) {
       this.setBehaviors();
     }
+    
   },
   
   addAnotherPrompt:function() {
@@ -67,10 +68,10 @@ var Input = new Class({
   expand:function(command, description) {
     this.setCommand(command, description);
     this.setInput("");
-    this.setCommandDisplay(true);
-    $('input').focus();    
-    if(this.el.hasClass('hidden')) {
-      this.show();  
+    // this.setCommandDisplay(true);
+    $('label').focus();    
+    if(!this.el.hasClass('expanded')) {
+      this.el.addClass('expanded');  
       return true;
     }
     return false;
@@ -91,6 +92,7 @@ var Input = new Class({
   },
   
   getCommandAction:function() {
+  
     return $('command').getProperty('value').match(/\w+/)[0].toLowerCase();
   },
   
@@ -135,31 +137,45 @@ var Input = new Class({
   },
   
   onKey:function(ev) {
+
     if(this.el.hasClass('disabled')) return;
      switch(ev.key){
         case "esc":
           this.hide();
           break;
         case "enter":
-          if(!this.isInUse()) return; 
-          if(this.getCommandAction() == "invite" || this.getCommandAction() == "email") {
-            if($('extra_input').hasClass('hidden')) {
-              $('extra_input_label').set('text','Add a personal note or Press enter to send');
-              $('extra_input').removeClass('hidden');
-              $('extra_input').focus();
-            } else {
-              this.submit(this.submitUrl());
-            }
+          // if(!this.isInUse()) return; 
+          var currentSection = this.el.getElement('.current_section');
+          var nextSection = currentSection.getNext('.section');
+          
+          if($defined(nextSection)) {
+            currentSection.removeClass('current_section');
+            nextSection.addClass('current_section');
+            $('form_overview').getElement('span.title').set('text', $('title').getProperty('value'));
+            $('form_overview').getElement('span.tags').set('text', $('tags').getProperty('value'));
           } else {
-            this.submit(this.submitUrl());
+            this.el.getElement('form').submit();
+            // if(this.getCommandAction() == "invite" || this.getCommandAction() == "email") {
+            //               if($('extra_input').hasClass('hidden')) {
+            //                 $('extra_input_label').set('text','Add a personal note or Press enter to send');
+            //                 $('extra_input').removeClass('hidden');
+            //                 $('extra_input').focus();
+            //               } else {
+            //                 this.submit(this.submitUrl());
+            //               }
+            //             } else {
+            //               this.submit(this.submitUrl());
+            //             }
           }
+          
          break;
         case "space":
           if(!this.isInUse()) {
             if(this.el.hasClass('hidden')) {this.show();}
           }
-        default:    
-          this.setCommandDisplay();
+        default: 
+           this.getSuggestions();
+          // this.setCommandDisplay();
       }
   },
   
@@ -176,19 +192,26 @@ var Input = new Class({
 
   },
   
+  
   setBehaviors:function() {
-    this.getFileField().addEvents({
-      'change':this.submit.bind(this,this.submitUrl())
-    },this);
-    $('command').addEvent('change', this.onCommandChange.bind(this));
-    if($defined(this.el.getElement('a.collapse'))){
-      this.el.getElement('a.collapse').addEvent('click', this.hide.bindWithEvent(this));
-    }
+    this.el.getElements('.section')[0].addClass('current_section');
+    this.el.getElement('form').addEvent('keyup', function(ev){
+      ev.preventDefault();
+    });
+    
+    // this.getFileField().addEvents({
+    //       'change':this.submit.bind(this,this.submitUrl())
+    //     },this);
+    // $('command').addEvent('change', this.onCommandChange.bind(this));
+    //    if($defined(this.el.getElement('a.collapse'))){
+    //      this.el.getElement('a.collapse').addEvent('click', this.hide.bindWithEvent(this));
+    //    }
     this.el.addEvent('keyup', this.onKey.bindWithEvent(this));
 
   },
   
   setCommand:function(command, description) {
+    if(!$defined($('command'))) {return}
     $('command').setProperty('value', command);
     if($defined(description)) {this.setLabel(description);}
   },
@@ -202,7 +225,7 @@ var Input = new Class({
     switch(this.getCommandAction()) {
       case "create":
         if(this.getInputValue().split(' ').length > 1) {
-          this.setLabel("DId you mean?")
+          this.setLabel("Did you mean?")
         }
       case "add":
       case "new":
@@ -239,7 +262,7 @@ var Input = new Class({
   },
   
   setInput:function(input) {
-    $('input').setProperty('value', input)
+    // $('input').setProperty('value', input)
   },
   
   setUpdatable:function(updatable) {
@@ -248,7 +271,7 @@ var Input = new Class({
   
   show:function() {
     this.el.removeClass('hidden');
-    $('input').focus(); 
+    $('label').focus(); 
   },
   
   spinner:function() {
@@ -290,7 +313,8 @@ var Input = new Class({
   },
   
   suggestUrl:function() {
-    var url = $('suggestions').getProperty('title')+"/"+$('command').getProperty('value')+"/"+this.getInputValue();
+   //  var url = $('suggestions').getProperty('title')+"/"+$('command').getProperty('value')+"/"+this.getInputValue();
+   var url = $('suggestions').getProperty('title')
     if($('tagging') != null) { url += "?id="+$('tagging').getProperty('value'); }
     return url;
   }, 

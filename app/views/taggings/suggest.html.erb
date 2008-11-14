@@ -1,0 +1,8 @@
+<label>We are suggesting</label>
+<% @taggings.each do |tagging| -%>
+  <div class="item" style="float:left;position:relative;width:230px">
+    <%= thumbnail_tag(tagging.object) %>
+    <h4><%= link_to tagging.object.label.capitalize, "/taggings/find_or_create/#{tagging.id}?kind=#{@kind}" %></h4>
+    <p style="font-size:11px"><%= tagging.kind %></p>
+  </div>
+<% end -%>

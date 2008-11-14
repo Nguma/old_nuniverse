@@ -1,7 +1,7 @@
 class Tagging < ActiveRecord::Base
   belongs_to :object, :class_name => "Tag"
 	belongs_to :subject, :class_name => "Tag"
-	belongs_to :owner, :class_name => "User", :foreign_key => "user_id"
+	belongs_to :owner, :class_name => "Tag", :foreign_key => "user_id"
 	
 	
 	has_many :rankings
@@ -76,7 +76,6 @@ class Tagging < ActiveRecord::Base
 		if info == 'price'
 			return "#{object.property('price')} on #{object.service.capitalize}" unless object.service.nil?
 		end
-		# return "#{self.owner.login.capitalize}" if info == "comment"
 		return description if info == 'description'
 		return object.property('address') if info == 'address'
 
@@ -105,16 +104,15 @@ class Tagging < ActiveRecord::Base
 
 	def self.find_or_create(params)
 		params[:kind] ||= nil
-		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND kind = ?', params[:subject_id], params[:object_id],  params[:user], params[:kind]])
+		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND kind = ?', params[:subject].id, params[:object].id,  params[:user].tag.id, params[:kind]])
 		tagging = Tagging.create(
-			:subject_id => params[:subject_id], 
-			:object_id => params[:object_id], 
-			:path => params[:path], 
-			:user_id => params[:user].id,
+			:subject => params[:subject], 
+			:object => params[:object], 
+			:owner => params[:user].tag,
 			:kind => params[:kind] || nil,
 			:description => params[:description] || nil,
 			:public => params[:public] || 1
-		) if tagging.nil? rescue nil
+		) if tagging.nil? 
 		tagging
 	end
 	
@@ -134,51 +132,38 @@ class Tagging < ActiveRecord::Base
 	# I Wish i could use named_scope here but will_paginate gets apparently capricious 
 	# Performs a rlike against each tag to validate their existence.
 	def self.select(params = {})
-	
-		params[:users] ||= []
-		params[:current_user] ||= params[:users].first
-		params[:tags] ||= []
+		
+		current_user = params[:perspective].user
+		params[:user] ||= params[:perspective].members
 		params[:subject] ||= nil
+		
 		order = Tagging.order(params[:order])
-	
-		user_ids = params[:users].collect {|u| u.id}.join(',')
-		
-		
+
 		# Building clause out of tags and title if present
 		# Pluralized and singularized versions of each tag is passed as a regexp match.
 		# Same is done with title if exists.
-		having_clauses = []
-		query = Regexp.escape(params[:tags].join(' '))
-		# 
-		# sql = "SELECT DISTINCT T.*, CONCAT('##',GROUP_CONCAT(DISTINCT S.label, ' ', T.kind, '##', T.kind SEPARATOR '##'),'##') AS GC , (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:current_user].id}') AS personal "
-		# sql << "	FROM taggings T LEFT OUTER JOIN tags S on S.id = T.subject_id "
-		# sql << " LEFT OUTER JOIN tags on (object_id = tags.id) " 
-		# sql << " WHERE (T.user_id IN (#{user_ids}) "
-		# sql << " OR T.public = 1 " if params[:perspective] == 'everyone'
-		# sql << ")"
-		# sql << " AND CONCAT(S.label,' ',T.kind) rlike (\"(#{query})$\") " if params[:tags]
-		# sql << " AND T.subject_id = #{params[:subject].id} " if params[:subject]
-		# sql << " AND tags.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
-		# sql << " GROUP BY object_id "
-		# sql << " HAVING (GC rlike \"###{query}##\") " if params[:tags].length > 1
-		# sql << " ORDER BY #{order} "
 		
 		
-		sql = "SELECT DISTINCT TA.*, (GROUP_CONCAT(DISTINCT user_id) rlike '#{params[:current_user].id}') AS personal "
+		sql = "SELECT DISTINCT TA.* "
+		sql << ", (GROUP_CONCAT(DISTINCT user_id) rlike '#{current_user.tag.id}') AS personal"
 		sql << " FROM taggings TA LEFT OUTER JOIN tags S on S.id = TA.subject_id "
 		sql << " LEFT OUTER JOIN tags O on O.id = TA.object_id "
-		
-		case params[:perspective]
-		when "you"
-			sql << " WHERE (TA.user_id = #{params[:current_user].id}) "
+
+		case params[:perspective].kind
+		when "personal"
+			sql << " WHERE (TA.user_id = #{params[:user].id}) "
 		when "everyone"
-			sql << " WHERE (TA.user_id = (#{params[:current_user].id}) OR  public = 1 ) "
+			sql << " WHERE (TA.user_id = (#{params[:user].id}) OR  public = 1 ) "
 		else
-			sql << " WHERE (TA.user_id IN (#{user_ids}) AND public = 1) "
+			sql << " WHERE (TA.user_id IN (#{params[:user].collect {|u| u.id}.join(',')}) AND public = 1) "
 		end
-		sql << " AND '#{query}' rlike CONCAT('^(',S.label,'|',S.kind,')?\s?(',O.kind,'|',TA.kind,')$') " if params[:tags]
+		
+		if params[:tags]
+			query = Regexp.escape(params[:tags].join(' ').gsub("'","\\'")) 
+			sql << " AND '#{query.singularize}' rlike CONCAT('^(',S.label,'|',S.kind,')?\s?(',O.kind,'|',TA.kind|TA.kind,')$') "
+		end
 		sql << " AND TA.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << " AND O.label rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
+		sql << " AND CONCAT(O.label,' ',O.kind,' ',TA.kind) rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub('\'','\\\'').gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "
 		sql << " ORDER BY #{order} "
 

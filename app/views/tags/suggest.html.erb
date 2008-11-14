@@ -1,1 +1,13 @@
-<%= render :partial => "/tags/instance", :collection => @tags %>
+<% if @tags.empty? && !@input.blank? -%>
+  <label>Nothing has been found.</label>
+  <h3><%= link_to "Add this #{@kind}!", add_to_nuniverse_url(@nuniverse, @kind, :label => @input)%></h3>
+<% else -%>
+  <% @tags.each do |tag| -%>
+    <div  class="connection">  
+      <h3>
+        <%= link_to("#{thumbnail_tag(tag, :kind => tag.kind)} <span style='font-weight:bold'>#{tag.label}</span>","#" ) %>
+      </h3>
+      <p></p>
+    </div>
+  <% end -%>
+<% end -%>

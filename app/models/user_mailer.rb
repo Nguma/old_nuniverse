@@ -48,7 +48,7 @@ class UserMailer < ActionMailer::Base
 	def list(params)
 		@recipients  = params[:emails]
     @from        = params[:sender].email
-    @subject     = "#{params[:sender].login.capitalize} is inviting you."
+    @subject     = "#{params[:sender].login.capitalize} is sharing a list of #{params[:content].label.pluralize} with you."
     @sent_on     = Time.now
     @body[:sender] = params[:sender]
 		@body[:content] = params[:content]

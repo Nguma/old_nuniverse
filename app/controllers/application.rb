@@ -51,8 +51,8 @@ class ApplicationController < ActionController::Base
 	def update_session
 		session[:mode] = @mode
 		session[:service] = @service
-		if @tag
-			
+		session[:perspective] = @perspective
+		if @tag	
 			session[:previous] = session[:current] unless session[:current] == @tag.id
 			session[:current] = @tag.id
 	
@@ -70,5 +70,20 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	
+	
+	def find_everyone
+		@everyone = User.find(0)
+	end
+	
+	def find_perspective
+		if params[:perspective]
+			@perspective = Perspective.find(:first, :conditions => ['tags.label = ?', params[:perspective]], :include => :tag)
+			@perspective = current_user.self_perspective if @perspective.nil?
+		else
+			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.self_perspective
+		end
+		# Last line is to replace 'default' user for common perspectives, such as 'everyone'
+		@perspective.user = current_user 
+	end
 
 end

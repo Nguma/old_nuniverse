@@ -64,7 +64,7 @@
 
 
 .nuniverse .item p {
-	font-size:13px;
+	font-size:12px;
 	padding:0 0 0 0;
 	margin:0 0 5px 0;
 }
@@ -172,15 +172,15 @@ p strong {
 	float:right;
 }
 
-
 #nav {
 	position:relative;
 	clear:both;
-	width:100%;
+	width:auto;
 	min-height:30px;
 	z-index:123456789;
 	background:#666;
 	margin:0 0 0 1px;
+	padding:3px 0 5px 0;
 }
 
 #content {
@@ -221,7 +221,6 @@ a.saved {
 	position:relative;
 	float:left;
 	padding:10px 10px 10px 10px;
-	
 	margin:0 0 0 0;
 	color:#FFF;
 	background:none;
@@ -255,3 +254,58 @@ a.saved {
 	background:#ccc;
 }
 
+#title_box #perspectives {
+	margin:0;
+	padding:0;
+}
+
+#perspectives {
+	margin: 0 0 0 1px;
+}
+
+#perspective_hat {
+	display:block;
+	background:transparent url('/images/backgrounds/perspective_hat.png') -2px 0 no-repeat;
+	height:40px;
+	padding:10px 0 0 106px;
+}
+
+#perspective_hat a {
+	margin:0;
+	font-size:17px;
+	line-height:32px;
+	color:#eee;
+}
+
+#perspective_fav_list {
+	display:none;
+	background:#222;
+	padding:5px;	
+	width:auto;
+	margin:0 0 0 1px;
+}
+
+
+#perspective_fav_list a {
+
+}
+
+#perspectives.expanded #perspective_fav_list {
+	display:block;
+}
+
+.slots {
+	background:#fff;
+	height:165px;
+	width:495px;
+	background:transparent url('/images/backgrounds/empty_perspective.png') 0 0 repeat;
+	
+}
+
+.trashable {
+	background:transparent url('/images/icons/discard.png') 0 0 no-repeat ;
+}
+
+.trashable img {
+	visibility:hidden;
+}

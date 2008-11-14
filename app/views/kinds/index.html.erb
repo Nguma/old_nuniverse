@@ -1,0 +1,19 @@
+<h1>Listing kinds</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for kind in @kinds %>
+  <tr>
+
+    <td><%= link_to kind.name.capitalize, kind %></td>
+    <td><%= link_to 'Edit', edit_kind_path(kind) %></td>
+    <td><%= link_to 'Destroy', kind, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New kind', new_kind_path %>

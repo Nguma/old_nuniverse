@@ -1,7 +1,7 @@
 class ListsController < ApplicationController
 	
 	before_filter :login_required
-	before_filter :find_user, :only => [:show]
+	before_filter :find_user, :find_everyone, :find_perspective, :only => [:show]
 	#before_filter :admin_required, :except => [:show, :create, :find_or_create, :find_or_add_item]
   after_filter :store_location, :only => [:show]
 	after_filter :update_session, :only => [:show]
@@ -19,10 +19,12 @@ class ListsController < ApplicationController
   # GET /lists/1
   # GET /lists/1.xml
   def show
+	
+	
   	if params[:id] 
    		@list = List.find(params[:id]) 
    	else
-			@list = List.new(:creator => @user, :label => params[:kind].gsub(/\_|\-/,' '), :tag_id => params[:tag])
+			@list = List.find_or_create(:label => params[:kind])
 		end
 			@selected = params[:selected].to_i || nil
 			@page = params[:page]
@@ -31,14 +33,26 @@ class ListsController < ApplicationController
 			@title = @list.title
 			@info = params[:info] || nil
 			
-			@group = Tag.find(:first, :conditions => ['label = ? AND kind in ("group","user","service")', params[:user]])
-			
-			@service = params[:user]
+			@tag = Tag.find(params[:tag]) rescue nil
+			@tags =  [@list.label]
+			@tags << @tag unless @tag.nil?
 			@source = @list
 			@kind = @list.kind
 			
-			@items = @list.items(:group => @group, :page => @page, :per_page => 11, :order => @order, :perspective => @service, :current_user => current_user)  
-	
+
+			if @perspective.kind == "service"
+				
+			else
+				@items = Tagging.select(
+					:perspective => @perspective,
+					:subject => @list.tag,
+					:order => @order,
+					:page => @page,
+					:per_page => @per_page || 11
+					)
+				
+			end
+
 			respond_to do |format|
 				format.html {}
 				format.js {render :action => "page", :layout => false}
@@ -65,6 +79,7 @@ class ListsController < ApplicationController
   # POST /lists.xml
   def create
     @list = List.new(params[:list])
+		@list.creator = current_user
 
     respond_to do |format|
       if @list.save
@@ -98,7 +113,7 @@ class ListsController < ApplicationController
   # DELETE /lists/1
   # DELETE /lists/1.xml
   def destroy
-    @list = List.find(:params[:id])
+    @list = List.find(:first, :conditions => ["label = ? AND creator_id = ?",params[:query], current_user.id])
 		restrict_to(@list.creator)
     @list.destroy
 
@@ -109,10 +124,11 @@ class ListsController < ApplicationController
   end
 
 	def find_or_create
-		@list = List.find(:first, :conditions => ["label = ? AND creator_id = ?",params[:query], current_user.id])
+	
+		@list = List.find(:first, :conditions => ["label = ? AND creator_id = ?",params[:label], current_user.id])
 		unless @list
 			@list = List.create(
-				:label => params[:query],
+				:label => params[:label],
 				:creator_id => current_user.id
 			)
 		end
@@ -120,10 +136,23 @@ class ListsController < ApplicationController
 	end
 	
 	def find_or_add_item
-		@list = List.find(params[:id])
-		@tag = Tag.find_or_create(:label => params[:query], :kind => 'tag')
-		@tagging = Tagging.find_or_create(:subject_id => @list.tag.id, :object_id => @tag.id)
+		@list = List.find_or_create(:label => params[:nuniverse])
+		
+		if params[:kind] == "image"
+			@list.tag.add_image( :source_url => params[:label])
+		else
+			@tag = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
+			@tagging = Tagging.find_or_create(:subject => @list.tag, :object => @tag, :user => current_user, :kind => params[:kind])
+		end
+
+		
 		redirect_to @list
+	end
+	
+	def suggest
+		@input = params[:input]
+		@nuniverse = params[:nuniverse] 
+ 		@lists = List.find(:all, :conditions => ["label rlike ? ",@input])
 	end
 	
 	protected

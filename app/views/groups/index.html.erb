@@ -1,0 +1,38 @@
+<% favorites = [] %>
+<% s = {} %>
+
+<% @sections.each do |section, elements| -%>
+<% s[section] = []%>
+    <% elements.each_with_index do |element, i| -%>
+      <% if element.favorite == 1 %>
+          <% content_for :perspective_favorites do -%>
+            <%= link_to(thumbnail_tag(element.tag),"#", :title => element.tag.label.capitalize,  :class => "perspective #{element.user_id == 0 ? "locked" : ""}", :alt => "#{element.id}") %>
+          <% end -%>
+      <% else -%>
+        <% content_for "section_#{element.kind}" do -%>
+          <%= link_to(thumbnail_tag(element.tag),"#", :title => element.tag.label.capitalize, :class => "perspective", :alt => "#{element.id}") %>
+        <% end -%>
+      <% end -%>
+      
+    <% end -%>
+<% end -%>
+<div class="form_box" >
+  <div style="padding:40px;position:relative">
+    <h1>Manage your perspectives</h1>
+    <h3 style="color:#999;">Drag and drop any perspective you want to your favorites.</h3>
+    <h4 style="margin:15px 0 10px 0;color:#666">These are your most used perspectives</h4>
+    <div id="perspectives" style="position:relative;clear:both;" class="slots">    
+       <%= yield :perspective_favorites %>
+     </div>
+  </div>
+  <div style="position:absolute;bottom:50px;right:70px;clear:both">
+    <%= link_to image_tag("/images/icons/save_changes_btn.png"), "/groups/update", :title => "Save Changes", :id => "save_perspectives" %>
+    <%= link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"cancel_button"%>
+  </div>
+</div>
+
+</div>
+
+
+<%= render :partial => "select_user_form" %>
+<%= render :partial => "select_group_form" %>

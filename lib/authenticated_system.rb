@@ -58,7 +58,7 @@ module AuthenticatedSystem
 		end
 		
 		def restrict_to(users)
-			users.to_a.include?(self.current_user) ? true : access_restricted
+			users.to_a.include?(self.current_user.tag) ? true : access_restricted
 		end
 		
 		def access_restricted

@@ -1,4 +1,5 @@
 module Finder
+
 	class Search
 		class << self
 			def find(params)
@@ -94,6 +95,49 @@ module Finder
 		def results
 			
 		end
+	end
+	
+	class Netflix
+		attr_accessor :api_key, :shared_secret, :consumer, :request_token, :access_token
+		
+		def initialize
+			@api_key = "srnpu8b448ca2fj5q6vkrppd"
+			@shared_secret = "nuMWRS9hRQ"
+			@consumer = OAuth::Consumer.new(
+				      @api_key,
+				      @shared_secret,
+				      {
+				        :site => "http://api.netflix.com",
+
+				        :request_token_url => "https://api-user.netflix.com/oauth/request_token",
+				        :access_token_url => "http://api.netflix.com/oauth/access_token",
+				        :authorize_url => "https://api-user.netflix.com/oauth/login"
+				      })
+
+			@request_token = @consumer.get_request_token
+
+		end
+		
+		def authorization_url	
+			 @request_token.authorize_url({
+			      :oauth_consumer_key => @api_key,
+			      :application_name => "Nuniverse",
+			      :oauth_callback => "http://localhost:3000/admin/test"
+			    })
+		end
+		
+		def set_access_token
+			@access_token = @request_token.get_access_token
+		end
+		
+		def response
+			@consumer.request(
+		      :get,
+		      "/users/#{@access_token.response[:user_id]}",
+		      @access_token,
+		      {:scheme => :query_string})
+		end
+
 	end
 
 end

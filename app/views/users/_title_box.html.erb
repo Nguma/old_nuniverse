@@ -1,0 +1,11 @@
+<div class='box heading' id="title_box">
+  <h1 class="title"><span class='hidden'>User</span><%= source.title %></h1>
+  <% if source.connections.empty?  %>
+    <h2>Your nuniverse is empty... for now.</h2>
+  <% end -%>
+  <h3>
+    <%= link_to "Add something", "#", :id => "select_tag_form", :class => "select_form_lnk" %>
+    <%= link_to "Search this nuniverse", "#", :id => "", :class => "" %>
+    <%= link_to "Visit another nuniverse", "#", :id => "", :class => "" %>
+  </h3>
+</div>

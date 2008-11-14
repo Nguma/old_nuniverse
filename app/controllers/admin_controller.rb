@@ -123,8 +123,25 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def test
+		t = Finder::Netflix.new
 		
+		if session[:request_token].nil?
+			@request_token = t.request_token
+			session[:request_token] =  @request_token.token
+			session[:request_token_secret] =  @request_token.secret
+			redirect_to t.authorization_url
+		else
 			
+			@request_token = OAuth::RequestToken.new(t.consumer,session[:request_token],session[:request_token_secret])
 			
+			@access_token = @request_token.get_access_token 
+			raise @access_token.inspect
+			session[:request_token] = nil
+			session[:request_token_secret]
+		end
+		
 	end
+	
+	protected
+	
 end

@@ -138,7 +138,25 @@ module NuniverseHelper
 	def title(params ={})
 		params[:source] ||= @source
 		return if params[:source].nil?
-		render(:partial => "/nuniverse/title_box", :locals => params)
+		render(:partial => "title_box", :locals => params) rescue render(:partial => "/nuniverse/title_box", :locals => params)
+	end
+	
+	def empty_slot(params ={})
+
+		image_tag("/images/backgrounds/empty_perspective.png", :class => "empty_slot", :alt => "Drop a perspective here", :style => "position:relative;")
+	end
+	
+	def urize(params)
+		params[:mode] ||= @mode
+		params[:id] ||= @source.id
+		case @source.class.to_s
+		when "List"
+			listing_url(params)
+		when "User"
+			user_url(params)
+		else
+			tag_url(params)
+		end
 	end
 	
 end

@@ -1,9 +1,5 @@
 <div class='box heading' id="title_box">
   <%= display_options %>
   <h1 class="title"><span class='hidden'><%= @kind %></span><%= source.title %></h1>
-    <% unless @service.nil? %>
-      <span class='service'>according to <%= link_to_user(@user, :id => "perspective_link") %></span>
-      <%= perspectives(:source => @list, :selected => @perspective) %>
-    <% end -%>
-  
+  <%= perspectives(:source => @list, :selected => @perspective) %>  
 </div>

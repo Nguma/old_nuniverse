@@ -3,17 +3,25 @@
 	position:relative;
 	clear:both;
 	padding:10px 20px 10px 20px;
-	margin:0 0 0 0;
+	margin:5px;
 	background:#333;
 	width:auto;
 	min-height:200px;
 	height:200px;
+	display:none;
 }
-
 
 #input_wrap h1 {
 	font-size:25px;
 	color:#000;
+}
+
+#input_box h2 {
+	color:#FFF;
+}
+
+#input_box span {
+	color:#9F0;
 }
 
 #input_box .spinner {
@@ -29,18 +37,18 @@
 #input_box input {
 	background:none;
 	border:none;
-	font-size:27px;
+	font-size:35px;
 	font-weight:normal;
 	color:#FFF;
 	width:97%;
 	margin: 0 0 0 0;
-	padding:0 0 0 0;
+	padding:7px 0 10px 0;
 }
 
 #input_box #input {
-	font-size:25px;
+	font-size:35px;
 	padding:0;
-	margin:0 0 5px 0;
+	margin:10px;
 }
 
 #input_box textarea {
@@ -115,11 +123,19 @@
 #input_box label {
 	display:block;
 	font-weight:normal;
-	font-size:12px;
+	font-size:15px;
 	line-height:20px;
 	color:#999;
 	margin:0;
 	padding:0;
+}
+
+#input_box .section {
+	display:none;
+}
+
+#input_box .current_section {
+	display:block;
 }
 
 #image_url_uploaded_data {
@@ -152,7 +168,7 @@
 
 .box #input_box {
 	position:relative;
-	display:block;
+
 	height:260px;
 	border:none;
 	background:none;
@@ -168,7 +184,7 @@
 
 
 
-.expanded #input_box {
+#input_box.expanded  {
 	display:block;
 }
 
@@ -188,5 +204,69 @@
 	top:5px;
 	color:#eee;
 	font-size:12px;
+}
+
+
+.form_box {
+	background:transparent url("/images/backgrounds/popup.png") 0 0 no-repeat;
+	width:600px;
+	height:420px;
+	color:#333;
+	position:absolute;
+	z-index:123456789;
+}
+
+.form_box .suggestions {
+	padding:0;
+}
+
+.form_box form {
+	position:relative;
+	float:none;
+	padding:0;
+}
+
+.form_box label {
+	margin:0 0 5px 0;
+	padding:0 0 5px 0;
+	font-size:18px;
+}
+
+.form_box input {
+	margin:5px 0 0 0;
+	background:none;
+	border:none;
+	padding:5px 0 5px 0;
+}
+
+.form_box a {
+	font-weight:bold;
+	font-size:20px;
+	color:#3C9;
+}
+
+
+.form_box .suggestions {
+	
+}
+
+.form_box .connection {
+	position:relative;
+	clear:both;
+	margin:0 0 5px 0;
+}
+
+.form_box .droppable span {
+	display:none;
+}
+
+.form_box .droppable img {
+	background:transparent url('/images/backgrounds/icon_personal.png') 0 0 no-repeat;
+}
+
+.form_box .connection a {
+	font-weight:bold;
+	font-size:17px;
+	color:#3C9;
 }
 

@@ -1,0 +1,11 @@
+<% if @lists.empty? && !@input.blank? -%>
+  <label>No such nuniverse has been found</label>
+  <h3><%= link_to "Create #{@input}!", visit_url(@input) %></h3>
+<% else -%>
+  <label>You may be looking for those:</label>
+  <% @lists.each do |list| %>
+    <div class="list">
+      <%= link_to list.label, visit_url(list.label)%>
+    </div>
+  <% end -%>
+<% end -%>

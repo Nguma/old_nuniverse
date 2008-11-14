@@ -37,7 +37,8 @@ class User < ActiveRecord::Base
 	after_create :assign_tag
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
-	
+	has_many :perspectives, :foreign_key => :user_id
+	has_many :taggings, :foreign_key => :subject_id
 
 	def lists(params = {})
 		List.created_by(self).bound_to(nil).order_by("label ASC")
@@ -105,17 +106,21 @@ class User < ActiveRecord::Base
 	
 	def connections(params = {})
 		Tagging.select(
-			:users => [self],
-			:label => params[:label] || nil,
-			:page => params[:page] || 1,
-			:per_page => params[:per_page] || 3
-		)
+					:perspective => self_perspective,
+					:label => params[:label] || nil,
+					:page => params[:page] || 1,
+					:per_page => params[:per_page] || 3
+				)
+	
 	end
 	
 	def add_image(params)
 		tag.add_image(params)
 	end
 	
+	def self_perspective
+		Perspective.new(:user_id => self.id, :favorite => 1, :tag_id => self.tag.id)
+	end
 
   protected
     

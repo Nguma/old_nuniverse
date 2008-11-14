@@ -8,11 +8,11 @@ module ListsHelper
 		when 'List'
 			if !@list.context.blank?
 				breadcrumbs << link_to("< #{@list.context.capitalize}", tag_url(params[:source].tag, :kind => params[:source].context), :mode => @mode) 
-				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login, :mode => @mode)) 
+				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login, :mode => @mode)) 
 			end
 		when 'Tag'
 			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title, :user => @user.login, :mode => @mode)) unless @list.context.blank?
-			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :user => @user.login)) 
+			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login)) 
 		else
 			
 		end
@@ -43,7 +43,7 @@ module ListsHelper
 		title = title.singularize if options[:item_size] && options[:item_size] <= 1
 		
 		link_to title.capitalize, listing_url(list.uri_name, 
-																					:user => options[:user] || @user.login,
+																					:perspective => options[:user] || @perspective.tag.label,
 																					:mode => options[:mode] || @mode, 
 																					:page => options[:page] || @page, 
 																					:order => options[:order] || @order
@@ -57,7 +57,7 @@ module ListsHelper
 		params[:kind] ||= params[:source].label.singularize.downcase
 		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
 		params[:subject] ||= params[:source].tag
-		params[:items] ||= connections(:perspective => @service, :source => params[:source], :kind => params[:kind], :subject => params[:subject]) 
+		params[:items] ||= connections(:perspective => @perspective, :source => params[:source], :kind => params[:kind], :subject => params[:subject]) 
 		params[:command] ||= params[:kind] 
 		params[:order] ||= "latest"
 		params[:dom_id] ||= params[:title].pluralize
@@ -76,11 +76,10 @@ module ListsHelper
 	def render_item_box(item, params = {})
 		params[:item] = item
 		params[:item_classes] = ""
-	
-		if @service == current_user.login || @service == "everyone"
 			
-			params[:item_classes] <<  (item.personal.to_i == 1 ? 'personal' : '') rescue 'personal'
-			params[:item_classes] <<  (item.public ? ' public' : ' private')
+		personal = item.personal.to_i rescue nil
+		if personal	
+			params[:item_classes] <<  (item.public ? ' personal' : ' private')
 		end
 
 		
@@ -104,24 +103,14 @@ module ListsHelper
 	def perspectives(params = {})
 		return if @list.nil?
 		kind = @list.kind rescue params[:source].kind
-		users = [current_user, User.find(:all, :conditions => ["login in (?) ", ["everyone","nuniverse","google","amazon","youtube"]])].flatten
-    links = []
-		users.each do |user|
-     	if @source.is_a?(List)
-        url = listing_url(:kind => @list.label, :tag => @list.tag, :mode => @mode, :order => @order || nil, :page => 1, :user => user.login)
-      else
-				url = tag_url(@source, :kind => kind, :mode => @mode, :user => user.login)
-      end
-			links << link_to(thumbnail_tag(user.tag, :kind => 'user'),url, :class => "perspective #{@user == user ? "current" : ""}", :title => "#{user == current_user ? "You" : user.login.capitalize}")
-    end
-		 
-		render :partial => "/nuniverse/perspectives", :locals => {:links => links}
+		perspectives = [@current_user.self_perspective, @everyone.perspectives.favorites,current_user.perspectives.favorites].flatten
+		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => perspectives}
 	end
 	
 	def lists_for(source, options = {})
 		presets =  presets(@tag.kind)
-		presets << source.lists(:user => current_user).collect {|c| c.label}
-		make_lists(presets.flatten.uniq)
+		presets << source.lists(:user => current_user).collect {|c| c.label.downcase}
+		make_lists(presets.flatten.uniq.sort)
 	end
 	
 	def boxes_for(items, params = {})

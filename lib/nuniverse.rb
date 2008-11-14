@@ -314,5 +314,44 @@ module Nuniverse
 		dc.to_s
 	end
 		
+	def self.collect_infos(params)
+		tag = params[:connection].object
+		case params[:kind].singularize
+		when "film"
+			return tag.property("release_date")
+		when "location","restaurant","museum"
+			return "#{tag.address.full_address} - #{tag.property("tel")}" rescue ""
+		when "bookmark"
+			return tag.url.scan(/http.{1,3}\/\/([^\/]*).*/)[0] 
+		when "album","artwork","painting","sculpture"
+			info = [Nuniverse::Connection.find(:subject => tag, :kind => 'artist|painter|musician|sculptor', :perspective => params[:perspective]).first] rescue []
+			info << Nuniverse::Connection.find(:subject => tag, :kind => 'creation date', :perspective => params[:perspective]).first
+			info.collect {|c| c.nil? ?  "" : c.title}.join(' - ')
+		when "person"
+			return Nuniverse::Connection.find(:subject => tag, :kind => 'occupation|profession').first.label rescue []
+		when "product"
+			return "#{tag.property('price')} on #{tag.service.capitalize}" if tag.service
+		when "comment"
+			return "#{connection.owner.login.capitalize} - #{connection.created_at.strftime('%h %d, %H:%M')}"
+		else
+			return ""
+		end
+	end
+	
+	class Connection
+		
+		def self.find(params)
+				
+				Tagging.select(
+					:perspective => params[:perspective],
+					:tags => params[:tags] || [params[:kind]],
+					:subject => params[:subject] || nil,
+					:order => params[:order] || params[:order],
+					:page => params[:page] || 1, 
+					:per_page => params[:per_page],
+					:label => params[:label] || nil
+				)
+		end
+	end
 	
 end

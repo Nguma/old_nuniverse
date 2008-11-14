@@ -1,37 +1,31 @@
 ActionController::Routing::Routes.draw do |map|
-  # map.resources :rankings
-  # 
-  #   map.resources :lists
-  # 
-  #   map.resources :tags do |tag|
-  #     tag.resource :image
-  #   end
-			map.resources :lists
-  		map.resource :sessions
-   		map.resources :taggings
-			map.resources :tags
-			map.resources :images
-   		map.resource :user, :member => { :suspend   => :put,
-  	                                   :unsuspend => :put,
-    	                                 :purge     => :delete }
+	map.resources :kinds
+	map.resources :lists
+	map.resource :sessions
+ 	map.resources :taggings
+	map.resources :tags
+	map.resources :images
+ 	map.resource :user, :member => { :suspend   => :put,
+	                                   :unsuspend => :put,
+  	                                 :purge     => :delete }
     
-    	map.activate '/activate', 
-    		:controller => 'users', 
-    		:action => 'activate'		
-    		
-    	map.activate '/activate/:activation_code', 
-    		:controller => 'users', 
-    		:action => 'activate'
-    		
-    	map.signup '/signup', :controller => 'users', :action => 'new'
-    	map.login '/login', :controller => 'sessions', :action => 'new'
-    	map.logout '/logout', :controller => 'sessions', :action => 'destroy' 
-   		
-    		
-    	map.restricted "/restricted",
-    		:controller => "application",
-    		:action => 'restricted'
- 	
+  map.activate '/activate', 
+ 		:controller => 'users', 
+ 		:action => 'activate'		
+ 		
+ 	map.activate '/activate/:activation_code', 
+ 		:controller => 'users', 
+ 		:action => 'activate'
+ 		
+ 	map.signup '/signup', :controller => 'users', :action => 'new'
+ 	map.login '/login', :controller => 'sessions', :action => 'new'
+ 	map.logout '/logout', :controller => 'sessions', :action => 'destroy' 
+		
+ 		
+ 	map.restricted "/restricted",
+ 		:controller => "application",
+ 		:action => 'restricted'
+
 	  	map.with_options :controller => 'application' do |m|
 				m.about "/about", :action => "about"
 	  		m.thank_you '/thank_you', :action => 'thank_you' 
@@ -46,32 +40,23 @@ ActionController::Routing::Routes.draw do |map|
 	  	end
   	
 	  	map.with_options :controller => 'lists', :action => 'show', :path_prefix => '/my_nuniverse' do |m|
-				
-			
 	  		m.with_options :page => 1, :order => "by_name" do |page|
-
-					
 					page.listing_with_tag '/:tag/:kind/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
-					
-					#page.listing_in_images '/all/:list/in_images/:page/:order', :mode => 'image', :requirements => {:page => /\d+/, :tag => nil}
 					page.list_in_cards	'/:tag/:kind/in_cards/:page/:order', :mode => 'card', :requirements => {:tag => /\d+/,:page => /\d+/}
 					page.list_in_images '/:tag/:kind/in_images/:page/:order', :mode => 'image', :requirements => {:tag => /\d+/,:page => /\d+/}
 				end
-	  					
-	  	
 	  	end
 			
 			map.listing '/my_nuniverse/all/:kind/',:controller => 'lists', :action => 'show'
-			map.listing '/all/:kind/according-to/:user', :controller => 'lists', :action => 'show', :requirements => {:user => /\w+/}
+			map.listing '/all/:kind/according-to/:perspective', :controller => 'lists', :action => 'show', :requirements => {:perspective => /\w+/}
 	
 			map.item '/items/:kind/:label/:id/according-to/:service', :controller => 'tags', :action => 'show'
 	
-  	map.with_options :controller => 'taggings' do |m|
-  		m.rate '/rate/:id/:stars', :action => 'rate'
-  		m.map '/locate/:id', :action => 'show', :service => 'map'
-  		m.bookmark '/bookmark/:path', :action => 'bookmark'
-  	end
-  # 	
+ 	map.with_options :controller => 'taggings' do |m|
+ 		m.rate '/rate/:id/:stars', :action => 'rate'
+ 		m.map '/locate/:id', :action => 'show', :service => 'map'
+ 		m.bookmark '/bookmark/:path', :action => 'bookmark'
+ 	end 	
 
 	map.with_options :controller => 'nuniverse', :action => 'command',  :tag => nil  do |m|
 		m.command '/command'
@@ -79,10 +64,12 @@ ActionController::Routing::Routes.draw do |map|
 		m.command '/command/:command/:input'
 		m.command_with_item '/command/:command/with_item/:item', :requirements => {:item => /\d+/}
 		m.command_with_id '/command/:command/with_id/:id',  :requirements => {:id => /\d+/}
-		m.suggest '/suggest/:command', :action => 'suggest'
+		m.suggest '/suggest', :action => 'suggest'
 		m.suggest '/suggest/:command/:input', :action => 'suggest'
 	end
 
+	map.visit "/visit/:label", :controller => "lists", :action => "find_or_create"
+	map.add_to_nuniverse "/add_to/:nuniverse/:kind", :controller => "lists", :action => "find_or_add_item"
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "nuniverse"
