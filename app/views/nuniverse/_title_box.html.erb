@@ -1,5 +1,11 @@
 <div class='box heading' id="title_box">
   <%= display_options %>
   <h1 class="title"><span class='hidden'><%= @kind %></span><%= source.title %></h1>
-  <%= perspectives(:source => @list, :selected => @perspective) %>  
+  
+  <h3>
+    <%= link_to "Add something", "#", :id => "select_tag_form", :class => "select_form_lnk" %>
+    <%= link_to "Change Perspective", "#", :id => "select_perspective_form", :class => "select_form_lnk" %>
+    <%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_form", :class => "select_form_lnk" %>
+
+  </h3>
 </div>

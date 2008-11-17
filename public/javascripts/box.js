@@ -43,8 +43,10 @@ var Box = new Class({
       this.content().removeClass('hidden');
     }
     
-    this.el.addClass('expanded');
+   
     // windowScroll.toElement(this.el);
+    preview(this.el);
+   
   },
   
   expandButton:function() {
@@ -70,7 +72,7 @@ var Box = new Class({
     inputBox.setUpdatable(this);
     inputBox.expand(command.getProperty('href'), command.getProperty('title'));
     inputBox.addEvent('success', function() {
-      console.log("YEAH")
+ 
     });
   },
   

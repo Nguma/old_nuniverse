@@ -85,5 +85,18 @@ class ApplicationController < ActionController::Base
 		# Last line is to replace 'default' user for common perspectives, such as 'everyone'
 		@perspective.user = current_user 
 	end
+	
+	def service_items(query)
+		case @perspective.tag.label
+		when "google"
+			Googleizer::Request.new(query.gsub('&','and') , :mode => "web").response.results
+		when "amazon"
+			Finder::Search.find(:query => query, :service => 'amazon')
+		when "youtube"
+			Googleizer::Request.new(query.gsub('&','and') , :mode => "video").response.results
+		else
+			
+		end
+	end
 
 end

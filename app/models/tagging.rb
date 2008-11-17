@@ -83,7 +83,7 @@ class Tagging < ActiveRecord::Base
 	end
 	
 	def label
-		super.nil? ? object.label : super
+		object.label 
 	end
 	
 	def title
@@ -155,7 +155,7 @@ class Tagging < ActiveRecord::Base
 		when "everyone"
 			sql << " WHERE (TA.user_id = (#{params[:user].id}) OR  public = 1 ) "
 		else
-			sql << " WHERE (TA.user_id IN (#{params[:user].collect {|u| u.id}.join(',')}) AND public = 1) "
+			sql << " WHERE (TA.user_id IN (#{params[:user].to_a.collect {|u| u.id}.join(',')}) AND public = 1) "
 		end
 		
 		if params[:tags]
@@ -163,7 +163,7 @@ class Tagging < ActiveRecord::Base
 			sql << " AND '#{query.singularize}' rlike CONCAT('^(',S.label,'|',S.kind,')?\s?(',O.kind,'|',TA.kind|TA.kind,')$') "
 		end
 		sql << " AND TA.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << " AND CONCAT(O.label,' ',O.kind,' ',TA.kind) rlike '^(.*\s)?#{Regexp.escape(params[:label].gsub('\'','\\\'').gsub(/^the\s|a\s/,''))}(\s.*)?'" if params[:label]
+		sql << " AND CONCAT(O.label,' ',O.kind,' ',TA.kind) rlike '^(.*\s)?#{params[:label].gsub(/^the\s|a\s/,'')}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "
 		sql << " ORDER BY #{order} "
 

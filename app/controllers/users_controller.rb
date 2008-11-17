@@ -94,12 +94,13 @@ class UsersController < ApplicationController
 		@user = current_user
 		@mode = params[:mode] || 'card'
 		@tag = current_user.tag
-		@perspective = session[:perspective] || current_user.self_perspective
+		@perspective = current_user.self_perspective
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
 		@title = "#{current_user.login}'s nuniverse"
 		@source = current_user
-		@items = current_user.connections(:label => params[:input], :per_page => 15)
+		@input = params[:input]
+		@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1)
 		respond_to do |format|
 			format.html {}	
 			format.js { 

@@ -1,0 +1,7 @@
+ <div class="search_box" class="expanded" style="background:none;height:auto;width:auto;display:block;visibility:visible">
+   <% form_tag "/#{controller.controller_name}/show/#{@source.id}" do -%>
+     <%= text_field_tag "input", @input, :class => "input", :style => "position:relative;float:left"%>
+     <%= spinner(:message => "") %>
+   <% end -%>
+   
+ </div>

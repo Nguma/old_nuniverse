@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index]
-	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show]
+	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview]
 	after_filter :update_session, :only => [:show]
   # GET /tags
   # GET /tags.xml
@@ -16,10 +16,11 @@ class TagsController < ApplicationController
 
   # GET /tags/1
   # GET /tags/1.xml
-  def show		
+  def show	
+
 		@kind = params[:kind].singularize rescue @tag.kind
-		@list = List.new(:label => @kind, :creator => current_user)
-		@tag.kind = @kind
+		# @list = List.new(:label => @kind, :creator => current_user)
+		# @tag.kind = @kind
 		@source = @tag
 		@page = params[:page] || 1
 		@title = "#{@kind.capitalize}: #{@tag.label.capitalize}"
@@ -27,16 +28,28 @@ class TagsController < ApplicationController
 		@service = @user.login
 		@order = params[:order] || "latest"
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
+		@mode = @mode.blank? ? 'card' : @mode
+		if @perspective.kind == "service"
+			@items = service_items(@tag.label)
+		else
+		@items = Tagging.select(
+			:page => @page,
+			:per_page => 16,
+			:subject => @tag,
+			:perspective => @perspective
+		)
+		end
+		
 		
 		respond_to do |format|
 			format.html {}
 			format.js {
 				@items = Tagging.select(
 					:page => @page,
-					:per_page => 3,
-					:users => [current_user],
-					:tags => [@tag.label, @kind],
-					:perspective => @service
+					:per_page => 16,
+					:subject => @tag,
+					:label => params[:input],
+					:perspective => @perspective
 				)
 				
 				render :action => :page, :layout => false
@@ -109,6 +122,7 @@ class TagsController < ApplicationController
 	def suggest
 		@input = params[:input]
 		@nuniverse = params[:nuniverse]
+		@mode = session[:mode]
 		@kind = params[:kind]
 		
 		if params[:kind].nil?
@@ -121,10 +135,48 @@ class TagsController < ApplicationController
 			end
 		end
 		
-		@tags = Tag.with_label_like(@input).with_kind(@kind).paginate(
-			:per_page => 3,
-			:page => 1
-		)
+		if params[:kind] == "address"
+				@source = Tag.find(params[:nuniverse])
+			render(:action => "google_locations", :layout => false)
+		else
+		
+			@tags = Tag.with_label_like(@input).with_kind(@kind).paginate(
+				:per_page => 3,
+				:page => 1
+			)
+		end
+	end
+	
+	def connect
+
+		@source = Tag.find(params[:nuniverse])
+		@kind = params[:kind]
+	
+		find_perspective
+
+		if @tag.nil?
+			@tag = Tag.create(:label => params[:label], :kind => @kind, :url => params[:url], :data => params[:data])
+		end
+		
+		if params[:kind] == "image"
+			@tag.add_image( :source_url => params[:label])
+		end
+		@tagging = Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => @kind)
+		Tagging.find_or_create(:subject => @tag, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
+
+
+
+
+		respond_to do |format|
+			format.html {redirect_to @source}
+			format.js {
+				render :action => "connect", :layout => false
+			}
+		end
+	end
+	
+	def preview
+		@page = params[:page] || 1
 	end
 	
 	def images
@@ -145,9 +197,9 @@ class TagsController < ApplicationController
 
 				params[:kind].split('#').each do |k|	
 					Tagging.create(
-						:object => @object,
-						:subject => @tag,
-						:owner => current_user,
+						:object => @tag,
+						:subject => @object,
+						:owner => current_user.tag,
 						:kind => k)
 				end
 				
@@ -184,10 +236,7 @@ class TagsController < ApplicationController
 		if params[:id]
 			@tag = Tag.find(params[:id]) 
 		else
-			conditions = []
-			conditions << "label = #{params[:label]}" if params[:label]
-			
-			@tag = Tag.find(:first, :conditions => conditions.join(" AND "))
+			@tag = Tag.with_label(params[:label]).with_kind(params[:kind]).find(:first)
 		end
 	end
 

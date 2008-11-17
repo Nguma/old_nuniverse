@@ -19,6 +19,7 @@ module TagsHelper
 		params[:service] ||= @service
 		params[:source] ||= @source
 		query = "+#{params[:source].label}  #{tag_info(params[:source])}"
+
 		case params[:service]
 		when "google"	
 			Googleizer::Request.new(query , :mode => "web").response.results
@@ -34,12 +35,14 @@ module TagsHelper
 		end
 	end
 	
-	def tag_info(connection, params = {})
-		params[:connection]  = connection
+	def tag_info(tag, params = {})
+		params[:tag]  = tag
 		params[:perspective] ||= @perspective
+		params[:kind] ||= (@kind.nil? ? tag.kind : @kind)
+		params[:page] = @page || 1
+		info =  Nuniverse.collect_infos(params)
 		
-		params[:kind] ||= (@kind.nil? ? connection.kind : @kind)
-		# Nuniverse.collect_infos(params)
+		
 	end
 	
 	def tag_links(tag, params = {})

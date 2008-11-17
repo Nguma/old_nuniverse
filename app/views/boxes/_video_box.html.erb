@@ -1,0 +1,17 @@
+<div class="box" id="video_box">
+
+  <% if item.object.id.nil? -%>
+    <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :label => item.object.label, :url => item.object.url, :kind => item.object.kind, :data => item.object.data ), :class => "hidden add_to_fav_url")%>
+  <% else -%>
+    <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object ), :class => "hidden add_to_fav_url")%>
+  
+  <% end -%>
+  <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
+  
+  <div class="content">
+    <%= render :partial => "/ws/video", :locals => {
+      :url => item.object.url,
+      :flashvars => nil
+    }%>
+  </div>
+</div>

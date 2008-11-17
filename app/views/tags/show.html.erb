@@ -1,23 +1,13 @@
 <%= render :partial => "/tags/new"  %>
+
+<%= perspectives %>
 <% nuniverse(:selected => "My nuniverse") do -%>
 
-<% if @tag.kind == 'video' %>
-  <%= render :partial => 'video', :locals => {:tag => @tag} %>
-<% else -%>
-  <!-- <div class="column small" id="left-column">
-    <%= image_box %>
-    <%= description_box %>
-    <%= tag_box(:source => @tag) %>
-  </div> -->
-  <div class="column large">   
-    <%= columnize(tag_content) %>
-  </div>
-<% end -%>
+  <%= will_paginate @items  unless @perspective.kind == "service"%>
+  <div class="delimiter" style="clear:both">&nbsp;</div>
+  <%= columnize(boxes_for(@items)) %>
   <% content_for :nav do -%>
-    <%#= link_to(:label => "Add a list", :command => "Add a list of", :id => "select_") %>
-    <%#= command_box("Make a comment", "#")%>
-    <%#= command_box("Search","search") %>
-    
+    <%= render :partial => "/nuniverse/search_box"%>
   <% end -%>
  
 <% end -%>

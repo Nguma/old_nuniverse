@@ -35,7 +35,8 @@
 
 .box p {
 	color:#777;
-	font-size:14px;
+	font-size:13px;
+	padding:3px 0 0 0;
 }
 
 .nav .box {
@@ -44,6 +45,7 @@
 
 .box .connection h3 {
 	font-size:13px;
+	padding:0;
 }
 
 .box a:hover {
@@ -74,6 +76,64 @@
 .expanded {
 	height:240px;
 	overflow:hidden;
+
+
+}
+
+#preview_box {
+	position:absolute;
+	background:transparent url('/images/backgrounds/box_expanded.png') 0 0 no-repeat;
+	top:200px;
+	left:200px;
+	width:432px;
+	height:332px;
+	z-index:45678;
+}
+
+#preview_box .wrap {
+	padding:30px;
+	overflow:hidden;
+}
+
+#preview_box .title {
+	margin:0 0 5px 0;
+}
+
+#preview_box .pagination {
+	clear:both;
+	font-size:11px;
+	color:#666;
+	padding:5px;
+}
+
+#preview_box .content {
+	clear:both;
+}
+
+#preview_box .content .connection a {
+	font-weight:bold;
+	font-size:17px;
+	color:#3C9;
+}
+
+#preview_box .menu {
+	position:absolute;
+	top:6px;
+	right:16px;
+	background:none;
+	height:auto;
+}
+
+#preview_box .connection {
+	background:none;
+	height:auto;
+}
+
+#preview_box .controls {
+	position:absolute;
+	bottom:50px;
+	right:40px;
+	clear:both;
 }
 
 .box .content {

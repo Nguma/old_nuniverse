@@ -136,17 +136,37 @@ class ListsController < ApplicationController
 	end
 	
 	def find_or_add_item
-		@list = List.find_or_create(:label => params[:nuniverse])
-		
+		@source = Tag.find(params[:nuniverse])
+		@kind = params[:kind]
+		find_perspective
 		if params[:kind] == "image"
-			@list.tag.add_image( :source_url => params[:label])
+			@source.add_image( :source_url => params[:label])
 		else
-			@tag = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
-			@tagging = Tagging.find_or_create(:subject => @list.tag, :object => @tag, :user => current_user, :kind => params[:kind])
-		end
-
 		
-		redirect_to @list
+			if params[:kind] == "address"
+				@tag = Tag.find_or_create(:label => params[:label], :kind => @kind, :data =>"#latlng #{params[:latlng]}"  )
+			elsif params[:tag]
+				@tag = Tag.find(params[:tag])
+			else
+				@tag = Tag.find_or_create(:label => params[:label], :kind => @kind, :url => params[:url], :data => params[:data])
+			end
+			@tagging = Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => @kind)
+			Tagging.find_or_create(:subject => @tag, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
+		end
+		
+	
+
+		respond_to do |format|
+			format.html {redirect_to @source}
+			format.js {
+				if params[:kind] == "image"
+					render :nothing => true
+				else
+				render :action => "add", :layout => false
+			end
+			}
+		end
+		
 	end
 	
 	def suggest

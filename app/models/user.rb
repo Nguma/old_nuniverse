@@ -107,7 +107,8 @@ class User < ActiveRecord::Base
 	def connections(params = {})
 		Tagging.select(
 					:perspective => self_perspective,
-					:label => params[:label] || nil,
+					:subject => self.tag,
+					:label => params[:label] ? "#{params[:label].pluralize}|#{params[:label].singularize}" : nil,
 					:page => params[:page] || 1,
 					:per_page => params[:per_page] || 3
 				)

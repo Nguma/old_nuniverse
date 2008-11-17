@@ -4,7 +4,8 @@ class Image < ActiveRecord::Base
   has_attachment	:content_type => :image,
     							:thumbnails => {
       							:small => '80x80!',
-      							:large => '150x150!'
+      							:large => '150x150!',
+										:box => '400x80!'
     							},
     							:processor  => :image_science,
 									:path_prefix => "public/attachments",

@@ -1,15 +1,15 @@
 <%= render :partial => "/layouts/hat", :locals => {:selected => @selected }%>
+<%= render :partial => "/boxes/expanded", :locals => {}%>
+<%= render :partial => "/nuniverse/visit" if logged_in? %>
 
 <div class="nuniverse <%= dom_class rescue "" %> " id="nuniverse" >
   <% unless @source.nil? %>
     <%= breadcrumbs %>
     <%= title %>
-
     <!-- <div id="nav"> -->
       <%= yield :nav %>
       
     <!-- </div> -->
-    
   <% end -%>
     
   <div id="content" class="<%= @mode %>_mode">

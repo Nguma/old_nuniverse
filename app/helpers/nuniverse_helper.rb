@@ -14,7 +14,7 @@ module NuniverseHelper
 		params[:size] ||= column_size
 		params[:dom_classes] ||= []
 		cols = Array.new(params[:size])
-		boxes = [ad_box,boxes].flatten
+		# boxes = [ad_box,boxes].flatten
 		boxes.each_with_index do |box, i|
 			(cols[i%params[:size]] ||= "") << box
 		end
@@ -35,7 +35,7 @@ module NuniverseHelper
 	def column_size
 		case @mode
 		when "card"
-			3
+			4
 		when "image"
 			4
 		when "list"
@@ -121,8 +121,9 @@ module NuniverseHelper
 		return render(:partial => "/nuniverse/hat", :locals => params, :section => params[:section])
 	end
 	
-	def spinner
-		render :partial => "/nuniverse/spinner"
+	def spinner(params ={})
+		params[:message] ||= ""
+		render :partial => "/nuniverse/spinner", :locals => params
 	end
 	
 	# Service_is_nuniverse?

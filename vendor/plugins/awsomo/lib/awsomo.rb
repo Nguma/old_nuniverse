@@ -107,9 +107,9 @@ module Awsomo
 			when "kitchen","misc."
 				"product"
 			when "paperback"
-				"product#book"
+				"book"
 			else 
-				"product##{productGroup}"
+				productGroup
 			end
 		end
 		

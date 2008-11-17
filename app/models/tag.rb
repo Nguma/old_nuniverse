@@ -1,5 +1,5 @@
 class Tag < ActiveRecord::Base
-  has_many :images,  	:conditions => ["images.parent_id is null"]
+  has_one :image,  :foreign_key => :tag_id
 	has_many :taggings_from, :dependent => :destroy, :foreign_key => :subject_id, :class_name => :taggings
 	has_many :taggings_to, :dependent => :destroy, :foreign_key => :object_id, :class_name => :taggings
 	has_many :subjects, :through => :taggings_to
@@ -58,6 +58,9 @@ class Tag < ActiveRecord::Base
 		Nuniverse::Address.find_coordinates(self)
 	end
 	
+	
+
+	
 	def precision
 		return property('sub_type') unless property('sub_type').blank?
 		kind
@@ -78,11 +81,16 @@ class Tag < ActiveRecord::Base
 	def kinds
 		kind.split("#")
 	end
+		
 	
 	def thumbnail
-		return images.first.public_filename(:small) unless images.empty?
-		return property('thumbnail') unless property('thumbnail').blank?		
-		return nil
+		image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"', self.id])
+		if image_tag.nil? 
+			return property('thumbnail') unless property('thumbnail').blank?
+			return nil
+		else
+			return image_tag.object.image.public_filename(:small) rescue ""
+		end
 	end
 	
 	def icon
@@ -94,7 +102,8 @@ class Tag < ActiveRecord::Base
 	
 	
 	def avatar
-		return images.first.public_filename unless images.empty?
+		image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"',self.id])
+		return image_tag.object.image.public_filename unless image_tag.nil?
 		return property('image') 
 	end
 	
@@ -184,18 +193,11 @@ class Tag < ActiveRecord::Base
 		tag = Tag.with_label(params[:label]).with_kind(params[:kind]).find(:first)
 		if tag.nil? || params[:new]
 			if params[:label].match(/^http:\/\/.+/)
-				tag = Tag.create(
-					:label => params[:label], 
-					:kind => params[:kind] || "bookmark",
-					:url => params[:label]
-				)
+				params[:kind] ||= 'bookmark'
+				tag = Tag.create(params)
 			else
 
-			tag = Tag.create(
-				:label => params[:label], 
-				:kind => params[:kind],
-				:related_date => params[:related_date] || nil
-			) 
+			tag = Tag.create(params) 
 			end
 		
 		end
@@ -209,10 +211,9 @@ class Tag < ActiveRecord::Base
 		params[:users] ||= 0
 		
 		Tagging.select(
-			:users => [params[:user]],
-			:perspective => params[:perspective] || 'everyone',
+			:perspective => params[:perspective] ,
 			:subject => self,
-			:tags => [params[:kind]]
+			:tags => params[:tags] || nil
 		)
 	end
 	

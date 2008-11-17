@@ -1,6 +1,5 @@
-<%= will_paginate(@items) %>
+<%= will_paginate @items %>
 <div class="items">
-  <% @items.each do |item| %>
-    <%= render_item(item, :kind => @kind)%>
-  <% end -%>
+  <%= columnize(boxes_for(@items), :size => 4)%>
+
 </div>

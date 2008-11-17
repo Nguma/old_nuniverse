@@ -1,24 +1,23 @@
 <%= render :partial => "/tags/new" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
 
-    <% if @mode == "list" -%>
-      <div class="column xlarge" id="left_content;">
-        <%= lists_for(current_user)%>
-        <%= ad_box%>
-      </div>
-      
-    <% else -%>
-      <%#= columnize(lists_for(current_user), :size => 4)%>
-      <%= columnize(boxes_for(current_user.connections(:per_page => 15)), :size => 4)%>
-    <% end -%>
+      <% if @mode == "list" -%>
+        <div class="column xlarge" id="left_content;">
+          <%= lists_for(current_user)%>
+          <%= ad_box %>
+        </div>
+
+      <% else -%>
+        
+        <%= will_paginate(@items)%>
+        <div class="delimiter" style="clear:both">&nbsp;</div>
+        <%= columnize(boxes_for(@items), :size => 4)%>
+      <% end -%>
 
 
   <% content_for :nav do -%>
-   <div class="search_box" class="expanded" style="background:none;height:auto;width:auto;display:block;visibility:visible">
-     <% form_tag "/users/show/#{@source.id}" do -%>
-       <%= text_field_tag "input", "", :class => "input"%>
-     <% end -%>
-   </div>
+    <%= render :partial => "/nuniverse/search_box" %>
+   
   <% end -%>
 
   

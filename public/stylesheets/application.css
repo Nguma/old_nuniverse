@@ -34,10 +34,16 @@ body
 	position:fixed;
 	top:40px;
 	right:20px;
-	color:#333;
+	color:#999;
 	font-weight:bold;
 	font-size:15px;
 	z-index:123456;
-	background:#9F9;
-	padding:10px;
+	width:260px;
+	height:80px;
+	padding:10px 40px 10px 10px;
+	background:transparent url('/images/backgrounds/notice.png') 0 0 no-repeat;
+}
+
+#notice.added {
+	background:transparent url('/images/backgrounds/notice_added.png') 0 0 no-repeat;
 }

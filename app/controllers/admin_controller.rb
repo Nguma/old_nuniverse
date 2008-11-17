@@ -102,22 +102,15 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		t = Tag.find(:all, :conditions => ['kind in (?) AND id >= 5187', ['painting']])
-
-		t.each do |tag|
-			tag.tag_with(['painting'], :context => 5230)
-		end
-		
-		
-		if params[:batch]
-			@batch = params[:batch].split(",")
-			@batch.each do |item|
-				t = Tag.new(:label => item, :kind => params[:kind])
-				t.save
-				Tagging.create(:subject_id => 0, :object_id => t.id, :user_id => 0, :kind => t.kind, :public => 1)
-			end	
-			@batch = ""
-			flash[:notice] = "batch is a done deal."
+		images  =Image.find(:all, :conditions => ['tag_id IS NOT NULL'])
+		images.each do |img| 
+			tag = Tag.create(:label => img.filename, :kind => "image")
+			Tagging.create(
+				:subject_id => img.tag_id, 
+				:object_id => tag.id,
+				:kind => "image")
+			img.tag_id = tag.id
+			img.save
 		end
 		
 	end

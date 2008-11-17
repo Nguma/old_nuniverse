@@ -1,13 +1,14 @@
-<div class="form_box hidden" id="select_tag_form" style="padding:10px;margin:10px">
+<div class="form_box inline hidden" id="select_tag_form" style="padding:10px;margin:10px">
   <div style="padding:40px;position:relative;width:auto">
     <h1>Add to this nuniverse</h1>
-    <% form_tag "/groups/add_user" do -%>
+    <% form_tag "/tags/connect" do -%>
       <fieldset>
-        <%= hidden_field_tag "nuniverse", @source.label %>
+        <div class="data"></div>
+        <%= hidden_field_tag "nuniverse", @source.id %>
         <label>You want to add a</label><br/>
         <%= text_field_tag "kind", ""%>
         <label>named</label>
-        <%= text_field_tag "input", "", :class => "input" %>
+        <%= text_field_tag "input", "", :class => "input", :width => "90%" %>
       </fieldset>
     <% end -%>
     <div class="suggestions" style="margin:20px 0 20px 0" src="/tags/suggest">
@@ -15,7 +16,7 @@
 
   </div>
   <div style="position:absolute;bottom:70px;right:70px;clear:both">
-    <%= link_to image_tag("/images/icons/save_changes_btn.png"), "/groups/update", :title => "Save Changes", :id => "save_perspectives" %>
+ 
     <%= link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"cancel_button"%>
   </div>
 

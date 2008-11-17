@@ -1,16 +1,25 @@
 window.addEvent('domready',reset);
-var windowScroll;
-var inputBox;
+// var windowScroll;
+// var inputBox;
 function reset()
 {
-  var r = new MooRainbow('myRainbow', {
-  		'startColor': [58, 142, 246],
-  	});
+  // var r = new MooRainbow('myRainbow', {
+  //    'startColor': [58, 142, 246],
+  //  });
+  Element.implement({
+    call:function(updated) {
   
+      var req = new Request.HTML({
+        url:this.getProperty('href'),
+        update:updated,
+        onSuccess:function() {
+          
+        }
+      }).get();
+    }
+  })
   
-  windowScroll = new Fx.Scroll($(document.body), {
-    offset:{'x':0,'y':-200}
-  });
+  $$('div#preview_box').each(function(el){var popup = new PopUp(el, {draggable:true})});
  
   $$('.box','.list').each(function(box,i) {
     if(box.hasClass('list')) {
@@ -20,13 +29,26 @@ function reset()
     }
   });
   
+  
+  $$('div.search_box').each(function(form) {
+    var searchBox = new Input(form, {
+      update:$('content'),
+      suggestUrl:form.getElement('form').getProperty('action'),
+      onRequest:function() {
+        $('preview_box').collapse();
+        $('content').empty();
+      },
+      
+      onUpdate:function(updated) {
+        updated.getElements('.box').each(function(box) {
+          var b = new Box(box);
+        });
+      
+      }
+    })
+  });
 
-  if($defined($('input_box'))){
-    inputBox = new Input($('input_box'));
-    window.document.addEvent('keyup',function(ev){
-      inputBox.onKey(ev.key);
-    });
-  }
+
   
   
   notice();
@@ -189,17 +211,24 @@ function onunLoad()
   inputBox.destroy();
 }
 
-function notice(msg)
+function notice(msg, classes)
 {
-  if($defined(msg)) {$('notice').set('text',msg)}
-  if($('notice').get('text').length <= 1) {
+  $('notice').removeProperty('classes');
+  if($defined(classes)) {
+    $('notice').addClass(classes);
+  }
+  if($defined(msg)) {$('notice').set('html',msg)}
+  if($('notice').get('html').length <= 1) {
     $('notice').addClass('hidden');
+    $('notice').setProperty('opacity',0);
   }
   else
   {
+    $('notice').removeClass('hidden');
     $('notice').setProperty('opacity',1);
     $('notice').fade.delay('5000',$('notice'),'out');
   }
+  
   
 }
 
@@ -223,130 +252,119 @@ function isDoubleEnter() {
 function updateForms() {
   
   $$('div.form_box').each(function(form) {
+    if(form.getElement('.suggestions') == undefined) {return}
+    var form_box = new Input(form, {
+      update:form.getElement('.suggestions'),
+      suggestUrl:form.getElement('.suggestions').getProperty('src'),
+      onRequest:function() {
+        
+      },
+      onSuggestionClick:function(connection) {
+        connection.getElement('.data').clone().replaces(form.getElement('form .data'));
+        if(form.hasClass('inline'))
+        {
+          var call = new Request.HTML({
+            url:form.getElement('form').getProperty('action'),
+            evalScripts:true,
+            onSuccess:function(a,b,c,d) {
+              var count = $('content').getElements('.box').length;
+              var cols = $('content').getElements('.column').length;     
+              var selected_column =  $('column_'+((count)%cols));
+              selected_column.adopt(a);
+              var b = new Box(selected_column.getLast('.box'));
+            }
+          }).post(form.getElement('form'));
+        }
+        else
+        {
+          form.getElement('form').submit();
+        }
+
+      },
+      onUpdate:function() {
+        
+        this.setSuggestions();
+      }
+      
+    });
     
-    var input = form.getElement("input.input");
+
    
-    if($defined(input))
-    {
-      input.removeEvents();
-      input.addEvents({
-         'focus':function() {
-           input.store('focused', true);
-         },
-
-         'blur':function() {
-           input.store('focused', false);
-          
-         },
-         
-         'keyup':function() {
-           if(input.retrieve('focused') == true) {
-             var call = new Request.HTML({
-                url:form.getElement('.suggestions').getProperty('src'),
-                update:form.getElement('.suggestions'),
-                onSuccess:function() {
-                
-                  form.getElements('.connection').each(function(suggestion) {
-                    suggestion.removeEvents();
-                    if(suggestion.getElement('a').getProperty('href') != "#") {
-                        
-                      suggestion.addEvent('click', function(ev) {
-                        ev.preventDefault();
-                        var call = new Request.HTML({
-                          url:suggestion.getProperty('href'),
-                          update:form,
-                          onSuccess:function() {
-                            updateForms();
-                          }
-                        }).post(form.getElement('form'));
-                      });
-                    } else 
-                    {
-                   
-                      suggestion.makeDraggable({
-                        droppables:form,
-                        onDrop:function(el,droppable) {
-                          if(!$defined(droppable)){
-                             $('content').adopt(el);
-                             el.setStyles({'left':0,'top':0,'height':50,'width':300})
-                          }
-                        },
-                        onStart:function(el){
-                          el.addClass('dragged');
-                        },
-                        onStop:function(el) {
-                          el.removeClass('dragged');
-                        },
-                        onEnter:function(el,droppable) {
-                           el.removeClass('droppable');
-                          
-                        },
-                        onLeave:function(el,droppable) {
-                         
-                          el.addClass('droppable');
-                        }
-                      });
-                 
-                    }
-
-                  });
-                  if($defined(form.getElement('.slots'))){
-                    form.getElement('.slots').adopt(suggestion);
-                  }
-                }
-              }).post(form.getElement('form'));
-           }
-         }
-
-       });
        var cancel_btn = form.getElement('.cancel_button');
        cancel_btn.removeEvents();
        cancel_btn.addEvent('click', function(ev){
          ev.preventDefault();
          form.toggleClass('hidden');
        });
-       
-      
-    }
+  
     
   });
   
-  $$('div.search_box').each(function(form) {
-    
-    var input = form.getElement("input.input");
-   
-    if($defined(input))
-    {
-      input.removeEvents();
-      input.addEvents({
-         'focus':function() {
-           input.store('focused', true);
-         },
 
-         'blur':function() {
-           input.store('focused', false);
-          
-         },
-         
-         'keyup':function() {
-           if(input.retrieve('focused') == true) {
-             var call = new Request.HTML({
-                url:form.getElement('form').getProperty('action'),
-                update:$('content'),
-                onSuccess:function() {
-                
-
-                }
-              }).cancel().post(form.getElement('form'));
-           }
-         }
-
-       });
-
-       
-      
-    }
-    
-  });
 }
+
+
+function preview(el) {
+
+    var clone = el.getElement('.connection').clone();
+    var preview_content = $('preview_box').getElement('.content');
+    var preview_title = $('preview_box').getElement('.title');
+    
+    preview_title.empty();
+    preview_content.empty();
+    preview_title.adopt(clone);
+   
+    if($defined(el.getElement('.content')))
+    {
+      preview_title.addClass('hidden');
+      preview_content.set('html',el.getElement('.content').get('html'))
+    } else {
+      preview_title.removeClass('hidden');
+      var call = new Request.HTML({
+        'url':el.getElement('.preview_url').getProperty('href'),
+        'update':preview_content,
+        'onSuccess':function() {
+          preview_content.getElements('.pagination a').each(function(lnk) {
+            lnk.addEvent('click', function(ev) {
+              ev.preventDefault();
+              lnk.call(preview_content);
+            });
+          });
+        }
+      }).get();
+    }  
+    
+    if(el.getElement('.add_to_fav_url') != undefined ) {
+      $('add_to_fav_btn').removeClass('hidden');
+      $('add_to_fav_btn').setProperty('href',el.getElement('.add_to_fav_url').getProperty('href'));
+    } else {
+      $('add_to_fav_btn').addClass('hidden');
+    }
+    $('preview_box').removeClass('hidden');
+}
+
+                 
+                    // suggestion.makeDraggable({
+                    //                      droppables:form,
+                    //                      onDrop:function(el,droppable) {
+                    //                        if(!$defined(droppable)){
+                    //                           $('content').adopt(el);
+                    //                           el.setStyles({'left':0,'top':0,'height':50,'width':300})
+                    //                        }
+                    //                      },
+                    //                      onStart:function(el){
+                    //                        el.addClass('dragged');
+                    //                      },
+                    //                      onStop:function(el) {
+                    //                        el.removeClass('dragged');
+                    //                      },
+                    //                      onEnter:function(el,droppable) {
+                    //                         el.removeClass('droppable');
+                    //                        
+                    //                      },
+                    //                      onLeave:function(el,droppable) {
+                    //                       
+                    //                        el.addClass('droppable');
+                    //                      }
+                    //                    });
 

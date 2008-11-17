@@ -1,0 +1,8 @@
+<% infos = tag_info(@tag) %>
+<%= will_paginate(infos) %>
+
+<% infos.each do |info| -%>
+<div class="connection" style="clear:both">
+  <%= render_item(info, :kind => info.kind)%>
+</div>
+<% end -%>

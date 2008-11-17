@@ -11,8 +11,8 @@ module ListsHelper
 				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login, :mode => @mode)) 
 			end
 		when 'Tag'
-			breadcrumbs << link_to("< #{@list.title.capitalize}", listing_url(:kind => params[:source].title, :user => @user.login, :mode => @mode)) unless @list.context.blank?
-			breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login)) 
+			# breadcrumbs << link_to("< #{params[:source].kind.title.capitalize}", tag_url(:kind => params[:source].title, :perspective => @user.login, :mode => @mode)) unless @list.context.blank?
+			# breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login)) 
 		else
 			
 		end
@@ -31,10 +31,10 @@ module ListsHelper
 		kind = params[:kind] ? params[:kind] : item.kind 	
 		params[:service] ||= @service
 		params[:title] ||= item.label.capitalize
-		if item.kind == "bookmark" || !item.service.nil?
+		if item.kind == "bookmark" 
 			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title], tag_url(item, :kind => kind, :service => params[:service], :mode => params[:mode] || @mode))
+			link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
 		end
 	end
 	
@@ -81,9 +81,8 @@ module ListsHelper
 		if personal	
 			params[:item_classes] <<  (item.public ? ' personal' : ' private')
 		end
-
-		
-		render :partial => "/lists/item_box", :locals => params
+		render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
+	
 	end
 	
 	def sorting_options(params = {})
@@ -101,10 +100,9 @@ module ListsHelper
 	end
 	
 	def perspectives(params = {})
-		return if @list.nil?
-		kind = @list.kind rescue params[:source].kind
-		perspectives = [@current_user.self_perspective, @everyone.perspectives.favorites,current_user.perspectives.favorites].flatten
-		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => perspectives}
+		kind = params[:kind] || @source.kind 
+		pers = [@current_user.self_perspective, @everyone.perspectives.favorites,current_user.perspectives.favorites].flatten
+		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => pers}
 	end
 	
 	def lists_for(source, options = {})

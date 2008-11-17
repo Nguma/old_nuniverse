@@ -1,0 +1,15 @@
+<% items = google_localize(:source => @input)%>
+<%= image_tag("/images/icons/powered_by_google.gif", :style => "position:absolute;top:15px;right:50px")%>
+<% items[0..2].each do |item| -%>
+  <div class="connection">
+    <h3>
+      <%= link_to(item.label, "#") %>
+    </h3>
+    <p><%= item.property('address') %> <%= item.property('tel') %></p>
+    <div class="data" style="display:none">
+      <%= hidden_field_tag "kind", "address" %>
+      <%= hidden_field_tag "data", item.data %>
+      <%= hidden_field_tag "label", item.property('address') %>
+    </div>
+  </div>
+<% end -%>
