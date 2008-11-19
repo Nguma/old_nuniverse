@@ -1,5 +1,5 @@
 <%= render :partial => "/layouts/hat", :locals => {:selected => @selected }%>
-<%= render :partial => "/boxes/expanded", :locals => {}%>
+<%= render :partial => "/boxes/preview", :locals => {}%>
 <%= render :partial => "/nuniverse/visit" if logged_in? %>
 
 <div class="nuniverse <%= dom_class rescue "" %> " id="nuniverse" >

@@ -1,7 +1,0 @@
-<div class="connection <%= item_classes rescue "" %>" >
-  <% raise item.inspect if item.object.nil? %>
-  <%= thumbnail_tag(item.object, :kind => kind)  %>
-  <p><%= item.kind %></p>
-  <h3><%= link_to_item(item, :kind => kind) %></h3>
-  
-</div>

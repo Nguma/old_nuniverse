@@ -1,4 +1,4 @@
-<div class="box card" style="overflow:hidden">
+<div class="box card" >
   <%= thumbnail_tag(item.object)%>
   <h3><%= link_to_item(item, :kind => source.kind) %></h3>
   <%= render :partial => "/lists/item_options", :locals => {:item => item}%>

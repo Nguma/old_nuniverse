@@ -1,0 +1,10 @@
+<div class="box <%= item_classes rescue "" %>" >
+
+  <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
+  <div class="content">
+   <p>"<%= item.object.label.capitalize %>" - <i><%= item.user.label.capitalize %></i></p>
+   
+  </div>
+
+  <div class="delimiter">&nbsp;</div>
+</div>

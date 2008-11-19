@@ -1,5 +1,5 @@
-<% params ||= {}%>
-<div class="item <%= cycle('even','odd') %>">
-  <%= thumbnail_tag(instance.object) rescue "" %>
-  <h3><%= link_to_item(instance, :source => source) rescue ""%></h3>
+<div class="connection <%= item_classes rescue "" %>" >
+  <%= thumbnail_tag(item.object, :kind => kind)  %>
+  <p><%= item.kind %></p>
+  <h3><%= link_to_item(item, :kind => kind) %></h3>
 </div>

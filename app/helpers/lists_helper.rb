@@ -30,27 +30,19 @@ module ListsHelper
 		item = item.is_a?(Tagging) ? item.object : item
 		kind = params[:kind] ? params[:kind] : item.kind 	
 		params[:service] ||= @service
-		params[:title] ||= item.label.capitalize
-		if item.kind == "bookmark" 
+		params[:title] ||= item.label.capitalize[0..53]
+		params[:title] << "..." if item.label.length > 53
+		case item.kind
+		when 'email address','email'
+			link_to(params[:title], "mailto:#{params[:title]}")
+		when 'bookmark'
 			link_to(params[:title], item.url, :target => "_blank")
 		else
 			link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
 		end
 	end
 	
-	def link_to_list(list, options = {})
-		title = options[:title] || list.label
-		title = title.singularize if options[:item_size] && options[:item_size] <= 1
-		
-		link_to title.capitalize, listing_url(list.uri_name, 
-																					:perspective => options[:user] || @perspective.tag.label,
-																					:mode => options[:mode] || @mode, 
-																					:page => options[:page] || @page, 
-																					:order => options[:order] || @order
-																					
-																), :class => "link_to_list"
-	end
-	
+
 	def list(params)
 		params[:dom_class] ||= ""
 		params[:source] ||= @source
@@ -70,7 +62,7 @@ module ListsHelper
 		params[:source] ||= @source
 		params[:kind] ||= nil
 		params[:item] = item
-		render :partial => "/lists/item", :locals => params
+		render :partial => "/taggings/instance", :locals => params
 	end
 	
 	def render_item_box(item, params = {})
@@ -81,8 +73,11 @@ module ListsHelper
 		if personal	
 			params[:item_classes] <<  (item.public ? ' personal' : ' private')
 		end
+		if item.kind == "address"
+			render :partial => "/boxes/#{item.kind}_box", :locals => params 
+		else
 		render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
-	
+	end
 	end
 	
 	def sorting_options(params = {})

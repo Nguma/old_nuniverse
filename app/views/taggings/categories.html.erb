@@ -1,9 +1,0 @@
-<h2>Create a new Category</h2>
-<h5>Add a new category or select any from that list</h5>
- <% cats = ['Address','Bookmarks','Comments','Companies','Description', 'Images','items','News','People','Videos']%>
- <div id="possible_categories">
-   <% cats.each do |cat| -%>
-     <%= drop_command(:category => cat, :tagging => @command.list.tag_id)%>
-   <% end -%>
-   <%= link_to("<span class='pls'>+</span> Create your own", "/command/add/?tagging=#{@command.list.tag_id}", :class => 'custom') %>
- </div>

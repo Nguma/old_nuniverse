@@ -87,6 +87,7 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def service_items(query)
+		
 		case @perspective.tag.label
 		when "google"
 			Googleizer::Request.new(query.gsub('&','and') , :mode => "web").response.results
@@ -94,6 +95,8 @@ class ApplicationController < ActionController::Base
 			Finder::Search.find(:query => query, :service => 'amazon')
 		when "youtube"
 			Googleizer::Request.new(query.gsub('&','and') , :mode => "video").response.results
+		when "twitter"
+			Finder::Search.find(:query => query, :service => 'twitter')
 		else
 			
 		end

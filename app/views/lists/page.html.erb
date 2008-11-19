@@ -1,9 +1,0 @@
-<% if @mode %>
-  <%= columnize(:boxes => images_for(@items), :size => 3)%>
-<% else -%>
-  
-    <div class="items">
-      <%= render :partial => "item", :collection => @items, :locals => {:source => @list, :order => @order} %>
-    </div>
-  
-<% end -%>

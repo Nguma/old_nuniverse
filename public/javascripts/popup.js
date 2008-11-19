@@ -19,17 +19,24 @@ var PopUp = new Class({
     this.el.addClass('hidden');
   },
   
+  enableDrag:function() {
+    // this.options.drag.attach();
+  },
+  
+  disableDrag:function() {
+    this.options.drag.detach();
+  },
+  
   setBehavior:function() {
     if(this.options.draggable == true) {
-      this.el.makeDraggable();
+      this.options.drag = new Drag.Move(this.el);
+      this.el.getElement('.content').addEvents({
+        'mouseenter':this.disableDrag.bind(this),
+        'mouseleave':this.enableDrag.bind(this)
+      })
     }
     
-    if(this.options.content != null) {
-      this.options.content.addEvent('click', function() {
 
-      });
-    }
-    
 
     this.el.getElements('.close_btn','.cancel_btn').each(function(lnk){
       lnk.addEvent('click', this.collapse.bindWithEvent(this));

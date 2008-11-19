@@ -27,48 +27,22 @@ module WsHelper
 
 	
 	
-	def map(params)
-		map = GMap.new("map_div")
+	def map(tag, params = {})
+		map = GMap.new("map_#{tag.id}","map_#{tag.id}")
 	  map.control_init(:small_zoom => true)
-		#icon_loc = GIcon.new(:image => "public/images/icons/location.png", :icon_size => GSize.new(15,15),:icon_anchor => GPoint.new(7,7),:info_window_anchor => GPoint.new(9,2))
-	
-		if params[:source].is_a?(List) 
-		#items = Tagging.with_path_ending(params[:path].with_address_or_geocode().paginate(:page => 1, :per_page => 10))
-			items = params[:source].items(:per_page => 10, :page => params[:page] || 1).collect{|c| c.object }
-			markers = markers_for(items)
-		elsif params[:source].is_a?(Tagging)
-			markers = markers_for([params[:source].object])
-		else
-			
-			markers = markers_for([params[:source]])
-		end
+		markers = markers_for(tag)
 		
-		if markers.empty?
-			return false
-			# return render(:partial => "/nuniverse/maps", :locals => {:no_map => true, :path => params[:path]})
-		else
-			 #@map.center_zoom_init([-37,-49],10)
-			map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],12)
-			markers.each do |marker|
-				map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "<b>#{marker.label.rstrip}</b> <p style='font-size:11px'>#{marker.property('address')}</p>"))
-			end
-			return map
-			# html = "<script type='text/javascript' charset='utf-8'>
-			# 			//<![CDATA[
-			# 			
-			# 				setMap({
-			# 					'markers':[#{markers.join(',')}],
-			# 					'zoom':#{zoom},
-			# 					'center':#{markers[0]}
-			# 				});
-			# 			//]]>
-			# 			</script>"
+		return false if markers.empty?
+		map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],12)
+		markers.each do |marker|
+			map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "<b>#{marker.label.rstrip}</b> <p style='font-size:11px'>#{marker.property('address')}</p>"))
 		end
+		return map
 	end
 	
 	def markers_for(places)	
 		markers = []
-		places.each do |place|
+		places.to_a.each do |place|
 			if place.has_coordinates?
 					markers << place	
 			elsif place.has_address?

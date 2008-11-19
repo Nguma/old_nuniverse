@@ -1,14 +1,14 @@
 <div class="box image " style="height:60px;overflow:hidden" >
-  <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "hidden preview_url")%>
+  
   <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object), :class => "hidden add_to_fav_url")%>
-  <div class="connection">
+  <div class="connection hide_in_preview" >
     
     <%= image_tag(item.object.image.public_filename(:small), :class => "thumbnail")%>
     <p>Image</p>
     <h3><%= link_to(item.object.image.filename, "#") %></h3>
   </div>
   <div class="content">
-    <%= image_tag(item.object.image.public_filename, :width =>"100%")%>
+    <%= image_tag(item.object.image.public_filename, :class => "blowup")%>
   </div>
 </div>
 

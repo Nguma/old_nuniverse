@@ -155,17 +155,39 @@ class TagsController < ApplicationController
 		find_perspective
 
 		if @tag.nil?
-			@tag = Tag.create(:label => params[:label], :kind => @kind, :url => params[:url], :data => params[:data])
+			@tag = Tag.create(:label => params[:label], :kind => @kind, :url => params[:url], :data => params[:data], :description => params[:description], :service => params[:service])
 		end
 		
-		if params[:kind] == "image"
+		if @kind == "image"
 			@tag.add_image( :source_url => params[:label])
 		end
+		
 		@tagging = Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => @kind)
 		Tagging.find_or_create(:subject => @tag, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
 
 
 
+			if @kind == 'bookmark'  && @tag.url.match('en.wikipedia.org/wiki/')
+					t = @tag.url.gsub(/.*\/wiki/,'/wiki')
+
+					@source.replace_property('wikipedia_url',t)
+					wiki_content = Nuniverse.get_content_from_wikipedia(t)
+					
+					@source.description = Nuniverse.wikipedia_description(wiki_content) if @source.description.nil?
+
+					img = (wiki_content/'table.infobox'/:img).first
+					unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
+						image = Tag.create(:label => img.attributes['src'], :kind => 'image', :url => img.attributes['src'])
+						@image = image.add_image(:source_url => img.attributes['src'])
+						@tagging = Tagging.find_or_create(:subject => @source, :object => image, :user => current_user, :kind => "image")
+						Tagging.find_or_create(:subject => image, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
+						
+					end
+					@source.save
+			end
+					begin
+		rescue
+		end
 
 		respond_to do |format|
 			format.html {redirect_to @source}
@@ -177,6 +199,24 @@ class TagsController < ApplicationController
 	
 	def preview
 		@page = params[:page] || 1
+		if @tag.service.nil?
+			@items = Tagging.select(
+				:perspective => @perspective,
+				:subject => @tag,
+				:order => params[:order] || nil,
+				:page => params[:page] || 1,
+				:per_page => 3)
+
+		end
+
+			
+		
+	end
+	
+	def categorize
+		@context = Tag.find(params[:context])
+		@connections = Tagging.find(:all, :conditions => ['subject_id = ? AND object_id = ?',params[:context],params[:id] ])
+
 	end
 	
 	def images
@@ -184,51 +224,6 @@ class TagsController < ApplicationController
 		
 	end
 	
-	def bookmark
-		@object = Tag.find_by_url(params[:url])
-		@object = Tag.create(
-			:label => params[:label],
-			:kind => params[:kind],
-			:url => params[:url],
-			:service =>params[:service],
-			:data => params[:data],
-			:description => params[:description] ) if @object.nil?
-			
-
-				params[:kind].split('#').each do |k|	
-					Tagging.create(
-						:object => @tag,
-						:subject => @object,
-						:owner => current_user.tag,
-						:kind => k)
-				end
-				
-
-				begin
-					if params[:kind] == 'bookmark'  && @object.url.match('en.wikipedia.org/wiki/')
-							t = @object.url.gsub(/.*\/wiki/,'/wiki')
-
-							@tag.replace_property('wikipedia_url',t)
-							wiki_content = Nuniverse.get_content_from_wikipedia(t)
-							@tag.description = Nuniverse.wikipedia_description(wiki_content) if @tag.description.nil?
-
-							img = (wiki_content/'table.infobox'/:img).first
-							unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/) && @tag.images.empty?)
-								@image = @tag.add_image(:source_url => img.attributes['src'])
-							end
-							@tag.save
-					end
-				rescue
-				end
-			
-			
-		respond_to do |format|
-			format.html {redirect_back_or_default @tag, :service => params[:service] || nil	}
-			format.js { render :layout => false}
-		end
-		
-		
-	end
 	
 	protected
 	

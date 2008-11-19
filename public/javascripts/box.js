@@ -43,8 +43,6 @@ var Box = new Class({
       this.content().removeClass('hidden');
     }
     
-   
-    // windowScroll.toElement(this.el);
     preview(this.el);
    
   },
@@ -134,6 +132,14 @@ var Box = new Class({
       'mouseleave':this.unfocus.bind(this),
       'click':this.toggle.bindWithEvent(this)
     },this);
+    
+    this.el.getElements('.thumbnail').each(function(thumb){
+      thumb.addEvent('click', function(ev) {
+        
+        ev.stopPropagation();
+        preview(thumb);
+      })
+    });
     
     this.setCommands();
     this.setOptionsBehaviors();

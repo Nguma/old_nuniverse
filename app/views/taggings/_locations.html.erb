@@ -1,8 +1,0 @@
-<div class="box">
-  <h2>Places</h2>
-  <div class="items">
-    
-  <%= render :partial => "instance", :collection => source.connections(:kind => 'location') %>
-  </div>
-  <%= command(:label => "+ Add a location", :command => "location")%>
-</div>

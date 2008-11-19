@@ -8,6 +8,29 @@ module Finder
 		end
 	end
 	
+	class Twitter
+		def initialize(params)
+			@query = params[:query]
+			@request_url = "http://search.twitter.com/search.json?q=#{CGI.escape(@query)}"
+		end
+		def results
+			@response = Net::HTTP.get_response(URI.parse(@request_url))
+			results = []
+			JSON.parse(@response.body)['results'].each do |tweet|
+				results << Tag.new(
+					:label => tweet['text'],
+					:created_at => tweet['created_at'],
+					:kind => 'tweet',
+					:data => "#thumbnail #{tweet['profile_image_url']} #user_name #{tweet['from_user']} #user_id #{tweet['from_user_id']}",
+					:service => 'twitter',
+					:url => tweet['url']
+				)
+			end
+			results
+		end
+		
+	end
+	
 	class Google
 		def initialize(params)
 			@query = params[:query]
