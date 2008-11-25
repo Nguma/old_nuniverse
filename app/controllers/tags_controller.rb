@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index]
-	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview]
+	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview, :suggest]
 	after_filter :update_session, :only => [:show]
   # GET /tags
   # GET /tags.xml
@@ -24,7 +24,7 @@ class TagsController < ApplicationController
 		@source = @tag
 		@page = params[:page] || 1
 		@title = "#{@kind.capitalize}: #{@tag.label.capitalize}"
-		
+		@input = params[:input] || nil
 		@service = @user.login
 		@order = params[:order] || "latest"
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
@@ -32,26 +32,20 @@ class TagsController < ApplicationController
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
 		else
-		@items = Tagging.select(
-			:page => @page,
-			:per_page => 16,
-			:subject => @tag,
-			:perspective => @perspective
-		)
+			@items = Tagging.select(
+				:page => @page,
+				:per_page => 16,
+				:subject => @tag,
+				:label => @input,
+				:perspective => @perspective,
+				:order => @order
+			)
 		end
 		
 		
 		respond_to do |format|
 			format.html {}
 			format.js {
-				@items = Tagging.select(
-					:page => @page,
-					:per_page => 16,
-					:subject => @tag,
-					:label => params[:input],
-					:perspective => @perspective
-				)
-				
 				render :action => :page, :layout => false
 			}
 		end
@@ -139,35 +133,71 @@ class TagsController < ApplicationController
 				@source = Tag.find(params[:nuniverse])
 			render(:action => "google_locations", :layout => false)
 		else
+			@tags = Tagging.select(
+				:perspective => @everyone.perspectives.first,
+				:kind => @kind || nil,
+				:label => @input,
+				:per_page => 5,
+				:page => params[:page] || 1
+				)
 		
-			@tags = Tag.with_label_like(@input).with_kind(@kind).paginate(
-				:per_page => 3,
-				:page => 1
-			)
+			# @tags = Tag.with_label_like(@input).with_kind(@kind).paginate(
+			# 			:per_page => 3,
+			# 			:page => 1
+			# 		)
 		end
+	end
+	
+	def disconnect 
+		@source = Tag.find(params[:nuniverse])
+		set = [params[:nuniverse], params[:item]]
+		connections = Tagging.find(:all, :conditions => ['subject_id in (?) AND object_id in (?) AND user_id = ?', set, set, current_user.tag])
+		connections.each do |c|
+			c.destroy
+		end
+		redirect_to @source
 	end
 	
 	def connect
 
 		@source = Tag.find(params[:nuniverse])
 		@kind = params[:kind]
-	
+
 		find_perspective
-
-		if @tag.nil?
-			@tag = Tag.create(:label => params[:label], :kind => @kind, :url => params[:url], :data => params[:data], :description => params[:description], :service => params[:service])
+				
+		@tag = Tag.create(
+			:label => params[:input], 
+			:kind => @kind, 
+			:url => params[:url] || (@kind == 'bookmark') ? params[:input] : nil , 
+			:data => params[:data], 
+			:description => params[:description], 
+			:service => params[:service]) if @tag.nil?
+			
+		
+		 @tagging = Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => @kind)
+			if params[:tags]
+				params[:tags].split(',').each do |tag|
+							Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => tag)
+						end
+					end
+					Tagging.find_or_create(:subject => @tag, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
+		
+		
+		if @kind == "address"
+			@tag.label = @tag.property('address')
+			@tag.save
+			tel = Tag.find_or_create(:label => @tag.property('tel'), :kind => 'telephone')
+			@source.connect_with(tel, :user => current_user)
+		elsif @kind == "image"
+			@tag.add_image( :source_url => params[:input])
 		end
 		
-		if @kind == "image"
-			@tag.add_image( :source_url => params[:label])
-		end
 		
-		@tagging = Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => @kind)
-		Tagging.find_or_create(:subject => @tag, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
-
-
-
+				
+		
 			if @kind == 'bookmark'  && @tag.url.match('en.wikipedia.org/wiki/')
+				@tag.label = @tag.label.gsub(/\,\s+the free encyclopedia/, "")
+				@tag.save
 					t = @tag.url.gsub(/.*\/wiki/,'/wiki')
 
 					@source.replace_property('wikipedia_url',t)
@@ -177,17 +207,16 @@ class TagsController < ApplicationController
 
 					img = (wiki_content/'table.infobox'/:img).first
 					unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
-						image = Tag.create(:label => img.attributes['src'], :kind => 'image', :url => img.attributes['src'])
+						image = Tag.find_or_create(:label => img.attributes['src'].split('/').last, :kind => 'image', :url => img.attributes['src'])
 						@image = image.add_image(:source_url => img.attributes['src'])
 						@tagging = Tagging.find_or_create(:subject => @source, :object => image, :user => current_user, :kind => "image")
 						Tagging.find_or_create(:subject => image, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
 						
 					end
 					@source.save
+					
 			end
-					begin
-		rescue
-		end
+			
 
 		respond_to do |format|
 			format.html {redirect_to @source}
@@ -200,17 +229,19 @@ class TagsController < ApplicationController
 	def preview
 		@page = params[:page] || 1
 		if @tag.service.nil?
-			@items = Tagging.select(
-				:perspective => @perspective,
-				:subject => @tag,
-				:order => params[:order] || nil,
-				:page => params[:page] || 1,
-				:per_page => 3)
+			@items = Tagging.paginate_by_sql(
+			"SELECT TA.*,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.subject_id = #{@tag.id} GROUP BY TA.kind ORDER BY counted ASC",
+			:page => 1,
+			:per_page => 10)
 
 		end
-
-			
 		
+		respond_to do |format|
+			format.html {redirect_to @source}
+			format.js {
+				render :action => "preview", :layout => false
+			}
+		end
 	end
 	
 	def categorize
@@ -228,10 +259,16 @@ class TagsController < ApplicationController
 	protected
 	
 	def find_tag
+		
 		if params[:id]
 			@tag = Tag.find(params[:id]) 
 		else
-			@tag = Tag.with_label(params[:label]).with_kind(params[:kind]).find(:first)
+			if params[:url]
+				@tag = Tag.with_url(params[:url]).find(:first)
+			else
+				# @tag = Tag.with_label(params[:input]).with_kind(params[:kind]).find(:first)
+				@tag = Tag.find_or_create(:label => params[:input], :kind => params[:kind])
+			end
 		end
 	end
 

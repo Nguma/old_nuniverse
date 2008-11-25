@@ -5,6 +5,7 @@
 <div class="nuniverse <%= dom_class rescue "" %> " id="nuniverse" >
   <% unless @source.nil? %>
     <%= breadcrumbs %>
+    <%= search_box %>
     <%= title %>
     <!-- <div id="nav"> -->
       <%= yield :nav %>
@@ -14,5 +15,9 @@
     
   <div id="content" class="<%= @mode %>_mode">
     <%= content %>
+  </div>
+  <div class="delimiter" style="clear:both">&nbsp;</div>
+  <div class="footer" style="position:fixed;bottom:20px;">
+    <%= yield :footer %>
   </div>
 </div>

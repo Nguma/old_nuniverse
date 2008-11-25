@@ -30,6 +30,7 @@ class UsersController < ApplicationController
   def activate
     logout_keeping_session!
     user = User.find_by_activation_code(params[:activation_code]) unless params[:activation_code].blank?
+
     case
     when (!params[:activation_code].blank?) && user && !user.active?
       user.activate!
@@ -92,17 +93,27 @@ class UsersController < ApplicationController
 		end
 
 		@user = current_user
-		@mode = params[:mode] || 'card'
+		
+		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
 		@tag = current_user.tag
 		@perspective = current_user.self_perspective
 		@order = params[:order] || "rank"
 		@kind = params[:kind] || nil
 		@title = "#{current_user.login}'s nuniverse"
-		@source = current_user
+		@source = current_user.tag
 		@input = params[:input]
-		@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1)
+		if @mode == "category"
+			@items = Tagging.paginate_by_sql(
+			"SELECT TA.*,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.subject_id = #{@tag.id} GROUP BY TA.kind ORDER BY counted ASC",
+			:page => params[:page] || 1,
+			:per_page => 16)
+		else
+			@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1)
+		end
 		respond_to do |format|
-			format.html {}	
+			format.html {
+				update_session
+			}	
 			format.js { 
 				render :controller => 'user', :action => :page, :layout => false
 			}

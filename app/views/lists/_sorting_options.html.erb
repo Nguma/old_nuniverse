@@ -2,7 +2,7 @@
       <dt>Sort</dt>
       <% options.each do |option| -%>
         <dd class=" <%= selected == option[1] ? 'current' : '' %>">
-          <%= link_to_list(source, :order => option[1], :title => "By #{option[0]}") %>
+          <%= link_to("By #{option[0]}", visit_url(source, @perspective.tag.label, :order => option[1])) %>
         
         </dd>
       <% end -%>

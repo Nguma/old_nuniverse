@@ -7,8 +7,9 @@
     <p>Image</p>
     <h3><%= link_to(item.object.image.filename, "#") %></h3>
   </div>
-  <div class="content">
+  <div class="content" style="padding:20px">
     <%= image_tag(item.object.image.public_filename, :class => "blowup")%>
   </div>
+   <%= add_to_fav_link(item, :source => @tag)%>
 </div>
 

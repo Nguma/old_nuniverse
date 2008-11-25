@@ -2,20 +2,26 @@
   <label>Nothing has been found.</label>
 
 <% else -%>
+  <label>Select from our suggestions</label>
   <% @tags.each do |tag| -%>
     <div  class="connection">  
-      <%= link_to("#{thumbnail_tag(tag, :kind => tag.kind)}","#") %>
-      <p><%= tag.kind %></p>
+      <%= link_to("#{thumbnail_tag(tag.object, :kind => tag.kind)}","#") %>
+      <p><%= tag.object.kind %></p>
       <h3>
-        <%= link_to("<span style='font-weight:bold'>#{tag.label}</span>", "") %>
+        <%= link_to("<span style='font-weight:bold'>#{tag.object.label}</span>", "") %>
       </h3>
       
       <div class="data"  style="display:none">
-        <%= hidden_field_tag "kind", @kind.blank? ? tag.kind : @kind %>
-        <%= hidden_field_tag "id", tag.id %>
+  
+        <%= hidden_field_tag "kind", @kind.blank? ? tag.object.kind : @kind %>
+        <%= hidden_field_tag "id", tag.object.id %>
+        <%= hidden_field_tag "data", tag.object.data %>
+        <%= hidden_field_tag "url", tag.object.url %>
       </div>
     </div>
   <% end -%>
+  <div class="delimiter">&nbsp;</div>
+  <label style="">or </label>
 <% end -%>
 <div class = "connection">
   <h3>

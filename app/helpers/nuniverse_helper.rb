@@ -14,8 +14,8 @@ module NuniverseHelper
 		params[:size] ||= column_size
 		params[:dom_classes] ||= []
 		cols = Array.new(params[:size])
-		# boxes = [ad_box,boxes].flatten
-		boxes.each_with_index do |box, i|
+		# boxes = [ad_box,boxes]
+		boxes.flatten.each_with_index do |box, i|
 			(cols[i%params[:size]] ||= "") << box
 		end
 		
@@ -158,6 +158,10 @@ module NuniverseHelper
 		else
 			tag_url(params)
 		end
+	end
+	
+	def search_box
+		render :partial => "/nuniverse/search_box"
 	end
 	
 end

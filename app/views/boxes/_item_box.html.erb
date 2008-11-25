@@ -1,13 +1,31 @@
 <div class="box <%= item_classes rescue "" %>" >
-  
-  
   <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
-  <div class="content">
+  
+  <div class="content" style="padding:0px 0 20px 20px;position:relative">
+    
+    <% if item.object.service.nil? -%>
+    
+     <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "preview_url")%>
+      
+    <% else -%>
+    
+     <p style="padding:0;width:340px;word-wrap:break-word">
+        <%= item.object.description %><br/>
+        <% if !item.object.property('price').blank? -%>
+          <%= link_to("Buy it on #{item.object.service} for #{item.object.property('price')}", item.url, :style => "color:#393") %>
+        <% else -%>
+          <%= link_to(item.url, item.url, :style => "color:#393") %>
+        <% end -%>
+        
+      </p>
+      
+    <% end -%>
     
   </div>
+  
   <div class="hidden">
-    <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "preview_url")%>
-    <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object.id, :label => item.object.label, :url => item.object.url, :kind => item.object.kind, :data => item.object.data, :description => item.object.description, :service => item.object.service ), :class => "add_to_fav_url")%>
+    
+    <%= add_to_fav_link(item, :source => @tag)%>
     
     <%= link_to("Edit connections with #{@tag.label}",categorize_url(item.object.id, @tag), :class => "categorize_url")%>
   </div>

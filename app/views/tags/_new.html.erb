@@ -1,23 +1,27 @@
 <div class="form_box inline hidden" id="select_tag_form" style="padding:10px;margin:10px">
-  <div style="padding:40px;position:relative;width:auto">
-    <h1>Add to this nuniverse</h1>
+  <div class="wrap">
+    <h1>What do you want to add?</h1>
     <% form_tag "/tags/connect" do -%>
       <fieldset>
         <div class="data"></div>
         <%= hidden_field_tag "nuniverse", @source.id %>
         <label>You want to add a</label><br/>
-        <%= text_field_tag "kind", ""%>
+        <%= text_field_tag "kind", "", :class => 'input', :style => "width:480px"%><br/>
         <label>named</label>
-        <%= text_field_tag "input", "", :class => "input", :width => "90%" %>
+        <%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+        <label>and, in this nuniverse, tag it</label>
+        <%= text_field_tag "tags", "",  :style => "width:480px", :autocomplete => "off"%>
       </fieldset>
     <% end -%>
-    <div class="suggestions" style="margin:20px 0 20px 0" src="/tags/suggest">
+    <div class="content suggestions" style="margin:20px 0 20px 0" src="/tags/suggest">
+      <label>Popular things to  add</label>
+      <%= render :partial => "/kinds/suggest" %>
     </div>
 
   </div>
-  <div style="position:absolute;bottom:70px;right:70px;clear:both">
+  <div style="position:absolute;bottom:60px;right:50px;clear:both">
  
-    <%= link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"cancel_button"%>
+    <%= link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"cancel_btn"%>
   </div>
 
 </div>

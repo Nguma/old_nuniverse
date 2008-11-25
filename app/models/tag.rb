@@ -16,21 +16,28 @@ class Tag < ActiveRecord::Base
 		@address = Nuniverse::Address.new(self)
 	end
 	
-	def connect(params)
-		@tagging = Tagging.select(
-			:subject => self,
-			:tags => [params[:kind], params[:label]]
-		)
-		if @object.nil?
-			@object = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
-			@tagging = Tagging.create(
-						:subject => self, 
-						:object => @object,
-						:kind => params[:kind],
-						:public => params[:public] || 0
-			)
+	def connect_with(tag, params = {})
+		params[:as] ||= self.kind.to_a
+
+		params[:as].each do |k|
+			 Tagging.create(
+					:subject => tag,
+					:object => self,
+					:public => 1,
+					:user_id => params[:user] ? params[:user].tag.id : 0 ,
+					:kind => k )
 		end
+			
+			Tagging.create(
+			:subject => self,
+			:object => tag,
+			:public => 1,
+			:user_id => params[:user] ? params[:user].tag.id : 0 ,
+			:kind => tag.kind) unless tag.kind == 'user'
+	
+			
 	end
+
 		
 	def object
 		self
@@ -153,13 +160,17 @@ class Tag < ActiveRecord::Base
   }
 
 	named_scope :with_label_like, lambda {|label|
-		return label.nil? ? {} : {:conditions => ["label rlike ?","#{label}"]}
+		return label.nil? ? {} : {:conditions => ["label like ?","#{label}%"]}
 	}
 	
 	named_scope :with_label, lambda { |label| 
 		return label.nil? ? {} : {:conditions => ["label = ?","#{label}"]}
 	}
 	
+	named_scope :with_url, lambda { |url| 
+		return url.nil? ?  {} : {:conditions => ["url = ?", "#{url}"]}
+	}
+
 	named_scope :with_tags, lambda { |kind| 
 		return kind.nil? ? {} : {
 			:joins => "LEFT OUTER JOIN tagggings.TA on TA.subject_id = tags.id",
@@ -188,21 +199,8 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.find_or_create(params)
-		
-		
-		tag = Tag.with_label(params[:label]).with_kind(params[:kind]).find(:first)
-		if tag.nil? || params[:new]
-			if params[:label].match(/^http:\/\/.+/)
-				params[:kind] ||= 'bookmark'
-				tag = Tag.create(params)
-			else
-
-			tag = Tag.create(params) 
-			end
-		
-		end
-		
-
+		tag = Tag.with_label(params[:label]).with_kind(params[:kind]).with_url(params[:url]).find(:first)
+		tag = Tag.create(params) if tag.nil?
 		tag
 	end
 	

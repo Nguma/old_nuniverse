@@ -209,15 +209,34 @@
 
 .form_box {
 	background:transparent url("/images/backgrounds/popup.png") 0 0 no-repeat;
-	width:600px;
-	height:420px;
+	width:790px;
+	height:440px;
 	color:#333;
+	padding:0;
 	position:absolute;
 	z-index:123456789;
 }
 
+.form_box fieldset {
+	width:460px;
+	position:relative;
+}
+.form_box input {
+	clear:both;
+}
+
+.form_box .wrap {
+	padding:30px;
+	position:relative;
+	width:auto;
+}
+
 .form_box .suggestions {
 	padding:0;
+	position:absolute;
+	top:30px;
+	left:460px;
+	width:300px;
 }
 
 .form_box form {
@@ -270,3 +289,10 @@
 	color:#3C9;
 }
 
+#search_box input {
+	background:#FFF;
+}
+
+#search_box input.empty {
+	background:#FFF url('/images/backgrounds/empty_search.png') 0 5px no-repeat;
+}

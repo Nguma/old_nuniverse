@@ -1,13 +1,32 @@
-<%= render :partial => "/tags/new"  %>
+<%= render :partial => "/tags/default_overview"  %>
 
-<%= perspectives %>
+
 <% nuniverse(:selected => "My nuniverse") do -%>
+  <% if @items.empty? -%>
+    <h3>This nuniverse is empty for now.</h3>
+    <h3>Would you like to connect something to <%= @tag.label %> ?</h3>
+    <h3><%= link_to "Yes, add something", "#", :id => "select_tag_lnk" %></h3>
+    <h3><%= link_to "No thanks, I'll just visit something else", "#",  :id => "select_nuniverse_lnk" %></h3>
+  <% else -%>
+    <%= sorting_options :source => @tag  %>
+    <%= will_paginate @items  unless @perspective.kind == "service"%>
+    <div class="delimiter" style="clear:both">&nbsp;</div>
+    <%= columnize(boxes_for(@items)) %>
+    <% content_for :footer do -%>
+      <h3 style="display:inline;padding:5px;font-weight:bold"><%= link_to "+ Add something", "#", :id => "select_tag_lnk", :class => "select_form_lnk" %></h3>
+      <h3 style="display:inline;padding:5px"><%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_lnk", :class => "select_form_lnk" %></h3>
+      <%= display_options %>
 
-  <%= will_paginate @items  unless @perspective.kind == "service"%>
-  <div class="delimiter" style="clear:both">&nbsp;</div>
-  <%= columnize(boxes_for(@items)) %>
-  <% content_for :nav do -%>
-    <%= render :partial => "/nuniverse/search_box"%>
+    <% end -%>
   <% end -%>
- 
+  
+  
+
+
+  <% content_for :nav do -%>
+     <%= perspectives rescue ""%>
+  <% end -%>
+  
+
+  
 <% end -%>

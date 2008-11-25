@@ -179,7 +179,7 @@ p strong {
 	min-height:30px;
 	z-index:123456789;
 	background:#666;
-	margin:0 0 0 1px;
+	margin:0 0 5px 1px;
 	padding:3px 0 5px 0;
 }
 
@@ -188,10 +188,20 @@ p strong {
 	float:none;
 	width:auto;
 	clear:both;
-	margin:0 0 0 0px;
+	margin:5px 0 0 0px;
 	padding:0;
 	overflow:hidden;
 	z-index:123;
+}
+
+#content .pagination {
+	position:relative;
+	float:right;
+	width:200px;
+	padding:5px;
+	margin:0;
+	color:#999;
+	text-align:right;
 }
 
 #left-content {
@@ -309,3 +319,23 @@ a.saved {
 .trashable img {
 	visibility:hidden;
 }
+
+.dialogue {
+	color:#666;
+
+}
+
+.dialogue p {
+	font-size:18px;
+}
+
+.dialogue a,
+.dialogue p a {
+	color:#396;
+}
+
+.dialogue h3 {
+	font-weight:bold;
+	padding:5px 0 20px 0;
+}
+

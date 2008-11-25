@@ -1,17 +1,21 @@
-  <% if subject.has_address? %>
-  <!-- <div class="mini_map" style="float:right; width:200px;height:200px;border:solid 1px #999"> -->
-    <%#= map_from_google(
-    :location => subject,
-    :path => path
-    )%>
-  <!-- </div> -->
-  <% end -%>
-  <%= image_tag(subject.image) %> 
-  <h1><%= subject.label %></h1>
-  <p>
-    <strong><%= subject.kind.capitalize %></strong>
-  <% if subject.description.blank? -%>
-    <%= link_to("Add your own description","") %> or <%= link_to ("Try to find a description on Freebase", "") %>
-  <% end -%>
-  <%= h subject.details %></p>
-  <%#= render :partial => '/images/new', :path => path %>
+<div class="form_box inline hidden" id="select_tag_form" style="padding:10px;;margin:10px">
+  <div class="wrap">
+    <div class="phase" id="phase_1">
+      <h1>What do you want to add?</h1>
+      <% form_tag "/tags/connect" do -%>
+        <fieldset style="padding:0;margin:0">
+          <div class="data hidden"></div>
+          <%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+        </fieldset>
+      <% end -%>
+    </div>
+    <div class="phase" id="phase_2">
+      <label>You are about to add</label>
+      <h2></h2>
+      <label>Connect it to <%= @tag.label %> as:</label>
+      <%= text_area_tag "tags", "",  :style => "width:480px", :autocomplete => "off"%>
+    </div>
+      <div class="content suggestions" style="margin:0 0 20px 0;padding:0;position:relative;float:none;left:0;clear:both" src="/tags/suggest">
+      </div>
+  </div>
+</div>

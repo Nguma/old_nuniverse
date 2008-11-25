@@ -46,12 +46,11 @@ class AdminController < ApplicationController
 	
 	def ct 
 
-		cts = [
-		]		
+		cts = []
 cts.each_with_index do |ct,i|
 			
 				
-				t = Tag.new(:label => ct[0], :kind => 'painting', :data => "#dates #{ct[2]} ")
+				t = Tag.new(:label => ct[0], :kind => 'character', :data => "#wikipedia_url #{ct[1]} ")
 				
 				# unless ct[1].blank?
 				# 					wiki_content = Nuniverse.get_content_from_wikipedia(ct[1])
@@ -66,7 +65,7 @@ cts.each_with_index do |ct,i|
 				# 					t.save
 				# 				end
 				t.save
-				t.tag_with(['painting'],:context => 5230);
+				t.tag_with(['comic character','supervillain'],:context => 6239);
 		
 				# if !ct[1].blank?
 				# 				
@@ -102,16 +101,14 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		images  =Image.find(:all, :conditions => ['tag_id IS NOT NULL'])
-		images.each do |img| 
-			tag = Tag.create(:label => img.filename, :kind => "image")
-			Tagging.create(
-				:subject_id => img.tag_id, 
-				:object_id => tag.id,
-				:kind => "image")
-			img.tag_id = tag.id
-			img.save
+		tags  = Tag.find(:all, :conditions => 'data rlike "#release_date "')
+		tags.each do |tag| 
+			rd = tag.property('release_date')
+			date = Tag.find_or_create(:label => rd, :kind => 'date')
+			tag.connect_with(date)
 		end
+		
+		render :nothing => true
 		
 	end
 	

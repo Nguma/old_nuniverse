@@ -1,5 +1,6 @@
 var Input = new Class({
-    Implements:[Options,Events],
+    Extends:PopUp,
+
     Options:{
       'focused':false,
       'suggestUrl':null,
@@ -9,19 +10,20 @@ var Input = new Class({
     },
     
     initialize:function(el,options) {
-      this.setOptions(options)
-      this.el = $(el);
-      this.input = this.el.getElement('input.input');
-      this.setEvents();
+      this.inputs = $(el).getElements('input.input');
+      this.parent(el,options);
       this.setRequest();
     },
     
-    setEvents:function() {
-      this.input.removeEvents();
-      this.input.addEvents({
-        'focus':this.focus.bindWithEvent(this),
-        'blur':this.blur.bindWithEvent(this),
-        'keyup':this.keyup.bindWithEvent(this)
+    setBehavior:function() {
+      this.parent();
+      this.inputs.each(function(input){
+        input.removeEvents();
+        input.addEvents({
+        'focus':this.focus.bindWithEvent(this, input),
+        'blur':this.blur.bindWithEvent(this, input),
+        'keyup':this.keyup.bindWithEvent(this, input)
+        },this);
       },this);
       
     },
@@ -44,26 +46,42 @@ var Input = new Class({
       this.timeout = $empty
     },
     
+    expand:function() {
+      this.parent();
+      this.el.getElements('input#input')[0].focus();
+    },
+    
     getUpdate:function() {
       this.fireEvent('onUpdate', this.options.update)
     },
     
-    focus:function(ev) {
-      this.options.focused = true;
+    focus:function(ev,input) {
+      this.options.focused = input;
     },
     
-    blur:function(ev) {
-      this.options.focused = false;
+    blur:function(ev, input) {
+      this.options.focused = null;
     },
     
-    keyup:function(ev) {
-      if(this.options.focused == false) { return; }
+    keyup:function(ev, input) {
+      
+      if(this.options.focused != input) { return; }
+
+        
+    
       // if(this.input.getProperty('value').length == 0) {return;}
-      $clear(this.timeout)
+     
+      if(input.getProperty('value') == '') {
+        this.fireEvent('onClear',input)
+      } else {
+        this.fireEvent('onChange', input);
+      }
+      $clear(this.timeout);
       this.timeout = this.suggest.delay(200,this);
     },
     
     suggest:function() {
+      if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
       this.request.post(this.el.getElement('form'));
     },
     

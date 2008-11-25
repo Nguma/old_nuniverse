@@ -39,7 +39,8 @@ ActionController::Routing::Routes.draw do |map|
 	  		m.upgrade '/upgrade', :action => 'upgrade'
 	  	end
   	
-	  	map.with_options :controller => 'lists', :action => 'show', :path_prefix => '/my_nuniverse' do |m|
+	  	map.with_options :controller => 'tags', :action => 'show' do |m|
+		
 	  		m.with_options :page => 1, :order => "by_name" do |page|
 					page.listing_with_tag '/:tag/:kind/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
 					page.list_in_cards	'/:tag/:kind/in_cards/:page/:order', :mode => 'card', :requirements => {:tag => /\d+/,:page => /\d+/}
@@ -47,10 +48,7 @@ ActionController::Routing::Routes.draw do |map|
 				end
 	  	end
 			
-			map.listing '/my_nuniverse/all/:kind/',:controller => 'lists', :action => 'show'
-			map.listing '/all/:kind/according-to/:perspective', :controller => 'lists', :action => 'show', :requirements => {:perspective => /\w+/}
-	
-			map.item '/items/:kind/:label/:id/according-to/:service', :controller => 'tags', :action => 'show'
+
 	
  	map.with_options :controller => 'taggings' do |m|
  		m.rate '/rate/:id/:stars', :action => 'rate'
@@ -68,8 +66,10 @@ ActionController::Routing::Routes.draw do |map|
 		m.suggest '/suggest/:command/:input', :action => 'suggest'
 	end
 
-	map.visit "/visit/:label", :controller => "lists", :action => "find_or_create"
+	map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
+	# map.visit "/visit/:label", :controller => "lists", :action => "find_or_create"
 	map.add_to_nuniverse "/add_to/:nuniverse/:kind", :controller => "tags", :action => "connect"
+	map.remove_from_nuniverse "/remove_from/:nuniverse/:item", :controller => "tags", :action => "disconnect"
 	map.preview "/preview/:id/:kind", :controller => "tags", :action => "preview"
 	map.categorize "/categorize/:id/:context", :controller => "tags", :action => "categorize"
 

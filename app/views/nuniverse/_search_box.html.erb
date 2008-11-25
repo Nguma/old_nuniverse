@@ -1,7 +1,11 @@
- <div class="search_box" class="expanded" style="background:none;height:auto;width:auto;display:block;visibility:visible">
-   <% form_tag "/#{controller.controller_name}/show/#{@source.id}" do -%>
-     <%= text_field_tag "input", @input, :class => "input", :style => "position:relative;float:left"%>
-     <%= spinner(:message => "") %>
+ <div id="search_box" class="" style="background:#eee;height:45px;width:auto;position:relative;float:right;visibility:visible;padding:5px 5px 5px 5px;margin:0 0 0 0;z-index:12345678">
+    
+   <% form_tag "/#{controller.controller_name}/show/#{@source.id}", :style => "width:auto;" do -%>
+      
+     <%= text_field_tag "input", @input, :class => "input #{@input.blank? ? 'empty' : ''}", :style => "position:relative;float:none;padding:5px;width:auto;margin:0;"%>
+    
    <% end -%>
-   
+    <%= spinner(:message => "") %>
  </div>
+
+ 

@@ -1,0 +1,13 @@
+<div class="box <%= item_classes rescue "" %>" >
+  <div class="category">
+    <%= image_tag("/images/icons/#{item.kind}.png", :class => "thumbnail") %>
+    <h3><%= item.kind.pluralize.capitalize %></h3>
+  </div>
+  
+  <div class="content" style="padding:0px 0 20px 20px;position:relative">
+  
+
+  </div>
+  
+  <div class="delimiter">&nbsp;</div>
+</div>

@@ -21,7 +21,6 @@ Inflector.inflections do |inflect|
   inflect.plural(/([m|l])ouse$/i, '\1ice')
   inflect.plural(/^(ox)$/i, '\1en')
   inflect.plural(/(quiz)$/i, '\1zes')
-	
   inflect.singular(/s$/i, '')
   inflect.singular(/(n)ews$/i, '\1ews')
   inflect.singular(/([ti])a$/i, '\1um')

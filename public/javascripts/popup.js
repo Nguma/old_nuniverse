@@ -9,7 +9,7 @@ var PopUp = new Class({
     this.el = $(el);
     this.setOptions(options);
     this.setBehavior();
-    // this.setEvents();
+    this.setEvents();
     this.setRequest();
   },
   
@@ -17,6 +17,16 @@ var PopUp = new Class({
     if($defined(ev)) { ev.preventDefault();}
     
     this.el.addClass('hidden');
+  },
+  
+  expand:function(ev) {
+    if($defined(ev)) { ev.preventDefault();}
+    this.el.setStyles({
+      'top':0,
+      'left':200
+    })
+    this.el.removeClass('hidden');
+    
   },
   
   enableDrag:function() {
@@ -35,20 +45,21 @@ var PopUp = new Class({
         'mouseleave':this.enableDrag.bind(this)
       })
     }
+    var close_btns = this.el.getElements('.cancel_btn').concat(this.el.getElements('.close_btn'));
     
-
-
-    this.el.getElements('.close_btn','.cancel_btn').each(function(lnk){
+    close_btns.each(function(lnk) {
       lnk.addEvent('click', this.collapse.bindWithEvent(this));
     },this);
     
-
   },
   
   setEvents:function() {
-    this.el.getElements('.dynamic_lnk').each(function(lnk) {
-      lnk.addEvent('click', this.execute.bindWithEvent(this, lnk));
-    },this);
+    // this.el.getElements('.dynamic_lnk').each(function(lnk) {
+    //     lnk.addEvent('click', this.execute.bindWithEvent(this, lnk));
+    //   },this);
+
+    if(this.el.getProperty('id') == undefined ) { return; }
+    
   },
   
   setRequest:function() {

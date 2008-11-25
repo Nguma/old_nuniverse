@@ -21,7 +21,7 @@ function reset()
   
  
   
-  $$('div#preview_box').each(function(el){var popup = new PopUp(el, {draggable:true})});
+  $$('div#preview_box').each(function(el){ var popup = new PopUp(el, {draggable:true})});
  
   $$('.box','.list').each(function(box,i) {
     if(box.hasClass('list')) {
@@ -32,7 +32,7 @@ function reset()
   });
   
   
-  $$('div.search_box').each(function(form) {
+  $$('div#search_box').each(function(form) {
     var searchBox = new Input(form, {
       update:$('content'),
       suggestUrl:form.getElement('form').getProperty('action'),
@@ -46,6 +46,16 @@ function reset()
           var b = new Box(box);
         });
       
+      },
+      
+      onChange:function(input) {
+        console.log("CHANGE")
+        input.removeClass('empty');
+      },
+      
+      onClear:function(input) {
+       
+        input.addClass('empty');
       }
     })
   });
@@ -56,19 +66,19 @@ function reset()
   notice();
  
   
-  $$('.save_button').each(function(button) {
-    button.addEvent('click', function(ev) {
-      var call = new Request.HTML({
-        'url':button.getParent('.actions').getElement('form').getProperty('action'),
-        'onComplete':function() {
-          button.addClass('.saved');
-          notice("Bookmarked!");
-        }
-      }).post(button.getParent('.box').getElement('form'));
-      return false;
-    });
-  });
-
+  // $$('.save_button').each(function(button) {
+  //    button.addEvent('click', function(ev) {
+  //      var call = new Request.HTML({
+  //        'url':button.getParent('.actions').getElement('form').getProperty('action'),
+  //        'onComplete':function() {
+  //          button.addClass('.saved');
+  //          notice("Bookmarked!");
+  //        }
+  //      }).post(button.getParent('.box').getElement('form'));
+  //      return false;
+  //    });
+  //  });
+ 
 
  $$('a#perspective_link').each(function(lnk) {
    lnk.addEvent('click',function(ev){
@@ -141,14 +151,23 @@ function reset()
         "left":200
       });
       form.removeClass('hidden');
-      form.getElement('input.input').focus();
     });
   });
 
-
+  
   
   updateForms();
 
+}
+
+function refresh(updated) {
+  updated.getElements('.kind_lnk').each(function(lnk){
+    lnk.removeEvents();
+    lnk.addEvent('click',function(ev) {
+      ev.preventDefault();
+      $('select_tag_form_kind').setProperty('value',lnk.getProperty('html'))
+    })
+  });
 }
 
 
@@ -223,6 +242,7 @@ function updateForms() {
     var form_box = new Input(form, {
       update:form.getElement('.suggestions'),
       suggestUrl:form.getElement('.suggestions').getProperty('src'),
+      // draggable:true,
       onRequest:function() {
         
       },
@@ -259,12 +279,7 @@ function updateForms() {
     
 
    
-       var cancel_btn = form.getElement('.cancel_button');
-       cancel_btn.removeEvents();
-       cancel_btn.addEvent('click', function(ev){
-         ev.preventDefault();
-         form.toggleClass('hidden');
-       });
+
   
     
   });
@@ -304,52 +319,13 @@ function preview(el) {
     
     if($defined(el.getElement('.map'))){
       var funcName = 'display_'+el.getElement('.map').getProperty('id');
-      eval(funcName)();
+      eval(funcName).delay(200);
     }
     
-    if(el.getElement('.add_to_fav_url') != undefined ) {
-      $('add_to_fav_btn').removeClass('hidden');
-      $('add_to_fav_btn').setProperty('href',el.getElement('.add_to_fav_url').getProperty('href'));
-    } else {
-      $('add_to_fav_btn').addClass('hidden');
-    }
+    if(el.getElement('.add_to_fav_lnk') != undefined ) {
+      var lnk = el.getElement('.add_to_fav_lnk').replaces($('add_to_fav_btn'));
+      lnk.setProperty('id','add_to_fav_btn');
+      lnk.removeClass('hidden');
+    } 
     $('preview_box').removeClass('hidden');
 }
-
-
-// function map(map_div){
-//   if($defined(map_div)) {
-//     if (GBrowserIsCompatible()) {
-//     map = new GMap2(map_div);
-//     map.setCenter(new GLatLng("40.745615","-73.999301"),12);
-//     map.addOverlay(addInfoWindowToMarker(new GMarker(new GLatLng("40.745615","-73.999301"),{title : "318 W 23rd St, New York, United States"}),"<b>318 W 23rd St, New York, United States</b> <p style='font-size:11px'></p>",{}));
-//     map.addControl(new GSmallZoomControl());
-//     }
-//   }
-//   
-// }
-//                  
-                    // suggestion.makeDraggable({
-                    //                      droppables:form,
-                    //                      onDrop:function(el,droppable) {
-                    //                        if(!$defined(droppable)){
-                    //                           $('content').adopt(el);
-                    //                           el.setStyles({'left':0,'top':0,'height':50,'width':300})
-                    //                        }
-                    //                      },
-                    //                      onStart:function(el){
-                    //                        el.addClass('dragged');
-                    //                      },
-                    //                      onStop:function(el) {
-                    //                        el.removeClass('dragged');
-                    //                      },
-                    //                      onEnter:function(el,droppable) {
-                    //                         el.removeClass('droppable');
-                    //                        
-                    //                      },
-                    //                      onLeave:function(el,droppable) {
-                    //                       
-                    //                        el.addClass('droppable');
-                    //                      }
-                    //                    });
-

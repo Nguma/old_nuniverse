@@ -1,5 +1,5 @@
 <div class="box" id="video_box">
-  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object.id, :label => item.object.label, :url => item.object.url, :kind => item.object.kind, :data => item.object.data ), :class => "hidden add_to_fav_url")%>
+  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object.id, :input => item.object.label, :url => item.object.url, :kind => item.object.kind, :data => item.object.data ), :class => "hidden add_to_fav_url")%>
   
   <%= render_item(item, :kind => item.kind, :item_classes => "hide_in_preview") %>
   
@@ -9,4 +9,5 @@
       :flashvars => nil
     }%>
   </div>
+  <%= add_to_fav_link(item, :source => @tag)%>
 </div>

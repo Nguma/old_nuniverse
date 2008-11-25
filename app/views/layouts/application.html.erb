@@ -15,12 +15,11 @@
   <meta name="verify-v1" content="/b/gBK4McPYhBKaszdoH2V4g8APPQuLR+gAg4gpteUs=" />
 
   <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'filters', 'box', 'list', 'items', 'input', 'custom', 'moorainbow' %>
-  <%= javascript_include_tag  'mootools', 'application', 'box', 'list', 'input', 'popup'%>
-  <%#= GMap.header(:with_vml => false) %>
-  <%#= @map.to_html if @map%>
+  <%= javascript_include_tag  'mootools', 'application', 'box', 'list',  'popup','input'%>
 
+  <%= GMap.header (:small_zoom => true, :with_vml => false) %>
   <%= yield :head %>
-  <%#= head_for(controller.controller_name )%>
+
   <script type="text/javascript"><!--
    google_ad_client = "pub-8435960507166132";
    google_ad_slot = "4376243957";

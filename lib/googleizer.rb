@@ -52,6 +52,7 @@ module Googleizer
 				:description => item['content'],
 				:url => url(item) ,
 				:data => "#thumbnail #{item['tbUrl'] rescue ''}"
+				
 				)
 				t.replace_property("address", "#{item['streetAddress']}, #{item['city']}, #{item['country']}") if item['streetAddress']
 				# item['phoneNumbers'].each do |tel|

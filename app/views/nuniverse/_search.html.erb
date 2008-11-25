@@ -1,6 +1,6 @@
 <div class="input" id="finder">
   <div class="suggestions"></div>
   <% form_tag "/lists/find_or_create" do -%>
-    <%= text_field_tag "query", "", :id => "input" %>
+    <%= text_field_tag "query", @input, :id => "input" %>
   <% end -%>
 </div>

@@ -1,0 +1,33 @@
+<% if @items %>
+  
+  <div class="overview" style="padding:0 40px 0 0px">
+    <%= will_paginate(@items, :previous_label => "", :next_label => "")%>
+    <% @items.each do |info| -%>
+      <p style="padding:0 0 0 0;">
+        <% if info.counted.to_i == 1 -%>
+         <span style="margin:0 5px 0 0"><%= info.kind.capitalize %></span>
+          <%= link_to_visit(info.object, :class => "preview_tag_lnk")%>
+          
+        <% else -%>
+          <span style="margin:0 5px 0 0"><%= info.counted %></span><%= link_to info.kind.pluralize, visit_url(@tag.id, @perspective.tag.label, :input => info.kind)%>
+        <% end -%>
+      </p>
+    <% end -%>
+    
+  </div>
+  <div class="perspectives" style="margin:10px 0 0 0;font-size:15px;color:#999">
+    <h4>According to</h4>
+    <%= link_to "Google", visit_url(@tag,"google") , :style => "color:#666" %> | 
+    <%= link_to "Amazon", visit_url(@tag,"amazon"), :style => "color:#666"%> | 
+    <%= link_to "Youtube", visit_url(@tag,"youtube"), :style => "color:#666"%> | 
+    <%= link_to "Twitter", visit_url(@tag,"twitter"), :style => "color:#666"%>
+  </div>
+
+  
+<% else -%>
+  <p><%= @tag.description %></p>
+  <p><%= @tag.url %></p>
+  <% if !@tag.property('price').blank? -%>
+    <p><%= link_to "Buy it on #{@tag.service} for #{@tag.property('price')}", @tag.url %></p>
+  <% end -%>
+<% end -%>

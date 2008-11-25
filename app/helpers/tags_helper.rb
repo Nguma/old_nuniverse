@@ -1,6 +1,15 @@
 module TagsHelper
 
-
+	def link_to_visit(tag, params ={})
+		
+		if tag.url.nil?
+			link_to tag.label.capitalize, visit_url(tag.id, @perspective.tag.label), params
+		else
+			params[:target] = "_blank"
+			link_to tag.label.capitalize, tag.url, params
+		end
+	end
+	
 	def tag_content
 		params[:kind] ||= @kind
 		if service_is_nuniverse?
@@ -80,5 +89,29 @@ module TagsHelper
 			sql << " ORDER BY #{params[:order] || "T.label ASC"} "
 
 			Tag.paginate_by_sql(sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)
+	end
+	
+	def add_to_fav_link(item, params = {}) 
+		personal = item.personal rescue !item.public rescue 0
+		if !personal
+			link_to(image_tag("/images/icons/save.png"),
+				add_to_nuniverse_url(
+					:nuniverse => params[:source].id, 
+					:kind => item.kind, 
+					:tag => item.object.id, 
+					:input => item.object.label, 
+					:url => item.object.url, 
+					:kind => item.object.kind, 
+					:data => item.object.data, 
+					:description => item.object.description, 
+					:service => item.object.service 
+				), :class => "add_to_fav_lnk hidden", :title => "Save")
+		else
+			link_to(image_tag("/images/icons/heartbreak.png"),
+				remove_from_nuniverse_url(
+					:nuniverse => params[:source].id,
+					:item => item.object.id
+				),:class => "add_to_fav_lnk hidden", :title => "Remove from your connections")
+		end
 	end
 end

@@ -71,6 +71,10 @@ class KindsController < ApplicationController
     end
   end
 
+	def suggest
+		
+	end
+
   # DELETE /kinds/1
   # DELETE /kinds/1.xml
   def destroy

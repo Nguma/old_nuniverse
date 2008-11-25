@@ -146,6 +146,7 @@ class Tagging < ActiveRecord::Base
 		
 		sql = "SELECT DISTINCT TA.* "
 		sql << ", (GROUP_CONCAT(DISTINCT user_id) rlike '#{current_user.tag.id}') AS personal"
+		sql << ", (GROUP_CONCAT(DISTINCT TA.kind SEPARATOR ', ') ) AS current_tags "
 		sql << " FROM taggings TA LEFT OUTER JOIN tags S on S.id = TA.subject_id "
 		sql << " LEFT OUTER JOIN tags O on O.id = TA.object_id "
 
@@ -159,9 +160,12 @@ class Tagging < ActiveRecord::Base
 		end
 		
 		if params[:tags]
-			query = Regexp.escape(params[:tags].join(' ').gsub("'","\\'")) 
-			sql << " AND '#{query.singularize}' rlike CONCAT('^(',S.label,'|',S.kind,')?\s?(',O.kind,'|',TA.kind|TA.kind,')$') "
+			query = Regexp.escape(params[:tags].to_a.join(' ').gsub("'","\\'")) 
+			
+			sql << " AND '#{query.singularize}' rlike CONCAT('(',S.label,'|',S.kind,')?\s?(',O.kind,'|',TA.kind,')$') "
 		end
+		
+		sql << " AND CONCAT(O.kind,' ',TA.kind) rlike '(\s|^)#{params[:kind]}'" if params[:kind]
 		sql << " AND TA.subject_id = #{params[:subject].id} " if params[:subject]
 		sql << " AND CONCAT(O.label,' ',O.kind,' ',TA.kind) rlike '^(.*\s)?#{params[:label].gsub(/^the\s|a\s/,'')}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "

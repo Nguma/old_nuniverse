@@ -4,6 +4,11 @@ body
 	padding:0px 0 0 0px;
 }
 
+.wordwrap
+{
+   -moz-binding: url('./wordwrap.xml#wordwrap');
+}
+
 .delimiter
 {
 	position:relative;

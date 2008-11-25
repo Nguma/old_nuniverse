@@ -1,5 +1,9 @@
-<%= will_paginate @items %>
-<div class="items">
+<% if @items.empty? -%>
+  <h2>Nothing has been found in this nuniverse matching <span style="color:#396"><%= @input %></span></h2>
+  <%= link_to "Add something now" %>
+<% else -%>
+  <%= sorting_options :source => @tag %>
+  <%= will_paginate @items %>
+  <div class="delimiter" style="clear:both">&nbsp;</div>
   <%= columnize(boxes_for(@items), :size => 4)%>
-
-</div>
+<% end -%>

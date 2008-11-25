@@ -1,6 +1,7 @@
 <% items = google_localize(:source => @input)%>
-<%= image_tag("/images/icons/powered_by_google.gif", :style => "position:absolute;top:15px;right:50px")%>
-<% items[0..2].each do |item| -%>
+
+
+<% items[0..5].each do |item| -%>
   <div class="connection">
     <h3>
       <%= link_to(item.label, "#") %>
@@ -13,3 +14,5 @@
     </div>
   </div>
 <% end -%>
+<div class='delimiter'>&nbsp;</div>
+<%= image_tag("/images/icons/powered_by_google.gif", :style => "position:relative")%>

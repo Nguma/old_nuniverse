@@ -3,19 +3,11 @@ module ListsHelper
 	def breadcrumbs(params = {})
 		params[:source] ||= @source
 		breadcrumbs = []
-		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse")
-		case params[:source].class.to_s
-		when 'List'
-			if !@list.context.blank?
-				breadcrumbs << link_to("< #{@list.context.capitalize}", tag_url(params[:source].tag, :kind => params[:source].context), :mode => @mode) 
-				breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login, :mode => @mode)) 
-			end
-		when 'Tag'
+		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse") unless @source.kind == "user"
+	
 			# breadcrumbs << link_to("< #{params[:source].kind.title.capitalize}", tag_url(:kind => params[:source].title, :perspective => @user.login, :mode => @mode)) unless @list.context.blank?
 			# breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login)) 
-		else
-			
-		end
+
 		render :partial => "/nuniverse/breadcrumbs", :locals => {:breadcrumbs => breadcrumbs}
 	end
 	
@@ -38,7 +30,8 @@ module ListsHelper
 		when 'bookmark'
 			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
+			link_to(params[:title],  visit_url(item,  @perspective.tag.label, :mode => params[:mode] || @mode))
+			# link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
 		end
 	end
 	
@@ -76,12 +69,13 @@ module ListsHelper
 		if item.kind == "address"
 			render :partial => "/boxes/#{item.kind}_box", :locals => params 
 		else
-		render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
-	end
+			render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
+		end
 	end
 	
+
 	def sorting_options(params = {})
-		options = [['Name', 'by_name'],['Latest', 'by_latest'],['Vote', 'by_vote']]
+		options = [['Name', 'by_name'],['Latest', 'by_latest']]
 		params[:source] ||= @source
 		params[:selected] ||= @order
 		render :partial => "/lists/sorting_options", :locals => {:options => options, :source => params[:source], :selected => params[:selected]}
@@ -97,7 +91,16 @@ module ListsHelper
 	def perspectives(params = {})
 		kind = params[:kind] || @source.kind 
 		pers = [@current_user.self_perspective, @everyone.perspectives.favorites,current_user.perspectives.favorites].flatten
-		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => pers}
+		collection = []
+		pers.each do |p|
+			if p.tag == @current_user.tag
+				label = "You"
+			else
+				label = p.tag.label
+			end
+			collection << link_to(label, visit_url(@tag, p.tag.label), :style => (p.tag == @perspective.tag) ? 'color:#000' : '')
+		end
+		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => collection}
 	end
 	
 	def lists_for(source, options = {})
@@ -113,12 +116,13 @@ module ListsHelper
 		boxes = []
 		items.each_with_index do |item, i|
 			case @mode 
-			when "card"
-
-				boxes << render_item_box(item, params)
+			when "category"
+				params[:item] = item
+				boxes << "#{render :partial => "/boxes/category_box", :locals => params}"
 			when "image"
 				boxes << "#{render :partial => "/images/box", :locals => {:item => item, :source => params[:source]}}"
 			else	
+				boxes << render_item_box(item, params)
 			end
 		end
 		boxes
