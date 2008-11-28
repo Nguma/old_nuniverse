@@ -37,14 +37,14 @@ var Input = new Class({
     },
     
     setRequest:function() {
-      // this.request = new Request.HTML({
-      //         url:this.options.suggestUrl,
-      //         link:'cancel',
-      //         update:this.options.update,
-      //         onComplete:this.stopSpinning.bind(this),
-      //         onRequest:this.startSpinning.bind(this),
-      //         onSuccess:this.getUpdate.bind(this)
-      //       }, this)
+      this.request = new Request.HTML({
+                 url:this.options.suggestUrl,
+                 link:'cancel',
+                 update:this.options.update,
+                 onComplete:this.stopSpinning.bind(this),
+                 onRequest:this.startSpinning.bind(this),
+                 onSuccess:this.getUpdate.bind(this)
+               }, this)
         
       // Timeout definition
       this.timeout = $empty
