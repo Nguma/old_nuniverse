@@ -113,6 +113,18 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def test
+		if params[:uploaded_data]
+			@audio = Audio.new(:uploaded_data => params[:uploaded_data])
+			if @audio.save
+				flash[:notice] = "saved"
+				
+			else
+				flash[:error] = "not saved"
+			end
+		end
+	end
+	
+	def netflix
 		t = Finder::Netflix.new
 		
 		if session[:request_token].nil?

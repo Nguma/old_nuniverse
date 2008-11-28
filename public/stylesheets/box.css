@@ -7,7 +7,7 @@
 	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;	
 	border:none;
 	overflow:hidden;
-	min-height:10px;
+	min-height:80px;
 	height:auto;
 }
 
@@ -80,7 +80,8 @@
 
 }
 
-#preview_box {
+#preview_box,
+.popup_box {
 	position:absolute;
 	top:200px;
 	left:200px;
@@ -107,15 +108,45 @@
 }
 
 
-#preview_box .wrap {
+.popup_box .wrap {
 	padding:24px 23px 0 23px;
 	height:auto;
+	min-height:100px;
 	width:386px;
 	background:transparent url('/images/backgrounds/popup_top.png') 0 0 no-repeat;
 }
 
+#suggestion_box {
+	position:absolute;
+	z-index:9987654;
+	right:20px;
+	top:20px;
+	left:auto;
+	bottom:auto;
+}
 
-#preview_box .footer {
+#suggestion_box .connection {
+	position:relative;
+	display:block;
+	clear:both;
+
+}
+
+
+#suggestion_box h3 {
+	font-size:17px;
+	color:#333;
+}
+
+#suggestion_box h3 a {
+	font-size:inherit;
+	font-weight:inherit;
+	color:inherit;
+}
+
+
+
+.popup_box .footer {
 
 	background:transparent url('/images/backgrounds/popup_bottom.png') left bottom no-repeat;
 	height:28px;
@@ -616,6 +647,32 @@ h2 span.size {
 	clear:both;
 
 }
+
+.ellipsis span {
+   white-space:nowrap;
+   text-overflow:ellipsis; /* for internet explorer */
+   overflow:hidden;
+   width:100%;
+   display:block;
+}
+
+.preview_box .ellipsis span {
+	white-space:normal;
+}
+
+html>body .ellipsis {
+   clear:both;
+}
+
+html>body .ellipsis span:after {
+   content: "...";
+}
+
+html>body .ellipsis span {
+   max-width:100%;
+   width:auto !important;
+   float:left;
+
 
 
 .card {

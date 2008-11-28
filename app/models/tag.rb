@@ -20,22 +20,22 @@ class Tag < ActiveRecord::Base
 		params[:as] ||= self.kind.to_a
 
 		params[:as].each do |k|
-			 Tagging.create(
+			 @t = Tagging.find_or_create(
 					:subject => tag,
 					:object => self,
 					:public => 1,
-					:user_id => params[:user] ? params[:user].tag.id : 0 ,
+					:user => params[:user] || User.new(:tag_id => 0) ,
 					:kind => k )
 		end
 			
-			Tagging.create(
+			Tagging.find_or_create(
 			:subject => self,
 			:object => tag,
 			:public => 1,
-			:user_id => params[:user] ? params[:user].tag.id : 0 ,
+			:user => params[:user] || User.new(:tag_id => 0) ,
 			:kind => tag.kind) unless tag.kind == 'user'
 	
-			
+		@t
 	end
 
 		
@@ -43,8 +43,12 @@ class Tag < ActiveRecord::Base
 		self
 	end
 	
-	def tags
-		Tagging.tags(self)
+	def tags(params = {})
+		sql = "SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA "
+		sql << "WHERE TA.user_id = #{params[:user].tag.id} " if params[:user]
+		sql << "WHERE public = 1 " if !params[:user]
+		sql << "AND object_id = #{self.id} GROUP BY TA.kind ORDER BY TA.kind ASC"
+		Tagging.paginate_by_sql(sql,:page => params[:page] || 1,:per_page => params[:per_page] || 10)
 	end
 	
 	def has_address?
@@ -64,10 +68,7 @@ class Tag < ActiveRecord::Base
 	def find_coordinates
 		Nuniverse::Address.find_coordinates(self)
 	end
-	
-	
 
-	
 	def precision
 		return property('sub_type') unless property('sub_type').blank?
 		kind
@@ -88,7 +89,6 @@ class Tag < ActiveRecord::Base
 	def kinds
 		kind.split("#")
 	end
-		
 	
 	def thumbnail
 		image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"', self.id])
@@ -109,8 +109,13 @@ class Tag < ActiveRecord::Base
 	
 	
 	def avatar
-		image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"',self.id])
-		return image_tag.object.image.public_filename unless image_tag.nil?
+		if self.kind == 'image'
+			image_tag = self
+		else
+			image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"',self.id])
+			image_tag = image_tag.object unless image_tag.nil?
+		end
+		return image_tag.image.public_filename unless image_tag.nil?
 		return property('image') 
 	end
 	

@@ -79,6 +79,7 @@ class ApplicationController < ActionController::Base
 		if params[:perspective]
 			@perspective = Perspective.find(:first, :conditions => ['tags.label = ?', params[:perspective]], :include => :tag)
 			@perspective = current_user.self_perspective if @perspective.nil?
+	
 		else
 			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.self_perspective
 		end

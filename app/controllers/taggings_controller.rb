@@ -117,6 +117,16 @@ class TaggingsController < ApplicationController
 		:perspective => "everyone")
 	end
 	
+	def new
+		@form = params[:form]
+		@tags = params[:category]
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+	end
+	
 	protected
 	
 	def find_tagging	

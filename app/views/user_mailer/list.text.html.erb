@@ -23,7 +23,8 @@
             <% end -%>
           </h3>
         <p style="color:#999">
-          <%= Nuniverse.collect_infos(:connection => item, :current_user => @sender, :kind => item.kind) %>
+          <%#= Nuniverse.collect_infos(:connection => item, :current_user => @sender, :kind => item.kind) %>
+          <%= item.kind %>
         </p>
         
       </td>

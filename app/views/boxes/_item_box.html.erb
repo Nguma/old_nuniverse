@@ -1,4 +1,4 @@
-<div class="box <%= item_classes rescue "" %>" >
+<div class="box <%= item_classes rescue "" %>" style = "min-height:60px;<%= @mode == "image" ? "" : "overflow:hidden;height:70px;padding:5px" %>">
   <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
   
   <div class="content" style="padding:0px 0 20px 20px;position:relative">

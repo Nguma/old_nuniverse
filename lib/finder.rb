@@ -23,8 +23,7 @@ module Finder
 					:kind => 'tweet',
 					:data => "#thumbnail #{tweet['profile_image_url']} #user_name #{tweet['from_user']} #user_id #{tweet['from_user_id']}",
 					:service => 'twitter',
-					:url => tweet['url'],
-					:public => 1
+					:url => tweet['url']
 				)
 			end
 			results

@@ -102,17 +102,16 @@ class UsersController < ApplicationController
 		@title = "#{current_user.login}'s nuniverse"
 		@source = current_user.tag
 		@input = params[:input]
-		if @mode == "category"
-			@items = Tagging.paginate_by_sql(
-			"SELECT TA.*,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.subject_id = #{@tag.id} GROUP BY TA.kind ORDER BY counted ASC",
-			:page => params[:page] || 1,
-			:per_page => 16)
-		else
-			@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1)
-		end
+		@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1)
+		
+		
 		respond_to do |format|
 			format.html {
 				update_session
+				@categories = Tagging.paginate_by_sql(
+				"SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.user_id = #{current_user.tag.id} GROUP BY TA.kind ORDER BY TA.kind ASC",
+				:page => 1,
+				:per_page => 50)
 			}	
 			format.js { 
 				render :controller => 'user', :action => :page, :layout => false

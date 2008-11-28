@@ -63,13 +63,14 @@ module ListsHelper
 		params[:item_classes] = ""
 			
 		personal = item.personal.to_i rescue nil
-		if personal	
-			params[:item_classes] <<  (item.public ? ' personal' : ' private')
+		if personal	== 1
+			params[:item_classes] <<  (item.public ? 'personal' : ' private')
 		end
+	
 		if item.kind == "address"
 			render :partial => "/boxes/#{item.kind}_box", :locals => params 
 		else
-			render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
+			render :partial => "/boxes/#{item.object.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
 		end
 	end
 	

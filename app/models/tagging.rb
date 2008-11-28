@@ -18,9 +18,12 @@ class Tagging < ActiveRecord::Base
     object.nil? ? {} : {:select => "taggings.*",:conditions => ["object_id = ?", object.id]}
   }
   named_scope :with_user, lambda { |user|
-    user.nil? ? {} : {:conditions => ["taggings.user_id = ?", user.id]}
+    user.nil? ? {} : {:conditions => ["taggings.user_id = ?", user.tag_id]}
   }
-
+	named_scope :with_kind, lambda { |kind| 
+		kind.nil? ? {} : {:conditions => ['taggings.kind = ? ', kind]}
+	}
+	
 	named_scope :with_users, lambda { |users| 
 		users.empty? ? {} : {:conditions => ["user_id in (?)", users.collect {|u| u.id}]}
 	}
@@ -104,11 +107,11 @@ class Tagging < ActiveRecord::Base
 
 	def self.find_or_create(params)
 		params[:kind] ||= nil
-		tagging = Tagging.find(:first, :conditions => ['subject_id = ? AND object_id = ? AND user_id = ? AND kind = ?', params[:subject].id, params[:object].id,  params[:user].tag.id, params[:kind]])
+		tagging = Tagging.with_subject(params[:subject]).with_object(params[:object]).with_user(params[:user]).with_kind(params[:kind]).first
 		tagging = Tagging.create(
 			:subject => params[:subject], 
 			:object => params[:object], 
-			:owner => params[:user].tag,
+			:user_id => params[:user].tag_id,
 			:kind => params[:kind] || nil,
 			:description => params[:description] || nil,
 			:public => params[:public] || 1
@@ -167,7 +170,7 @@ class Tagging < ActiveRecord::Base
 		
 		sql << " AND CONCAT(O.kind,' ',TA.kind) rlike '(\s|^)#{params[:kind]}'" if params[:kind]
 		sql << " AND TA.subject_id = #{params[:subject].id} " if params[:subject]
-		sql << " AND CONCAT(O.label,' ',O.kind,' ',TA.kind) rlike '^(.*\s)?#{params[:label].gsub(/^the\s|a\s/,'')}(\s.*)?'" if params[:label]
+		sql << " AND CONCAT(O.label,' ',O.kind,' ',TA.kind) rlike '^(.*\s)?#{params[:label].gsub(/^the\s|a\s/,'').gsub(/\'|\"/,'\.')}(\s.*)?'" if params[:label]
 		sql << " GROUP BY object_id "
 		sql << " ORDER BY #{order} "
 

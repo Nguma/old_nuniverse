@@ -6,18 +6,18 @@ function reset()
   // var r = new MooRainbow('myRainbow', {
   //    'startColor': [58, 142, 246],
   //  });
-  Element.implement({
-    call:function(updated) {
-  
-      var req = new Request.HTML({
-        url:this.getProperty('href'),
-        update:updated,
-        onSuccess:function() {
-          
-        }
-      }).get();
-    }
-  });
+  // Element.implement({
+  //     call:function(updated) {
+  //   
+  //       var req = new Request.HTML({
+  //         url:this.getProperty('href'),
+  //         update:updated,
+  //         onSuccess:function() {
+  //           
+  //         }
+  //       }).get();
+  //     }
+  //   });
   
  
   
@@ -31,11 +31,11 @@ function reset()
     }
   });
   
-  
-  $$('div#search_box').each(function(form) {
-    var searchBox = new Input(form, {
+  if($('search_box') != undefined) {
+    var searchBox = new Input($('search_box'), {
       update:$('content'),
-      suggestUrl:form.getElement('form').getProperty('action'),
+      spinner:$('main_spinner'),
+      suggestUrl:$('search_box').getElement('form').getProperty('action'),
       onRequest:function() {
         $('preview_box').collapse();
         $('content').empty();
@@ -45,20 +45,32 @@ function reset()
         updated.getElements('.box').each(function(box) {
           var b = new Box(box);
         });
+        
       
       },
       
       onChange:function(input) {
-        console.log("CHANGE")
+       
         input.removeClass('empty');
+        this.suggest();
       },
       
       onClear:function(input) {
        
         input.addClass('empty');
+        this.suggest();
       }
+    });
+  }
+  
+  $$('div#tag_cloud a').each(function(tag) {
+    tag.addEvent('click', function(ev) {
+      ev.preventDefault();
+      // $('search_box').getElements('.input')[0].setProperty('value', tag.get('text'));
+      tag.toggleClass('selected');
+      searchBox.suggest();
     })
-  });
+  })
 
 
   
@@ -66,18 +78,7 @@ function reset()
   notice();
  
   
-  // $$('.save_button').each(function(button) {
-  //    button.addEvent('click', function(ev) {
-  //      var call = new Request.HTML({
-  //        'url':button.getParent('.actions').getElement('form').getProperty('action'),
-  //        'onComplete':function() {
-  //          button.addClass('.saved');
-  //          notice("Bookmarked!");
-  //        }
-  //      }).post(button.getParent('.box').getElement('form'));
-  //      return false;
-  //    });
-  //  });
+
  
 
  $$('a#perspective_link').each(function(lnk) {
@@ -147,8 +148,8 @@ function reset()
       
       var form =$(lnk.getProperty('id').replace(/_btn|_lnk/,'_form'))   
       form.setStyles({
-        "top":100,
-        "left":200
+        "top":30,
+        "left":50
       });
       form.removeClass('hidden');
     });
@@ -156,8 +157,101 @@ function reset()
 
   
   
-  updateForms();
+  var s = new Steppable('select_tag_form',{
+    'onTrigger':function(t) {
+      if(t.getProperty('href') != "#") {
+        var updatable = $('select_tag_form').getElement('.dynamic_area');
+        
 
+        var request = new Request.HTML({
+ 
+          url:t.get('href'),
+          update:updatable,
+          onSuccess:this.setTriggers.bind(this, updatable)
+
+        },this).post(this.el.getElement('form'));
+        updatable.empty();
+      }
+
+    }
+  });
+  // updateForms();
+  
+  // $$('div#select_tag_form').each(function(f) {
+  //    var cf = new Input(f, {
+  //      update:$('suggestion_box').getElement('.suggestions'),
+  //      spinner:$('suggestion_box').getElement('.spinner'),
+  //      suggestUrl:$('suggestion_box').getProperty('src'),
+  //      onSelect:function(trigger) {    
+  //         
+  //        if(trigger.hasClass('kind')) {
+  //          if(this.selected_kind != undefined) {
+  //            this.selected_kind.removeClass('selected');
+  //            
+  //          }
+  //          this.selected_kind = trigger;
+  //          this.selected_kind.addClass('selected');
+  //          this.el.getElements('span.kind').each(function(k) {
+  //            k.set('text', trigger.get('text'));
+  //          });
+  //          this.el.getElement('input.kind').setProperty('value', trigger.get('text'));
+  //          this.suggest();
+  //        }
+  //      },
+  //      
+  //      onChange:function(input) {
+  //        $('suggestion_box').removeClass('hidden')
+  //        this.el.getElements('span.name').each(function(name) {
+  //          name.set('text', input.getProperty('value'));
+  //        });
+  //        this.suggest();
+  //      },
+  //      
+  //      onCollapse:function() {
+  //        $('suggestion_box').addClass('hidden');
+  //        if(this.options.selected != null) {
+  //          this.options.selected.removeClass('selected');
+  //        }
+  //        this.el.getElement('span.kind').set('text', '');
+  //        this.el.getElement('.name').set('text', '');
+  //        this.el.getElement('.input').setProperty('value', '');
+  //      },
+  //      
+  //      onUpdate:function() {
+  //        this.setSuggestions();
+  //      },
+  //      
+  //      onSuggestionClick:function(connection) {
+  //        connection.getElement('.data').clone().replaces(this.el.getElement('form .data'));
+  //         var call = new Request.HTML({
+  //            url:this.el.getElement('form').getProperty('action'),
+  //            evalScripts:true,
+  //            onSuccess:function(a,b,c,d) {
+  //              addElement(a);
+  //            }
+  //          }).post(this.el.getElement('form'));
+  //      }
+  //    });
+  //  });
+
+}
+
+function addElement(el) {
+  
+  var count = $('content').getElements('.box').length;
+  var cols = $('content').getElements('.column').length;  
+
+  if (cols == 0) {
+    var selected_column =  $('content');
+  }  else {
+    var selected_column =  $('column_'+((count)%cols));
+  } 
+  
+  selected_column.adopt(el);
+  var b = new Box(selected_column.getLast('.box'));
+  $('suggestion_box').getElement('.suggestions').empty();
+  $('suggestion_box').addClass('hidden');
+  $('select_tag_form').addClass('hidden');
 }
 
 function refresh(updated) {
@@ -237,52 +331,52 @@ function isDoubleEnter() {
 
 function updateForms() {
   
-  $$('div.form_box').each(function(form) {
-    if(form.getElement('.suggestions') == undefined) {return}
-    var form_box = new Input(form, {
-      update:form.getElement('.suggestions'),
-      suggestUrl:form.getElement('.suggestions').getProperty('src'),
-      // draggable:true,
-      onRequest:function() {
-        
-      },
-      
-      onSuggestionClick:function(connection) {
-        connection.getElement('.data').clone().replaces(form.getElement('form .data'));
-        if(form.hasClass('inline'))
-        {
-          var call = new Request.HTML({
-            url:form.getElement('form').getProperty('action'),
-            evalScripts:true,
-            onSuccess:function(a,b,c,d) {
-              var count = $('content').getElements('.box').length;
-              var cols = $('content').getElements('.column').length;     
-              var selected_column =  $('column_'+((count)%cols));
-              selected_column.adopt(a);
-              var b = new Box(selected_column.getLast('.box'));
-            }
-          }).post(form.getElement('form'));
-        }
-        else
-        {
-          form.getElement('form').submit();
-        }
-
-      },
-      
-      onUpdate:function() {
-        
-        this.setSuggestions();
-      }
-      
-    });
-    
-
-   
+  // $$('div.form_box').each(function(form) {
+  //     if(form.getElement('.suggestions') == undefined) {return}
+  //     var form_box = new Input(form, {
+  //       update:form.getElement('.suggestions'),
+  //       suggestUrl:form.getElement('.suggestions').getProperty('src'),
+  //       // draggable:true,
+  //       onRequest:function() {
+  //         
+  //       },
+  //       
+  //       onSuggestionClick:function(connection) {
+  //         connection.getElement('.data').clone().replaces(form.getElement('form .data'));
+  //         if(form.hasClass('inline'))
+  //         {
+  //           var call = new Request.HTML({
+  //             url:form.getElement('form').getProperty('action'),
+  //             evalScripts:true,
+  //             onSuccess:function(a,b,c,d) {
+  //               var count = $('content').getElements('.box').length;
+  //               var cols = $('content').getElements('.column').length;     
+  //               var selected_column =  $('column_'+((count)%cols));
+  //               selected_column.adopt(a);
+  //               var b = new Box(selected_column.getLast('.box'));
+  //             }
+  //           }).post(form.getElement('form'));
+  //         }
+  //         else
+  //         {
+  //           form.getElement('form').submit();
+  //         }
+  // 
+  //       },
+  //       
+  //       onUpdate:function() {
+  //         
+  //         this.setSuggestions();
+  //       }
+  //       
+  //     });
+  //     
+  // 
+  //    
 
   
     
-  });
+  // });
   
 
 }

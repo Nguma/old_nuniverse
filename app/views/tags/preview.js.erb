@@ -1,6 +1,7 @@
 <% if @items %>
   
   <div class="overview" style="padding:0 40px 0 0px">
+     <%= @tag.description %><br/>
     <%= will_paginate(@items, :previous_label => "", :next_label => "")%>
     <% @items.each do |info| -%>
       <p style="padding:0 0 0 0;">
@@ -22,6 +23,14 @@
     <%= link_to "Youtube", visit_url(@tag,"youtube"), :style => "color:#666"%> | 
     <%= link_to "Twitter", visit_url(@tag,"twitter"), :style => "color:#666"%>
   </div>
+  <div  style="margin:10px 0 0 0;font-size:15px;color:#999">
+    <h4>You've tagged that item</h4>
+    <% @tag.tags(:user => current_user).each do |cat| -%>
+      <%= link_to (cat.name, "#{cat.name}" ,:style => "font-size:#{([cat.counted.to_i+11,18].min)}px;color:#999;margin:0 3px 0 0") %>
+    <% end -%>
+    <%= link_to "Add/edit tags", "#tags", :class => "dynamic", :style => "font-size:12px" %>
+  </div>
+    
 
   
 <% else -%>

@@ -1,0 +1,9 @@
+  <h2>2. Adding a file</h2>
+  <label>Copy and paste the url from the internet </label>
+  <%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+  <p>.. or ..</p>
+  <label>upload a file from your computer</label>
+  <%= file_field_tag :uploaded_data %>
+  <label>Add a quick description (Optional. First line will be used as title)</label>
+  <%= text_field_tag "description", "", :rows => 2,  :style => "width:480px;font-size:14px" %>
+  <%= hidden_field_tag :kind,  "image" %>

@@ -1,0 +1,14 @@
+<h2>2. Add a text</h2>
+
+<label>Say what you want to say!</label>
+<%= text_area_tag "description", "", :rows => 3, :style => "width:480px;font-size:14px" %>
+<label>Give a title to your comment (optional)</label>
+<%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+<label>Additionally, you may want to tag it</label>
+<div class="tag_cloud">
+<% ['Comment','Review','Pro','Con','description','todo'].each do |t| -%>
+  <%= link_to t, "#" %>
+<% end -%>
+</div>
+<%= hidden_field_tag :kind, "comment" %>
+<%= submit_tag "Add it."%>

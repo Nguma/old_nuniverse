@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index]
-	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview, :suggest]
+	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview, :suggest, :share]
 	after_filter :update_session, :only => [:show]
   # GET /tags
   # GET /tags.xml
@@ -29,6 +29,7 @@ class TagsController < ApplicationController
 		@order = params[:order] || "latest"
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
 		@mode = @mode.blank? ? 'card' : @mode
+		
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
 		else
@@ -40,6 +41,10 @@ class TagsController < ApplicationController
 				:perspective => @perspective,
 				:order => @order
 			)
+			@categories = Tagging.paginate_by_sql(
+			"SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.user_id = #{current_user.tag.id} AND subject_id = #{@tag.id} GROUP BY TA.kind ORDER BY TA.kind ASC",
+			:page => params[:page] || 1,
+			:per_page => 50)			
 		end
 		
 		
@@ -117,9 +122,9 @@ class TagsController < ApplicationController
 		@input = params[:input]
 		@nuniverse = params[:nuniverse]
 		@mode = session[:mode]
-		@kind = params[:kind]
+		@kind = params[:kind].downcase
 		
-		if params[:kind].nil?
+		if @kind.nil?
 			if @input.match(/(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/)
 				if @input.match(/.*\.(jpg|jpeg|gif|png)/)
 					@kind = "image"
@@ -129,8 +134,10 @@ class TagsController < ApplicationController
 			end
 		end
 		
-		if params[:kind] == "address"
-				@source = Tag.find(params[:nuniverse])
+		
+		
+		if @kind == "address"
+			@source = Tag.find(params[:nuniverse])
 			render(:action => "google_locations", :layout => false)
 		else
 			@tags = Tagging.select(
@@ -163,33 +170,45 @@ class TagsController < ApplicationController
 		@source = Tag.find(params[:nuniverse])
 		@kind = params[:kind]
 
+		@tags = params[:tags].split(',') rescue nil
+	
 		find_perspective
+		
+		if params[:input].blank?
+			if !params[:description].blank?
+				params[:input] = params[:description].split(/\n/)[0]
 				
-		@tag = Tag.create(
+			else
+				params[:input] = "#{@kind} of #{@source.label}"
+			end
+
+		end
+	
+				
+		@tag = Tag.create!(
 			:label => params[:input], 
 			:kind => @kind, 
-			:url => params[:url] || (@kind == 'bookmark') ? params[:input] : nil , 
+			:url => params[:url], 
 			:data => params[:data], 
 			:description => params[:description], 
 			:service => params[:service]) if @tag.nil?
 			
 		
-		 @tagging = Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => @kind)
-			if params[:tags]
-				params[:tags].split(',').each do |tag|
-							Tagging.find_or_create(:subject => @source, :object => @tag, :user => current_user, :kind => tag)
-						end
-					end
-					Tagging.find_or_create(:subject => @tag, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
+		
+		 @tagging = @tag.connect_with(@source, :as => @tags, :user => current_user)
 		
 		
 		if @kind == "address"
 			@tag.label = @tag.property('address')
 			@tag.save
-			tel = Tag.find_or_create(:label => @tag.property('tel'), :kind => 'telephone')
-			@source.connect_with(tel, :user => current_user)
+			if !@tag.property('tel').blank?
+				tel = Tag.find_or_create(:label => @tag.property('tel'), :kind => 'telephone')
+				@source.connect_with(tel, :user => current_user)
+			end
+	
+		
 		elsif @kind == "image"
-			@tag.add_image( :source_url => params[:input])
+			@tag.add_image( :source_url => params[:input], :uploaded_data => params[:uploaded_data])
 		end
 		
 		
@@ -209,9 +228,8 @@ class TagsController < ApplicationController
 					unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
 						image = Tag.find_or_create(:label => img.attributes['src'].split('/').last, :kind => 'image', :url => img.attributes['src'])
 						@image = image.add_image(:source_url => img.attributes['src'])
-						@tagging = Tagging.find_or_create(:subject => @source, :object => image, :user => current_user, :kind => "image")
-						Tagging.find_or_create(:subject => image, :object => @source, :user => current_user, :kind => @source.kind) unless @source.kind == "user"
-						
+						image.connect_with(@source, :user => current_user)
+									
 					end
 					@source.save
 					
@@ -250,10 +268,22 @@ class TagsController < ApplicationController
 
 	end
 	
-	def images
-		@tag = Tag.find(params[:id])
+	def share
+		@emails = params[:input].split(',')
+		@nuniverse = Tag.find_by_id(params[:nuniverse])
+		users = User.find(:all, :conditions => ['email in (?)',@emails])
+		current_user.email_to(
+			:emails => @emails, 
+			:content => @nuniverse, 
+			:message => params[:message], 
+			:items => @nuniverse.connections(:perspective => @perspective))
+			
+		respond_to do |format|
+			format.html { redirect_to @nuniverse}
+		end
 		
 	end
+	
 	
 	
 	protected
@@ -262,13 +292,10 @@ class TagsController < ApplicationController
 		
 		if params[:id]
 			@tag = Tag.find(params[:id]) 
+		elsif params[:url]
+			@tag = Tag.with_url(params[:url]).first
 		else
-			if params[:url]
-				@tag = Tag.with_url(params[:url]).find(:first)
-			else
-				# @tag = Tag.with_label(params[:input]).with_kind(params[:kind]).find(:first)
-				@tag = Tag.find_or_create(:label => params[:input], :kind => params[:kind])
-			end
+			@tag = Tag.with_kind(params[:kind]).with_label(params[:input]).first
 		end
 	end
 

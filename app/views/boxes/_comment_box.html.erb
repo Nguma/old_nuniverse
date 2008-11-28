@@ -1,10 +1,22 @@
-<div class="box <%= item_classes rescue "" %>" >
+<div class="box <%= item_classes rescue "" %>" style="padding:5px;height:70px;background:#eee" >
 
-  <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
+  <div class="connection <%= item_classes rescue "" %>"  >
+  
+   <%= image_tag "/images/icons/comment.png", :style => "position:relative;float:left;height:30px;mergin-right:5px"%>
+   <p style="color:#666;font-size:11px" ><%= item.owner.label.capitalize %> said</p>
+    <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.object.label.capitalize %>"</i></span></p>
+  </div>
+  
   <div class="content">
-   <p>"<%= item.object.label.capitalize %>" - <i><%= item.user.label.capitalize %></i></p>
+    
+   <p><%= link_to "Reply", "#"%>
    
+  </div>
+  
+  <div class="hidden">
+    <%= add_to_fav_link(item, :source => @tag)%>
   </div>
 
   <div class="delimiter">&nbsp;</div>
 </div>
+

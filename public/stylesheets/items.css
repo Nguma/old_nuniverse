@@ -26,20 +26,18 @@
 
 .thumbnail {
 	position:relative;
-	float:left;
+	float:right;
 	padding:0;
-	margin:0 5px 0 0;
-	height:30px;
-	width:30px;
+	margin:0 0 0 5px;
 	line-height:-999999px;
-	height:40px;
-	width:40px;
-	background:transparent url("/images/backgrounds/icon.png") 0 0 no-repeat;
+	height:60px;
+	width:60px;
+	background:transparent url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
 	padding:4px 6px 6px 4px;
 }
 
 .personal .thumbnail {
-	background:transparent url("/images/backgrounds/icon_personal.png") 0 0 no-repeat;
+	background:transparent url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
 }
 
 .private .thumbnail {
@@ -124,7 +122,7 @@ span.unique_item a:visited {
 
 
 .list .list .connection .thumbnail {
-	height:50px;
+	height:70px;
 }
 
 #content .list .connection h3 {

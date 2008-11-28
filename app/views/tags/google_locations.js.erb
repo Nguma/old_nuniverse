@@ -1,4 +1,4 @@
-<% items = google_localize(:source => @input)%>
+<% items = google_localize(:source => @input.blank? ? @source.label : @input)%>
 
 
 <% items[0..5].each do |item| -%>

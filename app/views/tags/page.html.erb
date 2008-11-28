@@ -3,7 +3,7 @@
   <%= link_to "Add something now" %>
 <% else -%>
   <%= sorting_options :source => @tag %>
-  <%= will_paginate @items %>
+  <%= will_paginate @items, :inner_window => 2 %>
   <div class="delimiter" style="clear:both">&nbsp;</div>
   <%= columnize(boxes_for(@items), :size => 4)%>
 <% end -%>

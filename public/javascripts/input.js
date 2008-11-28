@@ -1,10 +1,12 @@
 var Input = new Class({
     Extends:PopUp,
 
-    Options:{
+    options:{
       'focused':false,
       'suggestUrl':null,
       'update':null,
+      'trigger':'.trigger',
+      'spinner':$empty
       //'onUpdate':$empty
       //'onSuggestionClick':$empty
     },
@@ -12,6 +14,7 @@ var Input = new Class({
     initialize:function(el,options) {
       this.inputs = $(el).getElements('input.input');
       this.parent(el,options);
+
       this.setRequest();
     },
     
@@ -26,24 +29,33 @@ var Input = new Class({
         },this);
       },this);
       
+      this.triggers = this.el.getElements(this.options.trigger);
+      this.triggers.each(function(t) {
+          t.addEvent('click', this.onTrigger.bindWithEvent(this,t))
+        }, this);
+     
     },
     
     setRequest:function() {
-      this.request = new Request.HTML({
-          url:this.options.suggestUrl,
-          link:'cancel',
-          update:this.options.update,
-          onComplete:function() {
-            $('spinner').addClass('hidden');
-          },
-          onRequest:function() {
-            $('spinner').removeClass('hidden');
-          },
-          onSuccess:this.getUpdate.bind(this)
-        }, this)
+      // this.request = new Request.HTML({
+      //         url:this.options.suggestUrl,
+      //         link:'cancel',
+      //         update:this.options.update,
+      //         onComplete:this.stopSpinning.bind(this),
+      //         onRequest:this.startSpinning.bind(this),
+      //         onSuccess:this.getUpdate.bind(this)
+      //       }, this)
         
       // Timeout definition
       this.timeout = $empty
+    },
+    
+    startSpinning:function() {
+      this.options.spinner.removeClass('hidden');
+    },
+    
+    stopSpinning:function() {
+      this.options.spinner.addClass('hidden');
     },
     
     expand:function() {
@@ -63,25 +75,31 @@ var Input = new Class({
       this.options.focused = null;
     },
     
+    onTrigger:function(ev, trigger) {
+      ev.preventDefault();
+      this.fireEvent('onSelect',trigger);
+    },
+    
     keyup:function(ev, input) {
-      
+
       if(this.options.focused != input) { return; }
 
-        
-    
-      // if(this.input.getProperty('value').length == 0) {return;}
-     
       if(input.getProperty('value') == '') {
         this.fireEvent('onClear',input)
       } else {
         this.fireEvent('onChange', input);
       }
-      $clear(this.timeout);
-      this.timeout = this.suggest.delay(200,this);
+      
     },
     
     suggest:function() {
+      $clear(this.timeout);
+      this.timeout = this.retrieveSuggestions.delay(200,this);
+    },
+    
+    retrieveSuggestions:function() {
       if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
+      this.options.update.removeClass('hidden');
       this.request.post(this.el.getElement('form'));
     },
     

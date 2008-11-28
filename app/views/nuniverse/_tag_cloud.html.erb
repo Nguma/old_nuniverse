@@ -1,0 +1,9 @@
+<% unless @categories.nil? -%>
+  <div id="tag_cloud" style="margin:10px 0 5px 0;clear:both;position:relative">
+    <%= search_box %>
+  <b>Your categories</b>
+   <% @categories.each do |cat| -%>
+      <%= link_to (cat.name, "#{cat.name}" ,:style => "font-size:#{([cat.counted.to_i+10,18].min)}px;") %>
+    <% end -%>
+  </div>
+<% end -%>

@@ -1,118 +1,75 @@
-var Finder = new Class({
-  Implements:[Events,Options],
-  options:{
-  },
-  
-  initialize:function(el)
-  {
-    this.el = el;
-    this.setEvents();
-  },
-  
-  input:function()
-  {
-    return this.el.getElement('input#query');
-  },
-  
-  suggestionsArea:function()
-  {
-    return this.el.getElement('.suggestions');
-  },
-  
-  setEvents:function()
-  {
-    this.input().addEvents(
-      {
-        'focus':this.focusing.bind(this),
-        'blur':this.blur.bind(this),
-        'keyup':this.capture.bindWithEvent(this)
-      },this);
-  },
-  
-  capture:function(ev)
-  {
-    switch(ev.key)
-    {
-      case "enter":
-        this.submit();
-        break;
-      default:
-        this.find();
-    }
-  },
-  
-  find:function()
-  {
-    var call =  new Request.HTML({
-      'url':'/ws/find?service=nuniverse&query='+this.input().getProperty('value'),
-      'update':this.suggestionsArea(),
-      'autoCancel':true
-    },this).get();
-  },
-  
-  submit:function()
-  {
-    var obj = this;
-    var call =  new Request.HTML({
-      'url':'/connect',
-      'data':{
-        'query':this.input().getProperty('value'),
-        'authenticity_token':this.el.getElement('form input').getProperty('value')
-        },
-      onSuccess:function(a,b,c,d)
-      {
-        obj.fireEvent('connect',[a,b,c,d])
-      }
-    },this).post();    
-  },
-  
-  blur:function()
-  {
-    this.collapse();
-  },
-  
-  focusing:function()
-  {
-   
-    this.expand();
-  },
-  
-  collapse:function()
-  {
-    if(!this.isExpanded()) return;
-    this.el.removeClass('expanded');
-    this.input().setProperty('value','');
-    this.suggestionsArea().empty();
-  },
-  
-  expand:function(startValue)
-  {
-    this.input().focus();
-    if(this.isExpanded()) return;
-    this.el.addClass('expanded');
-    var startValue = startValue || ""
-    this.input().focus();
-    this.input().setProperty('value',startValue);
+
+  var Steppable = new Class({
+    Implements:[Options,Events],
+    options: {
+      step:'.step',
+      trigger:'.trigger',
+      scrollable:'.scrollable'
+    },
     
-  },
-  
-  isExpanded:function()
-  {
-    if(this.el.hasClass('expanded')) return true;
-    return false;
-  },
-  
-  toggle:function()
-  {
-    if(this.isExpanded())
-    {
-      this.collapse();
+    initialize:function(el, options) {
+      this.el = $(el);
+      this.setOptions(options);
+      this.options.steps = this.el.getElements(this.options.step);
+      this.options.current = this.options.steps[0];
+      this.scroll = new Fx.Scroll(this.el.getElement(this.options.scrollable));
+      this.setTriggers(this.el);
+ 
+      
+      this.el.getElements('.close_btn').each(function(btn) {
+        btn.addEvent('click', this.collapse.bindWithEvent(this, btn));
+      },this);
+    },
+    
+    setTriggers:function(area) {
+      area.getElements(this.options.trigger).each(function(trigger) {
+         trigger.addEvent('click', this.onTrigger.bindWithEvent(this, trigger));
+       },this)
+    },
+    
+    collapse:function(ev) {
+      if($defined(ev)) { ev.preventDefault();}
+      this.select(this.options.steps[0])
+      this.el.addClass('hidden');
+    },
+    
+    onTrigger:function(ev, trigger) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      this.fireEvent('onTrigger', trigger);
+      
+      if(trigger.hasClass('next')) {
+                    this.next();
+                  } else if (trigger.hasClass('previous')) {
+                    this.previous();
+                  } else if (trigger.hasClass('same')) {
+                   
+                  } 
+                  
+               // this[trigger.getProperty('href')]();
+      
+    },
+    
+    previous:function() {
+      var p = this.options.current.getPrevious(this.options.step);
+      this.select(p);
+    },
+    
+    next:function() {
+      var n = this.options.current.getNext(this.options.step);
+      this.select(n);
+    },
+    
+    select:function(step) {
+      if(step != undefined) {
+        this.options.current.addClass('hidden');
+        this.options.current = step;
+        this.options.current.removeClass('hidden');
+        // this.scroll.toElement(step);
+        
+      }
+      
     }
-    else
-    {
-      this.expand();
-    }
-  }
+    
+  });
   
-  
-});

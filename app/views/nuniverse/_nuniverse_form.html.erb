@@ -1,0 +1,12 @@
+<h2>2. Connect this nuniverse with </h2>
+<label>Name it.</label>
+<%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+<label>Describe it. (optional)</label>
+<%= text_area_tag "description", "", :rows => 3, :style => "width:480px; font-size:14px" %>
+<label>Additionally, you may want to tag it. (comma separated)</label>
+<%= text_area_tag "tags", @tags , :rows => 1, :style => "width:480px; font-size:14px" %>
+<% ['Person','location','recipe','Film','Character','Vehicle'].each do |t| -%>
+<%= link_to t, "#" %>
+<% end -%>
+<%= hidden_field_tag :kind, "nuniverse" %>
+<%= submit_tag 'Just create it for now' %>

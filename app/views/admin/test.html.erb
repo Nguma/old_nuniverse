@@ -1,6 +1,6 @@
-<div style="padding:40px">
-  <% select_tags(:service => "everyone", :query => "film", :order => "T.label DESC").each do |tag| -%>
-    <%= tag.label %>
-  <% end -%>
+<%= error_messages_for :audio %>
 
-</div>
+<% form_tag "/admin/test", :multipart => true do -%>
+  <%= file_field_tag :uploaded_data %>
+  <%= submit_tag 'Upload Audio File' %>
+<% end -%>

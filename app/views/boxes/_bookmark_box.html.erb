@@ -1,10 +1,35 @@
-<div class="box <%= item_classes rescue "" %>" >
+<div class="bookmark box <%= item_classes rescue "" %>" style = "min-height:60px;<%= @mode == "image" ? "" : "overflow:hidden;height:60px;" %>">
+  <%= image_tag "/images/icons/bookmark.png", :style => "position:relative;float:right;height:30px;mergin-right:5px"%>
+  <p style="color:#666;font-size:11px" >Bookmark</p>
+   <p style="color:#666;font-size:15px;margin:0 0 0 0;font-weight:bold" >
+    <%= link_to(item.object.label.capitalize, item.object.url, :target => "_blank") %><br/>
+    <span style="font-size:11px"><%= link_to (item.object.url, item.object.url, :target => "_blank")%></span>
+    </p>
   
-  <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "hidden preview_url")%>
-  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object.id, :label => item.object.label, :url => item.object.url, :data => item.object.data, :service => item.object.service, :description => item.object.description), :class => "hidden add_to_fav_url")%>
-  <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
-  <div class="content">
-    <p><%= link_to(item.object.url, item.object.url, :target => '_blank')%>
-    <p><%= item.description %></p>
+   
+  <div class="content" style="padding:0px 0 20px 20px;position:relative">
+    
+
+    
+     <p style="padding:0;width:340px;word-wrap:break-word">
+        <%= item.object.description %><br/>
+        <% if !item.object.property('price').blank? -%>
+          <%= link_to("Buy it on #{item.object.service} for #{item.object.property('price')}", item.url, :style => "color:#393") %>
+        <% else -%>
+          <%= link_to(item.url, item.url, :style => "color:#393") %>
+        <% end -%>
+        
+      </p>
+      
+
+    
   </div>
+  
+  <div class="hidden">
+    
+    <%= add_to_fav_link(item, :source => @tag)%>
+    
+    <%= link_to("Edit connections with #{@tag.label}",categorize_url(item.object.id, @tag), :class => "categorize_url")%>
+  </div>
+  <div class="delimiter">&nbsp;</div>
 </div>

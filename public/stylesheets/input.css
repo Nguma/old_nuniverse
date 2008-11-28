@@ -84,35 +84,7 @@
 	border:none;
 }
 
-#suggestions {
-	display:block;
-	color:#eee;
-	margin-bottom:10px;
-	width:100%;
-}
 
-#suggestions .pagination {
-	position:relative;
-	float:none;
-	clear:both;
-}
-
-.suggestion {
-	position:relative;
-	float:left;
-	width:200px;
-}
-
-.suggestion h3 {
-	font-size:17px;
-	color:#ccc;
-}
-
-.suggestion h3 a {
-	font-size:inherit;
-	font-weight:inherit;
-	color:inherit;
-}
 
 #file_field {
 	position:relative;
@@ -214,7 +186,8 @@
 	color:#333;
 	padding:0;
 	position:absolute;
-	z-index:123456789;
+	z-index:56789;
+	left:0;
 }
 
 .form_box fieldset {
@@ -245,34 +218,31 @@
 	padding:0;
 }
 
-.form_box label {
-	margin:0 0 5px 0;
-	padding:0 0 5px 0;
-	font-size:18px;
+
+.form_box .selected {
+	color:#396;
 }
 
 .form_box input {
 	margin:5px 0 0 0;
-	background:none;
+	background:#FFF;
 	border:none;
-	padding:5px 0 5px 0;
+	padding:5px;
 }
 
-.form_box a {
-	font-weight:bold;
-	font-size:20px;
-	color:#3C9;
+.form_box label {
+	display:block;
+	margin:10px 0 0 0;
+	padding:0;
 }
 
-
-.form_box .suggestions {
-	
+.form_box h3 {
+	margin:10px 0 0 0;
 }
 
-.form_box .connection {
-	position:relative;
-	clear:both;
-	margin:0 0 5px 0;
+.form_box p {
+	margin: 0 0 5px 0;
+	color:#666;
 }
 
 .form_box .droppable span {

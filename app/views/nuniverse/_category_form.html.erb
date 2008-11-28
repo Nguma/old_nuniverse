@@ -1,0 +1,5 @@
+<h2>2. Create a category</h2>
+<label>How would you like to call it?</label>
+<%= text_field_tag "category", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+<%= link_to('Create and add something to it.', "/taggings/new?form=nuniverse", :class => "trigger same") %>
+<%= submit_tag 'Just create it for now' %>

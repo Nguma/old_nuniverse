@@ -7,6 +7,7 @@
       <% @map = map(item.object) %>
       
        <% content_for :head do -%>
+            <%= GMap.header (:small_zoom => true, :with_vml => false) %>
             
             <%#= @map.to_html %>
         <% end -%>

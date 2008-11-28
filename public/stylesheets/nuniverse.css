@@ -197,7 +197,7 @@ p strong {
 #content .pagination {
 	position:relative;
 	float:right;
-	width:200px;
+	width:400px;
 	padding:5px;
 	margin:0;
 	color:#999;
@@ -339,3 +339,11 @@ a.saved {
 	padding:5px 0 20px 0;
 }
 
+.tag_cloud a {
+	color:#999;
+	margin:0 3px 0 0;
+}
+
+#tag_cloud a.selected {
+	color:#333;
+}

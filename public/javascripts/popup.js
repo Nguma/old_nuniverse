@@ -2,6 +2,7 @@ var PopUp = new Class({
   Implements:[Events, Options],
   options: {
     draggable:false,
+    offset:{'x':0,'y':0},
     content:$('content')
   },
   
@@ -15,15 +16,15 @@ var PopUp = new Class({
   
   collapse:function(ev) {
     if($defined(ev)) { ev.preventDefault();}
-    
+    this.fireEvent('onCollapse', this)
     this.el.addClass('hidden');
   },
   
   expand:function(ev) {
     if($defined(ev)) { ev.preventDefault();}
     this.el.setStyles({
-      'top':0,
-      'left':200
+      'top':this.options.offset.y,
+      'left':this.options.offset.x
     })
     this.el.removeClass('hidden');
     
@@ -63,12 +64,12 @@ var PopUp = new Class({
   },
   
   setRequest:function() {
-    this.request = new Request.HTML(
-      {
-        url:"",
-        update:this.options.content,
-        onSuccess:this.onUpdate.bind(this)
-      })
+    // this.request = new Request.HTML(
+    //      {
+    //        url:"",
+    //        update:this.options.content,
+    //        onSuccess:this.onUpdate.bind(this)
+    //      })
   },
   
   execute:function(ev, lnk) {

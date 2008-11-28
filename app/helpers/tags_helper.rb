@@ -92,8 +92,15 @@ module TagsHelper
 	end
 	
 	def add_to_fav_link(item, params = {}) 
-		personal = item.personal rescue !item.public rescue 0
-		if !personal
+		personal = item.personal.to_i  rescue 0
+
+		if personal == 1
+				link_to(image_tag("/images/icons/heartbreak.png"),
+					remove_from_nuniverse_url(
+						:nuniverse => params[:source].id,
+						:item => item.object.id
+					),:class => "add_to_fav_lnk hidden", :title => "Remove from your connections")
+		else
 			link_to(image_tag("/images/icons/save.png"),
 				add_to_nuniverse_url(
 					:nuniverse => params[:source].id, 
@@ -106,12 +113,7 @@ module TagsHelper
 					:description => item.object.description, 
 					:service => item.object.service 
 				), :class => "add_to_fav_lnk hidden", :title => "Save")
-		else
-			link_to(image_tag("/images/icons/heartbreak.png"),
-				remove_from_nuniverse_url(
-					:nuniverse => params[:source].id,
-					:item => item.object.id
-				),:class => "add_to_fav_lnk hidden", :title => "Remove from your connections")
+		
 		end
 	end
 end

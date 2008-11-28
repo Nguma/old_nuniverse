@@ -1,7 +1,8 @@
 <%= render :partial => "/tags/new" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
+
   <% if @items.empty? %>
-  <div class="dialogue">
+  <div <div id="content" class="<%= @mode %>_mode dialogue" style="clear:both;height:360px;overflow:hidden">
     <h2 style="color:#333">Here you are.</h2>
     <p>This is your nuniverse. Right now, it's empty, and it's waiting for YOU to build it.</p>
     <p>There might be hundreds of things you want to keep track of, this "empty page" is made just for that.</p>
@@ -16,16 +17,21 @@
     </h3>
   </div>
   <% else -%>
-    <%= sorting_options :source => @tag %>
-    <%= will_paginate(@items) %>
-    <div class="delimiter" style="clear:both">&nbsp;</div>
-    <%= columnize(boxes_for(@items), :size => 4) %> 
+    <div id="content" class="<%= @mode %>_mode" style="clear:both;height:360px;overflow:hidden">
+      <%= sorting_options :source => @tag %>
+      <%= will_paginate(@items, :inner_window => 2) %>
+      <div class="delimiter" style="clear:both">&nbsp;</div>
+      <%= columnize(boxes_for(@items), :size => 4) %> 
+    </div>
+    
+    <%= render :partial => "/nuniverse/tag_cloud" %>
+    
     <% content_for :footer do -%>
 
       <h3 style="display:inline;padding:5px;font-weight:bold"><%= link_to "+ Add something", "#", :id => "select_tag_lnk", :class => "select_form_lnk" %></h3>
       <h3 style="display:inline;padding:5px"><%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_lnk", :class => "select_form_lnk" %></h3>
     <% end -%>
-       
+         <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute;right:20px;bottom:20px", :id => "main_spinner", :class => "spinner hidden") %>
   <% end -%>
 
   
