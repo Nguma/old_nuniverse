@@ -2,11 +2,30 @@
     <div class="header">
       <%= image_tag("/images/icons/nuniverse_logo.png") %>
     </div>
-    <h1>Almost beta.</h1>
-    <h2>We're tightenings the bolts for our private beta launch, which is officially scheduled for this month of <span style="text-decoration:line-through">October</span> November.</h2>
-    <h2>If you interested, <%= link_to("register for an account", "/signup", :style=>"color:#1A9") %> to be on our beta guest list.</h2>
+    <h1>It's december, happy holidays.</h1>
+    <h2>As promised, we starting authorizing some accounts. If you haven't got anything yet, please be a little more patient. We're going to keep on opening up throughout the month.</h2>
     <br/>
-    <h3>See you soon!</h3>
+
+    
+    <div class="relative;clear:both" >
+      <% form_tag "/sessions/create" do -%>
+      <div style="position:relative;float:left">
+      <%= label_tag 'login' %><br />
+      <%= text_field_tag 'login', @login , :style => "padding:3px"%>
+      </div>
+      <div style="position:relative;float:left">
+      <%= label_tag 'password' %><br/>
+      <%= password_field_tag 'password', nil, :style => "padding:3px" %>
+      </div>
+      <div style="position:relative;float:left">
+      <br/>
+      <%= submit_tag 'Log in', :style => "padding:4px;font-size:20px;font-weight:bold;color:#333;margin:0" %>
+      </div>
+      <% end -%>
+    </div>
+   
+    <div class="delimiter" style="clear:both">&nbsp;</div>
+    <h3>If you interested, <%= link_to("register for an account", "/signup", :style=>"color:#1A9") %> to be on our beta guest list.</h3>
     <h4><%= link_to("More info about nuniverse","/about", :style=>"color:#1A9") %></h4>
      
 <% end -%>
