@@ -1,0 +1,37 @@
+<%  menu_window(:title => "tag" ) do -%>
+    <% form_tag "/tags/connect", :multipart => true do -%>
+     <%= hidden_field_tag "nuniverse", @tag.id %>
+     <div class="data hidden"></div>
+     <div id="step_1" class="step" style="height:100%">
+       <h2>1. What do you want to do?</h2>
+       <p>Select from this list what is the most appropriate.</p>
+       <h3><%= link_to "Create a new category", "/taggings/new?form=category",  :class => 'trigger next' %></h3>
+       <h3><%= link_to "Connect with another nuniverse", "/taggings/new?form=nuniverse", :class => 'trigger next'%></h3>
+       <p>Whether its a person, a tv show, a recipe or anything you might have in mind, this is the place.</p>
+      
+       <h3><%= link_to "Bookmark a web page", "/taggings/new?form=bookmark", :class => 'trigger next'%></h3>
+       <p>Copy and paste a favorite bookmark</p>     
+      
+       <h3><%= link_to "Add a file" , "/taggings/new?form=file",  :class => 'trigger next'%></h3>
+       <p>You can add an image, a mp3, a video or a text document. You can add it from a url or upload directly from your computer.</p>
+       <h3><%= link_to "Add a text / Make a comment" , "/taggings/new?form=text",  :class => 'trigger next'%></h3>
+       <p>Post a comment, a review, a to do, a description or any type of long text.</p>
+       <h3><%= link_to "Add a map address" , "/taggings/new?form=address",  :class => 'trigger next'%></h3>
+       <p>Write down an address to be shown on a map</p>
+    </div>
+    <div id="step_2" class="step hidden" style="height:100%">
+      
+      
+
+      <fieldset style="padding:0;margin:0" class="dynamic_area">
+      </fieldset>
+      
+      <%= link_to "Change what you want to add", "#", :class => 'trigger previous'%>
+
+    </div>
+    <% end -%>
+  <% end -%>
+
+
+
+

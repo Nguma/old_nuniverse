@@ -54,7 +54,7 @@ module AuthenticatedSystem
     end
 
 		def admin_required
-       (logged_in? && self.current_user.role == "admin") ? true : access_restricted
+       (logged_in? && self.current_user.role.name == "admin") ? true : access_restricted
 		end
 		
 		def restrict_to(users)

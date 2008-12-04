@@ -119,7 +119,7 @@ class TaggingsController < ApplicationController
 	
 	def new
 		@form = params[:form]
-		@tags = params[:category]
+		@tags = params[:category].to_a rescue []
 		
 		respond_to do |f|
 			f.html {}

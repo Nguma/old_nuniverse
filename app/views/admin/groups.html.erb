@@ -1,0 +1,3 @@
+<% @groups.each do |group| -%>
+  <%= group.name %><%= link_to("delete", "/groups/delete/#{group.id}",  :method => :delete) %><br/>
+<% end -%>

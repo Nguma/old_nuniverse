@@ -63,6 +63,16 @@ class UsersController < ApplicationController
     @user.destroy
     redirect_to users_path
   end
+	
+	def suggest
+		@users = User.find(:all, :conditions => ['login rlike ?', "^#{params[:input]}"])
+		@suggestion_uri = params[:url] 
+	
+		respond_to do |f|
+				f.html {}
+				f.js {}
+		end
+	end
 
 	def upgrade
 	end
@@ -78,6 +88,12 @@ class UsersController < ApplicationController
 		redirect_to "/my_nuniverse"
 	end
 	
+	def membership
+		respond_to do |f| 
+			f.html {}
+			f.js {}
+		end
+	end
   
   # There's no page here to update or destroy a user.  If you add those, be
   # smart -- make sure you check that the visitor is authorized to do so, that they
@@ -97,21 +113,21 @@ class UsersController < ApplicationController
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
 		@tag = current_user.tag
 		@perspective = current_user.self_perspective
-		@order = params[:order] || "rank"
+		@order = params[:order] || "by_latest"
 		@kind = params[:kind] || nil
-		@title = "#{current_user.login}'s nuniverse"
+		
 		@source = current_user.tag
 		@input = params[:input]
-		@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1)
+		@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1, :order => @order)
 		
 		
 		respond_to do |format|
 			format.html {
 				update_session
-				@categories = Tagging.paginate_by_sql(
-				"SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.user_id = #{current_user.tag.id} GROUP BY TA.kind ORDER BY TA.kind ASC",
-				:page => 1,
-				:per_page => 50)
+
+				@title = "#{current_user.login}'s nuniverse"
+				@categories = Tagging.gather.with_user(current_user).with_subject(@tag).paginate(:page => @page, :per_page => 40)
+			
 			}	
 			format.js { 
 				render :controller => 'user', :action => :page, :layout => false

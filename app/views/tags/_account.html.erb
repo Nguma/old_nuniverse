@@ -1,0 +1,28 @@
+ 
+<div class="form_box inline hidden"  id="select_profile_form" > 
+  <div class="wrap" style=" height:100px;" >
+     <div id="step_1" class="step" style="height:100%">
+        <h2>Your Account</h2>
+        <p>Select from this list what is the most appropriate.</p>
+        <h3><%= link_to "Create a new category", "/taggings/new?form=category",  :class => 'trigger next' %></h3>
+        <h3><%= link_to "Connect with another nuniverse", "/taggings/new?form=nuniverse", :class => 'trigger next'%></h3>
+        <p>Whether its a person, a tv show, a recipe or anything you might have in mind, this is the place.</p>
+
+        <h3><%= link_to "Bookmark a web page", "/taggings/new?form=bookmark", :class => 'trigger next'%></h3>
+        <p>Copy and paste a favorite bookmark</p>     
+
+        <h3><%= link_to "Add a file" , "/taggings/new?form=file",  :class => 'trigger next'%></h3>
+        <p>You can add an image, a mp3, a video or a text document. You can add it from a url or upload directly from your computer.</p>
+        <h3><%= link_to "Add a text / Make a comment" , "/taggings/new?form=text",  :class => 'trigger next'%></h3>
+        <p>Post a comment, a review, a to do, a description or any type of long text.</p>
+        <h3><%= link_to "Add a map address" , "/taggings/new?form=address",  :class => 'trigger next'%></h3>
+        <p>Write down an address to be shown on a map</p>
+
+
+
+      </div>
+  
+  </div>
+
+</div>
+

@@ -1,7 +1,7 @@
 class Tag < ActiveRecord::Base
   has_one :image,  :foreign_key => :tag_id
-	has_many :taggings_from, :dependent => :destroy, :foreign_key => :subject_id, :class_name => :taggings
-	has_many :taggings_to, :dependent => :destroy, :foreign_key => :object_id, :class_name => :taggings
+	has_many :taggings_from, :dependent => :destroy, :foreign_key => :subject_id, :class_name => 'Connection'
+	has_many :taggings_to, :dependent => :destroy, :foreign_key => :object_id, :class_name => 'Connection'
 	has_many :subjects, :through => :taggings_to
 	has_many :objects, :through => :taggings_from
 	
@@ -17,25 +17,38 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def connect_with(tag, params = {})
-		params[:as] ||= self.kind.to_a
+		params[:as] ||= []
 
-		params[:as].each do |k|
-			 @t = Tagging.find_or_create(
-					:subject => tag,
-					:object => self,
-					:public => 1,
-					:user => params[:user] || User.new(:tag_id => 0) ,
-					:kind => k )
-		end
+			@c = Connection.find_or_create(
+				:subject => tag,
+				:object => self,
+				:public => 1,
+				:user => params[:user] || User.new(:tag_id => 0),
+				:comment => params[:comment] || nil
+			)
+
+			params[:as].each do |k|
+				begin
+					t = Tagging.new(:connection_id => @c.id,:kind => k.strip)
+					t.save
+				rescue
+					
+				end
+			end
 			
-			Tagging.find_or_create(
-			:subject => self,
-			:object => tag,
-			:public => 1,
-			:user => params[:user] || User.new(:tag_id => 0) ,
-			:kind => tag.kind) unless tag.kind == 'user'
+			begin 
+			Connection.create(
+				:subject => self,
+				:object => tag,
+				:public => 1,
+				:user_id => params[:user].tag_id || 0,
+				:comment => params[:comment] || nil
+				) unless tag.kind == 'user' && self.kind != 'group'
+			rescue
+			end
+
 	
-		@t
+		@c
 	end
 
 		
@@ -44,11 +57,12 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def tags(params = {})
-		sql = "SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA "
-		sql << "WHERE TA.user_id = #{params[:user].tag.id} " if params[:user]
-		sql << "WHERE public = 1 " if !params[:user]
-		sql << "AND object_id = #{self.id} GROUP BY TA.kind ORDER BY TA.kind ASC"
-		Tagging.paginate_by_sql(sql,:page => params[:page] || 1,:per_page => params[:per_page] || 10)
+		# sql = "SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA "
+		# 	sql << "WHERE TA.user_id = #{params[:user].tag.id} " if params[:user]
+		# 	sql << "WHERE public = 1 " if !params[:user]
+		# 	sql << "AND object_id = #{self.id} GROUP BY TA.kind ORDER BY TA.kind ASC"
+		# 	Tagging.paginate_by_sql(sql,:page => params[:page] || 1,:per_page => params[:per_page] || 10)
+		Tagging.with_object(self).with_user(params[:user]).gather.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 10)
 	end
 	
 	def has_address?
@@ -91,7 +105,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def thumbnail
-		image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"', self.id])
+		 image_tag = Connection.with_subject(self).with_kind('image').first
 		if image_tag.nil? 
 			return property('thumbnail') unless property('thumbnail').blank?
 			return nil
@@ -244,8 +258,11 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def tag_with(tags, params = {})
-		tags.each do |t|
-			Tagging.create!(:subject_id => params[:context] || 0, :object => self, :kind => t, :public => params[:public] || 1)
+		user = User.find(0)
+		c = Connection.find_or_create(:subject => user.tag, :user => User.find(0), :object => self, :public => 1)
+		tags.to_a.each do |t|
+			Tagging.create(:kind => t, :connection_id => c.id) rescue ""
+			# Tagging.create!(:subject_id => params[:context] || 0, :object => self, :kind => t, :public => params[:public] || 1)
 		end
 	end
   

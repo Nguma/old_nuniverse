@@ -1,6 +1,14 @@
-<%= render_item_box(@tagging, :kind => @kind) %>
-<script type="javascript">
-//<![CDATA[
-   notice('<%= render_item(@tagging).to_s.gsub(/\n/,'') %>', 'added')
-//]]> 
-</script>
+<div class="new">
+  <%= render_item(@tagging, :kind => @kind) %>
+  <div class="content">
+    <div  style="font-size:15px;color:#999">
+      <label>This item has been tagged</label>
+      <% Tagging.gather_with_user_list.with_object(@tagging.object).each do |cat| -%> 
+        <%= link_to (cat.kind, "#{cat.kind}" ,:style => "font-size:#{([cat.counted.to_i+11,18].min)}px;color:#999;margin:0 3px 0 0") %>
+      <% end -%>
+      <label>Tag it!</label>
+      <%= text_field_tag "tags", "" , :class => "input" %>
+      <%= link_to "Save", "/tags/update/#{@tagging.object.id}", :class => "trigger" %>
+    </div>
+  </div>
+</div>

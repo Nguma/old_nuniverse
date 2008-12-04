@@ -1,10 +1,11 @@
 ActionController::Routing::Routes.draw do |map|
 	map.resources :kinds
-	map.resources :lists
+
 	map.resource :sessions
  	map.resources :taggings
 	map.resources :tags
 	map.resources :images
+	map.resources :groups
  	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
   	                                 :purge     => :delete }
@@ -68,8 +69,8 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
 	# map.visit "/visit/:label", :controller => "lists", :action => "find_or_create"
-	map.add_to_nuniverse "/add_to/:nuniverse/:kind", :controller => "tags", :action => "connect"
-	map.remove_from_nuniverse "/remove_from/:nuniverse/:item", :controller => "tags", :action => "disconnect"
+	map.add_to_nuniverse "/add_to/:id/:kind", :controller => "tags", :action => "connect"
+	map.remove_from_nuniverse "/remove_from/:id/:item", :controller => "tags", :action => "disconnect"
 	map.preview "/preview/:id/:kind", :controller => "tags", :action => "preview"
 	map.categorize "/categorize/:id/:context", :controller => "tags", :action => "categorize"
 

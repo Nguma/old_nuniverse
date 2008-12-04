@@ -5,6 +5,10 @@ class User < ActiveRecord::Base
   include Authentication::ByPassword
   include Authentication::ByCookieToken
   include Authorization::StatefulRoles
+
+	belongs_to :role, :class_name => "Role"
+	has_one :max_connections, :through => :role
+	
   #validates_presence_of     :login
   validates_length_of       :login, :within => 3..40
   validates_uniqueness_of   :login, :case_sensitive => false,
@@ -74,14 +78,7 @@ class User < ActiveRecord::Base
 		end
 	end
 	
-	def max_connections
-		case self.role
-		when "free"
-			return 200
-		when "admin"
-			return 9999999
-		end
-	end
+
 	
 	def connections_count 
 		Tagging.count(:select => "DISTINCT object_id", :conditions => ['user_id = ?',self.id])
@@ -105,15 +102,20 @@ class User < ActiveRecord::Base
 	end
 	
 	def connections(params = {})
-		Tagging.select(
-					:perspective => self_perspective,
-					:subject => self.tag,
-					
-					:label => params[:label] ? "#{params[:label].pluralize}|#{params[:label].singularize}" : nil,
-					:page => params[:page] || 1,
-					:per_page => params[:per_page] || 3
-				)
+
+		Connection.with_user_list.with_subject(self.tag).with_user(self).tagged(params[:label]).order_by(params[:order]).distinct.paginate(
+			:page => params[:page]||1, 
+			:per_page => params[:per_page] || 3
+		)
+
+	end
 	
+	def groups
+		Connection.with_subject(self.tag).with_kind('group').paginate(:page => 1, :per_page => 5)
+	end
+	def member_of?(group)
+		return true if !Connection.with_subject(group.tag).with_user(self).with_object(self.tag).tagged('member').empty?
+		return false
 	end
 	
 	def add_image(params)

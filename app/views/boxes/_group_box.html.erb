@@ -1,0 +1,7 @@
+<div class="box user_group_box" >
+  <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
+  <div class="content" style="padding:0px 0 20px 20px;position:relative">
+     <%= link_to("","/groups/preview/#{item.object.id}", :class => "preview_url")%>
+  </div>
+  <div class="delimiter">&nbsp;</div>
+</div>

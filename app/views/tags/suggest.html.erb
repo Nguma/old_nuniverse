@@ -1,34 +1,18 @@
-<% if @tags.empty? && !@input.blank? -%>
+<div style="padding:5px;width:100%">
+<% if @suggestions.empty? && !@input.blank? -%>
   <label>Nothing has been found.</label>
-
 <% else -%>
   <label>Select from our suggestions</label>
-  <% @tags.each do |tag| -%>
-    <div  class="connection">  
-      <%= link_to("#{thumbnail_tag(tag.object, :kind => tag.kind)}","#") %>
-      <p><%= tag.object.kind %></p>
-      <h3>
-        <%= link_to("<span style='font-weight:bold'>#{tag.object.label}</span>", "") %>
-      </h3>
-      
-      <div class="data"  style="display:none">
-  
-        <%= hidden_field_tag "kind", @kind.blank? ? tag.object.kind : @kind %>
-        <%= hidden_field_tag "id", tag.object.id %>
-        <%= hidden_field_tag "data", tag.object.data %>
-        <%= hidden_field_tag "url", tag.object.url %>
-      </div>
-    </div>
-  <% end -%>
-  <div class="delimiter">&nbsp;</div>
-  <label style="">or </label>
+  <%= columnize(boxes_for(@suggestions))%>  
 <% end -%>
-<div class = "connection">
+<label style="clear:both">or if it doesn't exist yet, create it:</label>
+<div class="connection" style="clear:both;width:auto">
+  
+  <%= image_tag("", :class => "thumbnail") %>
   <h3>
-    <%= link_to("Add this #{@kind}!", "#")%>
+    <%= link_to(@input, "/tags/connect", :class => "trigger ", :mode => "connect") %>
+    <%= link_to(" - Create it!", "/tags/connect", :class => "trigger new next", :mode => "connect") %>
   </h3>
-  <div class="data">
-    <%= hidden_field_tag "kind", @kind %>
-    <%= hidden_field_tag "label", @input %>
-  </div>
+</div>
+<div class="delimiter">&nbsp;</div>
 </div>

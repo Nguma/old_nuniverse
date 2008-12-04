@@ -1,22 +1,18 @@
-<div class="box <%= item_classes rescue "" %>" style="padding:5px;height:70px;background:#eee" >
-
+<div class="box <%= item_classes rescue "" %>" style="padding:5px;height:70px;" >
   <div class="connection <%= item_classes rescue "" %>"  >
-  
-   <%= image_tag "/images/icons/comment.png", :style => "position:relative;float:left;height:30px;mergin-right:5px"%>
-   <p style="color:#666;font-size:11px" ><%= item.owner.label.capitalize %> said</p>
+   <%= image_tag "/images/icons/comment.png", :style => "position:relative;float:left;height:30px;margin:0 5px 0 0px"%>
+   <p style="color:#666;font-size:11px;padding:5px 0 0 0" ><%= link_to item.user.label.capitalize, visit_url(item.user, item.user.label) %> said</p>
     <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.object.label.capitalize %>"</i></span></p>
   </div>
-  
   <div class="content">
-    
-   <p><%= link_to "Reply", "#"%>
-   
+     <%= image_tag "/images/icons/comment.png", :style => "position:relative;float:left;height:30px;margin:0 5px 0 0px"%>
+     <p style="color:#666;font-size:11px;padding:5px 0 0 0" ><%= link_to item.user.label.capitalize, visit_url(item.user, item.user.label) %> said</p>
+      <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.object.label.capitalize %>"</i></span></p>
+   <p><%= link_to "Reply", "#"%></p>
   </div>
-  
   <div class="hidden">
     <%= add_to_fav_link(item, :source => @tag)%>
   </div>
-
   <div class="delimiter">&nbsp;</div>
 </div>
 

@@ -1,0 +1,24 @@
+<p>Founded by: <%= link_to @founder.label, visit_url(@founder, @founder.label) %></p>
+<p>Most active Members:
+<% @members.each do |member| -%>
+ <span style="margin: 0 5px 0 0"><%= link_to member.object.label, visit_url(member.object, member.object.label) %></span>
+<% end -%>
+</p>
+<% if @members.empty? -%>
+  Nobody joined yet.
+<% end -%>
+
+<% if current_user.tag == @founder -%>
+ <p> <%= link_to "Add/Edit Members", "#" %></p>
+<% elsif current_user.member_of?(@group) -%>
+  <p> <%= link_to "Resign from that group", "#" %></p>
+<% else -%>
+  <% if @group.private -%>
+    <h3>This group is private</h3>
+    <%= link_to "Request an invite", "#" %>
+  <%else -%>
+    <h3>This group is open to everyone</h3>
+    <%= link_to "Join", "#" %>
+  <% end -%>
+  
+<% end -%>

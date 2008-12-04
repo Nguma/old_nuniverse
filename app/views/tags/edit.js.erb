@@ -1,0 +1,11 @@
+  <div class="tag_cloud" >
+    <%= hidden_field_tag "id", @tag.id, :id => dom_id(@tag) %>
+    <% @tags.each do |tag| -%>
+        <%= link_to tag.kind, "#" , :style => "font-size:#{[tag.counted.to_i+12,18].min}px;padding:0 5px 0 0; color:#999;", :class => "trigger"%>
+    <% end -%>
+     <br/>
+      <%= text_field_tag "tags", "" , :class => "input"%>
+      <%= submit_tag "Save Changes", :style => "font-size:16px;color:#666;font-weight:bold" %>
+
+  </div>
+   

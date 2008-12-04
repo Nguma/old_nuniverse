@@ -55,3 +55,16 @@ label {
 form ul li label {
 	min-width:50%;
 }
+
+#select_profile_form a {
+	color:#396;
+}
+
+#membership {
+	width:100%;
+}
+
+#membership .price {
+	margin: 0 0 0 10px;
+	color:#396;
+}

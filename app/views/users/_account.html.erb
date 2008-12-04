@@ -1,3 +1,30 @@
-<div class="command_box">
-  <%=  link_to("<strong>#{current_user.connections_count}</strong> connections.", "/my_nuniverse/all_items") %>
-</div>
+<% menu_window(:title => 'profile') do -%>
+    <% form_tag "/users/membership" do -%>
+     <div id="step_1" class="step" style="height:100%">
+       
+        <h2>Your Account</h2>
+        <p>Select from this list what is the most appropriate.</p>
+        <h3>Your are using a <%= link_to (current_user.role.name, "/users/membership", :class => "trigger next") %> nuniverse.</h3>
+        
+        <p>You are using <%= Connection.with_user(current_user).size %> / <%= current_user.role.max_connections %> connections. <%= link_to ("Upgrade",  "/users/membership", :class => "trigger next") %> </p>
+        <h3>This nuniverse is private</h3>
+        <p>Private nuniverse: Only invited members can add to it.</p>
+        
+        <h3>Others can add to this nuniverse</h3>
+        <p>People from <%= link_to "this list", "#" %> will be able to post on this nuniverse.<br/>
+            <%= link_to "Choose who can edit", ""%>
+        </p>
+        
+        <h3>Change your password</h3>
+        
+          
+      </div>
+        
+      <div id="step_2" class="step hidden" style="height:100%">
+         <fieldset style="padding:0;margin:0" class="dynamic_area">
+         </fieldset>
+         <%= link_to "< Back", "#", :class => 'trigger previous'%>
+      </div>
+    <% end -%>
+
+<% end -%>

@@ -12,18 +12,15 @@ class Perspective < ActiveRecord::Base
 	
 	def members
 		case self.kind
-		when "user","personal","everyone"
+		when "user","personal"
 			return self.tag
+		when "everyone"
+			return nil
 		when "service"
 			return nil
 		when "group"
-			Tagging.select(
-				:user => self.user.tag,
-				:mode => "personal",
-				:subject => @perspective.tag,
-				:kind => "user",
-				:paginate => false
-				).collect{|c| c.user}.uniq!
+	
+			 Connection.with_subject(self.tag).with_kind('user').tagged('member|founder').collect {|c| c.object}
 		end
 		
 	end

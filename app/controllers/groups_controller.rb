@@ -1,5 +1,5 @@
 class GroupsController < ApplicationController
-	
+
 	before_filter :find_user, :find_everyone
 	
 	def index
@@ -25,28 +25,82 @@ class GroupsController < ApplicationController
 	
 	def suggest
 		
-		@input = params[:input]
-		@kind = params[:kind]
-		case @kind
-			
-		when "user"
-			@users =	User.find(:all, :conditions => ['(login rlike ? OR email = ?) AND role != "service"', "^#{params[:input]}",params[:input]], :limit => 3)
-			render :action => "suggest_users", :layout => false
-		else
-			@tags = Tag.with_label(params[:input]).with_kind(params[:kind]).paginate(:page => 1, :per_page => 3)
-			render :action => "suggest_groups", :layout => false
-		end	
-		
+		@groups = Group.find(:all, :conditions => ['name rlike ?', "^#{params[:input]}"])
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 	
 	def select
 	end
 	
 	def create
+
 		@group = Group.create(
 			:name => params[:input],
 			:user => current_user
 		 )
 		
+		current_user.tag.connect_with(@group.tag, :user => current_user, :as => "founder")
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+		
+	end
+	
+	def update
+		@group = Group.find(params[:id])
+		
+		@group.private = params[:private] if params[:private]
+		if params[:member]
+			
+			user = User.find(params[:member])
+	
+			user.tag.connect_with(@group.tag, :user => current_user, :as => 'member')
+		end
+		
+		respond_to do |f|
+			f.html {}
+			f.js { render :action => "create"}
+		end
+	end
+	
+	def join
+		@group = Group.find(params[:id])
+		if @group.private
+			# UserMailer.deliver_group_request(:from => current_user, :group => @group)
+			current_user.tag.connect_with(@group.tag, :user => @group.user, :as => "pending")
+		else
+			current_user.tag.connect_with(@group.tag, :user => current_user, :as => "member")
+		end
+		
+		respond_to do |f|
+			f.html {}
+			f.js { }
+		end
+			
+	end
+	
+	def new
+	end
+	
+	def delete
+		@group = Group.find(params[:id])
+
+		@group.destroy
+		redirect_back_or_default "/admin/groups"
+	end
+	
+	def preview
+		@group = Group.find(:first, :conditions => ['tag_id = ? ', params[:id]])
+		@founder = Connection.with_subject(@group.tag).with_kind("user").tagged("founder").first.object
+	
+		@members = Connection.with_subject(@group.tag).with_kind("user").tagged("member").paginate(:page =>1, :per_page => 10)
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 end

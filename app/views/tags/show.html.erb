@@ -1,8 +1,10 @@
-<%= render :partial => "/tags/default_overview"  %>
+<%= render :partial => "/nuniverse/connect"  %>
 <%= render :partial => "/tags/email"  %>
+<%= render :partial => "/users/account" %>
+<%= render :partial => "/users/groups" %>
 
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <div id="content" class="<%= @mode %>_mode" style="clear:both;height:360px;overflow:hidden">
+  <div id="content" class="<%= @mode %>_mode" style="clear:both;height:380px;overflow:hidden">
   <% if @items.empty? -%>
     <h3>This nuniverse is empty for now.</h3>
     <h3>Would you like to connect something to <%= @tag.label %> ?</h3>
@@ -15,26 +17,22 @@
       <div class="delimiter" style="clear:both">&nbsp;</div>
       <%= columnize(boxes_for(@items)) %>
   
-    <% content_for :footer do -%>
-      <h3 style="display:inline;padding:5px;font-weight:bold">
-        <%= link_to "+ Add something", "#", :id => "select_tag_lnk", :class => "select_form_lnk" %>
-      </h3>
-      <h3 style="display:inline;padding:5px">
-        <%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_lnk", :class => "select_form_lnk" %>
-      </h3>
-      <h3 style="display:inline;padding:5px">
-        <%= link_to "Email this to someone", "#", :id => "select_email_lnk", :class => "select_form_lnk" %>
-      </h3>
-      <%= display_options %>
-
-    <% end -%>
+    
+  <% end -%>
+  <% content_for :nav do -%>
+  
+  <div id="main_menu" style="display:block;width:90%;position:relative">
+    <%= render :partial => "/nuniverse/new" %>
+   </div>
+    <%#= display_options %>
   <% end -%>
    </div>
+   <%= search_box %>
    <%= render :partial => "/nuniverse/tag_cloud" %>
    
    
-  <% content_for :nav do -%>
-     <%= perspectives rescue ""%>
+  <% content_for :footer do -%>
+     <%= perspectives %>
   <% end -%>
   
 <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px", :id => "main_spinner", :class => "spinner hidden") %>

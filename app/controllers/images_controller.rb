@@ -47,4 +47,14 @@ class ImagesController < ApplicationController
 		@image.destroy
 		redirect_back_or_default('/')
 	end
+	
+	def show
+		@tag = Tag.find(params[:id])
+		@image =  Connection.with_subject(@tag).with_kind('image').first.object.image.public_filename
+
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+	end
 end

@@ -3,16 +3,17 @@
 	clear:both;
 	width:auto;
 	margin:0 0 1px 1px;
-	padding:10px;
-	background:#ccc url("/images/backgrounds/box.png") 0 0 repeat-x;	
+	padding:5px;
+	background:none;
+	
 	border:none;
 	overflow:hidden;
-	min-height:80px;
+	min-height:70px;
 	height:auto;
 }
 
 .personal {
-	background: #ccc url("/images/backgrounds/box_personal.png") 0 0 repeat-x;;
+/*	background: #ccc url("/images/backgrounds/box_personal.png") 0 0 repeat-x;;*/
 }
 
 .private {
@@ -179,6 +180,10 @@
 	clear:both;
 }
 
+#preview_box .subject {
+	padding:10px 20px 10px 20px;
+}
+
 #preview_box .overview {
 	padding:0px 20px 0px 0px;
 	color:#666;
@@ -195,7 +200,7 @@
 }
 
 #preview_box .content p {
-	padding:5px;
+	padding:0px 10px 10px 0;
 }
 
 #preview_box .content .connection a {
@@ -267,9 +272,7 @@
 	display:block;
 }
 
-.box .spinner {
-	display:none;
-}
+
 
 .loading .spinner {
 	display:block;
@@ -398,6 +401,7 @@
 
 .column .hover {
 	background:#333;
+	background:transparent url("/images/backgrounds/box.png") 0 0 repeat-x;	
 }
 
 .column .hover h2 {
@@ -764,4 +768,9 @@ html>body .ellipsis span {
 
 #title_box h3 a {
 	padding:5px 10px 5px 0;
+}
+
+.bookmark_box {
+	border:solid 3px #666;
+	background:transparent url('/images/icons/bookmark.png') 0 0 no-repeat;
 }

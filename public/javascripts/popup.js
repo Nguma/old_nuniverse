@@ -1,17 +1,20 @@
 var PopUp = new Class({
-  Implements:[Events, Options],
+  Extends:Steppable,
   options: {
     draggable:false,
     offset:{'x':0,'y':0},
-    content:$('content')
+    update:'.content'
   },
   
   initialize:function(el, options) {
     this.el = $(el);
+   
+    this.parent(el, options);
+    this.content = this.options.update;
+
+    
     this.setOptions(options);
     this.setBehavior();
-    this.setEvents();
-    this.setRequest();
   },
   
   collapse:function(ev) {
@@ -22,16 +25,17 @@ var PopUp = new Class({
   
   expand:function(ev) {
     if($defined(ev)) { ev.preventDefault();}
+    if(!this.el.hasClass('hidden')) { return; }
     this.el.setStyles({
       'top':this.options.offset.y,
       'left':this.options.offset.x
-    })
+    });
     this.el.removeClass('hidden');
-    
+    this.fireEvent('onExpand');
   },
   
   enableDrag:function() {
-    // this.options.drag.attach();
+    this.options.drag.attach();
   },
   
   disableDrag:function() {
@@ -39,12 +43,15 @@ var PopUp = new Class({
   },
   
   setBehavior:function() {
+
     if(this.options.draggable == true) {
+      
       this.options.drag = new Drag.Move(this.el);
       this.el.getElement('.content').addEvents({
-        'mouseenter':this.disableDrag.bind(this),
-        'mouseleave':this.enableDrag.bind(this)
-      })
+               'mouseenter':this.disableDrag.bind(this),
+               'mouseleave':this.enableDrag.bind(this)
+           });
+
     }
     var close_btns = this.el.getElements('.cancel_btn').concat(this.el.getElements('.close_btn'));
     
@@ -53,32 +60,25 @@ var PopUp = new Class({
     },this);
     
   },
-  
-  setEvents:function() {
-    // this.el.getElements('.dynamic_lnk').each(function(lnk) {
-    //     lnk.addEvent('click', this.execute.bindWithEvent(this, lnk));
-    //   },this);
-
-    if(this.el.getProperty('id') == undefined ) { return; }
     
-  },
-  
-  setRequest:function() {
-    // this.request = new Request.HTML(
-    //      {
-    //        url:"",
-    //        update:this.options.content,
-    //        onSuccess:this.onUpdate.bind(this)
-    //      })
-  },
-  
   execute:function(ev, lnk) {
     ev.preventDefault();
     this.request.url = lnk.getProperty('href');
     this.request.get();
   },
   
-  onUpdate:function() {
+
+  
+  updateWith:function(el) {
+    // 
+    // 
+    // 
+    this.content.empty();
+
+    this.content.set('html',el.getElement('.content').get('html'));
    
+    this.request.options.update = this.content;
+    this.setTriggers(this.content);
+    this.fireEvent('onUpdate');
   }
 })

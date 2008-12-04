@@ -344,6 +344,52 @@ a.saved {
 	margin:0 3px 0 0;
 }
 
-#tag_cloud a.selected {
+.tag_cloud a.selected {
 	color:#333;
 }
+
+#main_menu h3 {
+	display:inline;
+	padding:5px;
+}
+
+
+.form_box .step {
+	display:none;
+}
+
+.form_box .activated, 
+.form_box .current {
+	display:block;
+}
+
+.form_box .step .content{
+	display:none;
+	margin:5px 10px 5px 30px;
+}
+
+.form_box .current .content {
+	display:block;
+}
+
+.form_box .step h2 {
+	display:none;
+}
+
+.form_box .activated h2 {
+	font-size:14px;
+	color:#666;
+	display:block;
+}
+
+.form_box .current h2 {
+	font-size:25px;
+	color:#333;
+	display:block;
+}
+
+
+#main_menu .activated {
+	background:#eee;
+}
+

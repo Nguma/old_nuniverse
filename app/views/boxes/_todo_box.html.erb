@@ -1,0 +1,14 @@
+<div class="box todo <%= item_classes rescue "" %>" >
+  <div class="connection <%= item_classes rescue "" %>"  >
+   <%= image_tag "/images/icons/todo.png", :style => "position:relative;float:left;height:30px;margin:0 5px 0 0px"%>
+    <p>todo</p>
+    <h3><%= item.object.label.capitalize %></h3>
+  </div>
+  <div class="content">
+   <p><%= link_to "Mark as done", "#" -%></p>
+  </div>
+  <div class="hidden">
+    <%= add_to_fav_link(item, :source => @tag)%>
+  </div>
+  <div class="delimiter">&nbsp;</div>
+</div>

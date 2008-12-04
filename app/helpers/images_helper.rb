@@ -11,11 +11,11 @@ module ImagesHelper
 	# thumbail image for the corresponding source
 	def thumbnail_tag(source, params = {})
 		source = source.is_a?(Tagging) ? source.object : source
-		params[:kind] ||= @kind.nil? ? source.kind : @kind
+		params[:kind] ||= source.kind
 		unless source.thumbnail.nil?
 			img = source.thumbnail
 		else
-			img = "/images/icons/#{params[:kind].singularize}.png"
+			img = "/images/icons/#{source.object.kind}.png"
 		end
 		return image_tag(img, :alt => "", :class => params[:class] || "thumbnail")
 	

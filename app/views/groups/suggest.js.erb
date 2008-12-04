@@ -1,0 +1,14 @@
+<% if @groups.empty? -%>
+  <h3>This group doesn't exist<br/><%= link_to "Create it!", "/groups/create", :class =>"trigger" %></h3>
+<% else -%>
+  <% @groups.each do |group| -%>
+  <div class="option">
+    <%= link_to group.name, "/groups/join/#{group.id}", :class => "trigger" %> 
+
+     <%=  "<span style='color:#930'>(private)</span>" if group.private  %>
+    <div class="data">
+      <%= hidden_field_tag :id, group.id %>
+    </data>
+  </div>
+  <% end -%>
+<% end -%>

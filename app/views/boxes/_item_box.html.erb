@@ -1,21 +1,21 @@
-<div class="box <%= item_classes rescue "" %>" style = "min-height:60px;<%= @mode == "image" ? "" : "overflow:hidden;height:70px;padding:5px" %>">
+<div class="box <%= item_classes rescue "" %>" style = "<%= @mode == "image" ? "" : "overflow:hidden;"%>">
   <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
   
-  <div class="content" style="padding:0px 0 20px 20px;position:relative">
+  <div class="content" style="padding:0px 20px 20px 20px;position:relative">
     
     <% if item.object.service.nil? -%>
     
      <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "preview_url")%>
       
     <% else -%>
-    
-     <p style="padding:0;width:340px;word-wrap:break-word">
-        <%= item.object.description %><br/>
+
+     <p style="padding:0;width:340px;word-wrap:break-word;font-size:13px;color:#333">
+        <%= item.object.description[0..300] rescue "" %><br/>
         <% if !item.object.property('price').blank? -%>
-          <%= link_to("Buy it on #{item.object.service} for #{item.object.property('price')}", item.url, :style => "color:#393") %>
-        <% else -%>
-          <%= link_to(item.url, item.url, :style => "color:#393") %>
-        <% end -%>
+            <%= link_to("Buy it on #{item.object.service} for #{item.object.property('price')}", item.object.url, :style => "color:#393") %>
+          <% else -%>
+            <%= link_to(item.object.url, item.object.url, :style => "color:#393") rescue ""%>
+          <% end -%>
         
       </p>
       

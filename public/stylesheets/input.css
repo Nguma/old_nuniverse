@@ -212,6 +212,13 @@
 	width:300px;
 }
 
+.suggestions .thumbnail {
+	background:none;
+	border:solid #333 2px;
+	height:30px;
+	width:30px;
+}
+
 .form_box form {
 	position:relative;
 	float:none;
@@ -265,4 +272,18 @@
 
 #search_box input.empty {
 	background:#FFF url('/images/backgrounds/empty_search.png') 0 5px no-repeat;
+}
+
+
+.action {
+	clear:both;
+}
+
+.action .icon {
+	height:40px;
+	width:40px;
+	background:none;
+	position:relative;
+	float:left;
+	border:none;
 }

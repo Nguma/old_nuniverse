@@ -19,7 +19,7 @@ module ListsHelper
 	end
 		
 	def link_to_item(item, params = {})	
-		item = item.is_a?(Tagging) ? item.object : item
+		item = item.is_a?(Connection) ? item.object : item
 		kind = params[:kind] ? params[:kind] : item.kind 	
 		params[:service] ||= @service
 		params[:title] ||= item.label.capitalize[0..53]
@@ -62,15 +62,16 @@ module ListsHelper
 		params[:item] = item
 		params[:item_classes] = ""
 			
-		personal = item.personal.to_i rescue nil
-		if personal	== 1
+		personal = item.users.to_a.include?(current_user.id.to_s) rescue nil
+
+		if personal
 			params[:item_classes] <<  (item.public ? 'personal' : ' private')
 		end
-	
+
 		if item.kind == "address"
 			render :partial => "/boxes/#{item.kind}_box", :locals => params 
 		else
-			render :partial => "/boxes/#{item.object.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
+			render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
 		end
 	end
 	
@@ -91,15 +92,11 @@ module ListsHelper
 	
 	def perspectives(params = {})
 		kind = params[:kind] || @source.kind 
-		pers = [@current_user.self_perspective, @everyone.perspectives.favorites,current_user.perspectives.favorites].flatten
+		pers = [current_user.login, "everyone", "google", "amazon", "youtube", "twitter", current_user.groups.collect {|c| c.object.label}].flatten
 		collection = []
+	
 		pers.each do |p|
-			if p.tag == @current_user.tag
-				label = "You"
-			else
-				label = p.tag.label
-			end
-			collection << link_to(label, visit_url(@tag, p.tag.label), :style => (p.tag == @perspective.tag) ? 'color:#000' : '')
+			collection << link_to(((p == current_user.login) ? "You" : p).capitalize, visit_url(@tag, p), :style => (p == @perspective.tag.label) ? 'color:#000' : '')
 		end
 		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => collection}
 	end
@@ -111,20 +108,9 @@ module ListsHelper
 	end
 	
 	def boxes_for(items, params = {})
-		params[:source] ||= @source
-		params[:kind] ||= params[:source].kind
-		
 		boxes = []
 		items.each_with_index do |item, i|
-			case @mode 
-			when "category"
-				params[:item] = item
-				boxes << "#{render :partial => "/boxes/category_box", :locals => params}"
-			when "image"
-				boxes << "#{render :partial => "/images/box", :locals => {:item => item, :source => params[:source]}}"
-			else	
-				boxes << render_item_box(item, params)
-			end
+			 boxes << render_item_box(item, params)
 		end
 		boxes
 	end

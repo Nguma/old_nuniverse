@@ -1,0 +1,28 @@
+<h2><%= @group.name.capitalize %> is created!</h2>
+
+<h3>This group is <%= @group.privacy %>.</h3>
+<% if @group.private -%>
+  <p>Only invited members will have access.</p>
+<% else -%>
+  <p>It means that anyone can join and see its content.</p>
+<% end -%>
+<%= link_to "Make it #{@group.private ? "public" : "private"}.", "/groups/update/#{@group.id}?private=#{@group.private ? 0 : 1}", :class => "trigger" %>
+
+
+  <h3>Members</h3>
+  <% @group.members.each do |member| -%>
+    <%= link_to member.object.label, visit_url(member.object, member.object.label) -%> 
+    <%= link_to "Kick out", "/groups/update/#{@group.id}?remove=#{member.object.id}"%>
+  <% end -%>
+  <div class="selected_items"></div>
+  <label>Enter an email address or a member name.</label>
+
+
+
+  <div style="position:relative;clear:both;left:0;background:#FFF;padding:5px">
+    <%= text_field_tag "input", "" , :id => "input" , :src => "/users/suggest" %>
+    <%= spinner :dom_id => 'suggestion_spinner'%>
+    <div class="suggestions" style="background:#FFF;width:100%;position:absolute;margin:0;left:5px;top:0;"></div>
+  </div>
+  
+  <%= submit_tag "Save" %>

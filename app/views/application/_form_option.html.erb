@@ -1,0 +1,9 @@
+ <div class="action">
+   <%= image_tag("/images/icons/#{image}.png", :class => "icon") %>
+   <h3>
+     <%= link_to (title, url, :class => 'trigger')%>
+   </h3>
+   <% unless description.nil? -%>
+    <p><%= description %></p>
+   <% end -%>
+ </div>

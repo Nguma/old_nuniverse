@@ -1,0 +1,10 @@
+<h2>Join/Create a user group</h2>
+<div class="selected_items"></div>
+<div class="name">
+  <label>Name it.</label>
+  <%= text_field_tag "input", "", :id => "input", :auto_complete => "off" , :src => "/groups/suggest"%>
+  <div style="position:relative;clear:both;left:0;background:#FFF;padding:5px">
+    <%= spinner :dom_id => 'suggestion_spinner'%>
+    <div class="suggestions" style="background:#FFF;width:100%;position:absolute;margin:0;left:5px;top:0;"></div>
+  </div>
+</div>

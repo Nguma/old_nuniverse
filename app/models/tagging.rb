@@ -1,28 +1,32 @@
 class Tagging < ActiveRecord::Base
-  belongs_to :object, :class_name => "Tag"
-	belongs_to :subject, :class_name => "Tag"
-	belongs_to :owner, :class_name => "Tag", :foreign_key => "user_id"
+	# belongs_to :connection, :class_name => 'Connection'
 	
 	
-	has_many :rankings
+	# has_many :rankings
 
 	cattr_reader :per_page 
   @@per_page = 5
 
 	#before_destroy :destroy_connections
 
-  named_scope :with_subject, lambda { |subject|
-    subject.nil? ? {} : {:conditions => ["subject_id = ?", subject.id]}
-  }
-  named_scope :with_object, lambda { |object|
-    object.nil? ? {} : {:select => "taggings.*",:conditions => ["object_id = ?", object.id]}
-  }
-  named_scope :with_user, lambda { |user|
-    user.nil? ? {} : {:conditions => ["taggings.user_id = ?", user.tag_id]}
-  }
+
 	named_scope :with_kind, lambda { |kind| 
 		kind.nil? ? {} : {:conditions => ['taggings.kind = ? ', kind]}
 	}
+	
+	named_scope :with_user, lambda {|user| 
+		user.nil? ? {} : {:conditions => ['connections.user_id in (?)', user.to_a.collect {|c| c.is_a?(User) ? c.tag_id : c.id} ]}
+	}
+	
+	named_scope :with_subject, lambda {|subject| 
+		subject.nil? ? {} : {:joins => "INNER JOIN connections ON connections.id = taggings.connection_id", :conditions => ['connections.subject_id = ?', subject.id]}
+	}
+	
+	named_scope :with_object, lambda {|object| 
+		object.nil? ? {} : {:joins => "INNER JOIN connections ON connections.id = taggings.connection_id", :conditions => ['connections.object_id = ?', object.id]}
+	}
+	
+	named_scope :distinct, :group => :kind
 	
 	named_scope :with_users, lambda { |users| 
 		users.empty? ? {} : {:conditions => ["user_id in (?)", users.collect {|u| u.id}]}
@@ -35,6 +39,9 @@ class Tagging < ActiveRecord::Base
 	named_scope :with_address_or_geocode, lambda { |kind|
     kind.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
+
+	named_scope :gather, :select => " *, count(DISTINCT connection_id) AS counted",  :group => :kind
+	named_scope :gather_with_user_list, :select => " taggings.kind, count(DISTINCT connection_id) AS counted, GROUP_CONCAT(DISTINCT connections.user_id, ',') AS users", :group => :kind
 
 	# Sad, but paginate doesnt seem to work with the following:
 	# named_scope :with_tags, lambda { |tags|
@@ -240,11 +247,7 @@ class Tagging < ActiveRecord::Base
 
 	private
 	
-	def destroy_connections
-		self.connections.each do |c|
-			c.destroy
-		end
-	end
+
 	
 	def clean_path
 	  self.path = self.path.to_s

@@ -1,0 +1,17 @@
+
+  <div class="option" id="option_image"> 
+    <%= link_to ("nuniverse" , "image", :class => "kind hidden") -%>
+  
+    <h2>2. Pick it</h2>
+    <div class="content">
+      <label>Copy and paste the url from the internet </label>
+      <%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
+    
+      <label>... or upload a file from your computer</label>
+      <%= file_field_tag :uploaded_data %>
+      <label>Add a quick description (Optional. First line will be used as title)</label>
+      <%= text_field_tag "description", "", :rows => 2,  :style => "width:480px;font-size:14px" %>
+      <%= link_to "Done."%>
+    </div>
+  </div>
+  

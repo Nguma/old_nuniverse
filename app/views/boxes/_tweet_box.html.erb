@@ -7,12 +7,15 @@
   
    <%= image_tag "/images/icons/twitter.png", :style => "position:relative;float:left;height:30px;margin-right:5px"%>
    <p style="color:#666;font-size:11px" ><%= item.object.property('user_name').capitalize %> said</p>
-    <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.label.capitalize %>"</i></span></p>
+    <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.object.label.capitalize %>"</i></span></p>
   </div>
   <div class="content">
-    <p><%= item.label%></p>
+    <p><%= item.object.label%></p>
     <p> <%= link_to( "Follow #{item.object.property('user_name')}", "#")%></p>
     <p>Reply to <%= item.object.property('user_name')%></p>
+  </div>
+  <div class="hidden">
+    <%= add_to_fav_link(item, :source => @tag)%>
   </div>
   <div class="delimiter">&nbsp;</div>
 </div>

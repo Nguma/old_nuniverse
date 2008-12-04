@@ -1,6 +1,8 @@
-<div class="connection <%= item_classes rescue "" %>"  >
-  <%= thumbnail_tag(item.object, :kind => kind)  %>
-  <p style="font-size:11px;padding:3px 3px 3px 5px">Nuniverse of</p>
-  <h3><%= link_to_item(item, :kind => kind) %></h3>
-    <p style="font-size:11px;padding:0 3px 3px 5px"><%= item.current_tags.split(',')[0..1].to_s.capitalize rescue item.kind.capitalize %></p>
+<div class="connection subject <%= item_classes rescue "" %>"  >
+  <%= link_to(thumbnail_tag(item.object, :kind => kind), "/images/show/#{item.object.id}", :class => "trigger")%>
+  <p style="font-size:11px;padding:0">
+    <%= item.current_tags.split(',')[0..1].to_s.capitalize rescue item.kind.capitalize %>
+  </p>
+  <h3 ><%= link_to_item(item, :kind => kind) %></h3>
+    
 </div>

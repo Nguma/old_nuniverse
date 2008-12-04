@@ -1,9 +1,12 @@
+
+
 var Input = new Class({
+    Implements:[Requestable],
     Extends:PopUp,
 
     options:{
       'focused':false,
-      'suggestUrl':null,
+      'requestUrl':null,
       'update':null,
       'trigger':'.trigger',
       'spinner':$empty
@@ -36,35 +39,10 @@ var Input = new Class({
      
     },
     
-    setRequest:function() {
-      this.request = new Request.HTML({
-                 url:this.options.suggestUrl,
-                 link:'cancel',
-                 update:this.options.update,
-                 onComplete:this.stopSpinning.bind(this),
-                 onRequest:this.startSpinning.bind(this),
-                 onSuccess:this.getUpdate.bind(this)
-               }, this)
-        
-      // Timeout definition
-      this.timeout = $empty
-    },
-    
-    startSpinning:function() {
-      this.options.spinner.removeClass('hidden');
-    },
-    
-    stopSpinning:function() {
-      this.options.spinner.addClass('hidden');
-    },
-    
+  
     expand:function() {
       this.parent();
       this.el.getElements('input#input')[0].focus();
-    },
-    
-    getUpdate:function() {
-      this.fireEvent('onUpdate', this.options.update)
     },
     
     focus:function(ev,input) {
@@ -90,17 +68,6 @@ var Input = new Class({
         this.fireEvent('onChange', input);
       }
       
-    },
-    
-    suggest:function() {
-      $clear(this.timeout);
-      this.timeout = this.retrieveSuggestions.delay(200,this);
-    },
-    
-    retrieveSuggestions:function() {
-      if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
-      this.options.update.removeClass('hidden');
-      this.request.post(this.el.getElement('form'));
     },
     
     setSuggestions:function() {

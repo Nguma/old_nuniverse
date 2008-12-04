@@ -101,11 +101,10 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		tags  = Tag.find(:all, :conditions => 'data rlike "#release_date "')
+		tags  = Tag.find(:all, :conditions => 'kind rlike "character"')
+	
 		tags.each do |tag| 
-			rd = tag.property('release_date')
-			date = Tag.find_or_create(:label => rd, :kind => 'date')
-			tag.connect_with(date)
+			tag.tag_with('character');
 		end
 		
 		render :nothing => true
@@ -113,15 +112,7 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def test
-		if params[:uploaded_data]
-			@audio = Audio.new(:uploaded_data => params[:uploaded_data])
-			if @audio.save
-				flash[:notice] = "saved"
-				
-			else
-				flash[:error] = "not saved"
-			end
-		end
+		current_user.connections
 	end
 	
 	def netflix
@@ -142,6 +133,10 @@ cts.each_with_index do |ct,i|
 			session[:request_token_secret]
 		end
 		
+	end
+	
+	def groups
+		@groups = Group.find(:all)
 	end
 	
 	protected

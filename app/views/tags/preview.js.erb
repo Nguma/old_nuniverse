@@ -1,34 +1,35 @@
 <% if @items %>
   
-  <div class="overview" style="padding:0 40px 0 0px">
-     <%= @tag.description %><br/>
-    <%= will_paginate(@items, :previous_label => "", :next_label => "")%>
+  <div class="overview" style="margin:0 0 10px 0;clear:both">
+    <p style="padding:0;"><%= @tag.description[0..400] rescue "" %></p>
+    
+    <%#= will_paginate(@items, :previous_label => "", :next_label => "")%>
     <% @items.each do |info| -%>
-      <p style="padding:0 0 0 0;">
+      <p style="padding:0 0 0 0;margin:0">
         <% if info.counted.to_i == 1 -%>
          <span style="margin:0 5px 0 0"><%= info.kind.capitalize %></span>
           <%= link_to_visit(info.object, :class => "preview_tag_lnk")%>
           
         <% else -%>
-          <span style="margin:0 5px 0 0"><%= info.counted %></span><%= link_to info.kind.pluralize, visit_url(@tag.id, @perspective.tag.label, :input => info.kind)%>
+          <span style="margin:0 5px 0 0"><%= info.counted %></span>
+          <%= link_to info.kind.pluralize, visit_url(@tag.id, @perspective.tag.label, :input => info.kind) %>
         <% end -%>
       </p>
     <% end -%>
-    
   </div>
-  <div class="perspectives" style="margin:10px 0 0 0;font-size:15px;color:#999">
+  <div class="perspectives" style="font-size:15px;color:#999;margin: 0 0 5px 0">
     <h4>According to</h4>
     <%= link_to "Google", visit_url(@tag,"google") , :style => "color:#666" %> | 
     <%= link_to "Amazon", visit_url(@tag,"amazon"), :style => "color:#666"%> | 
     <%= link_to "Youtube", visit_url(@tag,"youtube"), :style => "color:#666"%> | 
     <%= link_to "Twitter", visit_url(@tag,"twitter"), :style => "color:#666"%>
   </div>
-  <div  style="margin:10px 0 0 0;font-size:15px;color:#999">
+  <div  style="font-size:15px;color:#999">
     <h4>You've tagged that item</h4>
     <% @tag.tags(:user => current_user).each do |cat| -%>
-      <%= link_to (cat.name, "#{cat.name}" ,:style => "font-size:#{([cat.counted.to_i+11,18].min)}px;color:#999;margin:0 3px 0 0") %>
+      <%= link_to (cat.kind, "#{cat.kind}" ,:style => "font-size:#{([cat.counted.to_i+11,18].min)}px;color:#999;margin:0 3px 0 0") %>
     <% end -%>
-    <%= link_to "Add/edit tags", "#tags", :class => "dynamic", :style => "font-size:12px" %>
+    <%= link_to "Add/edit tags", "/tags/edit/#{@tag.id}", :class => "trigger", :style => "font-size:12px" %>
   </div>
     
 

@@ -1,4 +1,7 @@
 <%= render :partial => "/tags/new" %>
+<%= render :partial => "/users/account" %>
+<%= render :partial => "/users/groups" %>
+
 <% nuniverse(:selected => "My nuniverse") do -%>
 
   <% if @items.empty? %>
@@ -16,7 +19,15 @@
       <%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_lnk", :class => "select_form_lnk" , :style => "color:#396"%>
     </h3>
   </div>
+    <% content_for :footer do -%>
+      <div id="main_menu">
+        <h3 style="font-weight:bold">
+          <%= link_to(image_tag('/images/icons/plus.png'), "#", :id => "select_tag_lnk", :class => "select_form_lnk") %>
+        </h3>
+      </div>
+    <% end -%>
   <% else -%>
+   <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute", :id => "main_spinner", :class => "spinner hidden") %>
     <div id="content" class="<%= @mode %>_mode" style="clear:both;height:360px;overflow:hidden">
       <%= sorting_options :source => @tag %>
       <%= will_paginate(@items, :inner_window => 2) %>
@@ -24,14 +35,17 @@
       <%= columnize(boxes_for(@items), :size => 4) %> 
     </div>
     
+    <%= search_box %>
     <%= render :partial => "/nuniverse/tag_cloud" %>
     
-    <% content_for :footer do -%>
-
-      <h3 style="display:inline;padding:5px;font-weight:bold"><%= link_to "+ Add something", "#", :id => "select_tag_lnk", :class => "select_form_lnk" %></h3>
-      <h3 style="display:inline;padding:5px"><%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_lnk", :class => "select_form_lnk" %></h3>
+    <% content_for :nav do -%>
+   
+      <div id="main_menu">
+        <%= render :partial => "/nuniverse/new" %>
+         
+       </div>
     <% end -%>
-         <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute;right:20px;bottom:20px", :id => "main_spinner", :class => "spinner hidden") %>
+        
   <% end -%>
 
   

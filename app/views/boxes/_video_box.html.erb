@@ -3,7 +3,7 @@
   
   <%= render_item(item, :kind => item.kind, :item_classes => "hide_in_preview") %>
   
-  <div class="content">
+  <div class="content" style="padding:0">
     <%= render :partial => "/ws/video", :locals => {
       :url => item.object.url,
       :flashvars => nil

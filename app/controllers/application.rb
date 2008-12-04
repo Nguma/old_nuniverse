@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 	include AuthenticatedSystem
 	
-	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about]
+	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about, :screenshots]
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -22,6 +22,9 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def thank_you
+	end
+	
+	def screenshots
 	end
 	
 	def feedback
@@ -76,9 +79,19 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def find_perspective
+		
+		
 		if params[:perspective]
-			@perspective = Perspective.find(:first, :conditions => ['tags.label = ?', params[:perspective]], :include => :tag)
-			@perspective = current_user.self_perspective if @perspective.nil?
+			t = Tag.find(:first, :conditions => ['label = ? AND kind in (?)', params[:perspective], ['user','group','service']])
+	
+			if t.nil?
+				@perspective = current_user.self_perspective
+			else
+				@perspective = Perspective.new(:tag_id => t.id, :user => current_user, :favorite => 1)
+										# raise @perspective.members.inspect
+			end
+			# @perspective = Perspective.find(:first, :conditions => ['tags.label = ?', params[:perspective]], :include => :tag)
+			# @perspective = current_user.self_perspective if @perspective.nil?
 	
 		else
 			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.self_perspective

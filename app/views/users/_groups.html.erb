@@ -1,0 +1,15 @@
+<% menu_window(:title => "groups") do -%>
+  <% form_tag do -%>
+
+  <div class="step" id="step_1">
+    <h2>Manage your groups</h2>
+  
+    <h3><%= link_to("Edit", "/groups/edit", :class => "trigger next")%></h3>
+    <h3><%= link_to("Join / Create a user group", "/groups/new", :class => "trigger next")%></h3>
+  </div>
+  <div class="step" id="step_2">
+    <fieldset>
+    </fieldset>
+  </div>
+  <% end -%>
+<% end -%>

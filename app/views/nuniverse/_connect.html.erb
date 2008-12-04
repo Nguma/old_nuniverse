@@ -1,0 +1,75 @@
+<%  menu_window(:title => "tag" ) do -%>
+  <% form_tag "/tags/connect", :multipart => true do -%>
+    <%= hidden_field_tag "nuniverse", @tag.id %>
+    <div class="data hidden"></div>
+    <div id="step_1" class="step activated" style="height:100%">
+      <h2>1. Select a type of nuniverse <%= link_to("(Change)","#step_1", :class => "trigger") %></h2>
+      <div class="content">
+       <p>Select from this list what is the most appropriate.</p>
+       <div class="action">
+         <%= image_tag("/images/icons/person.png", :class => "icon") %>
+         <h3>
+           <%= link_to ("Add a person", "/taggings/new?form=nuniverse", :class => 'trigger next')%>
+         </h3>
+         <p>or a character</p>
+       </div>
+       <div class="action">
+         <%= image_tag("/images/icons/location.png", :class => "icon") %>
+         <h3>
+           <%= link_to ("Add a location", "/taggings/new?form=comment", :class => 'trigger next')%>
+         </h3>
+         <p>Any nuniverse with a physical address</p>
+       </div>
+      <div class="action">
+        <%= image_tag("/images/icons/small_nuniverse.png", :class => "icon") %>
+        <h3>
+          <%= link_to ("Custom", "/taggings/new?form=nuniverse", :class => 'trigger next')%>
+        </h3>
+        <p>Whether its a camera, a tv show, a recipe or anything you might have in mind, this is the place.</p>
+      </div>
+
+      <div class="action">
+        <%= image_tag("/images/icons/bookmark.png", :class => "icon") %>
+        <h3>
+          <%= link_to ("Bookmark a web page", "/taggings/new?form=bookmark", :class => 'trigger next')%>
+        </h3>
+        <p>Copy and paste a favorite bookmark</p>  
+      </div>
+      <div class="action">
+        <%= image_tag("/images/icons/image.png", :class => "icon") %>
+        <h3>
+          <%= link_to ("Add an image", "/taggings/new?form=image", :class => 'trigger next')%>
+        </h3>
+        <p>You can add it from a url or upload directly from your computer.</p>
+      </div>
+      <div class="action">
+        <%= image_tag("/images/icons/comment.png", :class => "icon") %>
+        <h3>
+          <%= link_to ("Make a comment", "/taggings/new?form=text", :class => 'trigger next')%>
+        </h3>
+        <p>Post a comment, a review, a to do, a description or any type of long text.</p>
+      </div>
+      </div>
+
+    </div>
+    <div id="step_2" class="step hidden" style="height:100%;width:100%">
+      <h2>2. Name it! <%= link_to("(Change)","#step_2", :class => "trigger") %></h2>
+      <div class="content">
+        <fieldset style="padding:0;margin:0;width:100%">
+        </fieldset>
+      </div>
+    </div>
+    <div id="step_3" class="step hidden" style="height:100%;width:100%">
+       
+       <%= link_to "2. Name it! (change)" %>
+       <div class="tag_cloud hidden" style="clear:both;">
+         <label>Tag it.</label>
+         <%= text_area_tag :tags, "", :rows => 3, :style =>"width:520px;" %>
+         <%# @tags.each do |tag| -%>
+           <%#= link_to tag.kind, "#", :class => "trigger" %>
+         <% #end -%>
+         <%#= submit_tag 'Connect!' %>
+       </div>
+    </div>
+  <% end -%>
+<% end -%>

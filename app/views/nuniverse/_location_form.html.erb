@@ -1,0 +1,11 @@
+<div class="option" id="option_location"> 
+  <h2>2. Name it! <%= link_to("","#step_2", :class => "trigger selected_option") %></h2>
+  <div class="content">
+    <%= link_to ("nuniverse" , "location", :class => "kind hidden") -%>
+    <%= text_field_tag "input", "", :class => "input", :style => "width:520px", :autocomplete => "off"%>
+    <div style="position:relative;clear:both;left:0;padding:0 5px 5px 5px;width:100%;background:none">
+      <%= spinner :dom_id => 'suggestion_spinner'%>
+      <div class="suggestions" style="background:none;width:100%;position:absolute;margin:0;left:0;top:0;padding:0"></div>
+    </div>
+  </div>
+</div>
