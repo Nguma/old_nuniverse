@@ -1,5 +1,5 @@
 class Tagging < ActiveRecord::Base
-	# belongs_to :connection, :class_name => 'Connection'
+	belongs_to :taggable, :polymorphic => true 
 	
 	
 	# has_many :rankings
@@ -9,9 +9,12 @@ class Tagging < ActiveRecord::Base
 
 	#before_destroy :destroy_connections
 
-
-	named_scope :with_kind, lambda { |kind| 
-		kind.nil? ? {} : {:conditions => ['taggings.kind = ? ', kind]}
+	named_scope :with_connection, lambda {|connection| 
+		id.nil? ? {} : {:conditions => ["taggable_id in (?)", connection.to_a.collect{ |c| c.id}] } 
+	}
+	
+	named_scope :named, lambda { |kind| 
+		kind.nil? ? {} : {:conditions => ['predicate = ? ', kind]}
 	}
 	
 	named_scope :with_user, lambda {|user| 

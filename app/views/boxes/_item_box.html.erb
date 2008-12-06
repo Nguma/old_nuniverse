@@ -3,18 +3,18 @@
   
   <div class="content" style="padding:0px 20px 20px 20px;position:relative">
     
-    <% if item.object.service.nil? -%>
+    <% if item.service.nil? -%>
     
-     <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "preview_url")%>
+     <%= link_to("",preview_url(item.id, :kind => item.kind), :class => "preview_url")%>
       
     <% else -%>
 
      <p style="padding:0;width:340px;word-wrap:break-word;font-size:13px;color:#333">
-        <%= item.object.description[0..300] rescue "" %><br/>
-        <% if !item.object.property('price').blank? -%>
-            <%= link_to("Buy it on #{item.object.service} for #{item.object.property('price')}", item.object.url, :style => "color:#393") %>
+        <%= item.description[0.300] rescue "" %><br/>
+        <% if !item.property('price').blank? -%>
+            <%= link_to("Buy it on #{item.service} for #{item.property('price')}", item.url, :style => "color:#393") %>
           <% else -%>
-            <%= link_to(item.object.url, item.object.url, :style => "color:#393") rescue ""%>
+            <%= link_to(item.url, item.url, :style => "color:#393") rescue ""%>
           <% end -%>
         
       </p>
@@ -25,9 +25,9 @@
   
   <div class="hidden">
     
-    <%= add_to_fav_link(item, :source => @tag)%>
+    <%#= add_to_fav_link(item, :source => @tag)%>
     
-    <%= link_to("Edit connections with #{@tag.label}",categorize_url(item.object.id, @tag), :class => "categorize_url")%>
+    <%= link_to("Edit connections with #{@tag.label}",categorize_url(item.id, @tag), :class => "categorize_url")%>
   </div>
   <div class="delimiter">&nbsp;</div>
 </div>

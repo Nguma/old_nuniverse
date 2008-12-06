@@ -101,10 +101,20 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		tags  = Tag.find(:all, :conditions => 'kind rlike "character"')
-	
+		@kinds = ["company"]
+		tags  = Tag.find(:all, :conditions => ["kind in (?)", @kinds])
+		
 		tags.each do |tag| 
-			tag.tag_with('character');
+			# @c = Connection.create(
+			# 			:subject => tag,
+			# 			:object => tag,
+			# 			:public => 1
+			# 		)
+			
+				Tagging.create(
+					:taggable => tag,
+					:predicate => tag.kind
+					)
 		end
 		
 		render :nothing => true

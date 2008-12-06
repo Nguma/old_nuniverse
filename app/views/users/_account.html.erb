@@ -6,7 +6,7 @@
         <p>Select from this list what is the most appropriate.</p>
         <h3>Your are using a <%= link_to (current_user.role.name, "/users/membership", :class => "trigger next") %> nuniverse.</h3>
         
-        <p>You are using <%= Connection.with_user(current_user).size %> / <%= current_user.role.max_connections %> connections. <%= link_to ("Upgrade",  "/users/membership", :class => "trigger next") %> </p>
+        <p>You are using <%= Connection.with_object(current_user).size %> / <%= current_user.role.max_connections %> connections. <%= link_to ("Upgrade",  "/users/membership", :class => "trigger next") %> </p>
         <h3>This nuniverse is private</h3>
         <p>Private nuniverse: Only invited members can add to it.</p>
         

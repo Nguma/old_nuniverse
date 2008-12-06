@@ -1,5 +1,13 @@
 module TagsHelper
 
+
+	def render_tag(tag, params ={})
+		params[:tag] = tag
+		params[:url] ||= visit_url(tag, current_user.login)
+		params[:mode] ||= nil
+		render :partial => "/tags/tag", :locals => params
+	end
+	
 	def link_to_visit(tag, params ={})
 		
 		if tag.url.nil?
@@ -91,29 +99,29 @@ module TagsHelper
 			Tag.paginate_by_sql(sql, :page => params[:page] || 1, :per_page => params[:per_page] || 3)
 	end
 	
-	def add_to_fav_link(item, params = {}) 
+	def add_to_fav_link(connection, params = {}) 
 		
-		personal = item.users.to_a.include?(current_user.tag_id.to_s) rescue false
-
+	# 	personal = connection.users.to_a.include?(current_user.tag_id.to_s) rescue false
+		personal = connection.favorites.collect{|c| c.user_id}.to_a.include?(current_user.id) rescue false
 		if personal
 				link_to(image_tag("/images/icons/heartbreak.png"),
 					remove_from_nuniverse_url(
-						:id => params[:source].id,
-						:item => item.object.id
-					),:class => "add_to_fav_lnk hidden", :title => "Remove from your connections")
+						:id => connection.id,
+						:connection => connection.subject.id
+					),:class => "add_to_fav_lnk trigger", :title => "Remove from your connections")
 		else
 			link_to(image_tag("/images/icons/save.png"),
 				add_to_nuniverse_url(
-					:id => params[:source].id, 
-					:kind => item.kind, 
-					:tag => item.object.id, 
-					:input => item.object.label, 
-					:url => item.object.url, 
-					:kind => item.object.kind, 
-					:data => item.object.data, 
-					:description => item.object.description, 
-					:service => item.object.service 
-				), :class => "add_to_fav_lnk hidden", :title => "Save")
+					:id => connection.id, 
+					:kind => connection.kind, 
+					:tag => connection.subject.id, 
+					:input => connection.subject.label, 
+					:url => connection.subject.url, 
+					:kind => connection.subject.kind, 
+					:data => connection.subject.data, 
+					:description => connection.subject.description, 
+					:service => connection.subject.service 
+				), :class => "add_to_fav_lnk trigger", :title => "Save")
 		
 		end
 	end

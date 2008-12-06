@@ -34,16 +34,17 @@ class TagsController < ApplicationController
 		
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
+		
 		else
-			@items = Connection.with_user(@perspective.members).with_subject(@tag).tagged(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 12)
+			@items = Connection.with_object(@tag).tagged(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 12)
 		end
 		
 		respond_to do |format|
 			format.html {
-				@categories = Tagging.gather.with_user(@perspective.members).with_subject(@tag).paginate(:page => @page, :per_page => 10)
+				@categories = Connection.with_object(@tag).gather_tags
 			}
 			format.js {
-				render :action => :page, :layout => false
+				
 			}
 		end
 	
@@ -63,7 +64,7 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
    
-		@tags = Tagging.gather_with_user_list.with_object(@tag)
+		@tags = Connection.by_kind.with_subject(@tag)
 
 		# redirect_back_or_default(@tag)
   end
@@ -84,7 +85,8 @@ class TagsController < ApplicationController
   # PUT /tags/1
   # PUT /tags/1.xml
   def update
-		@tag.connect_with(params[:subject] || current_user.tag, :user => current_user, :as => params[:tags].split(','));
+		@object = Tag.find(params[:object]) rescue self
+		@tag.connect_with(@object, :user => current_user, :as => params[:tags].split(','));
 		
 		respond_to do |f|
 			f.html {redirect_back_or_default "/"}
@@ -105,13 +107,11 @@ class TagsController < ApplicationController
   end
 
 	def suggest
-		@input = params[:input]
 
+		@input = params[:input]
 		@mode = session[:mode]
 		@kind = params[:kind].downcase
-		
 
-		
 		if @kind.nil?
 			if @input.match(/(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/)
 				if @input.match(/.*\.(jpg|jpeg|gif|png)/)
@@ -128,119 +128,18 @@ class TagsController < ApplicationController
 			@source = Tag.find(params[:nuniverse])
 			render(:action => "google_locations", :layout => false)
 		else
-
+			@suggestions = Tag.with_label_like(@input).paginate(:per_page => 12, :page => 1)
 		
-			@suggestions = Connection.named(@input).distinct.paginate(:per_page => 12, :page => 1)
 		end
 	end
-	
-	def disconnect 
-		
-		@item = Tag.find(params[:item])
-		set = [@tag, @item]
-		connections = Connection.with_user(current_user).with_subject(set).with_object(set)
 
-		connections.each do |c|
-			c.destroy
-		end
-		redirect_to @tag
-	end
-	
-	def connect
 
-		# @source = Tag.find(params[:id])
-		@kind = params[:kind]
-
-		@tags = params[:tags].split(',') rescue []
-		# @tags << @kind
-	
-		find_perspective
-		
-		if params[:input].blank?
-			if !params[:description].blank?
-				params[:input] = params[:description].split(/\n/)[0]
-				
-			elsif @kind == "bookmark"
-				doc = Hpricot open( params[:url])
-
-				params[:input] = (doc/:title).first.inner_html.to_s
-				params[:description] ||= (doc/:p).first.inner_html.to_s rescue ""
-			else
-				params[:input] = "#{@kind} of #{@tag.label}"
-			end
-
-		end
-
-		@object = Tag.find_or_create(
-			:label => params[:input], 
-			:kind => @kind, 
-			:url => params[:url], 
-			:data => params[:data], 
-			:description => params[:description], 
-			:service => params[:service]
-		)
-
-		
-		
-		 @tagging = @object.connect_with(@tag, :as => @tags, :user => current_user, :comment => params[:comment])
-		
-		
-		if @kind == "address"
-			@object.label = @object.property('address')
-			@object.save
-			if !@object.property('tel').blank?
-				tel = Tag.find_or_create(:label => @object.property('tel'), :kind => 'telephone')
-				@object.connect_with(tel, :user => current_user)
-			end
-	
-		
-		elsif @kind == "image"
-			@object.add_image( :source_url => params[:input], :uploaded_data => params[:uploaded_data])
-		end
-		
-		
-				
-		
-			if @kind == 'bookmark'  && @object.url.match('en.wikipedia.org/wiki/')
-				@object.label = @object.label.gsub(/\,\s+the free encyclopedia/, "")
-				@object.save
-					t = @object.url.gsub(/.*\/wiki/,'/wiki')
-
-					@tag.replace_property('wikipedia_url',t)
-					wiki_content = Nuniverse.get_content_from_wikipedia(t)
-					
-					@tag.description = Nuniverse.wikipedia_description(wiki_content) if @tag.description.nil?
-
-					img = (wiki_content/'table.infobox'/:img).first
-					unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
-						image = Tag.find_or_create(:label => img.attributes['src'].split('/').last, :kind => 'image', :url => img.attributes['src'])
-						@image = image.add_image(:source_url => img.attributes['src'])
-						image.connect_with(@tag, :user => current_user)
-									
-					end
-					@tag.save
-					
-			end
-			
-
-		respond_to do |format|
-			format.html {redirect_to @tag}
-			format.js {
-			
-			}
-		end
-	end
 	
 	def preview
 		@page = params[:page] || 1
-		if @tag.service.nil?
-			# @items = Tagging.paginate_by_sql(
-			# "SELECT TA.*,  count(DISTINCT TA.object_id) AS counted FROM taggings TA WHERE TA.subject_id = #{@tag.id} GROUP BY TA.kind ORDER BY counted ASC",
-			# :page => 1,
-			# :per_page => 10)
-			
-			@items = Connection.with_subject(@tag).by_kind.paginate(:page => 1, :per_page => 10)
 
+		if @tag.service.nil?			
+			@items = Connection.with_object(@tag)
 		end
 		
 		respond_to do |format|
@@ -253,7 +152,7 @@ class TagsController < ApplicationController
 	
 	def categorize
 		@context = Tag.find(params[:context])
-		@connections = Tagging.find(:all, :conditions => ['subject_id = ? AND object_id = ?',params[:context],params[:id] ])
+		@connections = Tagging.find(:all, :conditions => ['subject_id = ? AND subject_id = ?',params[:context],params[:id] ])
 
 	end
 	

@@ -126,11 +126,11 @@ class UsersController < ApplicationController
 				update_session
 
 				@title = "#{current_user.login}'s nuniverse"
-				@categories = Tagging.gather.with_user(current_user).with_subject(@tag).paginate(:page => @page, :per_page => 40)
+				@categories = Connection.with_object(current_user.tag).gather_tags.paginate(:page => @page, :per_page => 40)
 			
 			}	
 			format.js { 
-				render :controller => 'user', :action => :page, :layout => false
+				
 			}
 		end
 	end

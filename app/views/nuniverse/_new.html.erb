@@ -17,37 +17,40 @@
 
   </div>
   <div class="hidden connect_form" id="connect_bookmark_form" style="padding:20px;position:relative;float:left">
-        <% form_tag "/tags/suggest" , :style => "width:400px" do -%>
-          <label>Add a bookmark.</label>
+        <% form_tag "/tags/suggest" , :style => "width:800px" do -%>
+          <h2>Add a bookmark.</h2>
+          <label>Copy and paste the url of the webpage you want to bookmark</label> 
           <%= hidden_field_tag "id", @tag.id %>
           <%= hidden_field_tag "kind", "bookmark" -%>
           <%= text_field_tag "url", "", :class => "input", :style => "width:500px", :autocomplete => "off"%>
-          <%= link_to "Add bookmark", "/tags/connect", :class => "trigger", :mode => "connect"  %>
+          <%= link_to "Add bookmark", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
         <% end -%>
   </div>
   <div class="hidden connect_form" id="connect_note_form" style="padding:20px;position:relative;float:left">
-        <% form_tag "/tags/suggest" , :style => "width:400px" do -%>
-          <label>Post a note</label>
+        <% form_tag "/tags/suggest" , :style => "width:800px" do -%>
+          <h2>Post a note</h2>
           <%= hidden_field_tag "id", @tag.id %>
           <%= hidden_field_tag "kind", "comment" -%>
           <%= text_area_tag "input", "", :class => "input", :rows => 3, :style => "width:500px;background:#FFF", :autocomplete => "off"%>
-           <%= link_to "Add note", "/tags/connect", :class => "trigger" , :mode => "connect" %>
+           <%= link_to "Add note", create_and_connect_url(@tag), :class => "trigger button" , :mode => "connect" %>
         <% end -%>
         
   </div>
   <div class="hidden connect_form" id="connect_image_form" style="padding:20px;position:relative;float:left">
     <h2>Add an image</h2>
-        <% form_tag "/tags/suggest" , :multipart => true,  :style => "width:400px" do -%>
+        <% form_tag "/tags/suggest" , :multipart => true do -%>
           <%= hidden_field_tag "id", @tag.id %>
           <%= hidden_field_tag "kind", "image" -%>
-
-            <label>Copy and paste the url from the internet </label>
-            <%= text_field_tag "input", "", :class => "input", :style => "width:480px", :autocomplete => "off"%>
-
-            <label>... or upload a file from your computer</label>
+            <div style="position:relative;float:left;width:46%">
+            <label>Copy and paste the url from the internet </label><br/>
+            <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
+            </div>
+            <div style="position:relative;float:left;width:45%">
+            <label>... or upload a file from your computer</label><br/>
             <%= file_field_tag :uploaded_data %>
-
-          <%= link_to "Save", "/tags/connect", :class => "trigger", :mode => "connect"  %>
+            </div>
+            <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
+          <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
         <% end -%>
   </div>
   <div style="clear:both"></div>

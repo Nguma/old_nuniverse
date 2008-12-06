@@ -103,7 +103,7 @@ class User < ActiveRecord::Base
 	
 	def connections(params = {})
 
-		Connection.with_user_list.with_subject(self.tag).with_user(self).tagged(params[:label]).order_by(params[:order]).distinct.paginate(
+		Connection.with_object(self.tag).tagged(params[:label]).order_by(params[:order]).distinct.paginate(
 			:page => params[:page]||1, 
 			:per_page => params[:per_page] || 3
 		)

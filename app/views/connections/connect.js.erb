@@ -1,0 +1,9 @@
+<div class="connection" >
+  <div class="preview" style="padding:20px">
+    <h5>You connected with</h5>
+    <%= render_tag @connection_from.subject  %>
+    <h5>Tag it within this nuniverse</h5>
+    <%= text_area_tag :tags %>
+    <%= link_to "Save", "/connections/tag/#{@connection_from.id}", :class => "trigger" %>
+  </div>
+</div>

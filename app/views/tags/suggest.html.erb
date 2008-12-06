@@ -3,15 +3,25 @@
   <label>Nothing has been found.</label>
 <% else -%>
   <label>Select from our suggestions</label>
-  <%= columnize(boxes_for(@suggestions))%>  
+  <%#= columnize(boxes_for(@suggestions))%>  
+  <% @suggestions.each do |suggestion| %>
+  <div class="connection">
+    <div class="subject">
+      <%= render_tag suggestion, :url => konnect_url(suggestion, @tag.id) , :mode => "connect"%>
+    </div>
+    <div class="preview">
+      <%= link_to "preview", "/tags/edit/#{suggestion.id}" ,:class => "preview_url" %>
+    </div>
+  </div>
+  <% end -%>
 <% end -%>
 <label style="clear:both">or if it doesn't exist yet, create it:</label>
 <div class="connection" style="clear:both;width:auto">
   
   <%= image_tag("", :class => "thumbnail") %>
   <h3>
-    <%= link_to(@input, "/tags/connect", :class => "trigger ", :mode => "connect") %>
-    <%= link_to(" - Create it!", "/tags/connect", :class => "trigger new next", :mode => "connect") %>
+    <%= link_to(@input, create_and_connect_url(@tag.id), :class => "trigger ", :mode => "connect") %>
+    <%= link_to(" - Create it!",create_and_connect_url(@tag.id), :class => "trigger new next", :mode => "connect") %>
   </h3>
 </div>
 <div class="delimiter">&nbsp;</div>

@@ -1,0 +1,4 @@
+<div class="message">
+  <%= image_tag('/images/icons/heart.png') %>
+  <%= link_to @connection.subject.label.capitalize, visit_url(@connection.subject, current_user.login) %> was saved.
+</div>

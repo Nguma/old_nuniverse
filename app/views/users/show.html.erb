@@ -9,9 +9,9 @@
     <h2 style="color:#333">Here you are.</h2>
     <p>This is your nuniverse. Right now, it's empty, and it's waiting for YOU to build it.</p>
     <p>There might be hundreds of things you want to keep track of, this "empty page" is made just for that.</p>
-    <h3>
-      <%= link_to "Add something to your nuniverse", "#", :id => "select_tag_lnk", :class => "select_form_lnk" , :style => "color:#396"%>
-    </h3>
+     <div id="main_menu">
+       <%= render :partial => "/nuniverse/new" %>
+      </div>
     <p>Not sure what do add?</p>
     <p>What about trying adding your favorite film, or that car you'd like to buy.<br/>You can also create a category and add things to it later.</p>
     <p>Still not convinced? Maybe you'd prefer to see what others have been doing...</p>
@@ -32,23 +32,21 @@
       <%= sorting_options :source => @tag %>
       <%= will_paginate(@items, :inner_window => 2) %>
       <div class="delimiter" style="clear:both">&nbsp;</div>
-      <%= columnize(boxes_for(@items), :size => 4) %> 
+      <%= columnize(render_connections(@items), :size => 4) %> 
     </div>
     
     <%= search_box %>
     <%= render :partial => "/nuniverse/tag_cloud" %>
-    
     <% content_for :nav do -%>
-   
-      <div id="main_menu">
-        <%= render :partial => "/nuniverse/new" %>
-         
-       </div>
-    <% end -%>
+
+       <div id="main_menu">
+         <%= render :partial => "/nuniverse/new" %>
+        </div>
+     <% end -%>
         
   <% end -%>
 
   
-  
+
  
 <% end -%>

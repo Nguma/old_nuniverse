@@ -15,7 +15,7 @@
       <%= sorting_options :source => @tag  %>
       <%= will_paginate @items, :inner_window => 2  unless @perspective.kind == "service"%>
       <div class="delimiter" style="clear:both">&nbsp;</div>
-      <%= columnize(boxes_for(@items)) %>
+      <%= columnize(render_connections(@items)) %>
   
     
   <% end -%>
@@ -32,7 +32,7 @@
    
    
   <% content_for :footer do -%>
-     <%= perspectives %>
+     <%#= perspectives %>
   <% end -%>
   
 <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px", :id => "main_spinner", :class => "spinner hidden") %>

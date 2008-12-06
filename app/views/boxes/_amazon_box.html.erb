@@ -1,5 +1,5 @@
 <div class="box" id="amazon_box">
-  <%= link_to("",preview_url(item.object.id, :kind => item.kind), :class => "hidden preview_url")%>
+  <%= link_to("",preview_url(item.subject.id, :kind => item.kind), :class => "hidden preview_url")%>
  
   <%= render_item(item, :kind => item.kind, :item_classes => item_classes) %>
   <div class="content">

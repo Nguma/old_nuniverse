@@ -1,18 +1,18 @@
 <div class="tweet box" >
  
 
-  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object.id, :input => item.object.label, :url => item.object.url, :kind => item.object.kind, :data => item.object.data ), :class => "hidden add_to_fav_url")%>
+  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.subject.id, :input => item.subject.label, :url => item.subject.url, :kind => item.subject.kind, :data => item.subject.data ), :class => "hidden add_to_fav_url")%>
   
   <div class="connection <%= item_classes rescue "" %>"  >
   
    <%= image_tag "/images/icons/twitter.png", :style => "position:relative;float:left;height:30px;margin-right:5px"%>
-   <p style="color:#666;font-size:11px" ><%= item.object.property('user_name').capitalize %> said</p>
-    <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.object.label.capitalize %>"</i></span></p>
+   <p style="color:#666;font-size:11px" ><%= item.subject.property('user_name').capitalize %> said</p>
+    <p style="color:#666;font-size:14px;margin:0 0 0 0;padding:5px" ><span><i>"<%= item.subject.label.capitalize %>"</i></span></p>
   </div>
   <div class="content">
-    <p><%= item.object.label%></p>
-    <p> <%= link_to( "Follow #{item.object.property('user_name')}", "#")%></p>
-    <p>Reply to <%= item.object.property('user_name')%></p>
+    <p><%= item.subject.label%></p>
+    <p> <%= link_to( "Follow #{item.subject.property('user_name')}", "#")%></p>
+    <p>Reply to <%= item.subject.property('user_name')%></p>
   </div>
   <div class="hidden">
     <%= add_to_fav_link(item, :source => @tag)%>

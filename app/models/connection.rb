@@ -2,12 +2,15 @@ class Connection < ActiveRecord::Base
   belongs_to :object, :class_name => "Tag"
 	belongs_to :subject, :class_name => "Tag"
 	
-	has_many :origins, :foreign_key => "connection_id"
+	has_many :favorites, :foreign_key => "connection_id"
 	# belongs_to :user, :class_name => "Tag"
 	
-	has_many :taggings
+	has_many :taggings, :as => :taggable
 	
+		
 	before_destroy :destroy_taggings
+	
+
 	
 	named_scope :with_subject, lambda { |subject|
     subject.nil? ? {} :  {:conditions => ["connections.subject_id in (?)", subject.to_a.collect {|c| c.is_a?(Tag) ? c.id : c}] } 
@@ -17,53 +20,72 @@ class Connection < ActiveRecord::Base
     object.nil? ? {} : {:conditions => ["connections.object_id in (?)", object.to_a.collect {|c| c.is_a?(Tag) ? c.id : c}]}
 
   }
-  named_scope :with_user, lambda { |user|
-    user.nil? ? {} : {:conditions => ["origins.user_id in (?)", user.to_a.collect{|c| c.is_a?(Tag) ? c.id : c.tag_id}], :joins => ['origins on origins.connection_id = connections.id']}
-  }
 
-	
 
 	named_scope :tagged, lambda { |query| 
 		query.nil? ? {} : {
 			:select => "connections.*",
-			:conditions => ["taggings.kind rlike ?", query.to_a.join('|')], 
-			:joins => "INNER JOIN tags O on O.id = connections.object_id iNNER JOIN tags S on S.id = connections.subject_id LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id ",
+			:conditions => ["taggings.predicate rlike ?", query.to_a.join('|')], 
+			:joins => "LEFT OUTER JOIN taggings ON taggings.taggable_id = connections.id ",
 		
-			:group => "connections.object_id HAVING count(connection_id) >= #{query.to_a.length}"
+			:group => "connections.subject_id HAVING count(connections.subject_id) >= #{query.to_a.length}"
 		}
 	}
 	
 	named_scope :named, lambda { |name| 
 		name.nil? ? {} : {
 			:conditions => ["tags.label rlike ?", "^#{name}"],
-			:joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id INNER JOIN tags on tags.id = connections.object_id"
+			:joins => "INNER JOIN tags on tags.id = connections.subject_id"
 		}
 	}
 
 	named_scope :with_kind, lambda { |kind| 
-		kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], 
-			:joins => "INNER JOIN tags on connections.object_id = tags.id LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id "
+		kind.nil? ? {} : {:conditions => ["predicate = ?", kind], 
+			:joins => "LEFT OUTER JOIN taggings ON taggings.taggable_id = connections.id "
 			}
 	}
-	named_scope :by_kind, :group => "taggings.kind", :select => ["connections.*, count(distinct object_id) AS counted"], :joins => "LEFT OUTER JOIN taggings on taggings.connection_id = connections.id "
-	named_scope :distinct, :group => "connections.object_id", :select => ["connections.*, count(distinct object_id) AS counted"]
+	named_scope :by_kind, :group => "predicate", :select => ["connections.*, count(distinct subject_id) AS counted"], :joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id "
+	named_scope :distinct, :group => "connections.subject_id", :select => ["connections.*, count(distinct subject_id) AS counted"]
 	
-	named_scope :with_user_list, :group => "connections.object_id", :select => ["connections.*, GROUP_CONCAT(connections.user_id SEPARATOR ',') AS users"]
+	named_scope :with_user_list, :group => "connections.subject_id", :joins => "LEFT OUTER JOIN favorites on favorites.connection_id = connections.id", :select => ["connections.*, GROUP_CONCAT(favorites.user_id SEPARATOR ',') AS users"]
+	named_scope :gather, :select => " *, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id LEFT OUTER JOIN favorites ON favorites.connection_id = connections.id"
+	
+	named_scope :gather_tags, :select => "taggings.predicate, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag') OR (taggings.taggable_type = 'Connection' AND taggings.taggable_id = connections.id)"
+
 	
 	named_scope :order_by, lambda { |order| 
 		order.nil? ? {} : { :order => Connection.normalize_order(order) }
 		
 	}
 	def self.find_or_create(params)
-		c = Connection.with_subject(params[:subject]).with_object(params[:object]).with_user(params[:user]).first
+		c = Connection.with_subject(params[:subject]).with_object(params[:object]).first
 		return c unless c.nil?
-		params[:user] = params[:user].tag
 		Connection.create(params)
 	end
 	
-	def kind
-		taggings.first.kind rescue object.kind
+	def twin
+		Connection.with_subject(self.object).with_object(self.subject)
 	end
+	
+	def kind
+		subject.kind
+	end
+	
+	def connections
+		Connection.with_object(self.subject)
+	end
+	
+	def tags
+		self.taggings.collect {|c| c.predicate}
+	end
+	
+	def tag_with(tags)
+		tags.each do |tag|
+			Tagging.create(:taggable => self, :predicate => tag.strip) 
+		end
+		
+	end
+
 	
 	def self.normalize_order(order)
 		case order

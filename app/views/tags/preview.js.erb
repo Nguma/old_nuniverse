@@ -4,17 +4,9 @@
     <p style="padding:0;"><%= @tag.description[0..400] rescue "" %></p>
     
     <%#= will_paginate(@items, :previous_label => "", :next_label => "")%>
+    <h4>Connected to</h4>
     <% @items.each do |info| -%>
-      <p style="padding:0 0 0 0;margin:0">
-        <% if info.counted.to_i == 1 -%>
-         <span style="margin:0 5px 0 0"><%= info.kind.capitalize %></span>
-          <%= link_to_visit(info.object, :class => "preview_tag_lnk")%>
-          
-        <% else -%>
-          <span style="margin:0 5px 0 0"><%= info.counted %></span>
-          <%= link_to info.kind.pluralize, visit_url(@tag.id, @perspective.tag.label, :input => info.kind) %>
-        <% end -%>
-      </p>
+        <%= link_to info.subject.label, visit_url(info.subject, @perspective.tag.label) %><br/>
     <% end -%>
   </div>
   <div class="perspectives" style="font-size:15px;color:#999;margin: 0 0 5px 0">
@@ -26,8 +18,8 @@
   </div>
   <div  style="font-size:15px;color:#999">
     <h4>You've tagged that item</h4>
-    <% @tag.tags(:user => current_user).each do |cat| -%>
-      <%= link_to (cat.kind, "#{cat.kind}" ,:style => "font-size:#{([cat.counted.to_i+11,18].min)}px;color:#999;margin:0 3px 0 0") %>
+    <% @tag.tags.each do |cat| -%>
+      <%= link_to (cat.predicate, "#{cat.predicate}" ,:style => "font-size:#{([cat.counted.to_i+11,18].min)}px;color:#999;margin:0 3px 0 0") %>
     <% end -%>
     <%= link_to "Add/edit tags", "/tags/edit/#{@tag.id}", :class => "trigger", :style => "font-size:12px" %>
   </div>

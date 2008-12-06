@@ -1,0 +1,4 @@
+<div class="message" style="padding:20px">
+  <%= image_tag('/images/icons/heartbreak.png') %>
+  <%= link_to @connection.subject.label.capitalize, visit_url(@connection.subject, current_user.login) %> was removed from your favorites.
+</div>

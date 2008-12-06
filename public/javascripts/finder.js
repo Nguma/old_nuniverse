@@ -129,7 +129,9 @@ var Requestable = new Class({
     },
     
     setTriggers:function(area) {
+      
       area.getElements(this.options.trigger).each(function(trigger) {
+   
         trigger.removeEvents();
         trigger.addEvent('click', this.onTrigger.bindWithEvent(this, trigger));
        },this)

@@ -344,6 +344,10 @@ a.saved {
 	margin:0 3px 0 0;
 }
 
+.tag_cloud .connection-tag {
+	color:#669;
+}
+
 .tag_cloud a.selected {
 	color:#333;
 }

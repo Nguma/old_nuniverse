@@ -68,17 +68,26 @@ var PopUp = new Class({
   },
   
 
-  
-  updateWith:function(el) {
-    // 
-    // 
-    // 
+  setContent:function(el) {
     this.content.empty();
-
-    this.content.set('html',el.getElement('.content').get('html'));
-   
-    this.request.options.update = this.content;
+    // this.el.getElement('.subject').destroy();
+    // if($chk(el.getElement('.subject'))) {
+      // this.el.adopt(el.getElement('.subject').clone());
+    // }
+    
+    if($chk(el.getElement('.preview'))) {
+      this.content.set('html',el.getElement('.preview').get('html'));
+      this.content.setStyles({'padding':el.getElement('.preview').getStyle('padding')});
+    }
+    
+    if($chk(el.getElement('.preview_url'))) {
+      this.callRequest({url:el.getElement('.preview_url').get('href')});
+    } else {
+      this.fireEvent('onUpdate');
+    }
     this.setTriggers(this.content);
-    this.fireEvent('onUpdate');
+    
   }
+  
+  
 })

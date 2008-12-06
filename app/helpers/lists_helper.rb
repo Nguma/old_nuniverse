@@ -10,16 +10,9 @@ module ListsHelper
 
 		render :partial => "/nuniverse/breadcrumbs", :locals => {:breadcrumbs => breadcrumbs}
 	end
-	
-	def list_hat(list)
-		title = ""
-		title << "#{list.tag.label.capitalize}: " if list.tag
-		title << list.label.capitalize
-		render :partial => "hat", :locals => {:title => title}
-	end
 		
 	def link_to_item(item, params = {})	
-		item = item.is_a?(Connection) ? item.object : item
+		item = item.is_a?(Connection) ? item.subject : item
 		kind = params[:kind] ? params[:kind] : item.kind 	
 		params[:service] ||= @service
 		params[:title] ||= item.label.capitalize[0..53]
@@ -34,32 +27,30 @@ module ListsHelper
 			# link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
 		end
 	end
-	
 
-	def list(params)
-		params[:dom_class] ||= ""
-		params[:source] ||= @source
-		params[:kind] ||= params[:source].label.singularize.downcase
-		params[:title] ||= params[:kind] ? params[:kind].pluralize : ""
-		params[:subject] ||= params[:source].tag
-		params[:items] ||= connections(:perspective => @perspective, :source => params[:source], :kind => params[:kind], :subject => params[:subject]) 
-		params[:command] ||= params[:kind] 
-		params[:order] ||= "latest"
-		params[:dom_id] ||= params[:title].pluralize
-		params[:ord] = cycle('even','odd')
-		render :partial => "/boxes/#{params[:kind]}_box", :locals => params rescue render :partial => "/boxes/list_box", :locals => params
-		#render :partial => "/taggings/#{params[:kind]}_box", :locals => params
-	end
 	
 	def render_item(item, params = {})
 		params[:source] ||= @source
 		params[:kind] ||= nil
-		params[:item] = item
+		params[:item] = item.is_a?(Connection) ? item.subject : item
 		render :partial => "/taggings/instance", :locals => params
 	end
 	
+	def render_connection(connection, params = {})
+		if connection.is_a?(Connection)
+			render :partial => "/connections/connection", :locals => {:connection => connection}
+		else
+			render :partial => "/tags/connection", :locals => {:connection => connection}
+		end
+		
+	end
+	
+	def render_connections(connections)
+		connections.collect {|c| render_connection(c) }
+	end
+	
 	def render_item_box(item, params = {})
-		params[:item] = item
+		params[:item] = item.is_a?(Connection) ? item.subject : item
 		params[:item_classes] = ""
 			
 		personal = item.users.to_a.include?(current_user.id.to_s) rescue nil
@@ -101,31 +92,18 @@ module ListsHelper
 		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => collection}
 	end
 	
-	def lists_for(source, options = {})
-		presets =  presets(@tag.kind)
-		presets << source.lists(:user => current_user).collect {|c| c.label.downcase}
-		make_lists(presets.flatten.uniq.sort)
-	end
-	
-	def boxes_for(items, params = {})
+	def boxes_for(connections, params = {})
 		boxes = []
-		items.each_with_index do |item, i|
-			 boxes << render_item_box(item, params)
+		connections.each_with_index do |connection, i|
+			 boxes << render_connection(connection, params)
 		end
 		boxes
 	end
 	
+
+	
 	def pagination_box(params) 
 		render :partial => "/lists/pagination", :locals => {:items => params[:items]} 
-	end
-	
-	def make_lists(list_names)
-		lists = []
-		params[:source] ||= @source
-		list_names.each do |list|
-			lists << list(:source => List.new(:label => list, :creator => current_user, :tag => (@source == current_user) ? nil : @source.object ))
-		end
-		lists
 	end
 	
 	def image_box(params = {})
@@ -145,16 +123,6 @@ module ListsHelper
 	
 	def empty_box
 		render :partial => "/nuniverse/empty_box", :locals => {:source => @source}
-	end
-	
-	def command_box(label,action, options = {})
-		options[:label] = label
-		options[:command] = action
-		
-		str = "<div class='command_box'>"
-		str << command(options)
-		str << "</div>"
-		str		
 	end
 	
 	def reviews_box(params = {})

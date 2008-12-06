@@ -1,7 +1,7 @@
 <div class="connection subject <%= item_classes rescue "" %>"  >
-  <%= link_to(thumbnail_tag(item.object, :kind => kind), "/images/show/#{item.object.id}", :class => "trigger")%>
+  <%= link_to(thumbnail_tag(item, :kind => kind), "/images/show/#{item.id}", :class => "trigger")%>
   <p style="font-size:11px;padding:0">
-    <%= item.current_tags.split(',')[0..1].to_s.capitalize rescue item.kind.capitalize %>
+    <%#= item.current_tags.split(',')[0..1].to_s.capitalize rescue item.kind.capitalize %>
   </p>
   <h3 ><%= link_to_item(item, :kind => kind) %></h3>
     

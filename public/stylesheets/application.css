@@ -12,7 +12,7 @@ body
 .delimiter
 {
 	position:relative;
-	clear:left;
+	clear:both;
 	padding:0;
 	margin:0;
 	height:0;

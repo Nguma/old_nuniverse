@@ -5,12 +5,8 @@ var preview_box;
 function reset()
 {
  
-  $$('.box','.list').each(function(box,i) {
-    if(box.hasClass('list')) {
-      var b = new ListBox(box);
-    } else { 
+  $$('.connection').each(function(box,i) {
       var b = new Box(box);
-    }
   });
   
   if($('search_box') != undefined) {
@@ -24,7 +20,7 @@ function reset()
           },
           
           onSuccess:function(updated) {
-            updated.getElements('.box').each(function(box) {
+            updated.getElements('.connection').each(function(box) {
               var b = new Box(box);
             });
             
@@ -176,12 +172,12 @@ function reset()
     },
     
     onTrigger:function(t) {
-
-       if($chk(t.getParent('.tag_cloud'))) {
-          t.destroy();
-          return;
-        }
-      console.log(t.get('href'))
+      
+       // if($chk(t.getParent('.tag_cloud'))) {
+       //           t.destroy();
+       //           return;
+       //         }
+       //       
       this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});  
     },
     
@@ -196,6 +192,7 @@ function reset()
         var funcName = 'display_'+this.el.getElement('.map').get('id');
         eval(funcName).delay(200);
       }
+      
       this.setTriggers(this.content);
       // this.expand();
     }
@@ -212,6 +209,7 @@ function reset()
       
       onTrigger:function(t) {
         this.mode = t.get('mode');
+        console.log(this.mode)
         if(t.getProperty('href') != '#') {
           this.request.options.update = this.el.getPrevious('.response');
           this.el.addClass('hidden');
@@ -227,7 +225,7 @@ function reset()
 
       onSuccess:function(updated) {
         // $('suggestion_box').removeClass('hidden');
-
+       
         
         
         
@@ -243,6 +241,8 @@ function reset()
             
             break;
           case "connect":
+        
+            
             preview(this.request.options.update);
             this.request.options.update.empty();
             break;
@@ -382,28 +382,24 @@ function isDoubleEnter() {
 }
 
 function preview(el) {
-    preview_box.el.getElement('.subject').empty();
+    // preview_box.el.getElement('.subject').empty();
     preview_box.el.getElement('.content').empty();
-    if($chk(el.getElement('.subject'))) {
-      el.getElement('.subject').clone().replaces(preview_box.el.getElement('.subject'));
-    } else {
-     
-    }
-   
-    if(el.getElement('.add_to_fav_lnk') != undefined ) {
-      
-      var lnk = el.getElement('.add_to_fav_lnk').replaces($('add_to_fav_btn'));
-      lnk.setProperty('id','add_to_fav_btn');
-      lnk.removeClass('hidden');
-    }  else {
-      $('add_to_fav_btn').set('html', '')
-    }
-    if($chk(el.getElement('.preview_url'))) {
-      preview_box.content.setStyles({'padding':el.getElement('.content').getStyle('padding')})
-      preview_box.callRequest({url:el.getElement('.preview_url').get('href')});
-    } else {
-      preview_box.updateWith(el);
-    }
+    
+    preview_box.setContent(el);
+    // if($chk(el.getElement('.subject'))) {
+    //      el.getElement('.subject').clone().replaces(preview_box.el.getElement('.subject'));
+    //    } else {
+    //     
+    //    }
+
+
+    // preview_box.content.setStyles({'padding':el.getElement('.preview').getStyle('padding')});
+    // if($chk(el.getElement('.preview_url'))) {
+    //       
+    //       preview_box.callRequest({url:el.getElement('.preview_url').get('href')});
+    //     } else {
+    //       preview_box.updateWith(el);
+    //     }
     preview_box.expand();
 
     

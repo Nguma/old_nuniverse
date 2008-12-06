@@ -1,11 +1,11 @@
 <div class="box" id="video_box" style="overflow:hidden;height:70px;padding:5px;">
-  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.object.id, :input => item.object.label, :url => item.object.url, :kind => item.object.kind, :data => item.object.data ), :class => "hidden add_to_fav_url")%>
+  <%= link_to("",add_to_nuniverse_url(@tag, item.kind, :tag => item.subject.id, :input => item.subject.label, :url => item.subject.url, :kind => item.subject.kind, :data => item.subject.data ), :class => "hidden add_to_fav_url")%>
   
   <%= render_item(item, :kind => item.kind, :item_classes => "hide_in_preview") %>
   
   <div class="content" style="padding:0">
     <%= render :partial => "/ws/video", :locals => {
-      :url => item.object.url,
+      :url => item.subject.url,
       :flashvars => nil
     }%>
   </div>

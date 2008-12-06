@@ -5,6 +5,8 @@ class Tag < ActiveRecord::Base
 	has_many :subjects, :through => :taggings_to
 	has_many :objects, :through => :taggings_from
 	
+	has_many :taggings, :as => :taggable
+	
 	validates_presence_of :label
 	
 	alias_attribute :name, :label
@@ -19,35 +21,29 @@ class Tag < ActiveRecord::Base
 	def connect_with(tag, params = {})
 		params[:as] ||= []
 
-			@c = Connection.find_or_create(
+		@c = Connection.find_or_create(
+			:subject => self,
+			:object => tag,
+			:public => 1
+		)
+		
+		params[:as].each do |k|
+			
+			Tagging.create(
+				:taggable => self,
+				:predicate => k.strip
+				)
+			
+		end
+
+		if tag.kind != "category"
+			Connection.create (
 				:subject => tag,
 				:object => self,
-				:public => 1,
-				:user => params[:user] || User.new(:tag_id => 0),
-				:comment => params[:comment] || nil
-			)
+				:public => 1
+			)		rescue nil
+		end
 
-			params[:as].each do |k|
-				begin
-					t = Tagging.new(:connection_id => @c.id,:kind => k.strip)
-					t.save
-				rescue
-					
-				end
-			end
-			
-			begin 
-			Connection.create(
-				:subject => self,
-				:object => tag,
-				:public => 1,
-				:user_id => params[:user].tag_id || 0,
-				:comment => params[:comment] || nil
-				) unless tag.kind == 'user' && self.kind != 'group'
-			rescue
-			end
-
-	
 		@c
 	end
 
@@ -57,12 +53,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def tags(params = {})
-		# sql = "SELECT TA.kind as name,  count(DISTINCT TA.object_id) AS counted FROM taggings TA "
-		# 	sql << "WHERE TA.user_id = #{params[:user].tag.id} " if params[:user]
-		# 	sql << "WHERE public = 1 " if !params[:user]
-		# 	sql << "AND object_id = #{self.id} GROUP BY TA.kind ORDER BY TA.kind ASC"
-		# 	Tagging.paginate_by_sql(sql,:page => params[:page] || 1,:per_page => params[:per_page] || 10)
-		Tagging.with_object(self).with_user(params[:user]).gather.paginate(:page => params[:page] || 1, :per_page => params[:per_page] || 10)
+		taggings.collect {|c| c.predicate}
 	end
 	
 	def has_address?
@@ -105,12 +96,14 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def thumbnail
-		 image_tag = Connection.with_subject(self).with_kind('image').first
+		image_tag = self.kind == "image" ? self : (self.subjects.with_kind('image').first rescue nil)
+
 		if image_tag.nil? 
 			return property('thumbnail') unless property('thumbnail').blank?
 			return nil
 		else
-			return image_tag.object.image.public_filename(:small) rescue ""
+			
+			return image_tag.image.public_filename(:small) rescue ""
 		end
 	end
 	
@@ -192,8 +185,8 @@ class Tag < ActiveRecord::Base
 
 	named_scope :with_tags, lambda { |kind| 
 		return kind.nil? ? {} : {
-			:joins => "LEFT OUTER JOIN tagggings.TA on TA.subject_id = tags.id",
-			:conditions => ["TA.kind = #{kind} OR tags.kind = #{kind} "]}
+			:joins => "LEFT OUTER JOIN connections on connections.subject_id = tags.id",
+			:conditions => ["connections.predicate = #{kind} OR tags.kind = #{kind} "]}
 	}
 		
 	def match_freebase_record(record)
@@ -225,13 +218,7 @@ class Tag < ActiveRecord::Base
 	
 	
 	def connections(params = {})
-		params[:users] ||= 0
 		
-		Tagging.select(
-			:perspective => params[:perspective] ,
-			:subject => self,
-			:tags => params[:tags] || nil
-		)
 	end
 	
 	def lists(params = {})

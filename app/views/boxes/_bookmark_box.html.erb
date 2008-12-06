@@ -2,18 +2,18 @@
   <div class="subject">
   <p style="color:#666;font-size:11px;padding:0 0 0 0" >Bookmark</p>
   <p style="color:#666;font-size:15px;margin:0 0 0 0;font-weight:bold;padding:0px" >
-    <%= link_to(item.object.label.capitalize, item.object.url, :target => "_blank") %><br/>
-    <span style="font-size:11px"><%= link_to (item.object.url, item.object.url, :target => "_blank")%></span>
+    <%= link_to(item.subject.label.capitalize, item.subject.url, :target => "_blank") %><br/>
+    <span style="font-size:11px"><%= link_to (item.subject.url, item.subject.url, :target => "_blank")%></span>
   </p>
   </div>
        
   <div class="content" style="padding:0px 20px 20px 20px;position:relative">
     <p style="padding:0;width:340px;word-wrap:break-word">
-        <%= item.object.description %><br/>
-        <% if !item.object.property('price').blank? -%>
-          <%= link_to("Buy it on #{item.object.service} for #{item.object.property('price')}", item.url, :style => "color:#393") %>
+        <%= item.subject.description %><br/>
+        <% if !item.subject.property('price').blank? -%>
+          <%= link_to("Buy it on #{item.subject.service} for #{item.subject.property('price')}", item.url, :style => "color:#393") %>
         <% else -%>
-          <%= link_to(item.object.url, item.object.url, :style => "color:#393") %>
+          <%= link_to(item.subject.url, item.subject.url, :style => "color:#393") %>
         <% end -%>
         
     </p>
@@ -21,7 +21,7 @@
   
   <div class="hidden">
     <%= add_to_fav_link(item, :source => @tag)%>
-    <%= link_to("Edit connections with #{@tag.label}",categorize_url(item.object.id, @tag), :class => "categorize_url")%>
+    <%= link_to("Edit connections with #{@tag.label}",categorize_url(item.subject.id, @tag), :class => "categorize_url")%>
   </div>
   <div class="delimiter">&nbsp;</div>
 </div>

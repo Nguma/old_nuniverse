@@ -1,18 +1,12 @@
-<% if reverse
-    tag = connection.subject
-    path = TaggingPath.new
-  else 
-    tag = connection.object 
-    path = connection.path
-  end -%>
-
-<dd class="connection <%= cycle('even', 'odd') %>"> 
-    <div class="image"><%= avatar_for(tag) %></div>
-    <h3><%= tag.kind %>: 
-      <%= link_to(tag.label, "/section/#{connection.path}", :class =>"main inner") %>
-    </h3>
-      <p><%= connection.description %></p>
+<div class="connection"> 
+  <%= render_tag(connection)%>
+  <div class="preview">
+    <div style="padding:20px">
+    <%= render_tag(connection)%>
+    <p><%= connection.description %></p>
+    <p><%= link_to(connection.url, connection.url, :target => "_blank") %>
     </div>
+  </div>
     
-    
-</dd>
+  <div class='delimiter'>&nbsp;</div>
+</div>
