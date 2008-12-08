@@ -101,7 +101,7 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		@kinds = ["video"]
+		@kinds = ["person","film","bookmark","painting","actor","director","country","city","restaurant","user"]
 		tags  = Tag.find(:all, :conditions => ["kind in (?)", @kinds])
 		
 		tags.each do |tag| 

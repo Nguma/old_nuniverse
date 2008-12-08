@@ -4,7 +4,7 @@ class CreateRoles < ActiveRecord::Migration
 			t.column :name, :string
 			t.column :max_connections, :integer
 		end 
-		change_column :users, :role, :integer
+		change_column :users, :role, :integer, :default => 4
   end
 
   def self.down
