@@ -162,41 +162,44 @@ function reset()
     }
   });
   
-  preview_box = new PopUp('preview_box', {
-    draggable:true,
-    spinner:$('preview_box').getElement('.spinner'),
-    update:$('preview_box').getElement('.content'),
-    offset:{x:30,y:110},
-    onExpand:function() {
+  if($chk($('preview_box'))) {
+    preview_box = new PopUp('preview_box', {
+       draggable:true,
+       spinner:$('preview_box').getElement('.spinner'),
+       update:$('preview_box').getElement('.content'),
+       offset:{x:30,y:110},
+       onExpand:function() {
 
-    },
-    
-    onTrigger:function(t) { 
-      if(t.hasClass('title')) {
-        window.location = t.get('href');
-      } else {
-        this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});  
-      } 
-      
-    },
-    
-    onUpdate:function() {
-      
-      
-      
-    },
-    
-    onSuccess:function() {
-      if($defined(this.el.getElement('.map'))){
-        var funcName = 'display_'+this.el.getElement('.map').get('id');
-        eval(funcName).delay(200);
-      }
-      
-      this.setTriggers(this.content);
-      // this.expand();
-    }
+       },
 
-  });
+       onTrigger:function(t) { 
+         if(t.hasClass('title')) {
+           window.location = t.get('href');
+         } else {
+           this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});  
+         } 
+
+       },
+
+       onUpdate:function() {
+
+
+
+       },
+
+       onSuccess:function() {
+         if($defined(this.el.getElement('.map'))){
+           var funcName = 'display_'+this.el.getElement('.map').get('id');
+           eval(funcName).delay(200);
+         }
+
+         this.setTriggers(this.content);
+         // this.expand();
+       }
+
+     });
+  }
+ 
   
   
   $$('.connect_form').each(function(form) {
