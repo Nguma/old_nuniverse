@@ -7,9 +7,9 @@ class ModifyTaggings < ActiveRecord::Migration
 			t.column :taggable_type, :string
 			t.timestamps
 		end
-		add_index [:taggable_id, :taggable_type, :predicate], :unique => true
-		add_index :predicate
-		add_index [:taggable_id, :taggable_type]
+		add_index :taggings, [:taggable_id, :taggable_type, :predicate], :unique => true
+		add_index :taggings, :predicate
+		add_index :taggings, [:taggable_id, :taggable_type]
   end
 
   def self.down
