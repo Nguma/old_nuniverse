@@ -80,10 +80,10 @@ module Awsomo
 				items << Tag.new(
 					:label => parse(item, "ItemAttributes/Title"),
 					:url => parse(item,"DetailPageURL"),
-					:kind => map_kind(parse(item, "ItemAttributes/Binding")),
+					:kind => 'product',
 					:service => 'amazon',
 					:description => parse(item,"EditorialReviews//EditorialReview/Content"),
-					:data => "#price #{parse(item,"OfferSummary//FormattedPrice")} #thumbnail #{parse(item,"SmallImage/URL")} #image #{parse(item,"LargeImage/URL")} #amazon_id #{parse(item, "ASIN")}"
+					:data => "#tags #{parse(item, "ItemAttributes/Binding")} #price #{parse(item,"OfferSummary//FormattedPrice")} #thumbnail #{parse(item,"SmallImage/URL")} #image #{parse(item,"LargeImage/URL")} #amazon_id #{parse(item, "ASIN")}"
 					)
 			end
 			items
@@ -100,17 +100,6 @@ module Awsomo
 		
 		def parse(item, q)
 			item.elements[q].text rescue ""
-		end
-		
-		def map_kind(productGroup)
-			case productGroup.strip.downcase
-			when "kitchen","misc."
-				"product"
-			when "paperback"
-				"book"
-			else 
-				productGroup
-			end
 		end
 		
 	end

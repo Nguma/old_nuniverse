@@ -7,11 +7,9 @@ class ConnectionsController < ApplicationController
 		@subject = Tag.find(params[:subject]) rescue create_subject
 		@connection_from = Connection.find_or_create(:subject => @subject, :object => @object)
 		@connection_to = Connection.find_or_create(:subject => @object, :object => @subject)
-		
-		if params[:tags]
-			params[:tags].split(',').each do |tag|
-				Tagging.create(:tag => @subject, :predicate => tag.strip) rescue nil
-			end
+		params[:tags] ||= @subject.property('tags').blank? ? @subject.kind :  @subject.property('tags')
+		if params[:tags] != "nuniverse"
+			@subject.tag_with(params[:tags].split(','))
 		end
 		
 		respond_to do |f|
@@ -25,8 +23,8 @@ class ConnectionsController < ApplicationController
 	def disconnect
 		@connections = [@connection] 
 		@connections << @connection.twin unless @connection.twin.nil?
-	
-		connections.each do |c|
+		
+		@connections.flatten.each do |c|
 			c.destroy
 		end
 		redirect_back_or_default('/')
@@ -37,6 +35,7 @@ class ConnectionsController < ApplicationController
 	end
 	
 	def tag
+		@connection.subject.tag_with(params[:kinds].split(',')) unless params[:kinds].nil?
 		@connection.tag_with(params[:tags].split(','))
 	end
 	
@@ -76,29 +75,45 @@ class ConnectionsController < ApplicationController
 		when "address"
 			params[:label] = @subject.property('address')
 		when "image"
-			
+		
 		when "bookmark"
 
 			if params[:url].match('en.wikipedia.org/wiki/')
 				t = params[:url].gsub(/.*\/wiki/,'/wiki')
-				wiki_content = Nuniverse.get_content_from_wikipedia(t)
-				@objects.description = Nuniverse.wikipedia_description(wiki_content) if @tag.description.nil?
+				doc = Nuniverse.get_content_from_wikipedia(t)
+				params[:description] = Nuniverse.wikipedia_description(doc) 
+				params[:input] = "#{(doc/:h1).first.inner_html.to_s} on Wikipedia"
+				@object.description = params[:description] if @object.description.nil?
 				@object.replace_property('wikipedia_url',t)
-				img = (wiki_content/'table.infobox'/:img).first
+				img = (doc/'table.infobox'/:img).first
 				unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
 					image = Tag.find_or_create(:label => img.attributes['src'].split('/').last, :kind => 'image', :url => img.attributes['src'])
-					@image = image.add_image(:source_url => img.attributes['src'])
-					image.connect_with(@image, :user => current_user)			
+					image.add_image(:source_url => img.attributes['src'])
+					image.connect_with(@object, :user => current_user)
+					image.tag_with('image')			
 				end
 			else
 				doc = Hpricot open( params[:url])
-				params[:input] = (doc/:title).first.inner_html.to_s
+				params[:input] = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
+
 				params[:description] ||= (doc/:p).first.inner_html.to_s rescue ""
 			end
+			
 		else
 			params[:input] = params[:description].split(/\n/)[0] if params[:input].blank?
 		end
 		
+		if params[:kind] == "nuniverse"
+			
+			@subject = Tag.create(
+			:label => params[:input], 
+			:kind => params[:kind], 
+			:url => params[:url], 
+			:data => params[:data], 
+			:description => params[:description], 
+			:service => params[:service]
+			)
+		else
 		@subject = Tag.find_or_create(
 				:label => params[:input], 
 				:kind => params[:kind], 
@@ -107,11 +122,15 @@ class ConnectionsController < ApplicationController
 				:description => params[:description], 
 				:service => params[:service]
 			)
+		end
+		if params[:kind] == "image"
+			@subject.add_image( :source_url => params[:input], :uploaded_data => params[:uploaded_data]) 
+			@subject.label = @subject.image.filename.gsub(/\-|\_/,' ')
+			@subject.save
+		end
 		
-
-		@subject.add_image( :source_url => params[:input], :uploaded_data => params[:uploaded_data]) if params[:kind] == "image"
-		if params[:data] && !params[:data].property('tel').blank?
-			tel = Tag.find_or_create(:label => params[:data].property('tel'), :kind => 'telephone')
+		if params[:data] && !@subject.property('tel').blank?
+			tel = Tag.find_or_create(:label => @subject.property('tel'), :kind => 'telephone')
 			tel.connect_with(@subject, :as => "telephone number")
 		end
 	

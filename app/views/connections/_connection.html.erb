@@ -1,14 +1,15 @@
-<div class="connection ">
-  <div class="subject <%= connection.subject.kind %>_kind">
+<div class="connection <%= connection.subject.kind %>_connection">
+  <div class="subject ">
     <%= render_tag connection.subject %>
     <p class="tags"><%= connection.tags.join(',')%></p>
     
   </div>
-  <div class="preview"></div>
-  <div class="hidden">
-  <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
-
+  <div class="preview">
+    <div class="hidden">
+    <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
+    </div>
   </div>
+
   
   <div style="clear:both"></div>
   

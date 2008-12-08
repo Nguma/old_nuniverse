@@ -171,14 +171,13 @@ function reset()
 
     },
     
-    onTrigger:function(t) {
+    onTrigger:function(t) { 
+      if(t.hasClass('title')) {
+        window.location = t.get('href');
+      } else {
+        this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});  
+      } 
       
-       // if($chk(t.getParent('.tag_cloud'))) {
-       //           t.destroy();
-       //           return;
-       //         }
-       //       
-      this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});  
     },
     
     onUpdate:function() {
@@ -209,7 +208,7 @@ function reset()
       
       onTrigger:function(t) {
         this.mode = t.get('mode');
-        console.log(this.mode)
+
         if(t.getProperty('href') != '#') {
           this.request.options.update = this.el.getPrevious('.response');
           this.el.addClass('hidden');
@@ -243,8 +242,9 @@ function reset()
           case "connect":
         
             
-            preview(this.request.options.update);
-            this.request.options.update.empty();
+            preview(updated);
+            
+            updated.empty();
             break;
           default:
             
@@ -256,10 +256,14 @@ function reset()
       },
       
       onKeyUp:function(key) {
-        this.request.options.update = this.el.getElement('.suggestions');
-        this.options.spinner = this.request.options.update.getPrevious('.spinner')
-        this.mode = "suggest"
-        this.callRequest({url:'/tags/suggest'});
+        if(this.el.getElement('.suggestions')) {
+          this.request.options.update = this.el.getElement('.suggestions');
+          this.options.spinner = this.request.options.update.getPrevious('.spinner')
+          this.mode = "suggest"
+          this.callRequest({url:'/tags/suggest'});
+        }
+        
+
       }
       
     });
@@ -382,25 +386,6 @@ function isDoubleEnter() {
 }
 
 function preview(el) {
-    // preview_box.el.getElement('.subject').empty();
-    preview_box.el.getElement('.content').empty();
-    
     preview_box.setContent(el);
-    // if($chk(el.getElement('.subject'))) {
-    //      el.getElement('.subject').clone().replaces(preview_box.el.getElement('.subject'));
-    //    } else {
-    //     
-    //    }
-
-
-    // preview_box.content.setStyles({'padding':el.getElement('.preview').getStyle('padding')});
-    // if($chk(el.getElement('.preview_url'))) {
-    //       
-    //       preview_box.callRequest({url:el.getElement('.preview_url').get('href')});
-    //     } else {
-    //       preview_box.updateWith(el);
-    //     }
     preview_box.expand();
-
-    
 }

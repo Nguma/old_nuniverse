@@ -24,9 +24,6 @@ module WsHelper
 		render :partial => "/nuniverse/amazon_box", :locals => {:source => params[:source], :items => items}
 	end
 	
-
-	
-	
 	def map(tag, params = {})
 		map = GMap.new("map_#{tag.id}","map_#{tag.id}")
 	  map.control_init(:small_zoom => true)

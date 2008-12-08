@@ -3,7 +3,11 @@ module TagsHelper
 
 	def render_tag(tag, params ={})
 		params[:tag] = tag
-		params[:url] ||= visit_url(tag, current_user.login)
+		if tag.kind == "bookmark"
+			params[:url] = tag.url
+		else
+			params[:url] ||= visit_url(tag, current_user.login)
+		end
 		params[:mode] ||= nil
 		render :partial => "/tags/tag", :locals => params
 	end
@@ -100,29 +104,34 @@ module TagsHelper
 	end
 	
 	def add_to_fav_link(connection, params = {}) 
-		
-	# 	personal = connection.users.to_a.include?(current_user.tag_id.to_s) rescue false
-		personal = connection.favorites.collect{|c| c.user_id}.to_a.include?(current_user.id) rescue false
-		if personal
-				link_to(image_tag("/images/icons/heartbreak.png"),
-					remove_from_nuniverse_url(
-						:id => connection.id,
-						:connection => connection.subject.id
-					),:class => "add_to_fav_lnk trigger", :title => "Remove from your connections")
-		else
+
+		# personal = connection.favorites.collect{|c| c.user_id}.to_a.include?(current_user.id) rescue false
+		if connection.is_a?(Tag)
 			link_to(image_tag("/images/icons/save.png"),
-				add_to_nuniverse_url(
-					:id => connection.id, 
-					:kind => connection.kind, 
-					:tag => connection.subject.id, 
-					:input => connection.subject.label, 
-					:url => connection.subject.url, 
-					:kind => connection.subject.kind, 
-					:data => connection.subject.data, 
-					:description => connection.subject.description, 
-					:service => connection.subject.service 
-				), :class => "add_to_fav_lnk trigger", :title => "Save")
-		
+				create_and_connect_url(@tag.id),
+				:class => "add_to_fav_lnk trigger",
+				:title => "Save to your nuniverse"
+			)
+		else
+				personal = connection.object == current_user.tag 
+
+				if personal
+						link_to(
+							image_tag("/images/icons/heartbreak.png"),
+							disconnect_url(:id => connection.id), 
+							:class => "add_to_fav_lnk", 
+							:title => "Remove from your nuniverse"
+						)
+				else
+					link_to(image_tag("/images/icons/save.png"),
+						konnect_url(
+							:subject => connection.subject_id,
+							:object => current_user.tag
+						), :class => "add_to_fav_lnk trigger", :title => "Save to your nuniverse")
+
+				end
 		end
+
+	
 	end
 end

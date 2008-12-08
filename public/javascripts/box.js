@@ -43,7 +43,7 @@ var Box = new Class({
       this.content().removeClass('hidden');
     }
     
-    preview(this.el);
+    preview(this.el.getElement('.preview'));
    
   },
   
@@ -53,20 +53,7 @@ var Box = new Class({
   
   expandInput:function(command) {
     this.expand();
-    // $('input_box').injectInside(this.el, 'bottom');
-    // this.scrollTo($('input_box'));
-    // this.setOptionsBehaviors();
-   
-    
-    // $('input_box').setStyles({
-    //       'height':this.el.getCoordinates()['height'],
-    //       'top':this.el.getCoordinates($('categories'))['top'] - 125
-    //     });
-    // this.inputBox = new Input($('input_box'),{
-    //       onSuccess:function() {
-    //         console.log("BLAH");
-    //       }
-    //     });
+  
     inputBox.setUpdatable(this);
     inputBox.expand(command.getProperty('href'), command.getProperty('title'));
     inputBox.addEvent('success', function() {

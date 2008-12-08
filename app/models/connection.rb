@@ -10,8 +10,6 @@ class Connection < ActiveRecord::Base
 		
 	before_destroy :destroy_taggings
 	
-
-	
 	named_scope :with_subject, lambda { |subject|
     subject.nil? ? {} :  {:conditions => ["connections.subject_id in (?)", subject.to_a.collect {|c| c.is_a?(Tag) ? c.id : c}] } 
 
@@ -26,8 +24,7 @@ class Connection < ActiveRecord::Base
 		query.nil? ? {} : {
 			:select => "connections.*",
 			:conditions => ["taggings.predicate rlike ?", query.to_a.join('|')], 
-			:joins => "LEFT OUTER JOIN taggings ON taggings.taggable_id = connections.id ",
-		
+			:joins => "LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.id AND taggings.taggable_type = 'Connection') OR (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag')",
 			:group => "connections.subject_id HAVING count(connections.subject_id) >= #{query.to_a.length}"
 		}
 	}

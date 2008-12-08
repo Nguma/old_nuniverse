@@ -1,0 +1,4 @@
+  <%= sorting_options :source => @tag  %>
+  <%= will_paginate @items, :inner_window => 2  unless @perspective.kind == "service"%>
+  <div class="delimiter" style="clear:both">&nbsp;</div>
+  <%= columnize(render_connections(@items)) %>

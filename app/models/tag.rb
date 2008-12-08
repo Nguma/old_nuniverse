@@ -245,11 +245,8 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def tag_with(tags, params = {})
-		user = User.find(0)
-		c = Connection.find_or_create(:subject => user.tag, :user => User.find(0), :object => self, :public => 1)
 		tags.to_a.each do |t|
-			Tagging.create(:kind => t, :connection_id => c.id) rescue ""
-			# Tagging.create!(:subject_id => params[:context] || 0, :object => self, :kind => t, :public => params[:public] || 1)
+			Tagging.create(:predicate => t, :taggable => self) rescue nil
 		end
 	end
   

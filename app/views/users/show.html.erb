@@ -1,7 +1,4 @@
-<%= render :partial => "/tags/new" %>
-<%= render :partial => "/users/account" %>
-<%= render :partial => "/users/groups" %>
-
+<%= render :partial => "/boxes/preview" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
 
   <% if @items.empty? %>
@@ -34,14 +31,17 @@
       <div class="delimiter" style="clear:both">&nbsp;</div>
       <%= columnize(render_connections(@items), :size => 4) %> 
     </div>
-    
-    <%= search_box %>
-    <%= render :partial => "/nuniverse/tag_cloud" %>
-    <% content_for :nav do -%>
 
+    <% content_for :nav do -%>
+      
        <div id="main_menu">
          <%= render :partial => "/nuniverse/new" %>
         </div>
+     <% end -%>
+     
+     <% content_for :footer do -%>
+       <%= search_box %>
+       <%= render :partial => "/nuniverse/tag_cloud" %>
      <% end -%>
         
   <% end -%>

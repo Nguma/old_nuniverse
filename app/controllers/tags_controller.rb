@@ -39,12 +39,12 @@ class TagsController < ApplicationController
 			@items = Connection.with_object(@tag).tagged(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 12)
 		end
 		
-		respond_to do |format|
-			format.html {
+		respond_to do |f|
+			f.html {
 				@categories = Connection.with_object(@tag).gather_tags
 			}
-			format.js {
-				
+			f.js {
+				render :layout => false
 			}
 		end
 	
@@ -64,8 +64,11 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
    
-		@tags = Connection.by_kind.with_subject(@tag)
-
+		@tags = @tag.tags
+    respond_to do |format|
+      format.html {}
+      format.xml  { render :xml => @tag }
+    end
 		# redirect_back_or_default(@tag)
   end
 
@@ -85,8 +88,14 @@ class TagsController < ApplicationController
   # PUT /tags/1
   # PUT /tags/1.xml
   def update
-		@object = Tag.find(params[:object]) rescue self
-		@tag.connect_with(@object, :user => current_user, :as => params[:tags].split(','));
+
+		@object = Tag.find(params[:object]) rescue nil
+		if @object.nil? || @object == @tag
+			@tag.tag_with(params[:tags].split(','));
+		else
+			@tag.connect_with(@object, :user => current_user, :as => params[:tags].split(','));
+		end
+		
 		
 		respond_to do |f|
 			f.html {redirect_back_or_default "/"}

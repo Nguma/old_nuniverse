@@ -1,24 +1,10 @@
-<h1>Editing <%= @tag.label %></h1>
+<div style="padding:40px">
+  <h1><%= @tag.label %></h1>
+  <h4>These tags are public. Meaning there are not associated with any particular context but <%= @tag.label.capitalize %> itself.</h4>
 
-<%= error_messages_for :tag %>
-
-<% form_for(@tag) do |f| -%>
-  <label>Title</label>
-  <br/>
-  <%= f.text_field :label  %>
-  <br/>
-  <label>Description</label>
-  <br/>
-  <%= f.text_area :description , :rows => 3, :cols => 50 %>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
-<% end -%>
-
-<% form_for :image, @tag.image, :url => tag_image_path(@tag), :html => {:multipart => true} do |f| %>
-  <%= f.file_field :uploaded_data %>
-  <%= f.submit "Upload" %>
-<% end %>
-
-<%= link_to 'Show', @tag %> |
-<%= link_to 'Back', tags_path %>
+  <% form_tag "/tags/update/#{@tag.id}" do -%>
+    <%= text_area_tag "tags", @tag.tags.join(',') %><br/>
+    <%= submit_tag %>
+    <%= link_to image_tag("/images/icons/cancel_btn.png"), visit_url(@tag, current_user.tag) %>
+  <% end %>
+</div>

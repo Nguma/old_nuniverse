@@ -1,13 +1,13 @@
 <div style="padding:20px">
-  <%= render_tag @connection.subject %>
-  <% @connection.subject.description %>
-  <%= add_to_fav_link(@connection) %>
+  <%= render_tag connection.subject %>
+  <% connection.subject.description %>
+  <%= add_to_fav_link(connection) %>
   <div class="delimiter">&nbsp;</div>
-<h5>Connected to <%= @connection.object.label %> as</h5>
-<% @connection.tags.each do |tag| -%>
+<h5>Connected to <%= connection.object.label %> as</h5>
+<% connection.tags.each do |tag| -%>
   <span style="margin:0 10px 0 0;font-size:13px;"><%= link_to tag, "#" %></span>
 <% end -%>
-<%= link_to "Edit", "/connections/edit/#{@connection.id}", :class => "trigger" %>
+<%= link_to "Edit", "/connections/edit/#{connection.id}", :class => "trigger" %>
 
 <h5>Connected to this nuniverse</h5>
 <% @connections.each do |connection| -%>
@@ -18,8 +18,8 @@
 <% end -%>
 
 <h5>Find more on</h5>
-<%= link_to "Google", visit_url(@connection.subject,"google") , :style => "color:#666" %> | 
-<%= link_to "Amazon", visit_url(@connection.subject,"amazon"), :style => "color:#666"%> | 
-<%= link_to "Youtube", visit_url(@connection.subject,"youtube"), :style => "color:#666"%> | 
-<%= link_to "Twitter", visit_url(@connection.subject,"twitter"), :style => "color:#666"%>
+<%= link_to "Google", visit_url(connection.object.id,"google") , :style => "color:#666" %> | 
+<%= link_to "Amazon", visit_url(connection.object.id,"amazon"), :style => "color:#666"%> | 
+<%= link_to "Youtube", visit_url(connection.object.id,"youtube"), :style => "color:#666"%> | 
+<%= link_to "Twitter", visit_url(connection.object.id,"twitter"), :style => "color:#666"%>
 </div>

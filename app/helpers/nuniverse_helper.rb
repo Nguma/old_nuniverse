@@ -211,20 +211,7 @@ module NuniverseHelper
 		params[:style] = "position:relative;clear:both;left:0;margin:10px 0 0 0;#{params[:style]}"
 		link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"close_btn", :style => params[:style]
 	end
-	
-	def connections(params = {})
-		params[:service] ||= @service
-		params[:perspective] = @perspective
-		params[:tags] = [params[:kind]] || [@kind]
-		params[:source] ||= @source
-		if service_is_nuniverse?(:service => params[:service])
-			Nuniverse::Connection.find(params)
-		else
-			service_items(:service => params[:service])
-		end
 		
-	end
-	
 	
 	def menu_window(params, &block)
 		params[:content] = capture(&block)

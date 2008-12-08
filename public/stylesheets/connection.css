@@ -25,7 +25,42 @@
 	display:none;
 }
 
-#preview_box .image_kind {
+.comment_connection {
+	
+}
+
+.connection .tag_url {
+	font-size:11px;
+	color:#999;
+	display:none;
+}
+
+#preview_box .tag_url {
+	font-size:12px;
+}
+
+
+.bookmark_connection .tag_url {
+	display:inline;
+}
+
+.tweet_connection .thumbnail,
+.bookmark_connection .thumbnail,
+.comment_connection .thumbnail {
+	height:30px;
+	width:30px;
+	background:none;
+	margin:0 0 0 0;
+}
+
+.tweet_connection .title,
+.comment_connection .title {
+	font-size:14px;
+	font-weight:normal;
+	font-style:italic;
+}
+
+#preview_box .image_connection {
 	display:none;
 }
 

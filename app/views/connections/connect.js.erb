@@ -1,9 +1,14 @@
-<div class="connection" >
-  <div class="preview" style="padding:20px">
+<div style="padding:20px 40px 20px 20px">
     <h5>You connected with</h5>
     <%= render_tag @connection_from.subject  %>
-    <h5>Tag it within this nuniverse</h5>
+    <div class="delimiter">&nbsp;</div>
+    <% if @subject.tags.empty? %>
+      <h3>Public tags<h3>
+      <h5>What is <%= @subject.label %>?</h5>
+      <%= text_area_tag :kinds %>
+    <% end -%>
+    <h5>What connection does it have with <%= @object.label %>?</h5>
     <%= text_area_tag :tags %>
-    <%= link_to "Save", "/connections/tag/#{@connection_from.id}", :class => "trigger" %>
-  </div>
+     <div class="delimiter">&nbsp;</div>
+    <%= link_to "Save", "/connections/tag/#{@connection_from.id}", :class => "trigger button" %>
 </div>

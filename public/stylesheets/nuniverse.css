@@ -1,7 +1,7 @@
 .nuniverse
 {
 	position:relative;
-	padding:40px 20px 20px 20px;
+	padding:20px 20px 20px 20px;
 	color:#333;
 	font-weight:normal;
 	z-index:123;
@@ -47,19 +47,19 @@
 }
 
 #breadcrumbs {
-	position:fixed;
-	left:20px;
-	top:10px;
+	position:relative;
+	clear:both;
 	padding:5px;
+	margin:0 0 0 0px;
 	background:#c3c3c3;
 	z-index:1234567890123;
-	font-size:15px;
 }
 
 #breadcrumbs a {
 	padding:0;
+	font-size:16px;
+	font-weight:bold;
 	color:#666;
-	font-size:inherit;
 }
 
 

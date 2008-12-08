@@ -24,6 +24,7 @@ var Requestable = new Class({
     this.request = new Request.HTML({
                url:this.options.requestUrl,
                link:'cancel',
+  
                update:this.options.update,
                onComplete:this.onComplete.bind(this),
                onRequest:this.onRequest.bind(this),
@@ -58,6 +59,7 @@ var Requestable = new Class({
   sendRequest:function() {
     if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
     this.request.options.update.removeClass('hidden');
+    
     this.request.post(this.el.getElement('form'));
   },
   

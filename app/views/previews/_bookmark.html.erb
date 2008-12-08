@@ -1,0 +1,7 @@
+<div style="padding:20px">
+  <%= render_tag(tag)%>
+  <p style="color:#666;font-size:13px"><%= tag.description %></p>
+  <%# doc = Hpricot open(tag.url) %>
+ 
+  <%#= (doc/:body/:p).first.inner_html rescue nil %>
+</div>

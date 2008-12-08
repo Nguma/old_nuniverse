@@ -1,8 +1,5 @@
-<%= render :partial => "/nuniverse/connect"  %>
-<%= render :partial => "/tags/email"  %>
-<%= render :partial => "/users/account" %>
-<%= render :partial => "/users/groups" %>
-
+<%#= render :partial => "/users/groups" %>
+<%= render :partial => "/boxes/preview" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
   <div id="content" class="<%= @mode %>_mode" style="clear:both;height:380px;overflow:hidden">
   <% if @items.empty? -%>
@@ -20,20 +17,21 @@
     
   <% end -%>
   <% content_for :nav do -%>
-  
+  <%= perspectives %>
   <div id="main_menu" style="display:block;width:90%;position:relative">
     <%= render :partial => "/nuniverse/new" %>
    </div>
     <%#= display_options %>
   <% end -%>
+   <% content_for :footer do -%>
+     <%= search_box %>
+     <%= render :partial => "/nuniverse/tag_cloud" %>
+   <% end -%>
    </div>
-   <%= search_box %>
-   <%= render :partial => "/nuniverse/tag_cloud" %>
+  
    
    
-  <% content_for :footer do -%>
-     <%#= perspectives %>
-  <% end -%>
+  
   
 <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px", :id => "main_spinner", :class => "spinner hidden") %>
   

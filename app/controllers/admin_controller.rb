@@ -101,7 +101,7 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		@kinds = ["company"]
+		@kinds = ["video"]
 		tags  = Tag.find(:all, :conditions => ["kind in (?)", @kinds])
 		
 		tags.each do |tag| 
@@ -114,7 +114,7 @@ cts.each_with_index do |ct,i|
 				Tagging.create(
 					:taggable => tag,
 					:predicate => tag.kind
-					)
+					) rescue ""
 		end
 		
 		render :nothing => true

@@ -1,3 +1,4 @@
 <div class='heading' id="title_box" style="height:auto;padding:0;margin:0;clear:none">
   <h1 class="title"><%= source.title %> <span style="color:#999"><%= @kind %></span></h1>
+  <p style="color:#999"><%= @tag.tags.join(', ') %> <%= link_to "Edit public tags", "/tags/#{source.id}/edit" %></p>
 </div>

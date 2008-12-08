@@ -1,4 +1,4 @@
-
-  <%= thumbnail_tag(tag)%>
-  <p class="kinds"><%= tag.tags.join(',') %></p>
-  <%= link_to tag.label.capitalize, url , :class => "trigger title", :mode => mode %>
+<%= thumbnail_tag(tag)%>
+<p class="kinds"><%= tag.tags.join(',') %></p>
+<p><%= link_to tag.label.capitalize, url , :class => "trigger title", :mode => mode %></p>
+<p><%= link_to truncate(tag.url,50, '...'), tag.url, :target => "_blank" , :class => "tag_url" unless tag.url.blank? %></p>

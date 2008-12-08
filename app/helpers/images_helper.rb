@@ -15,7 +15,7 @@ module ImagesHelper
 		unless source.thumbnail.nil?
 			img = source.thumbnail
 		else
-			img = "/images/icons/#{source.kind}.png"
+			img = "/images/icons/#{source.tags.first.gsub(' ', '_')}.png" rescue "/images/icons/#{source.kind}.png"
 		end
 		return image_tag(img, :alt => "", :class => params[:class] || "thumbnail")
 	
