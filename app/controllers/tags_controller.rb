@@ -91,7 +91,14 @@ class TagsController < ApplicationController
 
 		@object = Tag.find(params[:object]) rescue nil
 		if @object.nil? || @object == @tag
-			@tag.tag_with(params[:tags].split(','));
+			@tags = params[:tags].split(',')
+			@tag.taggings.each do |tagging|
+				if !@tags.include?(tagging.predicate)
+					tagging.destroy
+				end
+			end
+				
+			@tag.tag_with(@tags);
 		else
 			@tag.connect_with(@object, :user => current_user, :as => params[:tags].split(','));
 		end
