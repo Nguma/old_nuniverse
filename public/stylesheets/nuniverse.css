@@ -327,11 +327,6 @@ a.saved {
 	color:#333;
 }
 
-#main_menu h3 {
-	display:inline;
-	padding:5px;
-}
-
 
 .form_box .step {
 	display:none;
@@ -368,8 +363,13 @@ a.saved {
 }
 
 
+#main_menu h3 {
+	display:inline;
+	padding:5px;
+}
+
 #main_menu .activated {
-	background:#eee;
+	background:#333;
 }
 
 #main_menu .suggestions .connection {

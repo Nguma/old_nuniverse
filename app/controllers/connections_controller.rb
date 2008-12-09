@@ -101,7 +101,6 @@ class ConnectionsController < ApplicationController
 		else
 			params[:input] = params[:description].split(/\n/)[0] if params[:input].blank?
 		end
-		
 
 		if params[:kind] == "nuniverse"
 			
@@ -113,6 +112,7 @@ class ConnectionsController < ApplicationController
 			:description => params[:description], 
 			:service => params[:service]
 			)
+		
 		else
 		@subject = Tag.find_or_create(
 				:label => params[:input], 

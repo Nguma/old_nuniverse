@@ -244,8 +244,9 @@ function reset()
         this.mode = t.get('mode');
 
         if(t.getProperty('href') != '#') {
-          if(this.mode == "connect") {
-            this.el.getPrevious('.response').adopt(t.getParent('.connection'));
+          if(this.mode == "connect" && $chk(t.getParent('.connection'))) {
+            console.log(this.el.getElements('.suggestions'))
+            this.el.getElement('.data').set('html',t.getParent('.connection').getElement('.data').get('html'));
             this.el.getElements('.suggestions').empty();
           }
           this.request.options.update = this.el.getPrevious('.response');

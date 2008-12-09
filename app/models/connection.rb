@@ -36,9 +36,9 @@ class Connection < ActiveRecord::Base
 		}
 	}
 
-	named_scope :with_kind, lambda { |kind| 
-		kind.nil? ? {} : {:conditions => ["predicate = ?", kind], 
-			:joins => "LEFT OUTER JOIN taggings ON taggings.taggable_id = connections.id "
+	named_scope :with_object_kind, lambda { |kind| 
+		kind.nil? ? {} : {:conditions => ["tags.taggable_type = ?", kind], 
+			:joins => "LEFT OUTER JOIN tags ON connections.object_id = tags.id "
 			}
 	}
 	named_scope :by_kind, :group => "predicate", :select => ["connections.*, count(distinct subject_id) AS counted"], :joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id "

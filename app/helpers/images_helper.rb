@@ -10,11 +10,15 @@ module ImagesHelper
 
 	# thumbail image for the corresponding source
 	def thumbnail_tag(source, params = {})
-		source = source.is_a?(Tagging) ? source.subject : source
+		source = source.is_a?(Connection) ? source.subject : source
+		
 		params[:kind] ||= source.kind
-		unless source.thumbnail.nil?
-			
-			img = @mode == "image" ? source.avatar : source.thumbnail
+		
+		image = source.subjects.with_kind('Image').first
+
+		unless image.nil?
+
+			img = @mode == "image" ? image.taggable.public_filename : image.taggable.public_filename(:small)
 		else
 			img = "/images/icons/#{source.tags.first.gsub(' ', '_')}.png" rescue "/images/icons/#{source.kind}.png"
 		end

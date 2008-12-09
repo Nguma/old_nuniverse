@@ -84,7 +84,7 @@ class Tagging < ActiveRecord::Base
 	
 	def info(params)
 		params[:kind] ||= self.kind
-		info = params[:info] || Nuniverse::Kind.matching_info(params[:kind])
+		info = params[:info] || Nuniversal::Kind.matching_info(params[:kind])
 		
 		if info == 'price'
 			return "#{object.property('price')} on #{object.service.capitalize}" unless object.service.nil?
@@ -133,7 +133,7 @@ class Tagging < ActiveRecord::Base
 		Tagging.select(
 			:users => [self.owner], 
 			:subject => self.object, 
-			:tags => Nuniverse::Kind.match(params[:kind] ||= "").split('#'), 
+			:tags => Nuniversal::Kind.match(params[:kind] ||= "").split('#'), 
 			:page => params[:page], 
 			:per_page => params[:per_page], 
 			:order => params[:order] ||= "latest"

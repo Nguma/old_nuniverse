@@ -37,7 +37,7 @@ class Command
 			return m
 		elsif  m = action.match(/^(add|create|new|edit)\s?((a|to)\s)?(.*)/)
 			@action = "add"
-			@argument = Nuniverse::Kind.match(m[4]).last || "category"
+			@argument = Nuniversal::Kind.match(m[4]).last || "category"
 			
 			@service = nil
 			return m		
@@ -52,7 +52,7 @@ class Command
 			return m
 		elsif m = action.match(/^email\s(.*)\sto$/)
 			@action = "email"
-			@argument = Nuniverse::Kind.match(m[1]).last
+			@argument = Nuniversal::Kind.match(m[1]).last
 			@service = nil
 			return m
 		elsif m = action.match(/^share\s?(.*)\swith$/)

@@ -50,4 +50,8 @@ class NuniverseController < ApplicationController
 		
 	end
 	
+	def show
+		@nuniverse = Nuniverse.find(params[:id])
+	end
+	
 end

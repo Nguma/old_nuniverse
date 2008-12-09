@@ -1,3 +1,4 @@
+<%= raise connection.inspect if connection.subject.nil? %>
 <div class="connection <%= connection.subject.kind %>_connection">
   <div class="subject ">
     <%= render_tag connection.subject %>
@@ -6,7 +7,7 @@
   </div>
   <div class="preview">
     <div class="hidden">
-    <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
+      <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
     </div>
   </div>
 

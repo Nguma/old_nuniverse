@@ -2,7 +2,7 @@ class Preset
 	def self.find(kind)
 		p = []
 
-		Nuniverse::Kind.match(kind).each do |k|
+		Nuniversal::Kind.match(kind).each do |k|
 			p << sets[k] unless sets[k].nil?
 		end
 		

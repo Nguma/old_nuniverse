@@ -42,11 +42,7 @@ class User < ActiveRecord::Base
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 	has_many :perspectives, :foreign_key => :user_id
-	has_many :taggings, :foreign_key => :subject_id
-
-	def lists(params = {})
-		List.created_by(self).bound_to(nil).order_by("label ASC")
-	end
+	has_many :taggings, :as => :taggable
 	
 
 	alias_attribute :title, :label

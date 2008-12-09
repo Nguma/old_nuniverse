@@ -12,9 +12,11 @@
     <h2>Connect with another nuniverse</h2>
         <% form_tag "/tags/suggest" , :style => "width:400px" do -%>
           <label>Name it.</label>
+          
           <%= hidden_field_tag "id", @tag.id %>
           <%= hidden_field_tag "kind", "nuniverse" -%>
           <%= text_field_tag "input", "", :class => "input", :style => "width:500px", :autocomplete => "off"%>
+          <div class="data hidden"></div>
         <% end -%>
         <div class="suggestions"></div>
 
@@ -30,12 +32,12 @@
         <% end -%>
   </div>
   <div class="hidden connect_form" id="connect_note_form" style="padding:20px;position:relative;float:left">
-        <% form_tag "/tags/suggest" , :style => "width:800px" do -%>
+        <% form_tag "/comments/create" , :style => "width:800px" do -%>
           <h2>Post a note</h2>
-          <%= hidden_field_tag "id", @tag.id %>
-          <%= hidden_field_tag "kind", "comment" -%>
-          <%= text_area_tag "input", "", :class => "input", :rows => 3, :style => "width:500px;background:#FFF", :autocomplete => "off"%>
-           <%= link_to "Add note", create_and_connect_url(@tag), :class => "trigger button" , :mode => "connect" %>
+          <div class="data hidden">&nbsp;</div>
+          <%= hidden_field_tag "object", @tag.id %>
+          <%= text_area_tag "body", "", :class => "input", :rows => 3, :style => "width:500px;background:#FFF", :autocomplete => "off"%>
+           <%= link_to "Add note", "/comments/create", :class => "trigger button" , :mode => "connect" %>
         <% end -%>
         
   </div>
@@ -43,6 +45,7 @@
     <h2>Add an image</h2>
         <% form_tag "/tags/suggest" , :multipart => true do -%>
           <fieldset>
+            <div class="data hidden">&nbsp;</div>
           <%= hidden_field_tag "id", @tag.id %>
           <%= hidden_field_tag "kind", "image" -%>
             <div style="position:relative;float:left;width:46%">
@@ -62,10 +65,12 @@
     <h2>Add an address</h2>
         <% form_tag "/ws/suggest_address"  do -%>
           <fieldset>
+           
             <%= hidden_field_tag "id", @tag.id %>
             <%= hidden_field_tag "kind", "address" -%>
             <label>Type in an address to locate</label><br/>
             <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
+             <div class="data hidden"></div>
             <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
           </fieldset>
           <div class="suggestions" style="width:100%;display:block"></div>
@@ -77,6 +82,7 @@
     <h2>Email this to</h2>
         <% form_tag "/ws/suggest_address"  do -%>
           <fieldset>
+            <div class="data hidden"></div>
             <%= hidden_field_tag "id", @tag.id %>
             <%= hidden_field_tag "kind", "address" -%>
             <label>Type in as many email addresses, comma delimited</label><br/>

@@ -5,7 +5,7 @@
   <div class="connection">
     <strong><%= link_to(item.label,  create_and_connect_url(@tag.id), :class => "trigger", :mode => "connect") %></strong>
     <p><%= item.property('address') %> <%= item.property('tel') %></p>
-    <div class="data" style="display:none">
+    <div class="data hidden" >
       <%= hidden_field_tag "data", item.data %>
       <%= hidden_field_tag "input", item.property('address') %>
     </div>

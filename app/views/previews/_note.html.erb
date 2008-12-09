@@ -1,0 +1,9 @@
+<div style="padding:20px">
+  <p><%= link_to note.user.login.capitalize, visit_url(note.user.tag_id, current_user.login) %> said</p>
+  <h3><i>"<%= note.body %>"</i></h3>
+  ---------------------------
+  <% note.replies.each do |reply| -%>
+    <p><%= link_to reply.user.login.capitalize, visit_url(note.user.tag_id, current_user.login) %> replied</p>
+    <strong><i><%= reply.body %></i></strong>
+  <% end -%>
+</div>

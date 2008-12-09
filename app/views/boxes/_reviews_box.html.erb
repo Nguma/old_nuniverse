@@ -1,7 +1,0 @@
-<div class="box" id="reviews">
-  <span class="size"><%= reviews.total_entries %> </span>
-  <h2>Reviews</h2>
-  <% reviews.each do |review| %>
-    <%= review['text_excerpt'] %><%= link_to("Read more on yelp.com", review['url'])%>
-  <% end -%>
-</div>

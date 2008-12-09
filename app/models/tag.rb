@@ -6,6 +6,7 @@ class Tag < ActiveRecord::Base
 	has_many :objects, :through => :connections_from
 	
 	has_many :taggings, :as => :taggable
+	belongs_to :taggable, :polymorphic => true
 	
 	validates_presence_of :label
 	
@@ -14,8 +15,12 @@ class Tag < ActiveRecord::Base
 	
 	after_create  :find_coordinates
 		
+	def kind
+		self.taggable_type
+	end
+	
 	def after_initialize
-		@address = Nuniverse::Address.new(self)
+		@address = Nuniversal::Address.new(self)
 	end
 	
 	def connect_with(tag, params = {})
@@ -36,7 +41,7 @@ class Tag < ActiveRecord::Base
 			
 		end
 
-		if tag.kind != "category"
+		if tag.taggable_type != "Category"
 			Connection.create (
 				:subject => tag,
 				:object => self,
@@ -58,7 +63,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def has_address?
-		return true if self.kind == "address"
+		return true if self.kind == "Location"
 		return true if !address.full_address.blank?
 		false
 	end
@@ -72,13 +77,10 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def find_coordinates
-		Nuniverse::Address.find_coordinates(self)
+		Nuniversal::Address.find_coordinates(self)
 	end
 
-	def precision
-		return property('sub_type') unless property('sub_type').blank?
-		kind
-	end
+
 	
 	def flashvars
 		data.scan(/#flashvars[\s]+([^#|\[|\]]+)*/).to_s rescue ""
@@ -91,23 +93,7 @@ class Tag < ActiveRecord::Base
 	def ws_id
 		data.scan(/#ws_id[\s]+([^#|\[|\]]+)*/).to_s rescue nil
 	end
-	
-	def kinds
-		kind.split("#")
-	end
-	
-	def thumbnail
-		image_tag = self.kind == "image" ? self : (self.subjects.with_kind('image').first rescue nil)
-
-		if image_tag.nil? 
-			return property('thumbnail') unless property('thumbnail').blank?
-			return nil
-		else
-			
-			return image_tag.image.public_filename(:small) rescue ""
-		end
-	end
-	
+		
 	def icon
 		kinds.each do |kind|
 			return "/images/icons/#{kind}.png" if FileTest.exists?("public/images/icons/#{kind}.png")
@@ -115,17 +101,6 @@ class Tag < ActiveRecord::Base
 		return nil
 	end
 	
-	
-	def avatar
-		if self.kind == 'image'
-			image_tag = self
-		else
-			image_tag = self.subjects.with_kind('image').first
-		
-		end
-		return image_tag.image.public_filename unless image_tag.nil?
-		return property('image') 
-	end
 	
 	def price
 		data.scan(/#price[\s]+([^#|\[|\]]+)*/).to_s rescue ""
@@ -161,11 +136,11 @@ class Tag < ActiveRecord::Base
 	end
 		
   named_scope :with_kind_like, lambda { |kind|
-   	return kind.nil? ? {} : {:conditions => ["kind rlike ?", "(^|#)(#{kind.gsub('#','|')})(#|$)"]}
+   	return kind.nil? ? {} : {:conditions => ["taggable_type rlike ?", "(^|#)(#{kind.gsub('#','|')})(#|$)"]}
   }
 	
   named_scope :with_kind, lambda { |kind|
-   	return kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
+   	return kind.nil? ? {} : {:conditions => ["taggable_type = ?", kind]}
   }
    
   named_scope :with_property, lambda { |prop_name, prop_value|
@@ -227,7 +202,7 @@ class Tag < ActiveRecord::Base
 	end
 
 	def properties
-		data.scan(/#([\w]+)[\s]+([^#|\[|\]]+)*/).collect {|s| Nuniverse::LabelValue.new(s[0],s[1])}
+		data.scan(/#([\w]+)[\s]+([^#|\[|\]]+)*/).collect {|s| Nuniversal::LabelValue.new(s[0],s[1])}
 	end
 	
 	def title

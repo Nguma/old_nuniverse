@@ -145,10 +145,7 @@
 	color:inherit;
 }
 
-
-
 .popup_box .footer {
-
 	background:transparent url('/images/backgrounds/popup_bottom.png') left bottom no-repeat;
 	height:28px;
 	width:465px;
@@ -166,7 +163,6 @@
 	color:#666;
 	padding:5px;
 }
-
 
 #preview_box .content {
 	clear:both;
@@ -214,8 +210,6 @@
 	margin:5px 0 0 0 ;
 	line-height:15px;
 }
-
-
 
 #preview_box .content .connection a {
 	font-weight:bold;
