@@ -111,6 +111,7 @@ class UsersController < ApplicationController
 		@user = current_user
 		
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
+
 		@tag = current_user.tag
 		@perspective = current_user.self_perspective
 		@order = params[:order] || "by_latest"
@@ -118,7 +119,7 @@ class UsersController < ApplicationController
 		
 		@source = current_user.tag
 		@input = params[:input]
-		@items = current_user.connections(:label => @input, :per_page => 16, :page => params[:page] || 1, :order => @order)
+		@items = current_user.connections(:label => @input, :per_page => 15, :page => params[:page] || 1, :order => @order)
 		
 		
 		respond_to do |format|
@@ -126,7 +127,7 @@ class UsersController < ApplicationController
 				update_session
 
 				@title = "#{current_user.login}'s nuniverse"
-				@categories = Connection.with_object(current_user.tag).gather_tags.paginate(:page => @page, :per_page => 40)
+				@categories = Connection.with_object(current_user.tag).gather_tags.paginate(:page => @page, :per_page => 200)
 			
 			}	
 			format.js { 

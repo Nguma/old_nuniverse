@@ -2,7 +2,7 @@
 <% nuniverse(:selected => "My nuniverse") do -%>
 
   <% if @items.empty? %>
-  <div <div id="content" class="<%= @mode %>_mode dialogue" style="clear:both;height:360px;overflow:hidden">
+  <div <div id="content" class="<%= @mode %>_mode dialogue" style="clear:left;height:auto;overflow:hidden">
     <h2 style="color:#333">Here you are.</h2>
     <p>This is your nuniverse. Right now, it's empty, and it's waiting for YOU to build it.</p>
     <p>There might be hundreds of things you want to keep track of, this "empty page" is made just for that.</p>
@@ -25,22 +25,21 @@
     <% end -%>
   <% else -%>
    <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute", :id => "main_spinner", :class => "spinner hidden") %>
-    <div id="content" class="<%= @mode %>_mode" style="clear:both;height:360px;overflow:hidden">
-      <%= sorting_options :source => @tag %>
+    <div id="content" class="<%= @mode %>_mode" style="clear:none;height:auto;overflow:hidden">
+      
       <%= will_paginate(@items, :inner_window => 2) %>
       <div class="delimiter" style="clear:both">&nbsp;</div>
-      <%= columnize(render_connections(@items), :size => 4) %> 
+      <%= columnize(render_connections(@items)) %> 
     </div>
 
     <% content_for :nav do -%>
-      
-       <div id="main_menu">
-         <%= render :partial => "/nuniverse/new" %>
-        </div>
+        <%= render :partial => "/nuniverse/new" %>
      <% end -%>
      
-     <% content_for :footer do -%>
+     <% content_for :right_col do -%>
        <%= search_box %>
+        <%= display_options %>
+       <%= sorting_options :source => @tag %>
        <%= render :partial => "/nuniverse/tag_cloud" %>
      <% end -%>
         

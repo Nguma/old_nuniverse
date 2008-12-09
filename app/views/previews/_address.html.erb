@@ -1,0 +1,18 @@
+<div style="padding:20px">
+  
+  <% if connection.subject.has_address? -%>
+    <% @map = map(connection.subject) %>
+
+      <%= @map.div(:width => '378px', :height => '260px', :class => "map", :id => "map_#{connection.subject.id}") %>
+  <% end -%>
+  <script type="text/javascript">
+  //<![CDATA[
+    function display_map_<%= connection.subject.id %>(){
+      
+      <%=  @map.to_html(:no_load => true, :no_script_tag => true, :no_declare => true, :no_global => true) %>
+    }
+   
+  //]]> 
+  </script>
+  <%= add_to_fav_link(connection) %>
+</div>

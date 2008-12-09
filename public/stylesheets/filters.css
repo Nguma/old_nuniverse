@@ -4,50 +4,28 @@
 	width:auto;	
 	list-style-type:none;
 	padding:0;
-	margin:0;
+	font-size:13px;
+	margin:10px 0 0 0;
 }
 
-.tabs dt {
-	position:relative;
-	float:left;
-	padding:5px;
-	line-height:14px;
+.tabs .tab {
+
+	padding:0;
+	margin: 0 5px 0 0;
 	font-size:13px;
 	font-weight:bold;
-	color:#666;
-}
-
-.tabs li,
-.tabs dd {
-	position:relative;
-	float:left;
-
-	padding:5px;
-	line-height:14px;
-	font-size:13px;
-	font-weight:normal;
 	color:#999;
-	border-left:none;
-	margin:0 0 0 0;
 }
+
 
 .expanded dd {
 	display:block;
 }
 
-.tabs li a,
-.tabs dd a {
-	background:none;
-	padding:0;
-	font-color:inherit;
-	font-weight:inherit;
-	font-size:inherit;
-}
-
 .tabs .current {
 	border-bottom:none;
 	font-weight:bold;
-	background:#ddd;
+	color:#333;
 }
 
 .tabs dd img {

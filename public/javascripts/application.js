@@ -199,6 +199,37 @@ function reset()
 
      });
   }
+  
+  
+  $$('.tag_form').each(function(form) {
+    var c = new Steppable(form, {
+      spinner:form.getElement('.spinner'),
+      listener:form.getElement('.input'),
+      onTrigger:function(t) {
+        this.mode = t.get('mode');
+        
+        this.request.options.update = this.el.getElement('.response')
+        this.callRequest({url:t.get('href')});
+        if(this.mode == "remove") {
+          t.getParent('.tag').destroy();
+        }
+      },
+      
+      onSuccess:function(updated) {
+        switch(this.mode) {
+          case "add":
+            this.setTriggers(updated);
+            this.el.getElements('.tags').adopt(updated.getElements('.tag')[0], 'bottom');
+            
+            break;
+          case "remove":
+            
+            break;
+        }
+        
+      }
+    });
+  }); 
  
   
   
@@ -213,12 +244,16 @@ function reset()
         this.mode = t.get('mode');
 
         if(t.getProperty('href') != '#') {
+          if(this.mode == "connect") {
+            this.el.getPrevious('.response').adopt(t.getParent('.connection'));
+            this.el.getElements('.suggestions').empty();
+          }
           this.request.options.update = this.el.getPrevious('.response');
           this.el.addClass('hidden');
-          this.callRequest({url:t.get('href')})
+          this.callRequest({url:t.get('href'), delay:500})
          
           
-        }
+        } 
       },
 
       onExpand:function() {
@@ -263,7 +298,7 @@ function reset()
           this.request.options.update = this.el.getElement('.suggestions');
           this.options.spinner = this.request.options.update.getPrevious('.spinner')
           this.mode = "suggest"
-          this.callRequest({url:'/tags/suggest'});
+          this.callRequest({url:this.el.getElement('form').get('action')});
         }
         
 

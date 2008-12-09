@@ -1,6 +1,6 @@
 <div style="padding:20px">
   <%= render_tag connection.subject %>
-  <% connection.subject.description %>
+  <%= connection.subject.description %>
   <%= add_to_fav_link(connection) %>
   <div class="delimiter">&nbsp;</div>
 <h5>Connected to <%= connection.object.label %> as</h5>

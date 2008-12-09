@@ -18,14 +18,12 @@
 
   <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'filters', 'box', 'list', 'items', 'input', 'custom', 'moorainbow' %>
   <%= javascript_include_tag  'mootools', 'application', 'box', 'list', 'finder', 'popup','input'%>
-
+  <%= GMap.header (:small_zoom => true, :with_vml => false) %>
   <%= yield :head %>
 
   <script type="text/javascript"><!--
    google_ad_client = "pub-8435960507166132";
    google_ad_slot = "4376243957";
-   
-   
    google_ad_width = 300;
    google_ad_height = 60;
    //-->

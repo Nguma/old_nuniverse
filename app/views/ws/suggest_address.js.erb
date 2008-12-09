@@ -1,15 +1,13 @@
-<% items = google_localize(:source => @input) %>
+<% items = google_localize(:source => @input)%>
 
-<% items[0..5].each do |item| -%>
+
+<% items[0..6].each do |item| -%>
   <div class="connection">
-    <h3>
-      <%= link_to(item.label, "#") %>
-    </h3>
+    <strong><%= link_to(item.label,  create_and_connect_url(@tag.id), :class => "trigger", :mode => "connect") %></strong>
     <p><%= item.property('address') %> <%= item.property('tel') %></p>
     <div class="data" style="display:none">
-      <%= hidden_field_tag "kind", "address" %>
       <%= hidden_field_tag "data", item.data %>
-      <%= hidden_field_tag "label", item.property('address') %>
+      <%= hidden_field_tag "input", item.property('address') %>
     </div>
   </div>
 <% end -%>

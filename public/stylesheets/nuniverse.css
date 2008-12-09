@@ -48,10 +48,11 @@
 
 #breadcrumbs {
 	position:relative;
-	clear:both;
+	float:left;
 	padding:5px;
 	margin:0 0 0 0px;
-	background:#c3c3c3;
+	background:none;
+
 	z-index:1234567890123;
 }
 
@@ -59,7 +60,7 @@
 	padding:0;
 	font-size:16px;
 	font-weight:bold;
-	color:#666;
+	color:#FFF;
 }
 
 
@@ -204,6 +205,11 @@ p strong {
 	text-align:right;
 }
 
+.pagination .current {
+	color:#333;
+	font-size:16px;
+}
+
 #left-content {
 	position:relative;
 }
@@ -264,45 +270,14 @@ a.saved {
 	background:#ccc;
 }
 
-#title_box #perspectives {
-	margin:0;
+#title_box {
+	height:auto;
 	padding:0;
-}
-
-#perspectives {
-	margin: 0 0 0 1px;
-}
-
-#perspective_hat {
-	display:block;
-	background:transparent url('/images/backgrounds/perspective_hat.png') -2px 0 no-repeat;
-	height:40px;
-	padding:10px 0 0 106px;
-}
-
-#perspective_hat a {
 	margin:0;
-	font-size:17px;
-	line-height:32px;
-	color:#eee;
+	position:relative;
+	clear:both;
 }
 
-#perspective_fav_list {
-	display:none;
-	background:#222;
-	padding:5px;	
-	width:auto;
-	margin:0 0 0 1px;
-}
-
-
-#perspective_fav_list a {
-
-}
-
-#perspectives.expanded #perspective_fav_list {
-	display:block;
-}
 
 .slots {
 	background:#fff;
@@ -395,5 +370,11 @@ a.saved {
 
 #main_menu .activated {
 	background:#eee;
+}
+
+#main_menu .suggestions .connection {
+	position:relative;
+	float:left;
+	width:23%;
 }
 

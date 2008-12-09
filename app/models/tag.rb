@@ -1,9 +1,9 @@
 class Tag < ActiveRecord::Base
   has_one :image,  :foreign_key => :tag_id
-	has_many :taggings_from, :dependent => :destroy, :foreign_key => :subject_id, :class_name => 'Connection'
-	has_many :taggings_to, :dependent => :destroy, :foreign_key => :object_id, :class_name => 'Connection'
-	has_many :subjects, :through => :taggings_to
-	has_many :objects, :through => :taggings_from
+	has_many :connections_from, :dependent => :destroy, :foreign_key => :subject_id, :class_name => 'Connection'
+	has_many :connections_to, :dependent => :destroy, :foreign_key => :object_id, :class_name => 'Connection'
+	has_many :subjects, :through => :connections_to
+	has_many :objects, :through => :connections_from
 	
 	has_many :taggings, :as => :taggable
 	
@@ -51,6 +51,7 @@ class Tag < ActiveRecord::Base
 	def object
 		self
 	end
+	
 	
 	def tags(params = {})
 		taggings.collect {|c| c.predicate}
@@ -119,8 +120,8 @@ class Tag < ActiveRecord::Base
 		if self.kind == 'image'
 			image_tag = self
 		else
-			image_tag = Tagging.find(:first, :conditions => ['subject_id = ? AND kind = "image"',self.id])
-			image_tag = image_tag.object unless image_tag.nil?
+			image_tag = self.subjects.with_kind('image').first
+		
 		end
 		return image_tag.image.public_filename unless image_tag.nil?
 		return property('image') 
@@ -246,8 +247,9 @@ class Tag < ActiveRecord::Base
 	
 	def tag_with(tags, params = {})
 		tags.to_a.each do |t|
-			Tagging.create(:predicate => t, :taggable => self) rescue nil
+			@t = Tagging.create(:predicate => t, :taggable => self) rescue nil
 		end
+		return @t
 	end
   
 	def update_with(params)

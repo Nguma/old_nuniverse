@@ -13,7 +13,8 @@ module ImagesHelper
 		source = source.is_a?(Tagging) ? source.subject : source
 		params[:kind] ||= source.kind
 		unless source.thumbnail.nil?
-			img = source.thumbnail
+			
+			img = @mode == "image" ? source.avatar : source.thumbnail
 		else
 			img = "/images/icons/#{source.tags.first.gsub(' ', '_')}.png" rescue "/images/icons/#{source.kind}.png"
 		end

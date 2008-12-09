@@ -86,7 +86,7 @@
 	position:absolute;
 	top:200px;
 	left:200px;
-	width:432px;
+	width:455px;
 	z-index:45678;
 }
 
@@ -113,7 +113,7 @@
 	padding:24px 23px 0 23px;
 	height:auto;
 	min-height:100px;
-	width:386px;
+	width:450px;
 	background:transparent url('/images/backgrounds/popup_top.png') 0 0 no-repeat;
 }
 
@@ -151,6 +151,7 @@
 
 	background:transparent url('/images/backgrounds/popup_bottom.png') left bottom no-repeat;
 	height:28px;
+	width:465px;
 }
 
 #preview_box .title {
@@ -166,9 +167,6 @@
 	padding:5px;
 }
 
-#preview_box .content img.blowup {
-	width:338px;
-}
 
 #preview_box .content {
 	clear:both;
@@ -417,7 +415,7 @@
 
 .column .hover {
 	background:#333;
-	background:transparent url("/images/backgrounds/box.png") 0 0 repeat-x;	
+	background:#FFF ;	
 }
 
 .column .hover h2 {
@@ -738,50 +736,6 @@ html>body .ellipsis span {
 	color:#FFF;
 }
 
-#perspectives {
-	position:relative;
-	margin:5px 0 0 0;
-	float:left;
-}
-
-#perspectives.expanded {
-	display:block;
-	height:auto;
-}
-
-#perspectives a {
-	padding:0;
-	z-index:123456;
-	position:relative;
-}
-
-#perspective a span {
-	display:none;
-}
-
-#perspectives .thumbnail {
-	position:relative;
-	margin:0;
-	float:none;
-}
-
-#perspectives .empty_slot {
-	z-index:123;
-}
-
-#perspectives .section {
-	position:relative;
-	float:left;
-	width:275px;
-	margin:0 20px 0 0;
-}
-
-#perspectives h5 {
-	color:#666;
-	margin:0 0 5px 0;
-}
-
-
 #title_box h3 a {
 	padding:5px 10px 5px 0;
 }
@@ -789,4 +743,17 @@ html>body .ellipsis span {
 .bookmark_box {
 	border:solid 3px #666;
 	background:transparent url('/images/icons/bookmark.png') 0 0 no-repeat;
+}
+
+#perspectives {
+	position:relative;
+	clear:both;
+}
+
+#perspectives a.perspective {
+	background:#eee;
+	padding:5px;
+	color:#999;
+	font-size:14px;
+	
 }

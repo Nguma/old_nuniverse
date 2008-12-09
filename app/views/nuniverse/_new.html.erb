@@ -1,7 +1,10 @@
+<div class="delimiter" style="clear:left">&nbsp;</div>
 <h3><%= link_to image_tag("/images/icons/small_nuniverse.png", :width => 40), "#", :id => "connect_nuniverse_lnk", :class => "expand_lnk" %></h3>
 <h3><%= link_to image_tag("/images/icons/bookmark.png", :width => 40), "#", :id => "connect_bookmark_lnk", :class => "expand_lnk" %></h3>
 <h3><%= link_to image_tag("/images/icons/comment.png", :width => 40), "#", :id => "connect_note_lnk", :class => "expand_lnk" %></h3>
 <h3><%= link_to image_tag("/images/icons/image.png", :width => 40), "#", :id => "connect_image_lnk", :class => "expand_lnk" %></h3>
+<h3><%= link_to image_tag("/images/icons/location.png", :width => 40), "#", :id => "connect_location_lnk", :class => "expand_lnk" %></h3>
+<h3><%= link_to image_tag("/images/icons/email.png", :width => 40), "#", :id => "connect_email_lnk", :class => "expand_lnk" %></h3>
 <div style="position:relative;display:block;background:#eee;">
   <%= spinner %>
   <div class="response" style="display:block"></div>
@@ -55,7 +58,37 @@
           <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
         <% end -%>
   </div>
-  <div style="clear:both"></div>
+  <div class="hidden connect_form" id="connect_location_form" style="padding:20px;position:relative;float:left;width:100%">
+    <h2>Add an address</h2>
+        <% form_tag "/ws/suggest_address"  do -%>
+          <fieldset>
+            <%= hidden_field_tag "id", @tag.id %>
+            <%= hidden_field_tag "kind", "address" -%>
+            <label>Type in an address to locate</label><br/>
+            <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
+            <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
+          </fieldset>
+          <div class="suggestions" style="width:100%;display:block"></div>
+          <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
+        <% end -%>
+  </div>  
+  
+  <div class="hidden connect_form" id="connect_email_form" style="padding:20px;position:relative;float:left;width:100%">
+    <h2>Email this to</h2>
+        <% form_tag "/ws/suggest_address"  do -%>
+          <fieldset>
+            <%= hidden_field_tag "id", @tag.id %>
+            <%= hidden_field_tag "kind", "address" -%>
+            <label>Type in as many email addresses, comma delimited</label><br/>
+            <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
+            <%= text_area_tag "message", "", :width => "100%", :autocomplete => "off"%>
+            <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
+          </fieldset>
+         
+          <%= link_to "Send", send_email_url(@tag), :class => "trigger button", :mode => "connect"  %>
+        <% end -%>
+  </div>
+  <div style="clear:left"></div>
   <div style="position:absolute;width:auto;z-index:7890987;">
 </div>
 </div>

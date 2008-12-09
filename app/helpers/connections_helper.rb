@@ -2,6 +2,8 @@ module ConnectionsHelper
 	def render_preview(connection)
 		tag = connection.is_a?(Connection) ? connection.subject : connection
 		case connection.kind
+		when "address"
+			render :partial => "/previews/address", :locals => {:connection => connection}
 		when "image"
 			render :partial => "/previews/image", :locals => {:tag => tag}
 		when "video"

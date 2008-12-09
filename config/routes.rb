@@ -70,14 +70,13 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.konnect "/connect/:subject/:object", :controller => "connections", :action => "connect", :requirements => {:subject => /\d+/}
 	map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
-	
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"
+	
 	map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
-	# map.visit "/visit/:label", :controller => "lists", :action => "find_or_create"
 	map.add_to_nuniverse "/add-to-favorites/:id", :controller => "connections", :action => "add_to_favorites"
 	map.remove_from_nuniverse "/remove-from-favorites/:id", :controller => "connections", :action => "remove_from_favorites"
 	map.preview "/preview/:id", :controller => "connections", :action => "preview"
-	map.categorize "/categorize/:id/:context", :controller => "tags", :action => "categorize"
+	map.send_email "/send_email/:id", :controller => "tags", :action => "send_email"
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "nuniverse"

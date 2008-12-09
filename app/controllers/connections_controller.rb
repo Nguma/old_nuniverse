@@ -72,8 +72,7 @@ class ConnectionsController < ApplicationController
 	def create_subject
 		
 		case params[:kind]
-		when "address"
-			params[:label] = @subject.property('address')
+
 		when "image"
 		
 		when "bookmark"
@@ -87,7 +86,7 @@ class ConnectionsController < ApplicationController
 				@object.replace_property('wikipedia_url',t)
 				img = (doc/'table.infobox'/:img).first
 				unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
-					image = Tag.find_or_create(:label => img.attributes['src'].split('/').last, :kind => 'image', :url => img.attributes['src'])
+					image = Tag.find_or_create(:label => img.attributes['src'].split('/').last.gsub(/\-|\_/,' '), :kind => 'image', :url => img.attributes['src'])
 					image.add_image(:source_url => img.attributes['src'])
 					image.connect_with(@object, :user => current_user)
 					image.tag_with('image')			
@@ -103,6 +102,7 @@ class ConnectionsController < ApplicationController
 			params[:input] = params[:description].split(/\n/)[0] if params[:input].blank?
 		end
 		
+
 		if params[:kind] == "nuniverse"
 			
 			@subject = Tag.create(

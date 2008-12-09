@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
-	before_filter :find_tag, :except => [:index]
+	before_filter :find_tag, :except => [:index, :remove_tag]
 	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview, :suggest, :share]
 	after_filter :update_session, :only => [:show]
   # GET /tags
@@ -36,7 +36,7 @@ class TagsController < ApplicationController
 			@items = service_items(@tag.label)
 		
 		else
-			@items = Connection.with_object(@tag).tagged(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 12)
+			@items = Connection.with_object(@tag).tagged(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
 		end
 		
 		respond_to do |f|
@@ -64,7 +64,7 @@ class TagsController < ApplicationController
   # GET /tags/1/edit
   def edit
    
-		@tags = @tag.tags
+		@tags = @tag.taggings
     respond_to do |format|
       format.html {}
       format.xml  { render :xml => @tag }
@@ -105,11 +105,28 @@ class TagsController < ApplicationController
 		
 		
 		respond_to do |f|
-			f.html {redirect_back_or_default "/"}
+			f.html {redirect_to visit_url(@tag.id, current_user.tag) }
 			f.js { render :action => "preview"}
 		end
   end
 
+	def add_tag 
+		@tagging = @tag.tag_with(params[:tag].to_a)
+		respond_to do |f|
+			f.html {redirect_to visit_url(@tag.id, current_user.tag) }
+			f.js { render :action => "add_tag"}
+		end
+	end
+	
+	def remove_tag 
+		t = Tagging.find(params[:id])
+		t.destroy()
+		respond_to do |f|
+			f.html {redirect_to visit_url(@tag.id, current_user.tag) }
+			f.js { render :nothing => true}
+		end
+	end
+	
   # DELETE /tags/1
   # DELETE /tags/1.xml
   def destroy
@@ -121,6 +138,16 @@ class TagsController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+	def send_email
+		@emails = params[:input].split(/\,|\;/)
+		UserMailer.deliver_list(
+			:sender => current_user,
+			:emails => params[:input],
+			:tag => @tag,
+			:connections => @tag.connections_from,
+			:message => params[:message])	
+	end
 
 	def suggest
 
@@ -138,13 +165,11 @@ class TagsController < ApplicationController
 			end
 		end
 		
-		
-		
 		if @kind == "address"
 			@source = Tag.find(params[:nuniverse])
 			render(:action => "google_locations", :layout => false)
 		else
-			@suggestions = Tag.with_label_like(@input).paginate(:per_page => 12, :page => 1)
+			@suggestions = Tag.with_label_like(@input).with_kind('nuniverse').paginate(:per_page => 12, :page => 1)
 		
 		end
 	end

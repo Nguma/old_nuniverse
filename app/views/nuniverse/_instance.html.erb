@@ -4,16 +4,29 @@
 
 <div class="nuniverse <%= dom_class rescue "" %> " id="nuniverse" >
   <% unless @source.nil? %>
+    <%= breadcrumbs %>
     <%= title %>
-    <%= yield :nav %>
+    
+
   <% end -%>
+  <div class="delimiter">&nbsp;</div>
+  <div style="position:relative;float:right;width:300px;margin:50px 0 0 0">
+    <%= yield :right_col %>
+  </div>
+  <div style="position:relative;width:auto;margin:0 310px 0 0">
+    <div id="main_menu">
+      
+      <%= yield :nav %>
+    </div>
+    
   <%= content %>
+  </div>
   <div class="delimiter" style="clear:both">&nbsp;</div>
   
   <div class="footer" style="position:fixed;bottom:20px;left:0;z-index:567990;display:block;width:100%;padding:0">
     <div style="padding:0 20px 0 20px">
     <%= yield :footer %>
     </div>
-    <%= breadcrumbs %>
+    
   </div>
 </div>

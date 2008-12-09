@@ -1,5 +1,5 @@
 .connection {
-	height:70px;
+	min-height:70px;
 	padding:5px;
 }
 
@@ -17,6 +17,31 @@
 	color:#555;
 	font-size:15px;
 	font-weight:bold;
+}
+
+.image_mode .connection {
+	background:#eee;
+	margin:0 1px 1px 0;
+}
+
+.image_mode .connection .thumbnail {
+	width:95%;
+	height:auto;
+	background:none;
+}
+
+.image_mode .connection .title {
+
+}
+
+.connection .description {
+	display:none;
+}
+
+.list_mode .connection .description {
+	display:block;
+	color:#666;
+	font-size:12px;
 }
 
 .connection .preview {

@@ -48,14 +48,14 @@ class UserMailer < ActionMailer::Base
 	def list(params)
 		@recipients  = params[:emails]
     @from        = params[:sender].email
-    @subject     = "#{params[:sender].login.capitalize} is sharing his perspective of #{params[:content].label.pluralize} with you."
+    @subject     = "#{params[:sender].login.capitalize} is sharing his nuniverse with you."
     @sent_on     = Time.now
     @body[:sender] = params[:sender]
-		@body[:content] = params[:content]
-		@body[:title] = params[:content].label
+		@body[:content] = params[:tag]
+		@body[:title] = params[:tag].label
 		@body[:url] = "http://www.nuniverse.net/my_nuniverse/all/#{@body[:title]}"
 		@body[:message] = params[:message]
-		@body[:items] = params[:items] || params[:content].items(:page => 1, :per_page => 10)
+		@body[:items] = params[:connections] || params[:tag].connections(:page => 1, :per_page => 10)
 		part 	:content_type => "text/html",
 		      :body => render_message('list.text.html.erb', @body)
 		include_thumbnails(@body[:items])		

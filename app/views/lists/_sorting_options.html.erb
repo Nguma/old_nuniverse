@@ -1,9 +1,8 @@
-<dl class='tabs'>
-      <dt>Sort</dt>
+<div class='tabs'>
+  <strong style="display:inline;font-weight:bold;margin:0 5px 0 0">Sort</strong>
       <% options.each do |option| -%>
-        <dd class=" <%= selected == option[1] ? 'current' : '' %>">
-          <%= link_to("By #{option[0]}", visit_url(source, @perspective.tag.label, :order => option[1])) %>
-        
-        </dd>
+
+          <%= link_to("By #{option[0]}", visit_url(source, @perspective.tag.label, :order => option[1]), :class => "tab #{selected == option[1] ? 'current' : ''} ") %>
+
       <% end -%>
-    </dl>
+</div>

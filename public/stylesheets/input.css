@@ -204,12 +204,9 @@
 	width:auto;
 }
 
-.form_box .suggestions {
+#main_menu .suggestions {
 	padding:0;
-	position:absolute;
-	top:30px;
-	left:460px;
-	width:300px;
+	width:100%;
 }
 
 .suggestions .thumbnail {

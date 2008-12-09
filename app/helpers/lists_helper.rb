@@ -88,7 +88,7 @@ module ListsHelper
 		collection = []
 	
 		pers.each do |p|
-			collection << link_to(((p == current_user.login) ? "You" : p).capitalize, visit_url(@tag, p), :style => (p == @perspective.tag.label) ? 'color:#000' : '')
+			collection << link_to(((p == current_user.login) ? "You" : p).capitalize, visit_url(@tag.id, p), :style => (p == @perspective.tag.label) ? 'color:#000' : '',  :class => "perspective")
 		end
 		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => collection}
 	end

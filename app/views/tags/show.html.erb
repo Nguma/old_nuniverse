@@ -1,7 +1,7 @@
 <%#= render :partial => "/users/groups" %>
 <%= render :partial => "/boxes/preview" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <div id="content" class="<%= @mode %>_mode" style="clear:both;height:380px;overflow:hidden">
+  <div id="content" class="<%= @mode %>_mode" style="clear:none;height:auto;overflow:hidden">
   <% if @items.empty? -%>
     <h3>This nuniverse is empty for now.</h3>
     <h3>Would you like to connect something to <%= @tag.label %> ?</h3>
@@ -9,7 +9,7 @@
     <h3><%= link_to "No thanks, I'll just visit something else", "#",  :id => "select_nuniverse_lnk" %></h3>
   <% else -%>
     
-      <%= sorting_options :source => @tag  %>
+      
       <%= will_paginate @items, :inner_window => 2  unless @perspective.kind == "service"%>
       <div class="delimiter" style="clear:both">&nbsp;</div>
       <%= columnize(render_connections(@items)) %>
@@ -17,15 +17,26 @@
     
   <% end -%>
   <% content_for :nav do -%>
-  <%= perspectives %>
-  <div id="main_menu" style="display:block;width:90%;position:relative">
+  
+  
+  
     <%= render :partial => "/nuniverse/new" %>
-   </div>
-    <%#= display_options %>
+   
   <% end -%>
    <% content_for :footer do -%>
+     
+     
+     
+     
+   <% end -%>
+   
+   <% content_for :right_col do -%>
+     
      <%= search_box %>
+     <%= sorting_options :source => @tag  %>
+     <%= display_options %>
      <%= render :partial => "/nuniverse/tag_cloud" %>
+     <%= perspectives %>
    <% end -%>
    </div>
   
