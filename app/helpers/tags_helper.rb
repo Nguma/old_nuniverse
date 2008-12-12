@@ -120,11 +120,11 @@ module TagsHelper
 							:title => "Disconnect from this nuniverse"
 						)
 				else
-					link_to(image_tag("/images/icons/save.png"),
+					link_to(image_tag("/images/icons/add_to_fav.png"),
 						konnect_url(
 							:subject => connection.subject_id,
 							:object => connection.object_id
-						), :class => "add_to_fav_lnk trigger", :style => "position:relative;float:left", :title => "Connect with this nuniverse")
+						), :class => "add_to_fav_lnk trigger", :title => "Connect with this nuniverse")
 
 				end
 		end

@@ -1,4 +1,2 @@
 <%= image_tag(tag.source.public_filename(), :style => "width:378px")%>
-  <div style="position:relative;width:auto">
-    <%= link_to image_tag("/images/icons/comment.png", :style => "height:30px"), "/comments/new", :class => "trigger" %>
-  </div>
+<%= link_to image_tag("/images/icons/comment_lnk.png"), "/comments/new", :class => "trigger comment_lnk" %>
