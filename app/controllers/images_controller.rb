@@ -5,19 +5,18 @@ class ImagesController < ApplicationController
   end
   
   def create
-    @image = Image.new params[:image] 
-    @image.tag_id = params[:tag_id]
-    
-    if @image.save
-      Image.find(:all, :conditions => {:tag_id => params[:tag_id]}).each do |av|
-        av.destroy unless av.id == @image.id
-      end
-      
-      redirect_to tag_path(@image.tag)
-    else
-      puts @image.errors.inspect
-      render :action => "new"
-    end
+    if @image = Image.create!(:source_url => params[:source_url], :uploaded_data => params[:uploaded_data])
+			@tag = @image.tag
+			@image.tag.tag_with('image')
+			@object = Tag.find(params[:object])
+		
+    	@tag.connect_with(@object)
+		end
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
   end
 
 	def upload

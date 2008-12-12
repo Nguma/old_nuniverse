@@ -1,5 +1,5 @@
-<%= raise connection.inspect if connection.subject.nil? %>
-<div class="connection <%= connection.subject.kind %>_connection">
+
+<div class="connection <%= connection.subject.kind %>_connection <%= cycle('even','odd') %>">
   <div class="subject ">
     <%= render_tag connection.subject %>
     <p class="tags"><%= connection.tags.join(',')%></p>

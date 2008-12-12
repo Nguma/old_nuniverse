@@ -78,32 +78,22 @@ class ApplicationController < ActionController::Base
 		@everyone = User.find(0)
 	end
 	
-	def find_perspective
-		
-		
+	def find_perspective		
 		if params[:perspective]
-			t = Tag.find(:first, :conditions => ['label = ? AND kind in (?)', params[:perspective], ['user','group','service']])
-	
-			if t.nil?
-				@perspective = current_user.self_perspective
-			else
-				@perspective = Perspective.new(:tag_id => t.id, :user => current_user, :favorite => 1)
-										# raise @perspective.members.inspect
-			end
-			# @perspective = Perspective.find(:first, :conditions => ['tags.label = ?', params[:perspective]], :include => :tag)
-			# @perspective = current_user.self_perspective if @perspective.nil?
-	
+			@perspective = Tag.find(:first, :conditions => ['label = ? AND kind in (?)', params[:perspective], ['user','group','service']])
+			
 		else
-			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.self_perspective
+			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.tag
 		end
-		# Last line is to replace 'default' user for common perspectives, such as 'everyone'
-		@perspective.user = current_user 
+		@perspective = current_user.tag if @perspective.nil?
+		@perspective
 	end
 	
 	def service_items(query)
 		
-		case @perspective.tag.label
+		case @perspective.label
 		when "google"
+			
 			Googleizer::Request.new(query.gsub('&','and') , :mode => "web").response.results
 		when "amazon"
 			Finder::Search.find(:query => query, :service => 'amazon')

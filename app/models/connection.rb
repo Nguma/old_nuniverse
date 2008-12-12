@@ -29,6 +29,15 @@ class Connection < ActiveRecord::Base
 		}
 	}
 	
+	named_scope :tagged_or_named, lambda { |q| 
+		q.nil? ? {} : {
+			:select => "connections.*",
+			:conditions => ['taggings.predicate rlike ? OR T.label rlike ?', q.to_a.join('|'), q.to_a.join('|')],
+			:joins => "LEFT OUTER JOIN tags T on T.id = connections.subject_id LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.id AND taggings.taggable_type = 'Connection') OR (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag')",
+			:group => "connections.subject_id HAVING count(connections.subject_id) >= #{q.to_a.length}"
+		}
+	}
+	
 	named_scope :named, lambda { |name| 
 		name.nil? ? {} : {
 			:conditions => ["tags.label rlike ?", "^#{name}"],

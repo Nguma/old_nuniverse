@@ -2,7 +2,7 @@
   <strong style="display:inline;font-weight:bold;margin:0 5px 0 0">Sort</strong>
       <% options.each do |option| -%>
 
-          <%= link_to("By #{option[0]}", visit_url(source, @perspective.tag.label, :order => option[1]), :class => "tab #{selected == option[1] ? 'current' : ''} ") %>
+          <%= link_to("By #{option[0]}", visit_url(source, @perspective.label, :order => option[1]), :class => "tab #{selected == option[1] ? 'current' : ''} ") %>
 
       <% end -%>
 </div>

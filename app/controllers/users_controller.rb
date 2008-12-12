@@ -111,9 +111,8 @@ class UsersController < ApplicationController
 		@user = current_user
 		
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
-
 		@tag = current_user.tag
-		@perspective = current_user.self_perspective
+		@perspective = current_user.tag
 		@order = params[:order] || "by_latest"
 		@kind = params[:kind] || nil
 		

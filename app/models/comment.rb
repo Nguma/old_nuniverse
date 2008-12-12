@@ -2,7 +2,7 @@ class Comment < ActiveRecord::Base
 	
 	belongs_to :user, :class_name => 'User'
 
-	has_one :tag, :as => :taggable
+	belongs_to :tag, :class_name => "Tag"
 	has_many :taggings, :as => :taggable
 	
 	before_create :create_tag
@@ -13,10 +13,9 @@ class Comment < ActiveRecord::Base
 		t = Tag.create (
 			:label => self.body[0..255],
 			:description => self.body,
-			:kind => 'note'
+			:kind => 'comment'
 		)
 		self.tag = t
-		
 	end
 	
 	def tag_with(tags)
@@ -27,7 +26,8 @@ class Comment < ActiveRecord::Base
 	end
 	
 	def replies
-		self.tag.connections_from.tagged('reply')
+	
+		self.tag.connections_to.tagged('reply').collect {|c| c.subject.source}
 	end
 	
 

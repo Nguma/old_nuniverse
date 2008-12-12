@@ -188,21 +188,22 @@ p strong {
 	position:relative;
 	float:none;
 	width:auto;
-	clear:both;
 	margin:5px 0 0 0px;
 	padding:0;
-	overflow:hidden;
 	z-index:123;
 }
 
 #content .pagination {
-	position:relative;
-	float:right;
+	position:absolute;
+	right:0;
+	top:-30px;
+
 	width:400px;
 	padding:5px;
 	margin:0;
 	color:#999;
 	text-align:right;
+	z-index:456789;
 }
 
 .pagination .current {
@@ -369,7 +370,7 @@ a.saved {
 }
 
 #main_menu .activated {
-	background:#333;
+	background:#27406a;
 }
 
 #main_menu .suggestions .connection {

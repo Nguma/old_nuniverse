@@ -3,7 +3,7 @@
 
 <% items[0..6].each do |item| -%>
   <div class="connection">
-    <strong><%= link_to(item.label,  create_and_connect_url(@tag.id), :class => "trigger", :mode => "connect") %></strong>
+    <strong><%= link_to(item.label,  create_and_connect_url(@tag.id), :class => "trigger", :mode => "locate") %></strong>
     <p><%= item.property('address') %> <%= item.property('tel') %></p>
     <div class="data hidden" >
       <%= hidden_field_tag "data", item.data %>

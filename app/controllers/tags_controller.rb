@@ -36,7 +36,7 @@ class TagsController < ApplicationController
 			@items = service_items(@tag.label)
 		
 		else
-			@items = Connection.with_object(@tag).tagged(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
+			@items = @tag.connections_to.tagged_or_named(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
 		end
 		
 		respond_to do |f|
@@ -44,7 +44,7 @@ class TagsController < ApplicationController
 				@categories = Connection.with_object(@tag).gather_tags
 			}
 			f.js {
-				render :layout => false
+				
 			}
 		end
 	
@@ -53,13 +53,26 @@ class TagsController < ApplicationController
   # GET /tags/new
   # GET /tags/new.xml
   def new
-    @tag = Tag.new
+
+    @tag = Tag.new(:label => params[:input])
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html {}
+			format.js {}
       format.xml  { render :xml => @tag }
     end
   end
+
+	def create
+	
+		@tag = Tag.new(:label => params[:input], :kind => "nuniverse")
+		@tag.tag_with(params[:tags].split(','))
+		@tag.save
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+	end
 
   # GET /tags/1/edit
   def edit
@@ -72,18 +85,18 @@ class TagsController < ApplicationController
 		# redirect_back_or_default(@tag)
   end
 
-  # POST /tags
-  # POST /tags.xml
-  def create
-		@tag = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
-
-    respond_to do |format|
-        flash[:notice] = 'Tags were successfully created.'
-        format.html { redirect_back_or_default("/my_nuniverse") }
-        format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
-				format.js { render :action => "instance"}
-    end
-  end
+  # # POST /tags
+  # # POST /tags.xml
+  # def create
+  # 		@tag = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
+  # 
+  #   respond_to do |format|
+  #       flash[:notice] = 'Tags were successfully created.'
+  #       format.html { redirect_back_or_default("/my_nuniverse") }
+  #       format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
+  # 				format.js { render :action => "instance"}
+  #   end
+  # end
 
   # PUT /tags/1
   # PUT /tags/1.xml
@@ -150,27 +163,11 @@ class TagsController < ApplicationController
 	end
 
 	def suggest
-
 		@input = params[:input]
-		@mode = session[:mode]
-		@kind = params[:kind].downcase
-
-		if @kind.nil?
-			if @input.match(/(^$)|(^(http|https):\/\/[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(([0-9]{1,5})?\/.*)?$)/)
-				if @input.match(/.*\.(jpg|jpeg|gif|png)/)
-					@kind = "image"
-				else
-					@kind = "bookmark"
-				end
-			end
-		end
-		
-		if @kind == "address"
-			@source = Tag.find(params[:nuniverse])
-			render(:action => "google_locations", :layout => false)
-		else
+		if @input
 			@suggestions = Tag.with_label_like(@input).with_kind('nuniverse').paginate(:per_page => 12, :page => 1)
-		
+		else
+			render :nothing => true
 		end
 	end
 

@@ -120,13 +120,13 @@ var Box = new Class({
       'click':this.toggle.bindWithEvent(this)
     },this);
     
-    this.el.getElements('.thumbnail').each(function(thumb){
-      thumb.addEvent('click', function(ev) {
-        
-        ev.stopPropagation();
-        preview(thumb);
-      })
-    });
+    // this.el.getElements('.thumbnail').each(function(thumb){
+    //      thumb.addEvent('click', function(ev) {
+    //        
+    //        ev.stopPropagation();
+    // 
+    //      })
+    //    });
     
     this.setCommands();
     this.setOptionsBehaviors();

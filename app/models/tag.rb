@@ -14,10 +14,7 @@ class Tag < ActiveRecord::Base
 	attr_accessor :address
 	
 	after_create  :find_coordinates
-		
-	def kind
-		self.taggable_type
-	end
+	
 	
 	def after_initialize
 		@address = Nuniversal::Address.new(self)
@@ -35,13 +32,13 @@ class Tag < ActiveRecord::Base
 		params[:as].each do |k|
 			
 			Tagging.create(
-				:taggable => self,
+				:taggable => @c,
 				:predicate => k.strip
 				)
 			
 		end
 
-		if tag.taggable_type != "Category"
+		if tag.kind != "Category"
 			Connection.create (
 				:subject => tag,
 				:object => self,
@@ -52,10 +49,6 @@ class Tag < ActiveRecord::Base
 		@c
 	end
 
-		
-	def object
-		self
-	end
 	
 	
 	def tags(params = {})
@@ -136,11 +129,11 @@ class Tag < ActiveRecord::Base
 	end
 		
   named_scope :with_kind_like, lambda { |kind|
-   	return kind.nil? ? {} : {:conditions => ["taggable_type rlike ?", "(^|#)(#{kind.gsub('#','|')})(#|$)"]}
+   	return kind.nil? ? {} : {:conditions => ["kind rlike ?", "(^|#)(#{kind.gsub('#','|')})(#|$)"]}
   }
 	
   named_scope :with_kind, lambda { |kind|
-   	return kind.nil? ? {} : {:conditions => ["taggable_type = ?", kind]}
+   	return kind.nil? ? {} : {:conditions => ["kind = ?", kind]}
   }
    
   named_scope :with_property, lambda { |prop_name, prop_value|
@@ -165,6 +158,20 @@ class Tag < ActiveRecord::Base
 			:conditions => ["connections.predicate = #{kind} OR tags.kind = #{kind} "]}
 	}
 		
+		
+	def source
+		case kind
+		when "user"
+			User.find_by_tag_id(self.id)
+		when "image"
+			Image.find_by_tag_id(self.id)
+		when "comment"
+			Comment.find(:first, :conditions => ['tag_id = ? ',self.id])
+		else
+			return self
+		end
+	end
+	
 	def match_freebase_record(record)
 		description = record.article if description.blank?
 		self.replace('freebase_id', record.id)
@@ -218,11 +225,14 @@ class Tag < ActiveRecord::Base
 		end
 		image.tag_id = self.id
     image.save!
+		image
 	end
 	
 	def tag_with(tags, params = {})
-		tags.to_a.each do |t|
-			@t = Tagging.create(:predicate => t, :taggable => self) rescue nil
+		tags.to_a.compact.each do |t|
+			unless t.blank?
+				@t = Tagging.create(:predicate => t, :taggable => self) rescue nil
+			end
 		end
 		return @t
 	end

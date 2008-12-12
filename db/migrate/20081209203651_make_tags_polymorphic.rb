@@ -26,6 +26,13 @@ class MakeTagsPolymorphic < ActiveRecord::Migration
 			tag.taggable_id = n.id
 		end
 		
+		tags = Tag.find(:all, :conditions => 'taggable_type = "image"')
+		tags.each do |tag|
+			n = Image.find(:filename => tag.label)
+			tag.taggable_type = "Image"
+			tag.taggable_id = n.id
+		end
+		
   end
 
   def self.down

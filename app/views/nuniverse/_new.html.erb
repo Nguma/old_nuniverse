@@ -8,62 +8,34 @@
 <div style="position:relative;display:block;background:#eee;">
   <%= spinner %>
   <div class="response" style="display:block"></div>
-  <div class="hidden connect_form" id="connect_nuniverse_form" style="padding:20px;position:relative;float:left">
-    <h2>Connect with another nuniverse</h2>
-        <% form_tag "/tags/suggest" , :style => "width:400px" do -%>
-          <label>Name it.</label>
-          
+  <div class="hidden connect_form" id="connect_nuniverse_form" >
+   
+        <% form_tag "/tags/suggest" do -%>
+          <h2>Visit another nuniverse</h2>
           <%= hidden_field_tag "id", @tag.id %>
           <%= hidden_field_tag "kind", "nuniverse" -%>
-          <%= text_field_tag "input", "", :class => "input", :style => "width:500px", :autocomplete => "off"%>
+          <%= text_field_tag "input", "", :class => "input",  :autocomplete => "off", :id => "input_connect"%>
           <div class="data hidden"></div>
         <% end -%>
-        <div class="suggestions"></div>
+        <div class="suggestions" style="padding:0 20px 20px 20px;min-height:100px"></div>
 
   </div>
-  <div class="hidden connect_form" id="connect_bookmark_form" style="padding:20px;position:relative;float:left">
-        <% form_tag "/tags/suggest" , :style => "width:800px" do -%>
+  <div class="hidden connect_form" id="connect_bookmark_form" >
+        <% form_tag "/tags/suggest"  do -%>
           <h2>Add a bookmark.</h2>
-          <label>Copy and paste the url of the webpage you want to bookmark</label> 
+         
           <%= hidden_field_tag "object", @tag.id %>
           <%= hidden_field_tag "kind", "bookmark" -%>
-          <%= text_field_tag "url", "", :class => "input", :style => "width:500px", :autocomplete => "off"%>
-          <%= link_to "Add bookmark", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
+          <%= text_field_tag "url", "", :class => "input", :autocomplete => "off", :id => "input_bookmark"%>
+          <%= link_to image_tag('/images/icons/add_button.png'), create_and_connect_url(@tag), :class => "trigger", :mode => "bookmark"  %>
         <% end -%>
   </div>
-  <div class="hidden connect_form" id="connect_note_form" style="padding:20px;position:relative;float:left">
-        <% form_tag "/comments/create" , :style => "width:800px" do -%>
-          <h2>Post a note</h2>
-          <div class="data hidden">&nbsp;</div>
-          <%= hidden_field_tag "object", @tag.id %>
-          <%= text_area_tag "body", "", :class => "input", :rows => 3, :style => "width:500px;background:#FFF", :autocomplete => "off"%>
-           <%= link_to "Add note", "/comments/create", :class => "trigger button" , :mode => "connect" %>
-        <% end -%>
-        
-  </div>
-  <div class="hidden connect_form" id="connect_image_form" style="padding:20px;position:relative;float:left">
-    <h2>Add an image</h2>
-        <% form_tag "/tags/suggest" , :multipart => true do -%>
-          <fieldset>
-            <div class="data hidden">&nbsp;</div>
-          <%= hidden_field_tag "id", @tag.id %>
-          <%= hidden_field_tag "kind", "image" -%>
-            <div style="position:relative;float:left;width:46%">
-            <label>Copy and paste the url from the internet </label><br/>
-            <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
-            </div>
-            <div style="position:relative;float:left;width:45%">
-            <label>... or upload a file from your computer</label><br/>
-            <%= file_field_tag :uploaded_data %>
-            </div>
-            <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
-            </fieldset>
-          <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
-        <% end -%>
-  </div>
-  <div class="hidden connect_form" id="connect_location_form" style="padding:20px;position:relative;float:left;width:100%">
-    <h2>Add an address</h2>
+  <%= render :partial => "/comments/new" %>
+  <%= render :partial => "/images/new" %>
+  <div class="hidden connect_form" id="connect_location_form" >
+    
         <% form_tag "/ws/suggest_address"  do -%>
+          <h2>Add an address</h2>
           <fieldset>
            
             <%= hidden_field_tag "id", @tag.id %>
@@ -74,13 +46,14 @@
             <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
           </fieldset>
           <div class="suggestions" style="width:100%;display:block"></div>
-          <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "connect"  %>
+          <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "locate"  %>
         <% end -%>
   </div>  
   
-  <div class="hidden connect_form" id="connect_email_form" style="padding:20px;position:relative;float:left;width:100%">
-    <h2>Email this to</h2>
+  <div class="hidden connect_form" id="connect_email_form" >
+    
         <% form_tag "/ws/suggest_address"  do -%>
+        <h2>Email this to</h2>
           <fieldset>
             <div class="data hidden"></div>
             <%= hidden_field_tag "id", @tag.id %>
@@ -91,7 +64,7 @@
             <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
           </fieldset>
          
-          <%= link_to "Send", send_email_url(@tag), :class => "trigger button", :mode => "connect"  %>
+          <%= link_to "Send", send_email_url(@tag), :class => "trigger button", :mode => "email"  %>
         <% end -%>
   </div>
   <div style="clear:left"></div>

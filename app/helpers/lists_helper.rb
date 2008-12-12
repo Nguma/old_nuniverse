@@ -24,7 +24,7 @@ module ListsHelper
 		when 'bookmark'
 			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title],  visit_url(item,  @perspective.tag.label, :mode => params[:mode] || @mode))
+			link_to(params[:title],  visit_url(item,  @perspective.label, :mode => params[:mode] || @mode))
 			# link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
 		end
 	end
@@ -88,7 +88,7 @@ module ListsHelper
 		collection = []
 	
 		pers.each do |p|
-			collection << link_to(((p == current_user.login) ? "You" : p).capitalize, visit_url(@tag.id, p), :style => (p == @perspective.tag.label) ? 'color:#000' : '',  :class => "perspective")
+			collection << link_to(((p == current_user.login) ? "You" : p).capitalize, visit_url(@tag.id, p), :style => (p == @perspective.label) ? 'color:#000' : '',  :class => "perspective")
 		end
 		render :partial => "/nuniverse/perspectives", :locals => {:perspectives => collection}
 	end

@@ -38,6 +38,19 @@
 	display:none;
 }
 
+.list_mode .connection {
+	background:#dedede;
+	margin: 0 0 1px 0;
+}
+
+.list_mode .even {
+	background:transparent url('/images/backgrounds/even.png') 0 0 repeat;
+}
+
+.list_mode .odd {
+	background:transparent url('/images/backgrounds/odd.png') 0 0 repeat;
+}
+
 .list_mode .connection .description {
 	display:block;
 	color:#666;
@@ -52,6 +65,16 @@
 
 .comment_connection {
 	
+}
+
+.comment_connection div.user {
+	background:transparent url('/images/backgrounds/comment_from.png') 0 0 no-repeat;
+}
+
+.comment_connection .user .thumbnail {
+	height:30px;
+	background:none;
+	top:20px;
 }
 
 .connection .tag_url {

@@ -13,7 +13,7 @@ class ConnectionsController < ApplicationController
 		end
 		
 		respond_to do |f|
-			f.html {}
+			f.html { redirect_to visit_url(@object.id, current_user.login)}
 			f.js {}
 		end
 
@@ -31,7 +31,7 @@ class ConnectionsController < ApplicationController
 	end
 	
 	def preview
-		@connections = @connection.connections.paginate(:per_page => 10, :page => 1)
+		@connections = @connection.connections.with_kind('nuniverse').paginate(:per_page => 10, :page => 1)
 	end
 	
 	def tag
@@ -79,18 +79,18 @@ class ConnectionsController < ApplicationController
 
 			if params[:url].match('en.wikipedia.org/wiki/')
 				t = params[:url].gsub(/.*\/wiki/,'/wiki')
-				doc = Nuniverse.get_content_from_wikipedia(t)
-				params[:description] = Nuniverse.wikipedia_description(doc) 
+				doc = Nuniversal.get_content_from_wikipedia(t)
+				params[:description] = Nuniversal.wikipedia_description(doc) 
 				params[:input] = "#{(doc/:h1).first.inner_html.to_s} on Wikipedia"
 				@object.description = params[:description] if @object.description.nil?
 				@object.replace_property('wikipedia_url',t)
 				img = (doc/'table.infobox'/:img).first
-				unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
-					image = Tag.find_or_create(:label => img.attributes['src'].split('/').last.gsub(/\-|\_/,' '), :kind => 'image', :url => img.attributes['src'])
-					image.add_image(:source_url => img.attributes['src'])
-					image.connect_with(@object, :user => current_user)
-					image.tag_with('image')			
-				end
+				# unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
+				# 					image = Tag.find_or_create(:label => img.attributes['src'].split('/').last.gsub(/\-|\_/,' '), :kind => 'image', :url => img.attributes['src'])
+				# 					image.add_image(:source_url => img.attributes['src'])
+				# 					image.connect_with(@object, :user => current_user)
+				# 					image.tag_with('image')			
+				# 				end
 			else
 				doc = Hpricot open( params[:url])
 				params[:input] = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
@@ -124,8 +124,9 @@ class ConnectionsController < ApplicationController
 			)
 		end
 		if params[:kind] == "image"
-			@subject.add_image( :source_url => params[:input], :uploaded_data => params[:uploaded_data]) 
-			@subject.label = @subject.image.filename.gsub(/\-|\_/,' ')
+			img = @subject.add_image( :source_url => params[:input], :uploaded_data => params[:uploaded_data]) 
+
+			@subject.label = img.filename.gsub(/\-|\_/,' ')
 			@subject.save
 		end
 		

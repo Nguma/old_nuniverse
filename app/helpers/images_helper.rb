@@ -14,14 +14,21 @@ module ImagesHelper
 		
 		params[:kind] ||= source.kind
 		
-		image = source.subjects.with_kind('Image').first
-
-		unless image.nil?
-
-			img = @mode == "image" ? image.taggable.public_filename : image.taggable.public_filename(:small)
+		image_tag = source.kind == "image" ? source : source.subjects.with_kind('image').first
+		
+		if image_tag.nil? 
+			if !source.property("thumbnail").blank? 
+				img = source.property("thumbnail")
+			else
+				img = "/images/icons/#{source.tags.first.gsub(' ', '_')}.png" rescue "/images/icons/#{source.kind}.png"
+			end
+		
 		else
-			img = "/images/icons/#{source.tags.first.gsub(' ', '_')}.png" rescue "/images/icons/#{source.kind}.png"
+			raise image_tag.inspect if image_tag.source.nil?
+			img = @mode == "image" ? image_tag.source.public_filename : image_tag.source.public_filename(:small)
 		end
+		
+
 		return image_tag(img, :alt => "", :class => params[:class] || "thumbnail")
 	
 	end

@@ -1,9 +1,6 @@
-
-
 var Input = new Class({
-    Implements:[Requestable],
-    Extends:PopUp,
-
+    Implements:[Requestable, Expandable, Triggerable, Keymapped, Options, Events],
+    
     options:{
       'focused':false,
       'requestUrl':null,
@@ -16,9 +13,13 @@ var Input = new Class({
     
     initialize:function(el,options) {
       this.inputs = $(el).getElements('input.input');
-      this.parent(el,options);
+      this.el = el;
+      this.setOptions(options)
+      this.setKeyListener(this.options.listener);
+      // this.parent(el,options);
 
       this.setRequest();
+      return this;
     },
     
     setBehavior:function() {
@@ -39,14 +40,19 @@ var Input = new Class({
      
     },
     
-  
     expand:function() {
       this.parent();
-      this.el.getElements('input#input')[0].focus();
+      this.el.getElements('input.input')[0].focus();
     },
     
     focus:function(ev,input) {
       this.options.focused = input;
+    },
+    
+    reset:function() {
+      this.el.getElement('.suggestions').empty();
+      this.listener.set('value', '');
+      this.fireEvent('onClear', this.listener);
     },
     
     blur:function(ev, input) {
@@ -58,17 +64,7 @@ var Input = new Class({
       this.fireEvent('onSelect',trigger);
     },
     
-    keyup:function(ev, input) {
-
-      if(this.options.focused != input) { return; }
-
-      if(input.getProperty('value') == '') {
-        this.fireEvent('onClear',input)
-      } else {
-        this.fireEvent('onChange', input);
-      }
-      
-    },
+    
     
     setSuggestions:function() {
       var suggestions = this.options.update.getElements('.connection');

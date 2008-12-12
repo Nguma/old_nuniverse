@@ -1,0 +1,5 @@
+<%= render_tag(@tag) %> 
+<p>This nuniverse was created.</p>
+<%= link_to "Visit #{@tag.label}'s nuniverse now", visit_url(@tag.id, current_user.tag)%>
+<div class="delimiter">&nbsp;</div>
+<%= link_to "#{image_tag("/images/icons/heart.png")} Save to my nuniverse", konnect_url(@tag.id, current_user.tag_id) %>

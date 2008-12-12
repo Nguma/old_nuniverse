@@ -101,28 +101,26 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		@kinds = ["person","film","bookmark","painting","actor","director","country","city","restaurant","user"]
-		tags  = Tag.find(:all, :conditions => ["kind in (?)", @kinds])
-		
-		tags.each do |tag| 
-			# @c = Connection.create(
-			# 			:subject => tag,
-			# 			:object => tag,
-			# 			:public => 1
-			# 		)
-			
-				Tagging.create(
-					:taggable => tag,
-					:predicate => tag.kind
-					) rescue ""
+		@tags = Tag.find(:all, :conditions => 'description IS NOT NULL')
+		@tags.each do |tag|
+			begin
+				tag.taggable.description = tag.description
+				tag.taggable.save
+			rescue
+			end
 		end
-		
 		render :nothing => true
 		
 	end
 	
 	def test
-		current_user.connections
+		@tags = Tag.find(:all, :conditions => 'taggable_type = "Video"', :group => "taggable_id HAVING count(*) > 1")
+		
+		@tags.each do |tag|
+			tag.destroy
+		end
+		raise @tags.inspect
+		
 	end
 	
 	def netflix

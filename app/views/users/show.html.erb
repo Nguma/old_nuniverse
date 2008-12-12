@@ -6,23 +6,19 @@
     <h2 style="color:#333">Here you are.</h2>
     <p>This is your nuniverse. Right now, it's empty, and it's waiting for YOU to build it.</p>
     <p>There might be hundreds of things you want to keep track of, this "empty page" is made just for that.</p>
-     <div id="main_menu">
-       <%= render :partial => "/nuniverse/new" %>
+     <p><strong>Not sure what do add?</strong> What about trying adding your favorite film, or that car you'd like to buy.<br/>You can also create a category and add things to it later.</p>
+   
+      <div class="search_form" id="search_form" style="margin:5px 0 0 0">
+        <% form_tag "/tags/suggest" do -%>
+          <%= hidden_field_tag :id, @tag.id %>
+          <%= text_field_tag "input", "", :id  => "input_visit", :class => "main_input"%>
+          <div class="data hidden">&nbsp;</div>
+          <div class="suggestions">&nbsp;</div>
+          <%= spinner %>
+        <% end -%>
       </div>
-    <p>Not sure what do add?</p>
-    <p>What about trying adding your favorite film, or that car you'd like to buy.<br/>You can also create a category and add things to it later.</p>
-    <p>Still not convinced? Maybe you'd prefer to see what others have been doing...</p>
-    <h3>
-      <%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_lnk", :class => "select_form_lnk" , :style => "color:#396"%>
-    </h3>
   </div>
-    <% content_for :footer do -%>
-      <div id="main_menu">
-        <h3 style="font-weight:bold">
-          <%= link_to(image_tag('/images/icons/plus.png'), "#", :id => "select_tag_lnk", :class => "select_form_lnk") %>
-        </h3>
-      </div>
-    <% end -%>
+
   <% else -%>
    <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute", :id => "main_spinner", :class => "spinner hidden") %>
     <div id="content" class="<%= @mode %>_mode" style="clear:none;height:auto;overflow:hidden">
@@ -38,7 +34,7 @@
      
      <% content_for :right_col do -%>
        <%= search_box %>
-        <%= display_options %>
+       <%= display_options %>
        <%= sorting_options :source => @tag %>
        <%= render :partial => "/nuniverse/tag_cloud" %>
      <% end -%>

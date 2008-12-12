@@ -3,13 +3,9 @@ module TagsHelper
 
 	def render_tag(tag, params ={})
 		params[:tag] = tag
-		if tag.kind == "bookmark"
-			params[:url] = tag.url
-		else
-			params[:url] ||= visit_url(tag, current_user.login)
-		end
+		params[:url] ||= visit_url(tag, current_user.login)
 		params[:mode] ||= nil
-		render :partial => "/tags/tag", :locals => params
+		render :partial => "/#{tag.kind.downcase.pluralize.to_s}/tag", :locals => params
 	end
 	
 	def link_to_visit(tag, params ={})
@@ -107,7 +103,7 @@ module TagsHelper
 
 		# personal = connection.favorites.collect{|c| c.user_id}.to_a.include?(current_user.id) rescue false
 		if connection.is_a?(Tag)
-			link_to(image_tag("/images/icons/save.png"),
+			link_to(image_tag("/images/icons/connect.png"),
 				create_and_connect_url(@tag.id),
 				:class => "add_to_fav_lnk trigger",
 				:title => "Save to your nuniverse"
@@ -120,14 +116,15 @@ module TagsHelper
 							image_tag("/images/icons/heartbreak.png"),
 							disconnect_url(:id => connection.id), 
 							:class => "add_to_fav_lnk", 
-							:title => "Remove from your nuniverse"
+							
+							:title => "Disconnect from this nuniverse"
 						)
 				else
 					link_to(image_tag("/images/icons/save.png"),
 						konnect_url(
 							:subject => connection.subject_id,
-							:object => current_user.tag
-						), :class => "add_to_fav_lnk trigger", :title => "Save to your nuniverse")
+							:object => connection.object_id
+						), :class => "add_to_fav_lnk trigger", :style => "position:relative;float:left", :title => "Connect with this nuniverse")
 
 				end
 		end

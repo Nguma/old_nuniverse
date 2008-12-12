@@ -5,51 +5,25 @@ var preview_box;
 function reset()
 {
  
+
   $$('.connection').each(function(box,i) {
       var b = new Box(box);
   });
   
-  if($('search_box') != undefined) {
-    var searchBox = new Input($('search_box'), {
-          update:$('content'),
-          spinner:$('main_spinner'),
-          requestUrl:$('search_box').getElement('form').getProperty('action'),
-          onRequest:function() {
-            // $('preview_box').collapse();
-            $('content').empty();
-          },
-          
-          onSuccess:function(updated) {
-            updated.getElements('.connection').each(function(box) {
-              var b = new Box(box);
-            });
-            
-          
-          },
-          
-          onChange:function(input) {
-           
-            input.removeClass('empty');
-            this.callRequest();
-          },
-          
-          onClear:function(input) {
-           
-            input.addClass('empty');
-            this.callRequest();
-          }
-    });
-  }
+  var searchBox = createSearchForm($('search_form'));
+  
+  var filterBox = createFilterBox($('search_box'));
+
   
   $$('div#tag_cloud a').each(function(tag) {
     tag.addEvent('click', function(ev) {
       ev.preventDefault();
-      $('search_box').getElements('.input')[0].setProperty('value', tag.get('text'));
+      $('search_box').getElement('.main_input').setProperty('value', tag.get('text'));
       if($chk($('tag_cloud').getElement('.selected'))) {
         $('tag_cloud').getElement('.selected').removeClass('selected');
       }
       tag.toggleClass('selected');
-      searchBox.callRequest({'delay':0});
+      filterBox.callRequest({'delay':0});
     })
   })
 
@@ -68,60 +42,7 @@ function reset()
      $('perspectives').toggleClass('expanded');
    });
  });
- 
- $$('a#save_perspectives').each(function(btn) {
-   btn.addEvent('click',function(ev) {
-     ev.preventDefault();
-     var favorite_ids = $('favorite_perspectives').getElements('a.perspective').map(function(item) {return item.getProperty('alt')})
-     window.location = btn.getProperty('href')+'?favorite_ids='+favorite_ids
-   });
- });
-  
- $$('a.perspective').each(function(lnk){
-   if(!lnk.hasClass('locked')) {
 
-      lnk.makeDraggable({
-        droppables:$('perspectives'),
-        
-        onBeforeStart:function(el) {
-          el.store('origin',el.getCoordinates(el.getParent()));
-        },
-        
-        emptyDrop:function(el) {
-        },
-        
-        onEnter:function(el, droppable) {
-          el.removeClass('trashable');
-        },
-        
-        onLeave:function(el, droppable) {
-           el.addClass('trashable');
-        },
-
-        onDrop:function(el,droppable) {
-          
-          if($defined(droppable)) {
-                el.setStyles({
-                   'top':Math.floor((el.getCoordinates(droppable).top + 22)/55) * 55,
-                   'left':Math.floor((el.getCoordinates(droppable).left + 22)/ 55) * 55,
-                   'position':'absolute'
-                })
-
-          } else {
-            el.destroy();
-
-          }
-
-        }
-      });
-
-
-    }
-
-
-   
-   
- });
  
 
   var account = new Steppable('select_profile_form', {
@@ -173,31 +94,52 @@ function reset()
        },
 
        onTrigger:function(t) { 
+             
          if(t.hasClass('title')) {
            window.location = t.get('href');
+         } else if(t.getProperty('href') != '#') {
+ 
+           this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});
          } else {
-           this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});  
-         } 
+           
+           switch(t.get('mode')) {
+               case "tag":
+                 this.addTag(this.el.getElement('.input').get('value'))
+                 break
+               case "untag": 
+        
+                 this.removeTag(t);
+               break; 
+               default:
+                 console.log(t.get('mode'))
+
+             }
+         }
 
        },
 
-       onUpdate:function() {
+       onEnter:function() {
 
-
-
+          if(this.listener.get('mode') == "tag") {
+            this.addTag(this.listener.get('value'))
+          }
        },
 
-       onSuccess:function() {
+       onSuccess:function(updated) {
+   
          if($defined(this.el.getElement('.map'))){
            var funcName = 'display_'+this.el.getElement('.map').get('id');
            eval(funcName).delay(200);
          }
 
          this.setTriggers(this.content);
-         // this.expand();
+         
+         this.expand();
+         this.setKeyListener(updated.getElement('.input'));
        }
 
      });
+     
   }
   
   
@@ -237,24 +179,41 @@ function reset()
     var c = new Steppable(form, {
       
       spinner:form.getParent().getElement('.spinner'),
-      
+      update:form.getPrevious('.response'),
       listener:form.getElement('.input'),
       
       onTrigger:function(t) {
         this.mode = t.get('mode');
-
         if(t.getProperty('href') != '#') {
-          if(this.mode == "connect" && $chk(t.getParent('.connection'))) {
-            console.log(this.el.getElements('.suggestions'))
-            this.el.getElement('.data').set('html',t.getParent('.connection').getElement('.data').get('html'));
-            this.el.getElements('.suggestions').empty();
-          }
-          this.request.options.update = this.el.getPrevious('.response');
-          this.el.addClass('hidden');
-          this.callRequest({url:t.get('href'), delay:500})
-         
           
-        } 
+          switch(this.mode) {
+            case "suggest":
+            
+              preview_box.el.getElement('.data').set('html',this.el.getElement('fieldset').get('html'));
+            case "connect":
+            case "create":
+              preview_box.callRequest({url:t.get('href')});
+              this.reset();
+            break;
+            
+            default:
+              this.callRequest({url:t.get('href')});
+              
+               // 
+              
+          }
+        } else {
+          
+          switch(this.mode) {
+            case "tag":
+              this.addTag(t.get('text'));
+              break;
+            case "untag":
+              this.removeTag(t);
+              break;
+          }
+        }
+     
       },
 
       onExpand:function() {
@@ -262,11 +221,6 @@ function reset()
       },
 
       onSuccess:function(updated) {
-        // $('suggestion_box').removeClass('hidden');
-       
-        
-        
-        
         switch(this.mode) {
           case "suggest":
             updated.getElements('.box').each(function(box) {
@@ -279,11 +233,15 @@ function reset()
             
             break;
           case "connect":
-        
+          case "image":
+          case "bookmark":
             
+            this.collapse();
+            // filterBox.callRequest();
             preview(updated);
-            
             updated.empty();
+            
+            filterBox.callRequest.delay(200, filterBox, {delay:200});
             break;
           default:
             
@@ -326,10 +284,7 @@ function reset()
     
     
   });
-
-
   
-
 }
 
 function addElement(el) {
@@ -427,4 +382,61 @@ function isDoubleEnter() {
 function preview(el) {
     preview_box.setContent(el);
     preview_box.expand();
+}
+
+function createFilterBox(el) {
+  if(!$chk(el)) return null;
+
+  return new Input(el, {
+        update:$('content'),
+        spinner:$('main_spinner'),
+        listener:el.getElement('.main_input'),
+        requestUrl:el.getElement('form').getProperty('action'),
+        onRequest:function() {
+
+          $('content').empty();
+        },
+        
+        onSuccess:function(updated) {
+          updated.getElements('.connection').each(function(box) {
+            var b = new Box(box);
+          });
+        },
+        
+        onKeyUp:function(key, field) {
+          this.callRequest();
+        },
+        
+        onClear:function(input) {
+          this.callRequest();
+        }
+  });
+}
+
+function createSearchForm(form) {
+  if(!$chk(form)) return null;
+  return new Input(form, {
+    
+    listener:form.getElements('input.main_input')[0],
+    update:form.getElement('.suggestions'),
+    spinner:form.getElement('.spinner'),
+    onKeyUp:function(input, field) {
+      field.addClass('filled');
+      this.callRequest({url:form.getElement('form').get('action')});
+    },
+    
+    onClear:function(field) {
+      field.removeClass('filled');
+    },
+    
+    onTrigger:function(t) {
+      this.reset();
+      preview_box.callRequest({url:t.get('href')});
+    },
+    
+    onSuccess:function(updated) {
+      this.setTriggers(updated);
+     
+    }
+  });
 }

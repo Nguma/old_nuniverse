@@ -99,15 +99,17 @@ class User < ActiveRecord::Base
 	
 	def connections(params = {})
 
-		Connection.with_object(self.tag).tagged(params[:label]).order_by(params[:order]).distinct.paginate(
-			:page => params[:page]||1, 
-			:per_page => params[:per_page] || 3
-		)
-
+		Connection.with_object(self.tag).tagged_or_named(params[:label]).order_by(params[:order]).distinct.paginate(
+				:page => params[:page]||1, 
+				:per_page => params[:per_page] || 3
+			)
+		
+		
+	
 	end
 	
 	def groups
-		Connection.with_subject(self.tag).with_kind('group').paginate(:page => 1, :per_page => 5)
+		self.tag.connections_to.tagged('group').paginate(:page => 1, :per_page => 5)
 	end
 	def member_of?(group)
 		return true if !Connection.with_subject(group.tag).with_user(self).with_object(self.tag).tagged('member').empty?

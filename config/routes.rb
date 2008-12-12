@@ -67,7 +67,7 @@ ActionController::Routing::Routes.draw do |map|
 		m.suggest '/suggest/:command/:input', :action => 'suggest'
 	end
 	
-
+	map.create_tag "/create_tag", :controller => "tags", :action => "create"
 	map.konnect "/connect/:subject/:object", :controller => "connections", :action => "connect", :requirements => {:subject => /\d+/}
 	map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"

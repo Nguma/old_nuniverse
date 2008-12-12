@@ -1,5 +1,7 @@
 class Image < ActiveRecord::Base
   belongs_to :tag
+
+	before_create :create_tag
   
   has_attachment	:content_type => :image,
     							:thumbnails => {
@@ -65,6 +67,14 @@ class Image < ActiveRecord::Base
 	else
 	    return nil
 	  end
+	end
+	
+	def create_tag
+		t = Tag.create! (
+			:label => self.filename,
+			:kind => 'image'
+		)
+		self.tag = t
 	end
 
 end

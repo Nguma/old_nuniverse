@@ -1,11 +1,9 @@
-<div class="box" id="tag_box">
-  <h2>Tags</h2>
-  <div class="content" style="display:block;height:auto">
-  <% items.each do |item| -%>
-    <%= link_to(item.kind.capitalize, tag_url(item, :kind => item.kind),:style => "font-size:14px") %>
+<div class="tags">
+  <div class="hidden">
+    <%= link_to "", "#", :class => "tag trigger", :mode => "untag" -%>
+  </div>
+  <% selecteds.each do |tag| -%>
+    <%= link_to tag, "#", :class => "tag trigger", :mode => "untag" -%>
   <% end -%>
-  </div>
-  <div class="actions">
-    <%= command(:label => "+ Add tags", :command => "Add tags", :description => "Enter your tags, comma separated.")%>
-  </div>
+ 
 </div>

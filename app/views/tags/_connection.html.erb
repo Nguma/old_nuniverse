@@ -1,9 +1,11 @@
-<div class="connection <%= connection.kind %>_connection"> 
+<div class="connection <%= connection.kind %>_connection <%= cycle('even','odd') %>"> 
   <%= render_tag(connection)%>
   <div class="preview">
-    <%= add_to_fav_link(connection) %>
+    
     <%= render_preview(connection) %>
-
+    <div style="padding:5px">
+    <%= add_to_fav_link(connection) %>
+    </div>
     <%= hidden_field_tag :input, connection.label %>
     <%= hidden_field_tag :url, connection.url %>
     <%= hidden_field_tag :kind, connection.kind %>

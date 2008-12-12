@@ -1,0 +1,9 @@
+<% if @perspective.kind == "service" -%>
+
+  <div style="position:relative;float:left;width:200px;">
+    <%= link_to(image_tag("/images/icons/powered_by_#{@perspective.label}.png"), "#")%>
+  </div>
+<% end -%>
+<%= will_paginate items, :inner_window => 2  unless @perspective.kind == "service"%>
+<div class="delimiter" style="clear:left">&nbsp;</div>
+<%= columnize(render_connections(items)) %>

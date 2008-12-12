@@ -18,13 +18,27 @@ var Expandable = new Class({
   }
 });
 
+var Triggerable = new Class({
+  setTriggers:function(area) {    
+    area.getElements('.trigger').each(function(trigger) {
+      trigger.removeEvents();
+      trigger.addEvent('click', this.onTrigger.bindWithEvent(this, trigger));
+     },this)
+  },
+  
+  onTrigger:function(ev, trigger) {
+    ev.preventDefault();
+    ev.stopPropagation();
+    this.fireEvent('onTrigger', trigger);
+  }
+});
+
 var Requestable = new Class({
   
   setRequest:function() {
     this.request = new Request.HTML({
                url:this.options.requestUrl,
                link:'cancel',
-  
                update:this.options.update,
                onComplete:this.onComplete.bind(this),
                onRequest:this.onRequest.bind(this),
@@ -57,10 +71,10 @@ var Requestable = new Class({
   },
   
   sendRequest:function() {
-    if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
+    // if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
     this.request.options.update.removeClass('hidden');
     
-    this.request.post(this.el.getElement('form'));
+    this.request.send(this.el.getElement('form'));
   },
   
   getRequestResult:function() {
@@ -86,17 +100,59 @@ var Requestable = new Class({
       if(!$chk(listener)) return;
       this.listener = listener;
       this.listener.removeEvents();
-      this.listener.addEvent('keyup', this.onKeyUp.bindWithEvent(this))
+      this.listener.addEvents({
+        'keyup':this.onKeyUp.bindWithEvent(this),
+        'keydown':this.onKeyDown.bindWithEvent(this)
+        // 'keypress':function(ev) {ev.preventDefault();}
+        
+      },this);
     },
     
     onKeyUp:function(ev) {
-      this.fireEvent('onKeyUp',ev.key);
+      ev.preventDefault();
+      ev.stopPropagation();     
+      this.fireEvent('onKeyUp',[ev.key, this.listener]);
+      if(this.listener.getProperty('value') == '') {
+        this.listener.removeClass('filled');
+        this.fireEvent('onClear',this.listener);
+      } else {
+        this.listener.addClass('filled');
+      }
+      
+
+    },
+    
+    onKeyDown:function(ev) {
+      if(ev.key == "enter") {
+        ev.preventDefault();
+        this.fireEvent('onEnter')
+      }
     }
     
   });
   
+  
+  var Taggable = new Class({
+    addTag:function(label) {
+       var tag = this.el.getElement('a.tag').clone();
+       tag.set('text', label);
+       this.el.getElement('.tags').adopt(tag, 'bottom');
+       tag.addClass('.selected');
+       this.el.getElement('.input').set('value', '');
+       this.setTriggers(this.el.getElement('div.tags'));
+       this.el.getElement('input.tags').set('value', this.el.getElement('input.tags').get('value')+','+label);
+    },
+    
+    removeTag:function(t) {
+      label = ","+t.get('text');
+      t.destroy();
+      
+      this.el.getElement('input.tags').set('value', this.el.getElement('input.tags').get('value').replace(label, ','));
+    }
+  });
+  
   var Steppable = new Class({
-    Implements:[Options,Events,Requestable, Keymapped, Expandable],
+    Implements:[Options,Events,Requestable, Keymapped, Expandable, Triggerable],
     options: {
       step:'.step',
       trigger:'.trigger',
@@ -130,45 +186,30 @@ var Requestable = new Class({
       },this);
     },
     
-    setTriggers:function(area) {
-      
-      area.getElements(this.options.trigger).each(function(trigger) {
-   
-        trigger.removeEvents();
-        trigger.addEvent('click', this.onTrigger.bindWithEvent(this, trigger));
-       },this)
-    },
+    
     
     collapse:function(ev) {
       if($defined(ev)) { ev.preventDefault();}
       this.select(this.options.steps[0])
       this.el.addClass('hidden');
     },
-    
-    onTrigger:function(ev, trigger) {
-      ev.preventDefault();
-      ev.stopPropagation();
-
-      if(trigger.hasClass('next')) {
-        this.next();
-      } else if (trigger.hasClass('previous')) {
-        this.previous();
-      } else if (trigger.getProperty('href').match(/^#.*/)) {
-        var gum = trigger.getProperty('href').match(/^#(\w+)#?(\w+)?/)
-        // checks if step belongs to the form and displays it. other wise clones it as the next part of the form
-        this.select($(gum[1]),$(gum[2]));
-        
-      }
-               
-      this.fireEvent('onTrigger', trigger);   
-               // this[trigger.getProperty('href')]();
-
-    },
+  
     
     previous:function() {
       var p = this.options.current.getPrevious(this.options.step);
       this.select(p);
     },
+    
+    reset:function() {
+      if($chk(this.el.getElement('.suggestions'))) {
+        this.el.getElement('.suggestions').empty();
+      }
+      if($chk(this.listener)) {
+        this.listener.set('value', '');
+        this.fireEvent('onClear', this.listener);
+      }
+    },
+
     
     next:function() {
       var n = this.options.current.getNext(this.options.step);

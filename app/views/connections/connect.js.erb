@@ -1,14 +1,5 @@
-<div style="padding:20px 40px 20px 20px">
-    <h5>You connected with</h5>
-    <%= render_tag @connection_from.subject  %>
-    <div class="delimiter">&nbsp;</div>
-    <% if @subject.tags.empty? %>
-      <h3>Public tags<h3>
-      <h5>What is <%= @subject.label %>?</h5>
-      <%= text_area_tag :kinds %>
-    <% end -%>
-    <h5>What connection does it have with <%= @object.label %>?</h5>
-    <%= text_area_tag :tags %>
-     <div class="delimiter">&nbsp;</div>
-    <%= link_to "Save", "/connections/tag/#{@connection_from.id}", :class => "trigger button" %>
-</div>
+<%= render_tag @connection_from.subject  %>
+<p>was connect to <%= @connection_from.object.label.capitalize %>.</p>
+<%= link_to "Visit #{@connection_from.subject.label}'s nuniverse now", visit_url(@connection_from.subject.id, current_user.tag)%>
+<div class="delimiter">&nbsp;</div>
+<%= link_to "#{image_tag("/images/icons/heart.png")} Save to my nuniverse", konnect_url(@connection_from.subject.id, current_user.tag_id) %>

@@ -1,5 +1,6 @@
 var PopUp = new Class({
   Extends:Steppable,
+  Implements:[Taggable],
   options: {
     draggable:false,
     offset:{'x':0,'y':0},
@@ -71,7 +72,7 @@ var PopUp = new Class({
   setContent:function(el) {
     this.content.empty();
     this.content.set('html',el.get('html'));
-    this.content.setStyles({'padding':el.getStyle('padding')});
+    // this.content.setStyles({'padding':el.getStyle('padding')});
       
     if($chk(el.getElement('.preview_url'))) {
       this.callRequest({url:el.getElement('.preview_url').get('href')});
