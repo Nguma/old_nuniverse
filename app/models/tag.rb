@@ -247,5 +247,16 @@ class Tag < ActiveRecord::Base
 		self.save
 	end
 	
+	
+	def thumbnail 
+		image_tag = self.kind == "image" ? self : self.subjects.with_kind('image').first
+		if image_tag.nil?
+			return self.property("thumbnail") unless self.property("thumbnail").blank?
+			return "images/icons/#{self.kind}.png"
+		else
+			image_tag.source.public_filename(:small)
+		end
+	end
+	
 
 end

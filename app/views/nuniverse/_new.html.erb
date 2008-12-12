@@ -5,9 +5,9 @@
 <h3><%= link_to image_tag("/images/icons/image.png", :width => 40), "#", :id => "connect_image_lnk", :class => "expand_lnk" %></h3>
 <h3><%= link_to image_tag("/images/icons/location.png", :width => 40), "#", :id => "connect_location_lnk", :class => "expand_lnk" %></h3>
 <h3><%= link_to image_tag("/images/icons/email.png", :width => 40), "#", :id => "connect_email_lnk", :class => "expand_lnk" %></h3>
-<div style="position:relative;display:block;background:#eee;">
+<div style="position:relative;display:block;background:#526688;">
   <%= spinner %>
-  <div class="response" style="display:block"></div>
+  <div class="response" style="display:block;"></div>
   <div class="hidden connect_form" id="connect_nuniverse_form" >
    
         <% form_tag "/tags/suggest" do -%>
@@ -51,21 +51,19 @@
   </div>  
   
   <div class="hidden connect_form" id="connect_email_form" >
-    
-        <% form_tag "/ws/suggest_address"  do -%>
-        <h2>Email this to</h2>
-          <fieldset>
-            <div class="data hidden"></div>
-            <%= hidden_field_tag "id", @tag.id %>
-            <%= hidden_field_tag "kind", "address" -%>
-            <label>Type in as many email addresses, comma delimited</label><br/>
-            <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
-            <%= text_area_tag "message", "", :width => "100%", :autocomplete => "off"%>
-            <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
-          </fieldset>
-         
-          <%= link_to "Send", send_email_url(@tag), :class => "trigger button", :mode => "email"  %>
-        <% end -%>
+    <% form_tag "/ws/suggest_address"  do -%>
+      <h2>Email this to</h2>
+      <fieldset>
+        <div class="data hidden"></div>
+        <%= hidden_field_tag "id", @tag.id %>
+        <%= hidden_field_tag "kind", "address" -%>
+        <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off", :id => "input_email"%><br/>
+        <%= text_area_tag "message", "", :width => "100%;background:#fff", :autocomplete => "off"%>
+        <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
+      </fieldset>
+     
+      <%= link_to "Send", send_email_url(@tag), :class => "trigger button", :mode => "email"  %>
+    <% end -%>
   </div>
   <div style="clear:left"></div>
   <div style="position:absolute;width:auto;z-index:7890987;">

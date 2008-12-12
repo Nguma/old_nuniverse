@@ -361,7 +361,6 @@
 	width:500px;
 }
 
-
 #input_new_tag {
 	background:#FFF url('/images/backgrounds/input_new_tag.png') 0 0 no-repeat;
 	width:250px;
@@ -377,12 +376,18 @@
 	width:550px;
 }
 
+#input_email {
+	background:#FFF url('/images/backgrounds/input_email.png') 0 0 no-repeat;
+	width:700px;	
+}
+
 #input_visit.filled,
 #input_filter.filled,
 #input_image.filled,
 #input_new_tag.filled,
 #input_connect.filled,
 #input_bookmark.filled,
+#input_email.filled,
 #input_address.filled,
 input.filled {
 	background:#FFF;

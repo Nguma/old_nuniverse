@@ -5,7 +5,7 @@ module TagsHelper
 		params[:tag] = tag
 		params[:url] ||= visit_url(tag, current_user.login)
 		params[:mode] ||= nil
-		render :partial => "/#{tag.kind.downcase.pluralize.to_s}/tag", :locals => params
+		render :partial => "/#{tag.kind.downcase.pluralize.to_s}/tag", :locals => params rescue render :partial => "/tags/tag", :locals => params
 	end
 	
 	def link_to_visit(tag, params ={})

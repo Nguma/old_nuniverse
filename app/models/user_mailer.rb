@@ -101,7 +101,7 @@ class UserMailer < ActionMailer::Base
 			items.each_with_index do |item,i|
 				unless item.object.thumbnail.blank?
 					inline_attachment :content_type => "image/jpeg", 
-					                  :body => File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
+					                  :body => item.object.thumbnail.match(/^http:\/\//) ? item.object.thumbnail : File.read("#{RAILS_ROOT}/public/#{item.object.thumbnail}"),
 					                  :filename => item.object.thumbnail,
 					                  :cid => "<#{item.object.thumbnail}@nuniverse.net>"
 				end

@@ -46,7 +46,7 @@ class Connection < ActiveRecord::Base
 	}
 
 	named_scope :with_object_kind, lambda { |kind| 
-		kind.nil? ? {} : {:conditions => ["tags.taggable_type = ?", kind], 
+		kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], 
 			:joins => "LEFT OUTER JOIN tags ON connections.object_id = tags.id "
 			}
 	}

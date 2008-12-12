@@ -1,9 +1,8 @@
-<%= render_tag connection.subject %>
+  <%= render_tag connection.subject %>
   <%= connection.subject.description %>
-  <div style="position:absolute;top:25px;right:30px;width:20px">
-    <%= add_to_fav_link(connection) %>
-    <%= link_to image_tag("/images/icons/comment.png", :style => "height:30px"), "/comments/new", :class => "trigger" %>
-  </div>
+  <%= add_to_fav_link(connection) %>
+  <%= link_to image_tag("/images/icons/comment_lnk.png"), "/comments/new", :class => "trigger comment_lnk" %>
+ 
   <div class="delimiter">&nbsp;</div>
 <h5>Connected to <%= connection.object.label %> as</h5>
 <% connection.tags.each do |tag| -%>

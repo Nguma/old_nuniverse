@@ -96,11 +96,6 @@
 	top:-16px;
 }
 
-#preview_box #add_to_fav_btn {
-
-}
-
-
 #preview_box .hide_in_preview {
 	display:none;
 }
@@ -189,7 +184,18 @@
 
 #preview_box .add_to_fav_lnk {
 	display:block;
+	position:absolute;
+	top:-15px;
+	right:17px;
 }
+
+#preview_box .comment_lnk {
+	display:block;
+	position:absolute;
+	top:22px;
+	right:-20px;
+}
+
 
 #preview_box .overview {
 	padding:0px 20px 0px 0px;
@@ -224,7 +230,11 @@
 	background:none;
 	height:auto;
 	width:auto;
+}
 
+#preview_box p {
+	color:#666;
+	font-size:12px;
 }
 
 #preview_box a {

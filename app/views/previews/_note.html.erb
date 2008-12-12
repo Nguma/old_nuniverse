@@ -10,5 +10,11 @@
   </dd>
   <% end -%>
   <br/>
-  <%= link_to "Reply", "/comments/new?kind=reply" , :class => "trigger"%>
+  
+ 
 </dl>
+<h3>Post a reply</h3>
+ <%= text_area_tag "body" %>
+ <%= hidden_field_tag :subject, note.id %>
+ <%= hidden_field_tag :kind, "reply" %>
+ <%= link_to(image_tag("/images/icons/add_button.png"), "/comments/create", :class => "trigger")%>

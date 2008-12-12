@@ -25,6 +25,8 @@
         <p style="color:#999">
           <%#= Nuniverse.collect_infos(:connection => item, :current_user => @sender, :kind => item.kind) %>
           <%= item.kind %>
+          <%= item.tags.join(', ')%>
+          <%= item.object.description %>
         </p>
         
       </td>

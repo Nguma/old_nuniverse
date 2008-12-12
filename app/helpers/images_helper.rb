@@ -24,7 +24,7 @@ module ImagesHelper
 			end
 		
 		else
-			raise image_tag.inspect if image_tag.source.nil?
+	
 			img = @mode == "image" ? image_tag.source.public_filename : image_tag.source.public_filename(:small)
 		end
 		

@@ -94,7 +94,7 @@ var Requestable = new Class({
 });
 
   var Keymapped = new Class({
-    listener:$empty,
+   
     
     setKeyListener:function(listener) {
       if(!$chk(listener)) return;
@@ -205,6 +205,7 @@ var Requestable = new Class({
         this.el.getElement('.suggestions').empty();
       }
       if($chk(this.listener)) {
+        console.log(this.listener);
         this.listener.set('value', '');
         this.fireEvent('onClear', this.listener);
       }

@@ -184,13 +184,17 @@ function reset()
       
       onTrigger:function(t) {
         this.mode = t.get('mode');
+
         if(t.getProperty('href') != '#') {
           
           switch(this.mode) {
             case "suggest":
             
-              preview_box.el.getElement('.data').set('html',this.el.getElement('fieldset').get('html'));
+              // preview_box.el.getElement('.data').set('html',this.el.getElement('fieldset').get('html'));
             case "connect":
+              this.callRequest({url:t.get('href')});
+              this.collapse();
+              break;
             case "create":
               preview_box.callRequest({url:t.get('href')});
               this.reset();
@@ -198,7 +202,7 @@ function reset()
             
             default:
               this.callRequest({url:t.get('href')});
-              
+              this.collapse();
                // 
               
           }
@@ -221,6 +225,7 @@ function reset()
       },
 
       onSuccess:function(updated) {
+       
         switch(this.mode) {
           case "suggest":
             updated.getElements('.box').each(function(box) {
@@ -235,7 +240,7 @@ function reset()
           case "connect":
           case "image":
           case "bookmark":
-            
+
             this.collapse();
             // filterBox.callRequest();
             preview(updated);
@@ -244,7 +249,9 @@ function reset()
             filterBox.callRequest.delay(200, filterBox, {delay:200});
             break;
           default:
-            
+      
+            this.collapse();
+            filterBox.callRequest.delay(200, filterBox, {delay:200});
         }
         
         this.setTriggers(this.request.options.update);

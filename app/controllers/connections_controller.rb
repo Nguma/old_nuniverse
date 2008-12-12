@@ -31,7 +31,7 @@ class ConnectionsController < ApplicationController
 	end
 	
 	def preview
-		@connections = @connection.connections.with_kind('nuniverse').paginate(:per_page => 10, :page => 1)
+		@connections = @connection.connections.with_object_kind('nuniverse').paginate(:per_page => 10, :page => 1)
 	end
 	
 	def tag

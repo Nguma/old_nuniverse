@@ -4,11 +4,9 @@
     <fieldset>
     <%= hidden_field_tag "object", @tag.id %>
     <%= hidden_field_tag "kinds", "" %>
-    
-   
     <%= text_area_tag "body", "",  :rows => 3, :style => "min-width:520px;display:block;background:#FFF", :autocomplete => "off"%>
     </fieldset>
     <div class="delimiter">&nbsp;</div>
-    <%= link_to image_tag('/images/icons/add_button.png'), "/comments/create", :class => "trigger", :mode => "connect"  %>
+    <%= link_to image_tag('/images/icons/add_button.png'), "/comments/create", :class => "trigger", :mode => "comment"  %>
   <% end -%>   
 </div>
