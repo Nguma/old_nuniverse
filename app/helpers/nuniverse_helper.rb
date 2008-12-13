@@ -107,7 +107,7 @@ module NuniverseHelper
 			render(
 				:partial => "/nuniverse/instance",
 				:locals => params
-		), block.binding)		
+		))		
 	end
 	
 	def render_hat(params)
