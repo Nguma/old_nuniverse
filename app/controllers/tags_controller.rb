@@ -27,7 +27,7 @@ class TagsController < ApplicationController
 		# @list = List.new(:label => @kind, :creator => current_user)
 		# @tag.kind = @kind
 		@source = @tag
-		
+		@filter = params[:input]
 		@title = "#{@tag.kind}: #{@tag.label.capitalize}"
 		@input = params[:input] || nil
 		@service = @user.login
@@ -42,16 +42,17 @@ class TagsController < ApplicationController
 		@user_count = Connection.with_object(@tag).with_subject_kind('user').count
 		@image_count = Connection.with_object(@tag).with_subject_kind('image').count
 		@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
+		@product_count = Connection.with_object(@tag).with_subject_kind('product').count
 		
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
 		else
-			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
+			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(@filter).distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
 		end
 		
 		respond_to do |f|
 			f.html {
-				@categories = Connection.with_object(@tag).gather_tags
+				@categories = Connection.with_object(@tag).with_subject_kind(@kind).gather_tags
 			}
 			f.js {
 				

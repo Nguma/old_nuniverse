@@ -101,10 +101,11 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		@tags = Tag.tagged('city')
+		@tags = Tag.find(:all, :conditions => ['kind = ?', params[:kind]])
 		@tags.each do |tag|
-			tag.kind = "location"
+			tag.kind = "nuniverse"
 			tag.save
+			tag.tag_with(params[:kind])
 		end
 		render :nothing => true
 		

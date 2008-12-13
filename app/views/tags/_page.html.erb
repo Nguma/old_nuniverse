@@ -1,5 +1,5 @@
 <div id="sub_menu">
-  <h2><%= items.size %> <%= @kind.pluralize.capitalize %></h2>
+  <h2><%= items.size %> <%= @kind.pluralize.capitalize %> <%= " matching \"#{@filter}\"" if @filter%></h2>
   <% if items.empty? -%>
     <h3>No <%= @kind.pluralize %> are connected to <%= @tag.label %></h3>
     
