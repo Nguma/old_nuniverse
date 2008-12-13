@@ -112,19 +112,21 @@ class UsersController < ApplicationController
 		
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
 		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
+		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
+		
 		@tag = current_user.tag
 		@perspective = current_user.tag
-		@order = params[:order] || "by_latest"		
+			
 		@source = current_user.tag
 		@input = params[:input]
-		@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).paginate(:per_page => 15, :page => params[:page] || 1)
+		@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).order_by(@order).paginate(:per_page => 15, :page => params[:page] || 1)
 
 		respond_to do |format|
 			format.html {
 				update_session
 
 				@title = "#{current_user.login}'s nuniverse"
-				@categories = Connection.with_object(current_user.tag).gather_tags.paginate(:page => @page, :per_page => 200)
+				@categories = Connection.with_object(@tag).with_subject_kind(@kind).gather_tags.paginate(:page => @page, :per_page => 200)
 			
 			}	
 			format.js { 

@@ -13,7 +13,6 @@ class CommentsController < ApplicationController
 		@comment.tag_with('note')
 		@c = @comment.tag.connect_with(@object, :as => @kind, :user => current_user)
 	
-	
 		respond_to do |f|
 			f.html {}
 			f.js {}

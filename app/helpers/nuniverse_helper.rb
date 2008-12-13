@@ -225,8 +225,9 @@ module NuniverseHelper
 	
 	
 	def main_menu_item item
+		count = Connection.with_object(@tag).with_subject_kind(item).count
 		lnk = link_to image_tag("/images/icons/#{item}.png"), visit_url(@tag.id, current_user.login, :kind => item), :id => "connect_#{item}_lnk"
-		"<dd class = '#{(item == @kind) ? "activated" : ""}'>#{lnk}</dd>"
+		"<dd class = '#{(item == @kind) ? "activated" : ""}'>#{lnk}<span class='count'>#{count}</span></dd>"
 	end
 	
 end

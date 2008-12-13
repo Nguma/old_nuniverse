@@ -40,7 +40,7 @@ class Tag < ActiveRecord::Base
 		end
 
 		if tag.kind != "Category"
-			Connection.create (
+			Connection.create(
 				:subject => tag,
 				:object => self,
 				:public => 1

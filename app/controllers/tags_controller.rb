@@ -18,9 +18,11 @@ class TagsController < ApplicationController
   # GET /tags/1.xml
   def show	
 		@page = params[:page] || 1
-		@order = params[:order] || "created_at DESC"
-		redirect_to "/users/show/#{current_user.id}" if @tag == current_user.tag
+
+		# redirect_to "/users/show/#{current_user.id}" if @tag == current_user.tag
+		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
 		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
+		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
 		
 		# @list = List.new(:label => @kind, :creator => current_user)
 		# @tag.kind = @kind
@@ -33,9 +35,16 @@ class TagsController < ApplicationController
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
 		@mode = @mode.blank? ? 'card' : @mode
 		
+		@video_count = Connection.with_object(@tag).with_subject_kind('video').count
+		@bookmark_count = Connection.with_object(@tag).with_subject_kind('bookmark').count
+		@nuniverse_count = Connection.with_object(@tag).with_subject_kind('nuniverse').count
+		@location_count = Connection.with_object(@tag).with_subject_kind('location').count
+		@user_count = Connection.with_object(@tag).with_subject_kind('user').count
+		@image_count = Connection.with_object(@tag).with_subject_kind('image').count
+		@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
+		
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
-		
 		else
 			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
 		end

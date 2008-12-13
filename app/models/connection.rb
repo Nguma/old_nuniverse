@@ -11,11 +11,11 @@ class Connection < ActiveRecord::Base
 	before_destroy :destroy_taggings
 	
 	named_scope :with_subject, lambda { |subject|
-    subject.nil? ? {} :  {:conditions => ["connections.subject_id in (?)", subject.to_a.collect {|c| c.is_a?(Tag) ? c.id : c}] } 
+    subject.nil? ? {} :  {:conditions => ["connections.subject_id in (?)", [*subject].collect {|c| c.is_a?(Tag) ? c.id : c}] } 
 
   }
   named_scope :with_object, lambda { |object|
-    object.nil? ? {} : {:conditions => ["connections.object_id in (?)", object.to_a.collect {|c| c.is_a?(Tag) ? c.id : c}]}
+    object.nil? ? {} : {:conditions => ["connections.object_id in (?)", [*object].collect {|c| c.is_a?(Tag) ? c.id : c}]}
 
   }
 
@@ -38,8 +38,6 @@ class Connection < ActiveRecord::Base
 		}
 	}
 	
-
-	
 	named_scope :named, lambda { |name| 
 		name.nil? ? {} : {
 			:conditions => ["O.label rlike ?", "^#{name}"],
@@ -49,6 +47,7 @@ class Connection < ActiveRecord::Base
 
 	named_scope :with_subject_kind, lambda { |kind| 
 		kind.nil? ? {} : {
+
 			:conditions => ["S.kind = ?", kind],
 			:joins => ["LEFT OUTER JOIN tags S on S.id = connections.subject_id "]
 		}
@@ -65,7 +64,7 @@ class Connection < ActiveRecord::Base
 	named_scope :with_user_list, :group => "connections.subject_id", :joins => "LEFT OUTER JOIN favorites on favorites.connection_id = connections.id", :select => ["connections.*, GROUP_CONCAT(favorites.user_id SEPARATOR ',') AS users"]
 	named_scope :gather, :select => " *, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id LEFT OUTER JOIN favorites ON favorites.connection_id = connections.id"
 	
-	named_scope :gather_tags, :select => "taggings.predicate, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "INNER JOIN tags S on S.id = connections.subject_id LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag') OR (taggings.taggable_type = 'Connection' AND taggings.taggable_id = connections.id)"
+	named_scope :gather_tags, :select => "taggings.predicate, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => " LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag') OR (taggings.taggable_type = 'Connection' AND taggings.taggable_id = connections.id)"
 
 	
 	named_scope :order_by, lambda { |order| 
@@ -98,7 +97,6 @@ class Connection < ActiveRecord::Base
 		tags.each do |tag|
 			Tagging.create(:taggable => self, :predicate => tag.strip) 
 		end
-		
 	end
 
 	
@@ -106,8 +104,8 @@ class Connection < ActiveRecord::Base
 		case order
 		when "by_latest"
 			"connections.created_at DESC"
-		when "name"
-			"object.label ASC"
+		when "by_name"
+			"S.label ASC"
 		else
 		end
 		

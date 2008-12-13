@@ -70,7 +70,7 @@ class Image < ActiveRecord::Base
 	end
 	
 	def create_tag
-		t = Tag.create! (
+		t = Tag.create!(
 			:label => self.filename,
 			:kind => 'image'
 		)

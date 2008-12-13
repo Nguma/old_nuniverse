@@ -368,10 +368,26 @@ a.saved {
 	position:relative;
 	float:left;
 	padding:5px;
+	color:#FFF;
+	text-align:center;
 }
 
 #main_menu .activated {
 	background:#27406a;
+}
+
+#main_menu .count {
+	position:absolute;
+	top:40px;
+	left:0;
+
+	width:50px;
+	height:30px;
+	font-size:12px;
+	font-weight:bold;
+/*	background:transparent url('/images/backgrounds/count.png') 0 0 no-repeat;*/
+	color:#eee;
+	text-align:center;
 }
 
 #main_menu .suggestions .connection {
