@@ -31,23 +31,32 @@ class Connection < ActiveRecord::Base
 	
 	named_scope :tagged_or_named, lambda { |q| 
 		q.nil? ? {} : {
-			:select => "connections.*",
-			:conditions => ['taggings.predicate rlike ? OR T.label rlike ?', q.to_a.join('|'), q.to_a.join('|')],
-			:joins => "LEFT OUTER JOIN tags T on T.id = connections.subject_id LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.id AND taggings.taggable_type = 'Connection') OR (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag')",
+			:select => ["connections.*, S.*"],
+			:conditions => ['taggings.predicate rlike ? OR S.label rlike ?', q.to_a.join('|'), q.to_a.join('|')],
+			:joins => ["LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.id AND taggings.taggable_type = 'Connection') OR (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag')"],
 			:group => "connections.subject_id HAVING count(connections.subject_id) >= #{q.to_a.length}"
 		}
 	}
 	
+
+	
 	named_scope :named, lambda { |name| 
 		name.nil? ? {} : {
-			:conditions => ["tags.label rlike ?", "^#{name}"],
-			:joins => "INNER JOIN tags on tags.id = connections.subject_id"
+			:conditions => ["O.label rlike ?", "^#{name}"],
+			:joins => "INNER JOIN tags O on O.id = connections.subject_id"
 		}
 	}
 
+	named_scope :with_subject_kind, lambda { |kind| 
+		kind.nil? ? {} : {
+			:conditions => ["S.kind = ?", kind],
+			:joins => ["LEFT OUTER JOIN tags S on S.id = connections.subject_id "]
+		}
+	}
+	
 	named_scope :with_object_kind, lambda { |kind| 
-		kind.nil? ? {} : {:conditions => ["tags.kind = ?", kind], 
-			:joins => "LEFT OUTER JOIN tags ON connections.object_id = tags.id "
+		kind.nil? ? {} : {:conditions => ["O.kind = ?", kind], 
+			:joins => "LEFT OUTER JOIN tags O ON connections.object_id = O.id "
 			}
 	}
 	named_scope :by_kind, :group => "predicate", :select => ["connections.*, count(distinct subject_id) AS counted"], :joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id "
@@ -56,7 +65,7 @@ class Connection < ActiveRecord::Base
 	named_scope :with_user_list, :group => "connections.subject_id", :joins => "LEFT OUTER JOIN favorites on favorites.connection_id = connections.id", :select => ["connections.*, GROUP_CONCAT(favorites.user_id SEPARATOR ',') AS users"]
 	named_scope :gather, :select => " *, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "LEFT OUTER JOIN taggings ON taggings.connection_id = connections.id LEFT OUTER JOIN favorites ON favorites.connection_id = connections.id"
 	
-	named_scope :gather_tags, :select => "taggings.predicate, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag') OR (taggings.taggable_type = 'Connection' AND taggings.taggable_id = connections.id)"
+	named_scope :gather_tags, :select => "taggings.predicate, count(DISTINCT subject_id) AS counted",  :group => "taggings.predicate", :joins => "INNER JOIN tags S on S.id = connections.subject_id LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag') OR (taggings.taggable_type = 'Connection' AND taggings.taggable_id = connections.id)"
 
 	
 	named_scope :order_by, lambda { |order| 

@@ -2,7 +2,7 @@
 
 # Add new inflection rules using the following format 
 # (all these examples are active by default):
-Inflector.inflections do |inflect|
+ActiveSupport::Inflector.inflections do |inflect|
 	inflect.plural(/$/, 's')
   inflect.plural(/s$/i, 's')
   inflect.plural(/(ax|test)is$/i, '\1es')

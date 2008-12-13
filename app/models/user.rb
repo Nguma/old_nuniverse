@@ -43,6 +43,7 @@ class User < ActiveRecord::Base
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 	has_many :perspectives, :foreign_key => :user_id
 	has_many :taggings, :as => :taggable
+
 	
 
 	alias_attribute :title, :label
@@ -99,11 +100,7 @@ class User < ActiveRecord::Base
 	
 	def connections(params = {})
 
-		Connection.with_object(self.tag).tagged_or_named(params[:label]).order_by(params[:order]).distinct.paginate(
-				:page => params[:page]||1, 
-				:per_page => params[:per_page] || 3
-			)
-		
+		self.tag.connections_from
 		
 	
 	end

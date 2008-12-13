@@ -101,13 +101,10 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		@tags = Tag.find(:all, :conditions => 'description IS NOT NULL')
+		@tags = Tag.tagged('city')
 		@tags.each do |tag|
-			begin
-				tag.taggable.description = tag.description
-				tag.taggable.save
-			rescue
-			end
+			tag.kind = "location"
+			tag.save
 		end
 		render :nothing => true
 		

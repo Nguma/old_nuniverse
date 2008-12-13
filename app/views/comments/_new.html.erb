@@ -1,5 +1,4 @@
-<div class="hidden connect_form" id="connect_note_form" >
-  <% form_tag "/comments/create" do -%>
+<% form_tag "/comments/create" do -%>
     <h2>Post a note</h2>
     <fieldset>
     <%= hidden_field_tag "object", @tag.id %>
@@ -9,4 +8,3 @@
     <div class="delimiter">&nbsp;</div>
     <%= link_to image_tag('/images/icons/add_button.png'), "/comments/create", :class => "trigger", :mode => "comment"  %>
   <% end -%>   
-</div>

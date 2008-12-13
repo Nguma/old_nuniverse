@@ -1,0 +1,13 @@
+ <% form_tag "/ws/suggest_address"  do -%>
+    <h2>Email this to</h2>
+    <fieldset>
+      <div class="data hidden"></div>
+      <%= hidden_field_tag "id", @tag.id %>
+      <%= hidden_field_tag "kind", "address" -%>
+      <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off", :id => "input_email"%><br/>
+      <%= text_area_tag "message", "", :width => "100%;background:#fff", :autocomplete => "off"%>
+      <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
+    </fieldset>
+   
+    <%= link_to "Send", send_email_url(@tag), :class => "trigger button", :mode => "email"  %>
+  <% end -%>

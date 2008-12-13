@@ -179,7 +179,7 @@ function reset()
     var c = new Steppable(form, {
       
       spinner:form.getParent().getElement('.spinner'),
-      update:form.getPrevious('.response'),
+      update:$('content'),
       listener:form.getElement('.input'),
       
       onTrigger:function(t) {
@@ -271,25 +271,46 @@ function reset()
       }
       
     });
-    
-    $$('a#'+form.getProperty('id').replace(/_form/, '_lnk')).each(function(lnk) {
   
-      lnk.addEvent('click', function(ev) {
-        ev.preventDefault();
-        var previous = $('main_menu').getElement('.activated');
-        
-        lnk.getParent().toggleClass('activated');
-        c.toggle();
+    
+    // $$('a#'+form.getProperty('id').replace(/_form/, '_lnk')).each(function(lnk) {
+    //  
+    //      lnk.addEvent('click', function(ev) {
+    //        ev.preventDefault();
+    //        var previous = $('main_menu').getElement('.activated');
+    //        
+    //        lnk.getParent().toggleClass('activated');
+    //        c.toggle();
+    // 
+    //        if($chk(previous) && (previous != lnk.getParent())) { 
+    //          previous.removeClass('activated');
+    //          $(previous.getElement('a').getProperty('id').replace(/_btn|_lnk/,'_form')).addClass('hidden');
+    //        }
+    //      });
+    //    });
+    
+    
+    
+  });
+  
+  // $('main_menu').getElements('dd').each(function(lnk) {
+  //     
+  //     lnk.getElement('a').addEvent('click', function(ev) {
+  //       ev.preventDefault();
+  //       var previous = $('main_menu').getElement('.activated');
+  //       if($chk(previous)) { previous.removeClass('activated'); }
+  //       lnk.addClass('activated');
+  //       
+  //     });
+  //   });
+  
+  $$('.expand_lnk').each(function(lnk) {
+    lnk.addEvent('click', function(ev) {
+      ev.preventDefault();
+      var expanded = $(lnk.get('id').replace(/^expand_|_lnk/g,''));
 
-        if($chk(previous) && (previous != lnk.getParent())) { 
-          previous.removeClass('activated');
-          $(previous.getElement('a.expand_lnk').getProperty('id').replace(/_btn|_lnk/,'_form')).addClass('hidden');
-        }
-      });
+      if($chk(expanded)) { expanded.toggleClass('hidden');}
     });
-    
-    
-    
   });
   
 }

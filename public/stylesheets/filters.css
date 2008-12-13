@@ -3,9 +3,9 @@
 	display:block;
 	width:auto;	
 	list-style-type:none;
-	padding:0;
+	padding:5px 0;
 	font-size:13px;
-	margin:10px 0 0 0;
+	margin:0 0 0 0;
 }
 
 .tabs .tab {
@@ -14,7 +14,6 @@
 	margin: 0 5px 0 0;
 	font-size:13px;
 	font-weight:bold;
-	color:#999;
 }
 
 
@@ -22,10 +21,10 @@
 	display:block;
 }
 
-.tabs .current {
+#sub_menu .current {
 	border-bottom:none;
 	font-weight:bold;
-	color:#333;
+	color:#FFF;
 }
 
 .tabs dd img {
@@ -38,4 +37,20 @@
 	position:absolute;
 	right:5px;
 	top:10px;
+}
+
+#content .pagination {
+	position:relative;
+	float:right;
+	width:200px;
+	padding:5px;
+	margin:0;
+	
+	text-align:right;
+	z-index:456789;
+	font-size:14px;
+}
+
+.pagination .current {
+	font-size:14px;
 }

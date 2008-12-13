@@ -20,12 +20,13 @@ class TagsController < ApplicationController
 		@page = params[:page] || 1
 		@order = params[:order] || "created_at DESC"
 		redirect_to "/users/show/#{current_user.id}" if @tag == current_user.tag
-		@kind = params[:kind].singularize rescue @tag.kind
+		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
+		
 		# @list = List.new(:label => @kind, :creator => current_user)
 		# @tag.kind = @kind
 		@source = @tag
 		
-		@title = "#{@kind.capitalize}: #{@tag.label.capitalize}"
+		@title = "#{@tag.kind}: #{@tag.label.capitalize}"
 		@input = params[:input] || nil
 		@service = @user.login
 		
@@ -36,7 +37,7 @@ class TagsController < ApplicationController
 			@items = service_items(@tag.label)
 		
 		else
-			@items = @tag.connections_to.tagged_or_named(params[:input]).with_user_list.distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
+			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
 		end
 		
 		respond_to do |f|

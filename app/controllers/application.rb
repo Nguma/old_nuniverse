@@ -55,6 +55,7 @@ class ApplicationController < ActionController::Base
 		session[:mode] = @mode
 		session[:service] = @service
 		session[:perspective] = @perspective
+		session[:kind] = @kind
 		if @tag	
 			session[:previous] = session[:current] unless session[:current] == @tag.id
 			session[:current] = @tag.id

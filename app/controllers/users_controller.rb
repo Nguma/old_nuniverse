@@ -94,7 +94,7 @@ class UsersController < ApplicationController
 			f.js {}
 		end
 	end
-  
+	
   # There's no page here to update or destroy a user.  If you add those, be
   # smart -- make sure you check that the visitor is authorized to do so, that they
   # supply their old password along with a new one to update it, etc.
@@ -111,16 +111,14 @@ class UsersController < ApplicationController
 		@user = current_user
 		
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
+		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
 		@tag = current_user.tag
 		@perspective = current_user.tag
-		@order = params[:order] || "by_latest"
-		@kind = params[:kind] || nil
-		
+		@order = params[:order] || "by_latest"		
 		@source = current_user.tag
 		@input = params[:input]
-		@items = current_user.connections(:label => @input, :per_page => 15, :page => params[:page] || 1, :order => @order)
-		
-		
+		@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).paginate(:per_page => 15, :page => params[:page] || 1)
+
 		respond_to do |format|
 			format.html {
 				update_session

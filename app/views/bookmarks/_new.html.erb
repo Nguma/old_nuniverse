@@ -1,0 +1,7 @@
+<% form_tag "/tags/suggest"  do -%>
+    <h2>Add a bookmark.</h2>
+    <%= hidden_field_tag "object", @tag.id %>
+    <%= hidden_field_tag "kind", "bookmark" -%>
+    <%= text_field_tag "url", "", :class => "input", :autocomplete => "off", :id => "input_bookmark"%>
+    <%= link_to image_tag('/images/icons/add_button.png'), create_and_connect_url(@tag), :class => "trigger", :mode => "bookmark"  %>
+  <% end -%>

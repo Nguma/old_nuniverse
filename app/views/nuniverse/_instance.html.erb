@@ -9,17 +9,13 @@
     
 
   <% end -%>
-  <div class="delimiter">&nbsp;</div>
-  <div style="position:relative;float:right;width:300px;margin:50px 0 0 0">
+
+  <%= render :partial => "/nuniverses/main_menu"%>
+  <div style="position:relative;float:right;width:300px;margin:0 0 0 0">
     <%= yield :right_col %>
   </div>
-  <div style="position:relative;width:auto;margin:0 310px 0 0;">
-    <div id="main_menu">
-      
-      <%= yield :nav %>
-    </div>
-    
-  <%= content %>
+  <div style="position:relative;width:auto;margin:0 310px 0 0;padding:0">
+    <%= content %>
   </div>
   <div class="delimiter" style="clear:both">&nbsp;</div>
   

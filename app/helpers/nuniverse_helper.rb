@@ -224,4 +224,9 @@ module NuniverseHelper
 	end
 	
 	
+	def main_menu_item item
+		lnk = link_to image_tag("/images/icons/#{item}.png"), visit_url(@tag.id, current_user.login, :kind => item), :id => "connect_#{item}_lnk"
+		"<dd class = '#{(item == @kind) ? "activated" : ""}'>#{lnk}</dd>"
+	end
+	
 end

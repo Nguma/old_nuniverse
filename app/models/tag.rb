@@ -7,6 +7,7 @@ class Tag < ActiveRecord::Base
 	
 	has_many :taggings, :as => :taggable
 	belongs_to :taggable, :polymorphic => true
+
 	
 	validates_presence_of :label
 	
@@ -152,10 +153,10 @@ class Tag < ActiveRecord::Base
 		return url.nil? ?  {} : {:conditions => ["url = ?", "#{url}"]}
 	}
 
-	named_scope :with_tags, lambda { |kind| 
+	named_scope :tagged, lambda { |kind| 
 		return kind.nil? ? {} : {
-			:joins => "LEFT OUTER JOIN connections on connections.subject_id = tags.id",
-			:conditions => ["connections.predicate = #{kind} OR tags.kind = #{kind} "]}
+			:joins => "LEFT OUTER JOIN taggings on taggings.id = tags.id AND taggings.taggable_type = 'Tag'",
+			:conditions => ["taggings.predicate = '#{kind}'"]}
 	}
 		
 		

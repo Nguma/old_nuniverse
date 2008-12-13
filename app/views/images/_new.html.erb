@@ -1,5 +1,4 @@
-<div class="hidden connect_form" id="connect_image_form" >
-  <% form_tag  create_and_connect_url(@tag) , { :multipart => true } do -%>
+<% form_tag  "/images/create" , { :multipart => true } do -%>
     <h2>Add an image</h2>
     <fieldset>
       <div class="data hidden">&nbsp;</div>
@@ -11,7 +10,6 @@
 
       <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
     </fieldset>
-    <%= link_to image_tag('/images/icons/add_button.png'), "/images/create", :class => "trigger", :mode => "image"  %>
+    <%= submit_tag "Add"  %>
 
-  <% end -%>
-</div>
+<% end -%>

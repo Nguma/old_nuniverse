@@ -311,15 +311,14 @@
 
 .connect_form {
 	position:relative;
-	float:left;
-	background:#27406a url('/images/backgrounds/connect_form.png') 0 0 repeat-x;
+	padding:0;
 	width:100%;
 	
 }
 
 .connect_form form {
 	display:block;
-	padding:20px;
+	padding:0;
 }
 
 .connect_form label {

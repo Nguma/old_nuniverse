@@ -5,7 +5,8 @@ class ImagesController < ApplicationController
   end
   
   def create
-    if @image = Image.create!(:source_url => params[:source_url], :uploaded_data => params[:uploaded_data])
+	
+    if @image = Image.create!(:source_url => params[:source_url].blank? ? nil : params[:source_url], :uploaded_data => params[:uploaded_data])
 			@tag = @image.tag
 			@image.tag.tag_with('image')
 			@object = Tag.find(params[:object])
@@ -14,7 +15,7 @@ class ImagesController < ApplicationController
 		end
 		
 		respond_to do |f|
-			f.html {}
+			f.html { redirect_to visit_url(@object.id, current_user.login)}
 			f.js {}
 		end
   end
