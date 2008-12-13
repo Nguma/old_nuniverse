@@ -53,11 +53,17 @@ namespace :deploy do
   # task :after_update do
   #    # sudo "cp #{release_path}/config/database.example.yml #{release_path}/config/database.yml"
   #  end
-  
-  task :restart do
-    stop
-    start
-  end
+	
+	desc "restart override"
+	task :restart, :roles => :app do
+	  run "killall -9 ruby"
+	end
+	
+	
+  # task :restart do
+  #   stop
+  #   start
+  # end
     
 
 	task :after_update, :roles => :app do
