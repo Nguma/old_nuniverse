@@ -170,6 +170,10 @@ class TagsController < ApplicationController
 		else
 			render :nothing => true
 		end
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 
 
