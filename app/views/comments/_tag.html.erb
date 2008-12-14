@@ -1,4 +1,4 @@
 <%= image_tag("/images/icons/comment.png", :style => "float:left;position:relative;margin:0 10px 0 10px") %>
 
 <p class="kinds"><%= tag.source.user.login.capitalize %> said </p>
-<i>"<%= tag.source.body %>"</i> <span style="font-size:12px"> - <%= tag.connections_to.tagged('reply').size %> replies</span>
+<i style="font-sie:16px;">"<%= tag.source.body %>"</i> <span style="font-size:14px;"> - <%= tag.connections_to.tagged('reply').size %> replies</span>

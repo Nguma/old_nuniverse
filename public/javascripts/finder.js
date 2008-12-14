@@ -147,7 +147,9 @@ var Requestable = new Class({
       label = ","+t.get('text');
       t.destroy();
       this.el.getElement('input.tags').set('value', this.el.getElement('input.tags').get('value').replace(label, ','));
-    }
+    },
+    
+    
   });
   
   var Steppable = new Class({

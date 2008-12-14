@@ -21,7 +21,7 @@ class TagsController < ApplicationController
 
 		# redirect_to "/users/show/#{current_user.id}" if @tag == current_user.tag
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
-		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
+		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'digest')
 		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
 		
 		# @list = List.new(:label => @kind, :creator => current_user)
@@ -36,11 +36,11 @@ class TagsController < ApplicationController
 		@mode = @mode.blank? ? 'card' : @mode
 		
 
-		
+		@subject_kind = @kind == "digest" ? nil : @kind
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
 		else
-			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(@filter).distinct.order_by(params[:order]).paginate(:page => @page, :per_page => 15)
+			@items = Connection.with_object(@tag).with_subject_kind(@subject_kind).tagged_or_named(@filter).distinct.order_by(@order).paginate(:page => @page, :per_page => 15)
 		end
 		
 		respond_to do |f|
@@ -54,7 +54,7 @@ class TagsController < ApplicationController
 				@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
 				@product_count = Connection.with_object(@tag).with_subject_kind('product').count
 				
-				@categories = Connection.with_object(@tag).with_subject_kind(@kind).gather_tags
+				@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags
 			}
 			f.js {
 				

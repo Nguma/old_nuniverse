@@ -1,3 +1,4 @@
 <%= thumbnail_tag(tag) %>
 <p class="kinds"><%= tag.tags.join(', ')%></p>
 <%= link_to tag.label, tag.url, :target => "_blank" %>
+<%= link_to "Buy it on #{tag.service} for #{tag.property('price')}", tag.url  if !tag.property('price').blank? %> 

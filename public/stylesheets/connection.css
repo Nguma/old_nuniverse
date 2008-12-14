@@ -13,9 +13,9 @@
 	font-size:13px;
 }
 
-.connection .title {
-	color:#555;
-	font-size:15px;
+.connection .subject a {
+	color:#369;
+	font-size:20px;
 	font-weight:bold;
 }
 
@@ -87,6 +87,9 @@
 	font-size:12px;
 }
 
+#digest .connection a {
+	color:#369;
+}
 
 .bookmark_connection .tag_url {
 	display:inline;

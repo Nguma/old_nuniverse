@@ -396,6 +396,9 @@ a.saved {
 	width:23%;
 }
 
+#main_menu #show_digest .count {
+	display:none;
+}
 #sub_menu {
 	padding:10px 10px 5px 10px;
 	background:#27406a;

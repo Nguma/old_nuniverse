@@ -1,0 +1,21 @@
+<div id="sub_menu">
+  <h2>Digest</h2>
+  <h3>What happened lately in this nuniverse</h3>
+  <%= will_paginate items, :inner_window => 2  unless @perspective.kind == "service"%>
+</div>
+<div id="digest">
+<% @items.each do |item| -%>
+<div class="connection <%= cycle('odd','even')%>" style="height:auto;min-height:0">
+  <% case item.subject.kind 
+      when "user" -%>
+   <%= link_to item.subject.label.capitalize, visit_url(item.subject.id, current_user.tag) %> connected to <%= @tag.label.capitalize %>.
+  <% when "image", "video", "bookmark", "product" -%>
+    A new <%= item.subject.kind %> was added: <%= link_to item.subject.label.capitalize, visit_url(item.subject.id, current_user.tag) %>
+  <% when "comment" %>
+    <%= link_to item.subject.source.user.label.capitalize, visit_url(item.subject.source.user.tag, current_user.tag, :mode => "digest") -%> posted "<%= item.subject.label.capitalize %>"
+  <% else %>
+  The nuniverse of <%= link_to item.subject.label.capitalize, visit_url(item.subject.id, current_user.tag) %> was connected to <%= @tag.label.capitalize %>.
+  <% end -%>
+</div>
+<% end -%>
+</div>

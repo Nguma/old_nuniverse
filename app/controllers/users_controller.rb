@@ -110,13 +110,15 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_nuniverse
 	def show
+		@user ||= current_user
+		redirect_to @user.tag 
 		if @user && current_user != @user
-			redirect_to @user.tag 	
+				
 		else
 			@service = nil	
 		end
 
-		@user = current_user
+		
 		
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
 		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
