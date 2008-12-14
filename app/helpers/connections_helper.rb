@@ -12,7 +12,7 @@ module ConnectionsHelper
 			render :partial => "/previews/bookmark", :locals => {:tag => tag}
 		when "comment", "note"
 			note = Comment.find_by_tag_id(tag.id)
-			render :partial => "/previews/note", :locals => {:note => note}
+			render :partial => "/previews/note", :locals => {:note => note, :connection => connection}
 		when "tweet"
 			render :partial => "/previews/comment", :locals => {:tag => tag}
 		when "product"

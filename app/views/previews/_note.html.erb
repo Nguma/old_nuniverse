@@ -1,4 +1,5 @@
-<dl >
+<%= add_to_fav_link(connection) %>
+<dl>
   <dd style="background:none;padding:3px;margin:0 0 1px 0">
   <p style="font-size:12px"><%= link_to note.user.login.capitalize, visit_url(note.user.tag_id, current_user.login) %> said</p>
   <h3><i>"<%= note.body %>"</i></h3>

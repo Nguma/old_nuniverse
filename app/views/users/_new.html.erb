@@ -1,1 +1,9 @@
-<h2>Do you want to connect?</h2>
+
+<% form_tag "/users/find" do -%>
+  <h2>Find other nusers to connect to</h2>
+  <%= hidden_field_tag "id", @tag.id %>
+  <%= hidden_field_tag "kind", "nuniverse" -%>
+  <%= text_field_tag "input", "", :class => "input",  :autocomplete => "off", :id => "input_connect"%>
+  <div class="data hidden"></div>
+<% end -%>
+<div class="suggestions" style=";min-height:100px"></div>

@@ -7,6 +7,14 @@ class UsersController < ApplicationController
 	skip_before_filter :invitation_required, :only => [:new, :create, :activate]
   after_filter :store_location, :only => [:show]
 	after_filter :update_session, :only => [:show]
+	
+	def find
+		@users = User.find(:all, :conditions => ['login rlike ? OR email rlike ?', "^#{params[:input]}{0,6}$", "^#{params[:input]}{0,6}$"])
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+	end
 
   # render new.rhtml
   def new

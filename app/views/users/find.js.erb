@@ -1,0 +1,6 @@
+<% @users.each do |user| -%>
+  <div class="suggestion">
+    <%= thumbnail_tag user.tag %>
+    <%= link_to user.login, konnect_url(user.tag_id, current_user.tag_id), :class => "trigger", :mode => "connect" -%>
+  </div>
+<% end -%>

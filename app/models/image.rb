@@ -70,11 +70,13 @@ class Image < ActiveRecord::Base
 	end
 	
 	def create_tag
-		t = Tag.create!(
-			:label => self.filename,
-			:kind => 'image'
-		)
-		self.tag = t
+		if self.parent_id.nil?
+			t = Tag.create!(
+				:label => self.filename,
+				:kind => 'image'
+			)
+			self.tag = t
+		end
 	end
 
 end
