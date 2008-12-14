@@ -2,6 +2,9 @@ window.addEvent('domready',reset);
 // var windowScroll;
 // var inputBox;
 var preview_box;
+var filterBox;
+var searchBox;
+
 function reset()
 {
  
@@ -10,9 +13,8 @@ function reset()
       var b = new Box(box);
   });
   
-  var searchBox = createSearchForm($('search_form'));
-  
-  var filterBox = createFilterBox($('search_box'));
+  searchBox = createSearchForm($('search_form'));
+  filterBox = createFilterBox($('search_box'));
 
   
   $$('div#tag_cloud a').each(function(tag) {
@@ -94,7 +96,7 @@ function reset()
        },
 
        onTrigger:function(t) { 
-             
+          this.mode = t.get('mode');
          if(t.hasClass('title')) {
            window.location = t.get('href');
          } else if(t.getProperty('href') != '#') {
@@ -102,7 +104,7 @@ function reset()
            this.callRequest({url:t.get('href'), update:this.el.getElement('.content')});
          } else {
            
-           switch(t.get('mode')) {
+           switch(this.mode) {
                case "tag":
                  this.addTag(this.el.getElement('.input').get('value'))
                  break
@@ -126,10 +128,14 @@ function reset()
        },
 
        onSuccess:function(updated) {
-   
+        
          if($defined(this.el.getElement('.map'))){
            var funcName = 'display_'+this.el.getElement('.map').get('id');
            eval(funcName).delay(200);
+         }
+         
+         if(this.mode == "create") {
+           filterBox.callRequest.delay(200, filterBox, {delay:200});
          }
 
          this.setTriggers(this.content);
@@ -175,7 +181,28 @@ function reset()
  
   
   
-  $$('.connect_form').each(function(form) {
+    setConnectForm(window.document);
+    setExpandLinks(window.document);
+  
+
+
+  
+}
+
+function setExpandLinks(scope) {
+  scope.getElements('.expand_lnk').each(function(lnk) {
+    lnk.removeEvents();
+    lnk.addEvent('click', function(ev) {
+      
+      ev.preventDefault();
+      var expanded = $(lnk.get('id').replace(/^expand_|_lnk/g,''));
+      if($chk(expanded)) { expanded.toggleClass('hidden');}
+    });
+  });
+}
+
+function setConnectForm(scope) {
+  scope.getElements('.connect_form').each(function(form) {
     var c = new Steppable(form, {
       
       spinner:form.getParent().getElement('.spinner'),
@@ -188,17 +215,11 @@ function reset()
         if(t.getProperty('href') != '#') {
           
           switch(this.mode) {
-            case "suggest":
-            
-              // preview_box.el.getElement('.data').set('html',this.el.getElement('fieldset').get('html'));
-            case "connect":
-              this.callRequest({url:t.get('href')});
-              this.collapse();
-              break;
+
             case "create":
               preview_box.callRequest({url:t.get('href')});
               this.reset();
-            break;
+              break;
             
             default:
               this.callRequest({url:t.get('href')});
@@ -272,47 +293,11 @@ function reset()
       
     });
   
-    
-    // $$('a#'+form.getProperty('id').replace(/_form/, '_lnk')).each(function(lnk) {
-    //  
-    //      lnk.addEvent('click', function(ev) {
-    //        ev.preventDefault();
-    //        var previous = $('main_menu').getElement('.activated');
-    //        
-    //        lnk.getParent().toggleClass('activated');
-    //        c.toggle();
-    // 
-    //        if($chk(previous) && (previous != lnk.getParent())) { 
-    //          previous.removeClass('activated');
-    //          $(previous.getElement('a').getProperty('id').replace(/_btn|_lnk/,'_form')).addClass('hidden');
-    //        }
-    //      });
-    //    });
-    
-    
-    
-  });
-  
-  // $('main_menu').getElements('dd').each(function(lnk) {
-  //     
-  //     lnk.getElement('a').addEvent('click', function(ev) {
-  //       ev.preventDefault();
-  //       var previous = $('main_menu').getElement('.activated');
-  //       if($chk(previous)) { previous.removeClass('activated'); }
-  //       lnk.addClass('activated');
-  //       
-  //     });
-  //   });
-  
-  $$('.expand_lnk').each(function(lnk) {
-    lnk.addEvent('click', function(ev) {
-      ev.preventDefault();
-      var expanded = $(lnk.get('id').replace(/^expand_|_lnk/g,''));
+   
 
-      if($chk(expanded)) { expanded.toggleClass('hidden');}
-    });
+    
+    
   });
-  
 }
 
 function addElement(el) {
@@ -429,6 +414,8 @@ function createFilterBox(el) {
           updated.getElements('.connection').each(function(box) {
             var b = new Box(box);
           });
+          setExpandLinks(updated);
+          setConnectForm(updated);
         },
         
         onKeyUp:function(key, field) {

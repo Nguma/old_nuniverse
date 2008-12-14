@@ -35,14 +35,7 @@ class TagsController < ApplicationController
 		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
 		@mode = @mode.blank? ? 'card' : @mode
 		
-		@video_count = Connection.with_object(@tag).with_subject_kind('video').count
-		@bookmark_count = Connection.with_object(@tag).with_subject_kind('bookmark').count
-		@nuniverse_count = Connection.with_object(@tag).with_subject_kind('nuniverse').count
-		@location_count = Connection.with_object(@tag).with_subject_kind('location').count
-		@user_count = Connection.with_object(@tag).with_subject_kind('user').count
-		@image_count = Connection.with_object(@tag).with_subject_kind('image').count
-		@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
-		@product_count = Connection.with_object(@tag).with_subject_kind('product').count
+
 		
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
@@ -52,9 +45,19 @@ class TagsController < ApplicationController
 		
 		respond_to do |f|
 			f.html {
+				@video_count = Connection.with_object(@tag).with_subject_kind('video').count
+				@bookmark_count = Connection.with_object(@tag).with_subject_kind('bookmark').count
+				@nuniverse_count = Connection.with_object(@tag).with_subject_kind('nuniverse').count
+				@location_count = Connection.with_object(@tag).with_subject_kind('location').count
+				@user_count = Connection.with_object(@tag).with_subject_kind('user').count
+				@image_count = Connection.with_object(@tag).with_subject_kind('image').count
+				@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
+				@product_count = Connection.with_object(@tag).with_subject_kind('product').count
+				
 				@categories = Connection.with_object(@tag).with_subject_kind(@kind).gather_tags
 			}
 			f.js {
+				
 				
 			}
 		end
@@ -75,10 +78,11 @@ class TagsController < ApplicationController
   end
 
 	def create
-	
+		@object = Tag.find(params[:object]) rescue nil
 		@tag = Tag.new(:label => params[:input], :kind => "nuniverse")
 		@tag.tag_with(params[:tags].split(','))
 		@tag.save
+		@tag.connect_with(@object) if @object 
 		respond_to do |f|
 			f.html {}
 			f.js {}

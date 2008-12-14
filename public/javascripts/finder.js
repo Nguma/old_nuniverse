@@ -5,7 +5,7 @@ var Expandable = new Class({
   },
   
   collapse:function() {
-    this.el.addClass('hidden');
+    // this.el.addClass('hidden');
     this.fireEvent('onCollapse');
   },
   
@@ -146,7 +146,6 @@ var Requestable = new Class({
     removeTag:function(t) {
       label = ","+t.get('text');
       t.destroy();
-      
       this.el.getElement('input.tags').set('value', this.el.getElement('input.tags').get('value').replace(label, ','));
     }
   });
