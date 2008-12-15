@@ -31,6 +31,9 @@ var Box = new Class({
       'click':this.toggle.bindWithEvent(this)
     },this);
 
+    this.el.getElements('a').each(function(lnk) {
+      lnk.addEvent('click', function(ev) {ev.stopPropagation();})
+    });
   },
 
   toggle:function() {
