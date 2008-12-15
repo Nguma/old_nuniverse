@@ -13,6 +13,8 @@
 	font-size:13px;
 }
 
+
+
 .connection .subject a {
 	color:#369;
 	font-size:20px;
@@ -30,8 +32,8 @@
 	background:none;
 }
 
-.image_mode .connection .title {
-
+.image_mode .connection .kinds {
+clear:left;
 }
 
 .connection .rank_lnk {
@@ -41,6 +43,7 @@
 	font-size:50px;
 	color:#999;
 	right:5px;
+
 }
 
 .connection .rank_lnk a:hover {
@@ -53,6 +56,23 @@
 .list_mode .connection {
 	background:#dedede;
 	margin: 1px 0 0px 0;
+}
+
+
+.order_by_name .rank_lnk,
+.order_by_latest .rank_lnk{
+	display:none;
+}
+
+.image_mode .rank_lnk,
+.card_mode .rank_lnk {
+	font-size:20px;
+	clear:right;
+}
+
+.image_mode .rank_lnk img,
+.card_mode .rank_lnk img {
+	height:20px;
 }
 
 .list_mode .even {

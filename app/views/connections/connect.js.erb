@@ -1,5 +1,6 @@
 <%= render_tag @connection_from.subject  %>
-<p>was connect to <%= @connection_from.object.label.capitalize %>.</p>
-<%= link_to "Visit #{@connection_from.subject.label}'s nuniverse now", visit_url(@connection_from.subject.id, current_user.tag)%>
+<p>was connected to <%= @connection_from.object.label.capitalize %>.</p>
+
 <div class="delimiter">&nbsp;</div>
-<%= link_to "#{image_tag("/images/icons/heart.png")} Save to my nuniverse", konnect_url(@connection_from.subject.id, current_user.tag_id) %>
+<h3>Tag him<h3>
+  <%= render :partial => "/tags/box" , :locals => {:selecteds => @connection_from.tags, :suggesteds => ["person","character","topic","band","company","album","restaurant","museum"] }%>

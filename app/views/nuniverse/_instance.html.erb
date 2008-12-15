@@ -8,7 +8,7 @@
   GSFN.feedback('http://getsatisfaction.com/nguma/feedback/topics/new?display=overlay&amp;style=idea');
 </script>
 
-<div class="nuniverse <%= dom_class rescue "" %> " id="nuniverse" >
+<div class="nuniverse <%= dom_class rescue "" %> <%= @order ? "order_#{@order}" : "" %>" id="nuniverse" >
   <% unless @source.nil? %>
     <%= breadcrumbs %>
     <%= title %>
