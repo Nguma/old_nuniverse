@@ -78,7 +78,7 @@ class Connection < ActiveRecord::Base
 	end
 	
 	def twin
-		Connection.with_subject(self.object).with_object(self.subject)
+		Connection.with_subject(self.object).with_object(self.subject).first
 	end
 	
 	def kind

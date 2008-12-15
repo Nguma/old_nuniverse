@@ -24,7 +24,7 @@ module ListsHelper
 		when 'bookmark'
 			link_to(params[:title], item.url, :target => "_blank")
 		else
-			link_to(params[:title],  visit_url(item,  @perspective.label, :mode => params[:mode] || @mode))
+			link_to(params[:title],  visit_url(item, current_user.login, :mode => params[:mode] || @mode))
 			# link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
 		end
 	end

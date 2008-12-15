@@ -3,6 +3,7 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resource :sessions
  	map.resources :taggings
+	map.resources :connections
 	map.resources :tags
 	map.resources :images
 	map.resources :groups

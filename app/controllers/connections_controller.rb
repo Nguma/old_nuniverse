@@ -39,6 +39,16 @@ class ConnectionsController < ApplicationController
 		@connection.tag_with(params[:tags].split(','))
 	end
 	
+	def update
+		
+		@connection.description = params[:description] if params[:description]
+		@connection.save
+		
+		respond_to do |f|
+			f.html {redirect_to @connection.subject}
+		end
+	end
+	
 	def edit
 		
 	end
@@ -148,30 +158,7 @@ class ConnectionsController < ApplicationController
 	
 		
 		@subject
-				
-		
-			# if @kind == 'bookmark'  && @subject.url.match('en.wikipedia.org/wiki/')
-			# 			@subject.label = @subject.label.gsub(/\,\s+the free encyclopedia/, "")
-			# 			@subject.save
-			# 				t = @subject.url.gsub(/.*\/wiki/,'/wiki')
-			# 
-			# 				@tag.replace_property('wikipedia_url',t)
-			# 				wiki_content = Nuniverse.get_content_from_wikipedia(t)
-			# 				
-			# 				@tag.description = Nuniverse.wikipedia_description(wiki_content) if @tag.description.nil?
-			# 
-			# 				img = (wiki_content/'table.infobox'/:img).first
-			# 				unless (img.nil? || img.to_s.match(/Replace_this_image|Flag_of/))
-			# 					image = Tag.find_or_create(:label => img.attributes['src'].split('/').last, :kind => 'image', :url => img.attributes['src'])
-			# 					@image = image.add_image(:source_url => img.attributes['src'])
-			# 					image.connect_with(@tag, :user => current_user)
-			# 								
-			# 				end
-			# 				@tag.save
-			# 				
-			# 		end
 
-		
 
 	end
 	

@@ -1,6 +1,6 @@
 <%= render_tag @connection_from.subject  %>
 <p>was connected to <%= @connection_from.object.label.capitalize %>.</p>
 
-<div class="delimiter">&nbsp;</div>
+<div class="delimiter"> </div>
 <h3>Tag him<h3>
   <%= render :partial => "/tags/box" , :locals => {:selecteds => @connection_from.tags, :suggesteds => ["person","character","topic","band","company","album","restaurant","museum"] }%>

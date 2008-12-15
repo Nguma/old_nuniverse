@@ -1,2 +1,3 @@
 <%= hidden_field_tag :subject, @connection.subject.id %>
 <%= render_preview(@connection) -%>
+<%= link_to "How are they related?", edit_connection_url(@connection) %>

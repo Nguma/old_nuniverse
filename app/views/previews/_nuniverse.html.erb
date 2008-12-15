@@ -3,7 +3,7 @@
   <%= add_to_fav_link(connection) %>
   <%= link_to image_tag("/images/icons/comment_lnk.png"), "/comments/new", :class => "trigger comment_lnk" %>
  
-  <div class="delimiter">&nbsp;</div>
+  <div class="delimiter"> </div>
 <h5>Connected to <%= connection.object.label %> as</h5>
 <% connection.tags.each do |tag| -%>
   <span style="margin:0 10px 0 0;font-size:13px;"><%= link_to tag, "#" %></span>
