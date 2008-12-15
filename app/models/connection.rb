@@ -68,7 +68,7 @@ class Connection < ActiveRecord::Base
 
 	
 	named_scope :order_by, lambda { |order| 
-		order.nil? ? {} : {:select => ["connections.*, S.label, SUM(rankings.score) AS score"], :order => Connection.normalize_order(order), :joins => ["LEFT OUTER JOIN rankings ON rankings.rankable_id = connections.id  AND rankings.rankable_type = 'Connection'"], :group => "connections.id"}
+		order.nil? ? {} : {:select => ["connections.*, SUM(rankings.score) AS score"], :order => Connection.normalize_order(order), :joins => ["LEFT OUTER JOIN rankings ON rankings.rankable_id = connections.id  AND rankings.rankable_type = 'Connection'"], :group => "connections.id"}
 	}
 	
 	def self.find_or_create(params)
