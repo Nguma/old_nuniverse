@@ -6,8 +6,8 @@ class User < ActiveRecord::Base
   include Authentication::ByCookieToken
   include Authorization::StatefulRoles
 
-	belongs_to :role, :class_name => "Role"
-	has_one :max_connections, :through => :role
+	# belongs_to :role, :class_name => "Role"
+	# has_one :max_connections, :through => :role
 	
   #validates_presence_of     :login
   validates_length_of       :login, :within => 3..40
