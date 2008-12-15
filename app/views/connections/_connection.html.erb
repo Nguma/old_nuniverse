@@ -3,22 +3,20 @@
   <div class="rank_lnk"><span class="score"><%= connection.score rescue "-"%></span>
   <%= link_to(image_tag("/images/icons/arrow_up.png"), "/connections/rank/#{connection.id}", :class => "trigger") %>
   </div>
-  <div class="subject ">
-    <%= render_tag connection.subject %>
-    <p class="tags"><%= connection.tags.join(',')%></p>
-    
-  </div>
+  <%= render_tag connection.subject %>
+  <p>
+     <%= connection.description.blank? ? connection.twin.description : connection.description %> 
+     <% unless !authorized_to_edit?(connection, current_user) -%>
+       <%= link_to "Edit relationship", edit_connection_url(connection)%>
+     <% end -%>
+   </p>
+   <p class="tags"><%= connection.tags.join(',')%></p>
   <div class="preview">
     <div class="hidden">
       <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
     </div>
   </div>
-  <p>
-    <%= connection.description.blank? ? connection.twin.description : connection.description %> 
-    <% unless !authorized_to_edit?(connection, current_user) -%>
-      <%= link_to "Edit relationship", edit_connection_url(connection)%>
-    <% end -%>
-  </p>
+  
   
   <div class="delimiter"> </div>
   

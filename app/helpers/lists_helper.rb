@@ -84,7 +84,7 @@ module ListsHelper
 	
 	def perspectives(params = {})
 		kind = params[:kind] || @source.kind 
-		pers = [current_user.login, "everyone", "google", "amazon", "youtube", "twitter", current_user.groups.collect {|c| c.object.label}].flatten
+		pers = [current_user.login, "everyone", "google", "amazon", "youtube", "twitter"].flatten
 		collection = []
 	
 		pers.each do |p|

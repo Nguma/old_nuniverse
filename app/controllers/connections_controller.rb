@@ -45,7 +45,7 @@ class ConnectionsController < ApplicationController
 		@connection.save
 		
 		respond_to do |f|
-			f.html {redirect_to @connection.subject}
+			f.html {redirect_to @connection.object}
 		end
 	end
 	
