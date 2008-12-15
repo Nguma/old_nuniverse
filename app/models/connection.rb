@@ -32,7 +32,7 @@ class Connection < ActiveRecord::Base
 	
 	named_scope :tagged_or_named, lambda { |q| 
 		q.nil? ? {} : {
-			:conditions => ['taggings.predicate rlike ? OR S.label rlike ?', q.to_a.join('|'), q.to_a.join('|')],
+			:conditions => ['taggings.predicate rlike ? OR S.label rlike ?', q.to_a.collect{|c| c.singularize}.join('|'), q.to_a.join('|')],
 			:joins => ["LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.id AND taggings.taggable_type = 'Connection') OR (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag')"],
 			:group => "connections.subject_id HAVING count(connections.subject_id) >= #{q.to_a.length}"
 		}
@@ -70,6 +70,8 @@ class Connection < ActiveRecord::Base
 	named_scope :order_by, lambda { |order| 
 		order.nil? ? {} : {:select => ["connections.*, SUM(rankings.score) AS score"], :order => Connection.normalize_order(order), :joins => ["LEFT OUTER JOIN rankings ON rankings.rankable_id = connections.id  AND rankings.rankable_type = 'Connection'"], :group => "connections.id"}
 	}
+	
+	named_scope :order_by_id, :select => "connections.*", :order => "connections.id DESC"
 	
 	def self.find_or_create(params)
 		c = Connection.with_subject(params[:subject]).with_object(params[:object]).first

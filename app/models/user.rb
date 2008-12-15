@@ -106,6 +106,10 @@ class User < ActiveRecord::Base
 	def add_image(params)
 		tag.add_image(params)
 	end
+	
+	def users
+		Connection.with_subject_kind('user').with_object(self.tag).collect {|c| c.subject }
+	end
 
   protected
     

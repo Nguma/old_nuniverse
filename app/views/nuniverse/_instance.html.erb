@@ -17,10 +17,11 @@
   <% end -%>
 
   <%= render :partial => "/nuniverses/main_menu"%>
-  <div style="position:relative;float:right;width:300px;margin:0 0 0 0">
+  <div style="position:fixed;float:right;width:300px;margin:0 0 0 0;right:-300px;background:#fff;z-index:888888">
+    <%= link_to "<>", "#", :class => "expand_right_col" %>
     <%= yield :right_col %>
   </div>
-  <div style="position:relative;width:auto;margin:0 310px 0 0;padding:0">
+  <div style="position:relative;width:auto;margin:0 auto 0 0;padding:0">
     <%= content %>
   </div>
   <div class="delimiter" style="clear:both">&nbsp;</div>

@@ -22,7 +22,7 @@
 }
 
 .image_mode .connection {
-	background:#eee;
+/*	background:#eee;*/
 	margin:0 1px 1px 0;
 }
 
@@ -54,7 +54,7 @@ clear:left;
 }
 
 .list_mode .connection {
-	background:#dedede;
+/*	background:#dedede;*/
 	margin: 1px 0 0px 0;
 }
 
@@ -75,12 +75,14 @@ clear:left;
 	height:20px;
 }
 
-.list_mode .even {
-	background:transparent url('/images/backgrounds/even.png') 0 0 repeat;
+.even {
+	background:#eee;
+/*	background:transparent url('/images/backgrounds/even.png') 0 0 repeat;*/
 }
 
-.list_mode .odd {
-	background:transparent url('/images/backgrounds/odd.png') 0 0 repeat;
+.odd {
+	background:#dedede;
+/*	background:transparent url('/images/backgrounds/odd.png') 0 0 repeat;*/
 }
 
 .list_mode .connection .description {

@@ -6,6 +6,7 @@ class ConnectionsController < ApplicationController
 		@object = Tag.find(params[:object])
 		@subject = Tag.find(params[:subject]) rescue create_subject
 		@connection_from = Connection.find_or_create(:subject => @subject, :object => @object)
+		@connection = @connection_from
 		@connection_to = Connection.find_or_create(:subject => @object, :object => @subject)
 		params[:tags] ||= @subject.property('tags').blank? ? @subject.kind :  @subject.property('tags')
 		if params[:tags] != "nuniverse"
@@ -31,7 +32,11 @@ class ConnectionsController < ApplicationController
 	end
 	
 	def preview
-		@connections = @connection.connections.with_object_kind('nuniverse').paginate(:per_page => 10, :page => 1)
+
+		@nuniverses = Connection.with_object(@connection.subject).with_subject_kind('nuniverse').paginate(:per_page => 5, :page => 1)
+		@users = Connection.with_subject(current_user.users).with_object(@connection.subject).paginate(:per_page => 5, :page => 1)
+	
+		# @connections = @connection.connections.with_object_kind('nuniverse').paginate(:per_page => 10, :page => 1)
 	end
 	
 	def tag

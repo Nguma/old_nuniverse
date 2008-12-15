@@ -28,7 +28,7 @@ var PopUp = new Class({
     if($defined(ev)) { ev.preventDefault();}
     if(!this.el.hasClass('hidden')) { return; }
     this.el.setStyles({
-      'top':this.options.offset.y,
+     
       'left':this.options.offset.x
     });
     this.el.removeClass('hidden');

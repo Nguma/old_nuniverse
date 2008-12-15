@@ -109,6 +109,7 @@ module TagsHelper
 				:title => "Save to your nuniverse"
 			)
 		else
+			
 				personal = connection.object == current_user.tag 
 
 				if personal
@@ -120,6 +121,7 @@ module TagsHelper
 							:title => "Disconnect from this nuniverse"
 						)
 				else
+	
 					link_to(image_tag("/images/icons/add_to_fav.png"),
 						konnect_url(
 							:subject => connection.subject_id,

@@ -35,9 +35,9 @@ module NuniverseHelper
 	def column_size
 		case @mode
 		when "card"
-			3
+			2
 		when "image"
-			4
+			5
 		when "list"
 			1
 		else

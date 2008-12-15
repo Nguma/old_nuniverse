@@ -1,9 +1,4 @@
   <div style="padding:20px" class="edit_connection">
-    <h2><%= @connection.subject.label %> <> <%= @connection.object.label%></h2>
-    <h4>How is <%= @connection.subject.label %> connected to <%= @connection.object.label %> ?</h4>
+    <%= render :partial => "/connections/edit_form"%>
 
-  <div class="delimiter">&nbsp;</div>
-  
-  <%= text_area_tag "tags", @connection.tags.join(','),:style => "background:#FFF"%>
-  <%= link_to "Save changes", "/connections/tag/#{@connection.id}", :class => "trigger button" %>
   </div>

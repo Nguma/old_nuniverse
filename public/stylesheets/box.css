@@ -90,6 +90,19 @@
 	z-index:45678;
 }
 
+#preview_box .subject {
+	background:#369;
+}
+
+#preview_box .kinds {
+	color:#ccc;
+}
+
+#preview_box .subject .title {
+	color:#eee;
+	font-size:16px;
+}
+
 #preview_box a.close_btn {
 	position:absolute;
 	right:-20px;

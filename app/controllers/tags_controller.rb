@@ -42,6 +42,7 @@ class TagsController < ApplicationController
 			@items = service_items(@tag.label)
 		else
 			@items = Connection.with_object(@tag).with_subject_kind(@subject_kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
+
 		end
 	
 		respond_to do |f|

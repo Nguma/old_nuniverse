@@ -1,7 +1,7 @@
 window.addEvent('domready',reset);
 // var windowScroll;
 // var inputBox;
-var preview_box;
+var previewBox;
 var filterBox;
 var searchBox;
 
@@ -29,8 +29,10 @@ function reset()
         },
         
         onClick:function() {
-     
-          preview(this.el)
+          previewBox.el.setStyles({
+            top:this.el.getCoordinates().top
+          });
+          previewBox.callRequest({url:this.el.getElement('.preview_url').get('href')});
         },
         
         onSuccess:function(updated) {
@@ -87,42 +89,14 @@ function reset()
     }
   });
   
-  var groups = new Steppable('select_groups_form', {
-
-    'onKeyUp':function(key) {
-      this.request.options.update = this.el.getElement('.suggestions');
-      this.options.spinner = this.request.options.update.getPrevious('.spinner')
-      this.mode = "suggest"
-      this.callRequest({url:this.listener.get('src')});
-    },
-    
-    
-    'onSuccess':function() {
-      this.setTriggers(this.request.options.update);
-      this.setKeyListener(this.request.options.update.getElement('input#input'));
-    },
-    
-    onTrigger:function(t) {
-      if(t.getProperty('href') == '#') {
-        if($chk(t.getParent('.option'))) {
-          this.el.getElement('.selected_items').adopt(t.getParent('.option'));
-        } 
-        this.el.getElement('.suggestions').empty();
-        this.listener.set('value','');
-        this.mode = "regular"
-      } else {
-        this.callRequest({url:t.get('href'), update:this.el.getElement('fieldset')});        
-      }
-
-    }
-  });
+  
   
   if($chk($('preview_box'))) {
-    preview_box = new PopUp('preview_box', {
+    previewBox = new PopUp('preview_box', {
        draggable:true,
        spinner:$('preview_box').getElement('.spinner'),
        update:$('preview_box').getElement('.content'),
-       offset:{x:30,y:110},
+       offset:{x:500,y:110},
        onExpand:function() {
 
        },
@@ -249,7 +223,7 @@ function setConnectForm(scope) {
           switch(this.mode) {
 
             case "create":
-              preview_box.callRequest({url:t.get('href')});
+              previewBox.callRequest({url:t.get('href')});
               this.reset();
               break;
             
@@ -430,8 +404,8 @@ function isDoubleEnter() {
 }
 
 function preview(el) {
-    preview_box.setContent(el);
-    preview_box.expand();
+    previewBox.setContent(el);
+    previewBox.expand();
 }
 
 function createFilterBox(el) {
@@ -457,8 +431,11 @@ function createFilterBox(el) {
                     },
 
                     onClick:function() {
-
-                      preview(this.el)
+              
+                      previewBox.el.setStyles({
+                        top:this.el.getCoordinates().top
+                      })
+                      previewBox.callRequest({url:this.el.getElement('.preview_url').get('href')});
                     },
 
                     onSuccess:function(updated) {
@@ -504,7 +481,7 @@ function createSearchForm(form) {
     
     onTrigger:function(t) {
       this.reset();
-      preview_box.callRequest({url:t.get('href')});
+      previewBox.callRequest({url:t.get('href')});
     },
     
     onSuccess:function(updated) {
