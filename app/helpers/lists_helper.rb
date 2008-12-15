@@ -69,8 +69,7 @@ module ListsHelper
 	
 
 	def sorting_options(params = {})
-		
-		params[:options] = [['Name', 'by_name'],['Latest', 'by_latest']]
+		params[:options] = [['Name', 'by_name'],['Latest', 'by_latest'], ['Rank','by_rank']]
 		params[:source] ||= @source
 		params[:selected] ||= @order
 		render :partial => "/lists/sorting_options", :locals => params

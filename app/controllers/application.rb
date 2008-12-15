@@ -11,6 +11,14 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery  :secret => '6d0fa0cfa575daf50a50a8c4f23265a5'
 
+	def index
+		if logged_in?
+			redirect_to visit_url(current_user.tag, current_user.tag)
+		else
+			redirect_to :beta
+		end
+	end
+
 	def restricted
 		
 	end
@@ -55,7 +63,9 @@ class ApplicationController < ActionController::Base
 		session[:mode] = @mode
 		session[:service] = @service
 		session[:perspective] = @perspective
+		session[:order] = @order
 		session[:kind] = @kind
+		session[:last_input] = @filter
 		if @tag	
 			session[:previous] = session[:current] unless session[:current] == @tag.id
 			session[:current] = @tag.id

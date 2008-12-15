@@ -1,6 +1,3 @@
-<%= error_messages_for :audio %>
-
-<% form_tag "/admin/test", :multipart => true do -%>
-  <%= file_field_tag :uploaded_data %>
-  <%= submit_tag 'Upload Audio File' %>
+<% @connections.each do |p| -%>
+  <p><%= p.object.label %></p>
 <% end -%>

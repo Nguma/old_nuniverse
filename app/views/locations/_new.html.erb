@@ -1,14 +1,18 @@
-<% form_tag "/ws/suggest_address"  do -%>
-  <h2>Add an address</h2>
+<% form_tag "/locations/find"  do -%>
+  <h2>Add a Location</h2>
   <fieldset>
-   
     <%= hidden_field_tag "id", @tag.id %>
     <%= hidden_field_tag "kind", "address" -%>
-    <label>Type in an address to locate</label><br/>
-    <%= text_field_tag "input", "", :class => "input", :width => "100%", :autocomplete => "off"%>
-     <div class="data hidden"></div>
+    <label>Name your location</label><br/>
+    <%= text_field_tag "name", "", :class => "input",  :autocomplete => "off", :id => "input_location" %><br/>
+    <label>Add an Address (optional)</label><br/>
+    <%= text_field_tag "name", "", :class => "input",  :autocomplete => "off", :id => "input_location" %>
+    
     <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
   </fieldset>
+  
   <div class="suggestions" style="width:100%;display:block"></div>
-  <%= link_to "Save", create_and_connect_url(@tag), :class => "trigger button", :mode => "locate"  %>
+  
+  <%= submit_tag "Add" %>
+  <div class="delimiter">&nbsp;</div>
 <% end -%>

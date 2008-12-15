@@ -27,6 +27,7 @@ var Triggerable = new Class({
   },
   
   onTrigger:function(ev, trigger) {
+    
     ev.preventDefault();
     ev.stopPropagation();
     this.fireEvent('onTrigger', trigger);
@@ -39,11 +40,11 @@ var Requestable = new Class({
     this.request = new Request.HTML({
                url:this.options.requestUrl,
                link:'cancel',
-               update:this.options.update,
                onComplete:this.onComplete.bind(this),
                onRequest:this.onRequest.bind(this),
                onSuccess:this.getRequestResult.bind(this)
              }, this)
+    if($chk(this.options.update)) {this.request.options.update = this.options.update}
       
     // Timeout definition
     this.timeout = $empty
@@ -60,7 +61,7 @@ var Requestable = new Class({
   },
   
   onRequest:function() {
-    this.request.options.update.empty();
+    if($chk(this.request.options.update)) {this.request.options.update.empty();}
     this.startSpinning();
     this.fireEvent('onRequest');
   },
@@ -72,9 +73,13 @@ var Requestable = new Class({
   
   sendRequest:function() {
     // if($defined(this.el.getElement('.data'))){this.el.getElement('.data').empty();}
-    this.request.options.update.removeClass('hidden');
+  
+    if($chk(this.el.getElement('form'))) {
+      this.request.post(this.el.getElement('form'));
+    } else {
+      this.request.get(this.el);
+    }
     
-    this.request.send(this.el.getElement('form'));
   },
   
   getRequestResult:function() {
@@ -206,7 +211,7 @@ var Requestable = new Class({
         this.el.getElement('.suggestions').empty();
       }
       if($chk(this.listener)) {
-        console.log(this.listener);
+
         this.listener.set('value', '');
         this.fireEvent('onClear', this.listener);
       }

@@ -101,23 +101,31 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		@tags = Tag.find(:all, :conditions => ['kind = ?', params[:kind]])
-		@tags.each do |tag|
-			tag.kind = "nuniverse"
-			tag.save
-			tag.tag_with(params[:kind])
+		# @tags = Tag.tagged('restaurant')
+		# 
+		# 		@tags.each do |tag|
+		# 			Location.create(
+		# 				:name => tag.label,
+		# 				:full_address => tag.property('address'),
+		# 				:latlng => tag.property('latlng'),
+		# 				:tag_id => tag.id
+		# 			)
+		# 		end
+		
+		@locations = Location.find(:all)
+		@locations.each do |l|
+			l.tag.kind = "Location"
+			l.tag.save
 		end
 		render :nothing => true
 		
 	end
 	
 	def test
-		@tags = Tag.find(:all, :conditions => 'taggable_type = "Video"', :group => "taggable_id HAVING count(*) > 1")
-		
-		@tags.each do |tag|
-			tag.destroy
-		end
-		raise @tags.inspect
+		# @nun = Nuniverse.find(params[:id])
+
+		# @connections = @nun.nuniverses.find(:all).paginate(:page => 1, :per_page => 10)
+		@items = Connection.with_object(Tag.find(1)).with_subject_kind('nuniverse').tagged_or_named('band').order_by('by_rank').paginate(:page => @page, :per_page => 15)
 		
 	end
 	

@@ -43,6 +43,17 @@ class ConnectionsController < ApplicationController
 		
 	end
 	
+	def rank
+		
+		@ranking = @connection.rankings.by_user(current_user).first || Ranking.new(:rankable => @connection, :user => current_user)
+		@ranking.score += 1
+		@ranking.save
+		respond_to do |f|
+			f.html {redirect_to @connection.object}
+			f.js {}
+		end
+	end
+	
 	def add_to_favorites
 		@fav = Favorite.new
 		@fav.user_id = current_user.id

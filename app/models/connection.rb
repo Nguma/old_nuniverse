@@ -6,6 +6,7 @@ class Connection < ActiveRecord::Base
 	# belongs_to :user, :class_name => "Tag"
 	
 	has_many :taggings, :as => :taggable
+	has_many :rankings, :as => :rankable
 	
 		
 	before_destroy :destroy_taggings
@@ -31,7 +32,6 @@ class Connection < ActiveRecord::Base
 	
 	named_scope :tagged_or_named, lambda { |q| 
 		q.nil? ? {} : {
-			:select => ["connections.*, S.*"],
 			:conditions => ['taggings.predicate rlike ? OR S.label rlike ?', q.to_a.join('|'), q.to_a.join('|')],
 			:joins => ["LEFT OUTER JOIN taggings ON (taggings.taggable_id = connections.id AND taggings.taggable_type = 'Connection') OR (taggings.taggable_id = connections.subject_id AND taggings.taggable_type = 'Tag')"],
 			:group => "connections.subject_id HAVING count(connections.subject_id) >= #{q.to_a.length}"
@@ -68,9 +68,9 @@ class Connection < ActiveRecord::Base
 
 	
 	named_scope :order_by, lambda { |order| 
-		order.nil? ? {} : { :order => Connection.normalize_order(order) }
-		
+		order.nil? ? {} : {:select => ["connections.*, S.label, SUM(rankings.score) AS score"], :order => Connection.normalize_order(order), :joins => ["LEFT OUTER JOIN rankings ON rankings.rankable_id = connections.id  AND rankings.rankable_type = 'Connection'"], :group => "connections.id"}
 	}
+	
 	def self.find_or_create(params)
 		c = Connection.with_subject(params[:subject]).with_object(params[:object]).first
 		return c unless c.nil?
@@ -106,6 +106,8 @@ class Connection < ActiveRecord::Base
 			"connections.created_at DESC"
 		when "by_name"
 			"S.label ASC"
+		when "by_rank"
+			"score DESC"
 		else
 		end
 		

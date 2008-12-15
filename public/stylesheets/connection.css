@@ -34,6 +34,18 @@
 
 }
 
+.connection .rank_lnk {
+	position:relative;
+	float:right;
+	top:5px;
+	font-size:50px;
+	color:#999;
+	right:5px;
+}
+
+.connection .rank_lnk a:hover {
+	background:transparent url('/images/icons/arrow_up_hover.png') top right no-repeat;
+}
 .connection .description {
 	display:none;
 }

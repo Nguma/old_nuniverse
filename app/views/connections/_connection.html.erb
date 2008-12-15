@@ -1,5 +1,8 @@
 
 <div class="connection <%= connection.subject.kind %>_connection <%= cycle('even','odd') %>">
+  <div class="rank_lnk"><span class="score"><%= connection.score rescue "-"%></span>
+  <%= link_to(image_tag("/images/icons/arrow_up.png"), "/connections/rank/#{connection.id}", :class => "trigger") %>
+  </div>
   <div class="subject ">
     <%= render_tag connection.subject %>
     <p class="tags"><%= connection.tags.join(',')%></p>

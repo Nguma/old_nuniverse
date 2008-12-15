@@ -23,11 +23,12 @@ class TagsController < ApplicationController
 		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
 		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'digest')
 		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
-		
+
+		@filter = params[:input] 
 		# @list = List.new(:label => @kind, :creator => current_user)
 		# @tag.kind = @kind
 		@source = @tag
-		@filter = params[:input]
+		
 		@title = "#{@tag.kind}: #{@tag.label.capitalize}"
 		@input = params[:input] || nil
 		@service = @user.login
@@ -40,9 +41,9 @@ class TagsController < ApplicationController
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
 		else
-			@items = Connection.with_object(@tag).with_subject_kind(@subject_kind).tagged_or_named(@filter).distinct.order_by(@order).paginate(:page => @page, :per_page => 15)
+			@items = Connection.with_object(@tag).with_subject_kind(@subject_kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
 		end
-		
+	
 		respond_to do |f|
 			f.html {
 				@video_count = Connection.with_object(@tag).with_subject_kind('video').count

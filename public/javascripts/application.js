@@ -5,12 +5,44 @@ var preview_box;
 var filterBox;
 var searchBox;
 
+function getPreviousConnectionWithSmallerScoreThan(score, el) { 
+  var c = null
+
+  el.getAllPrevious('.connection').each(function(co) {
+    var sc = Number(co.getElement('.score').get('text'));
+   
+    if(sc < score) {  c = co; return c; }
+    
+  });
+  return c;
+}
+
 function reset()
 {
  
 
   $$('.connection').each(function(box,i) {
-      var b = new Box(box);
+      var b = new Box(box, {
+        onTrigger:function(t) {
+         
+          this.callRequest({url:t.get('href')});
+        },
+        
+        onClick:function() {
+     
+          preview(this.el)
+        },
+        
+        onSuccess:function(updated) {
+          var score = Number(this.el.getElement('.score').get('text')) + 1;
+          this.el.getElement('.score').set('text', score );
+          var pc = getPreviousConnectionWithSmallerScoreThan(score, this.el);
+        
+          if($chk(pc)) {
+            this.el.inject(pc,'before');
+          }
+        }
+      });
   });
   
   searchBox = createSearchForm($('search_form'));
@@ -250,7 +282,12 @@ function setConnectForm(scope) {
         switch(this.mode) {
           case "suggest":
             updated.getElements('.box').each(function(box) {
-              var b = new Box(box);
+              var b = new Box(box, {
+                onTrigger:function(t) {
+                  
+                  // this.call_request(t.get('href'));
+                }
+                });
             });
             var input = this.request.options.update.getElement('.input');
             if($chk(input)) {
@@ -412,7 +449,28 @@ function createFilterBox(el) {
         
         onSuccess:function(updated) {
           updated.getElements('.connection').each(function(box) {
-            var b = new Box(box);
+            var b = new Box(box, 
+                   {
+                     onTrigger:function(t) {
+
+                      this.callRequest({url:t.get('href')});
+                    },
+
+                    onClick:function() {
+
+                      preview(this.el)
+                    },
+
+                    onSuccess:function(updated) {
+                      var score = Number(this.el.getElement('.score').get('text')) + 1;
+                      this.el.getElement('.score').set('text', score );
+                      var pc = getPreviousConnectionWithSmallerScoreThan(score, this.el);
+
+                      if($chk(pc)) {
+                        this.el.inject(pc,'before');
+                      }
+                    }
+                  });
           });
           setExpandLinks(updated);
           setConnectForm(updated);

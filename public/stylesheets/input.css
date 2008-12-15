@@ -375,6 +375,10 @@
 	width:550px;
 }
 
+#input_location {
+	background:#FFF url('/images/backgrounds/input_location.png') 0 0 no-repeat;
+	width:550px;
+}
 #input_email {
 	background:#FFF url('/images/backgrounds/input_email.png') 0 0 no-repeat;
 	width:700px;	
@@ -387,7 +391,7 @@
 #input_connect.filled,
 #input_bookmark.filled,
 #input_email.filled,
-#input_address.filled,
+#input_location.filled,
 input.filled {
 	background:#FFF;
 }

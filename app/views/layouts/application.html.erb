@@ -17,7 +17,7 @@
 
 
   <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'filters', 'box', 'list', 'items', 'input', 'custom', 'moorainbow' %>
-  <%= javascript_include_tag  'mootools', 'application', 'box', 'list', 'finder', 'popup','input'%>
+  <%= javascript_include_tag  'mootools', 'application', 'finder','box', 'list',  'popup','input'%>
   <% if @kind && @kind == "address"%>
     <%= GMap.header(:small_zoom => true, :with_vml => false) %>
   <% end -%>

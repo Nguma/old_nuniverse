@@ -6,7 +6,9 @@ class Tag < ActiveRecord::Base
 	has_many :objects, :through => :connections_from
 	
 	has_many :taggings, :as => :taggable
-	belongs_to :taggable, :polymorphic => true
+	# belongs_to :taggable, :polymorphic => true
+	
+
 
 	
 	validates_presence_of :label
@@ -155,7 +157,7 @@ class Tag < ActiveRecord::Base
 
 	named_scope :tagged, lambda { |kind| 
 		return kind.nil? ? {} : {
-			:joins => "LEFT OUTER JOIN taggings on taggings.id = tags.id AND taggings.taggable_type = 'Tag'",
+			:joins => "LEFT OUTER JOIN taggings on taggings.taggable_id = tags.id AND taggings.taggable_type = 'Tag'",
 			:conditions => ["taggings.predicate = '#{kind}'"]}
 	}
 		
