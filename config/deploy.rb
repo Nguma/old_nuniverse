@@ -121,10 +121,11 @@ namespace :deploy do
     #   ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
     # CMD
     
-    sudo <<-CMD
-         rm -fr #{release_path}/public/attachments &&
-         ln -nfs #{shared_path}/attachments #{release_path}/public/attachments
-       CMD
+     %w{attachments}.each do |share|
+		    run "rm -rf #{release_path}/public/#{share}"
+		    run "mkdir -p #{shared_path}/system/#{share}"
+		    run "ln -nfs #{shared_path}/system/#{share} #{release_path}/public/#{share}"
+		  end
     
     # sudo <<-CMD
     #   rm -fr #{release_path}/tmp/.ruby_inline &&

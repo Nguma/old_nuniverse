@@ -24,9 +24,10 @@ class UsersController < ApplicationController
   def create
     logout_keeping_session!
     @user = User.new(params[:user])
-    @user.register! if @user && @user.valid?
+
     success = @user && @user.valid?
     if success && @user.errors.empty?
+			@user.register!
       redirect_to('/thank_you')
      # flash[:notice] = "Thanks for signing up!  We're sending you an email with your activation code."
     else

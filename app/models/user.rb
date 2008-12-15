@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
 	belongs_to :tag
 	
 	alias_attribute :object, :tag
-	after_create :assign_tag
+	before_create :assign_tag
 	
 	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
 	has_many :perspectives, :foreign_key => :user_id
@@ -134,7 +134,7 @@ class User < ActiveRecord::Base
 				:label => self.login,
 				:kind => 'user'
 			)
-			self.save
+		
 		end
 
 end
