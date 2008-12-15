@@ -13,7 +13,12 @@
       <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
     </div>
   </div>
-  <p><%= connection.description.blank? ? connection.twin.description : connection.description %> <%= link_to "Edit their relationship", edit_connection_url(connection)%></p>
+  <p>
+    <%= connection.description.blank? ? connection.twin.description : connection.description %> 
+    <% unless !authorized_to_edit?(connection, current_user) -%>
+      <%= link_to "Edit relationship", edit_connection_url(connection)%>
+    <% end -%>
+  </p>
   
   <div class="delimiter"> </div>
   

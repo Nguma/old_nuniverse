@@ -21,4 +21,17 @@ module ConnectionsHelper
 			render :partial => "/previews/nuniverse", :locals => {:connection => connection}
 		end
 	end
+	
+	def render_connection_description(connection)
+		return connection.description.blank? ? connection.twin.description : connection.description
+	end
+	
+	def authorized_to_edit?(connection, user)
+		return true if connection.subject.kind != 'user' && connection.object.kind != 'user'
+		return true if connection.object.kind == 'user' && connection.object == current_user.tag
+		# return true if connection.subject.kind == 'user' && connection.subject == current_user.tag
+		return false
+	end
+	
+	
 end

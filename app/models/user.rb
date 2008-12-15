@@ -39,9 +39,7 @@ class User < ActiveRecord::Base
 	
 	alias_attribute :object, :tag
 	before_create :assign_tag
-	
-	has_many :invitations, :class_name => "Permission", :foreign_key => "user_id"
-	has_many :perspectives, :foreign_key => :user_id
+
 	has_many :taggings, :as => :taggable
 
 	
@@ -104,21 +102,9 @@ class User < ActiveRecord::Base
 		
 	
 	end
-	
-	def groups
-		self.tag.connections_to.tagged('group').paginate(:page => 1, :per_page => 5)
-	end
-	def member_of?(group)
-		return true if !Connection.with_subject(group.tag).with_user(self).with_object(self.tag).tagged('member').empty?
-		return false
-	end
-	
+
 	def add_image(params)
 		tag.add_image(params)
-	end
-	
-	def self_perspective
-		Perspective.new(:user_id => self.id, :favorite => 1, :tag_id => self.tag.id)
 	end
 
   protected

@@ -1,22 +1,27 @@
   <%= render_tag connection.subject %>
-  <%= connection.subject.description %>
+  <div class="delimiter"> </div>
+  <h5>How are <%= connection.subject.label %> and <%= connection.object.label %> related?</h5>
+  <p><%= render_connection_description(connection) %><%= link_to "Edit", edit_connection_url(connection)%></p>
+  <h5>About <%= connection.subject.label %></h5>
+  <p><%= connection.subject.description %></p>
+  <h5>In <%= connection.subject.label %> nuniverse, you'll find</h5>
+  <% @connections.each do |connection| -%>
+  <div style="margin:5px 0 1px 0;display:block;clear:left;position:relative;">
+    <span style="padding:2px;background:#369;color:#FFF;margin:0 3px 0 0;font-size:14px"><%= connection.subject.tags.first %></span>
+    <span style="font-size:14px;color:#666;line-height:16px"><%= link_to_item(connection.subject) %></span>
+  </div>
+    
+  <% end -%>
   <%= add_to_fav_link(connection) %>
   <%= link_to image_tag("/images/icons/comment_lnk.png"), "/comments/new", :class => "trigger comment_lnk" %>
  
-  <div class="delimiter"> </div>
-<h5>Connected to <%= connection.object.label %> as</h5>
+  
+
 <% connection.tags.each do |tag| -%>
   <span style="margin:0 10px 0 0;font-size:13px;"><%= link_to tag, "#" %></span>
 <% end -%>
 <%= link_to "Edit", "/connections/edit/#{connection.id}", :class => "trigger" %>
 
-<h5>Connected to this nuniverse</h5>
-<% @connections.each do |connection| -%>
-  <span style="margin:0 10px 0 0;font-size:13px;">
-    <%= link_to connection.subject.label, visit_url(connection.subject, current_user.login)%> 
-    <%="(#{ connection.tags.first})" unless  connection.tags.empty? %>
-  </span>
-<% end -%>
 
 <h5>Find more on</h5>
 <%= link_to "Google", visit_url(connection.object.id,"google") , :style => "color:#666" %> | 

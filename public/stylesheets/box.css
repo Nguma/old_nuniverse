@@ -96,6 +96,11 @@
 	top:-16px;
 }
 
+#preview_box p a {
+	position:relative;
+	color:#369;
+}
+
 #preview_box .hide_in_preview {
 	display:none;
 }
