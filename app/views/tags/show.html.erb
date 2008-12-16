@@ -1,27 +1,18 @@
 <%#= render :partial => "/users/groups" %>
 <%= render :partial => "/boxes/preview" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
-  <div id="content" class="<%= @mode %>_mode" style="clear:none;height:auto;padding:0;margin:0">
+  <div id="content" class="<%= @mode %>_mode">
  
- <% if @kind == 'digest' -%>
-  <%= render :partial => "/tags/digest", :locals => {:items => @items }%>
- <% else -%>
-  <%= render :partial => "/tags/page", :locals => {:items => @items }%>
- <% end -%>
-  
-     
-   <% content_for :right_col do -%>
-     
-     <%= display_options %>
-     <%= render :partial => "/nuniverse/tag_cloud" %>
-     <%= perspectives %>
+   <% if @kind == 'digest' -%>
+    <%= render :partial => "/tags/digest", :locals => {:items => @items }%>
+   <% else -%>
+    <%= render :partial => "/tags/page", :locals => {:items => @items }%>
    <% end -%>
+  
+     
+
    </div>
+  <%= display_options %>
   
-   
-   
-  
-  
-<%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px", :id => "main_spinner", :class => "spinner hidden") %>
   
 <% end -%>

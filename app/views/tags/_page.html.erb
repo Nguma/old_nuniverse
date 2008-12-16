@@ -1,5 +1,6 @@
 <div id="sub_menu">
-  <h2><%= items.size %> <%= @kind.pluralize.capitalize %> <%= " matching \"#{@filter}\"" if @filter%></h2>
+  <%= link_to "email that to ...", "/tags/create_email/#{@tag.id}?filter=#{@filter}", :style => "position:relative;float:right"%>
+  <h2><%= items.size %> <%= @kind.pluralize %> <%= " matching \"#{@filter}\"" if @filter%></h2>
   <% if items.empty? -%>
     <h3>No <%= @kind.pluralize %> are connected to <%= @tag.label %></h3>
     

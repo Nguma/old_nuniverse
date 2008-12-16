@@ -1,5 +1,42 @@
-<h1>Add tags</h1>
-<%= render :partial => "/tags/new" %>
+<div style="padding:60px">
+  <% form_tag create_tag_url, {:multipart => true} do -%>
+  <fieldset>
+  <h1>Great! You are about to create a nuniverse for <span style="color:#389"><%= @tag.label %></span>.</h1>
+  
+  <%= link_to "1. Tag it. (We need at least one!)", "#", :class => "toggle" %>
+  <div >
+    <label>Add as many tags as needed. Be aware that these tags are public, meaning that they will be seen by anyone.</p>
+    <%= text_field_tag "tags", "" , :class => "tags", :id => "input_tag"%>
+  </div>
+  
+  <%= link_to "2. Describe it (optional)", "#", :class => "toggle" %>
+  <div class="hidden">
+  <label>Add a quick description about <%= @tag.label %></label>
+  <%= text_area_tag :description, "", :style => "width:100%", :rows => 2 %>
+  </div>
+  
+  <%= link_to "3. Add an image (optional)", "#", :class => "toggle" %>
+  <div class="hidden">
+    <%= text_field_tag :source_url, "", :class => "input",  :id => "input_image", :autocomplete => "off"%>
+    <br/>
+    <label style="color:#fff">... or upload a file from your computer</label><br/>
+    <%= file_field_tag :uploaded_data , :id => "input_upload"%>
+  </div>
 
 
-<%= link_to 'Back', tags_path %>
+  <% if @object %>
+    <%= link_to "4. How is #{@tag.label} related to #{@object.label}?", "#", :class => "toggle" %>
+    <div class="hidden">
+      <%= text_area_tag :connection_description, "", :style => "width:100%", :rows => 2 %><br/>
+    </div>
+  <% end -%>
+ 
+    <%= hidden_field_tag "object", @object.id %>
+    <%= hidden_field_tag "input", @tag.label %>
+    
+   
+    <%= submit_tag "Save & connect" %>
+    <%= link_to(image_tag("/images/icons/cancel_btn.png"), "#", :class => "trigger") %>
+   </fieldset>
+  <% end -%>
+</div>

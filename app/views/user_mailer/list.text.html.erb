@@ -10,23 +10,23 @@
   <% @items.each_with_index do |item,i| %>
     <tr style="height:50px;background:#eee;margin:0 0 0 0;border:none">
       <td style="border:none;margin:0;width:50px">
-        <% unless item.object.thumbnail.blank? %>
-          <img src="cid:<%= item.object.thumbnail %>@nuniverse.net" height="50px" width="50px" style="border:solid 5px #eee;"/>
+        <% unless item.subject.thumbnail.blank? %>
+          <img src="cid:<%= item.subject.thumbnail %>@nuniverse.net" height="50px" width="50px" style="border:solid 5px #eee;"/>
         <% end -%>
       </td>
       <td style="border:none;padding:5px;margin:0">
         <h3>
-            <% if item.object.kind == "bookmark" -%>
-              <%= link_to("#{item.object.label.capitalize}", item.object.url, :style => "color:#666") %>
+            <% if item.subject.kind == "bookmark" -%>
+              <%= link_to("#{item.subject.label.capitalize}", item.subject.url, :style => "color:#666") %>
             <% else -%>
-              <%= link_to(item.object.label, "http://www.nuniverse.net/my_nuniverse/all/#{@content.label}/item/#{item.object.id}", :style => "color:#666") %>
+              <%= link_to(item.subject.label, visit_url(item.subject.id, @sender.login, :host => "nuniverse.net"), :style => "color:#666") %>
             <% end -%>
           </h3>
         <p style="color:#999">
           <%#= Nuniverse.collect_infos(:connection => item, :current_user => @sender, :kind => item.kind) %>
-          <%= item.kind %>
+          
           <%= item.tags.join(', ')%>
-          <%= item.object.description %>
+          <%= item.description.blank? ? item.twin.description : item.description %>
         </p>
         
       </td>

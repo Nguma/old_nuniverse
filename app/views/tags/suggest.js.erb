@@ -22,4 +22,4 @@
    
     <label style="clear:both">None of the above are what you're looking for? create it:</label>
   <% end -%>
-  <h3><%= link_to("Create #{@input}", "/tags/new?input=#{@input}", :class => "trigger ", :mode => "create") %></h3>
+  <h3><%= link_to("Create #{@input}", "/tags/new?input=#{@input}&object=#{@tag.id}", :mode => "create") %></h3>

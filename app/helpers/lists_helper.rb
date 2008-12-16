@@ -16,16 +16,18 @@ module ListsHelper
 		item = item.is_a?(Connection) ? item.subject : item
 		kind = params[:kind] ? params[:kind] : item.kind 	
 		params[:service] ||= @service
-		params[:title] ||= item.label.capitalize[0..53]
-		params[:title] << "..." if item.label.length > 53
+		params[:title] ||= item.label.capitalize
+
 		case item.kind
 		when 'email address','email'
 			link_to(params[:title], "mailto:#{params[:title]}")
 		when 'bookmark'
 			link_to(params[:title], item.url, :target => "_blank")
+		when 'user'
+			params[:title] = "you" if item == current_user.tag
+			link_to params[:title], visit_url(item, current_user.login, :mode => params[:mode] || @mode)
 		else
-			link_to(params[:title],  visit_url(item, current_user.login, :mode => params[:mode] || @mode))
-			# link_to(params[:title], tag_url(item, :kind => kind, :perspective => @perspective.tag.label, :mode => params[:mode] || @mode))
+			link_to(truncate(params[:title],50,'...'),  visit_url(item, current_user.login, :mode => params[:mode] || @mode))
 		end
 	end
 

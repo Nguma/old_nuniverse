@@ -33,10 +33,6 @@ class TagsController < ApplicationController
 		@input = params[:input] || nil
 		@service = @user.login
 		
-		@mode = params[:mode] ||  (session[:mode].nil? ? 'card' : session[:mode])
-		@mode = @mode.blank? ? 'card' : @mode
-		
-
 		@subject_kind = @kind == "digest" ? nil : @kind
 		if @perspective.kind == "service"
 			@items = service_items(@tag.label)
@@ -71,7 +67,7 @@ class TagsController < ApplicationController
   def new
 
     @tag = Tag.new(:label => params[:input])
-
+		@object = Tag.find(params[:object]) rescue nil
     respond_to do |format|
       format.html {}
 			format.js {}
@@ -81,12 +77,17 @@ class TagsController < ApplicationController
 
 	def create
 		@object = Tag.find(params[:object]) rescue nil
-		@tag = Tag.new(:label => params[:input], :kind => "nuniverse")
+		@tag = Tag.new(:label => params[:input], :kind => "nuniverse", :description => params[:description])
 		@tag.tag_with(params[:tags].split(','))
 		@tag.save
-		@tag.connect_with(@object) if @object 
+		@tag.connect_with(@object, :description => params[:connection_description]) if @object 
+		if params[:source_url] || params[:uploaded_data]
+			 if @image = Image.create!(:source_url => params[:source_url].blank? ? nil : params[:source_url], :uploaded_data => params[:uploaded_data])
+ 					@image.tag.connect_with(@tag)
+				end
+		end
 		respond_to do |f|
-			f.html {}
+			f.html { redirect_to @object rescue redirect_to @tag }
 			f.js {}
 		end
 	end
@@ -102,18 +103,7 @@ class TagsController < ApplicationController
 		# redirect_back_or_default(@tag)
   end
 
-  # # POST /tags
-  # # POST /tags.xml
-  # def create
-  # 		@tag = Tag.find_or_create(:label => params[:label], :kind => params[:kind])
-  # 
-  #   respond_to do |format|
-  #       flash[:notice] = 'Tags were successfully created.'
-  #       format.html { redirect_back_or_default("/my_nuniverse") }
-  #       format.xml  { render :xml => @tag, :status => :created, :location => @tag  }
-  # 				format.js { render :action => "instance"}
-  #   end
-  # end
+
 
   # PUT /tags/1
   # PUT /tags/1.xml
@@ -160,7 +150,7 @@ class TagsController < ApplicationController
   # DELETE /tags/1
   # DELETE /tags/1.xml
   def destroy
-    @tag = Tag.find(params[:id])
+  
     @tag.destroy
 
     respond_to do |format|
@@ -169,14 +159,23 @@ class TagsController < ApplicationController
     end
   end
 
+	def create_email
+		@filter = params[:filter]
+	end
+
 	def send_email
-		@emails = params[:input].split(/\,|\;/)
+		@filter = params[:filter].blank? ? nil : params[:filter]
+		@emails = params[:emails].split(/\,|\;/)
 		UserMailer.deliver_list(
 			:sender => current_user,
-			:emails => params[:input],
+			:emails => params[:emails],
 			:tag => @tag,
-			:connections => @tag.connections_from,
+			:connections => Connection.with_object(@tag).with_subject_kind(session[:kind]).tagged_or_named(@filter).order_by(session[:order]).paginate(:page => 1, :per_page => 15),
 			:message => params[:message])	
+		respond_to do |f|
+			f.html {redirect_to @tag }
+			f.js {}
+		end
 	end
 
 	def suggest

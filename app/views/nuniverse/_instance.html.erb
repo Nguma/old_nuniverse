@@ -22,6 +22,7 @@
     <%= yield :right_col %>
   </div>
   <div style="position:relative;width:auto;margin:0 auto 0 0;padding:0">
+    <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute", :id => "main_spinner", :class => "spinner hidden") %>
     <%= content %>
   </div>
   <div class="delimiter" style="clear:both">&nbsp;</div>

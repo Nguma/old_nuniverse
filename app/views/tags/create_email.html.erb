@@ -1,0 +1,11 @@
+<div style="padding:60px">
+  <h2>Who do you want to send this to?</h2>
+  <% form_tag "/tags/send_email" , :style=>"width:70%" do -%>
+    <label>Add as many email addresses as you wish, comma delimited</label><br/>
+    <%= text_field_tag "emails", "", :id => "email_input" , :style => "width:100%"%><br/>
+    <label>Add a few words... if you feel like it</label><br/>
+    <%= text_area_tag "message", "", :style => "width:100%"%>
+    <%= hidden_field_tag "filter", @filter%><br/>
+    <%= submit_tag "Send" %>
+  <% end -%>
+</div>

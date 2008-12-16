@@ -1,0 +1,7 @@
+<h2>Who do you want to send this to?</h2>
+<% form_tag "/tags/send_email" -%>
+  <%= text_field_tag "emails", "", :id => "email_input" %>
+  <%= text_area_tag "message", ""%>
+  <%= hidden_field_tags "filter", @filter%>
+  <%= submit_tag "Send" %>
+<% end -%>

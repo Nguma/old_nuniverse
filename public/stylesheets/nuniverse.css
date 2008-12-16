@@ -186,11 +186,12 @@ p strong {
 
 #content {
 	position:relative;
-	float:none;
 	width:auto;
-	margin:0 0 0 0px;
-	padding:0;
 	z-index:123;
+	clear:none;
+	height:auto;
+	padding:0;
+	margin:0 0 0 0;
 }
 
 

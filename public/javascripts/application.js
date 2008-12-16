@@ -67,6 +67,14 @@ function reset()
   
   
   notice();
+  
+  $$('a.toggle').each(function(toggle) {
+    toggle.removeEvents();
+    toggle.addEvent('click', function(ev) {
+      ev.preventDefault();
+      toggle.getNext().toggleClass('hidden');
+    });
+  });
  
   
 

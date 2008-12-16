@@ -29,7 +29,8 @@ class Tag < ActiveRecord::Base
 		@c = Connection.find_or_create(
 			:subject => self,
 			:object => tag,
-			:public => 1
+			:public => 1,
+			:description => params[:description]
 		)
 		
 		params[:as].each do |k|
@@ -45,7 +46,8 @@ class Tag < ActiveRecord::Base
 			Connection.create(
 				:subject => tag,
 				:object => self,
-				:public => 1
+				:public => 1,
+				:description => params[:description]
 			)		rescue nil
 		end
 

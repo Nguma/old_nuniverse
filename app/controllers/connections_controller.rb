@@ -89,6 +89,7 @@ class ConnectionsController < ApplicationController
 		end
 	end
 	
+
 	protected
 	
 	def find_connection
