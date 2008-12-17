@@ -13,19 +13,21 @@ module ImagesHelper
 		# source = source.is_a?(Connection) ? source.subject : source
 		# params[:kind] ||= source.kinds
 		params[:mode] ||= @mode
+		params[:class] ||= "thumbnail"
+		
 		image_tag = source.kind == "image" ? source : source.subjects.with_kind('image').first
 		
 		if image_tag.nil? 
 			if !source.property("thumbnail").blank? 
-				img = source.property("thumbnail")
+				return image_tag(source.property("thumbnail"), :alt => "", :class => params[:class] )
 			else
-				img = "/images/icons/#{source.tags.first.gsub(' ', '_')}.png" rescue "/images/icons/#{source.kind}.png"
+				return image_tag("/images/icons/#{source.kind}.png", :alt => "", :class => params[:class] << " default_img", :style => "width:50px;height:50px")
 			end
 		else
-			img = params[:mode] == "image" ? image_tag.source.public_filename : image_tag.source.public_filename(:small)
+			return image_tag(params[:mode] == "image" ? image_tag.source.public_filename : image_tag.source.public_filename(:small), :alt => "", :class => params[:class] )
 		end
 
-		return image_tag(img, :alt => "", :class => params[:class] || "thumbnail")
+
 	
 	end
 	

@@ -36,6 +36,12 @@
 	padding:4px 6px 6px 4px;
 }
 
+img.default_img {
+	width:50px;
+	height:50px;
+
+}
+
 .personal .thumbnail {
 	background:transparent url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
 }
