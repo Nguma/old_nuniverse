@@ -64,6 +64,22 @@ function reset()
   })
 
 
+  $$('form#new_tag_form').each(function(form) {
+    var s = $('input_url');
+    s.addEvents({
+      'blur':function(ev) {
+        new_tag_call(s, form);
+      }
+    });
+     form.getElements('a.wiki_suggest').each(function(wiki) {
+        wiki.addEvent('click', function(ev) {
+          ev.preventDefault();
+          $('input_url').set('value',wiki.get('href'));
+          new_tag_call(s, form);
+        });
+      });
+  });
+  
   
   
   notice();
@@ -201,6 +217,29 @@ function reset()
 
 
   
+}
+
+function new_tag_call(caller, scope) {
+  var req = new Request.HTML({
+    url:"/tags/new",
+    data:{url:caller.get('value')},
+    onSuccess:function(a,b,c,d) {
+      var node = new Element('div').set('html',c);
+  
+      node.getElement('.images').replaces(scope.getElement('.images'));
+      scope.getElements('.images a').each(function(img){
+        img.addEvent('click',function(ev) {
+          ev.preventDefault();
+          $('input_image').set('value',img.getElement('img').get('src'));
+        });
+      });
+      
+      if($('input_description').get('value') == ""  ) {
+        $('input_description').set('value', node.getElement('.description').get('text'));
+      }
+      
+    }
+  }).get()
 }
 
 function setExpandLinks(scope) {

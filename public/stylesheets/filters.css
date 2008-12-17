@@ -21,10 +21,18 @@
 	display:block;
 }
 
-#sub_menu .current {
+#list_menu  {
+	background:#eee;
+}
+
+#list_menu a {
+	color:#999;
+}
+
+#list_menu .current {
 	border-bottom:none;
 	font-weight:bold;
-	color:#FFF;
+	color:#333;
 }
 
 .tabs dd img {

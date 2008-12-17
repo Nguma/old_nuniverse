@@ -27,7 +27,7 @@ module ListsHelper
 			params[:title] = "you" if item == current_user.tag
 			link_to params[:title], visit_url(item, current_user.login, :mode => params[:mode] || @mode)
 		else
-			link_to(truncate(params[:title],50,'...'),  visit_url(item, current_user.login, :mode => params[:mode] || @mode))
+			link_to(truncate(params[:title],50,'...'),  "/tags/#{item.id}", :mode => params[:mode] || @mode)
 		end
 	end
 

@@ -4,15 +4,17 @@
   <%= link_to(image_tag("/images/icons/arrow_up.png"), "/connections/rank/#{connection.id}", :class => "trigger") %>
   </div>
 
-  <%= render_tag connection.subject %>
-  <p>
+  <%= thumbnail_tag(connection.subject)%>
+  
     
+    <div class="description" >
      <%= render_connection_description(connection) %> 
-     <% unless !authorized_to_edit?(connection, current_user) -%>
-       <%= link_to "Edit relationship", edit_connection_url(connection)%>
-     <% end -%>
-   </p>
-   <p class="tags"><%= connection.tags.join(',')%></p>
+     </div>
+   
+   <% unless !authorized_to_edit?(connection, current_user) -%>
+     <p> <%= link_to "Edit", edit_connection_url(connection), :style => "color:#369;margin:0 0 0 5px"%></p>
+    <% end -%>
+  
   <div class="preview">
     <div class="hidden">
       <%= link_to "preview", preview_url(connection), :class => "preview_url" %>

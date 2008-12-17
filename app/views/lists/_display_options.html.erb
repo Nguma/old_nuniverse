@@ -3,10 +3,7 @@
   <% options.each do |option| -%>
     <dd class=" <%= selected == option[1] ? 'current' : '' %>">
    
-        <%= link_to_item(source,
-                          :title => "#{image_tag("/images/icons/view_as_#{option[1]}.png")}",
-                          :mode => option[1])
-                      %>
+        <%= link_to("#{image_tag("/images/icons/view_as_#{option[1]}.png")}", "/tags/#{@tag.id}?mode=#{option[1]}") %>
     </dd>
   <% end -%>
 </dl>

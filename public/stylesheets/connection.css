@@ -1,6 +1,7 @@
 .connection {
 	min-height:70px;
 	padding:5px;
+	position:relative;
 }
 
 .connection .kinds {
@@ -37,20 +38,16 @@ clear:left;
 }
 
 .connection .rank_lnk {
-	position:relative;
-	float:right;
-	top:5px;
+	position:absolute;
+
 	font-size:50px;
 	color:#999;
 	right:5px;
-
+	bottom:5px;
 }
 
 .connection .rank_lnk a:hover {
 	background:transparent url('/images/icons/arrow_up_hover.png') top right no-repeat;
-}
-.connection .description {
-	display:none;
 }
 
 .list_mode .connection {
@@ -85,10 +82,33 @@ clear:left;
 /*	background:transparent url('/images/backgrounds/odd.png') 0 0 repeat;*/
 }
 
-.list_mode .connection .description {
+
+
+#digest .bookmark_connection {
+	background:#ffb33b;
+	
+}
+
+#digest .user_connection {
+	background:#b9efe2;
+	
+}
+
+.connection .description {
 	display:block;
 	color:#666;
-	font-size:12px;
+	font-size:18px;
+	padding:10px 10px 5px 5px;
+}
+
+.image_mode .description {
+	clear:both;
+}
+
+.connection .description a {
+	color:#369;
+	font-size:20px;
+	font-weight:bold;
 }
 
 .connection .preview {

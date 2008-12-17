@@ -1,22 +1,49 @@
 <div style="padding:60px">
-  <% form_tag create_tag_url, {:multipart => true} do -%>
+
+  <% form_tag create_tag_url, {:multipart => true, :id => "new_tag_form"} do -%>
+  <div style="float:right;width:300px;margin:50px 0 0 0">
+    <label>Do any of these wikipedia pages match?</label>
+    
+    <% @wikis.each do |wiki| -%>
+      <div style="margin:5px 0 0 0">
+      <%= link_to wiki.label, wiki.url, :class => "wiki_suggest" %><br/>
+      <p style="color:#666"><%= truncate(wiki.description,50,'...') %></p>
+      </div>
+    <% end -%>
+    
+  </div>
   <fieldset>
   <h1>Great! You are about to create a nuniverse for <span style="color:#389"><%= @tag.label %></span>.</h1>
   
   <%= link_to "1. Tag it. (We need at least one!)", "#", :class => "toggle" %>
   <div >
     <label>Add as many tags as needed. Be aware that these tags are public, meaning that they will be seen by anyone.</p>
-    <%= text_field_tag "tags", "" , :class => "tags", :id => "input_tag"%>
+    <%= text_field_tag "tags", @tags.join(', ') , :class => "tags", :id => "input_tag"%>
   </div>
+  
+  <%= link_to "3. link to a web page (optional)", "#", :class => "toggle" %>
+  <div class="hidden">
+    <label></label>
+    <%= text_field_tag "url", "", :id => "input_url" %>
+  </div>
+  
   
   <%= link_to "2. Describe it (optional)", "#", :class => "toggle" %>
   <div class="hidden">
-  <label>Add a quick description about <%= @tag.label %></label>
-  <%= text_area_tag :description, "", :style => "width:100%", :rows => 2 %>
+  <label>Add a quick description about <%= @tag.label %></label><br/>
+  <%= text_area_tag :description, "", :style => "width:600px", :rows => 2, :id => "input_description" %>
   </div>
   
   <%= link_to "3. Add an image (optional)", "#", :class => "toggle" %>
   <div class="hidden">
+    <div style="float:right;right:20px;width:500px">
+      <label>Suggested images</label>
+      <div class="images">
+        <% @images.each do |img| -%>
+          <%= image_tag(img)%>
+        <% end -%>
+      </div>
+    </div>
     <%= text_field_tag :source_url, "", :class => "input",  :id => "input_image", :autocomplete => "off"%>
     <br/>
     <label style="color:#fff">... or upload a file from your computer</label><br/>
@@ -35,8 +62,10 @@
     <%= hidden_field_tag "input", @tag.label %>
     
    
-    <%= submit_tag "Save & connect" %>
-    <%= link_to(image_tag("/images/icons/cancel_btn.png"), "#", :class => "trigger") %>
+   
    </fieldset>
+   <div class="delimiter"></div>
+    <%= submit_tag "Save & connect" %>
+     <%= link_to(image_tag("/images/icons/cancel_btn.png"), visit_url(@object.id, current_user.tag), :class => "trigger") %>
   <% end -%>
 </div>

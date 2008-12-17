@@ -48,7 +48,7 @@ class Connection < ActiveRecord::Base
 	named_scope :with_subject_kind, lambda { |kind| 
 		kind.nil? ? {:joins => ["LEFT OUTER JOIN tags S on S.id = connections.subject_id "]} : {
 
-			:conditions => ["S.kind = ?", kind],
+			:conditions => ["S.kind rlike ?", kind],
 			:joins => ["LEFT OUTER JOIN tags S on S.id = connections.subject_id "]
 		}
 	}

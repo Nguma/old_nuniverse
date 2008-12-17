@@ -24,7 +24,7 @@ class TagsController < ApplicationController
 		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'digest')
 		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
 
-		@filter = params[:input] 
+		@filter = params[:input].blank? ? nil : params[:input]
 		# @list = List.new(:label => @kind, :creator => current_user)
 		# @tag.kind = @kind
 		@source = @tag
@@ -33,26 +33,29 @@ class TagsController < ApplicationController
 		@input = params[:input] || nil
 		@service = @user.login
 		
-		@subject_kind = @kind == "digest" ? nil : @kind
-		if @perspective.kind == "service"
+		# @subject_kind = @kind == "digest" ? nil : @kind
+		if @kind == "digest"
+			@nuniverses = Connection.with_object(@tag).with_subject_kind('nuniverse|bookmark|user').order_by("by_latest").paginate(:page => 1, :per_page => 15)
+
+		elsif @perspective.kind == "service"
 			@items = service_items(@tag.label)
 		else
-			@items = Connection.with_object(@tag).with_subject_kind(@subject_kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
-
+			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
+			
 		end
 	
 		respond_to do |f|
 			f.html {
-				@video_count = Connection.with_object(@tag).with_subject_kind('video').count
-				@bookmark_count = Connection.with_object(@tag).with_subject_kind('bookmark').count
-				@nuniverse_count = Connection.with_object(@tag).with_subject_kind('nuniverse').count
-				@location_count = Connection.with_object(@tag).with_subject_kind('location').count
-				@user_count = Connection.with_object(@tag).with_subject_kind('user').count
-				@image_count = Connection.with_object(@tag).with_subject_kind('image').count
-				@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
-				@product_count = Connection.with_object(@tag).with_subject_kind('product').count
-				
-				@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags
+				# @video_count = Connection.with_object(@tag).with_subject_kind('video').count
+				# 				@bookmark_count = Connection.with_object(@tag).with_subject_kind('bookmark').count
+				# 				@nuniverse_count = Connection.with_object(@tag).with_subject_kind('nuniverse').count
+				# 				@location_count = Connection.with_object(@tag).with_subject_kind('location').count
+				# 				@user_count = Connection.with_object(@tag).with_subject_kind('user').count
+				# 				@image_count = Connection.with_object(@tag).with_subject_kind('image').count
+				# 				@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
+				# 				@product_count = Connection.with_object(@tag).with_subject_kind('product').count
+				# 				
+								@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags
 			}
 			f.js {
 				
@@ -68,6 +71,42 @@ class TagsController < ApplicationController
 
     @tag = Tag.new(:label => params[:input])
 		@object = Tag.find(params[:object]) rescue nil
+		@tags = params[:tags] || []
+		@images = []
+		@wikis = []
+	
+		if params[:url] 
+			if params[:url].match('en.wikipedia.org/wiki/')
+				feed_url = "http://en.wikipedia.org/w/api.php?action=query&list=allimages&aifrom=#{params[:url].gsub('http://en.wikipedia.org/wiki/','')}&format=xml"
+				
+				response = Net::HTTP.get_response(URI.parse(feed_url)).response.body
+				@images =  REXML::Document.new(response).elements.to_a("//img").collect {|c| c.attributes['url']}
+			else
+				doc = Hpricot open(params[:url].gsub(/\s|,/,'_'))
+				@images = (doc/:img).collect! {|img| img if not img.attributes['height'].to_i < 50 }
+				@description = (doc/:p).first.inner_html.gsub(/\..*/,'') rescue ""
+			end
+		
+		else
+				feed_url = "http://en.wikipedia.org/w/api.php?action=opensearch&search=#{@tag.label.gsub(' ','_')}&format=xml"
+				response = Net::HTTP.get_response(URI.parse(feed_url)).response.body
+				ds = REXML::Document.new(response).elements.to_a("//Item")
+				ds.each do |d|
+					@wikis << Tag.new(:label => d.elements["Text"].text, :description => d.elements["Description"].text, :url => d.elements["Url"].text, :kind => "bookmark")
+				end
+				feed_url = "http://en.wikipedia.org/w/api.php?action=query&list=allimages&aifrom=#{@tag.label.gsub(' ','_')}&format=xml"
+				response = Net::HTTP.get_response(URI.parse(feed_url)).response.body
+				@images =  REXML::Document.new(response).elements.to_a("//img").collect {|c| c.attributes['url']}
+		end
+				
+				
+
+				
+				
+			# 	@images = ds.collect {|c| c.elements["url"].text}
+			
+
+
     respond_to do |format|
       format.html {}
 			format.js {}
@@ -81,10 +120,20 @@ class TagsController < ApplicationController
 		@tag.tag_with(params[:tags].split(','))
 		@tag.save
 		@tag.connect_with(@object, :description => params[:connection_description]) if @object 
-		if params[:source_url] || params[:uploaded_data]
+		if !params[:source_url].blank? || !params[:uploaded_data].blank?
 			 if @image = Image.create!(:source_url => params[:source_url].blank? ? nil : params[:source_url], :uploaded_data => params[:uploaded_data])
  					@image.tag.connect_with(@tag)
 				end
+		end
+		
+		if params[:url] && !params[:url].blank?
+			bookmark = Tag.find(:first, :conditions => ['url = ?',params[:url]] )
+			if bookmark.nil?
+				bookmark = Nuniversal.parse_url(params[:url]) 
+				bookmark.save
+			end
+
+			bookmark.connect_with(@tag)
 		end
 		respond_to do |f|
 			f.html { redirect_to @object rescue redirect_to @tag }

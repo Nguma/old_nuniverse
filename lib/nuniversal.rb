@@ -254,7 +254,25 @@ module Nuniversal
 		raise str.inspect
 	end
 	
-	def self.get_content_from_wikipedia(url)
+	def self.parse_url(url)
+		doc = Hpricot open(url.gsub(/\s|,/,'_'))
+		@t = Tag.new(:kind => "bookmark")
+		if url.match('en.wikipedia.org/wiki/')
+			
+			@article = self.get_content_from_wikipedia(doc)
+			@t.description = self.wikipedia_description(@article)
+			@t.label = "#{(doc/:h1).first.inner_html.to_s} on Wikipedia"
+			@t.url = url		
+		else
+			@t.label = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
+			@t.description = (doc/:p).first.inner_html.to_s rescue ""
+			@t.url = url
+		end
+		@t
+
+	end
+	
+	def self.get_content_from_wikipedia(doc)
 			items_to_remove = [
 			  "#contentSub",        #redirection notice
 			  "div.messagebox",     #cleanup data
@@ -268,7 +286,7 @@ module Nuniversal
 				"#cite_note-0"
 			  ]
 
-			doc = Hpricot open('http://en.wikipedia.org'+url.gsub(/\s|,/,'_'))
+			
 			
 			@article = (doc/"#content").each do |content|
 			  #change /wiki/ links to point to full wikipedia path

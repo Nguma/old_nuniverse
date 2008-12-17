@@ -119,7 +119,7 @@ class ConnectionsController < ApplicationController
 				# 					image.tag_with('image')			
 				# 				end
 			else
-				doc = Hpricot open( params[:url])
+				doc = Hpricot open params[:url]
 				params[:input] = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
 
 				params[:description] ||= (doc/:p).first.inner_html.to_s rescue ""

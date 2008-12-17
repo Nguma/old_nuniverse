@@ -122,11 +122,14 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def test
-		# @nun = Nuniverse.find(params[:id])
+		#
+		#
+	
+		raise tags.inspect
 
-		# @connections = @nun.nuniverses.find(:all).paginate(:page => 1, :per_page => 10)
-		@items = Connection.with_object(Tag.find(1)).with_subject_kind('nuniverse').tagged_or_named('band').order_by('by_rank').paginate(:page => @page, :per_page => 15)
-		
+		#
+		@result =  response
+		raise @result.inspect	
 	end
 	
 	def netflix

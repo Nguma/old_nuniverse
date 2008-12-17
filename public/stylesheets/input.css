@@ -429,3 +429,8 @@ input.filled {
 	color:#369;
 	
 }
+
+.images img{
+	height:50px;
+	width:auto;
+}

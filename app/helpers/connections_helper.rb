@@ -24,8 +24,15 @@ module ConnectionsHelper
 	
 	def render_connection_description(connection)
 		d = connection.description.blank? ? connection.twin.description : connection.description
-		return nil if d.nil?
-		return d.gsub(/#{connection.subject.label}/,link_to_item(connection.subject))
+		return link_to_item connection.subject if d.nil?
+		reg = Regexp.escape(connection.subject.label)
+		if d.match(/#{reg}/i)
+			return d.gsub(/#{reg}/i,link_to_item(connection.subject))
+		else
+			return  "#{link_to_item connection.subject}. #{d.gsub(/connection.subject.label/,link_to_item(connection.subject))}"
+		end
+		
+		
 	end
 	
 	def authorized_to_edit?(connection, user)
