@@ -4,6 +4,7 @@ class TagsController < ApplicationController
 	before_filter :find_tag, :except => [:index, :remove_tag]
 	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview, :suggest, :share]
 	after_filter :update_session, :only => [:show]
+	after_filter :store_location, :only => [:show]
   # GET /tags
   # GET /tags.xml
   def index
@@ -41,21 +42,14 @@ class TagsController < ApplicationController
 			@items = service_items(@tag.label)
 		else
 			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
-			
+			@count = Connection.with_object(@tag).count
 		end
+		
+		
 	
 		respond_to do |f|
 			f.html {
-				# @video_count = Connection.with_object(@tag).with_subject_kind('video').count
-				# 				@bookmark_count = Connection.with_object(@tag).with_subject_kind('bookmark').count
-				# 				@nuniverse_count = Connection.with_object(@tag).with_subject_kind('nuniverse').count
-				# 				@location_count = Connection.with_object(@tag).with_subject_kind('location').count
-				# 				@user_count = Connection.with_object(@tag).with_subject_kind('user').count
-				# 				@image_count = Connection.with_object(@tag).with_subject_kind('image').count
-				# 				@comment_count = Connection.with_object(@tag).with_subject_kind('comment').count
-				# 				@product_count = Connection.with_object(@tag).with_subject_kind('product').count
-				# 				
-								@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags
+				@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags
 			}
 			f.js {
 				

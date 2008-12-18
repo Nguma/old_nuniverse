@@ -12,7 +12,7 @@
      </div>
    
    <% unless !authorized_to_edit?(connection, current_user) -%>
-     <p> <%= link_to "Edit", edit_connection_url(connection), :style => "color:#369;margin:0 0 0 5px"%></p>
+     <p> <%= link_to "Edit", edit_connection_url(connection), :class => "edit_lnk" %></p>
     <% end -%>
   
   <div class="preview">

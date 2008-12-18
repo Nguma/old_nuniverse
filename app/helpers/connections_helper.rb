@@ -23,8 +23,8 @@ module ConnectionsHelper
 	end
 	
 	def render_connection_description(connection)
-		d = connection.description.blank? ? connection.twin.description : connection.description
-		return link_to_item connection.subject if d.nil?
+		d = connection.description.blank? ? connection.twin.description : connection.description rescue nil
+		return "#{link_to_item connection.subject} #{connection.subject.tags.join(', ')}" if d.nil?
 		reg = Regexp.escape(connection.subject.label)
 		if d.match(/#{reg}/i)
 			return d.gsub(/#{reg}/i,link_to_item(connection.subject))

@@ -13,7 +13,7 @@
         <%= link_to suggestion.label, visit_url(suggestion.id, current_user), :class => "title" %>
         </div>
         <div style="position:relative;float:left;width:100px;top:5px;">
-         <%= link_to image_tag("/images/icons/connect.png", :style =>"width:30px"), konnect_url(suggestion.id, @tag.id), :title => "connect with this nuniverse", :class => "trigger", :mode => "connect" %>
+         <%= link_to image_tag("/images/icons/connect.png", :style =>"width:30px"), "/connect/#{suggestion.id}/with/#{@tag.id}", :title => "connect with this nuniverse", :class => "trigger", :mode => "connect" %>
          </div>
         <div class="delimiter"> </div>
       </div>

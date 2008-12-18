@@ -203,9 +203,6 @@ a.save_button {
 	display:block;
 }
 
-a.saved {
-	opacity:.3;
-}
 
 #control_panel {
 	position:fixed;
@@ -391,6 +388,19 @@ a.saved {
 #main_menu #show_digest .count {
 	display:none;
 }
+
+#main_menu .star {
+	width:40px;
+	padding:3px 0 0 0;
+	position:relative;
+	float:right;
+	top:-15px;
+	font-size:40px;
+	font-weight:bold;
+}
+
+
+
 #sub_menu {
 	padding:10px 10px 5px 10px;
 /*	background:#27406a;*/
@@ -431,3 +441,4 @@ a.saved {
 #digest .connection a {
 	color:#39F;
 }
+

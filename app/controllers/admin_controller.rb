@@ -122,14 +122,7 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def test
-		#
-		#
-	
-		raise tags.inspect
-
-		#
-		@result =  response
-		raise @result.inspect	
+		raise (URI.parse params[:url]).to_s.inspect
 	end
 	
 	def netflix

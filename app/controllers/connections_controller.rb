@@ -1,20 +1,41 @@
 class ConnectionsController < ApplicationController
 	
-	before_filter :find_connection, :except => [:connect]
+	before_filter :find_connection, :except => [:connect, :new, :create]
+	
+	def new
+		@connection = Connection.new(:subject_id => params[:subject_id], :object_id => params[:object_id])
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+	end
+	
+	def create
+
+		@connection = Connection.find_or_create(params[:connection]) 
+		@twin = Connection.find_or_create(:subject_id => @connection.object_id, :object_id => @connection.subject_id)
+	
+		respond_to do |f|
+			f.html { redirect_back_or_default('/') }
+			f.js {}
+		end
+	end
+	
 	
 	def connect
 		@object = Tag.find(params[:object])
 		@subject = Tag.find(params[:subject]) rescue create_subject
-		@connection_from = Connection.find_or_create(:subject => @subject, :object => @object)
+	
+		@connection_from = Connection.find_or_create(:subject_id => @subject.id, :object_id => @object.id)
 		@connection = @connection_from
-		@connection_to = Connection.find_or_create(:subject => @object, :object => @subject)
-		params[:tags] ||= @subject.property('tags').blank? ? @subject.kind :  @subject.property('tags')
-		if params[:tags] != "nuniverse"
-			@subject.tag_with(params[:tags].split(','))
-		end
+		@connection_to = Connection.find_or_create(:subject_id => @object.id, :object_id => @subject.id)
+		params[:tags] ||= @subject.property('tags').to_a
+		@subject.tag_with(params[:tags].split(','))
+
 		
 		respond_to do |f|
-			f.html { redirect_to visit_url(@object.id, current_user.login)}
+			f.html { redirect_back_or_default('/')}
 			f.js {}
 		end
 
@@ -28,7 +49,10 @@ class ConnectionsController < ApplicationController
 		@connections.flatten.each do |c|
 			c.destroy
 		end
-		redirect_back_or_default('/')
+		respond_to do |f|
+			f.html { redirect_back_or_default('/')}
+			f.js {}
+		end
 	end
 	
 	def preview
@@ -103,7 +127,7 @@ class ConnectionsController < ApplicationController
 		when "image"
 		
 		when "bookmark"
-
+			params[:url] = "http://#{params[:url]}" if params[:url].match("^www")
 			if params[:url].match('en.wikipedia.org/wiki/')
 				t = params[:url].gsub(/.*\/wiki/,'/wiki')
 				doc = Nuniversal.get_content_from_wikipedia(t)

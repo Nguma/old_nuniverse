@@ -1,16 +1,16 @@
 <div class="connection <%= connection.kind %>_connection <%= cycle('even','odd') %>"> 
-  <%= render_tag(connection)%>
-  <div class="preview">
-    
-    <%= render_preview(connection) %>
-    <div style="padding:5px">
-      <%= add_to_fav_link(connection) %>
-    </div>
+  <%= thumbnail_tag(connection) %>
+  <div style="position:relative;float:right"><%= add_to_fav_link(connection) %></div>
+  <div class="description" >
+    <%= link_to(connection.label, connection.url, :target => "_blank") %> 
+   
+  </div>
+ 
     <%= hidden_field_tag :input, connection.label %>
     <%= hidden_field_tag :url, connection.url %>
     <%= hidden_field_tag :kind, connection.kind %>
     <%= hidden_field_tag :description, connection.description %>
     <%= hidden_field_tag :data, connection.data %>
-  </div>
+
   <div class='delimiter'>&nbsp;</div>
 </div>

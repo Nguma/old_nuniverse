@@ -1,6 +1,20 @@
 <% if @tag -%>
   <dl id="main_menu">
+    <div class="star">
+      <% if @tag == current_user.tag %>
+        <%= @count %><span><%= image_tag('/images/icons/connection.png', :alt => "connections")%></span>
+      <% else -%>
+        <% if personal_connection -%>
+            <%= link_to image_tag('/images/icons/star_saved.png'), "/disconnect/#{personal_connection.id}", :title => "Save to your nuniverse", :class => "remove_lnk" %>
+        <% else -%>
+        <%= link_to image_tag('/images/icons/star.png'), "/connect/#{@tag.id}/with/#{current_user.tag_id}", :title => "Save to your nuniverse", :class => "save_lnk" %>
+         
+        <% end -%>
+       
+
+      <% end -%>
     
+    </div>
     <%#= main_menu_item "digest" %>
     <%= main_menu_item "nuniverse" %>
     <%= main_menu_item "bookmark" %>  

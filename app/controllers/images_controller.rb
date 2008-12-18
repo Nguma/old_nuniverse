@@ -8,14 +8,12 @@ class ImagesController < ApplicationController
 	
     if @image = Image.create!(:source_url => params[:source_url].blank? ? nil : params[:source_url], :uploaded_data => params[:uploaded_data])
 			@tag = @image.tag
-			@image.tag.tag_with('image')
-			@object = Tag.find(params[:object])
-		
-    	@tag.connect_with(@object)
+			Connection.find_or_create(:object_id => params[:object], :subject_id => @image.tag_id)
+			Connection.find_or_create(:subject_id => params[:object], :object_id => @image.tag_id)
 		end
 		
 		respond_to do |f|
-			f.html { redirect_to visit_url(@object.id, current_user.login)}
+			f.html { redirect_back_or_default('/')}
 			f.js {}
 		end
   end

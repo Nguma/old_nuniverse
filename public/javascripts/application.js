@@ -20,6 +20,13 @@ function getPreviousConnectionWithSmallerScoreThan(score, el) {
 function reset()
 {
  
+ $$('.save_lnk').each(function(lnk) {
+   lnk.addEvent('click', function(ev) {
+     ev.preventDefault();
+     lnk.getParent().toggleClass('saved');
+     previewBox.callRequest({url:lnk.get('href')});
+   });
+ });
 
   $$('.connection').each(function(box,i) {
       var b = new Box(box, {

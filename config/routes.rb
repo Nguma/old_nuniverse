@@ -73,6 +73,8 @@ ActionController::Routing::Routes.draw do |map|
 	map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"
 	
+	map.connect_with "/connect/:subject_id/with/:object_id", :controller => "connections", :action => "new"
+	
 	map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
 	map.add_to_nuniverse "/add-to-favorites/:id", :controller => "connections", :action => "add_to_favorites"
 	map.remove_from_nuniverse "/remove-from-favorites/:id", :controller => "connections", :action => "remove_from_favorites"

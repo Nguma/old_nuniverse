@@ -1,13 +1,13 @@
 <div class="box <%= cycle('even','odd') %>" >
     <h3>
     <%= thumbnail_tag(result)%>
-     <%= link_to(result.label.capitalize, result.url)%>
+     <%= link_to(result.label.capitalize, result.url)%><%= save_button(result, :id => tag.id)%>
     </h3>
     <p style="padding:0 70px 10px 0">
       <%= result.description %><br/>
       <%= link_to(result.url,result.url)%>
     </p>
     <div class="actions">
-      <%= save_button(result, :id => tag.id)%>
+      
     </div>
   </div>

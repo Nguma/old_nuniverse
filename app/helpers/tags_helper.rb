@@ -103,9 +103,9 @@ module TagsHelper
 
 		# personal = connection.favorites.collect{|c| c.user_id}.to_a.include?(current_user.id) rescue false
 		if connection.is_a?(Tag)
-			link_to(image_tag("/images/icons/connect.png"),
+			link_to(image_tag("/images/icons/small_star.png"),
 				create_and_connect_url(@tag.id),
-				:class => "add_to_fav_lnk trigger",
+				:class => "trigger",
 				:title => "Save to your nuniverse"
 			)
 		else
@@ -132,5 +132,9 @@ module TagsHelper
 		end
 
 	
+	end
+	
+	def personal_connection
+		Connection.with_object(current_user.tag).with_subject(@tag).first
 	end
 end

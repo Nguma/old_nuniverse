@@ -55,10 +55,12 @@ clear:left;
 	margin: 1px 0 0px 0;
 }
 
-.default_img {
-	width:50px;
-	height:50px;
-	clear:none;
+.edit_lnk {
+	visibility:hidden;
+}
+
+.hover .edit_lnk {
+	visibility:visible;
 }
 
 
@@ -104,11 +106,12 @@ clear:left;
 	display:block;
 	color:#666;
 	font-size:18px;
-	padding:10px 10px 5px 5px;
+	padding:20px 10px 5px 5px;
 }
 
 .image_mode .description {
 	clear:both;
+	padding:10px 10px 5px 5px;
 }
 
 .connection .description a {

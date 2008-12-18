@@ -8,6 +8,8 @@ class Connection < ActiveRecord::Base
 	has_many :taggings, :as => :taggable
 	has_many :rankings, :as => :rankable
 	
+
+	
 		
 	before_destroy :destroy_taggings
 	
@@ -73,8 +75,10 @@ class Connection < ActiveRecord::Base
 	
 	named_scope :order_by_id, :select => "connections.*", :order => "connections.id DESC"
 	
+
+	
 	def self.find_or_create(params)
-		c = Connection.with_subject(params[:subject]).with_object(params[:object]).first
+		c = Connection.with_subject(params[:subject_id]).with_object(params[:object_id]).first
 		return c unless c.nil?
 		Connection.create(params)
 	end

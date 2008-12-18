@@ -27,8 +27,8 @@ class Tag < ActiveRecord::Base
 		params[:as] ||= []
 
 		@c = Connection.find_or_create(
-			:subject => self,
-			:object => tag,
+			:subject_id => self.id,
+			:object_id => tag.id,
 			:public => 1,
 			:description => params[:description]
 		)
