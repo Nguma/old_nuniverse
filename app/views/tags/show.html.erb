@@ -3,46 +3,11 @@
 <% if @kind == 'digest' -%>
   <%= render :partial => "/tags/digest", :locals => {:items => @items }%>
 <% else -%>
-<% nuniverse(:selected => "My nuniverse") do -%>
-<div id="sub_menu">
-   <%= link_to "email that to ...", "/tags/create_email/#{@tag.id}?filter=#{@filter}", :style => "position:relative;float:right"%>
-   <% if @items.empty? -%>
-
-     <h3><%= "No #{@kind.pluralize} #{@filter ? "matching \"#{@filter}\"" : ""} are connected to #{@tag.label}" %></h3>
-
-   <% else -%>
-     <h2><%= "#{@items.total_entries rescue ""} #{@kind.pluralize} #{" matching \"#{@filter}\"" if @filter } "  %> 
-     <%= link_to "Add one", "#", :class => "expand_lnk", :id => "expand_connect_form_lnk"%></h2>
-
-     <% if @perspective.kind == "service" -%>
-
-       <div style="position:relative;float:left;width:200px;">
-         <%= link_to(image_tag("/images/icons/powered_by_#{@perspective.label}.png"), "#")%>
-       </div>
-
-
-     <% end -%>
-
-   <% end -%>
-
-   <div class="connect_form <%= @items.empty? ? "" : "hidden" %>" id="connect_form" >
-     <%= render :partial => "/#{@kind.pluralize}/new" %>
-   </div>
-
-   <%= search_box %>
-   <div class="delimiter" style="clear:left;"> </div>
- </div>
-  <div id="content" class="<%= @mode %>_mode <%= @kind %>_kind">
- 
-    
-    <%= render :partial => "/tags/page", :locals => {:items => @items }%>
- 
-     
-
-   </div>
-  <%= display_options %>
-  
-  
-<% end -%>
-
+  <% nuniverse(:selected => "My nuniverse") do -%>
+    <%= render :partial => "/tags/submenu"%>
+    <div id="content" class="<%= @mode %>_mode <%= @kind %>_kind">
+      <%= render :partial => "/tags/page", :locals => {:items => @items }%>
+    </div>
+    <%= display_options %>
+  <% end -%>
 <% end -%>

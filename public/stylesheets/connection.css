@@ -102,6 +102,16 @@ clear:left;
 	
 }
 
+.connection .save_lnk,
+.connection .remove_lnk {
+	display:none;
+}
+
+.hover .save_lnk,
+.hover .remove_lnk {
+	display:block;
+}
+
 .connection .description {
 	display:block;
 	color:#666;

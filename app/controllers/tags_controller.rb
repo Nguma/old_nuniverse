@@ -49,7 +49,12 @@ class TagsController < ApplicationController
 	
 		respond_to do |f|
 			f.html {
-				@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags
+				if @count && @count == 0
+					render :action => :empty				
+				else
+					@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags					
+				end
+				
 			}
 			f.js {
 				

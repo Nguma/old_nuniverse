@@ -222,7 +222,8 @@
 	background:transparent url('/images/backgrounds/odd.png');
 }
 
-.suggestions .thumbnail {
+.suggestions .thumbnail, 
+.suggestions .default_img {
 	background:none;
 	height:30px;
 	width:30px;

@@ -1,0 +1,15 @@
+<%= render :partial => "/boxes/preview" %>
+<% nuniverse(:selected => "My nuniverse") do -%>
+  
+  <div id="content" class="<%= @mode %>_mode <%= @kind %>_kind" style="clear:both">
+    <h2>Here you are, at last.</h2>
+    <p>This is your nuniverse. Right now, it's empty, and it's waiting for YOU to build it.</p>
+    <p>There might be hundreds of things you want to keep track of, this "empty page" is made just for that.</p>
+     <p><strong>Not sure what do add?</strong> What about trying adding your favorite film, or that car you'd like to buy.<br/>You can also create a category and add things to it later.</p>
+    
+  </div>
+  <div class="connect_form " id="connect_form" >
+  <%= render :partial => "/#{@kind.pluralize}/new" %>
+  </div>
+  <%= display_options %>
+<% end -%>

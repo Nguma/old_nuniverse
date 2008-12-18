@@ -105,7 +105,7 @@ module TagsHelper
 		if connection.is_a?(Tag)
 			link_to(image_tag("/images/icons/small_star.png"),
 				create_and_connect_url(@tag.id),
-				:class => "trigger",
+				:class => "save_lnk trigger",
 				:title => "Save to your nuniverse"
 			)
 		else
@@ -114,19 +114,19 @@ module TagsHelper
 
 				if personal
 						link_to(
-							image_tag("/images/icons/heartbreak.png"),
+							image_tag("/images/icons/small_star_saved.png"),
 							disconnect_url(:id => connection.id), 
-							:class => "add_to_fav_lnk", 
+							:class => "remove_lnk", 
 							
-							:title => "Disconnect from this nuniverse"
+							:title => "Remove #{connection.subject.label} from your nuniverse"
 						)
 				else
 	
-					link_to(image_tag("/images/icons/add_to_fav.png"),
+					link_to(image_tag("/images/icons/small_star.png"),
 						konnect_url(
 							:subject => connection.subject_id,
-							:object => connection.object_id
-						), :class => "add_to_fav_lnk trigger", :title => "Connect with this nuniverse")
+							:object => current_user.tag_id
+						), :class => "save_lnk ", :title => "Save #{connection.subject.label} to your nuniverse")
 
 				end
 		end

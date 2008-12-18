@@ -21,7 +21,7 @@ module ImagesHelper
 			if !source.property("thumbnail").blank? 
 				return image_tag(source.property("thumbnail"), :alt => "", :class => params[:class] )
 			else
-				return image_tag("/images/icons/#{source.kind}.png", :alt => "", :class => params[:class] << " default_img", :style => "width:60px;height:60px")
+				return image_tag("/images/icons/#{source.kind}.png", :alt => "", :class => params[:class] << " default_img")
 			end
 		else
 			return image_tag(params[:mode] == "image" ? image_tag.source.public_filename : image_tag.source.public_filename(:small), :alt => "", :class => params[:class] )

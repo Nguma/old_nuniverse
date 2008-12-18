@@ -6,7 +6,7 @@
 
   <%= thumbnail_tag(connection.subject)%>
   
-    
+    <div style="position:relative;float:right"><%= add_to_fav_link(connection) %></div>
     <div class="description" >
      <%= render_connection_description(connection) %> 
      </div>
