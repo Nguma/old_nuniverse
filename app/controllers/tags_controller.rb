@@ -40,16 +40,18 @@ class TagsController < ApplicationController
 
 		elsif @perspective.kind == "service"
 			@items = service_items(@tag.label)
+			@count = 0
 		else
 			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
-			@count = Connection.with_object(@tag).count
+			@count = Connection.with_object(@tag).count 
 		end
+		
 		
 		
 	
 		respond_to do |f|
 			f.html {
-				if @count && @count == 0
+				if  @count == 0 && @tag == current_user.tag
 					render :action => :empty				
 				else
 					@categories = Connection.with_object(@tag).with_subject_kind(@subject_kind).gather_tags					

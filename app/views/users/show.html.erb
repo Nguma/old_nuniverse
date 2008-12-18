@@ -1,8 +1,5 @@
 <%= render :partial => "/boxes/preview" %>
 <% nuniverse(:selected => "My nuniverse") do -%>
-
-
-   
     <div id="content" class="<%= @mode %>_mode" >
       <%= render :partial => "/tags/page", :locals => {:items => @items }%>
     </div>

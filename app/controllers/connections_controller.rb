@@ -71,6 +71,16 @@ class ConnectionsController < ApplicationController
 	def update
 		
 		@connection.description = params[:description] if params[:description]
+		@tags = params[:tags].split(',')
+	
+		@connection.taggings.each do |t|
+			if !@tags.include?(t.predicate)
+				t.destroy
+			else
+				@tags.reject! {|c| c == t.predicate}
+			end
+		end
+		@connection.tag_with(@tags)
 		@connection.save
 		
 		respond_to do |f|
