@@ -234,7 +234,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def tag_with(tags, params = {})
-		tags.to_a.compact.each do |t|
+		[*tags].compact.each do |t|
 			unless t.blank?
 				@t = Tagging.create(:predicate => t, :taggable => self) rescue nil
 			end

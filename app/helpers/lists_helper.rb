@@ -50,25 +50,7 @@ module ListsHelper
 	
 	def render_connections(connections)
 		connections.collect {|c| render_connection(c) }
-	end
-	
-	def render_item_box(item, params = {})
-		params[:item] = item.is_a?(Connection) ? item.subject : item
-		params[:item_classes] = ""
-			
-		personal = item.users.to_a.include?(current_user.id.to_s) rescue nil
-
-		if personal
-			params[:item_classes] <<  (item.public ? 'personal' : ' private')
-		end
-
-		if item.kind == "address"
-			render :partial => "/boxes/#{item.kind}_box", :locals => params 
-		else
-			render :partial => "/boxes/#{item.kind}_box", :locals => params rescue 	render :partial => "/boxes/item_box", :locals => params
-		end
-	end
-	
+	end	
 
 	def sorting_options(params = {})
 		params[:options] = [['Name', 'by_name'],['Latest', 'by_latest'], ['Rank','by_rank']]

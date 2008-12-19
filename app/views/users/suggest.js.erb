@@ -1,5 +1,5 @@
 <% @users.each do |user| -%>
-  <div class="option user">
+  <div class="option user" style="clear:both">
     <%= link_to user.login, "#", :class => "trigger"%>
     <%= hidden_field_tag :user, "#{user.id}" %>
   </div>

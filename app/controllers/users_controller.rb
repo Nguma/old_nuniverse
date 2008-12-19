@@ -9,7 +9,7 @@ class UsersController < ApplicationController
 	after_filter :update_session, :only => [:show]
 	
 	def find
-		@users = User.find(:all, :conditions => ['login rlike ? OR email rlike ?', "^#{params[:input]}{0,6}$", "^#{params[:input]}{0,6}$"])
+		@users = User.find(:all, :conditions => ['login rlike ? OR email rlike ?', "^#{params[:input]}{0,6}", "^#{params[:input]}{0,6}"])
 		respond_to do |f|
 			f.html {}
 			f.js {}

@@ -21,7 +21,7 @@ class TagsController < ApplicationController
 		@page = params[:page] || 1
 
 		# redirect_to "/users/show/#{current_user.id}" if @tag == current_user.tag
-		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
+		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'list')
 		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'digest')
 		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
 
@@ -45,10 +45,7 @@ class TagsController < ApplicationController
 			@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(@filter).order_by(@order).paginate(:page => @page, :per_page => 15)
 			@count = Connection.with_object(@tag).count 
 		end
-		
-		
-		
-	
+
 		respond_to do |f|
 			f.html {
 				if  @count == 0 && @tag == current_user.tag
