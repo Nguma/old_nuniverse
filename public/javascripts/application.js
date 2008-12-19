@@ -489,7 +489,7 @@ function createFilterBox(el) {
                       previewBox.el.setStyles({
                         top:this.el.getCoordinates().top
                       })
-                      previewBox.callRequest({url:this.el.getElement('.preview_url').get('href')});
+                      // previewBox.callRequest({url:this.el.getElement('.preview_url').get('href')});
                     },
 
                     onSuccess:function(updated) {

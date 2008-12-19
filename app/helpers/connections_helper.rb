@@ -26,8 +26,8 @@ module ConnectionsHelper
 		d = connection.description.blank? ? connection.twin.description : connection.description rescue nil
 		return "#{link_to_item connection.subject} #{connection.subject.tags.join(', ')}" if d.blank?
 		reg = Regexp.escape(connection.subject.label)
-		if d.match(/#{reg}/i)
-			return d.gsub(/#{reg}/i,link_to_item(connection.subject))
+		if d.match(/#{reg}\b/i)
+			return d.gsub(/#{reg}\b/i,link_to_item(connection.subject))
 		else
 			return  "#{link_to_item connection.subject}. #{d.gsub(/connection.subject.label/,link_to_item(connection.subject))}"
 		end

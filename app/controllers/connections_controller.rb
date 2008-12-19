@@ -140,7 +140,8 @@ class ConnectionsController < ApplicationController
 			params[:url] = "http://#{params[:url]}" if params[:url].match("^www")
 			if params[:url].match('en.wikipedia.org/wiki/')
 				t = params[:url].gsub(/.*\/wiki/,'/wiki')
-				doc = Nuniversal.get_content_from_wikipedia(t)
+			
+				doc = Nuniversal.get_content_from_wikipedia(Hpricot open params[:url])
 				params[:description] = Nuniversal.wikipedia_description(doc) 
 				params[:input] = "#{(doc/:h1).first.inner_html.to_s} on Wikipedia"
 				@object.description = params[:description] if @object.description.nil?

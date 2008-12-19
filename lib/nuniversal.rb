@@ -287,7 +287,7 @@ module Nuniversal
 			  ]
 
 			
-			
+
 			@article = (doc/"#content").each do |content|
 			  #change /wiki/ links to point to full wikipedia path
 
