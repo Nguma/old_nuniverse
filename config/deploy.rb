@@ -118,7 +118,7 @@ namespace :deploy do
     sudo <<-CMD
       rm -fr #{release_path}/log &&
       ln -nfs #{shared_path}/log #{release_path}/log
-      rm -fr #{release_path}/db/sphinx &&
+     	rm -fr #{release_path}/db/sphinx &&
       ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
     CMD
 
@@ -150,9 +150,6 @@ namespace :mongrel do
 	
 
 end
-	
-
-
 
 namespace :sphinx do
   task :install do
@@ -174,12 +171,12 @@ namespace :sphinx do
   end
   
   task :stop do
-    sudo "cd #{current_path} && rake thinking_sphinx:stop RAILS_ENV=production"
+    run "cd #{current_path} && rake thinking_sphinx:stop RAILS_ENV=production"
   end
   
   task :start do
     configure
-    sudo "cd #{current_path} && rake thinking_sphinx:start RAILS_ENV=production"
+    run "cd #{current_path} && rake thinking_sphinx:start RAILS_ENV=production"
   end
   
   task :restart do
@@ -188,11 +185,11 @@ namespace :sphinx do
   end
   
   task :index do
-    sudo "cd #{current_path} && rake thinking_sphinx:index RAILS_ENV=production"
+    run "cd #{current_path} && rake thinking_sphinx:index RAILS_ENV=production"
   end
   
   task :configure do
-    sudo "cd #{current_path} && rake thinking_sphinx:configure RAILS_ENV=production"
+    run  "cd #{current_path} && rake thinking_sphinx:configure RAILS_ENV=production"
   end
 end
 
