@@ -1,0 +1,22 @@
+<%= link_to "< Back to your nuniverse", home_url %>
+<% nuniverse do -%>
+  <%= render :partial => "/nuniverses/main_menu"%>
+  <div id="content">
+    <div class="step <%= @klass.downcase %>-klass" style="margin:0 0 1px 0">
+      <%= render :partial => "/#{@klass.downcase.pluralize}/new" %>
+    </div>
+  <% if @connections.empty? -%>
+    <div class="step">
+      There is no <%= @klass.downcase.to_s %> connected to this nuniverse, yet. Time to make some connections!
+    </div>
+
+  <% else -%>
+    <%= render :partial => "/connections/connections", :locals => {:connections => @conections }%>
+   
+  <% end -%>
+  
+
+  
+  </div>
+   <%= display_options %>
+<% end -%>

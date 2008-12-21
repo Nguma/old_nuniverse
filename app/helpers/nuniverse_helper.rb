@@ -33,9 +33,10 @@ module NuniverseHelper
 	end
 	
 	def column_size
-		case @mode
+		case @display
+		
 		when "card"
-			2
+			1
 		when "image"
 			5
 		when "list"
@@ -225,9 +226,16 @@ module NuniverseHelper
 	
 	
 	def main_menu_item item
-		count = Connection.with_object(@tag).with_subject_kind(item).count
-		lnk = link_to "#{count} #{(count > 1) ? item.pluralize : item.singularize  }", visit_url(@tag.id, current_user.login, :kind => item), :id => "connect_#{item}_lnk", :title => "Show #{item.pluralize} connected to #{@tag.label}"
-		"<dd id= 'show_#{item}' class = '#{(item == @kind) ? "activated" : ""}'>#{lnk}</dd>"
+		count = @source.connections.of_klass(item.classify).count
+		lnk = link_to "#{count} #{(count > 1) ? item.pluralize : item.singularize  }", polymorphic_url(@source, :klass => item.capitalize, :display => @display, :page => 1), :title => "Show #{item.pluralize} connected to #{@source.name}"
+		"<dd id= 'show_#{item}' class = '#{item}-klass #{(item == @klass) ? "activated" : ""}'>#{lnk}</dd>"
 	end
 	
+	def home_link 
+		link_to "< Back to your nuniverse", home_url, :class => "home_lnk"
+	end
+	
+	def clear
+		'<div class="delimiter"></div>'
+	end
 end

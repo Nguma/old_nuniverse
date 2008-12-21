@@ -1,24 +1,23 @@
-<div class="article">
-  <%#= render_hat(:subject => section.subject, :section => section ) %>
-  
-  <% unless section.subject == current_user.tag %>
-    <%= render :partial => "/tags/#{section.subject.kind}_overview", :locals => {
-      :subject => section.subject,
-      :path => section.path
-    } rescue 
-    render :partial => "/tags/default_overview", :locals => {
-      :subject => section.subject,
-      :path => section.path
-    }%>
+
+
+<div class="nuniverse <%= dom_class rescue "" %> <%= @order ? "order_#{@order}" : "" %>" id="nuniverse" >
+  <% unless @source.nil? %>
+    <%= breadcrumbs %>
+    <%= title %>
   <% end -%>
-  <dl class="connections">
-    <dt>Your most recent additions</dt>
-    <% section.overview.each do |connection| -%>
-        <%= render :partial => "/nuniverse/connection", :locals => {
-          :connection => connection,
-          :path => section.path
-        }%>
-    <% end -%>
-     
-    </dl>
+
+  <%= render :partial => "/nuniverses/main_menu" %>
+  
+  <div style="position:relative;width:auto;margin:0 auto 0 0;padding:0">
+    <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px;position:absolute", :id => "main_spinner", :class => "spinner hidden") %>
+    <%= content %>
+  </div>
+  <div class="delimiter" style="clear:both">&nbsp;</div>
+  
+  <div class="footer" style="position:fixed;bottom:20px;left:0;z-index:567990;display:block;width:100%;padding:0">
+    <div style="padding:0 20px 0 20px">
+    <%= yield :footer %>
+    </div>
+    
+  </div>
 </div>

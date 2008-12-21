@@ -188,12 +188,39 @@ p strong {
 	position:relative;
 	width:auto;
 	z-index:123;
-	clear:none;
+	clear:both;
 	height:auto;
 	padding:0;
 	margin:0 0 0 0;
 }
 
+#content .step {
+	position:relative;
+	clear:both;
+	background:#eee;
+	padding:10px;
+	font-size:20px;
+	color:#666;
+	margin:1px 0 0 0;
+}
+
+#content a.title {
+	color:#369;
+	font-weight:bold;
+}
+
+#content a.action,
+#content a.action:visited {
+	color:#dd3bb4;
+}
+
+#content .admin {
+	background:#5d4f4c;
+}
+
+#content .admin a {
+	color:#f90;
+}
 
 #left-content {
 	position:relative;
@@ -349,13 +376,15 @@ a.save_button {
 	position:relative;
 	clear:left;
 /*	background:url('/images/backgrounds/main_menu.png') 0 0 repeat-x;*/
-	margin:10px 0 0px 0;
+	margin:0 0 0px 0;
+	padding:0 0 0 10px;
+	background:#333;
 }
 
 #main_menu dt {
 	height:0;
 	padding:0;
-	margin:0;
+	margin:0 0 0 0;
 }
 
 #main_menu dd img {
@@ -370,12 +399,12 @@ a.save_button {
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
+	margin: 0 5px 0 0;
 }
 
 #main_menu .activated {
 /*	background:#27406a;*/
-	background:#333;
-	color:#333;
+
 	
 }
 
@@ -440,5 +469,55 @@ a.save_button {
 
 #digest .connection a {
 	color:#39F;
+	font-weight:bold;
 }
 
+#tutorial {
+	
+}
+
+#tutorial .step {
+	margin:1px 0 0 0;
+	padding:10px;
+	background:#eee;
+	font-size:15px;
+	color:#666;
+}
+
+#tutorial .step a {
+	color:#369;
+}
+
+.home_lnk {
+	color:#FFF;
+	font-size:14px;
+}
+
+
+.bookmark-klass {
+	background:#f4e0a2 !important; 
+}
+
+.story-klass {
+	background:#fbb964 !important;
+}
+
+.image-klass {
+	background:#ffb6e8 !important;
+}
+
+.user-klass {
+	background:#94f1da !important;
+}
+
+.nuniverse-klass {
+	background:#9fdceb !important;
+}
+
+.video-klass {
+	background:#c26cf4 !important;
+}
+
+.product-klass {
+	background:#91bae8 !important;
+}

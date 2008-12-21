@@ -40,19 +40,14 @@ module ListsHelper
 	end
 	
 	def render_connection(connection, params = {})
-		if connection.is_a?(Connection)
-			render :partial => "/connections/connection", :locals => {:connection => connection}
-		else
-			render :partial => "/tags/connection", :locals => {:connection => connection}
-		end
-		
+		render :partial => "/connections/connection", :locals => {:connection => connection}
 	end
 	
 	def render_connections(connections)
 		connections.collect {|c| render_connection(c) }
 	end	
 
-	def sorting_options(params = {})
+	def sorting_options(connections, params = {})
 		params[:options] = [['Name', 'by_name'],['Latest', 'by_latest'], ['Rank','by_rank']]
 		params[:source] ||= @source
 		params[:selected] ||= @order

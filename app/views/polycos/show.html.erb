@@ -1,0 +1,63 @@
+<%= home_link %>
+<% nuniverse do -%>
+  <div id="content">
+   
+   <% unless !@suggestions || @suggestions.empty? %>
+    <% if current_user.role == "admin" %>
+      <div class="admin step">
+        <%= link_to "make active", "/polycos/update/#{@polyco.id}?state=active"%>
+      </div>
+    <% end -%>
+    <div class="step">
+       Does any of those nuniverses match what you are talking about?
+     </div>
+    <% @suggestions.each do |suggestion| -%>
+        <div class="step">
+        <%= thumbnail_tag suggestion, :style => "background:none;height:30px;width:30px"%>
+        <%= link_to suggestion.name, suggestion, :class => "title" rescue suggestion.inspect %>
+        <%= link_to("Yes, that's the same", confirm_connection_url(@polyco, :subject_id => suggestion.id, :subject_type => suggestion.class.to_a) , :class => "action")%>
+        <p><%= suggestion.tags.join(',') %><%= suggestion.description %></p>
+        <%= clear %>
+        </div>
+      <% end -%>
+      <div class="step">
+        Not What you're looking for? Well, that's fine. <%= link_to "Create that nuniverse", polyco_url(@polyco, :no_suggestions => true), :class => "title"%>
+  <% else -%>
+    <div class="step">
+      Great you're the first to have created this nuniverse,
+      Please tell us a bit more about it.
+    </div>
+     <% form_for(@polyco, :html => {:multipart => true}) do |f| %>
+        <%= f.error_messages %>
+        <% fields_for :subject do |s| -%>
+
+          <div class="step">
+            What is it? (ie: a person? a film? a restaurant?)
+            <%= s.text_field :description %>
+          </div>
+        <% end -%>
+        <div class="step">
+          How is <%= @polyco.name %> related to <%= @polyco.object.name %>?
+          <%= f.text_area :description, :rows => 2%>
+        </div>
+        <% fields_for :image do |i| -%>
+        <div class="step">
+          Would you like to add an image for it?
+          <%= i.text_field :source_url, :id => "input_image", :autocomplete => "off" %>
+        </div>
+        <% end -%>
+        <p>
+          <%= f.submit "Great, Save it." %>
+        </p>
+      <% end %>
+  <% end -%>
+  <%= clear %>
+  <% if current_user == @polyco.object %>
+    <div class="step">
+      <%= link_to "Nah, after all, i'm not feeling like making that connection", @polyco, :method => "delete", :class => "action"%>
+    </div>
+  <% end -%>
+    
+  </div>
+
+<% end -%>

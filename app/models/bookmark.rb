@@ -1,21 +1,23 @@
 class Bookmark < ActiveRecord::Base
 	has_many :taggings, :as => :taggable
+	has_many :connections, :as => :object, :class_name => "Polyco"
+	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
+	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
 	
-	alias_attribute :label, :name
+	before_create :make_name
 	
-	def kind
-		"bookmark"
-	end
-	
-	def thumbnail
-		nil
-	end
 	
 	def tags
 		taggings.collect {|c| c.predicate}
 	end
+
+	def avatar(size = {})
+		connections.of_klass('Image').with_score.order_by_score.first.subject.public_filename(size)
+	end
 	
-	def description
-		"bleh"
+	protected
+	
+	def make_name
+		self.name ||= self.url
 	end
 end

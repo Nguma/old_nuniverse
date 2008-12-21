@@ -1,16 +1,18 @@
-<%= render :partial => "/boxes/preview" %>
-<% nuniverse(:selected => "My nuniverse") do -%>
-    <div id="content" class="<%= @mode %>_mode" >
-      <%= render :partial => "/tags/page", :locals => {:items => @items }%>
-    </div>
-
-     <% content_for :right_col do -%>
-       <%= display_options %>
-       <%= render :partial => "/nuniverse/tag_cloud" %>
-     <% end -%>
-     
-
+<%= home_link if @source != current_user %>
+<% nuniverse do -%>
+  <%= render :partial => "/nuniverses/main_menu"%>
+  <div id="content">
   
-
- 
+  <div class="step <%= @klass.downcase %>-klass"  style="margin:0 0 1px 0">
+    <%= render :partial => "/#{@klass.downcase.pluralize}/new" %>
+  </div>
+  <%= render :partial => "/connections/connections", :locals => {:connections => @connections}%>
+  </div>
+  
+  <%= display_options %>
+  
 <% end -%>
+
+
+
+<%#= link_to "Find other users", "/users"%>

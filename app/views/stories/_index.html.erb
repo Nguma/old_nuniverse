@@ -1,0 +1,19 @@
+<div class="stories">
+  <% connections.order_by_score.each do |story| -%>
+ 
+    <div  class ="story <%= cycle('even','odd') %>">
+       <%= link_to "X", connection, :method => :delete, :style => "position:absolute;left:-20px" %>
+      <%#= image_tag(story.nuniverses.first.images.first.public_filename(:small), :class => "thumbnail") rescue nil %>
+      <div class="star-rating" >
+        <% 5.times do |time| %>
+        <%= link_to image_tag("/images/icons/empty.png"), "/connections/rank/#{story.id}?score=#{time+1}", :class => "star #{connections.score > time ? "on_#{story.score.ceil.to_s[0,1]}" : ""}" %>
+        <% end -%>
+      </div>
+      <%= link_to connection.name, connection, :class => "title" %>
+      <div class="delimiter"></div>
+    </div>
+  <% end -%>
+  
+</div>
+
+

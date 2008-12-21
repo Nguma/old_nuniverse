@@ -11,6 +11,10 @@ class ConnectionsController < ApplicationController
 		end
 	end
 	
+	def show
+		
+	end
+	
 	def create
 
 		@connection = Connection.find_or_create(params[:connection]) 
@@ -92,15 +96,13 @@ class ConnectionsController < ApplicationController
 		
 	end
 	
-	def rank
+	def rate
+		@ranking = @connection.rankings.by_user(current_user).first || Ranking.new(:user => current_user)
+		@connection.rankings << @ranking
 		
-		@ranking = @connection.rankings.by_user(current_user).first || Ranking.new(:rankable => @connection, :user => current_user)
-		@ranking.score += 1
+		@ranking.score = params[:score].to_i
 		@ranking.save
-		respond_to do |f|
-			f.html {redirect_to @connection.object}
-			f.js {}
-		end
+		redirect_back_or_default("/")
 	end
 	
 	def add_to_favorites

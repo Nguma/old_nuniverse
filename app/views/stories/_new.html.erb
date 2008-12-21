@@ -1,0 +1,10 @@
+<% @new_story = Story.new(:author_id => current_user.id, :parent => @story) -%>
+
+<% form_for @new_story  do |f| %>
+  
+  <%= f.text_field :name %><%= f.submit "Create" %><br/>
+  <%= f.check_box :is_private %> Make it private
+  <%= f.hidden_field :parent_id %>
+  <%= f.hidden_field :author_id %>
+
+<% end %>

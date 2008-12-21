@@ -1,3 +1,16 @@
-<% @connections.each do |p| -%>
-  <p><%= p.object.label %></p>
-<% end -%>
+<% @new_polyco = Polyco.new(:object => @source, :subject => Image.new)  %>
+<div class="step">
+  <h2>Add an image</h2>
+  <% form_for @new_polyco, :html => {:multipart => true } do |f| -%>
+    <%= f.hidden_field :object_id %>
+    <%= f.hidden_field :object_type %>
+    
+    <% fields_for(:subject) do |s| %>   
+      <%= s.text_field :source_url, :class => "input",  :id => "input_image", :autocomplete => "off"%><br/>
+      .. or upload a file from your computer<br/>
+      <%= s.file_field :uploaded_data %>
+    <% end -%>
+    <%= f.check_box :is_private %> Make it private
+    <%= submit_tag %>
+  <% end -%>
+</div>

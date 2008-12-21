@@ -1,13 +1,9 @@
 .connection {
-	min-height:70px;
-	padding:5px;
+	padding:10px;
 	position:relative;
+	clear:both;
 }
 
-.connection .kinds {
-	font-size:12px;
-	color:#999;
-}
 
 .connection .tags {
 	color:#669;
@@ -22,6 +18,19 @@
 	font-weight:bold;
 }
 
+.list_mode .thumbnail {
+	display:none;
+} 
+
+.card_mode .title {
+	position:relative;
+
+}
+
+.card_mode .star-rating {
+	top:15px;
+}
+
 .image_mode .connection {
 /*	background:#eee;*/
 	margin:0 1px 1px 0;
@@ -33,9 +42,44 @@
 	background:none;
 }
 
-.image_mode .connection .kinds {
-clear:left;
+.connection .klass {
+	position:absolute;
+	left:0;
+	padding:2px;
+	color:#FFF;
+	background:#ccc;
+	font-size:13px;
+	height:20px;
 }
+
+.bookmark-connection .klass {
+	background:#f4e0a2;
+}
+
+.image-connection .klass {
+	background:#ffb6e8;
+}
+
+.user-connection .klass {
+	background:#94f1da;
+}
+
+.video-connection .klass {
+	background:#c26cf4;
+}
+
+.nuniverse-connection .klass {
+	background:#9fdceb;
+}
+
+.product-connection .klass {
+	background:#91bae8;
+}
+
+
+
+
+
 
 .connection .rank_lnk {
 	position:absolute;
@@ -63,6 +107,9 @@ clear:left;
 	visibility:visible;
 }
 
+.connection .hover {
+	background:#FFF;
+}
 
 .order_by_name .rank_lnk,
 .order_by_latest .rank_lnk{
@@ -92,12 +139,12 @@ clear:left;
 
 
 
-#digest .bookmark_connection {
+#digest .bookmark-connection {
 	background:#ffb33b;
 	
 }
 
-#digest .user_connection {
+#digest .user-connection {
 	background:#b9efe2;
 	
 }
@@ -136,15 +183,15 @@ clear:left;
 	display:none;
 }
 
-.comment_connection {
+.comment-connection {
 	
 }
 
-.comment_connection div.user {
+.comment-connection div.user {
 	background:transparent url('/images/backgrounds/comment_from.png') 0 0 no-repeat;
 }
 
-.comment_connection .user .thumbnail {
+.comment-connection .user .thumbnail {
 	height:30px;
 	background:none;
 	top:20px;
@@ -164,34 +211,65 @@ clear:left;
 	color:#369;
 }
 
-.bookmark_connection .tag_url {
+.bookmark-connection .tag_url {
 	display:inline;
 }
 
-.tweet_connection .thumbnail,
-.bookmark_connection .thumbnail,
-.comment_connection .thumbnail {
+.tweet-connection .thumbnail,
+.bookmark-connection .thumbnail,
+.comment-connection .thumbnail {
 	height:30px;
 	width:30px;
 	background:none;
 	margin:0 0 0 0;
 }
 
-.tweet_connection .title,
-.comment_connection .title {
+.tweet-connection .title,
+.comment-connection .title {
 	font-size:14px;
 	font-weight:normal;
 	font-style:italic;
 }
 
-#preview_box .image_connection {
+#preview_box .image-connection {
 	display:none;
 }
 
-.image_kind .preview {
+.image_klass .preview {
 	padding:0;
 }
 
-.edit_connection .connection .thumbnail {
+.edit-connection .connection .thumbnail {
 	height:30px;
+}
+
+
+img.thumbnail {
+	position:relative;
+	float:left;
+	padding:0;
+	margin:0 5px 0 0px;
+	line-height:-999999px;
+	height:60px;
+	width:60px;
+	background:transparent url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
+	padding:4px 6px 6px 4px;
+}
+
+
+.image_mode .connection img.thumbnail {
+	background:none;
+	width:100%;
+	padding:0;
+	margin:0;
+}
+
+.image_mode .connection img.default_img {
+	width:60px;
+	display:block;
+	float:none;
+}
+
+.image_mode .connection .star-rating {
+	display:none;
 }

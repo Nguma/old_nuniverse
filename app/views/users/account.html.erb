@@ -1,0 +1,23 @@
+<%= home_link %>
+
+<% nuniverse do -%>
+  <div id="tutorial">
+    <div class="step">
+      <h2>Your have a free account. This means your nuniverse can grow up to 100 connections.<br/>You are currently using <%= @count %>/100 of these connections. <%= link_to "Upgrade?", "/upgrade" %></h2>
+    </div>
+
+    <div class="step">
+      <h2>During beta, we aren't offering any privacy. But you'll be able to manage your privacy settings from here.</h2>
+    </div>
+    
+    <div class="step">
+      <h2><%= link_to "Add an avatar.", "#"%></h2>
+    </div>
+    
+    <div class="step">
+      <h2><%= link_to "Set your public name.", "#"%></h2>
+    </div>
+  </div>
+  
+<% end -%>
+

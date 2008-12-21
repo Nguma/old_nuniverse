@@ -2,14 +2,21 @@ class UsersController < ApplicationController
   
   # Protect these actions behind an admin login
   # before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
-  before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge]
+  before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge, :upgrade]
 	before_filter :login_required, :except => [:new, :activate, :create]
 	skip_before_filter :invitation_required, :only => [:new, :create, :activate]
   after_filter :store_location, :only => [:show]
-	after_filter :update_session, :only => [:show]
+	before_filter :update_session, :only => [:show, :tutorial]
+	
+	def index
+		# @users = User.paginate(:conditions => {:state => 'active'}, :page => 1, :per_page => 5)
+		@users = []
+		render :action => :find
+	end
 	
 	def find
-		@users = User.find(:all, :conditions => ['login rlike ? OR email rlike ?', "^#{params[:input]}{0,6}", "^#{params[:input]}{0,6}"])
+		@source = current_user
+		@users = User.search params[:name], :conditions => {:state => 'active'}
 		respond_to do |f|
 			f.html {}
 			f.js {}
@@ -84,6 +91,7 @@ class UsersController < ApplicationController
 	end
 
 	def upgrade
+		@source = current_user
 	end
 	
 	def edit
@@ -97,11 +105,9 @@ class UsersController < ApplicationController
 		redirect_to "/my_nuniverse"
 	end
 	
-	def membership
-		respond_to do |f| 
-			f.html {}
-			f.js {}
-		end
+	def account
+		@source =  current_user
+		@count = @source.connections.count || 0
 	end
 	
   # There's no page here to update or destroy a user.  If you add those, be
@@ -112,33 +118,27 @@ class UsersController < ApplicationController
 	# GET /my_nuniverse
 	def show
 		@user ||= current_user
-		redirect_to @user.tag 
-		if @user && current_user != @user
-				
+		
+		@source = @user
+
+		@connections = @user.connections.of_klass(@klass)
+		@count = @user.connections.count
+
+		
+		render :action => :tutorial if @user == current_user && @count == 0
+		case params[:order]
+		when "by_latest"
+			@connections = @connections.order_by_date
+		when "by_name"
+			@connections = @connections.order_by_name
 		else
-			@service = nil	
+			@connections = @connections.order_by_score(@perspective)
 		end
-
+		@connections = @connections.with_score.paginate(:per_page => 20, :page => params[:page])
 		
-		
-		@mode = params[:mode] || (session[:mode] ? session[:mode] : 'card')
-		@kind = params[:kind] || (session[:kind] ? session[:kind] : 'nuniverse')
-		@order = params[:order] || (session[:order] ? session[:order] : 'by_latest')
-		
-		@tag = current_user.tag
-		@perspective = current_user.tag
-			
-		@source = current_user.tag
-		@input = params[:input]
-		@items = Connection.with_object(@tag).with_subject_kind(@kind).tagged_or_named(params[:input]).order_by(@order).paginate(:per_page => 15, :page => params[:page] || 1)
-
 		respond_to do |format|
 			format.html {
-				update_session
-
-				@title = "#{current_user.login}'s nuniverse"
-				@categories = Connection.with_object(@tag).with_subject_kind(@kind).gather_tags.paginate(:page => @page, :per_page => 200)
-			
+							
 			}	
 			format.js { 
 				
@@ -146,8 +146,12 @@ class UsersController < ApplicationController
 		end
 	end
 	
+	def tutorial
+		@user = @source = current_user
+	end
+	
 protected
   def find_user
-    @user = User.find(params[:id]) rescue nil
+    @source = @user = User.find(params[:id]) rescue nil
   end
 end

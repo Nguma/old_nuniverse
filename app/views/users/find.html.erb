@@ -1,0 +1,21 @@
+<%= home_link %>
+
+<div id="hat" style="padding:10px;color:#333;background:#88d2b7">
+  <h1 style="color:#fff">Find a user</h1>
+  <% form_tag "/users/find" do  -%>
+    <label style="font-weight:normal;font-size:14px;">Type in the name, the login or the email address of the user you're looking for</label><br/>
+    <%= text_field_tag :name %><%= submit_tag "find me!"%>
+  <% end -%>
+  <div class="delimiter"></div>
+</div>
+
+
+<div id="tutorial">
+<% @users.each do |user| -%>
+  <div class="step connection"  >
+    <%= thumbnail_tag user %>
+    <h2 style="position:relative;top:15px"><%= link_to user.name.capitalize, user, :class => "title" %><%= link_to "Connect.", "/connect/user/#{@source.id}/with/user/#{user.id}", :style=>"padding:0 5px 0 5px;color:#f39"%></h2>
+    <div class="delimiter"></div>
+  </div>
+<% end -%>
+</div>

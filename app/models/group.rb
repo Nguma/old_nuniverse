@@ -5,7 +5,7 @@ class Group < ActiveRecord::Base
 	
 	
 	def create_tag
-		t = Tag.create (
+		t = Tag.create(
 			:label => self.name,
 			:kind => 'group'
 		)

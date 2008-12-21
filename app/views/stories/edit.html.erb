@@ -1,0 +1,21 @@
+<%= link_to "< Back to your nuniverse", home_url %>
+<div id="edit_story">
+  <h1>Editing story</h1>
+
+
+    <% @suggestions.each do |suggestion| -%>
+    <h3>That nuniverse might already be existing. Are you talking about any of those?</h3>
+      <div class="suggestion">
+      <%= image_tag(suggestion.images.first.public_filename(:small), :class => "icon") rescue nil %>
+      <%= link_to suggestion.name, suggestion %>(<%= suggestion.tags.join(',') %>)<%= link_to "Yes, that's the same", "/stories/connect/#{@story.id}?nuniverse_id=#{suggestion.id}"%>
+      </div>
+    <% end -%>
+
+  <% form_for(@story) do |f| %>
+    <%= f.error_messages %>
+    <%= f.text_field :name %>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  <% end %>
+</div>

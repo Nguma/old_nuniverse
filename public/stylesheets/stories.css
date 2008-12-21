@@ -1,0 +1,72 @@
+
+
+
+
+.hover {
+	background:#FFF;
+}
+
+
+
+.story-connection .title {
+	font-weight:bold;
+	color:#369;
+	font-size:18px;
+}
+
+.connection .star-rating {
+	position:relative;
+	float:right;
+	width:125px;
+}
+
+.connection .star-rating .star {
+	width:25px;
+	height:25px;
+	position:relative;
+	float:left;
+	background:transparent url('/images/icons/stars.png') 0 -1px no-repeat;
+}
+
+.connection .bookmark-star {
+	width:25px;
+	height:25px;
+	position:relative;
+	background:transparent url('/images/icons/stars.png') 0 -1px no-repeat;
+}
+
+.connection .star-rating img {
+	border:none;
+	padding:0;
+	margin:0;
+}
+
+.connection .star-rating .on {
+	background:transparent url('/images/icons/stars.png') -0px -51px no-repeat;
+}
+.connection .star-rating .on_1 {
+	background:transparent url('/images/icons/stars.png') 0px -51px no-repeat;
+}
+.connection .star-rating .on_2 {
+	background:transparent url('/images/icons/stars.png') -25px -51px no-repeat;
+}
+.connection .star-rating .on_3 {
+	background:transparent url('/images/icons/stars.png') -50px -51px no-repeat;
+}
+.connection .star-rating .on_4 {
+	background:transparent url('/images/icons/stars.png') -75px -51px no-repeat;
+}
+.connection .star-rating .on_5 {
+	background:transparent url('/images/icons/stars.png') -100px -51px no-repeat;
+}
+
+.new_story {
+	margin:5px 0 0 0;
+	padding:5px 5px 5px 5px;
+	background:#999;
+}
+
+#edit_story {
+	padding:10px;
+	background:#d9e0ca;
+}

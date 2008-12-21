@@ -27,6 +27,8 @@ set :runner,          nil # "root"
 
 set :keep_releases, 5
 
+
+
 role :app, "nuniverse.net"
 role :web, "nuniverse.net"
 role :db,  "nuniverse.net", :primary => true
@@ -35,6 +37,8 @@ task :echo_vars do
   pp variables.keys.collect { |key| key.to_s }.sort
   pp variables[:default_environment]
 end
+
+
 
 
 
@@ -114,12 +118,10 @@ namespace :deploy do
     sudo <<-CMD
       rm -fr #{release_path}/log &&
       ln -nfs #{shared_path}/log #{release_path}/log
+      rm -fr #{release_path}/db/sphinx &&
+      ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
     CMD
-    
-    # sudo <<-CMD
-    #   rm -fr #{release_path}/db/sphinx &&
-    #   ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
-    # CMD
+
     
      %w{attachments}.each do |share|
 		    run "rm -rf #{release_path}/public/#{share}"
@@ -137,6 +139,20 @@ namespace :deploy do
     sudo "chmod +x #{release_path}/script/spin"
   end
 end
+
+
+namespace :mongrel do 
+	task :restart, :roles => :app do
+	    restart_sphinx
+	    stop
+			start
+	end
+	
+
+end
+	
+
+
 
 namespace :sphinx do
   task :install do

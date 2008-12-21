@@ -1,15 +1,18 @@
-<% form_tag  "/images/create" , { :multipart => true } do -%>
-    <h2>Add an image</h2>
-    <fieldset>
-      <div class="data hidden">&nbsp;</div>
-      <%= hidden_field_tag "object", @tag.id %>
-      <%= text_field_tag :source_url, "", :class => "input",  :id => "input_image", :autocomplete => "off"%>
-      <br/>
-      <label style="color:#fff">... or upload a file from your computer</label><br/>
-      <%= file_field_tag :uploaded_data , :id => "input_upload"%>
-
-      <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
-    </fieldset>
-    <%= submit_tag "Add"  %>
-
-<% end -%>
+  <%= link_to "Add an image", "#", :class => "expand_lnk", :id => "expand_connect_image_form" %>
+  
+  <% @new_polyco = Polyco.new(:object => @source, :subject => Image.new)  %>
+  <% form_for @new_polyco, :html => {:multipart => true , :id => "connect_image_form" , :class => "hidden"} do |f| -%>
+ 
+    <%= f.hidden_field :object_id %>
+    <%= f.hidden_field :object_type %>
+    <%= f.hidden_field :subject_type %>
+    <% fields_for(:subject) do |s| %>   
+      
+      <%= s.text_field :source_url, :id => "input_image", :autocomplete => "off"%><br/>
+      .. or upload a file from your computer<br/>
+      <%= s.file_field :uploaded_data %>
+    <% end -%>
+    <%#= f.check_box :is_private %>
+    <%= submit_tag %>
+  <% end -%>
+  <%= clear %>

@@ -1,0 +1,5 @@
+<%= will_paginate @nuniverses %>
+<% @nuniverses.each do |nuniverse| -%>
+  <%= image_tag(nuniverse.images.first.public_filename()) if nuniverse.images.first -%>
+  <%= nuniverse.name %>
+<% end -%>

@@ -3,7 +3,7 @@
   <% options.each do |option| -%>
     <dd class=" <%= selected == option[1] ? 'current' : '' %>">
    
-        <%= link_to("#{image_tag("/images/icons/view_as_#{option[1]}.png")}", "/tags/#{@tag.id}?mode=#{option[1]}") %>
+        <%= link_to("#{image_tag("/images/icons/view_as_#{option[1]}.png")}", polymorphic_url(@source, :display => option[1], :klass => @klass.capitalize)) %>
     </dd>
   <% end -%>
 </dl>

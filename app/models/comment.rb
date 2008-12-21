@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
 	attr_accessor :kind
 	
 	def create_tag
-		t = Tag.create (
+		t = Tag.create(
 			:label => self.body[0..255],
 			:description => self.body,
 			:kind => 'comment'

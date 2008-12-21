@@ -1,0 +1,26 @@
+<%= home_link %>
+<% nuniverse do -%>
+  <div id="content">
+    <div class="step story-klass" style="margin:0 0 1px 0">
+
+      <%= render :partial => "/user_mailer/new"%>
+    </div>
+    <% @connections.each do |connection| -%>
+      <div class="step connection">
+        <%= render_connection_description(connection) %>
+        <%= link_to "Edit", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection) %>
+      </div>
+    <% end -%>
+    <div class="step">
+      <% form_for :story, @story, :url => {:action => :add_item} do |f| -%>
+        <%= hidden_field_tag :id, @story.id %>
+        <% fields_for :tag do |t| -%>
+        <%= t.text_field :label %><%= f.submit "Add" %>
+        <% end -%>
+      <% end -%>
+    </div>
+  </div>
+  
+  <%#= display_options %>
+<% end -%>
+<%#= home_link  %>

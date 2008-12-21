@@ -1,24 +1,23 @@
-.tabs {
+#sorting-options {
 	position:relative;
 	display:block;
 	width:auto;	
 	list-style-type:none;
-	padding:5px 0;
+	padding:5px 0 0 10px;
 	font-size:13px;
 	margin:0 0 0 0;
+	color:#666;
 }
 
-.tabs .tab {
-
+#sorting-options .tab {
 	padding:0;
 	margin: 0 5px 0 0;
 	font-size:13px;
 	font-weight:bold;
 }
 
-
-.expanded dd {
-	display:block;
+#sorting-options .current {
+	color:#333;
 }
 
 #list_menu  {

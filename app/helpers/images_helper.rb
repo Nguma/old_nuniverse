@@ -10,25 +10,9 @@ module ImagesHelper
 
 	# thumbail image for the corresponding source
 	def thumbnail_tag(source, params = {})
-		# source = source.is_a?(Connection) ? source.subject : source
-		# params[:kind] ||= source.kinds
-		params[:mode] ||= @mode
 		params[:class] ||= "thumbnail"
 		
-		image_tag = source.kind == "image" ? source : source.subjects.with_kind('image').first
-		
-		if image_tag.nil? 
-			if !source.property("thumbnail").blank? 
-				return image_tag(source.property("thumbnail"), :alt => "", :class => params[:class] )
-			else
-				return image_tag("/images/icons/#{source.kind}.png", :alt => "", :class => params[:class] << " default_img")
-			end
-		else
-			return image_tag(params[:mode] == "image" ? image_tag.source.public_filename : image_tag.source.public_filename(:small), :alt => "", :class => params[:class] )
-		end
-
-
-	
+		image_tag(source.avatar(@display == "image" ? nil : :small), params) rescue  image_tag("/images/icons/#{source.class.to_s.downcase}.png",  params.merge({:class => "thumbnail default_img"}))	
 	end
 	
 	

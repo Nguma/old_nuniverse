@@ -47,8 +47,7 @@ class ImagesController < ApplicationController
 	end
 	
 	def show
-		@tag = Tag.find(params[:id])
-		@image =  Connection.with_subject(@tag).with_kind('image').first.object.image.public_filename
+		@image = Image.find(params[:id])
 
 		respond_to do |f|
 			f.html {}

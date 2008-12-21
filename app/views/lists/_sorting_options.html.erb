@@ -1,8 +1,9 @@
-<div class='tabs' >
-  <strong style="display:inline;font-weight:bold;margin:0 5px 0 0">Sort</strong>
+<div class='tabs' id="sorting-options" >
+  
+  <strong style="display:inline;font-weight:bold;margin:0 5px 0 10px">Sort</strong>
       <% options.each do |option| -%>
 
-          <%= link_to("By #{option[0]}", "/tags/#{@tag.id}?order=#{ option[1]}&input=#{@filter}", :class => "tab #{selected == option[1] ? 'current' : ''} ") %>
+          <%= link_to("By #{option[0]}", polymorphic_url(@source, :order => option[1], :display => @display, :klass => @klass.capitalize, :page => 1) , :class => "tab #{@order == option[1] ? 'current' : ''} ") %>
 
       <% end -%>
 </div>

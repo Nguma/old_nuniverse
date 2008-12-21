@@ -44,6 +44,22 @@ class UserMailer < ActionMailer::Base
 						
 	end
 	
+	def story(params)
+		@recipients  = params[:emails]
+    @from        = params[:sender].email
+    @subject     = "#{params[:sender].login.capitalize} is sharing a story with you."
+    @sent_on     = Time.now
+    @body[:sender] = params[:sender]
+		@body[:content] = params[:story]
+		@body[:title] = params[:story].name
+		@body[:url] = "http://www.nuniverse.net/stories/#{params[:story].id}"
+		@body[:message] = params[:message]
+		@body[:items] = params[:story].connections
+		part 	:content_type => "text/html",
+		      :body => render_message('story.text.html.erb', @body)
+		include_thumbnails(@body[:items])
+	end
+	
 	
 	def list(params)
 		@recipients  = params[:emails]
@@ -99,11 +115,11 @@ class UserMailer < ActionMailer::Base
 		
 		def include_thumbnails(items)
 			items.each_with_index do |item,i|
-				unless item.object.thumbnail.blank?
+				unless item.subject.avatar.nil?
 					inline_attachment :content_type => "image/jpeg", 
-					                  :body => item.subject.thumbnail.match(/^http:\/\//) ? item.subject.thumbnail : File.read("#{RAILS_ROOT}/public/#{item.subject.thumbnail}"),
-					                  :filename => item.subject.thumbnail,
-					                  :cid => "<#{item.subject.thumbnail}@nuniverse.net>"
+					                  :body => File.read("#{RAILS_ROOT}/public/#{item.subject.avatar(:small)}"),
+					                  :filename => item.subject.avatar(:small),
+					                  :cid => "<#{item.subject.avatar(:small)}@nuniverse.net>"
 				end
 			end
 		end

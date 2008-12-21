@@ -1,12 +1,19 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :stories
+
 	map.resources :kinds
 
 	map.resource :sessions
  	map.resources :taggings
 	map.resources :connections
 	map.resources :tags
+	map.resources :nuniverses
+	map.resources :polycos
+	map.confirm_connection "/confirm-connection/:id/with/:subject_id/:subject_type", :controller => "Polycos", :action => "update"
 	map.resources :images
-	map.resources :groups
+	map.resources :bookmarks
+	map.resources :users
+	map.resources :videos
  	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
   	                                 :purge     => :delete }
@@ -37,49 +44,32 @@ ActionController::Routing::Routes.draw do |map|
   			
 	  	map.with_options :controller => 'users' do |m|
 	  		m.home '/my_nuniverse', :action => 'show'
-				m.all '/my_nuniverse/all_items', :action => 'show', :mode => 'cards' 
+				m.account '/account', :action => 'account'
 	  		m.upgrade '/upgrade', :action => 'upgrade'
+		
 	  	end
   	
-	  	map.with_options :controller => 'tags', :action => 'show' do |m|
-		
-	  		m.with_options :page => 1, :order => "by_name" do |page|
-					page.listing_with_tag '/:tag/:kind/:page/:order', :requirements => {:tag => /\d+/, :page => /\d+/}
-					page.list_in_cards	'/:tag/:kind/in_cards/:page/:order', :mode => 'card', :requirements => {:tag => /\d+/,:page => /\d+/}
-					page.list_in_images '/:tag/:kind/in_images/:page/:order', :mode => 'image', :requirements => {:tag => /\d+/,:page => /\d+/}
-				end
-	  	end
+
 			
-
+	map.konnect "/connect/:subject_type/:subject_id/with/:object_type/:object_id", :controller => "polycos", :action => "connect"
 	
- 	map.with_options :controller => 'taggings' do |m|
- 		m.rate '/rate/:id/:stars', :action => 'rate'
- 		m.map '/locate/:id', :action => 'show', :service => 'map'
- 		m.bookmark '/bookmark/:path', :action => 'bookmark'
- 	end 	
-
-	map.with_options :controller => 'nuniverse', :action => 'command',  :tag => nil  do |m|
-		m.command '/command'
-		m.command '/command/:command'
-		m.command '/command/:command/:input'
-		m.command_with_item '/command/:command/with_item/:item', :requirements => {:item => /\d+/}
-		m.command_with_id '/command/:command/with_id/:id',  :requirements => {:id => /\d+/}
-		m.suggest '/suggest', :action => 'suggest'
-		m.suggest '/suggest/:command/:input', :action => 'suggest'
-	end
+	
+	
 	
 	map.create_tag "/create_tag", :controller => "tags", :action => "create"
-	map.konnect "/connect/:subject/:object", :controller => "connections", :action => "connect", :requirements => {:subject => /\d+/}
-	map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
+	# map.konnect "/connect/:subject/:object", :controller => "connections", :action => "connect", :requirements => {:subject => /\d+/}
+	# map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"
 	
-	map.connect_with "/connect/:subject_id/with/:object_id", :controller => "connections", :action => "new"
+
 	
 	map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
 	map.add_to_nuniverse "/add-to-favorites/:id", :controller => "connections", :action => "add_to_favorites"
 	map.remove_from_nuniverse "/remove-from-favorites/:id", :controller => "connections", :action => "remove_from_favorites"
 	map.preview "/preview/:id", :controller => "connections", :action => "preview"
 	map.send_email "/send_email/:id", :controller => "tags", :action => "send_email"
+	
+	map.tutorial_url "/tutorial", :controller => "users", :action => "tutorial"
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "application"

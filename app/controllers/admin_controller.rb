@@ -122,8 +122,9 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def test
-		raise (URI.parse params[:url]).to_s.inspect
+		@source = Image.new
 	end
+	
 	
 	def netflix
 		t = Finder::Netflix.new

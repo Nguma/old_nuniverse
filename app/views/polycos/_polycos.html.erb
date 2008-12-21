@@ -1,0 +1,27 @@
+
+<div class="connection <%= connection.subject.kind %>_connection <%= cycle('even','odd') %>">
+  <div class="rank_lnk"><span class="score"><%= connection.score rescue "-"%></span>
+  <%= link_to(image_tag("/images/icons/arrow_up.png"), "/connections/rank/#{connection.id}", :class => "trigger") %>
+  </div>
+
+  <%= thumbnail_tag(connection.subject)%>
+  
+    <div style="position:relative;float:right"><%= add_to_fav_link(connection) %></div>
+    <div class="description" >
+     <%= render_connection_description(connection) %> 
+     </div>
+   
+   <% unless !authorized_to_edit?(connection, current_user) -%>
+     <p> <%= link_to "Edit", edit_connection_url(connection), :class => "edit_lnk" %> <%= link_to "Tell me more about that connection", connection %></p>
+    <% end -%>
+  
+  <div class="preview">
+    <div class="hidden">
+      <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
+    </div>
+  </div>
+  
+  
+  <div class="delimiter"> </div>
+  
+</div>

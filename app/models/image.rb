@@ -1,13 +1,10 @@
 class Image < ActiveRecord::Base
-  belongs_to :tag
 
-	before_create :create_tag
   
   has_attachment	:content_type => :image,
     							:thumbnails => {
       							:small => '80x80!',
-      							:large => '150x150!',
-										:box => '400x80!'
+      							:large => '150x150!'
     							},
     							:processor  => :image_science,
 									:path_prefix => "public/attachments",
@@ -17,6 +14,8 @@ class Image < ActiveRecord::Base
 
   
   validates_as_attachment
+
+	alias_attribute :name, :filename
 
 	#override from has_attachment plugin
   def uploaded_data=(file_data)
@@ -50,7 +49,8 @@ class Image < ActiveRecord::Base
   # end
 
 	def source_url=(url)
-	  return nil if not url
+	  return nil if not url 
+		return nil if url.blank?
 	  http_getter = Net::HTTP
 	  uri = URI.parse(url)
 	  response = http_getter.start(uri.host, uri.port) {|http|
@@ -69,14 +69,8 @@ class Image < ActiveRecord::Base
 	  end
 	end
 	
-	def create_tag
-		if self.parent_id.nil?
-			t = Tag.create!(
-				:label => self.filename,
-				:kind => 'image'
-			)
-			self.tag = t
-		end
+	def avatar(size = {})
+		self.public_filename(size)
 	end
 
 end

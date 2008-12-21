@@ -1,0 +1,23 @@
+<%= home_link %>
+<% nuniverse do -%>
+  <div id="content">
+     <% form_for(@polyco, :html => {:multipart => true}) do |f| %>
+        <%= f.error_messages %>
+       
+        <div class="step">
+          How is <%= @polyco.name %> related to <%= @polyco.object.name %>?<br/>
+          <%= f.text_area :description, :rows => 3, :style => "background:#fff"%>
+        </div>
+         <% fields_for @polyco.subject do |s| -%>
+
+            <div class="step">
+              Tags for this connection to that story
+              <%= s.text_field :tags %>
+            </div>
+          <% end -%>
+        <p>
+          <%= f.submit "Great, Save it." %>
+        </p>
+      <% end %>
+  </div>
+<% end -%>

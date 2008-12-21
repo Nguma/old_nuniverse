@@ -29,6 +29,7 @@ function reset()
  });
 
   $$('.connection').each(function(box,i) {
+
       var b = new Box(box, {
         onTrigger:function(t) {
          

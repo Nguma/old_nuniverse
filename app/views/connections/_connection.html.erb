@@ -1,27 +1,16 @@
-
-<div class="connection <%= connection.subject.kind %>_connection <%= cycle('even','odd') %>">
-  <div class="rank_lnk"><span class="score"><%= connection.score rescue "-"%></span>
-  <%= link_to(image_tag("/images/icons/arrow_up.png"), "/connections/rank/#{connection.id}", :class => "trigger") %>
-  </div>
-
-  <%= thumbnail_tag(connection.subject)%>
-  
-    <div style="position:relative;float:right"><%= add_to_fav_link(connection) %></div>
-    <div class="description" >
-     <%= render_connection_description(connection) %> 
-     </div>
-   
-   <% unless !authorized_to_edit?(connection, current_user) -%>
-     <p> <%= link_to "Edit", edit_connection_url(connection), :class => "edit_lnk" %></p>
+<div class ="connection <%= connection.subject.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>">
+  <span class="klass" style="line-height:0"><%#= connection.subject.class.to_s %></span>
+  <%= thumbnail_tag connection.subject  %>
+  <div class="star-rating" >
+    <% 5.times do |time| %>
+    <%= link_to image_tag("/images/icons/empty.png"), "/polycos/rate/#{connection.id}?score=#{time+1}", :class => "star #{connection.score > time ? "on_#{connection.score.ceil.to_s[0,1]}" : ""}" %>
     <% end -%>
-  
-  <div class="preview">
-    <div class="hidden">
-      <%= link_to "preview", preview_url(connection), :class => "preview_url" %>
-    </div>
   </div>
+  <p class="description">
+    <%= render_connection_description(connection) %>
+  </p>
   
-  
-  <div class="delimiter"> </div>
-  
+  <%= link_to "Edit this connection", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection)%>
+
+  <div class="delimiter"></div>
 </div>

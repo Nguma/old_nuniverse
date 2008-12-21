@@ -1,0 +1,9 @@
+<div>
+  <h1>Wandering... <%= link_to "Wander more", "#", :style => "color:#369;font-size:20px"%></h1>
+  <% @polycos.each do |polyco| -%>
+    <div class="connection" style="position:relative;float:left;width:auto;clear:none;background:#eee;margin:0 1px 1px 0">
+      <%= link_to(image_tag(polyco.subject.images.first.public_filename(:small), :class => "thumbnail"), polyco) rescue link_to(image_tag("/images/icons/#{polyco.subject_type.downcase.to_s}.png", :class => "thumbnail"), polyco) %>
+      <p class="description"><%= link_to(polyco.subject.name, polyco.subject) %> / <%= link_to(polyco.object.name, polyco.object)%></p>
+    </div>
+  <% end -%>
+</div>

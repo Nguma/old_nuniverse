@@ -34,10 +34,15 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :first_name, :last_name, :password, :password_confirmation
 
-	has_one :asset
 	belongs_to :tag
 	
-	alias_attribute :object, :tag
+	has_many :stories, :foreign_key => :author_id
+	has_many :connections, :as => :object, :class_name => "Polyco"
+	has_many :story_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Story'"
+	has_many :nuniverse_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Nuniverse'"
+	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
+
+	alias_attribute :name, :login
 	before_create :assign_tag
 
 	has_many :taggings, :as => :taggable
@@ -45,6 +50,15 @@ class User < ActiveRecord::Base
 	
 
 	alias_attribute :title, :label
+	
+	define_index do
+		indexes :login
+		indexes [:firstname, :lastname], :as => :name, :sortable => true
+		
+		has :state
+		set_property :delta => :true
+		
+	end
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   #
   # uff.  this is really an authorization, not authentication routine.  
@@ -66,11 +80,8 @@ class User < ActiveRecord::Base
 		return email
 	end
 	
-	def avatar
-		if asset.image?
-			image_tag(asset.public_filename(:thumb))
-		else	
-		end
+	def avatar(size = {})
+		connections.of_klass('Image').with_score.order_by_score.first.subject.public_filename(size)
 	end
 	
 
@@ -96,12 +107,7 @@ class User < ActiveRecord::Base
 		tag.property('address')
 	end
 	
-	def connections(params = {})
 
-		self.tag.connections_from
-		
-	
-	end
 
 	def add_image(params)
 		tag.add_image(params)

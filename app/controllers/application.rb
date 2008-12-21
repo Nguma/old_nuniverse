@@ -5,7 +5,9 @@ class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 	include AuthenticatedSystem
 	
+	
 	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about, :screenshots]
+
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -13,7 +15,7 @@ class ApplicationController < ActionController::Base
 
 	def index
 		if logged_in?
-			redirect_to visit_url(current_user.tag, current_user.tag)
+			redirect_to current_user
 		else
 			redirect_to :beta
 		end
@@ -53,6 +55,9 @@ class ApplicationController < ActionController::Base
 	
 
 	protected
+	
+
+	
 	def invitation_required
 		if !logged_in?
 			redirect_to "/beta"
@@ -60,20 +65,17 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def update_session
-		session[:mode] = @mode
+		@display = session[:display] = params[:display] ? params[:display] : (!session[:display].nil? ? session[:display] : "cards")
+		@order = session[:order] = params[:order] ? params[:order] : (!session[:order].nil? ? session[:order] : "by_latest")
+		@klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
+		
+		
 		session[:service] = @service
 		session[:perspective] = @perspective
-		session[:order] = @order
-		session[:kind] = @kind
+
+		
 		session[:last_input] = @filter
-		if @tag	
-			session[:previous] = session[:current] unless session[:current] == @tag.id
-			session[:current] = @tag.id
 	
-		else
-			session[:tag] = nil
-			session[:current] = nil
-		end
 	end
 	
 	def find_user
@@ -91,7 +93,7 @@ class ApplicationController < ActionController::Base
 	
 	def find_perspective		
 		if params[:perspective]
-			@perspective = Tag.find(:first, :conditions => ['label = ? AND kind in (?)', params[:perspective], ['user','group','service']])
+			@perspective = Tag.find(:first, :conditions => ['label = ? AND klass in (?)', params[:perspective], ['user','group','service']])
 			
 		else
 			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.tag
