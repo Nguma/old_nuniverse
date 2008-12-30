@@ -5,3 +5,4 @@ db/schema.rb
 public/avatars/*
 public/attachments/*
 tmp/*
+db/sphinx/*
