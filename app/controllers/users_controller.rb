@@ -100,8 +100,20 @@ class UsersController < ApplicationController
 	
 	def update
 		@user = current_user
-		@user.tag.replace_property('address',params[:user]['address']) if params[:user]['address']
-		@user.tag.save
+
+		if params[:user]['address']
+		end
+		@user.firstname = params[:user][:firstname]
+		@user.lastname = params[:user][:lastname]
+		if params[:image]
+			begin
+				@user.images << Image.create(params[:image]) 
+			rescue
+				
+			end
+		end
+		@user.save
+		
 		redirect_to "/my_nuniverse"
 	end
 	
@@ -120,21 +132,24 @@ class UsersController < ApplicationController
 		@user ||= current_user
 		
 		@source = @user
-
+		
 		@connections = @user.connections.of_klass(@klass)
 		@count = @user.connections.count
-
+		@filter = params[:filter] || ""
 		
 		render :action => :tutorial if @user == current_user && @count == 0
 		case params[:order]
-		when "by_latest"
-			@connections = @connections.order_by_date
-		when "by_name"
-			@connections = @connections.order_by_name
-		else
-			@connections = @connections.order_by_score(@perspective)
-		end
-		@connections = @connections.with_score.paginate(:per_page => 20, :page => params[:page])
+				when "by_latest"
+					@connections = @connections.order_by_date
+				when "by_name"
+					@connections = @connections.order_by_name
+				else
+					@connections = @connections.order_by_score(@perspective)
+				end
+	
+		@connections = @connections.with_score.sphinx(@filter, :page => 1, :per_page => 3000).paginate(:page => params[:page] || 1)
+		
+	
 		
 		respond_to do |format|
 			format.html {

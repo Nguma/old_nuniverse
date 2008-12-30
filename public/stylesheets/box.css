@@ -1,16 +1,3 @@
-.box {
-	position:relative;
-	clear:both;
-	width:auto;
-	margin:0 0 1px 1px;
-	padding:5px;
-	background:none;
-	
-	border:none;
-	overflow:hidden;
-	min-height:70px;
-	height:auto;
-}
 
 .personal {
 /*	background: #ccc url("/images/backgrounds/box_personal.png") 0 0 repeat-x;;*/
@@ -21,65 +8,9 @@
 	margin:0 0 1px 1px;	
 }
 
-.box h2 {
-	font-size:24px;
-	color:#999;
-	display:inline;
-}
-
-.box h3 {
-	font-size:16px;
-	font-weight:bold;
-	color:#666;
-}
 
 
-.box p {
-	color:#777;
-	font-size:13px;
-	padding:3px 0 0 0;
-}
 
-.nav .box {
-/*	background:#eef6ee;*/
-}
-
-.box .connection h3 {
-	font-size:13px;
-	padding:0;
-}
-
-.box a:hover {
-	color:#9F0;
-}
-
-.list .list {
-	padding:0;
-	background:none;
-}
-
-.list .list .expander {
-	display:none;
-}
-
-.box .collapse_icon {
-	display:none;
-}
-
-.expanded .expand_icon {
-	display:none;
-}
-
-.expanded .collapse_icon {
-	display:inline;
-}
-
-.expanded {
-	height:240px;
-	overflow:hidden;
-
-
-}
 
 #preview_box,
 .popup_box {
@@ -165,13 +96,6 @@
 	margin:0 0 5px 0;
 	color:#333;
 	font-weight:bold;
-}
-
-#preview_box .pagination {
-	clear:both;
-	font-size:11px;
-	color:#666;
-	padding:5px;
 }
 
 #preview_box .content {
@@ -379,11 +303,6 @@
 	display:block;
 	font-size:14px;
 }
-
-.image_mode .avatar {
-	width:100%;
-}
-
 
 .cards_mode .expanded {
 	height:340px;

@@ -2,6 +2,10 @@ class Tagging < ActiveRecord::Base
 	belongs_to :taggable, :polymorphic => true 
 	
 	
+	define_index do
+		indexes :predicate
+		set_property :delta => true
+	end
 	# has_many :rankings
 
 	cattr_reader :per_page 

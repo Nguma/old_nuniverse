@@ -69,6 +69,7 @@ class ApplicationController < ActionController::Base
 		@order = session[:order] = params[:order] ? params[:order] : (!session[:order].nil? ? session[:order] : "by_latest")
 		@klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
 		
+		@size = (@display == "image") ? nil : :small
 		
 		session[:service] = @service
 		session[:perspective] = @perspective

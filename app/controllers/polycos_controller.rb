@@ -11,7 +11,8 @@ class PolycosController < ApplicationController
 	
 	def show
 		redirect_to @polyco.object if @polyco.state == "active"
-		@suggestions = Nuniverse.search @polyco.subject.name, :match_mode => :extended, :conditions => {:state => 1}, :per_page => 10 unless params[:no_suggestions]
+		# raise Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10).inspect
+		@suggestions = Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10)
 		@source = @polyco
 	
 	end
@@ -41,12 +42,12 @@ class PolycosController < ApplicationController
 	
 	def update
 		
-		
+
 		if params[:subject_id] 
 
 			@polyco.subject.delete
 			@polyco.subject = params[:subject_type].classify.constantize.find(params[:subject_id])
-
+			
 		end
 		if params[:polyco]	
 			if @polyco.subject.is_a?(Tag)
@@ -57,28 +58,39 @@ class PolycosController < ApplicationController
 				@polyco.subject.description = params[:subject][:description]
 			end
 			
-			@polyco.subject.state = 1 if @polyco.is_a?(Nuniverse)
+			@polyco.subject.active = 1
 			
-			if params[:image]
+			if params[:image] 
+				begin
 				@polyco.subject.images << Image.create(params[:image])
+			rescue
+			end
 			end
 		end
 		@polyco.state = params[:state] || "active"
 		@polyco.save_all
 
-		redirect_back_or_default("/")
+		respond_to do |f|
+				f.html { 
+					if params[:subject_id] 
+						redirect_to edit_polyco_url(@polyco)
+					else 
+						redirect_back_or_default("/")
+					end
+				}
+		end
+		
+		
 		
 	end
 	
 	def create
 
-		redirect_to eval "#{@klass.downcase.pluralize}_url" if params[:submit] == "Visit"
 		@polyco = Polyco.new(params[:polyco])
-
-		@polyco.state = "active" if @polyco.subject
-
-		@polyco.subject ||= @klass.classify.constantize.create(params[:subject])
-
+		
+		@polyco.subject ||= @klass.classify.constantize.create!(params[:subject])
+		@polyco.state = "active" if @polyco.subject.active
+		
     respond_to do |format|
       if @polyco.save_all
         # flash[:notice] = 'Story was successfully created.'
@@ -106,8 +118,8 @@ class PolycosController < ApplicationController
 	
 	def destroy
 		@object = @polyco.object
-		@polyco.subject.destroy if @polyco.subject.state == "pending"
-		@polyco.twin.destroy 
+		@polyco.subject.destroy if @polyco.subject.active == 0
+		@polyco.twin.destroy rescue nil
 		@polyco.destroy
 		redirect_to @object
 	end

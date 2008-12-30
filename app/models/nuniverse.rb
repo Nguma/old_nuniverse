@@ -1,5 +1,5 @@
 class Nuniverse < ActiveRecord::Base
-	has_many :taggings, :as => :taggable
+	has_many :taggings, :as => :taggable, :dependent => :destroy
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
@@ -7,8 +7,12 @@ class Nuniverse < ActiveRecord::Base
 	
 	define_index do
     indexes name, :sortable => true
-		has :state
-		set_property :delta => :true
+		# indexes description
+		# indexes taggings(:predicate), :as => :predicate
+		
+		has :active
+		has connections(:id), :as => :c_id
+		set_property :delta => true
 	end
 	
 	def tags

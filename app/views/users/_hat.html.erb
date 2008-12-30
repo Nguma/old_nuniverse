@@ -1,9 +1,12 @@
 <div id="hat" style="background:#333;padding:10px;color:#ccc">
-    <%= thumbnail_tag @source %>
+    <%= thumbnail_tag @source, :size => :small %>
     <% if @source == current_user -%>
      <h1><span style="color:#FFF"><%= @source.name.capitalize %></span>, this is your nuniverse.</h1>
     <% else -%>
      <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
     <% end -%> 
+    <% unless @filter.blank? -%>
+      <h2>Showing all <%= link_to @filter, @source, :class => "filter" %> 
+    <% end -%>
   <div class="delimiter"></div>
 </div>

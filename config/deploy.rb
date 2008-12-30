@@ -118,8 +118,7 @@ namespace :deploy do
     sudo <<-CMD
       rm -fr #{release_path}/log &&
       ln -nfs #{shared_path}/log #{release_path}/log
-     	rm -fr #{release_path}/db/sphinx &&
-      ln -nfs #{shared_path}/db/sphinx #{release_path}/db/sphinx
+     	
     CMD
 
     

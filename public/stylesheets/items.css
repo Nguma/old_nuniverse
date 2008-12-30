@@ -28,6 +28,8 @@
 img.default_img {
 	width:60px;
 	height:60px;
+	background:transparent url('/images/backgrounds/thumbnail_bg.png') 0 0 no-repeat;
+	float:left;
 
 }
 

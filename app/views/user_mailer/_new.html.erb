@@ -1,6 +1,6 @@
 <%= link_to "Email that story" , "#", :class => "expand_lnk", :id => "expand_email_story_form"%>
 
- <% form_for :story, @story, :url => {:action => :send_email}, :html => {:id => "email_story_form", :class => "hidden"}  do |f| -%>
+ <% form_for :story, @story, :url => {:action => :send_email}, :html => {:id => "email_story_form"}  do |f| -%>
     <fieldset>
       <%= hidden_field_tag :id, @story.id %>
       <% fields_for :email do |e| -%>
@@ -10,7 +10,8 @@
         <label>Maybe you'd like to write a personal note?</label><br/>
         <%= e.text_area :message, :rows => 3 %>
       <% end -%>
+      <%= f.submit "Send" %>
     </fieldset>
-    <br/>
-    <%= f.submit "Send" %>
+   
+    
   <% end -%>

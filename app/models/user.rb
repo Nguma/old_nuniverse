@@ -54,9 +54,10 @@ class User < ActiveRecord::Base
 	define_index do
 		indexes :login
 		indexes [:firstname, :lastname], :as => :name, :sortable => true
-		
+		indexes taggings(:predicate)
+		has connections(:id), :as => :c_id
 		has :state
-		set_property :delta => :true
+		set_property :delta => true
 		
 	end
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.

@@ -36,11 +36,7 @@
 	margin:0 1px 1px 0;
 }
 
-.image_mode .connection .thumbnail {
-	width:95%;
-	height:auto;
-	background:none;
-}
+
 
 .connection .klass {
 	position:absolute;
@@ -215,21 +211,6 @@
 	display:inline;
 }
 
-.tweet-connection .thumbnail,
-.bookmark-connection .thumbnail,
-.comment-connection .thumbnail {
-	height:30px;
-	width:30px;
-	background:none;
-	margin:0 0 0 0;
-}
-
-.tweet-connection .title,
-.comment-connection .title {
-	font-size:14px;
-	font-weight:normal;
-	font-style:italic;
-}
 
 #preview_box .image-connection {
 	display:none;
@@ -257,16 +238,20 @@ img.thumbnail {
 }
 
 
-.image_mode .connection img.thumbnail {
+.image_mode #content .connection img.thumbnail {
 	background:none;
 	width:100%;
+	height:auto;
 	padding:0;
 	margin:0;
+	
 }
 
-.image_mode .connection img.default_img {
-	width:60px;
+.image_mode #content img.default_img {
+	width:40px;
+	height:40px;
 	display:block;
+	background:none;
 	float:none;
 }
 

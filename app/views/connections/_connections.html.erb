@@ -1,7 +1,8 @@
     <div class="submenu " style="padding:5px;margin:0 0 1px 0;background:#eee">
       <%#= link_to "See only my ratings", nuniverse_url(@nuniverse, :perspective => current_user.id) ,:style => "float:right"%>
+      <%= will_paginate connections %>
       <%= sorting_options connections %>
-      <%= will_paginate connections -%>
+      
       <%= clear %>
     </div>
     <%= clear %>

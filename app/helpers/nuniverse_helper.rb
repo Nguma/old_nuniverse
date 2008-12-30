@@ -38,7 +38,7 @@ module NuniverseHelper
 		when "card"
 			1
 		when "image"
-			5
+			1
 		when "list"
 			1
 		else
@@ -232,7 +232,8 @@ module NuniverseHelper
 	end
 	
 	def home_link 
-		link_to "< Back to your nuniverse", home_url, :class => "home_lnk"
+		str = link_to "< Back to your nuniverse", home_url, :class => "home_lnk"
+		str << link_to("< Back to previous", session[:return_to])
 	end
 	
 	def clear

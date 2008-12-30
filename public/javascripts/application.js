@@ -256,8 +256,15 @@ function setExpandLinks(scope) {
     lnk.addEvent('click', function(ev) {
       
       ev.preventDefault();
-      var expanded = $(lnk.get('id').replace(/^expand_|_lnk/g,''));
-      if($chk(expanded)) { expanded.toggleClass('hidden');}
+      var expandable = $(lnk.get('id').replace(/^expand_|_lnk/g,''));
+      var expanded = lnk.getParent().getElement('.expanded');
+
+      if($chk(expandable)) { 
+        expandable.toggleClass('expanded');
+        if($chk(expanded) && (expanded != expandable)) {
+          expanded.removeClass('expanded');
+        }
+      }
     });
   });
 }

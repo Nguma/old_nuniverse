@@ -1,9 +1,11 @@
-<%= link_to "< Back to your nuniverse", home_url %>
+<%= home_link %>
 <% nuniverse do -%>
   <%= render :partial => "/nuniverses/main_menu"%>
   <div id="content">
-    <div class="step <%= @klass.downcase %>-klass" style="margin:0 0 1px 0">
+    <div class="step <%= @klass.downcase %>-klass submenu" style="margin:0 0 1px 0">
+      <%= render :partial => "/nuniverse/search_form" %>
       <%= render :partial => "/#{@klass.downcase.pluralize}/new" %>
+      <%= clear %>
     </div>
   <% if @connections.empty? -%>
     <div class="step">
@@ -19,4 +21,5 @@
   
   </div>
    <%= display_options %>
+   <%#= render :partial => "/nuniverses/main_menu"%>
 <% end -%>

@@ -1,0 +1,7 @@
+<% fields_for :image do |i| -%>
+<div class="step">
+  Would you like to add an image for it?
+  <%= i.text_field :source_url, :id => "input_image", :autocomplete => "off" %>
+  <%= i.file_field :uploaded_data %>
+</div>
+<% end -%>

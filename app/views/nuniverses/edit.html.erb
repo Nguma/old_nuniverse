@@ -1,0 +1,15 @@
+<% nuniverse do -%>
+  <div id="content">
+  <div class="step">
+    These are all tags for that nuniverse. You can add as many as you want. (Separated by comma if more than one at the time)
+   
+  </div>
+   <div class="step">
+     <% form_for @nuniverse do |f| -%>
+       <%= f.text_area :tags, :rows => 2 %><br/>
+       <%= submit_tag "Save"%>
+     <% end -%>
+    </div>
+  
+  </div>
+<% end -%>

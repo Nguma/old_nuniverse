@@ -337,39 +337,6 @@ a.save_button {
 }
 
 
-.form_box .step {
-	display:none;
-}
-
-.form_box .activated, 
-.form_box .current {
-	display:block;
-}
-
-.form_box .step .content{
-	display:none;
-	margin:5px 10px 5px 30px;
-}
-
-.form_box .current .content {
-	display:block;
-}
-
-.form_box .step h2 {
-	display:none;
-}
-
-.form_box .activated h2 {
-	font-size:14px;
-	color:#666;
-	display:block;
-}
-
-.form_box .current h2 {
-	font-size:25px;
-	color:#333;
-	display:block;
-}
 
 
 #main_menu {
@@ -476,7 +443,7 @@ a.save_button {
 	
 }
 
-#tutorial .step {
+.step {
 	margin:1px 0 0 0;
 	padding:10px;
 	background:#eee;
@@ -484,8 +451,12 @@ a.save_button {
 	color:#666;
 }
 
-#tutorial .step a {
+.step a {
 	color:#369;
+}
+
+.step h4 {
+	font-size:25px;
 }
 
 .home_lnk {
@@ -520,4 +491,17 @@ a.save_button {
 
 .product-klass {
 	background:#91bae8 !important;
+}
+
+a.filter {
+	color:#f93;
+}
+
+a.filter:hover {
+	text-decoration:line-through;
+}
+
+.submenu form {
+	position:relative;
+	float:left;
 }

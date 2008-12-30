@@ -1,112 +1,8 @@
-#input_box {
-	border:none;
-	position:relative;
-	clear:both;
-	padding:10px 20px 10px 20px;
-	margin:5px;
-	background:#333;
-	width:auto;
-	min-height:200px;
-	height:200px;
-	display:none;
-}
-
 #input_wrap h1 {
 	font-size:25px;
 	color:#000;
 }
 
-
-
-#input_box span {
-	color:#9F0;
-}
-
-#input_box .spinner {
-	display:none;
-}
-
-#input_box fieldset {
-	border:none;
-	position:relative;
-	padding:0;
-}
-
-#input_box input {
-	background:none;
-	border:none;
-	font-size:35px;
-	font-weight:normal;
-	color:#FFF;
-	width:97%;
-	margin: 0 0 0 0;
-	padding:7px 0 10px 0;
-}
-
-#input_box #input {
-	font-size:35px;
-	padding:0;
-	margin:10px;
-}
-
-#input_box textarea {
-}
-
-#input_box #command {
-	background:none;
-	border:none;
-/*	color:#9F0;*/
-	font-size:18px;
-	color:#ccc;
-	padding:0;
-	margin:0;
-}
-
-#input_info {
-	position:absolute;
-	right:0;
-	top:0;
-	color:#9F9;
-	padding:5px;
-}
-
-#extra_input {
-	background:none;
-	font-size:20px;
-	color:#FFF;
-	padding:0;
-	line-height:25px;
-	width:97%;
-	height:auto;
-	margin:0 0 5px 0;
-	border:none;
-}
-
-
-
-#file_field {
-	position:relative;
-	clear:both;
-	cursor:pointer;
-}
-
-#input_box label {
-	display:block;
-	font-weight:normal;
-	font-size:15px;
-	line-height:20px;
-	color:#999;
-	margin:0;
-	padding:0;
-}
-
-#input_box .section {
-	display:none;
-}
-
-#input_box .current_section {
-	display:block;
-}
 
 #image_url_uploaded_data {
 	-moz-opacity:0 ;
@@ -122,88 +18,30 @@
 	font-size:20px;
 }
 
-#input_box a.close {
-	padding:0;
-	line-height:16px;
 
-	font-size:20px;
-	font-weight:bold;
-	position:absolute;
-	right:6px;
-	cursor:pointer;
-	z-index:123456789;
-	top:3px;
-	color:#9F0;
+textarea {
+	background:#fff;
 }
 
-.box #input_box {
-	position:relative;
 
-	height:260px;
-	border:none;
-	background:none;
-	width:100%;
-	padding:0;
+.submenu form {
 	display:none;
 }
 
-
-.box #info_label {
-	display:none;
-}
-
-
-
-#input_box.expanded  {
+form.expanded  {
 	display:block;
-}
-
-.box #input_box #input {
-	color:#666;
-}
-
-.hover #input_box #input {
-	color:#FFF;
-}
-
-
-#input_box .actions {
-	position:absolute;
-	left:auto;
-	right:10px;
-	top:5px;
-	color:#eee;
-	font-size:12px;
-}
-
-
-.form_box {
-	background:transparent url("/images/backgrounds/popup.png") 0 0 no-repeat;
-	width:790px;
-	height:440px;
-	color:#333;
-	padding:0;
-	position:absolute;
-	z-index:56789;
-	left:0;
-}
-
-.form_box fieldset {
-	width:460px;
-	position:relative;
-}
-.form_box input {
-	clear:both;
-}
-
-.form_box .wrap {
-	padding:30px;
-	position:relative;
-	width:auto;
 }
 
 #main_menu .suggestions {
 	padding:0;
+	display:block;
+}
+
+fieldset {
+	display:none;
+}
+
+.expanded {
 	display:block;
 }
 

@@ -1,14 +1,17 @@
 <%= home_link %>
 <% nuniverse do -%>
   <div id="content">
-    <div class="step story-klass" style="margin:0 0 1px 0">
+    <div class="step story-klass submenu" style="margin:0 0 1px 0">
 
       <%= render :partial => "/user_mailer/new"%>
+      <%= clear %>
     </div>
     <% @connections.each do |connection| -%>
       <div class="step connection">
+        <%= thumbnail_tag connection.subject %>
         <%= render_connection_description(connection) %>
         <%= link_to "Edit", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection) %>
+        <%= clear %>
       </div>
     <% end -%>
     <div class="step">

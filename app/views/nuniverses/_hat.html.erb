@@ -1,5 +1,10 @@
 <div id="hat" style="background:#333;padding:10px;color:#ccc">
-    <%= thumbnail_tag @source %>
+    <%= thumbnail_tag @source, :size => :small %>
     <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
+    <% unless @filter.blank? -%>
+      <h2>Showing all <%= link_to @filter, @source, :class => "filter" %> 
+    <% end -%>
+    <div style="position:relative;bottom:5px;left:5px">
+    <%= @nuniverse.tags.join(', ') %> <%= link_to "Edit tags", edit_nuniverse_url(@source) %></div>
   <div class="delimiter"></div>
 </div>

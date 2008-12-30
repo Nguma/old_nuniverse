@@ -1,5 +1,11 @@
-<%= will_paginate @nuniverses %>
-<% @nuniverses.each do |nuniverse| -%>
-  <%= image_tag(nuniverse.images.first.public_filename()) if nuniverse.images.first -%>
-  <%= nuniverse.name %>
-<% end -%>
+<div>
+  <h1>Wandering... <%= link_to "Wander more", "#", :style => "color:#369;font-size:20px"%></h1>
+  <% @nuniverses.each do |nuniverse| -%>
+    <div class="connection" style="position:relative;float:left;width:auto;clear:none;background:#eee;margin:0 1px 1px 0">
+    <%= thumbnail_tag nuniverse -%>
+    <%= link_to nuniverse.name, nuniverse  %>
+    <p style="font-size:12px;color:#999"><%= nuniverse.tags.join(',')%></p>
+    </div>
+  <% end -%>
+ 
+</div>

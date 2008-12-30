@@ -6,12 +6,21 @@ class Polyco < ActiveRecord::Base
 	
 	has_many :taggings, :as => :taggable
 	
+	
 
 	
 	define_index do 
-		indexes :name, :sortable => true
+		indexes [subject.name, subject.taggings.predicate, taggings.predicate], :as => :name, :sortable => true
+		indexes subject_type, :as => :type
+		
+		set_property :delta => true
 		
 	end
+	
+	named_scope :sphinx, lambda {|*args| {
+    :conditions => { :id => search_for_ids(*args) }
+  }}
+  
 	
 	named_scope :order_by_date, :order => "created_at DESC"
 	
@@ -19,6 +28,9 @@ class Polyco < ActiveRecord::Base
 	
 	named_scope :order_by_score, :order => "average_score DESC"
 	
+	named_scope :tagged, lambda { |tag| 
+		tag.nil? ? {} : { :conditions => ["taggings.predicate rlike ?",tag ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) "}
+	}
 	
 	named_scope :with_score, lambda { |user| 
 		user.nil? ? {

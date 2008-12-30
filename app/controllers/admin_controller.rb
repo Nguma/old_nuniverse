@@ -101,21 +101,10 @@ cts.each_with_index do |ct,i|
 	end
 	
 	def batch
-		# @tags = Tag.tagged('restaurant')
-		# 
-		# 		@tags.each do |tag|
-		# 			Location.create(
-		# 				:name => tag.label,
-		# 				:full_address => tag.property('address'),
-		# 				:latlng => tag.property('latlng'),
-		# 				:tag_id => tag.id
-		# 			)
-		# 		end
+		@ns = Nuniverse.find(:all, :conditions => "id >= 4436 AND id <= 5738")
+		@ns.each do |n|
+			n.taggings << Tagging.new(:predicate => "comic character")
 		
-		@locations = Location.find(:all)
-		@locations.each do |l|
-			l.tag.kind = "Location"
-			l.tag.save
 		end
 		render :nothing => true
 		
