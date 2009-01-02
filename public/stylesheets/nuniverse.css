@@ -1,101 +1,20 @@
-.nuniverse
-{
-	position:relative;
-	padding:20px 80px 20px 80px;
-	color:#333;
-	font-weight:normal;
-	z-index:123;
-}
-
-.nuniverse .body
-{
-	position:relative;
-	clear:both;
-	margin:0 0 0 0;
-	padding:0;
-}
-
-.nuniverse .hat {
-	position:relative;
-	margin:0 0 0 0;
-	padding: 0 0 2px 0;
-}
-
-.nuniverse h1 {
-	font-size:45px;
-	font-weight:normal;
-	color:#4f4f4f;
-	margin:0 0 0 0;
-}
-
-.nuniverse h2 a {
-	font-size:30px;
-	color:#999;
-}
-
-.nuniverse h3 a {
-	color:#999;
-	font-size:22px;
-}
-
-.nuniverse h4 {
-	
-}
-
-.nuniverse .selected {
-	height:100px;
-}
 
 #breadcrumbs {
-	position:relative;
-	float:left;
-	padding:5px;
-	margin:0 0 0 0px;
+	position:fixed;
+	top:0;
+	left:30px;
+	
 	background:none;
 
 	z-index:1234567890123;
 }
 
 #breadcrumbs a {
-	padding:0;
+	padding:5px;
 	font-size:16px;
 	font-weight:bold;
+	background:#333;
 	color:#FFF;
-}
-
-
-.nuniverse .item p {
-	font-size:12px;
-	padding:0 0 0 0;
-	margin:0 0 5px 0;
-}
-
-.nuniverse p a {
-	color:#666;
-}
-
-.nuniverse .service {
-	color:#999;
-}
-
-.nuniverse .kind {
-	font-size:14px;
-}
-
-.nuniverse .right {
-	position:relative;
-	clear:both;
-	width:800px;
-}
-
-.nuniverse h1 .avatar {
-/*	border:solid 1px #333;*/
-	height:30px;
-	width:30px;
-	padding:15px 0 0 0;
-	position:relative;
-	float:left;
-	margin-right:3px;
 }
 
 .list_button {
@@ -191,17 +110,7 @@ p strong {
 	clear:both;
 	height:auto;
 	padding:0;
-	margin:0 0 0 0;
-}
-
-#content .step {
-	position:relative;
-	clear:both;
-	background:#eee;
-	padding:10px;
-	font-size:20px;
-	color:#666;
-	margin:1px 0 0 0;
+	margin:2px 0 0 0;
 }
 
 #content a.title {
@@ -337,15 +246,25 @@ a.save_button {
 }
 
 
+#hat {
+	padding:10px;
+	color:#666;
+	background:none;
+}
 
 
 #main_menu {
-	position:relative;
-	clear:left;
-/*	background:url('/images/backgrounds/main_menu.png') 0 0 repeat-x;*/
-	margin:0 0 0px 0;
-	padding:0 0 0 10px;
-	background:#333;
+	position:fixed;
+
+	background:url('/images/backgrounds/main_menu.png') 0 0 repeat-x;
+/*	background:#333;*/
+	margin:0 30px 0px 30px;
+	padding:0 0 0 0;
+	bottom:0;
+	left:0;
+	display:none;
+	width:auto;
+	z-index:987;
 }
 
 #main_menu dt {
@@ -354,19 +273,19 @@ a.save_button {
 	margin:0 0 0 0;
 }
 
-#main_menu dd img {
+#main_menu  img {
 	width:40px;
 }
 
-#main_menu dd {
+#main_menu .tab {
 	position:relative;
 	float:left;
-	padding:8px;
-	color:#333;
+	padding:10px;
+	color:#FFF;
 	font-weight:bold;
 	font-size:14px;
 	text-align:center;
-	margin: 0 5px 0 0;
+	margin: 0 0 0 10px;
 }
 
 #main_menu .activated {
@@ -443,13 +362,21 @@ a.save_button {
 	
 }
 
-.step {
-	margin:1px 0 0 0;
-	padding:10px;
-	background:#eee;
-	font-size:15px;
-	color:#666;
+#overview {
+	height:100%;
 }
+
+
+.step {
+	position:relative;
+	clear:both;
+	background:#eee;
+	padding:10px;
+	font-size:20px;
+	color:#666;
+	margin:1px 0 0 0;
+}
+
 
 .step a {
 	color:#369;
@@ -504,4 +431,41 @@ a.filter:hover {
 .submenu form {
 	position:relative;
 	float:left;
+}
+
+#right-column {
+	position:relative;
+	float:right;
+	
+	width:300px;
+	margin:0;
+	padding:0;
+	height:100%;
+}
+
+#left-column {
+	position:relative;
+	width:auto;
+	margin:0 301px 0 0;
+	clear:none;
+}
+
+#left-column .step {
+	clear:none;
+	
+}
+
+#right-column .step {
+	margin:0 0 1px 0;
+	font-size:16px; 
+}
+
+
+#overview dl {
+	position:relative;
+}
+#overview dl dd {
+	float:left;
+	width:20%;
+	font-size:15px;
 }

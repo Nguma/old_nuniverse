@@ -86,23 +86,7 @@ class ApplicationController < ActionController::Base
 			@user = User.find_by_login(params[:user]) || current_user
 		end
 	end
-	
-	
-	def find_everyone
-		@everyone = User.find(0)
-	end
-	
-	def find_perspective		
-		if params[:perspective]
-			@perspective = Tag.find(:first, :conditions => ['label = ? AND klass in (?)', params[:perspective], ['user','group','service']])
-			
-		else
-			@perspective = !session[:perspective].nil? ?  session[:perspective] : current_user.tag
-		end
-		@perspective = current_user.tag if @perspective.nil?
-		@perspective
-	end
-	
+
 	def service_items(query)
 		
 		case @perspective.label

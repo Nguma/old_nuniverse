@@ -19,7 +19,7 @@ class StoriesController < ApplicationController
   def show
 	
 		@source = @story
-		
+		@klass = 'nuniverse'
 		@connections = @source.connections
 		
 		case params[:order]
@@ -59,10 +59,12 @@ class StoriesController < ApplicationController
   # POST /stories
   # POST /stories.xml
   def create
+		params[:active] = 1
     @story = Story.new(params[:story])
-
+		
     respond_to do |format|
       if @story.save
+				Polyco.create(:subject => @story, :object => current_user, :state => "active")
         # flash[:notice] = 'Story was successfully created.'
         format.html { redirect_to(@story.parent) rescue redirect_to @story }
         format.xml  { render :xml => @story, :status => :created, :location => @story }
@@ -93,9 +95,16 @@ class StoriesController < ApplicationController
   end
 
 	def add_item
-		@story.pending_items << Tag.new(params[:tag])
+		@item = Nuniverse.find(params[:subject]) rescue Tag.new(params[:tag])
+		if @item.is_a?(Tag)
+			@story.pending_items << @item
+		else
+			@story.nuniverses << @item 
+		end
 		redirect_back_or_default('/')
 	end
+	
+
 	
 	def send_email
 			@mail = UserMailer.deliver_story(
@@ -122,6 +131,12 @@ class StoriesController < ApplicationController
 		@story.state = "object"
 		@story.save
 		redirect_back_or_default("/")
+	end
+	
+	def find_suggestion
+		
+		@suggestions = Nuniverse.search(params[:tag][:label]).paginate(:page => 1, :per_page => 5)
+		
 	end
 
   # DELETE /stories/1

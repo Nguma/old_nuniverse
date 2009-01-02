@@ -1,3 +1,5 @@
-<dl class="<%= classes %>" <%= name.blank? ? "" : "id=#{name}" %>>
-  <%= body %>
-</dl>
+<div class="step">
+  <%= link_to "See all connections", polymorphic_url(@source , :klass => "Nuniverse", :class => "nuniverse-klass")  if @klass != "Nuniverse"%>
+  <%= link_to "See all images", polymorphic_url(@source , :klass => "Image", :class => "image-klass")  if @klass != "Image"%>
+  <%= link_to "See all bookmarks", polymorphic_url(@source , :klass => "Bookmark", :class => "bookmark-klass")  if @klass != "Bookmark"%>
+</div>

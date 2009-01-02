@@ -1,0 +1,8 @@
+<% @suggestions.each do |suggestion| -%>
+  <dd class='suggestion <%= cycle('even','odd') %>'>
+    <%= thumbnail_tag suggestion %>
+    <%= link_to suggestion.name, make_connection_url(:subject_type => suggestion.type, :subject_id => suggestion.id, :object_type => @object.type, :object_id => @object.id) %> 
+    <span style="font-size:14px"> (<%= suggestion.tags.collect {|c| c.label}.join(',')%>)</span>
+    <%= clear %>
+  </dd>
+<% end -%>

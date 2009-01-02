@@ -1,7 +1,7 @@
 module ConnectionsHelper
 	def link_to_connection(connection)
-		polymorphic_url(connection.subject) rescue raise connection.subject_id.inspect
-		url = connection.state == "pending" ?  connection : polymorphic_url(connection.subject, :klass => "Nuniverse")
+		polymorphic_url(connection.subject) rescue  nil
+		url = connection.pending? ?  connection : polymorphic_url(connection.subject, :klass => "Nuniverse")
 		if connection.subject.is_a?(Bookmark)
 			link_to(connection.subject.name.capitalize, connection.subject.url, :class => "title", :target => "_blank")
 		else

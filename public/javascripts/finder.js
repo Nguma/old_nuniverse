@@ -77,7 +77,7 @@ var Requestable = new Class({
     if($chk(this.el.getElement('form'))) {
       this.request.post(this.el.getElement('form'));
     } else {
-      this.request.get(this.el);
+      this.request.post(this.el);
     }
     
   },
@@ -87,13 +87,14 @@ var Requestable = new Class({
   },
   
   startSpinning:function() {
-    if(!$chk(this.options.spinner)) return;
+    if(!$defined(this.options.spinner)) return;
    
     this.options.spinner.removeClass('hidden');
   },
   
   stopSpinning:function() {
-    if(!$chk(this.options.spinner)) return;
+    if(this.options.spinner == undefined) return;
+
     this.options.spinner.addClass('hidden');
   }
 });
@@ -101,27 +102,30 @@ var Requestable = new Class({
   var Keymapped = new Class({
    
     
-    setKeyListener:function(listener) {
-      if(!$chk(listener)) return;
-      this.listener = listener;
-      this.listener.removeEvents();
-      this.listener.addEvents({
-        'keyup':this.onKeyUp.bindWithEvent(this),
-        'keydown':this.onKeyDown.bindWithEvent(this)
+    setKeyListener:function(listeners) {
+      if(!$chk(listeners)) return;
+      this.listeners = listeners;
+      
+      this.listeners.each(function(listener) {
+        listener.removeEvents();
+        listener.addEvents({
+        'keyup':this.onKeyUp.bindWithEvent(this, listener),
+        'keydown':this.onKeyDown.bindWithEvent(this, listener)
         // 'keypress':function(ev) {ev.preventDefault();}
         
+        },this);
       },this);
     },
     
-    onKeyUp:function(ev) {
+    onKeyUp:function(ev, listener) {
       ev.preventDefault();
       ev.stopPropagation();     
-      this.fireEvent('onKeyUp',[ev.key, this.listener]);
-      if(this.listener.getProperty('value') == '') {
-        this.listener.removeClass('filled');
-        this.fireEvent('onClear',this.listener);
+      this.fireEvent('onKeyUp',[ev.key, listener]);
+      if(listener.getProperty('value') == '') {
+        listener.removeClass('filled');
+        this.fireEvent('onClear',listener);
       } else {
-        this.listener.addClass('filled');
+        listener.addClass('filled');
       }
       
 

@@ -1,13 +1,15 @@
-<%#= render :partial => "/users/groups" %>
-<%= render :partial => "/boxes/preview" %>
-<% if @kind == 'digest' -%>
-  <%= render :partial => "/tags/digest", :locals => {:items => @items }%>
-<% else -%>
-  <% nuniverse(:selected => "My nuniverse") do -%>
-    <%= render :partial => "/tags/submenu"%>
-    <div id="content" class="<%= @mode %>_mode <%= @kind %>_kind">
-      <%= render :partial => "/tags/page", :locals => {:items => @items }%>
+<% locations = google_localize(:source => @tag.label) %>
+
+
+<% locations[0..6].each do |location| -%>
+  <div class="connection">
+    <strong><%= link_to(location.name,  "", :class => "trigger", :mode => "locate") %></strong>
+    <p><%= location.full_address %> <%#= item.property('tel') %></p>
+    <div class="data hidden" >
+      <%#= hidden_field_tag "data", item.data %>
+
     </div>
-    <%= display_options %>
-  <% end -%>
+  </div>
 <% end -%>
+<div class='delimiter'>&nbsp;</div>
+<%= image_tag("/images/icons/powered_by_google.gif", :style => "position:relative")%>

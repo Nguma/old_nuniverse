@@ -36,9 +36,9 @@ module NuniverseHelper
 		case @display
 		
 		when "card"
-			1
+			3
 		when "image"
-			1
+			5
 		when "list"
 			1
 		else
@@ -233,10 +233,11 @@ module NuniverseHelper
 	
 	def home_link 
 		str = link_to "< Back to your nuniverse", home_url, :class => "home_lnk"
-		str << link_to("< Back to previous", session[:return_to])
+		# str << link_to("< Back to previous", session[:return_to])
+		str
 	end
 	
 	def clear
-		'<div class="delimiter"></div>'
+		'<div style="clear:left"></div>'
 	end
 end

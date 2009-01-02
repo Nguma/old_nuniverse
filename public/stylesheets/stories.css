@@ -1,12 +1,6 @@
-
-
-
-
 .hover {
 	background:#FFF;
 }
-
-
 
 .story-connection .title {
 	font-weight:bold;
@@ -58,6 +52,10 @@
 }
 .connection .star-rating .on_5 {
 	background:transparent url('/images/icons/stars.png') -100px -51px no-repeat;
+}
+
+.card_mode .star-rating {
+	display:none;
 }
 
 .new_story {

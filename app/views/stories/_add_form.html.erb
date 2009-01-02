@@ -1,0 +1,10 @@
+<% behavior = params[:behavior] || "hidden" %>
+
+ <% form_for :story, @story, :url => {:action => :add_item}, :html => {:id => "edit_story_form", :class =>  behavior} do |f| -%>
+    <%= hidden_field_tag :id, @story.id %>
+    <% fields_for :tag do |t| -%>
+      <%= t.text_field :label %> <%= f.submit "+" %>
+    <% end -%>
+    <div class="suggestions"></div>
+   
+  <% end -%>

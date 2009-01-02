@@ -10,4 +10,9 @@ class Tag < ActiveRecord::Base
 	def avatar
 		return nil
 	end
+	
+	def tags
+		[]
+	end
+
 end

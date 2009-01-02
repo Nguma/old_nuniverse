@@ -1,0 +1,21 @@
+<% locations = google_localize(:source => subject) %>
+
+<% if locations.empty? -%>
+  Nothing has been found on google.
+<% else -%>
+  Google suggest:
+<% locations[0..6].each do |location| -%>
+  <div class="connection">
+    <strong><%= link_to(location.name,  "", :class => "trigger", :mode => "locate") %></strong>
+    <p><%= location.full_address %> <%#= item.property('tel') %></p>
+    <div class="data hidden" >
+      <%#= hidden_field_tag "data", item.data %>
+
+    </div>
+  </div>
+  
+<% end -%>
+<%= image_tag("/images/icons/powered_by_google.gif", :style=>"position:absolute;right:5px;top:5px") %>
+<% end -%>
+
+

@@ -54,9 +54,10 @@ class User < ActiveRecord::Base
 	define_index do
 		indexes :login
 		indexes [:firstname, :lastname], :as => :name, :sortable => true
-		indexes taggings(:predicate)
+		indexes taggings(:tag).label, :as => :tags
 		has connections(:id), :as => :c_id
 		has :state
+		set_property :suggestable => true
 		set_property :delta => true
 		
 	end

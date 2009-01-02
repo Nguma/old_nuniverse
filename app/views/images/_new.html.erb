@@ -2,9 +2,10 @@
   
   <% @new_polyco = Polyco.new(:object => @source, :subject => Image.new)  %>
   <% form_for @new_polyco, :html => {:multipart => true , :id => "connect_image_form" } do |f| -%>
- 
-    <%= f.hidden_field :object_id %>
-    <%= f.hidden_field :object_type %>
+  <% fields_for :object, @source do |o| -%>
+     <%= o.hidden_field :id %>
+     <%= o.hidden_field :type %>
+   <% end -%>
     <%= f.hidden_field :subject_type %>
     <% fields_for(:subject) do |s| %>   
       

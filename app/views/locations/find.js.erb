@@ -1,3 +1,9 @@
 <% @locations.each do |location| -%>
-  <%= link_to location.name, "#" %><br/>
+  <%= link_to location.name, "#" %>
+  <p><%= location.full_address %> <%#= item.property('tel') %></p>
 <% end -%>
+<% @google_suggestions.each do |location| -%>
+  <%= link_to location.name, "#" %>
+  <p><%= location.full_address %> <%#= item.property('tel') %></p>
+<% end -%>
+<%= image_tag("/images/icons/powered_by_google.gif", :style=>"") %>

@@ -1,0 +1,8 @@
+  <% behavior = params[:behavior] || "hidden" %>
+  <% @location = Location.new(:name => subject)%>
+  <% form_for :location, @location, :url => {:action => :create}, :html => {:id => "address_form", :class =>  behavior} do |f| -%>
+    <%#= hidden_field_tag :id, @.id %>
+
+    <div class="suggestions"></div>
+   
+  <% end -%>

@@ -1,0 +1,19 @@
+<div id="overview">
+  <div class="step">
+      <%= thumbnail_tag @source, :size => :small %>
+      <% if @source == current_user -%>
+       <h1><span style="color:#FFF"><%= @source.name.capitalize %></span>, this is your nuniverse.</h1>
+      <% else -%>
+       <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
+      <% end -%> 
+      <% unless @filter.blank? -%>
+        <h2>Showing all <%= link_to @filter, @source, :class => "filter" %> 
+      <% end -%>
+    <div style="clear:left"></div>
+
+  </div>
+
+ 
+
+ 
+</div>

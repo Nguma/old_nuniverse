@@ -1,0 +1,18 @@
+<h1>Listing facts</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for fact in @facts %>
+  <tr>
+    <td><%= link_to 'Show', fact %></td>
+    <td><%= link_to 'Edit', edit_fact_path(fact) %></td>
+    <td><%= link_to 'Destroy', fact, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New fact', new_fact_path %>

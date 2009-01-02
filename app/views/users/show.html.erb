@@ -1,20 +1,35 @@
-<%= home_link if @source != current_user %>
 <% nuniverse do -%>
-  <%= render :partial => "/nuniverses/main_menu"%>
-  <div id="content">
-  
-  <div class="step <%= @klass.downcase %>-klass submenu"  style="margin:0 0 1px 0">
-    <%= render :partial => "/nuniverse/search_form"%>
-    <%= render :partial => "/#{@klass.downcase.pluralize}/new"  if @source == current_user%>
-    <%= clear %>
+  <div id="right-column" >
+    <%= render :partial => "/nuniverse/visit_form" %>
+    <div class="nuniverse-klass step" style="position:relative;">
+      There are <%= @count %> connections in this nuniverse. <%= link_to "Browse them all", polymorphic_url(@source, :klass => "nuniverse") %>, or look for something specific
+      <% form_tag "/users/show/#{@user.id}" do -%>
+        <%= text_field_tag "filter", @filter, :style => "width:auto;font-size:20px" %><%= submit_tag "search this nuniverse", :style => "font-size:15px;background:#eee"%>
+      <% end -%>
+    
+    </div>
+
+    <div class="step">
+      <h2>Top Stories</h2>
+      <% @latest_stories.each do |story| -%>
+        <%= link_to story.subject.name, story_url(story.subject) rescue story.id%><br/>
+      <% end -%><br/>
+      <span style="font-size:15px">See all <%= link_to "stories connected to that nuniverse.", stories_url %> | <%= link_to "Create a new story.", "#", :class => "expand_lnk", :id => "expand_new_story_form"%></span>
+      <%= render :partial => "/stories/new" %>
+    </div>
+      <%= render :partial => "/nuniverse/menu"%>
+     <div class="step">
+        People you know are also connected to this nuniverse <%= link_to "See all people in that nuniverse.", "#" %>
+     </div>
   </div>
-  <%= render :partial => "/connections/connections", :locals => {:connections => @connections}%>
+  
+
+    <div id="left-column" >
+      <%= render :partial => "overview" %>
+    <div id="content" style="clear:none">
+      <%= render :partial => "/connections/connections", :locals => {:connections => @connections}%>
+    </div>
+   
   </div>
-  
-  <%= display_options %>
-  
+
 <% end -%>
-
-
-
-<%#= link_to "Find other users", "/users"%>

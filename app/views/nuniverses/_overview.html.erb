@@ -1,0 +1,11 @@
+<div id="overview">
+
+    <div class="step" style="clear:none" >
+       <%= thumbnail_tag @source, :size => :small %>
+        <h1><span style="color:#333;font-weight:bold"><%= @source.name.capitalize %></span><%= ":#{@filter}" unless @filter.nil?%><%= " #{@klass.downcase.pluralize}" unless @klass == "Nuniverse"%></h1>
+       <h5>Showing all <%= !@filter.nil? ? link_to(@filter.pluralize, @source, :class => "filter") : "connections"  %> <%= link_to @order.gsub("_"," "), "#", :class => "expand_lnk", :id => "expand_sorting-options" %></h5>
+       <%= sorting_options @connections %>
+        <div style="clear:left"></div>
+      </div>
+
+</div>

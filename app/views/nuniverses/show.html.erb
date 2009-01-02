@@ -1,25 +1,61 @@
-<%= home_link %>
 <% nuniverse do -%>
-  <%= render :partial => "/nuniverses/main_menu"%>
-  <div id="content">
-    <div class="step <%= @klass.downcase %>-klass submenu" style="margin:0 0 1px 0">
-      <%= render :partial => "/nuniverse/search_form" %>
-      <%= render :partial => "/#{@klass.downcase.pluralize}/new" %>
-      <%= clear %>
-    </div>
-  <% if @connections.empty? -%>
+  <div id="right-column">
+    <%= render :partial => "/nuniverses/information"%>
+    <%= render :partial => "/nuniverse/visit_form"%>
+  
     <div class="step">
-      There is no <%= @klass.downcase.to_s %> connected to this nuniverse, yet. Time to make some connections!
+      <%= link_to "Search this nuniverse.", "#", :class => "expand_lnk", :id => "expand_filter_form" %>
+      <%= render :partial => "/nuniverse/filter_form"%>
     </div>
-
-  <% else -%>
-    <%= render :partial => "/connections/connections", :locals => {:connections => @conections }%>
-   
-  <% end -%>
-  
-
-  
+    <% unless @nuniverse.locations.empty? %>
+      <div class="step">
+        <%= link_to "Search this nuniverse.", "#content" %>
+        <%= render :partial => "/nuniverse/search_form"%>
+      </div>
+    <% end -%>
+    <div class="step">
+      See all <%= link_to "users connected to that nuniverse.", "#", :class => "user-klass" %>
+    </div>
+    <%= render :partial => "/nuniverse/menu"%>
+    <div class="step">
+      <% @nuniverse.nuniverses.collect{|c| c.connections.sphinx("date")}.flatten.each do |p| %>
+        <%= p.subject.name %>
+      <% end -%>
+    </div>
+    <div class="step">
+       <h2>In this nuniverse</h2>
+        <% @nuniverse.connections.gather_tags.each do |tag| -%>
+          <%= link_to "#{tag.counted} #{tag.label.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.label)  %><br/>
+        <% end -%><br/>
+        <span style="font-size:15px">See all <%= link_to "stories connected to that nuniverse.", stories_url %> | <%= link_to "Create a new story.", "#", :class => "expand_lnk", :id => "expand_new_story_form"%></span>
+        <%= render :partial => "/stories/new" %>
+    </div>
   </div>
-   <%= display_options %>
-   <%#= render :partial => "/nuniverses/main_menu"%>
+  <div id="left-column">
+    <%= render :partial => "overview" %>
+    
+     <% if @connections.empty? -%>
+       <div class="step" style="clear:left"  id="new-connection-step">
+         There is no <%= @klass.downcase.to_s %> connected to this nuniverse, yet. Time to make some connections!
+         <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
+          <dl class='suggestions'></dl>
+       </div>
+     <% else -%>
+       <%= render :partial => "/connections/connections", :locals => {:connections => @connections }%>
+       <div class="step" style="clear:left" id="new-connection-step">
+         <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
+         <dl class='suggestions'></dl>
+       </div>
+       
+      
+     <% end -%>
+
+
+     <div id="content"  >
+     </div>
+  </div>
+  
+ 
+    
+   <%= render :partial => "/nuniverses/main_menu"%>
 <% end -%>

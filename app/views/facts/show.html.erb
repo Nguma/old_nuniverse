@@ -1,0 +1,14 @@
+<div >
+  <% @title = @fact.body %>
+  <% @fact.connections.each do |connection| -%>
+    <%= thumbnail_tag connection.subject %>
+    <%= link_to connection.subject.name, connection.subject %>
+    <% @title = @title.gsub(connection.subject.name, link_to(connection.subject.name, connection.subject) ) %>
+  <% end -%>
+  
+  <h1><%= @title %></h1>
+  
+  <% @suggestions.each do |s| %>
+  <%= s.name %><br/>
+  <% end %>
+</div>

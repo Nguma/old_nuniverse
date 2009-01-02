@@ -4,11 +4,11 @@ class LocationsController < ApplicationController
 	after_filter :update_session, :only => [:show]
 	
 	def find
-		@locations =  Location.find(:all, :conditions => ['name like ? OR full_address like ?', "#{params[:name]}%", "%#{params[:address]}%"])
+			@locations = []# Location.find(:all, :conditions => ['name like ? OR full_address like ?', "#{params[:name]}%", "%#{params[:address]}%"])
 		sll = Graticule.service(:host_ip).new.locate(request.remote_ip).coordinates.join(',') rescue "40.746497,-74.009447"
-		query = params[:address].nil? ? params[:name] : params[:address]
+		query = params[:location][:address]
 		@google_suggestions = Googleizer::Request.new(query, :mode => "local").response(:sll => sll, :rsz => "small").results
-		
+
 		respond_to do |f|
 			f.html {}
 			f.js {}

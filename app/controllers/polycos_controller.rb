@@ -1,7 +1,7 @@
 class PolycosController < ApplicationController
 
 	
-	before_filter :find_polyco, :except => [:index, :new, :create, :connect]
+	before_filter :find_polyco, :except => [:index, :new, :create, :connect, :suggest]
 	before_filter :update_session
 	after_filter :store_location, :only => [:show]
 	
@@ -27,11 +27,17 @@ class PolycosController < ApplicationController
 	end
 	
 	def connect
-		@polyco = Polyco.new(:subject_type => params[:subject_type].capitalize , :subject_id => params[:subject_id], :object_type => params[:object_type].capitalize, :object_id => params[:object_id], :state => "active")
-		@polyco.save rescue nil
+		@object = params[:object_type].classify.constantize.find(params[:object_id])
+		@subject = params[:subject_type].classify.constantize.find(params[:subject_id])
 		
-		@polyco.twin.state = "active"
-		@polyco.twin.save
+		unless @object.nil? || @subject.nil?
+			@polyco = Polyco.new(:subject => @subject, :object => @object,:state => "active")
+			@polyco.save_all
+			flash[:notice] = "#{@subject.name} was connected to #{@object.name}"
+		else
+			flash[:error] = "There was some error creating that connection"
+		end
+
 		
 		
 		redirect_back_or_default('/')
@@ -55,16 +61,23 @@ class PolycosController < ApplicationController
 			end
 			@polyco.description = params[:polyco][:description] 
 			if params[:subject]
+				if params[:subject][:description]
 				@polyco.subject.description = params[:subject][:description]
+				params[:subject][:description].split(',').each do |t|
+						tag = Tag.find_or_create(:label => t)
+						@polyco.subject.tags << Tagging.new(:taggable => @polyco.subject, :tag => tag)
+				end
+			end
 			end
 			
 			@polyco.subject.active = 1
 			
-			if params[:image] 
+			if params[:image] && (!params[:image][:source_url].blank?)
 				begin
-				@polyco.subject.images << Image.create(params[:image])
-			rescue
-			end
+					@polyco.subject.images << Image.create(params[:image])
+				rescue
+					
+				end
 			end
 		end
 		@polyco.state = params[:state] || "active"
@@ -83,11 +96,12 @@ class PolycosController < ApplicationController
 		
 		
 	end
+
 	
 	def create
 
 		@polyco = Polyco.new(params[:polyco])
-		
+		@polyco.object = params[:object][:type].classify.constantize.find(params[:object][:id])
 		@polyco.subject ||= @klass.classify.constantize.create!(params[:subject])
 		@polyco.state = "active" if @polyco.subject.active
 		
@@ -122,6 +136,16 @@ class PolycosController < ApplicationController
 		@polyco.twin.destroy rescue nil
 		@polyco.destroy
 		redirect_to @object
+	end
+	
+	
+	def suggest
+		@object = params[:object][:type].classify.constantize.find(params[:object][:id])
+		@suggestions = ThinkingSphinx::Search.search(:conditions => {:name => "#{params[:subject][:name]}"}, :classes => [User,Nuniverse])
+		respond_to do |format|
+			format.html {}
+			format.js {}
+		end
 	end
 	
 	protected

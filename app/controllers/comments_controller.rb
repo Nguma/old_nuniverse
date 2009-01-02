@@ -1,20 +1,13 @@
 class CommentsController < ApplicationController
 	
 	before_filter :find_user
+	before_filter :find_comment, :only => [:show]
 	
 	def create
-		@object = Tag.find(params[:subject]) rescue Tag.find(params[:object])
-		@kind = params[:kind] || "note"
-		
-		@comment = Comment.create!(
-			:user => current_user,
-			:body => params[:body])
-
-		@comment.tag_with('note')
-		@c = @comment.tag.connect_with(@object, :as => @kind, :user => current_user)
-	
+		@comment = Comment.create(params[:comment])
+		Polyco.create(:subject => @comment, :object_id => params[:object][:id], :object_type => params[:object][:type]) if params[:object]
 		respond_to do |f|
-			f.html {}
+			f.html { redirect_back_or_default('/')}
 			f.js {}
 		end
 	end
@@ -27,7 +20,13 @@ class CommentsController < ApplicationController
 			f.js {}
 		end
 	end
+
 	
+	def show
+		
+	end
+	
+	protected
 	def find_comment
 		@comment = Comment.find(params[:id])
 	end

@@ -44,23 +44,7 @@ module Googleizer
 		def results
 			items = []
 			JSON.parse(@body)['responseData']['results'].each do |item|
-				
-				t =  Tag.new(
-				:label => item['titleNoFormatting'],
-				:kind => mode_to_kind,
-				:service => 'google',
-				:description => item['content'],
-				:url => url(item) ,
-				:data => "#thumbnail #{item['tbUrl'] rescue ''}"
-				
-				)
-				t.replace_property("address", "#{item['streetAddress']}, #{item['city']}, #{item['country']}") if item['streetAddress']
-				# item['phoneNumbers'].each do |tel|
-					# t.connect(:label => tel['number'], :kind => 'telephone', :public => 1)
-				# end
-				t.replace_property("tel", "#{item['phoneNumbers'][0]['number']}") if item['phoneNumbers']
-				t.replace_property("latlng", "#{item['lat']},#{item['lng']}") if item['lat']
-				items << t
+				items << item_for(item)
 			end
 			items 
 		end
@@ -70,21 +54,25 @@ module Googleizer
 			return CGI.unescape(item['url'])
 		end
 		
-		def mode_to_kind
+		
+		def item_for(item)
 			case @mode
-			when "web"
-				"bookmark"
-			when "images"
-				"image"
 			when "local"
-				"location"
-			when "video"
-				"video"
-			when "news"
-				"bookmark"
+				Location.new(
+					:name => item['titleNoFormatting'],
+					:full_address => "#{item['streetAddress']}, #{item['city']}, #{item['country']}",
+					:latlng => "#{item['lat']},#{item['lng']}"
+					)
 			else
-				"bookmark"
-			end
+				Bookmark.new(
+			:name => item['titleNoFormatting'],
+	
+			:description => item['content'],
+			:url => url(item) 
+			)
+		
+		end
+		
 		end
 	end
 end

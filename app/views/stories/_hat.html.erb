@@ -1,5 +1,6 @@
-<div id="hat" style="background:#333;padding:10px;color:#ccc">
+<div id="hat">
   <%= thumbnail_tag @source %>
   <h1><%= @source.name.capitalize %></h1>
+  Started by <%= link_to @story.author.name.capitalize, @story.author %>
   <div class="delimiter"></div>
 </div>

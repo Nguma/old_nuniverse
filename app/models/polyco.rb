@@ -6,15 +6,24 @@ class Polyco < ActiveRecord::Base
 	
 	has_many :taggings, :as => :taggable
 	
+	after_create :update_state
 	
+	acts_as_state_machine :initial => :pending
 
+  state :pending
+	state :twin
+	state :active
+
+  event :make_active do
+   transitions :to => :active, :from => :pending
+  end
 	
 	define_index do 
-		indexes [subject.name, subject.taggings.predicate, taggings.predicate], :as => :name, :sortable => true
+		indexes [subject.name, subject.taggings(:tag).label, taggings(:tag).label], :as => :name, :sortable => true
 		indexes subject_type, :as => :type
 		
 		set_property :delta => true
-		
+		has :suggestable => 0
 	end
 	
 	named_scope :sphinx, lambda {|*args| {
@@ -58,6 +67,9 @@ class Polyco < ActiveRecord::Base
 	}
 	
 	named_scope :exclude_twins, {:conditions => "state != 'twin'"}
+	
+	named_scope :gather_tags, :select => "T.label AS label, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id" ], :group => "T.id", :order => "counted DESC"
+	
 
 	
 	def score
@@ -75,7 +87,13 @@ class Polyco < ActiveRecord::Base
 
 	
 	def save_all
-		twin.save if self.state != "pending"
+		twin.save if !self.pending?
 		self.save
+	end
+	
+	protected
+	
+	def update_state
+		self.make_active! unless subject.is_a?(Tag)
 	end
 end

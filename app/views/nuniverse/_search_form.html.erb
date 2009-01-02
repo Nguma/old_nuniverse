@@ -1,4 +1,4 @@
-<%= link_to "Search this nuniverse", "#", :class => "expand_lnk", :id => "expand_filter_form" %>
-<% form_tag "/#{@source.class.to_s.downcase.pluralize}/show/#{@source.id}", :id => "filter_form" do -%>
-  <%= text_field_tag "filter", @filter %><%= submit_tag "search"%>
+
+<% form_tag "/nuniverses/index", :id => "search_form", :class => "hidden" do -%>
+  <%= text_field_tag "search_terms", "" %><%= submit_tag "search"%>
 <% end -%>

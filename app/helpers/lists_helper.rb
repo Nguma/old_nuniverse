@@ -4,7 +4,7 @@ module ListsHelper
 		params[:source] ||= @source
 		return if params[:source].nil?
 		breadcrumbs = []
-		breadcrumbs << link_to("< To your nuniverse", "/my_nuniverse") unless params[:source].kind == "user"
+		breadcrumbs << home_link unless params[:source] == current_user
 	
 			# breadcrumbs << link_to("< #{params[:source].kind.title.capitalize}", tag_url(:kind => params[:source].title, :perspective => @user.login, :mode => @mode)) unless @list.context.blank?
 			# breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login)) 

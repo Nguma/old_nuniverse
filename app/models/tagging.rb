@@ -1,9 +1,10 @@
 class Tagging < ActiveRecord::Base
 	belongs_to :taggable, :polymorphic => true 
+	belongs_to :tag
 	
 	
 	define_index do
-		indexes :predicate
+		indexes tag.label, :as => :predicate
 		set_property :delta => true
 	end
 	# has_many :rankings
@@ -11,7 +12,10 @@ class Tagging < ActiveRecord::Base
 	cattr_reader :per_page 
   @@per_page = 5
 
-	#before_destroy :destroy_connections
+	
+	def predicate
+		tag.label
+	end
 
 	named_scope :with_connection, lambda {|connection| 
 		id.nil? ? {} : {:conditions => ["taggable_id in (?)", connection.to_a.collect{ |c| c.id}] } 
@@ -47,21 +51,8 @@ class Tagging < ActiveRecord::Base
     kind.nil? ? {} : {:select => "taggings.*",:conditions => ["tags.data rlike ?", "#address|#latlng"], :include => :object}
   }
 
-	named_scope :gather, :select => " *, count(DISTINCT connection_id) AS counted",  :group => :kind
-	named_scope :gather_with_user_list, :select => " taggings.kind, count(DISTINCT connection_id) AS counted, GROUP_CONCAT(DISTINCT connections.user_id, ',') AS users", :group => :kind
+	named_scope :gather, :select => " *, count(DISTINCT tag_id) AS counted",  :group => 'tag_id'
 
-	# Sad, but paginate doesnt seem to work with the following:
-	# named_scope :with_tags, lambda { |tags|
-	# 		clause = tags.collect {|t| "(taggings.kind rlike '(^| )(#{t}|#{t.singularize})s?( |$)')"}.join('+')
-	# 		tags.empty? ? {} :
-	# 		{
-	# 			:select => "DISTINCT taggings.*, SUM((#{clause})) AS S, COUNT(DISTINCT object_id)",
-	# 			:include => :object,
-	# 			:conditions => "taggings.kind IS NOT NULL",
-	# 			:group => "taggings.object_id HAVING (S >= #{tags.length}) "
-	# 		}
-	# 
-	# 	}
 
 	named_scope :tags, lambda { |object|
 		{

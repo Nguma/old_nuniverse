@@ -1,0 +1,7 @@
+<% bookmarks = Googleizer::Request.new(subject.gsub('&','and') , :mode => "web").response.results %>
+<dl>
+<% bookmarks.each do |bk| -%>
+  <dd style="margin:0 0 5px 0"><%= bk.name %><br/><span style="font-size:11px"><%= bk.url %></span></dd>
+<% end -%>
+</dl>
+<%= image_tag("/images/icons/powered_by_google.gif", :style=>"position:absolute;right:5px;top:5px") %>

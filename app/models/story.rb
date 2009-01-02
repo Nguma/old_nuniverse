@@ -6,11 +6,14 @@ class Story < ActiveRecord::Base
 	has_many :rankings, :as => :rankable, :dependent => :destroy
 
 	has_many :connections, :as => :object, :class_name => 'Polyco'
-	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
-	has_many :stories, :through => :connections, :source => :subject, :source_type => "Story", :dependent => :destroy
-	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
+	has_many :connecteds, :as => :subject, :class_name => 'Polyco'
 	
-	has_many :pending_items, :through => :connections, :source => :subject, :source_type => "Tag", :conditions => ["state == 'pending' "], :dependent => :destroy
+	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse", :conditions => ["state = 'active'"]
+	# has_many :stories, :through => :connections, :source => :subject, :source_type => "Story", :dependent => :destroy
+	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
+	has_many :users, :through => :connecteds, :source => :object, :source_type => "User"
+	
+	has_many :pending_items, :through => :connections, :source => :subject, :source_type => "Tag", :conditions => ["state = 'pending' "], :dependent => :destroy
 		
 	acts_as_state_machine :initial => :pending
 	

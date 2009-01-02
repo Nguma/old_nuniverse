@@ -18,18 +18,16 @@
 	font-weight:bold;
 }
 
-.list_mode .thumbnail {
-	display:none;
-} 
+
 
 .card_mode .title {
 	position:relative;
-
 }
 
-.card_mode .star-rating {
-	top:15px;
+.card_mode .description{
+	font-size:15px;
 }
+
 
 .image_mode .connection {
 /*	background:#eee;*/

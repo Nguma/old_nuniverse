@@ -1,0 +1,3 @@
+<% form_tag "/#{@source.class.to_s.downcase.pluralize}/show/#{@source.id}", :id => "filter_form", :class => "hidden" do -%>
+  <%= text_field_tag "filter", @filter %><%= submit_tag "search"%>
+<% end -%>

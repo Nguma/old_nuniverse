@@ -2,7 +2,7 @@
   <span class="klass" style="line-height:0"><%#= connection.subject.class.to_s %></span>
   <%= thumbnail_tag(connection.subject, :size => @size)  %>
   <div class="star-rating" >
-    <% 5.times do |time| %>
+    <%  5.times do |time| %>
     <%= link_to image_tag("/images/icons/empty.png"), "/polycos/rate/#{connection.id}?score=#{time+1}", :class => "star #{connection.score > time ? "on_#{connection.score.ceil.to_s[0,1]}" : ""}" %>
     <% end -%>
   </div>
@@ -11,6 +11,7 @@
   </p>
   
   <%= link_to "Edit this connection", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection)%>
+  <%= link_to "x remove", polymorphic_url(connection), :method => :delete, :class => "edit_lnk" if current_user.role == "admin"%>
 
   <div class="delimiter"></div>
 </div>

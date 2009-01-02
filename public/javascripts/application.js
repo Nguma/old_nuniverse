@@ -223,7 +223,65 @@ function reset()
     setExpandLinks(window.document);
   
 
+  if($chk($('edit_story_form')))
+ {
+  
+   var p = new Input($('edit_story_form'), {
+     listener:$('tag_label'),
+     onKeyUp:function(key,listener) {
+       if(key == 'enter') {
+         this.el.submit();
+       } else {
+         this.callRequest({url:'/stories/find_suggestion/'});
+       }
+       
+       
+     },
+     onSuccess:function() {
+       
+     }
+   });
+   p.request.options.update = $('edit_story_form').getElement('.suggestions')
 
+ }
+ 
+ if($chk($('edit_connection_form')))
+ {
+  
+   var p = new Input($('edit_connection_form'), {
+     listeners:[$('address_field'),$('input_bookmark')],
+    
+     onKeyUp:function(key,listener) {
+
+       this.callRequest({url:'/locate'});
+     },
+     onSuccess:function() {
+       
+     }
+   });
+   p.request.options.spinner =  $('right-column').getElement('spinner')
+   p.request.options.update = $('right-column').getElement('.suggestions')
+
+ }
+ 
+ if($chk($('new-connection-step')))
+ {
+  
+   var p = new Input($('new-connection-step'), {
+     listeners:[$('input_connect')],
+    
+     onKeyUp:function(key,listener) {
+
+       this.callRequest({url:'/polycos/suggest'});
+     },
+     onSuccess:function() {
+       
+     }
+   });
+   // p.request.options.spinner =  $('right-column').getElement('spinner')
+   p.request.options.update = $('new-connection-step').getElement('.suggestions')
+
+ }
   
 }
 

@@ -1,6 +1,6 @@
 class NuniversesController < ApplicationController
 	
-	before_filter :find_user, :only => [:suggest, :show, :command]
+	before_filter :find_user, :only => [:suggest, :show, :command, :index]
 	before_filter :find_nuniverse, :except => [:index]
 	before_filter :update_session, :only => [:show]
  	after_filter :store_location, :only => [:show]
@@ -13,10 +13,11 @@ class NuniversesController < ApplicationController
 	def show
 		
 		@perspective = params[:perspective]
-	
 		@source = @nuniverse
-	
 		@connections = @nuniverse.connections.of_klass(@klass)
+		
+		
+		
 		case params[:order]
 		when "by_latest"
 			@connections = @connections.order_by_date
@@ -26,8 +27,11 @@ class NuniversesController < ApplicationController
 			@connections = @connections.order_by_score(@perspective)
 		end
 		
-		@connections = @connections.with_score.sphinx(@filter, :per_page => 3000).paginate(:per_page => 20, :page => params[:page])
+		@connections = @connections.with_score.sphinx(params[:filter], :per_page => 3000).paginate(:per_page => 20, :page => params[:page])
 		
+		@latest_stories = @nuniverse.connections.of_klass('Story').order_by_date.paginate(:page => 1, :per_page => 5)
+		
+		@filter = params[:filter] || nil
 	end
 	
 	def edit
@@ -36,13 +40,17 @@ class NuniversesController < ApplicationController
 	
 	def update
 		@taggings = []
-		params[:nuniverse][:tags].split(',').each do |tag|
-			@taggings << Tagging.new(:taggable => @nuniverse, :predicate => tag)
+		params[:nuniverse][:tags].split(',').each do |t|
+			tag = Tag.find_or_create(:name => t.strip)
+			@taggings << Tagging.new(:taggable => @nuniverse, :tag => tag)
 		end
 		@nuniverse.taggings = @taggings
 		@nuniverse.save
 		redirect_back_or_default('/')
 	end
+	
+	
+
 	
 	
 	protected

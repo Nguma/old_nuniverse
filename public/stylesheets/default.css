@@ -36,5 +36,6 @@ input
 }
 
 #wrap {
-	padding:100px;
+	padding:30px 100px 100px 100px;
+	padding:30px;
 }

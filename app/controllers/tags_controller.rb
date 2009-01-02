@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	before_filter :find_tag, :except => [:index, :remove_tag]
-	before_filter :find_perspective, :find_user, :find_everyone, :only => [:show, :preview, :suggest, :share]
+	before_filter  :find_user, :only => [:show, :preview, :suggest, :share]
 	after_filter :update_session, :only => [:show]
 	after_filter :store_location, :only => [:show]
   # GET /tags

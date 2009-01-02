@@ -1,6 +1,17 @@
-<%= home_link %>
 <% nuniverse do -%>
-  <div id="content">
+  <div id="right-column">
+    <%= spinner %>
+    <div class="step suggestions">
+      <%= render :partial => "/locations/locate", :locals => {:subject => @polyco.subject.name} %>
+    </div>
+    <div class="step">
+ 
+      <%#= render :partial => "/bookmarks/google", :locals => {:subject => @polyco.subject.name} %>
+    </div>
+   
+  </div>
+  <div id="left-column">
+
    
    <% unless !@suggestions || @suggestions.empty? %>
     <% if current_user.role == "admin" %>
@@ -27,7 +38,7 @@
       Great you're the first to have created this nuniverse,
       Please tell us a bit more about it.
     </div>
-     <% form_for(@polyco, :html => {:multipart => true}) do |f| %>
+     <% form_for(@polyco, :html => {:multipart => true, :id => "edit_connection_form"}) do |f| %>
         <%= f.error_messages %>
         <% fields_for :subject do |s| -%>
 
@@ -36,23 +47,32 @@
             <%= s.text_field :description %>
           </div>
         <% end -%>
-        <div class="step">
-          How is <%= @polyco.name %> related to <%= @polyco.object.name %>?<br/>
-          <%= f.text_area :description, :rows => 2, :style =>"background:#FFF"%>
-        </div>
-     
+       
         <% fields_for :image do |i| -%>
           <div class="step">
             Would you like to add an image for it?
             <%= i.text_field :source_url, :id => "input_image", :autocomplete => "off" %>
           </div>
         <% end -%>
+        
         <% fields_for :bookmark do |b| -%>
           <div class="step">
             How about a website url?
-            <%= b.text_field :source_url, :id => "input_image", :autocomplete => "off" %>
+            <%= b.text_field :source_url, :id => "input_bookmark", :autocomplete => "off" %>
           </div>
         <% end -%>
+        
+        <% fields_for :location do |l| -%>
+          <div class="step">
+            Is this a location?
+            <%= link_to "Add an address", "#", :class => "expand_lnk", :id => "expand_address_field"%>
+            <%= l.text_field :address, :id => "address_field" , :class => "hidden"%>
+          </div>
+        <% end -%>
+         <div class="step">
+            How is <%= @polyco.name %> related to <%= @polyco.object.name %>?<br/>
+            <%= f.text_area :description, :rows => 2, :style =>"background:#FFF"%>
+          </div>
            <div class="step">
               If you are in a hurry don't worry. You can always add more later...
           </div>

@@ -1,0 +1,24 @@
+
+<%= render :partial => "/nuniverse/visit_form"%>
+<div class="step">
+  <%= render :partial => "/user_mailer/new"%>
+  <%= clear %>
+</div>
+
+  <div class="step">
+    <%= link_to "Edit that story", "#", :class => "expand_lnk", :id => "expand_edit_story_form" -%>
+    
+   
+  </div>
+  <div class="step">
+    this story is <%= @story.is_private ? "private" : "public" %>
+  </div>
+  <div class="step">
+    <%= link_to "Share this story", "#"%><br/>
+   
+    There are <%= @story.users.count %> users connected to that story.
+    <% @story.users.paginate(:page => 1, :per_page => 5).each do |u| -%>
+      <%= link_to u.name, user_url(u) -%>
+    <% end -%>
+   
+  </div>

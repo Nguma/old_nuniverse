@@ -28,9 +28,10 @@
 img.default_img {
 	width:60px;
 	height:60px;
-	background:transparent url('/images/backgrounds/thumbnail_bg.png') 0 0 no-repeat;
+	background:transparent url('/images/backgrounds/icon_bg.png') 0 0 no-repeat;
 	float:left;
-
+	margin:0 5px 0 0;
+	padding:4px 6px 6px 4px;
 }
 
 .personal .thumbnail {

@@ -49,7 +49,7 @@ fieldset {
 	display:block;
 	padding:0;
 	margin:0 0 1px 0;
-	
+	font-size:15px;
 }
 
 .suggestions .even {
@@ -79,52 +79,7 @@ fieldset {
 	color:#FFF;
 }
 
-.form_box form {
-	position:relative;
-	float:none;
-	padding:0;
-}
 
-
-.form_box .selected {
-	color:#396;
-}
-
-.form_box input {
-	margin:5px 0 0 0;
-	background:#FFF;
-	border:none;
-	padding:5px;
-}
-
-.form_box label {
-	display:block;
-	margin:10px 0 0 0;
-	padding:0;
-}
-
-.form_box h3 {
-	margin:10px 0 0 0;
-}
-
-.form_box p {
-	margin: 0 0 5px 0;
-	color:#666;
-}
-
-.form_box .droppable span {
-	display:none;
-}
-
-.form_box .droppable img {
-	background:transparent url('/images/backgrounds/icon_personal.png') 0 0 no-repeat;
-}
-
-.form_box .connection a {
-	font-weight:bold;
-	font-size:17px;
-	color:#3C9;
-}
 
 .button {
 	padding:14px;
@@ -170,7 +125,7 @@ fieldset {
 
 #search_form {
 	clear:both;
-	background:#eee;
+
 	height:45px;
 	width:auto;
 	position:relative;

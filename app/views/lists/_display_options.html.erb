@@ -1,9 +1,9 @@
-<dl class='tabs' id="display_options" style="position:fixed;right:20px;bottom:20px;top:auto;z-index:67890">
-  <dt>Display</dt>
+<dl  id="display_options" style="position:relative;float:left;margin:0 0 0 40px;top:auto;z-index:67890">
+  
   <% options.each do |option| -%>
-    <dd class=" <%= selected == option[1] ? 'current' : '' %>">
+    <dd class=" <%= selected == option[1] ? 'current' : '' %>" style="position:relative;float:left">
    
-        <%= link_to("#{image_tag("/images/icons/view_as_#{option[1]}.png")}", polymorphic_url(@source, :display => option[1], :klass => @klass.capitalize)) %>
+        <%= link_to("#{image_tag("/images/icons/view_as_#{option[1]}.png", :style => "height:20px;width:20px")}", polymorphic_url(@source, :display => option[1], :klass => @klass.capitalize)) %>
     </dd>
   <% end -%>
 </dl>

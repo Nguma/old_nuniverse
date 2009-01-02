@@ -153,7 +153,8 @@ class UsersController < ApplicationController
 		
 		respond_to do |format|
 			format.html {
-							
+				@latest_stories = @user.connections.of_klass('Story').order_by_date.paginate(:page => 1, :per_page => 5)
+		
 			}	
 			format.js { 
 				
