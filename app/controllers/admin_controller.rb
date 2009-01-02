@@ -101,8 +101,13 @@ class AdminController < ApplicationController
 	end
 	
 	def test
-		@data = ThinkingSphinx::Search.search("sarah palin", :suggestable => true, :per_page => 500)
-		raise @data.size.pretty_inspect
+		@taggings = Tagging.find(:all)
+		@taggings.each do |tagging|
+			t = Tag.find(:first, :conditions => ["label = ?",tagging.predicate])
+			t = Tag.create(:label => tagging.predicate) if t.nil?
+			tagging.tag_id = t.id
+			tagging.save
+		end
 
 	end
 	
