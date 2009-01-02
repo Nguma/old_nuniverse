@@ -14,14 +14,14 @@
       </div>
     <% end -%>
     <div class="step">
-      See all <%= link_to "users connected to that nuniverse.", "#", :class => "user-klass" %>
+      Users connecteds to that nuniverse
+      <% @source.users.each do |user| -%>
+        <%= thumbnail_tag user, :class => "icon"%>
+      <% end -%>
+      <%= clear %>
     </div>
     <%= render :partial => "/nuniverse/menu"%>
-    <div class="step">
-      <% @nuniverse.nuniverses.collect{|c| c.connections.sphinx("date")}.flatten.each do |p| %>
-        <%= p.subject.name %>
-      <% end -%>
-    </div>
+
     <div class="step">
        <h2>In this nuniverse</h2>
         <% @nuniverse.connections.gather_tags.each do |tag| -%>
