@@ -2,13 +2,13 @@ class UpdateTaggingsWithTagId < ActiveRecord::Migration
   def self.up
 		add_column :taggings, :tag_id, :integer
 				
-				# taggings = Tagging.find(:all)
-				# taggings.each do |tagging|
-				# 	t = Tag.find(:first, :conditions => ["label = ?",tagging.predicate])
-				# 	t = Tag.create(:label => tagging.predicate) if t.nil?
-				# 	tagging.tag_id = t.id
-				# 	tagging.save
-				# end
+				taggings = Tagging.find(:all)
+				taggings.each do |tagging|
+					t = Tag.find(:first, :conditions => ["label = ?",tagging.predicate])
+					t = Tag.create(:label => tagging.predicate) if t.nil?
+					tagging.tag_id = t.id
+					tagging.save
+				end
 		
 		
 			

@@ -14,8 +14,8 @@ class Tagging < ActiveRecord::Base
 
 	
 	def predicate
-		tag.label
-	end
+				tag.label
+			end
 
 	named_scope :with_connection, lambda {|connection| 
 		id.nil? ? {} : {:conditions => ["taggable_id in (?)", connection.to_a.collect{ |c| c.id}] } 
