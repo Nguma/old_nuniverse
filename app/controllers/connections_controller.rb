@@ -143,7 +143,7 @@ class ConnectionsController < ApplicationController
 			if params[:url].match('en.wikipedia.org/wiki/')
 				t = params[:url].gsub(/.*\/wiki/,'/wiki')
 			
-				doc = Nuniversal.get_content_from_wikipedia(Hpricot open params[:url])
+				doc = Nuniversal.get_content_from_wikipedia(Hpricot open(params[:url]))
 				params[:description] = Nuniversal.wikipedia_description(doc) 
 				params[:input] = "#{(doc/:h1).first.inner_html.to_s} on Wikipedia"
 				@object.description = params[:description] if @object.description.nil?
@@ -156,7 +156,7 @@ class ConnectionsController < ApplicationController
 				# 					image.tag_with('image')			
 				# 				end
 			else
-				doc = Hpricot open params[:url]
+				doc = Hpricot open(params[:url])
 				params[:input] = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
 
 				params[:description] ||= (doc/:p).first.inner_html.to_s rescue ""

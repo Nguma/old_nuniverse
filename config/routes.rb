@@ -5,7 +5,7 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources :kinds
 
-	map.resource :sessions
+	
  	map.resources :taggings
 	map.resources :comments
 	map.resources :tags
@@ -14,8 +14,11 @@ ActionController::Routing::Routes.draw do |map|
 	map.confirm_connection "/confirm-connection/:id/with/:subject_id/:subject_type", :controller => "Polycos", :action => "update"
 	map.resources :images
 	map.resources :bookmarks
-	map.resources :users
+
 	map.resources :videos
+	map.signup '/signup', :controller => 'users', :action => 'new'
+ 	map.register '/register', :controller => 'users', :action => 'create'
+	map.resources :users
  	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
   	                                 :purge     => :delete }
@@ -28,9 +31,11 @@ ActionController::Routing::Routes.draw do |map|
  		:controller => 'users', 
  		:action => 'activate'
  		
- 	map.signup '/signup', :controller => 'users', :action => 'new'
+
  	map.login '/login', :controller => 'sessions', :action => 'new'
  	map.logout '/logout', :controller => 'sessions', :action => 'destroy' 
+	
+	map.session '/session', :controller => 'sessions', :action => 'create'
 		
  		
  	map.restricted "/restricted",

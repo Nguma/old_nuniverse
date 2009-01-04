@@ -55,8 +55,10 @@ class UsersController < ApplicationController
     when params[:activation_code].blank?
       flash[:notice] = "The activation code was missing."
     else 
+			
       flash[:notice]  = "We couldn't find a user with that activation code -- check your email? Or maybe you've already activated -- try signing in."
-      redirect_to '/login'
+      return nil
+			redirect_to '/login'
     end
   end
 

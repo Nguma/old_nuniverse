@@ -76,12 +76,12 @@ describe User do
     end.should_not change(User, :count)
   end
 
-  it 'requires password confirmation' do
-    lambda do
-      u = create_user(:password_confirmation => nil)
-      u.errors.on(:password_confirmation).should_not be_nil
-    end.should_not change(User, :count)
-  end
+  # it 'requires password confirmation' do
+  #   lambda do
+  #     u = create_user(:password_confirmation => nil)
+  #     u.errors.on(:password_confirmation).should_not be_nil
+  #   end.should_not change(User, :count)
+  # end
 
   it 'requires email' do
     lambda do
@@ -146,7 +146,7 @@ describe User do
   end
 
   it 'resets password' do
-    users(:quentin).update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    users(:quentin).update_attributes(:password => 'new password')
     User.authenticate('quentin', 'new password').should == users(:quentin)
   end
 
@@ -231,9 +231,9 @@ describe User do
   end
 
   it 'registers passive user' do
-    user = create_user(:password => nil, :password_confirmation => nil)
+    user = create_user(:password => nil)
     user.should be_passive
-    user.update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    user.update_attributes(:password => 'new password')
     user.register!
     user.should be_pending
   end
@@ -283,7 +283,7 @@ describe User do
 
 protected
   def create_user(options = {})
-    record = User.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire69', :password_confirmation => 'quire69' }.merge(options))
+    record = User.new({ :login => 'quire', :email => 'quire@example.com', :password => 'quire69' }.merge(options))
     record.register! if record.valid?
     record
   end

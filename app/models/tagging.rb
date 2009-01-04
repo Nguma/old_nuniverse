@@ -62,16 +62,7 @@ class Tagging < ActiveRecord::Base
 		}	
 	}	
 	
-	# Lists associated with this tagging
-	def lists(params = {})
-		List.created_by(params[:user] || nil).bound_to(self.object)
-	end
-	
-	
-	def kinds
-		object.kinds
-	end
-	
+
 	def url
 		object.url
 	end
@@ -199,11 +190,7 @@ class Tagging < ActiveRecord::Base
 		Image.find(:all, :conditions => ['tag_id = ?', object.id])
 	end
 	
-	def is_a_list?
-		return true if kind == "list"
-		return false
-	end
-	
+
 	def has_description?
 		return true if !description.blank?
 		return false

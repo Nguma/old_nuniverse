@@ -25,9 +25,5 @@ module ApplicationHelper
 	  return '' if string.blank?
 	  string.gsub(' ','-').gsub(/[^a-z0-9\-]+/i, '')
 	end
-	
-	# Find preset categories matching a certain kind
-	def presets(kind)
-		Preset.find(kind)
-	end
+
 end

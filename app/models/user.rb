@@ -69,10 +69,6 @@ class User < ActiveRecord::Base
     u = find(:first,:conditions => {:login => login})
 		u && u.authenticated?(password) ? u : nil
   end
-
-	def kind
-		"user"
-	end
 	
 	def label
 		return login.capitalize if login
