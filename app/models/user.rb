@@ -34,8 +34,6 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :first_name, :last_name, :password, :password_confirmation
 
-	belongs_to :tag
-	
 	has_many :stories, :foreign_key => :author_id
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :story_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Story'"
@@ -43,7 +41,6 @@ class User < ActiveRecord::Base
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
 
 	alias_attribute :name, :login
-	before_create :assign_tag
 
 	has_many :taggings, :as => :taggable
 
@@ -126,15 +123,7 @@ class User < ActiveRecord::Base
       self.activation_code = self.class.make_token
     end
 
-		def assign_tag
-			return if self.login.nil?
-			self.tag = Tag.create(
-				:label => self.login,
-				:kind => 'user'
-			)
-		
-		end
-
+	
 end
 
 

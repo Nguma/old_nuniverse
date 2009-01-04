@@ -1,5 +1,8 @@
 <% nuniverse do -%>
   <div id="right-column" >
+    <div class="step">
+      You are logged in as <%= current_user.login %>.<%= link_to "Logout", "/logout" %>
+    </div>
     <%= render :partial => "/nuniverse/visit_form" %>
     <div class="nuniverse-klass step" style="position:relative;">
       There are <%= @count %> connections in this nuniverse. <%= link_to "Browse them all", polymorphic_url(@source, :klass => "nuniverse") %>, or look for something specific
