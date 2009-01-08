@@ -16,7 +16,7 @@
       
         <h2>In this nuniverse</h2>
         <% @tags.each do |story| %>
-          <%= link_to story.label.pluralize, user_url(@user, :filter => story.label, :context => @context), :style => "font-size:#{[(12+story.counted.to_i),20].min}px"%>
+          <%= link_to story.name.pluralize, user_url(@user, :filter => story.name, :context => @context), :style => "font-size:#{[(12+story.counted.to_i),20].min}px"%>
         <% end -%>
       
     </div>

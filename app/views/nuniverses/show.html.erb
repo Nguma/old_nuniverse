@@ -31,7 +31,7 @@
 
     <div class="step">
        <% @nuniverse.connections.gather_tags.each do |tag| -%>
-          <%= link_to "#{tag.counted} #{tag.label.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.label)  %><br/>
+          <%= link_to "#{tag.counted} #{tag.name.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.name)  %><br/>
         <% end -%>
 
         <%#= render :partial => "/stories/new" %>

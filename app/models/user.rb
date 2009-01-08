@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
 	define_index do
 		indexes :login
 		indexes [:firstname, :lastname], :as => :name, :sortable => true
-		indexes taggings(:tag).label, :as => :tags
+		indexes taggings(:tag).name, :as => :tags
 		has connections(:id), :as => :c_id
 		has tags(:id), :as => :tag_ids
 		has contexts(:id), :as => :context_ids
@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
 		Permission.create(
 			:grantor_id => self.id,
 			:granted_id => params[:user].id,
-			:tags => params[:to].label)
+			:tags => params[:to].name)
 		UserMailer.deliver_invitation(:to => params[:to], :user => params[:user], :message => params[:message] || "", :sender => self)
 	end
 	

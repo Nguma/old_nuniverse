@@ -22,7 +22,7 @@ class Polyco < ActiveRecord::Base
   end
 	
 	define_index do 
-		indexes [subject.name, subject.taggings(:tag).label, taggings(:tag).label], :as => :name, :sortable => true
+		indexes [subject.name, subject.taggings(:tag).name, taggings(:tag).name], :as => :name, :sortable => true
 		indexes subject_type, :as => :type
 		
 		has subject.contexts(:id), :as => :context_ids
@@ -71,7 +71,7 @@ class Polyco < ActiveRecord::Base
 	}
 	
 
-	named_scope :gather_tags, :select => "T.label AS label, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "label ASC"
+	named_scope :gather_tags, :select => "T.name AS name, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "name ASC"
 	
 	
 	

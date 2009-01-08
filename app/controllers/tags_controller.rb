@@ -26,7 +26,7 @@ class TagsController < ApplicationController
   # GET /tags/new.xml
   def new
 
-    @tag = Tag.new(:label => params[:input])
+    @tag = Tag.new(:name => params[:input])
 		@object = Tag.find(params[:object]) rescue nil
 		@tags = params[:tags] || []
 		@images = []

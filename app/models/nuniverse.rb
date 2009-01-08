@@ -21,7 +21,7 @@ class Nuniverse < ActiveRecord::Base
 	define_index do
     indexes :name, :as => :name,  :sortable => true
 		# indexes description
-		indexes [taggings(:tag).label, connecteds(:object).name], :as => :tags
+		indexes [taggings(:tag).name, connecteds(:object).name], :as => :tags
 	
 		has :active
 		has connections(:id), :as => :c_id

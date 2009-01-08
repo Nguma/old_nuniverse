@@ -6,7 +6,8 @@
   </div>
    <div class="step">
      <% form_for @nuniverse do |f| -%>
-       <%= f.text_area :tags, :rows => 2 %><br/>
+      
+       <%= f.text_area :tags, :value => @nuniverse.tags.collect {|c| c.name }.join(','), :rows => 2 %><br/>
        <%= submit_tag "Save"%>
      <% end -%>
     </div>

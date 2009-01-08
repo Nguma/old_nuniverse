@@ -32,7 +32,7 @@ class AdminController < ApplicationController
 				img = (row/:td/:img)
 				title = (row/:td/:b/:i).innerHTML.gsub(/\.$/,'')
 				description = (row/:td)[1].innerHTML
-				t = Tag.new(:label => title, :kind => "painting", :description => description)
+				t = Tag.new(:name => title, :kind => "painting", :description => description)
 				image_url = [@url.gsub(/http\:\/\/www.abcgallery.com\/(\w)\/(\w+)\/.*/,'http://www.join2day.net/abc/\1/\2/'), img[0].attributes['src'].gsub(/s(.*)\.jpg/,'\1.JPG') ].join('')
 				t.save
 				t.add_image(:source_url => image_url) rescue nil
@@ -45,8 +45,8 @@ class AdminController < ApplicationController
 	end
 	
 	def ct 
-		tag = Tag.find(:first, :conditions => {:label => "painting"})
-		date_tag = Tag.find(:first, :conditions => {:label => "date"})
+		tag = Tag.find(:first, :conditions => {:name => "painting"})
+		date_tag = Tag.find(:first, :conditions => {:name => "date"})
 		gaugin = Nuniverse.find(2510)
 		
 		cts = [
@@ -103,8 +103,8 @@ class AdminController < ApplicationController
 	def test
 		@taggings = Tagging.find(:all)
 		@taggings.each do |tagging|
-			t = Tag.find(:first, :conditions => ["label = ?",tagging.predicate])
-			t = Tag.create(:label => tagging.predicate) if t.nil?
+			t = Tag.find(:first, :conditions => ["name = ?",tagging.predicate])
+			t = Tag.create(:name => tagging.predicate) if t.nil?
 			tagging.tag_id = t.id
 			tagging.save
 		end
