@@ -4,7 +4,7 @@ class Tagging < ActiveRecord::Base
 	
 	
 	define_index do
-		indexes tag.name, :as => :predicate
+		# indexes tag.name, :as => :predicate
 		set_property :delta => true
 	end
 	# has_many :rankings
@@ -14,8 +14,8 @@ class Tagging < ActiveRecord::Base
 
 	
 	def predicate
-				tag.label
-			end
+		tag.name
+	end
 
 	named_scope :with_connection, lambda {|connection| 
 		id.nil? ? {} : {:conditions => ["taggable_id in (?)", connection.to_a.collect{ |c| c.id}] } 

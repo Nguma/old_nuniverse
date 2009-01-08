@@ -18,13 +18,8 @@
 	font-weight:bold;
 }
 
-.card_mode .title {
-	position:relative;
-}
 
-.card_mode .description{
-	font-size:15px;
-}
+
 
 
 .image_mode .connection {
@@ -118,12 +113,12 @@
 }
 
 .even {
-	background:#eee;
+/*	background:#eee;*/
 /*	background:transparent url('/images/backgrounds/even.png') 0 0 repeat;*/
 }
 
 .odd {
-	background:#dedede;
+/*	background:#dedede;*/
 /*	background:transparent url('/images/backgrounds/odd.png') 0 0 repeat;*/
 }
 
@@ -251,4 +246,20 @@ img.thumbnail {
 
 .image_mode .connection .star-rating {
 	display:none;
+}
+
+.card_mode .description a.title {
+	position:relative;
+	font-size:18px;
+}
+
+.card_mode .description {
+	font-size:15px;
+	padding:0;
+	line-height:20px;
+}
+
+.card_mode .even, 
+.card_mode .odd {
+	background:none;
 }
