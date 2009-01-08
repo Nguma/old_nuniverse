@@ -74,7 +74,7 @@ class PolycosController < ApplicationController
 				@polyco.subject.description = params[:subject][:description]
 				params[:subject][:description].split(',').each do |t|
 						tag = Tag.find_or_create(:name => t.strip) 
-						@polyco.subject.taggings << Tagging.new(:taggable => @polyco.subject, :tag => tag) unless tag.label.nil?
+						@polyco.subject.taggings << Tagging.new(:taggable => @polyco.subject, :tag => tag) unless tag.name.nil?
 				end
 			end
 			end
