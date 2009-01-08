@@ -45,13 +45,13 @@ class TagsController < ApplicationController
 			end
 		
 		else
-				feed_url = "http://en.wikipedia.org/w/api.php?action=opensearch&search=#{@tag.label.gsub(' ','_')}&format=xml"
+				feed_url = "http://en.wikipedia.org/w/api.php?action=opensearch&search=#{@tag.name.gsub(' ','_')}&format=xml"
 				response = Net::HTTP.get_response(URI.parse(feed_url)).response.body
 				ds = REXML::Document.new(response).elements.to_a("//Item")
 				ds.each do |d|
-					@wikis << Tag.new(:label => d.elements["Text"].text, :description => d.elements["Description"].text, :url => d.elements["Url"].text, :kind => "bookmark")
+					@wikis << Tag.new(:name => d.elements["Text"].text, :description => d.elements["Description"].text, :url => d.elements["Url"].text, :kind => "bookmark")
 				end
-				feed_url = "http://en.wikipedia.org/w/api.php?action=query&list=allimages&aifrom=#{@tag.label.gsub(' ','_')}&format=xml"
+				feed_url = "http://en.wikipedia.org/w/api.php?action=query&list=allimages&aifrom=#{@tag.name.gsub(' ','_')}&format=xml"
 				response = Net::HTTP.get_response(URI.parse(feed_url)).response.body
 				@images =  REXML::Document.new(response).elements.to_a("//img").collect {|c| c.attributes['url']}
 		end
@@ -143,7 +143,7 @@ class TagsController < ApplicationController
 		elsif params[:url]
 			@tag = Tag.with_url(params[:url]).first
 		else
-			@tag = Tag.with_kind(params[:kind]).with_label(params[:input]).first
+			@tag = Tag.with_kind(params[:kind]).with_name(params[:input]).first
 		end
 	end
 

@@ -95,7 +95,7 @@ class ApplicationController < ActionController::Base
 
 	def service_items(query)
 		
-		case @perspective.label
+		case @perspective.name
 		when "google"
 			
 			Googleizer::Request.new(query.gsub('&','and') , :mode => "web").response.results

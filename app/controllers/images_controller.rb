@@ -18,27 +18,7 @@ class ImagesController < ApplicationController
 		end
   end
 
-	def upload
-		@tag = Tag.create(
-			:label => params[:Filename],
-			:kind => 'image',
-			:image => Image.new(:uploaded_data => params[:Filedata]),
-			:description => '')
-		if params[:path] && @tag
-			subject = TaggingPath.new(params[:path]).last_tag
-			Tagging.create(
-				:subject_id => subject.id,
-				:object_id => @tag.id,
-				:path => params[:path],
-				:user_id => params[:user_id]
-			)
-		end
-		if subject.image.nil?
-			subject.image = @tag.image
-			subject.save
-		end
-			render :layout => false
-	end
+	
 	
 	def destroy
 		@image = Image.find(params[:id])

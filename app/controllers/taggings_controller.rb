@@ -57,7 +57,7 @@ class TaggingsController < ApplicationController
 		@tag = Tag.find(:first, :conditions => ['url = ?', params[:url]])
 		
 		@tag = Tag.create(
-			:label => params[:label],
+			:name => params[:name],
 			:kind => params[:kind],
 			:url => params[:url],
 			:service =>params[:service],
@@ -113,7 +113,7 @@ class TaggingsController < ApplicationController
 		@taggings = Tagging.select(
 		:users => [current_user],
 		:current_user => current_user,
-		:label => params[:label],
+		:name => params[:name],
 		:perspective => "everyone")
 	end
 	
