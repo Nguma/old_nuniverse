@@ -27,7 +27,7 @@
         <%= thumbnail_tag suggestion, :style => "background:none;height:30px;width:30px"%>
         <%= link_to suggestion.name, suggestion, :class => "title" rescue suggestion.inspect %>
         <%= link_to("Yes, that's the same", confirm_connection_url(@polyco, :subject_id => suggestion.id, :subject_type => suggestion.class.to_a) , :class => "action")%>
-        <p><%= suggestion.tags.collect{|c| c.label}.join(',') %><%= suggestion.description %></p>
+        <p><%= suggestion.tags.collect{|c| c.name}.join(',') %><%= suggestion.description %></p>
         <%= clear %>
         </div>
       <% end -%>
