@@ -35,4 +35,9 @@ module ConnectionsHelper
 	end
 	
 	
+	def connect_link(params)
+		link_to params[:title], make_connection_url(:subject_id => params[:subject].id, :subject_type => params[:subject].type, :object_id => params[:object].id, :object_type => params[:object].type)
+	end
+	
+	
 end

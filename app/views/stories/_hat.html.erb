@@ -1,6 +1,8 @@
 <div id="hat">
+  <%= thumbnail_tag @context if @context %>
   <%= thumbnail_tag @source %>
-  <h1><%= @source.name.capitalize %></h1>
+  
+  <h1><%= @context.name.capitalize %>: <%= @source.name.capitalize %></h1>
   Started by <%= link_to @story.author.name.capitalize, @story.author %>
   <div class="delimiter"></div>
 </div>

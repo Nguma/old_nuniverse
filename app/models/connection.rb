@@ -7,9 +7,6 @@ class Connection < ActiveRecord::Base
 	
 	has_many :taggings, :as => :taggable
 	has_many :rankings, :as => :rankable
-	
-
-	
 		
 	before_destroy :destroy_taggings
 	

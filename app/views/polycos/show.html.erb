@@ -27,17 +27,20 @@
         <%= thumbnail_tag suggestion, :style => "background:none;height:30px;width:30px"%>
         <%= link_to suggestion.name, suggestion, :class => "title" rescue suggestion.inspect %>
         <%= link_to("Yes, that's the same", confirm_connection_url(@polyco, :subject_id => suggestion.id, :subject_type => suggestion.class.to_a) , :class => "action")%>
-        <p><%= suggestion.tags.join(',') %><%= suggestion.description %></p>
+        <p><%= suggestion.tags.collect{|c| c.label}.join(',') %><%= suggestion.description %></p>
         <%= clear %>
         </div>
       <% end -%>
       <div class="step">
-        Not What you're looking for? Well, that's fine. <%= link_to "Create that nuniverse", polyco_url(@polyco, :no_suggestions => true), :class => "title"%>
+        Not What you're looking for? Well, that's fine.
+        Please tell us a bit more about it.
+      </div>
   <% else -%>
     <div class="step">
       Great you're the first to have created this nuniverse,
       Please tell us a bit more about it.
     </div>
+  <% end -%>
      <% form_for(@polyco, :html => {:multipart => true, :id => "edit_connection_form"}) do |f| %>
         <%= f.error_messages %>
         <% fields_for :subject do |s| -%>
@@ -79,7 +82,7 @@
         <p>
           <%= f.submit "Great, Save it." %>
         </p>
-      <% end %>
+     
   <% end -%>
   <%= clear %>
   <% if current_user == @polyco.object %>

@@ -362,11 +362,6 @@ a.save_button {
 	
 }
 
-#overview {
-	height:100%;
-}
-
-
 .step {
 	position:relative;
 	clear:both;
@@ -384,6 +379,26 @@ a.save_button {
 
 .step h4 {
 	font-size:25px;
+}
+
+#overview {
+	height:100%;
+}
+
+#overview .step {
+	background:none;
+}
+
+#overview .step {
+	color:#0f2a5d;
+}
+
+#overview .step a {
+	color:#7ba7c9;
+}
+
+#overview .step a:hover {
+	color:#c0e4ff;
 }
 
 .home_lnk {
@@ -433,6 +448,7 @@ a.filter:hover {
 	float:left;
 }
 
+
 #right-column {
 	position:relative;
 	float:right;
@@ -441,6 +457,10 @@ a.filter:hover {
 	margin:0;
 	padding:0;
 	height:100%;
+}
+
+#right-column {
+/*	display:none;*/
 }
 
 #left-column {
@@ -459,6 +479,19 @@ a.filter:hover {
 	margin:0 0 1px 0;
 	font-size:16px; 
 }
+#nuniverse.extended #right-column {
+	display:none;
+}
+
+#nuniverse.extended #left-column {
+	margin:0;
+}
+
+#nuniverse #expand-right-column-lnk {
+	
+}
+
+
 
 
 #overview dl {

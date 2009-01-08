@@ -10,26 +10,15 @@
             <h2>You're about to tell a story</h2>
             Like, in every story, first thing to do is to set up the decor, and add the protagonists.
             Just enter the name of the people, things or places you want to populate this story with. Chances are they might have been already used in another story...
-            <%= render :partial => "/stories/add_form", :locals => {:params => {:behavior => ""}} %>
+             <div class="step" style="clear:left" id="new-connection-step">
+             <%= render :partial => "/stories/add_form", :locals => {:params => {:behavior => ""}} %>
+            </div>
           </div>
         <% else -%>
-          <div class="submenu " style="padding:5px;margin:1px 0 1px 0;background:#eee">
-            <%= will_paginate @connections %>
-            <%= sorting_options @connections %>
-            <%= display_options %>
-            <div style="clear:left"> </div>
-          </div>
-          <% @connections.each_with_index do |connection,i| -%>
-            <div class="step" >
-              <%#= thumbnail_tag connection.subject %>
-              #<%= i+1%>
-              <%= render_connection_description(connection) %> <%= connection.subject.tags.join(' ') %>
-              <%= link_to "Edit", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection) %>
-              <div style="clear:left"> </div>
-            </div>
-          <% end -%>
-          <div class="step">
-          <%= render :partial => "/stories/add_form", :locals => {:params => {:behavior => ""}} %>
+       
+          <%= render :partial => "/connections/connections", :locals => {:connections => @connections} %>
+          <div class="step" style="clear:left" id="new-connection-step">
+            <%= render :partial => "/stories/add_form", :locals => {:params => {:behavior => ""}} %>
           </div>
         <% end -%>
       </div>

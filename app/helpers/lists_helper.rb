@@ -4,7 +4,7 @@ module ListsHelper
 		params[:source] ||= @source
 		return if params[:source].nil?
 		breadcrumbs = []
-		breadcrumbs << home_link unless params[:source] == current_user
+		breadcrumbs << home_link unless params[:source] == current_user && !@context
 	
 			# breadcrumbs << link_to("< #{params[:source].kind.title.capitalize}", tag_url(:kind => params[:source].title, :perspective => @user.login, :mode => @mode)) unless @list.context.blank?
 			# breadcrumbs << link_to("< #{@list.kind.pluralize.capitalize}", listing_url(:kind => params[:source].kind.pluralize, :perspective => @user.login)) 
@@ -40,7 +40,7 @@ module ListsHelper
 	end
 	
 	def render_connection(connection, params = {})
-		render :partial => "/connections/connection", :locals => {:connection => connection}
+		render :partial => "/#{@klass.downcase.pluralize}/connection", :locals => {:connection => connection}
 	end
 	
 	def render_connections(connections)

@@ -1,0 +1,7 @@
+<% @suggestions.each do |suggestion| -%>
+  <dd>
+    <%= thumbnail_tag suggestion %>
+    <span style="font-size:15px;line-height:14px"><%= link_to suggestion.name, "/stories/add_item/#{@story.id}?subject=#{suggestion.id}" %></span>
+    <span style="font-size:11px"><%= suggestion.tags.join(',') %></span>
+    <%= clear %></dd>
+<% end -%>

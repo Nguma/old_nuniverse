@@ -1,11 +1,30 @@
-<div id="overview">
+<div id="overview" style="background:transparent url('/images/backgrounds/overview_n.png') 0 0 repeat-x">
 
     <div class="step" style="clear:none" >
+      
        <%= thumbnail_tag @source, :size => :small %>
-        <h1><span style="color:#333;font-weight:bold"><%= @source.name.capitalize %></span><%= ":#{@filter}" unless @filter.nil?%><%= " #{@klass.downcase.pluralize}" unless @klass == "Nuniverse"%></h1>
+       <%= thumbnail_tag @context, :size => :small if @context %>
+        <h1>
+          <span style="color:#333;font-weight:bold"><%= @source.name.capitalize %></span>
+          <%= @context.name.capitalize if @context%>
+          <%= ":#{@filter}" unless @filter.nil?%><%= " #{@klass.downcase.pluralize}" unless @klass == "Nuniverse"%>
+        </h1>
        <h5>Showing all <%= !@filter.nil? ? link_to(@filter.pluralize, @source, :class => "filter") : "connections"  %> <%= link_to @order.gsub("_"," "), "#", :class => "expand_lnk", :id => "expand_sorting-options" %></h5>
        <%= sorting_options @connections %>
         <div style="clear:left"></div>
+        
+
       </div>
+      <% if !@filter && !@context %>
+      <div class="step">
+        <h2>In this nuniverse</h2>
+      
+          <% @nuniverse.stories.each do |story| -%>
+            <%= link_to "#{story.name}", nuniverse_url(@nuniverse, :context => story.id)  %><br/>
+          <% end -%><br/>
+          <span style="font-size:15px">See all <%= link_to "stories connected to that nuniverse.", stories_url %> | <%= link_to "Create a new story.", "#", :class => "expand_lnk", :id => "expand_new_story_form"%></span>
+          <%= render :partial => "/stories/new" %>
+      </div>
+      <% end -%>
 
 </div>

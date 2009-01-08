@@ -1,6 +1,7 @@
 class Nuniverse < ActiveRecord::Base
 	has_many :taggings, :as => :taggable, :dependent => :destroy
-	has_many :tags, :through => :taggings
+	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	has_many :contexts, :through => :taggings, :source => :tag, :source_type => "Story"	
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :connecteds, :as => :subject, :class_name => "Polyco"
@@ -10,7 +11,9 @@ class Nuniverse < ActiveRecord::Base
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
 	has_many :locations, :through => :connections, :source => :subject, :source_type => "Location"
 	has_many :stories, :through => :connections, :source => :subject, :source_type => "Story"
-	has_many :users, :through => :connections, :source => :subject, :source_type => "User"
+	# has_many :contexts, :through =>:connecteds, :source => :object, :source_type => "Story"
+
+	has_many :users, :through => :connecteds, :source => :object, :source_type => "User"
 	has_many :facts, :through => :connecteds, :source => :object, :source_type => "Fact"
 	
 	
@@ -22,7 +25,9 @@ class Nuniverse < ActiveRecord::Base
 	
 		has :active
 		has connections(:id), :as => :c_id
-		has taggings(:tag_id), :as => :tag_ids
+		has tags(:id), :as => :tag_ids
+		has contexts(:id), :as => :context_ids
+		
 		set_property :delta => true
 		set_property :field_weights => {:name => 100}
 	end

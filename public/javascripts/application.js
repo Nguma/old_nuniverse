@@ -274,13 +274,33 @@ function reset()
 
        this.callRequest({url:'/polycos/suggest'});
      },
-     onSuccess:function() {
+     onSuccess:function(updated) {
        
+       updated.getElements('.suggestion').each(function(suggestion) {
+         var lnk = suggestion.getElement('a');
+         lnk.addEvent('click', function(ev) {
+           ev.preventDefault();
+           $('subject_type').set('value',lnk.get('id').split('-')[0]);
+             $('subject_id').set('value',lnk.get('id').split('-').getLast());
+       
+            $('new-connection-step').getElement('form').submit();
+           
+           
+           
+         },this);
+       },this);
      }
    });
    // p.request.options.spinner =  $('right-column').getElement('spinner')
    p.request.options.update = $('new-connection-step').getElement('.suggestions')
 
+ }
+ 
+ if($chk($('toggle-right-column-lnk'))) {
+   $('toggle-right-column-lnk').addEvent('click', function(ev) {
+     ev.preventDefault();
+     $('nuniverse').toggleClass('extended');
+   })
  }
   
 }

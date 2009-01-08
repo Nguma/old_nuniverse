@@ -11,27 +11,36 @@ class NuniversesController < ApplicationController
 	end
 	
 	def show
-		
 		@perspective = params[:perspective]
 		@source = @nuniverse
+		@context = Story.find(params[:context]) rescue nil
+		@connection_to_current = Polyco.with_subject(@source).with_object(@current_user).first
 		@connections = @nuniverse.connections.of_klass(@klass)
 		
+
 		
 		
 		case params[:order]
 		when "by_latest"
-			@connections = @connections.order_by_date
+			@connections = @connections.order_by_date.with_score
 		when "by_name"
-			@connections = @connections.order_by_name
+			@connections = @connections.order_by_name.with_score
 		else
-			@connections = @connections.order_by_score(@perspective)
+			@connections = @connections.order_by_score(@perspective).with_score
 		end
 		
-		@connections = @connections.with_score.sphinx(params[:filter], :per_page => 3000).paginate(:per_page => 20, :page => params[:page])
+		if @context
+			@connections = @connections.sphinx(:per_page => 3000, :conditions => {:context_ids => @context.id})
+		end
+		if params[:filter]
+			@connections = @connections.sphinx(params[:filter], :per_page => 3000)
+		end
+		
+		@connections = @connections.paginate(:per_page => 20, :page => params[:page])
 		
 		@latest_stories = @nuniverse.connections.of_klass('Story').order_by_date.paginate(:page => 1, :per_page => 5)
 		
-		@filter = params[:filter] || nil
+		@filter = params[:filter]  || nil
 	end
 	
 	def edit

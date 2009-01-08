@@ -22,8 +22,8 @@ class SessionsController < ApplicationController
     elsif current_user
       redirect_to '/activate/'
 		else
+			flash.now[:error] = "Wrong username / password "
       redirect_to '/login'
-			flash[:notice] = "Wrong username / password "
     end
   end
 

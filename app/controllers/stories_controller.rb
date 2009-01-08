@@ -1,7 +1,10 @@
 class StoriesController < ApplicationController
 	
 	before_filter :find_story, :except => [:new, :create, :index]
+	before_filter :find_context, :except => [:index]
 	after_filter :store_location, :only => [:show]
+	
+	
   # GET /stories
   # GET /stories.xml
   def index
@@ -20,7 +23,9 @@ class StoriesController < ApplicationController
 	
 		@source = @story
 		@klass = 'nuniverse'
-		@connections = @source.connections
+
+			@connections = @source.connections.with_score
+
 		
 		case params[:order]
 		when "by_latest"
@@ -31,7 +36,8 @@ class StoriesController < ApplicationController
 			@connections = @connections.order_by_score(@perspective)
 		end
 		
-		@connections = @connections.with_score.paginate(:per_page => 20, :page => params[:page])
+		@connections = @connections.sphinx(nil, :conditions => {:context_ids => @context.id}, :per_page => 2000) if @context
+		@connections = @connections.paginate(:per_page => 20, :page => params[:page])
 		
 
     respond_to do |format|
@@ -64,9 +70,9 @@ class StoriesController < ApplicationController
 		
     respond_to do |format|
       if @story.save
-				Polyco.create(:subject => @story, :object => current_user, :state => "active")
+				Polyco.create(:subject => @story, :object => @context, :state => "active")
         # flash[:notice] = 'Story was successfully created.'
-        format.html { redirect_to(@story.parent) rescue redirect_to @story }
+        format.html { redirect_to polymorphic_url(@context, :context => @story.id) }
         format.xml  { render :xml => @story, :status => :created, :location => @story }
       else
         format.html { render :action => "new" }
@@ -95,12 +101,14 @@ class StoriesController < ApplicationController
   end
 
 	def add_item
-		@item = Nuniverse.find(params[:subject]) rescue Tag.new(params[:tag])
+		@item = Nuniverse.find(params[:subject][:id]) rescue Nuniverse.create(params[:subject])
+	
 		if @item.is_a?(Tag)
-			@story.pending_items << @item
+			@story.pending_items << @item rescue nil
 		else
-			@story.nuniverses << @item 
+			@story.nuniverses << @item rescue nil
 		end
+		@context.nuniverses << @item rescue nil if @context 
 		redirect_back_or_default('/')
 	end
 	
@@ -133,9 +141,9 @@ class StoriesController < ApplicationController
 		redirect_back_or_default("/")
 	end
 	
-	def find_suggestion
+	def suggest
 		
-		@suggestions = Nuniverse.search(params[:tag][:label]).paginate(:page => 1, :per_page => 5)
+		@suggestions = Nuniverse.search(params[:subject][:name]).paginate(:page => 1, :per_page => 5)
 		
 	end
 
@@ -156,5 +164,7 @@ class StoriesController < ApplicationController
 	def find_story
 		@story = Story.find(params[:id])
 	end
+	
+
 	
 end

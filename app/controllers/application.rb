@@ -69,7 +69,7 @@ class ApplicationController < ActionController::Base
 		@order = session[:order] = params[:order] ? params[:order] : (!session[:order].nil? ? session[:order] : "by_latest")
 		@klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
 		
-		@size = (@display == "image") ? nil : :small
+		@size = (@display == "image") ? :large : :small
 		
 		session[:service] = @service
 		session[:perspective] = @perspective
@@ -85,6 +85,12 @@ class ApplicationController < ActionController::Base
 		else
 			@user = User.find_by_login(params[:user]) || current_user
 		end
+	end
+	
+	def find_context
+		
+		@context = params[:context][:type].classify.constantize.find(params[:context][:id])  rescue nil
+	
 	end
 
 	def service_items(query)

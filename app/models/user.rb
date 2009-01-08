@@ -34,16 +34,19 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :first_name, :last_name, :password, :password_confirmation
 
-	has_many :stories, :foreign_key => :author_id
+
 	has_many :connections, :as => :object, :class_name => "Polyco"
-	has_many :story_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Story'"
+	has_many :stories, :through => :connections, :source => :subject, :source_type => 'Story'
+	has_many :story_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.subject_type = 'Story'"
 	has_many :nuniverse_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Nuniverse'"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
+	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
 
 	alias_attribute :name, :login
 
 	has_many :taggings, :as => :taggable
-
+	has_many :tags, :through => :taggings, :source => :tag, :source_type => 'Tag'
+	has_many :contexts, :through => :taggings, :source => :tag, :source_type => 'Story'
 	
 
 	alias_attribute :title, :label
@@ -53,6 +56,8 @@ class User < ActiveRecord::Base
 		indexes [:firstname, :lastname], :as => :name, :sortable => true
 		indexes taggings(:tag).label, :as => :tags
 		has connections(:id), :as => :c_id
+		has tags(:id), :as => :tag_ids
+		has contexts(:id), :as => :context_ids
 		has :state
 		set_property :suggestable => true
 		set_property :delta => true

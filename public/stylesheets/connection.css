@@ -18,8 +18,6 @@
 	font-weight:bold;
 }
 
-
-
 .card_mode .title {
 	position:relative;
 }
@@ -33,8 +31,6 @@
 /*	background:#eee;*/
 	margin:0 1px 1px 0;
 }
-
-
 
 .connection .klass {
 	position:absolute;
@@ -236,7 +232,7 @@ img.thumbnail {
 }
 
 
-.image_mode #content .connection img.thumbnail {
+.image_mode .connection img.thumbnail {
 	background:none;
 	width:100%;
 	height:auto;

@@ -3,6 +3,7 @@ class Story < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Story"
 	belongs_to :author, :class_name => "User"
 	
+	
 	has_many :rankings, :as => :rankable, :dependent => :destroy
 
 	has_many :connections, :as => :object, :class_name => 'Polyco'
@@ -27,6 +28,8 @@ class Story < ActiveRecord::Base
 	  indexes name, :sortable => true	
 		
 	  has  created_at, updated_at
+	
+
 		
 	end
 	

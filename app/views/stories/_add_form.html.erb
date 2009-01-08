@@ -1,10 +1,20 @@
 <% behavior = params[:behavior] || "hidden" %>
 
- <% form_for :story, @story, :url => {:action => :add_item}, :html => {:id => "edit_story_form", :class =>  behavior} do |f| -%>
+ <% form_for :story, @story, :url => {:action => :add_item}, :html => {:id => "add_story_item_form", :class =>  behavior} do |f| -%>
     <%= hidden_field_tag :id, @story.id %>
-    <% fields_for :tag do |t| -%>
-      <%= t.text_field :label %> <%= f.submit "+" %>
+    <% fields_for :context, @context do |c| -%>
+      <%= c.hidden_field :id %>
+      <%= c.hidden_field :type %>
     <% end -%>
-    <div class="suggestions"></div>
+    <% fields_for :object, @story do |o| %>
+      <%= o.hidden_field :id %>
+      <%= o.hidden_field :type %>
+    <% end -%>
+    <% fields_for :subject do |s| %>
+      <%= s.hidden_field :id %>
+      <%= s.text_field :name , :id => 'input_connect'%> <%= f.submit "+" %>
+    <% end -%>
+
+    <div class="suggestions" src="/stories/suggest"></div>
    
   <% end -%>

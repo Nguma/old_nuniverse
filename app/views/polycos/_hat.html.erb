@@ -1,16 +1,17 @@
-<div id="hat" style="background:#333;padding:10px;color:#ccc">
-
-  <%= thumbnail_tag @source.object %>
-  <%= image_tag("/images/icons/related.png", :style => "position:relative;float:left;margin:0 10px   0 0") %>
+<div id="overview" style="background:#fff url('/images/backgrounds/hat.png') left top repeat-x">
+  <div class="step">
+  <%= thumbnail_tag @source.object%>
+  
   <% if @source.subject.nil? %>
     <h1 style="clear:both">
       Connect <%= link_to @source.object.name, polymorphic_url(@source.object) %> to ?
     </h1>
   <% else -%>
     <%= thumbnail_tag @source.subject %>
-    <h1 style="clear:both">
-      <%= link_to @source.object.name, polymorphic_url(@source.object) %> is connected to <%= link_to_connection(@source) %>
+    <h1 style="position:relative;float:left"><%= link_to @source.object.name.capitalize, polymorphic_url(@source.object) %></h1> <%= image_tag("/images/icons/related.png", :style => "position:relative;float:left;margin:0 10px   0 0") %> <h1 style="position:relative;float:left"><%= link_to_connection(@source) %>
     </h1>
   <% end -%>
+  <%= clear%>
+  </div>
 </div>
   

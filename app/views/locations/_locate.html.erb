@@ -1,4 +1,4 @@
-<% locations = google_localize(:source => subject) %>
+<% locations = google_localize(:source => subject) rescue []%>
 
 <% if locations.empty? -%>
   Nothing has been found on google.

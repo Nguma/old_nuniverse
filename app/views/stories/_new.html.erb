@@ -7,5 +7,10 @@
   <%#= f.check_box :is_private %> Make it private
   <%= f.hidden_field :parent_id %>
   <%= f.hidden_field :author_id %>
+  
+  <% fields_for :context, @source do |c| %>
+    <%= c.hidden_field :id %>
+    <%= c.hidden_field :type %>
+  <% end -%>
 
 <% end %>

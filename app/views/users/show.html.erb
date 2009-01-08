@@ -3,7 +3,7 @@
     <div class="step">
       You are logged in as <%= current_user.login %>.<%= link_to "Logout", "/logout" %>
     </div>
-    <%= render :partial => "/nuniverse/visit_form" %>
+   
     <div class="nuniverse-klass step" style="position:relative;">
       There are <%= @count %> connections in this nuniverse. <%= link_to "Browse them all", polymorphic_url(@source, :klass => "nuniverse") %>, or look for something specific
       <% form_tag "/users/show/#{@user.id}" do -%>
@@ -13,12 +13,12 @@
     </div>
 
     <div class="step">
-      <h2>Top Stories</h2>
-      <% @latest_stories.each do |story| -%>
-        <%= link_to story.subject.name, story_url(story.subject) rescue story.id%><br/>
-      <% end -%><br/>
-      <span style="font-size:15px">See all <%= link_to "stories connected to that nuniverse.", stories_url %> | <%= link_to "Create a new story.", "#", :class => "expand_lnk", :id => "expand_new_story_form"%></span>
-      <%= render :partial => "/stories/new" %>
+      
+        <h2>In this nuniverse</h2>
+        <% @tags.each do |story| %>
+          <%= link_to story.label.pluralize, user_url(@user, :filter => story.label, :context => @context), :style => "font-size:#{[(12+story.counted.to_i),20].min}px"%>
+        <% end -%>
+      
     </div>
       <%= render :partial => "/nuniverse/menu"%>
      <div class="step">
@@ -31,6 +31,12 @@
       <%= render :partial => "overview" %>
     <div id="content" style="clear:none">
       <%= render :partial => "/connections/connections", :locals => {:connections => @connections}%>
+      <%= clear %>
+      <div class="step"  id="new-connection-step">
+      <h3>Want to add something to <%= @story ? @story.name : @source.name %>?</h3>
+        <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
+        <dl class='suggestions'></dl>
+      </div>
     </div>
    
   </div>

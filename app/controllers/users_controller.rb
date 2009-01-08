@@ -137,20 +137,29 @@ class UsersController < ApplicationController
 		
 		@connections = @user.connections.of_klass(@klass)
 		@count = @user.connections.count
-		@filter = params[:filter] || ""
+		@context = Story.find(params[:context]) rescue nil
+		@filter = params[:filter] || nil
 		
 		render :action => :tutorial if @user == current_user && @count == 0
-		case params[:order]
-				when "by_latest"
-					@connections = @connections.order_by_date
-				when "by_name"
-					@connections = @connections.order_by_name
-				else
-					@connections = @connections.order_by_score(@perspective)
-				end
 	
-		@connections = @connections.with_score.sphinx(@filter, :page => 1, :per_page => 3000).paginate(:page => params[:page] || 1)
+	
+		if @context
+			@connections = @connections.sphinx(:conditions => {:context_ids => @context.id}, :per_page => 3000)
+		end
+		if @filter
+			@connections = @connections.sphinx(@filter, :page => 1, :per_page => 3000)
+		end
+			@tags = @connections.gather_tags
+			case params[:order]
+					when "by_latest"
+						@connections = @connections.order_by_date.with_score
+					when "by_name"
+						@connections = @connections.order_by_name.with_score
+					else
+						@connections = @connections.order_by_score(@perspective).with_score
+					end
 		
+		@connections = @connections.paginate(:page => params[:page] || 1)
 	
 		
 		respond_to do |format|

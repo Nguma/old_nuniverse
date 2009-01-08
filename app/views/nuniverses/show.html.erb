@@ -1,7 +1,9 @@
 <% nuniverse do -%>
-  <div id="right-column">
+
+  <div id="right-column" style="top:100px">
+
     <%= render :partial => "/nuniverses/information"%>
-    <%= render :partial => "/nuniverse/visit_form"%>
+    
   
     <div class="step">
       <%= link_to "Search this nuniverse.", "#", :class => "expand_lnk", :id => "expand_filter_form" %>
@@ -19,16 +21,20 @@
         <%= thumbnail_tag user, :class => "icon"%>
       <% end -%>
       <%= clear %>
+      <% if @connection_to_current %>
+        <%= link_to "Disconnect",  @connection_to_current, :method => :delete %>
+      <% else %>
+        <%= connect_link(:title => "connect with this nuniverse", :subject => @source, :object => current_user) %>
+      <% end -%>
     </div>
     <%= render :partial => "/nuniverse/menu"%>
 
     <div class="step">
-       <h2>In this nuniverse</h2>
-        <% @nuniverse.connections.gather_tags.each do |tag| -%>
+       <% @nuniverse.connections.gather_tags.each do |tag| -%>
           <%= link_to "#{tag.counted} #{tag.label.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.label)  %><br/>
-        <% end -%><br/>
-        <span style="font-size:15px">See all <%= link_to "stories connected to that nuniverse.", stories_url %> | <%= link_to "Create a new story.", "#", :class => "expand_lnk", :id => "expand_new_story_form"%></span>
-        <%= render :partial => "/stories/new" %>
+        <% end -%>
+
+        <%#= render :partial => "/stories/new" %>
     </div>
   </div>
   <div id="left-column">

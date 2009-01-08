@@ -12,6 +12,7 @@ module ImagesHelper
 	def thumbnail_tag(source, params = {})
 		params[:class] ||= "thumbnail"
 		params[:size] ||= "small"
+		
 	
 		image_tag(source.avatar(params[:size]), params) rescue  image_tag("/images/icons/#{source.class.to_s.downcase}.png",  params.merge({:class => "default_img"}))	
 	end

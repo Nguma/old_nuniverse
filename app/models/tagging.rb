@@ -1,10 +1,10 @@
 class Tagging < ActiveRecord::Base
 	belongs_to :taggable, :polymorphic => true 
-	belongs_to :tag
+	belongs_to :tag, :polymorphic => true
 	
 	
 	define_index do
-		indexes tag.label, :as => :predicate
+		indexes tag.name, :as => :predicate
 		set_property :delta => true
 	end
 	# has_many :rankings

@@ -6,6 +6,9 @@ class Polyco < ActiveRecord::Base
 	
 	has_many :taggings, :as => :taggable
 	
+	has_many :connections, :as => :object, :class_name => "Polyco"
+	
+	before_save :update_state
 	after_create :update_state
 	
 	acts_as_state_machine :initial => :pending
@@ -22,6 +25,7 @@ class Polyco < ActiveRecord::Base
 		indexes [subject.name, subject.taggings(:tag).label, taggings(:tag).label], :as => :name, :sortable => true
 		indexes subject_type, :as => :type
 		
+		has subject.contexts(:id), :as => :context_ids
 		set_property :delta => true
 		has :suggestable => 0
 	end
@@ -59,41 +63,47 @@ class Polyco < ActiveRecord::Base
 	}
 	
 	named_scope :with_object, lambda {|object|
-		object.nil? ? {} : {:conditions => {:object => object.id, :object_type => object.class.to_s}}
+		object.nil? ? {} : {:conditions => {:object_id => object.id, :object_type => object.class.to_s}}
 	}
 	
 	named_scope :with_subject, lambda {|subject|
 		subject.nil? ? {} : {:conditions => {:subject_id => subject.id, :subject_type => subject.class.to_s}}
 	}
 	
-	named_scope :exclude_twins, {:conditions => "state != 'twin'"}
-	
-	named_scope :gather_tags, :select => "T.label AS label, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id" ], :group => "T.id", :order => "counted DESC"
-	
 
+	named_scope :gather_tags, :select => "T.label AS label, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "label ASC"
+	
+	
 	
 	def score
 		average_score.to_i || 0
 	end
 	
 	def twin
-		self.subject.connections.with_subject(self.object).first || Polyco.new(:subject => self.object, :object => self.subject, :name => self.object.name, :description => self.description, :state => "twin")
+		self.subject.connections.with_subject(self.object).first || Polyco.new(:subject => self.object, :object => self.subject, :name => self.object.name, :description => self.description)
 	end
 	
 	def tags
 		taggings.collect {|c| c.predicate}
 	end
 	
-
+	def self.find_or_create(params)
+		Polyco.with_subject(params[:subject]).with_object(params[:object]).first || Polyco.create(params)
+	end
 	
 	def save_all
-		twin.save if !self.pending?
-		self.save
+		begin
+			twin.save if self.subject.is_a?(Nuniverse) # if !self.pending? 
+			self.save
+			true
+		rescue
+			false
+		end
 	end
 	
 	protected
 	
 	def update_state
-		self.make_active! unless subject.is_a?(Tag)
+		self.make_active! unless !subject.active
 	end
 end

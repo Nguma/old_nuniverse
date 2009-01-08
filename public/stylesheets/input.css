@@ -135,6 +135,12 @@ fieldset {
 	z-index:12345678;
 }
 
+#visit_form {
+	padding:10px;
+	background:#333;
+	top:1px;
+}
+
 #input_visit {
 	background:#FFF url('/images/backgrounds/input_visit.png') 0 0 no-repeat;
 	width:500px;
