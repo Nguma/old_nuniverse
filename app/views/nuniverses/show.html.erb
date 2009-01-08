@@ -15,10 +15,10 @@
         <%= render :partial => "/nuniverse/search_form"%>
       </div>
     <% end -%>
-    <div class="step">
+    <div class="step" id="users-box">
       Users connecteds to that nuniverse
       <% @source.users.each do |user| -%>
-        <%= thumbnail_tag user, :class => "icon"%>
+        <%= link_to(thumbnail_tag(user, :class => "icon"), user_url(user))%>
       <% end -%>
       <%= clear %>
       <% if @connection_to_current %>
