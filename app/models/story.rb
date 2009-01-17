@@ -1,13 +1,15 @@
 class Story < ActiveRecord::Base
-	
+		
 	belongs_to :parent, :class_name => "Story"
 	belongs_to :author, :class_name => "User"
 	
 	
+	has_many :comments, :as => :parent, :dependent => :destroy
+		
 	has_many :rankings, :as => :rankable, :dependent => :destroy
 
-	has_many :connections, :as => :object, :class_name => 'Polyco'
-	has_many :connecteds, :as => :subject, :class_name => 'Polyco'
+	has_many :connections, :as => :object, :class_name => 'Polyco', :dependent => :destroy
+	has_many :connecteds, :as => :subject, :class_name => 'Polyco', :dependent => :destroy
 	
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse", :conditions => ["state = 'active'"]
 	# has_many :stories, :through => :connections, :source => :subject, :source_type => "Story", :dependent => :destroy
@@ -32,9 +34,7 @@ class Story < ActiveRecord::Base
 
 		
 	end
-	
-	
-	
+		
 	named_scope :created_by, lambda {|user|
 		user.nil? ? {} : {:conditions => {:author_id => user.id}}
 	}
@@ -54,5 +54,10 @@ class Story < ActiveRecord::Base
 	
 	def image
 		images.first.public_filename
+	end
+	
+	def related_connections
+		Polyco.related_connections(self)
+		
 	end
 end

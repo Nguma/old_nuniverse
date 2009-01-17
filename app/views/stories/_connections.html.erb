@@ -1,0 +1,7 @@
+ <div class="step">
+ <h3>What is it about?</h3>
+ <% @story.connections.each do |connection| -%>
+   <%= link_to (thumbnail_tag connection.subject), polymorphic_url(connection.subject, :klass => "Comment")%>
+ <% end -%>
+   <%= clear %>
+ </div>

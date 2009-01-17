@@ -1,16 +1,82 @@
+<%= render :partial => "hat" %>
+
 <% nuniverse do -%>
-  <div id="content">
-  <div class="step">
-    These are all tags for that nuniverse. You can add as many as you want. (Separated by comma if more than one at the time)
+  <%#= render :partial => "/nuniverses/menu" %>
+  <%= clear %>
+  <div id="right-column">
+    <%= spinner %>
+    <div class="step suggestions">
+      <%= render :partial => "/locations/locate", :locals => {:subject => @source.name} %>
+    </div>
+    <div class="step">
+ 
+      <%#= render :partial => "/bookmarks/google", :locals => {:subject => @polyco.subject.name} %>
+    </div>
    
   </div>
-   <div class="step">
-     <% form_for @nuniverse do |f| -%>
-      
-       <%= f.text_area :tags, :value => @nuniverse.tags.collect {|c| c.name }.join(','), :rows => 2 %><br/>
-       <%= submit_tag "Save"%>
-     <% end -%>
-    </div>
   
+  <div id="left-column">
+    <div class="step">
+      <h2>This nuniverse is new. You're the first adding something to it.</h2>
+    </div>
+       <% form_for(@source, :url => {:controller => "nuniverses", :action => "update"}, :html => {:multipart => true, :id => "edit_connection_form"}) do |f| %>
+          <%= f.error_messages %>
+          <div class="step">
+            <label>Tag it, the simpler the better (ie: person, film, restaurant)</label>
+            <%= f.text_field :tags , :value => @source.tags.collect {|c| c.name}.join(',')%>
+          </div>
+            <div class="step">
+              <h3>
+                <%= link_to "Add a description", "#", :id => "expand_description_area_lnk", :class => "expand_lnk" %>
+              </h3>
+              <div id="description_area" class="hidden">
+                <label>Public description. Be brief.</label>
+                <%= f.text_area :description, :rows => 3, :cols => 100 %>
+              </div>
+            </div>
+
+          <% fields_for :image do |i| -%>
+            <div class="step">
+              <h3>
+                <%= link_to "Add an image", "#", :id => "expand_image_area_lnk", :class => "expand_lnk" %>
+              </h3>
+              <div id="image_area" class="hidden">
+              <label>Copy and paste an image address</label>
+              <%= i.text_field :source_url, :style => "width:450px", :autocomplete => "off" %><br/>
+              <label>Or upload from your computer</label>
+              <%= i.file_field :uploaded_data, :autocomplete => "off" %>
+              </div>
+            </div>
+          <% end -%>
+          
+          <div class="step">
+            <h3>
+              <%= link_to "Add a website", "#", :id => "expand_web_area_lnk", :class => "expand_lnk" %>
+            </h3>
+            <div id = "web_area" class = "hidden" >
+            <% fields_for :bookmark do |b| -%>
+              <label>Add a website url</label>
+              <%= b.text_field :source_url, :style => "width:450px",  :autocomplete => "off" %>
+            <% end -%>
+            </div>
+          </div>
+
+          <% fields_for :location do |l| -%>
+            <div class="step">
+             
+              <h3><%= link_to "Add an address", "#", :class => "expand_lnk", :id => "expand_address_field"%></h3>
+              <%= l.text_field :address, :id => "address_field" , :class => "hidden"%>
+            </div>
+          <% end -%>
+  
+            <div class="step">
+            <%= f.submit "Great, Save it." %>
+          </div>
+
+    <% end -%>
   </div>
+  
+  
+  
+  
 <% end -%>

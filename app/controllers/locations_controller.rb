@@ -28,6 +28,11 @@ class LocationsController < ApplicationController
 	
 	def create
 		
+		if params[:location][:latlng]
+		
+		else
+			geolocate(params[:name])
+		end
 		
 		
 		@location = Location.create(
@@ -41,6 +46,11 @@ class LocationsController < ApplicationController
 			f.html {}
 			f.js {}
 		end
+	end
+	
+	
+	def suggest
+		geolocate(params[:location][:])
 	end
 	
 	

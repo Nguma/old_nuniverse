@@ -61,3 +61,16 @@
 .pagination .current {
 	font-size:14px;
 }
+
+
+#tab-menu {
+	height:40px;background:#999;padding:0 40px 0 40px
+}
+
+#tab-menu li {
+	padding:11px 20px 11px 20px;position:relative;float:left;font-size:15px;font-weight:bold;color:#666;
+}
+
+#tab-menu li.selected {
+	background:#cecece;color:#333;
+}

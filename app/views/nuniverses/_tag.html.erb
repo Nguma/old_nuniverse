@@ -1,3 +1,42 @@
 <%= thumbnail_tag(tag)%>
 <p class="kinds"><%= tag.tags.join(', ') %></p>
 <%= link_to tag.label.capitalize, url , :class => "title" %>
+
+      <% if @klass == "Fact" -%>
+
+      <% @source.facts.each do |fact| -%>
+        <div class="step">
+          <%= thumbnail_tag fact.parent %>
+          <%= link_to fact.parent.name, polymorphic_url(fact.parent, :klass => "Comment") %>
+          <p><%= render_comment(fact)%></p>
+          <%= clear %>
+        </div>
+      <% end -%>
+
+        <div class="step"  id="new-note-step">
+            <h3 style="padding:0 0 0 10px;font-size:16px;font-weight:bold">Add a fact</h3>
+            <%= render :partial => "/comments/new", :locals => {:params => {:behavior => ""}}%>
+            <dl class='suggestions'></dl>
+          </div>
+        </div>
+      <% else -%>
+    <% end -%>
+      
+      <h5>Showing all <%= !@filter.nil? ? link_to(@filter.pluralize, @source, :class => "filter") : "connections"  %> <%= link_to @order.gsub("_"," "), "#", :class => "expand_lnk", :id => "expand_sorting-options" %></h5>
+       <%= sorting_options @connections %>
+       <% if @connections.empty? -%>
+         <div class="step" style="clear:left"  id="new-connection-step">
+           There is no <%= @klass.downcase.to_s %> connected to this nuniverse, yet. Time to make some connections!
+           <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
+            <dl class='suggestions'></dl>
+         </div>
+       <% else -%>
+        <div id="content" style="clear:none;margin:0 320px 0 0">
+         <%= render :partial => "/connections/connections", :locals => {:connections => @connections }%>
+         <div class="step" style="clear:left" id="new-connection-step">
+           <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
+           <dl class='suggestions'></dl>
+         </div>
+         </div>
+        <% end -%>
+  <% end -%>

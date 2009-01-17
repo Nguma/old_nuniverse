@@ -1,7 +1,7 @@
 .connection {
 	padding:10px;
 	position:relative;
-	clear:both;
+	clear:left;
 }
 
 
@@ -12,14 +12,11 @@
 
 
 
-.connection .title {
+.connection a.title {
 	color:#369;
 	font-size:20px;
 	font-weight:bold;
 }
-
-
-
 
 
 .image_mode .connection {
@@ -61,11 +58,6 @@
 	background:#91bae8;
 }
 
-
-
-
-
-
 .connection .rank_lnk {
 	position:absolute;
 
@@ -81,7 +73,9 @@
 
 .list_mode .connection {
 /*	background:#dedede;*/
-	margin: 1px 0 0px 0;
+
+	border-bottom:solid 1px #ccc;
+	padding:30px 50px 30px 50px;
 }
 
 .edit_lnk {
@@ -111,6 +105,7 @@
 .card_mode .rank_lnk img {
 	height:20px;
 }
+
 
 .even {
 /*	background:#eee;*/
@@ -144,12 +139,6 @@
 	display:block;
 }
 
-.connection .description {
-	display:block;
-	color:#666;
-	font-size:18px;
-	padding:20px 10px 5px 5px;
-}
 
 .image_mode .description {
 	clear:both;
@@ -157,7 +146,7 @@
 }
 
 .connection .description a {
-	color:#369;
+
 	font-size:20px;
 	font-weight:bold;
 }
@@ -248,15 +237,28 @@ img.thumbnail {
 	display:none;
 }
 
+#left-column .card_mode .connection {
+	padding:10px !important;
+}
+
 .card_mode .description a.title {
 	position:relative;
 	font-size:18px;
 }
 
+.connection .description {
+	display:block;
+	color:#444;
+	font-size:18px;
+	font-weight:normal;
+	padding:20px 10px 5px 5px;
+	font-family:arial;
+}
+
 .card_mode .description {
-	font-size:15px;
+	font-size:14px;
 	padding:0;
-	line-height:20px;
+	line-height:22px;
 }
 
 .card_mode .even, 

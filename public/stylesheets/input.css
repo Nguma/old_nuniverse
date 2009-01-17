@@ -37,6 +37,28 @@ form.expanded  {
 	display:block;
 }
 
+#input-note-body {
+	background:transparent url('/images/backgrounds/input_note.png') 0 0 no-repeat;
+	padding:13px 10px 13px 13px;
+	font-size:18px;
+	width:476px;
+	border:none;
+	position:relative;
+	float:left;
+	min-width:476px;
+	max-width:476px;
+	min-height:85px;
+	max-height:85px;
+}
+
+#input-note-submit {
+	background:transparent url('/images/icons/submit_button.png') 0 0 no-repeat;
+	border:none;
+	position:relative;
+	width:100px;
+	height:100px;
+}
+
 fieldset {
 	display:none;
 }
@@ -45,6 +67,7 @@ fieldset {
 	display:block;
 }
 
+#suggestions .suggestion 
 .suggestions .suggestion {
 	display:block;
 	padding:0;
@@ -52,28 +75,26 @@ fieldset {
 	font-size:15px;
 }
 
-.suggestions .even {
+#suggestions .even {
 	background:transparent url('/images/backgrounds/even.png');
 }
 
-.suggestions .odd {
+#suggestions .odd {
 	background:transparent url('/images/backgrounds/odd.png');
 }
 
-.suggestions .thumbnail, 
-.suggestions .default_img {
+#suggestions .thumbnail, 
+#suggestions .default_img {
 	background:none;
+	position:relative;
+	float:left;
 	height:30px;
 	width:30px;
 	margin: 0 0 0 0;
 }
 
-.suggestions .kinds {
-	font-size:12px;
-	color:#eee;
-}
 
-.suggestions .title {
+#suggestions .title {
 	font-size:14px;
 	font-weight:bold;
 	color:#FFF;
@@ -115,8 +136,8 @@ fieldset {
 	padding:0;
 }
 
-.connect_form label {
-	color:#FFF;
+label {
+	display:block;
 }
 
 .connect_form h2 {

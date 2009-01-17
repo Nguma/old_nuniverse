@@ -1,4 +1,6 @@
 class FactsController < ApplicationController
+	
+	after_filter :store_location, :only => [:show]
   # GET /facts
   # GET /facts.xml
   def index
@@ -13,7 +15,7 @@ class FactsController < ApplicationController
   # GET /facts/1
   # GET /facts/1.xml
   def show
-    @fact = Fact.find(params[:id])
+    @source = @fact = Fact.find(params[:id])
 
 		@suggestions = Nuniverse.search( @fact.body, :match_mode => :any)
 
@@ -43,14 +45,14 @@ class FactsController < ApplicationController
   # POST /facts.xml
   def create
     @fact = Fact.new(params[:fact])
-		@subject = params[:subject][:type].classify.constantize.find(params[:subject][:id])
+		@source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  current_user
 		
 
     respond_to do |format|
       if @fact.save
-				@fact.connections << Polyco.new(:subject => @subject, :object => @fact)
+				@source.facts << @fact
         flash[:notice] = 'Fact was successfully created.'
-        format.html { redirect_to(@fact) }
+        format.html { redirect_to polymorphic_url(@source, :klass => "Fact") }
         format.xml  { render :xml => @fact, :status => :created, :location => @fact }
       else
         format.html { render :action => "new" }

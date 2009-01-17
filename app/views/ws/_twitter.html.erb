@@ -1,20 +1,13 @@
 <dl class="connections">
   <% unless tweets.empty? -%>
     <% tweets.each do |tweet| -%>
-      <dd class="connection <%= cycle('even', 'odd') %>" style="height:auto">
-        
-        <div class="manage">
-          <%= link_to(image_tag("/images/icons/plus.png"),"/taggings/create",:title => "Bookmark", :class => "bookmark") %>
-        </div>
-        <%= link_to(image_tag(tweet.user.profile_image_url),"#",:class => 'image')%>
-        <h3><%= tweet.user.screen_name %></h3>
-        <p><%= tweet.text %></p>
-        <div class="data hidden">
-          <% form_tag '/taggings/create' do -%>
-            <%= hidden_field_tag :path, path %>
-            <%= hidden_field_tag :content, "#tweet #{tweet.id} #name #{tweet.user.screen_name} #description #{tweet.text} #service twitter"   %>
-          <% end -%>
-        </div>
+      <dd class="step connection <%= cycle('even', 'odd') %>" style="height:auto">
+       
+        <%= image_tag tweet.user.profile_image_url, :class => "thumbnail"%>
+      
+        <span style="font-size:15px"><%= tweet.user.screen_name %></span>
+        <%= tweet.text %>
+        <%= clear%>
       </dd>
     <% end -%>
   <% end -%>

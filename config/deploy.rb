@@ -142,7 +142,7 @@ end
 
 namespace :mongrel do 
 	task :restart, :roles => :app do
-	    restart_sphinx
+	    
 	    stop
 			start
 	end

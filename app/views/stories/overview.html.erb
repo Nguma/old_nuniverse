@@ -1,0 +1,25 @@
+<%= render :partial => "hat" %>
+
+<% nuniverse do -%>
+  <%= render :partial => "/stories/menu"%>
+  <%= clear %>
+  
+  
+  <div id="right-column">
+    <div id='contextual-content' style="background:#FFF;position:absolute;z-index:87654;height:400px;width:320px;left:-100px;top:0;padding:10px;display:none"> h</div>
+     <div class="step">This conversation is public. <%= link_to "Make private", "#" %></div>
+     <%= render :partial => "/stories/connections"%>
+     <%= render :partial => "/stories/people"%>
+     <%= render :partial => "/stories/location"%>
+     <div class="step">
+       <h3>When...</h3>
+
+     </div>
+     <div class="step">
+       <%= link_to('Destroy that story', @story, :confirm => 'Are you sure?', :method => :delete) if @story.author == current_user%>
+     </div>
+   </div>
+   <div id="left-column" style="margin:0 320px 0 0">
+     <%= render :partial => "/stories/comments"%>
+   </div>
+<% end -%>

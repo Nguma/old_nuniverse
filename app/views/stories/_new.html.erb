@@ -1,16 +1,15 @@
-<% @new_story = Story.new(:author_id => current_user.id, :parent => @story) -%>
-
-
-<% form_for @new_story, :html => {:id => "new_story_form", :class => "hidden"}  do |f| %>
+<% @new_story = Story.new(:author => current_user)%>
+<% form_for @new_story, :url => {:controller => "stories"}  do |f| %>
   
-  <%= f.text_field :name %><%= f.submit "Create" %><br/>
-  <%#= f.check_box :is_private %> Make it private
-  <%= f.hidden_field :parent_id %>
+  <%= f.text_area :name, :rows => 2, :cols => 100 , :id => "input-note-body"%>
+  <%= submit_tag "", :id => "input-note-submit" %>
+  <%#= f.check_box :is_private %>
+   <% fields_for :subject, @source do |s| -%>
+      <%= s.hidden_field :id %>
+      <%= s.hidden_field :type %>
+    <% end -%>
   <%= f.hidden_field :author_id %>
   
-  <% fields_for :context, @source do |c| %>
-    <%= c.hidden_field :id %>
-    <%= c.hidden_field :type %>
-  <% end -%>
+  
 
 <% end %>

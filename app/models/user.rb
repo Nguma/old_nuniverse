@@ -34,13 +34,14 @@ class User < ActiveRecord::Base
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :first_name, :last_name, :password, :password_confirmation
 
-
+	has_many :connecteds, :as => :subject, :class_name => "Polyco"
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :stories, :through => :connections, :source => :subject, :source_type => 'Story'
 	has_many :story_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.subject_type = 'Story'"
 	has_many :nuniverse_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Nuniverse'"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
+	has_many :facts, :through => :connecteds, :source => :object, :source_type => "Fact"
 
 	alias_attribute :name, :login
 

@@ -1,0 +1,19 @@
+<h2><%#= @comment.body %></h2>
+
+<% @comment.subjects.each do |subject| %>
+  
+  <div class="step">
+  <%= thumbnail_tag subject %>
+  <%= link_to subject.name, polymorphic_url(subject)%>
+  <p><%= subject.description%></p>
+  <p><%= subject.bookmarks.first.url rescue nil %></p>
+  <dl class="fact-sheet">
+    <dt>Quick Facts</dt>
+    <% subject.facts.paginate(:page => 1, :per_page => 5).each do |fact| %>
+      <dd class="step">
+        <%= fact.body %>
+      </dd>
+    <% end -%>
+  </dl>
+  </div>
+<% end -%>

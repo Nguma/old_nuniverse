@@ -1,10 +1,10 @@
-
-<div id="sign_up" style="padding:40px">
-  <div class="header">
-    <%= image_tag("/images/icons/logo_nuniverse.png") %>
-  </div>
+<div id="hat">
+  <%= image_tag("/images/icons/logo-nuniverse-2009.png")%>
+</div>
+<div id="sign_up" style="padding:10px 40px 40px 40px">
+  <h1>Signing up, Basics</h1>
   <% if (error_messages_for :user).blank? %>
-    <h1>Signing up, Basics</h1>
+    
     <h4>Three quick and easy steps.</h4>
   <% else -%>
     <%= error_messages_for :user, :header_message => "Wait a minute...", :message => ""%>
@@ -24,4 +24,5 @@
   
     <%= submit_tag 'Sign up' , :class => 'submit'%>
     <% end -%>
+    <%= link_to "Cancel", "/" %>
 </div>

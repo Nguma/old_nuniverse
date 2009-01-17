@@ -5,11 +5,10 @@ class ImagesController < ApplicationController
   end
   
   def create
-	
-    if @image = Image.create!(:source_url => params[:source_url].blank? ? nil : params[:source_url], :uploaded_data => params[:uploaded_data])
-			@tag = @image.tag
-			Connection.find_or_create(:object_id => params[:object], :subject_id => @image.tag_id)
-			Connection.find_or_create(:subject_id => params[:object], :object_id => @image.tag_id)
+		@source = params[:source][:type].classify.constantize.find(params[:source][:id])
+		begin
+			@source.images << Image.create!(params[:image])
+		rescue
 		end
 		
 		respond_to do |f|

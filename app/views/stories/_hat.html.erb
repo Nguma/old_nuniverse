@@ -1,8 +1,5 @@
-<div id="hat">
-  <%= thumbnail_tag @context if @context %>
-  <%= thumbnail_tag @source %>
-  
-  <h1><%= @context.name.capitalize %>: <%= @source.name.capitalize %></h1>
+<div id="hat" style="padding:20px 40px 20px 40px">
+  <h1><%= @source.name.capitalize %></h1>
   Started by <%= link_to @story.author.name.capitalize, @story.author %>
-  <div class="delimiter"></div>
+  <%= clear %>
 </div>

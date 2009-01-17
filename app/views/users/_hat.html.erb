@@ -1,1 +1,19 @@
-
+<div id="hat" > 
+    <%= thumbnail_tag @source, :size => :small %>
+    <%= thumbnail_tag @context, :size => :small if @context %>
+    <% if @source == current_user  -%>
+      <% if @context.nil? %>
+        <h1><%= @source.name.capitalize %></h1>
+        <h2>this is your nuniverse.</h2>
+      <% else -%>
+        <h1><span style="color:#FFF"><%= @source.name.capitalize %></span> <%= @context.name %></h1>
+      <% end -%>
+     
+    <% else -%>
+     <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
+    <% end -%> 
+    <% unless @filter.blank? -%>
+      <h2>Showing all <%= link_to @filter, @source, :class => "filter" %> 
+    <% end -%>
+  <div style="clear:left"></div>
+</div>

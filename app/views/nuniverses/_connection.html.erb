@@ -1,23 +1,17 @@
-<div class ="connection <%= connection.subject.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>">
-  <span class="klass" style="line-height:0"><%#= connection.subject.class.to_s %></span>
+<div class ="step connection <%= connection.subject.class.to_s.downcase %>-connection " style="padding:10px">
+  
   <%= thumbnail_tag(connection.subject, :size => @size)  %>
-  <div class="star-rating" >
-    <%  5.times do |time| %>
-    <%= link_to image_tag("/images/icons/empty.png"), "/polycos/rate/#{connection.id}?score=#{time+1}", :class => "star #{connection.score > time ? "on_#{connection.score.ceil.to_s[0,1]}" : ""}" %>
-    <% end -%>
-  </div>
-  <p class="description">
-    <%= render_connection_description(connection) %>
-  </p>
+  <%= link_to connection.subject.name, polymorphic_url(connection.subject) %>
+  <p><%= connection.subject.locations.first.full_address rescue ""%></p>
+  <p><%= connection.subject.facts[0..2].collect {|c| c.body.capitalize}.join("<br/>") rescue ""%></p>
+  
+    <%#= render_connection_description(connection) %>
+
   
   <%= link_to "Edit this connection", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection)%>
-  <% if current_user == @source -%>
-    <%= link_to "Remove from your nuniverse", polymorphic_url(connection), :method => :delete, :class => "edit_lnk" unless authorized_to_edit?(connection)%>
-  <% else -%>
-    <%= link_to "Add to your nuniverse", edit_polyco_url(connection), :class => "edit_lnk" unless authorized_to_edit?(connection)%>
-  <% end -%>
+ 
   
   <%= link_to "x remove", polymorphic_url(connection), :method => :delete, :class => "edit_lnk" if current_user.role == "admin"%>
 
-  <div class="delimiter"></div>
+  <%= clear %>
 </div>

@@ -3,6 +3,7 @@ class StoriesController < ApplicationController
 	before_filter :find_story, :except => [:new, :create, :index]
 	before_filter :find_context, :except => [:index]
 	after_filter :store_location, :only => [:show]
+	before_filter :update_session, :only => [:show]
 	
 	
   # GET /stories
@@ -22,24 +23,31 @@ class StoriesController < ApplicationController
   def show
 	
 		@source = @story
-		@klass = 'nuniverse'
-
-			@connections = @source.connections.with_score
-
 		
-		case params[:order]
-		when "by_latest"
-			@connections = @connections.order_by_date
-		when "by_name"
-			@connections = @connections.order_by_name
+	
+		if !@klass
+			params[:order] = "by_latest"
+			@connections = 	@story.comments.paginate(:page => params[:page], :per_page => 20, :order => "updated_at DESC")
+			render :action => "overview"
+			
 		else
-			@connections = @connections.order_by_score(@perspective)
+			@connections = @source.connections.of_klass(@klass)
+			@tags = @connections.gather_tags
+			case params[:order]
+			when "by_latest"
+				@connections = @connections.order_by_date.with_score
+			when "by_name"
+				@connections = @connections.order_by_name.with_score
+			else
+				@connections = @connections.order_by_score(@perspective).with_score
+			end
+
+			@connections = @connections.sphinx(nil, :conditions => {:context_ids => @context.id}, :per_page => 2000) if @context
+			@connections = @connections.sphinx(params[:filter], :page => 1, :per_page => 3000) if params[:filter]
+				@connections = @connections.paginate(:per_page => 20, :page => params[:page])
 		end
 		
-		@connections = @connections.sphinx(nil, :conditions => {:context_ids => @context.id}, :per_page => 2000) if @context
-		@connections = @connections.paginate(:per_page => 20, :page => params[:page])
 		
-
     respond_to do |format|
       format.html { }
       format.xml  { render :xml => @story }
@@ -66,13 +74,16 @@ class StoriesController < ApplicationController
   # POST /stories.xml
   def create
 		params[:active] = 1
-    @story = Story.new(params[:story])
+		@story = Story.new(params[:story])
+		@subject = params[:subject][:type].classify.constantize.find(params[:subject][:id]) rescue  nil
 		
+
     respond_to do |format|
       if @story.save
-				Polyco.create(:subject => @story, :object => @context, :state => "active")
+				@story.connections << Polyco.new(:subject => @story, :object =>@subject , :state => "active") if @subject
+   
         # flash[:notice] = 'Story was successfully created.'
-        format.html { redirect_to polymorphic_url(@context, :context => @story.id) }
+        format.html { redirect_to polymorphic_url(@story) }
         format.xml  { render :xml => @story, :status => :created, :location => @story }
       else
         format.html { render :action => "new" }
@@ -144,7 +155,20 @@ class StoriesController < ApplicationController
 	def suggest
 		
 		@suggestions = Nuniverse.search(params[:subject][:name]).paginate(:page => 1, :per_page => 5)
+	end
+	
+	def share
+		emails = params[:emails].split(/\,|\;/)
+		@users = []
+		emails.each do |email|
+			@users << User.find(:first, :conditions => ['email = ? OR login = ?', email, email])
+		end
 		
+		@story.users << @users
+		respond_to do |format|
+			format.html {}
+			format.js {}
+		end
 	end
 
   # DELETE /stories/1

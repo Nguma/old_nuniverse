@@ -67,7 +67,8 @@ class ApplicationController < ActionController::Base
 	def update_session
 		@display = session[:display] = params[:display] ? params[:display] : (!session[:display].nil? ? session[:display] : "cards")
 		@order = session[:order] = params[:order] ? params[:order] : (!session[:order].nil? ? session[:order] : "by_latest")
-		@klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
+		# @klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
+		@klass = params[:klass]
 		
 		@size = (@display == "image") ? :large : :small
 		
@@ -107,6 +108,28 @@ class ApplicationController < ActionController::Base
 			Finder::Search.find(:query => query, :service => 'twitter')
 		else
 			
+		end
+	end
+	
+	def connect_to_object(subject)
+		return nil if !params[:object]
+		@object = params[:object][:type].classify.constantize.find(params[:object][:id])
+		Polyco.create(:subject => subject, :object => @object, :state => 'active') unless @object.nil?
+	end
+	
+	
+	def wikipedit(bookmark)
+		urlscan = bookmark.scan(/((https?:\/\/)?[a-z0-9\-\_]+\.{1}([a-z0-9\-\_]+\.[a-z]{2,5})\S*)/ix)[0]
+		
+		doc = Hpricot open bookmark
+		
+		if urlscan[2] == "wikipedia.org"
+			@lat = (doc/"span[@class=geo-default]"/"span[@class=latitude]").first.inner_html
+			@lng = (doc/"span[@class=geo-default]"/"span[@class=latitude]").first.inner_html
+			@description = (doc/"#bodyContent"/:p)[1].inner_html
+			raise @description.inspect
+		else
+			return Bookmark.new(:name => bookmark, :url => bookmark)
 		end
 	end
 

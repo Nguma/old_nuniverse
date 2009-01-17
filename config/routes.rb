@@ -69,7 +69,9 @@ ActionController::Routing::Routes.draw do |map|
 	# map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"
 	
-
+	map.suggest "/suggest-a-nuniverse", :controller => "nuniverses", :action => "suggest"
+	
+	map.share_story "/share-story/:id", :controller => "stories", :action => "share"
 
 	
 	# map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"

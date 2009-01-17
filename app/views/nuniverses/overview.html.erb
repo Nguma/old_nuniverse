@@ -1,0 +1,36 @@
+<%= render :partial => "hat" %>
+<% nuniverse do -%>
+  <div id="right-column">
+  </div>
+  <div id="left-column">
+     <div class="step">
+        <h3>Quick Facts </h3>
+        <% @source.facts.paginate(:page =>1, :per_page => 4).each do |f| %>
+          <%= render_fact(f) %><br/>
+        <% end -%>
+        <span style="font-size:15px;font-weight:normal"><%= link_to "See all", nuniverse_url(@source, :klass => "Fact") %> <%= link_to "Add a fact", "#"%></span>
+      </div>
+      <div class="step">
+        <h3>Bookmarks</h3>
+        <% @source.bookmarks.paginate(:page =>1, :per_page => 4).each do |b| %>
+          <%= link_to b.name, b.url %><br/>
+        <% end -%>
+        <span style="font-size:15px;font-weight:normal"><%= link_to "See all", "#" %> <%= link_to "Add a bookmark", "#"%></span>
+      </div>
+      
+
+        <div class="step">
+          <% @images = @source.images.paginate(:page =>1, :per_page => 5) %>
+          <h3>Images</h3><span style="font-size:15px;font-weight:normal"><%= link_to "See all", "#" %> <%= link_to "Add a fact", "#"%></span>
+          <%= will_paginate @images %>
+          <% @images.each do |img| %>
+            <%= thumbnail_tag img %>
+          <% end -%>
+          <%= clear %>
+    
+          
+          
+        </div>
+  </div>
+
+<% end -%>

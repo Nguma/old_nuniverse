@@ -1,19 +1,8 @@
-  <%= link_to "Add an image", "#", :class => "expand_lnk", :id => "expand_connect_image_form" %>
-  
-  <% @new_polyco = Polyco.new(:object => @source, :subject => Image.new)  %>
-  <% form_for @new_polyco, :html => {:multipart => true , :id => "connect_image_form" } do |f| -%>
-  <% fields_for :object, @source do |o| -%>
-     <%= o.hidden_field :id %>
-     <%= o.hidden_field :type %>
-   <% end -%>
-    <%= f.hidden_field :subject_type %>
-    <% fields_for(:subject) do |s| %>   
-      
-      <%= s.text_field :source_url, :id => "input_image", :autocomplete => "off"%><br/>
+
+  <% form_for :image, :url => {:controller => "images"}, :html => {:multipart => true , :id => "connect_image_form" } do |f| -%>
+    <%= fields_for_source %>
+    <%= f.text_field :source_url, :id => "input_image", :autocomplete => "off"%><br/>
       .. or upload a file from your computer<br/>
-      <%= s.file_field :uploaded_data %>
-    <% end -%>
-    <%#= f.check_box :is_private %>
-    <%= submit_tag "Upload" %>
+    <%= f.file_field :uploaded_data %>
+    <%= f.submit "Upload" %>
   <% end -%>
-  <%= clear %>

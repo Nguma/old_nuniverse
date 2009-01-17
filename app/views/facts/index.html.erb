@@ -1,18 +1,12 @@
-<h1>Listing facts</h1>
+<div id="hat"><h1>Listing facts</h1></div>
 
-<table>
-  <tr>
-  </tr>
+<div style="padding:40px">
+  <% @facts.each do |fact|%>
+    <div class="step">
+    <%= thumbnail_tag fact.subjects.first %><%= link_to fact.body, fact_url(fact) , :style => "color:#666;font-size:30px"%><%= link_to 'Edit', edit_fact_path(fact) %>
+    </div>
+  <% end -%>
+</div>
 
-<% for fact in @facts %>
-  <tr>
-    <td><%= link_to 'Show', fact %></td>
-    <td><%= link_to 'Edit', edit_fact_path(fact) %></td>
-    <td><%= link_to 'Destroy', fact, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
 
 <%= link_to 'New fact', new_fact_path %>

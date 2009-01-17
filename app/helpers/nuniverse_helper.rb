@@ -232,7 +232,7 @@ module NuniverseHelper
 	end
 	
 	def home_link 
-		str = link_to "< Back to your nuniverse", home_url, :class => "home_lnk"
+		str = link_to "< Back to your nuniverse", home_url(:klass => "Story"), :class => "home_lnk"
 		# str << link_to("< Back to previous", session[:return_to])
 		str
 	end

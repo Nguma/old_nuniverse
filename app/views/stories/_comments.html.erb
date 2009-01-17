@@ -1,0 +1,24 @@
+
+<div class="step"  style="padding:10px 40px 0 40px" id="new-note-step">
+  <h3 style="padding:0 0 0 10px;font-size:16px;font-weight:bold">Add your note</h3>
+  <%= render :partial => "/comments/new", :locals => {:params => {:behavior => ""}}%>
+  <dl class="suggestions" id='suggestions'></dl>
+</div>
+<div class="step">
+  <%= will_paginate @connections unless @connections.empty?%>
+  <%= clear %>
+</div>
+<% @connections.each do |comment| -%>
+      <div class="step connection" src="<%= comment_url(comment) %>">
+        <%= thumbnail_tag comment.author %>
+        <span style="font-size:14px;font-weight:bold"><%= link_to comment.author.name.capitalize , comment.author %></span><span style="font-size:14px">, <%= comment.created_at.strftime("%h %m %y %H:%M")%></span><br/>
+        <%= render_comment(comment) %>
+        <div class="actions" style="font-size:12px">
+            <%= link_to "x remove", comment_url(comment), :method => :delete, :class => "edit_lnk" if current_user.role == "admin"%>
+        </div>
+        <%# @title = @title.gsub(connection.subject.name, link_to(connection.subject.name, connection.subject) ) %>
+        <%= clear %>
+      </div>
+    <% end -%>
+
+</div>

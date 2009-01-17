@@ -1,4 +1,4 @@
-<div class ="connection <%= connection.subject.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>">
+<div class ="step connection <%= connection.subject.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>">
   <span class="klass" style="line-height:0"><%#= connection.subject.class.to_s %></span>
   <%= thumbnail_tag(connection.subject, :size => @size)  %>
   <div class="star-rating" >

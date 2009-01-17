@@ -1,18 +1,15 @@
-<% form_tag "/locations/find"  do -%>
-  <h2>Add a Location</h2>
-  <fieldset>
-    <%= hidden_field_tag "id", @tag.id %>
-    <%= hidden_field_tag "kind", "address" -%>
-    <label>Name your location</label><br/>
-    <%= text_field_tag "name", "", :class => "input",  :autocomplete => "off", :id => "input_location" %><br/>
-    <label>Add an Address (optional)</label><br/>
-    <%= text_field_tag "name", "", :class => "input",  :autocomplete => "off", :id => "input_location" %>
+<% form_for :location, :url => {:controller => "locations"}  do |f| -%>
+  <h3>Add an address</h3>
+  
+    <%= hidden_field_tag "id", @source.id %>
+    <%= f.text_field "name",  :autocomplete => "off", :id => "input_address", :style => "display:inline;float:none;width:260px" %>
     
-    <div class="delimiter" style="margin: 0 0 5px 0">&nbsp;</div>
+    <%= clear %>
+    <fieldset>
   </fieldset>
   
-  <div class="suggestions" style="width:100%;display:block"></div>
+  <div class="suggestions" id="suggestions" style="width:100%;display:block"></div>
   
-  <%= submit_tag "Add" %>
+  <%= f.submit "Add" %>
   <div class="delimiter">&nbsp;</div>
 <% end -%>

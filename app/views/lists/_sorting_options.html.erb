@@ -1,8 +1,8 @@
 
-<div id="sorting-options" style="" class="hidden">
+<div id="sorting-options" style="" >
     <% options.each do |option| -%>
 
-          <%= link_to("By #{option[0]}", polymorphic_url(@source, :order => option[1], :display => @display, :klass => @klass.capitalize, :page => 1) , :class => "tab #{@order == option[1] ? 'current' : ''} ") %>
+          <%= link_to("By #{option[0]}", polymorphic_url(@source, :order => option[1], :display => @display, :klass => @klass, :page => 1) , :class => "tab #{@order == option[1] ? 'current' : ''} ") %>
 
       <% end -%>
 </div>

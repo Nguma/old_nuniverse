@@ -1,0 +1,10 @@
+ <div class="step">
+   <h3>Who's involved?</h3>
+   <% @story.users.each do |user| %>
+     <%= user.name %>
+   <% end -%>
+   <%= link_to "Invite someone else", "#", :class => "expand_lnk", :id => "expand_share_form_lnk"%>
+   <% form_tag "/share-story/#{@source.id}", :id => "share_form", :class => "hidden" do -%>
+     <%= text_field_tag :emails %><%= submit_tag "Invite"%>
+   <% end -%>
+ </div>

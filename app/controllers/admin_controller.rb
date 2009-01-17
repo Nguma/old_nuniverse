@@ -20,28 +20,60 @@ class AdminController < ApplicationController
 		@permissions = Permission.find(:all).paginate(:page => @page, :per_page => 10)	
 	end
 	
-	def scrap
-		@origin = Tag.find(params[:id])
-		@url = params[:url]
-		doc = Hpricot open @url
-		@list = (doc/:table/:tr)
-		@list.each do |row|
-			col_length = (row/:td).length
-			if col_length == 2
+	
+	def scrap_wikipedia
+		@fruits = Nuniverse.find(:all, :conditions => {:id => 7..54})
+		@fruit = Nuniverse.find(2543)
+		@fruit.nuniverses << @fruits
+	end
+	
+	def scrap_dbpedia 
+		@museum = Nuniverse.find_by_unique_name("museum")
+		@manhattan = Nuniverse.find_by_unique_name("manhattan")
+		
+		@rsts.each do |rst|
+			name = rst[0].gsub('_',' ')
+			n = Nuniverse.create(:unique_name => "#{rst[0].gsub('_','-')}", :name => name) 
+			n.images << Image.create(:source_url => rst[2]) rescue nil
+			n.locations << Location.create(:name => name, :latlng => rst[1])
+			@museum.nuniverses << n
+			n.nuniverses << @manhattan
+			@manhattan.nuniverses << n
+		end
+		
+	end
+	
+	def scrap_ikea
+		@ikea = Nuniverse.find(6262)
+		@url = "http://www.ikea.com/us/en/catalog/productsaz/"
+		
+		23.times do |time|
+			t = time+2
+		doc = Hpricot open "#{@url}#{t}"
+	
+		
+		(doc/:span/:a).each do |lnk|
 			
-				img = (row/:td/:img)
-				title = (row/:td/:b/:i).innerHTML.gsub(/\.$/,'')
-				description = (row/:td)[1].innerHTML
-				t = Tag.new(:name => title, :kind => "painting", :description => description)
-				image_url = [@url.gsub(/http\:\/\/www.abcgallery.com\/(\w)\/(\w+)\/.*/,'http://www.join2day.net/abc/\1/\2/'), img[0].attributes['src'].gsub(/s(.*)\.jpg/,'\1.JPG') ].join('')
-				t.save
-				t.add_image(:source_url => image_url) rescue nil
-				t.tag_with(['painting'],:context => @origin.id)
-				@origin.tag_with(['painter'],:context => t.id)
+			ikea = lnk.attributes['href'].scan(/(\/products\/(\w+))/)[0]
+			unless ikea.nil? || ikea[1].nil?
+				n = Nuniverse.find_by_unique_name("ikea-#{ikea[1]}")
+				if n.nil?
+
+					lnkdoc = Hpricot open "http://www.ikea.com#{lnk.attributes['href']}"
+					
+					
+					n = Nuniverse.create(:active =>1 ,:unique_name => "ikea-#{ikea[1]}", :name => lnkdoc.at("#productName").inner_html.titleize, :description => lnkdoc.at("#productType").inner_html )
+					n.bookmarks << Bookmark.create(:name => "#{n.name} at Ikea", :url => ikea[0])
+					n.images << Image.create(:source_url => "http://www.ikea.com/#{lnkdoc.at("#productImg").attributes['src']}")
+					n.tags << Tag.find_or_create(:name => n.description)
+					
+				end
+				@ikea.nuniverses << n if n
 				
 			end
-				
 		end
+	end
+		
 	end
 	
 	def ct 
@@ -91,24 +123,36 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
-		@ns = Nuniverse.find(:all, :conditions => "id >= 4436 AND id <= 5738")
-		@ns.each do |n|
-			n.taggings << Tagging.new(:predicate => "comic character")
-		
-		end
-		render :nothing => true
-		
+		wikipedit("http://en.wikipedia.org/wiki/Solomon_R._Guggenheim_Museum")
 	end
 	
 	def test
-		@taggings = Tagging.find(:all)
-		@taggings.each do |tagging|
-			t = Tag.find(:first, :conditions => ["name = ?",tagging.predicate])
-			t = Tag.create(:name => tagging.predicate) if t.nil?
-			tagging.tag_id = t.id
-			tagging.save
-		end
+		@images = []
+		@comment = params[:url]
+		urlscan = @comment.scan(/((https?:\/\/)?[a-z0-9]+[-.]{1}([a-z0-9]+\.[a-z]{2,5})\S*)/ix)[0]
+		@output = Bookmark.new
+		unless urlscan.nil?
+			url ||= "#{urlscan[1].nil? ? "http://" : nil}#{urlscan[0]}"
 
+			begin
+				doc = Hpricot open url
+				@output.name = (doc/:title).inner_html rescue "#{urlscan[2]} page"
+				@output.url = url
+				@output.description = (doc/"meta[@name=description]").first.attributes['content'] rescue ""
+			
+				(doc/:img).each do |img|
+					if img.attributes['height'].to_i >= 50
+						img.attributes['src'] = "#{url}/#{img.attributes['src']}" unless img.attributes['src'].match(/^http/)
+						@images <<  img  unless !img.attributes['src'].match(/(\.)(jpg|png)$/)
+					end
+				end
+				@output.images << Image.create(:source_url => @images.first.attributes['src']) 
+			rescue
+			
+			end
+			
+		end
+		
 	end
 	
 	

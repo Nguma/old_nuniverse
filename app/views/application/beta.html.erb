@@ -1,40 +1,35 @@
+<div id="hat">
+  <%= image_tag("/images/icons/logo-nuniverse-2009.png") %>
+  
+</div>
 
-    <div class="header">
-      <%= image_tag("/images/icons/nuniverse_logo.png") %>
-    </div>
-    <h1>2009 has arrived.</h1>
-    <h2>Happy new year to everyone. The prototype is getting some new clothes, hence the delay in accepting new accounts. </h2>
-    
-    <dl>
-      
-      <dt style="font-weight:bold;margin:10px 0 0 0">Few Features to be counted on for the prototype:</dt>
-      <dd>Your own lists of connections.<br/><span style="font-size:14px">Create and organize your connections under one topic of interest or your custom categories.</span></dd>
-      
-      <dd>Story of you connections.<br/><span style="font-size:14px">Each connection can have its own piece of story, which makes it easy to "break" an indigest text into bit-sized facts.</span></dd>
-      <dd>Privacy Management.<br/><span style="font-size:14px">Decide what's to share and what's to be kept private in your nuniverse.</span></dd>
-      
-      </dl>
-    <br/>
+<div style="padding:10px 40px 0 40px" style="">
 
+    <h1><span style="font-size:50px">Our world is made of complex stories.</span><br/>
+    We help you turn them into simple facts,
+    and remember the essential. <%= link_to("Learn how","/about", :style=>"color:#369") %></h1>
+ 
     
-    <div class="relative;clear:both" >
-      <% form_tag "/sessions/create" do -%>
+    <div style="position:relative;clear:both;margin:20px 0 0 0;padding: 0 0 20px 0" >
+      
       <div style="position:relative;float:left">
-      <%= label_tag 'login' %><br />
-      <%= text_field_tag 'login', @login , :style => "padding:3px"%>
+        <% form_tag "/sessions/create", :style => "background:transparent url('/images/backgrounds/glass-window.png') 0 0 no-repeat; padding:20px;width:220px" do -%>
+          <%= text_field_tag 'login', @login , :style => "padding:3px;width:195px"%><br/>
+       
+          <%= password_field_tag 'password', nil, :style => "padding:3px;width:195px" %><br/>
+          <%= submit_tag 'Log in', :style => "padding:3px;font-size:20px;font-weight:bold;color:#369;margin:0;background:none;border:none" %>
+        <% end -%>
       </div>
-      <div style="position:relative;float:left">
-      <%= label_tag 'password' %><br/>
-      <%= password_field_tag 'password', nil, :style => "padding:3px" %>
+      <div style="position:relative;float:left;margin:0 0 0 10px">
+         <h2>You don't have your nuniverse yet?</h2><%= link_to("Sign up for an account.", "/signup", :style=>"color:#369;font-size:30px") %>
+         <h2>Or if you prefer to wander a bit, go ahead.
+      
       </div>
-      <div style="position:relative;float:left">
-      <br/>
-      <%= submit_tag 'Log in', :style => "padding:4px;font-size:20px;font-weight:bold;color:#333;margin:0" %>
-      </div>
-      <% end -%>
+     
+      
     </div>
    
-    <div class="delimiter" style="clear:both">&nbsp;</div>
-    <h3>If you interested, <%= link_to("register for an account", "/signup", :style=>"color:#1A9") %> to be on our beta guest list.</h3>
-    <h2><%= link_to("More info about nuniverse","/about", :style=>"color:#1A9") %></h2>
-     
+    
+   
+    <h2></h2>
+</div>

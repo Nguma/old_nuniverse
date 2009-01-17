@@ -64,14 +64,12 @@ module Finder
 
 	class Amazon
 		def initialize(params)
-			@query = params[:query]
-			@kind = params[:kind] || "All"
+			@params = params
 		end
 		
 		def results
 			Awsomo::Request.new(
-				:query => @query, 
-				:kind => @kind
+				@params
 				).response.items
 		end
 	end

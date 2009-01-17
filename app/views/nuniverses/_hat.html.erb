@@ -1,2 +1,18 @@
+<div id="hat" >
+  
+   <%= thumbnail_tag @source, :size => :small %>
+   <%= thumbnail_tag @context, :size => :small if @context %>
+    <h1><%= @source.name.capitalize %></h1>
+    <h3 style="color:#eee;font-weight:bold;margin:0 ;line-height:14px">#<%= @source.unique_name %></h3>
+    <%= clear%>
+    <h2>
+      
+      <%= @context.name.capitalize if @context%>
+      <%= "#{@filter.pluralize.capitalize}" unless @filter.nil?%>
+    </h2>
+   
+    <div style="clear:left"></div>
+    
 
+  </div>
 

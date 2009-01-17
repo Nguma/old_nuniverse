@@ -57,6 +57,8 @@ module Awsomo
 
 			req << "&SearchIndex=#{params[:search_index].capitalize}&ItemPage=#{params[:page] || 1}&Keywords=#{params[:query].gsub(' ','_')}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,ItemIds" if params[:query]
 			req << "&ItemId=#{params[:item_id]}&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,EditorialReview" if params[:item_id]
+			req << "&ListId=#{params[:list_id]}&ListType=Listmania&ResponseGroup=Images,ItemAttributes,Medium,SalesRank,EditorialReview" if params[:list_id]
+
 			req
 		end
 	end
@@ -77,14 +79,14 @@ module Awsomo
 			# parse xml response into Ruby Objects
 			items = []
 			xml_items(body).each do |item|
-				items << Tag.new(
-					:label => parse(item, "ItemAttributes/Title"),
-					:url => parse(item,"DetailPageURL"),
-					:kind => 'product',
-					:service => 'amazon',
+				items << {
+					:name => parse(item, "ItemAttributes/Title"),
 					:description => parse(item,"EditorialReviews//EditorialReview/Content"),
-					:data => "#tags #{parse(item, "ItemAttributes/Binding")} #price #{parse(item,"OfferSummary//FormattedPrice")} #thumbnail #{parse(item,"SmallImage/URL")} #image #{parse(item,"LargeImage/URL")} #amazon_id #{parse(item, "ASIN")}"
-					)
+					:price => parse(item,"OfferSummary//FormattedPrice"),
+					:image => parse(item,"LargeImage/URL")
+				}
+					
+
 			end
 			items
 		

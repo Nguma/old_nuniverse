@@ -12,10 +12,10 @@ module WsHelper
 		)
 	end
 	
-	def tweets_from_twitter(params)
-		tweets = Twitter::Client.new(:login => "nuniverse", :password => "abc123").timeline_for(:public)
+	def tweets_from_twitter(params = {})
+		tweets = Twitter::Client.new(:login => "nuniverse", :password => "abc123").timeline_for(:me)
 		return render(:partial => "/ws/twitter", 
-			:locals => { :tweets => tweets, :path => params[:path] }
+			:locals => { :tweets => tweets }
 		)
 	end
 	
@@ -24,15 +24,15 @@ module WsHelper
 		render :partial => "/nuniverse/amazon_box", :locals => {:source => params[:source], :items => items}
 	end
 	
-	def map(tag, params = {})
-		map = GMap.new("map_#{tag.id}","map_#{tag.id}")
+	def map(locations, params = {})
+		map = GMap.new("map_","map_")
 	  map.control_init(:small_zoom => true)
-		markers = markers_for(tag)
+		markers = markers_for(locations)
 		
 		return false if markers.empty?
-		map.center_zoom_init([markers[0].address.lat, markers[0].address.lng],12)
+		map.center_zoom_init([markers[0].lat, markers[0].lng],8)
 		markers.each do |marker|
-			map.overlay_init(GMarker.new([marker.address.lat,marker.address.lng],:title => marker.label.rstrip, :info_window => "<b>#{marker.label.rstrip}</b> <p style='font-size:11px'>#{marker.property('address')}</p>"))
+			map.overlay_init(GMarker.new([marker.lat,marker.lng],:title => marker.name.rstrip, :info_window => "<b>#{marker.name.rstrip}</b> <p style='font-size:11px'>#{marker.full_address}</p>"))
 		end
 		return map
 	end
@@ -40,7 +40,7 @@ module WsHelper
 	def markers_for(places)	
 		markers = []
 		places.to_a.each do |place|
-			if place.has_coordinates?
+			if place.is_a?(Location)
 					markers << place	
 			elsif place.has_address?
 					place.find_coordinates

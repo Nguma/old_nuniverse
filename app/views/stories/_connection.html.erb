@@ -1,0 +1,7 @@
+ <% story = connection.subject %>
+   <div class="step connection" >
+     <%= thumbnail_tag story.nuniverses.first rescue ""%>
+     <%= link_to story.name, story, :style => "font-weight:bold"%><p>by <%= link_to story.author.name, story.author %></p>
+     <p>This story is about <%= story.nuniverses.paginate(:per_page => 3, :page => 1).collect {|c| link_to c.name, c}.join(", ") %>, <%= link_to "more", story_url(story, :klass => "Nuniverse") %></p>
+     <%= clear %>
+   </div>

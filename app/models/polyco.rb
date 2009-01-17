@@ -3,7 +3,6 @@ class Polyco < ActiveRecord::Base
 	belongs_to :object, :polymorphic => true
 	
 	has_many :rankings, :as => :rankable
-	
 	has_many :taggings, :as => :taggable
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
@@ -72,8 +71,11 @@ class Polyco < ActiveRecord::Base
 	
 
 	named_scope :gather_tags, :select => "T.name AS name, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "name ASC"
-	
-	
+
+	named_scope :related_connections, lambda {|object|
+		object.nil? ? {} : { :joins => ["LEFT OUTER JOIN polycos P ON (P.subject_id = polycos.object_id AND P.subject_type = polycos.object_type AND P.object_id = #{object.id} AND P.object_type = '#{object.type}')" ], :conditions => ["P.id IS NOT NULL"]}
+		}  
+		
 	
 	def score
 		average_score.to_i || 0
@@ -93,7 +95,7 @@ class Polyco < ActiveRecord::Base
 	
 	def save_all
 		begin
-			twin.save if self.subject.is_a?(Nuniverse) # if !self.pending? 
+			twin.save if self.subject.is_a?(Nuniverse) && !self.object.is_a?(Story)# if !self.pending? 
 			self.save
 			true
 		rescue
@@ -104,6 +106,6 @@ class Polyco < ActiveRecord::Base
 	protected
 	
 	def update_state
-		self.make_active! unless !subject.active
+		self.make_active! #unless !subject.active
 	end
 end

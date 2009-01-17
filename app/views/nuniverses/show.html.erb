@@ -1,6 +1,9 @@
-<% nuniverse do -%>
+<%= render :partial => "hat" %>
 
-  <div id="right-column" style="top:100px">
+<% nuniverse do -%>
+  <%= render :partial => "/nuniverses/menu" %>
+  <%= clear %>
+  <div id="right-column" >
 
     <%= render :partial => "/nuniverses/information"%>
     
@@ -16,7 +19,7 @@
       </div>
     <% end -%>
     <div class="step" id="users-box">
-      Users connecteds to that nuniverse
+      <h5>Users connecteds to that nuniverse</h5>
       <% @source.users.each do |user| -%>
         <%= link_to(thumbnail_tag(user, :class => "icon"), user_url(user))%>
       <% end -%>
@@ -27,41 +30,49 @@
         <%= connect_link(:title => "connect with this nuniverse", :subject => @source, :object => current_user) %>
       <% end -%>
     </div>
-    <%= render :partial => "/nuniverse/menu"%>
+    
 
     <div class="step">
        <% @nuniverse.connections.gather_tags.each do |tag| -%>
-          <%= link_to "#{tag.counted} #{tag.name.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.name)  %><br/>
+          <%= link_to("#{tag.name.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.name), :style => "font-size:#{[(12+tag.counted.to_i),20].min}px")  %>
         <% end -%>
 
         <%#= render :partial => "/stories/new" %>
     </div>
+    <div class="step">
+      <% if @nuniverse.locations.empty? -%>
+        <%= render :partial => "/locations/new" %>
+      <% else -%>
+        <% @map = map(@nuniverse.locations) %>
+         <% if @map -%>
+            <% content_for :head do -%>
+              <%= GMap.header (:large_map => true, :with_vml => false) %>
+              <%= @map.to_html %>
+            <% end -%>
+            <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
+
+         <% end -%>
+      <% end -%>
+     
+    </div>
+       <% if current_user.role == "admin" %>
+       <div class="step" id="admin-board">
+          <%= link_to "Destroy that nuniverse", nuniverse_url(@source), :method => :delete %>
+        </div>
+        <% end -%>
   </div>
-  <div id="left-column">
-    <%= render :partial => "overview" %>
+  <div id="left-column" style="margin: 0 320px 0 0">
     
-     <% if @connections.empty? -%>
-       <div class="step" style="clear:left"  id="new-connection-step">
-         There is no <%= @klass.downcase.to_s %> connected to this nuniverse, yet. Time to make some connections!
-         <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
-          <dl class='suggestions'></dl>
-       </div>
-     <% else -%>
-       <%= render :partial => "/connections/connections", :locals => {:connections => @connections }%>
-       <div class="step" style="clear:left" id="new-connection-step">
-         <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
-         <dl class='suggestions'></dl>
-       </div>
-       
-      
-     <% end -%>
+    <% if !@klass%>
+      <%= render :partial => "/nuniverses/overview"%>
+    <% else -%>
+      <%= render :partial => "/nuniverses/#{@klass.downcase.pluralize}"%>
 
+    <% end -%>
 
-     <div id="content"  >
-     </div>
   </div>
   
  
     
-   <%= render :partial => "/nuniverses/main_menu"%>
+   <%#= render :partial => "/nuniverses/main_menu"%>
 <% end -%>

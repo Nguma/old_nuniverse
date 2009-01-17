@@ -134,13 +134,15 @@ class UsersController < ApplicationController
 		@user ||= current_user
 		
 		@source = @user
-		
+		render :action => :tutorial if (@user == current_user && @count == 0) || (current_user.role == "admin" && params[:tutorial])
+		render :action => :overview if @klass.nil?
+		@klass = "Story" if @klass == "Comment" || @klass == "Fact"
 		@connections = @user.connections.of_klass(@klass)
 		@count = @user.connections.count
 		@context = Story.find(params[:context]) rescue nil
 		@filter = params[:filter] || nil
 		
-		render :action => :tutorial if @user == current_user && @count == 0
+		
 	
 	
 		if @context
@@ -161,10 +163,9 @@ class UsersController < ApplicationController
 		
 		@connections = @connections.paginate(:page => params[:page] || 1)
 	
-		
 		respond_to do |format|
 			format.html {
-				@latest_stories = @user.connections.of_klass('Story').order_by_date.paginate(:page => 1, :per_page => 5)
+				# @latest_stories = @user.connections.of_klass('Story').order_by_date.paginate(:page => 1, :per_page => 5)
 		
 			}	
 			format.js { 

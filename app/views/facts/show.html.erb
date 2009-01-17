@@ -1,14 +1,25 @@
-<div >
+
+  <div id="hat">
   <% @title = @fact.body %>
+  <h1><%= @title %></h1>
+  </div>
+<div style="padding:0px">
+  
   <% @fact.connections.each do |connection| -%>
+  <div class="step" style="clear:left;padding:40px;border-bottom:solid 1px #ccc">
     <%= thumbnail_tag connection.subject %>
     <%= link_to connection.subject.name, connection.subject %>
     <% @title = @title.gsub(connection.subject.name, link_to(connection.subject.name, connection.subject) ) %>
+    <%= clear %>
+  </div>
+  
   <% end -%>
   
-  <h1><%= @title %></h1>
-  
-  <% @suggestions.each do |s| %>
-  <%= s.name %><br/>
-  <% end %>
+  <div class="step"  id="new-connection-step">
+  <h3>Want to add something?</h3>
+    <%= render :partial => "/nuniverses/new", :locals => {:params => {:behavior => ""}}%>
+    <dl class='suggestions'></dl>
+  </div>
 </div>
+
+<%= link_to 'Destroy', @fact, :confirm => 'Are you sure?', :method => :delete %>

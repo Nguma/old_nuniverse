@@ -1,0 +1,8 @@
+<%= render :partial => "hat" %>
+<div id="left-column">
+  <h3>This is what happened</h3>
+  <% @user.stories.paginate(:page => 1, :per_page => 3).each do |story| %>
+    <%= link_to story.name, story_url(story, :klass => nil) %>
+  <% end -%>
+  <%= link_to "See all", user_url(@user, :klass => "Story")%>
+</div>

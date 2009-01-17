@@ -15,9 +15,6 @@ class PolycosController < ApplicationController
 		# raise Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10).inspect
 		@suggestions = Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10)
 		@source = @polyco
-		
-		
-	
 	end
 	
 	def rate
@@ -33,7 +30,7 @@ class PolycosController < ApplicationController
 		@object = params[:object_type].classify.constantize.find(params[:object_id])
 		@subject = params[:subject_type].classify.constantize.find(params[:subject_id])
 		
-		
+	
 		
 		unless @object.nil? || @subject.nil?
 			@polyco = Polyco.find_or_create(:subject => @subject, :object => @object,:state => "active")
@@ -121,7 +118,7 @@ class PolycosController < ApplicationController
 		
     respond_to do |format|
       if @polyco.save_all
-        # flash[:notice] = 'Story was successfully created.'
+        flash[:notice] = 'Story was successfully created.'
 				
         format.html { 
 	redirect_back_or_default("/")
@@ -129,6 +126,7 @@ class PolycosController < ApplicationController
 				}
         format.xml  { render :xml => @story, :status => :created, :location => @story }
       else
+	 			flash[:notice] = 'Blaaaa eeee nooo connection.'
         format.html { 	redirect_back_or_default("/")}
         format.xml  { render :xml => @story.errors, :status => :unprocessable_entity }
       end
@@ -151,6 +149,7 @@ class PolycosController < ApplicationController
 	
 	
 	def suggest
+		
 		@object = params[:object][:type].classify.constantize.find(params[:object][:id])
 		@suggestions = ThinkingSphinx::Search.search(:conditions => {:name => "#{params[:subject][:name]}"}, :with => {:active => 1}, :classes => [User,Nuniverse])
 		respond_to do |format|

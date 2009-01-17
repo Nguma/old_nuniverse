@@ -1,10 +1,8 @@
-<% form_tag "/comments/create" do -%>
-    <h2>Post a note</h2>
-    <fieldset>
-    <%= hidden_field_tag "object", @tag.id %>
-    <%= hidden_field_tag "kinds", "" %>
-    <%= text_area_tag "body", "",  :rows => 3, :style => "min-width:520px;display:block;background:#FFF", :autocomplete => "off"%>
-    </fieldset>
-    <div class="delimiter">&nbsp;</div>
-    <%= link_to image_tag('/images/icons/add_button.png'), "/comments/create", :class => "trigger", :mode => "comment"  %>
-  <% end -%>   
+<% new_comment = Comment.new(:author => current_user, :parent => @source)%>
+<% form_for :comment, new_comment, :url => {:controller => "comments"} do |f| -%>
+  <%= f.hidden_field :user_id %>
+  <%= f.hidden_field :parent_id %>
+  <%= f.hidden_field :parent_type %>
+  <%= f.text_area :body , :rows => 2, :cols => 70, :id => "input-note-body"%>
+  <%= submit_tag "", :id => "input-note-submit"%>
+<% end -%>

@@ -1,4 +1,4 @@
 <div id="content">
-  <h2><span style="font-style:italic">"<%= @comment.body %>"</span><span style="font-size:16px;color:#999"> - <%= link_to_item(@comment.author) %></span></h2>
+  <h2><span style="font-style:italic">"<%= @comment.body %>"</span><span style="font-size:16px;color:#999"> - <%= user_url(@comment.author) %></span></h2>
   <%= link_to "Reply"%>
 </div>
