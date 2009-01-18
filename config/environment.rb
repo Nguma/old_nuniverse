@@ -67,7 +67,6 @@ end
 #require 'will_paginate'
 # require 'google_geocode'
 require 'google_ajax'
-require 'mediacloth'
 require 'flickr'
 require 'hpricot'
 require 'open-uri'
