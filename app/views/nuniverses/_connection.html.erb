@@ -2,8 +2,8 @@
   
   <%= thumbnail_tag(connection.subject, :size => @size)  %>
   <%= link_to connection.subject.name, polymorphic_url(connection.subject) %>
-  <p><%= connection.subject.locations.first.full_address rescue ""%></p>
-  <p><%= connection.subject.facts[0..2].collect {|c| c.body.capitalize}.join("<br/>") rescue ""%></p>
+  
+  <p><%= connection.subject.facts[0..2].collect {|c| render_fact(c)}.join("<br/>") rescue ""%></p>
   
     <%#= render_connection_description(connection) %>
 

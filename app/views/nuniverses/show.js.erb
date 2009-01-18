@@ -1,4 +1,15 @@
-<div class="">
-  <h2>About <%= %></h2>
-  <div>YEah</div>
-</div>
+ <div class="step">
+  <div style="padding:5px">
+    <%= thumbnail_tag @source %>
+    <%= link_to @source.name, polymorphic_url(@source)%>
+  </div>
+  <p><%= @source.bookmarks.first.url rescue nil %></p>
+  <dl class="fact-sheet">
+    <dt>Quick Facts</dt>
+    <% @source.facts.paginate(:page => 1, :per_page => 5).each do |fact| %>
+      <dd class="step">
+        <%= render_fact(fact) %>
+      </dd>
+    <% end -%>
+  </dl>
+  </div>

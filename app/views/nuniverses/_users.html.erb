@@ -1,0 +1,12 @@
+<div class="step" id="users-box">
+  <h5>Users connecteds to that nuniverse</h5>
+  <% @source.users.each do |user| -%>
+    <%= link_to(thumbnail_tag(user, :class => "icon"), user_url(user))%>
+  <% end -%>
+  <%= clear %>
+  <% if @connection_to_current %>
+    <%= link_to "Disconnect",  @connection_to_current, :method => :delete %>
+  <% else %>
+    <%= connect_link(:title => "connect with this nuniverse", :subject => @source, :object => current_user) %>
+  <% end -%>
+</div>

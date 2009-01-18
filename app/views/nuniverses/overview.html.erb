@@ -15,7 +15,7 @@
         <% @source.bookmarks.paginate(:page =>1, :per_page => 4).each do |b| %>
           <%= link_to b.name, b.url %><br/>
         <% end -%>
-        <span style="font-size:15px;font-weight:normal"><%= link_to "See all", "#" %> <%= link_to "Add a bookmark", "#"%></span>
+        <span style="font-size:15px;font-weight:normal"><%= link_to "See all", nuniverse_url(@source, :klass => "Bookmark") %> <%= link_to "Add a bookmark", "#"%></span>
       </div>
       
 

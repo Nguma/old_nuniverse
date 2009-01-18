@@ -106,7 +106,14 @@
 	height:20px;
 }
 
+.step-options {
+	display:none;
+	font-size:14px;
+}
 
+.hover .step-options {
+	display:inline;
+}
 .even {
 /*	background:#eee;*/
 /*	background:transparent url('/images/backgrounds/even.png') 0 0 repeat;*/

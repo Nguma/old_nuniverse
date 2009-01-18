@@ -5,6 +5,5 @@
   <li class="<%= @klass == 'Bookmark' ? 'selected' : '' %>"><%= link_to "Bookmarks", polymorphic_url(@source, :klass => "Bookmark") %></li>
   <li class="<%= @klass == 'Image' ? 'selected' : '' %>"><%= link_to "Images", polymorphic_url(@source, :klass => "Image") %></li>
 
-    <li class="<%= @klass == 'Comment' ? 'selected' : '' %>"><%= link_to "Comments", polymorphic_url(@source, :klass => "Comment") %></li>
 
 </ul>

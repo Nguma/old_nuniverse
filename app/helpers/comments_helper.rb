@@ -6,7 +6,7 @@ module CommentsHelper
 			
 		matches.each_with_index do |item,i|
 			n = Nuniverse.find(:first, :conditions => ["unique_name = ?",item[1]])	
-			body = body.gsub(/\##{item[1]}/, (link_to n.name, n)) unless n.nil?
+			body = body.gsub(/\##{item[1]}/, (link_to n.name, n, :class => "preview-lnk")) unless n.nil?
 		end
 		body
 	end

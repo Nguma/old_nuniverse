@@ -3,76 +3,12 @@
 <% nuniverse do -%>
   <%= render :partial => "/nuniverses/menu" %>
   <%= clear %>
-  <div id="right-column" >
-
-    <%= render :partial => "/nuniverses/information"%>
-    
-  
-    <div class="step">
-      <%= link_to "Search this nuniverse.", "#", :class => "expand_lnk", :id => "expand_filter_form" %>
-      <%= render :partial => "/nuniverse/filter_form"%>
-    </div>
-    <% unless @nuniverse.locations.empty? %>
-      <div class="step">
-        <%= link_to "Search this nuniverse.", "#content" %>
-        <%= render :partial => "/nuniverse/search_form"%>
-      </div>
-    <% end -%>
-    <div class="step" id="users-box">
-      <h5>Users connecteds to that nuniverse</h5>
-      <% @source.users.each do |user| -%>
-        <%= link_to(thumbnail_tag(user, :class => "icon"), user_url(user))%>
-      <% end -%>
-      <%= clear %>
-      <% if @connection_to_current %>
-        <%= link_to "Disconnect",  @connection_to_current, :method => :delete %>
-      <% else %>
-        <%= connect_link(:title => "connect with this nuniverse", :subject => @source, :object => current_user) %>
-      <% end -%>
-    </div>
-    
-
-    <div class="step">
-       <% @nuniverse.connections.gather_tags.each do |tag| -%>
-          <%= link_to("#{tag.name.pluralize.capitalize}", nuniverse_url(@nuniverse, :filter => tag.name), :style => "font-size:#{[(12+tag.counted.to_i),20].min}px")  %>
-        <% end -%>
-
-        <%#= render :partial => "/stories/new" %>
-    </div>
-    <div class="step">
-      <% if @nuniverse.locations.empty? -%>
-        <%= render :partial => "/locations/new" %>
-      <% else -%>
-        <% @map = map(@nuniverse.locations) %>
-         <% if @map -%>
-            <% content_for :head do -%>
-              <%= GMap.header (:large_map => true, :with_vml => false) %>
-              <%= @map.to_html %>
-            <% end -%>
-            <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
-
-         <% end -%>
-      <% end -%>
-     
-    </div>
-       <% if current_user.role == "admin" %>
-       <div class="step" id="admin-board">
-          <%= link_to "Destroy that nuniverse", nuniverse_url(@source), :method => :delete %>
-        </div>
-        <% end -%>
-  </div>
-  <div id="left-column" style="margin: 0 320px 0 0">
-    
-    <% if !@klass%>
+   <% if !@klass%>
       <%= render :partial => "/nuniverses/overview"%>
     <% else -%>
       <%= render :partial => "/nuniverses/#{@klass.downcase.pluralize}"%>
 
     <% end -%>
-
-  </div>
   
- 
-    
    <%#= render :partial => "/nuniverses/main_menu"%>
 <% end -%>

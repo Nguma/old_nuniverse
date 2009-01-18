@@ -560,5 +560,12 @@ a.filter:hover {
 
 #popup dl.fact-sheet dd {
 	font-size:13px;
-	padding:5px;
+	padding:5px 5px 5px 0;
+}
+
+#popup .close-btn {
+	position:absolute;
+	top:-22px;
+	left:-22px;
+	z-index:87654;
 }

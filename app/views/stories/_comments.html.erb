@@ -9,7 +9,7 @@
   <%= clear %>
 </div>
 <% @connections.each do |comment| -%>
-      <div class="step connection" src="<%= comment_url(comment) %>">
+      <div class="step connection fact-connection" src="<%= comment_url(comment) %>">
         <%= thumbnail_tag comment.author %>
         <span style="font-size:14px;font-weight:bold"><%= link_to comment.author.name.capitalize , comment.author %></span><span style="font-size:14px">, <%= comment.created_at.strftime("%h %m %y %H:%M")%></span><br/>
         <%= render_comment(comment) %>

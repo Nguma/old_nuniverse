@@ -9,7 +9,7 @@
 	background:none;
 	text-decoration:none;
 	list-style-type:none;
-	outline:0;
+		
 }
 
 p {
@@ -22,6 +22,7 @@ a:visited {
 	font-weight:inherit;
 	font-size:inherit;
 	color:inherit;
+	outline:none;
 }
 
 a:hover {

@@ -39,20 +39,44 @@ class FactsController < ApplicationController
   # GET /facts/1/edit
   def edit
     @fact = Fact.find(params[:id])
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
   end
 
   # POST /facts
   # POST /facts.xml
   def create
     @fact = Fact.new(params[:fact])
+		@scan = @fact.body.scan(/^(([\w\-]+)\:)?(.*)/)[0]
+		@fact.body = @scan[2].strip
+		@fact.tags = [Tag.find_or_create(:name => @scan[1])]
 		@source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  current_user
 		
 
     respond_to do |format|
       if @fact.save
 				@source.facts << @fact
-        flash[:notice] = 'Fact was successfully created.'
-        format.html { redirect_to polymorphic_url(@source, :klass => "Fact") }
+				if @scan[1] == "address"
+					sll = Graticule.service(:google).new 'ABQIAAAA8l8NOquAug7TyWVBqeUUKBTJQa0g3IQ9GZqIMmInSLzwtGDKaBTkRKFsYU1nJXs7m0cuhHHmMYXxNg'
+					@geoloc = sll.locate(@fact.body)
+					
+					@source.locations << Location.new(
+						:name => @source.name,
+						:full_address => "#{@geoloc.street} #{@geoloc.locality} #{@geoloc.region} #{@geoloc.zip} #{@geoloc.country}",
+						:latlng => @geoloc.coordinates.join(',')
+						) rescue nil
+
+				end
+        
+        format.html { 
+					flash[:notice] = 'Fact was successfully created.'
+					redirect_to polymorphic_url(@source, :klass => "Fact") 
+				}
+				format.js {
+					
+				}
         format.xml  { render :xml => @fact, :status => :created, :location => @fact }
       else
         format.html { render :action => "new" }
@@ -65,14 +89,20 @@ class FactsController < ApplicationController
   # PUT /facts/1.xml
   def update
     @fact = Fact.find(params[:id])
+		@scan = params[:fact][:body].scan(/^(([\w\-]+)\:)?(.*)/)[0]
+		@fact.body = @scan[2].strip
+		@fact.tags = [Tag.find_or_create(:name => @scan[1].downcase)] rescue []
 
+	
     respond_to do |format|
-      if @fact.update_attributes(params[:fact])
+      if @fact.save
         flash[:notice] = 'Fact was successfully updated.'
-        format.html { redirect_to(@fact) }
+        format.html { redirect_back_or_default("/")}
+				format.js {}
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
+				format.js {}
         format.xml  { render :xml => @fact.errors, :status => :unprocessable_entity }
       end
     end

@@ -1,0 +1,5 @@
+<% form_for(@fact) do |f| %>
+  <%= f.text_area :body, :value => @fact.body_with_tag, :rows => 2, :cols => 100, :id => "input-note-body" %>
+  
+  <%= submit_tag "", :id => "input-note-submit"%>
+<% end %>

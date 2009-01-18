@@ -1,5 +1,8 @@
 <div class ="step connection <%= connection.subject.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>">
  <%= render_fact(connection.subject)%>
+ <span class='step-options'>
+   <%= link_to "edit", edit_fact_url(connection.subject), :class => ""%>
+ </span>
 
   <%= clear %>
 </div>

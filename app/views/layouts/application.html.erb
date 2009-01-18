@@ -17,7 +17,7 @@
 
 
   <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'stories', 'filters', 'box', 'list', 'items', 'input', 'custom' %>
-  <%= javascript_include_tag  'jquery', 'application'%>
+  <%= javascript_include_tag  'jquery', 'jquery_form', 'application'%>
   <% if @kind && @kind == "address"%>
     <%= GMap.header(:small_zoom => true, :with_vml => false) %>
   <% end -%>
@@ -40,7 +40,7 @@
         pageTracker._trackPageview();
       </script>
 </head>
-<body onunload="javascript:onUnload()" >
+<body  >
   <style type='text/css'>@import url('http://s3.amazonaws.com/getsatisfaction.com/feedback/feedback.css');</style>
   <script src='http://s3.amazonaws.com/getsatisfaction.com/feedback/feedback.js' type='text/javascript'></script>
   <script type="text/javascript" charset="utf-8">

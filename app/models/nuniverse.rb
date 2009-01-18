@@ -43,6 +43,7 @@ class Nuniverse < ActiveRecord::Base
 	end
 	
 
+
 	def avatar(size = {})
 		connections.of_klass('Image').with_score.order_by_score.first.subject.public_filename(size) rescue nil
 	end

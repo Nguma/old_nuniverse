@@ -5,7 +5,7 @@
   <div class="step">
   <%= thumbnail_tag subject %>
   <%= link_to subject.name, polymorphic_url(subject)%>
-  <p><%= subject.description%></p>
+  <p><%= subject.description %></p>
   <p><%= subject.bookmarks.first.url rescue nil %></p>
   <dl class="fact-sheet">
     <dt>Quick Facts</dt>
