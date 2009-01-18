@@ -9,7 +9,7 @@
     </div>
     <% form_tag "/users/update" , :multipart => true  do -%>
     <div class="step">
-      <h4><%= link_to "Add an avatar.", "#", :class => "expand_lnk", :id => "expand_image_form"%></h4>
+      <h4><%= link_to "Add an avatar.", "#", :class => "expand-lnk", :id => "expand_image_form"%></h4>
       <% fields_for :image do |i| -%>
         <fieldset id="image_form">
           <%= i.text_field :source_url, :id => "input_image", :autocomplete => "off"%><br/>
@@ -20,7 +20,7 @@
     </div>
     
     <div class="step">
-      <h4><%= link_to "Set your public profile.", "#", :class => "expand_lnk", :id => "expand_public_infos_form"%></h4>
+      <h4><%= link_to "Set your public profile.", "#", :class => "expand-lnk", :id => "expand_public_infos_form"%></h4>
       <fieldset id="public_infos_form">
         <% fields_for :user do |f| -%>
           If you want people to find you by your real name, you can set it here.<br/>

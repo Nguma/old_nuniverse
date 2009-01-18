@@ -59,7 +59,7 @@ class FactsController < ApplicationController
       if @fact.save
 				@source.facts << @fact
 				if @scan[1] == "address"
-					sll = Graticule.service(:google).new 'ABQIAAAA8l8NOquAug7TyWVBqeUUKBTJQa0g3IQ9GZqIMmInSLzwtGDKaBTkRKFsYU1nJXs7m0cuhHHmMYXxNg'
+					sll = Graticule.service(:google).new "ABQIAAAA8l8NOquAug7TyWVBqeUUKBQEtxNUKhNqH9fVyPPamALnlXdwmxQXyPYD9XOjHMOgc3AuNtDGwMBNHQ"
 					@geoloc = sll.locate(@fact.body)
 					
 					@source.locations << Location.new(

@@ -1,5 +1,5 @@
 
-  <%= link_to "Visit another nuniverse.", "#expand_visit_form", :class => "expand_lnk", :id => "expand_visit_form" %>
+  <%= link_to "Visit another nuniverse.", "#expand_visit_form", :class => "expand-lnk", :id => "expand_visit_form" %>
   <% form_tag "/nuniverses/index", :id => "visit_form", :class => "hidden" do -%>
     <%= text_field_tag "search_terms", "" %><%= submit_tag "Visit"%>
   <% end -%>

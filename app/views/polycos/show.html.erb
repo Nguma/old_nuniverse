@@ -68,7 +68,7 @@
         <% fields_for :location do |l| -%>
           <div class="step">
             Is this a location?
-            <%= link_to "Add an address", "#", :class => "expand_lnk", :id => "expand_address_field"%>
+            <%= link_to "Add an address", "#", :class => "expand-lnk", :id => "expand_address_field"%>
             <%= l.text_field :address, :id => "address_field" , :class => "hidden"%>
           </div>
         <% end -%>

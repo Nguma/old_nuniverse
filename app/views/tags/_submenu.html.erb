@@ -6,7 +6,7 @@
 
    <% else -%>
      <h2><%= "#{@items.total_entries rescue ""} #{@kind.pluralize} #{" matching \"#{@filter}\"" if @filter } "  %> 
-     <%= link_to "Add one", "#", :class => "expand_lnk", :id => "expand_connect_form_lnk"%></h2>
+     <%= link_to "Add one", "#", :class => "expand-lnk", :id => "expand_connect_form_lnk"%></h2>
 
      <% if @perspective.kind == "service" -%>
 

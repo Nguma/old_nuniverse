@@ -22,7 +22,7 @@
       <% else -%>
     <% end -%>
       
-      <h5>Showing all <%= !@filter.nil? ? link_to(@filter.pluralize, @source, :class => "filter") : "connections"  %> <%= link_to @order.gsub("_"," "), "#", :class => "expand_lnk", :id => "expand_sorting-options" %></h5>
+      <h5>Showing all <%= !@filter.nil? ? link_to(@filter.pluralize, @source, :class => "filter") : "connections"  %> <%= link_to @order.gsub("_"," "), "#", :class => "expand-lnk", :id => "expand_sorting-options" %></h5>
        <%= sorting_options @connections %>
        <% if @connections.empty? -%>
          <div class="step" style="clear:left"  id="new-connection-step">

@@ -123,7 +123,9 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
-		wikipedit("http://en.wikipedia.org/wiki/Solomon_R._Guggenheim_Museum")
+		ps = Polyco.find(:all, :conditions => ["description is not null AND object_type = 'Nuniverse'"])
+		ps.each do |p|
+		end
 	end
 	
 	def test

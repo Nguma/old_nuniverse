@@ -27,7 +27,7 @@
           </div>
             <div class="step">
               <h3>
-                <%= link_to "Add a description", "#", :id => "expand_description_area_lnk", :class => "expand_lnk" %>
+                <%= link_to "Add a description", "#", :id => "expand_description_area_lnk", :class => "expand-lnk" %>
               </h3>
               <div id="description_area" class="hidden">
                 <label>Public description. Be brief.</label>
@@ -38,7 +38,7 @@
           <% fields_for :image do |i| -%>
             <div class="step">
               <h3>
-                <%= link_to "Add an image", "#", :id => "expand_image_area_lnk", :class => "expand_lnk" %>
+                <%= link_to "Add an image", "#", :id => "expand_image_area_lnk", :class => "expand-lnk" %>
               </h3>
               <div id="image_area" class="hidden">
               <label>Copy and paste an image address</label>
@@ -51,7 +51,7 @@
           
           <div class="step">
             <h3>
-              <%= link_to "Add a website", "#", :id => "expand_web_area_lnk", :class => "expand_lnk" %>
+              <%= link_to "Add a website", "#", :id => "expand_web_area_lnk", :class => "expand-lnk" %>
             </h3>
             <div id = "web_area" class = "hidden" >
             <% fields_for :bookmark do |b| -%>
@@ -64,7 +64,7 @@
           <% fields_for :location do |l| -%>
             <div class="step">
              
-              <h3><%= link_to "Add an address", "#", :class => "expand_lnk", :id => "expand_address_field"%></h3>
+              <h3><%= link_to "Add an address", "#", :class => "expand-lnk", :id => "expand_address_field"%></h3>
               <%= l.text_field :address, :id => "address_field" , :class => "hidden"%>
             </div>
           <% end -%>

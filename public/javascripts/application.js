@@ -55,6 +55,15 @@ $(document).ready(function()
   
 });
 
+
+function setExpandLinks() {
+  $('a.expand-lnk').click(function() {
+    var expandable = $(this).attr('id').replace(/^expand_|_lnk/g,'');
+    $(expandable).toggle();
+    return false;
+  })
+}
+
 function inlineForms(scope) {
   $(scope).children('form').ajaxForm(function(response){
     scope.html(response);
@@ -428,7 +437,7 @@ function inlineFacts(scope) {
   // }
   // 
   // function setExpandLinks(scope) {
-  //   scope.getElements('.expand_lnk').each(function(lnk) {
+  //   scope.getElements('.expand-lnk').each(function(lnk) {
   //     lnk.removeEvents();
   //     lnk.addEvent('click', function(ev) {
   //       

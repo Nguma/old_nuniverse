@@ -14,10 +14,10 @@
       <%= home_link unless @source == @current_user %>
     </div>
 
-    <div class='tab'><%= link_to "Search this nuniverse", "#", :class => "expand_lnk", :id => "expand_filter_form" %></div>
+    <div class='tab'><%= link_to "Search this nuniverse", "#", :class => "expand-lnk", :id => "expand_filter_form" %></div>
     <div class='tab'>Share</div>
-    <div class='tab'><%= link_to "Edit this nuniverse", "#", :class => "expand_lnk", :id => "expand_connect_form" %></div>
-    <div class="tab"><%= link_to "Visit another nuniverse", "#", :class => "expand_lnk", :id => "expand_search_form" %></div>
+    <div class='tab'><%= link_to "Edit this nuniverse", "#", :class => "expand-lnk", :id => "expand_connect_form" %></div>
+    <div class="tab"><%= link_to "Visit another nuniverse", "#", :class => "expand-lnk", :id => "expand_search_form" %></div>
     <dt style="clear:both">&nbsp;</dt>
     <div class="step "  style="clear:both;float:none;background:#333">
       <%= render :partial => "/nuniverse/search_form"%>

@@ -1,4 +1,4 @@
-  <%#= link_to "Add a bookmark", "#", :class => "expand_lnk", :id => "expand_connect_bookmark_form" %>
+  <%#= link_to "Add a bookmark", "#", :class => "expand-lnk", :id => "expand_connect_bookmark_form" %>
    
   <% @new_bookmark = Bookmark.new()  %>
   <% form_for @new_bookmark , :url => {:controller => "bookmarks"}, :html => {:id => "connect_bookmark_form"} do |f| -%>
