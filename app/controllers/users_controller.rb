@@ -135,8 +135,8 @@ class UsersController < ApplicationController
 		
 		@source = @user
 		render :action => :tutorial if (@user == current_user && @count == 0) || (current_user.role == "admin" && params[:tutorial])
-		render :action => :overview if @klass.nil?
-		@klass = "Story" if @klass == "Comment" || @klass == "Fact"
+		# render :action => :overview if @klass.nil?
+		@klass = "Story" if @klass == "Comment" || @klass == "Fact" || @klass.nil?
 		@connections = @user.connections.of_klass(@klass)
 		@count = @user.connections.count
 		@context = Story.find(params[:context]) rescue nil

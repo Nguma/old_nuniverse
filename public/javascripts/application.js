@@ -20,6 +20,7 @@ var searchBox;
 $(document).ready(function()
 {
   
+  setExpandLinks();
   $('#left-column .connection').hover(
     function() {
     $(this).addClass('hover'); 
@@ -58,7 +59,9 @@ $(document).ready(function()
 
 function setExpandLinks() {
   $('a.expand-lnk').click(function() {
-    var expandable = $(this).attr('id').replace(/^expand_|_lnk/g,'');
+    
+    var expandable = '#'+$(this).attr('id').replace(/^expand_|_lnk/g,'');
+
     $(expandable).toggle();
     return false;
   })
