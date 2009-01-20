@@ -1,66 +1,8 @@
-<div id="suggestions" style="padding:0px;width:300px;background:#FFF;border:solid #ccc 5px;display:none;position:absolute;z-index:987654">
-  
-</div>
-
-<%= render :partial => "hat"%>
-<% nuniverse do -%>
-  <%= render :partial => "/stories/menu"%>
-  <%= clear %>
-  <div id="right-column">
-    <div class="step">This conversation is public. <%= link_to "Make private", "#" %></div>
-
-       <div class="step">
-            <% @tags.each do |story| %>
-              <%= link_to story.name.pluralize, story_url(@story, :filter => story.name), :style => "font-size:#{[(12+story.counted.to_i),20].min}px"%>
-            <% end -%>
-        </div>
-
-    <div class="step">
-      <h3>Who's involved?</h3>
-      <% @story.users.each do |user| %>
-        <%= user.name %>
-      <% end -%>
-      <%= link_to "Invite someone else", "#", :class => "expand-lnk", :id => "expand_share_form_lnk"%>
-      <% form_tag "/share-story/#{@source.id}", :id => "share_form", :class => "hidden" do -%>
-        <%= text_field_tag :emails %><%= submit_tag "Invite"%>
-      <% end -%>
-    </div>
-    <div class="step">
-      <h3>Where's that?</h3>
-      <% @map = map(Location.gather(@story.nuniverses)) %>
-      <% if @map -%>
-         <% content_for :head do -%>
-           <%= GMap.header (:large_map => true, :with_vml => false) %>
-           <%= @map.to_html %>
-         <% end -%>
-         <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
-       
-      <% end -%>
-    </div>
-    <div class="step">
-      <h3>When...</h3>
-      
-    </div>
-    <div class="step">
-      <%= link_to('Destroy that story', @story, :confirm => 'Are you sure?', :method => :delete) if @story.author == current_user%>
-    </div>
-  </div>
-  
-  <div id="left-column" style="margin:0 320px 0 0">
-
-    <%#= tweets_from_twitter %>
-    <% if @klass == "Comment"%>
-      
-  <% else -%>
-    <div class="step">
-      <%= sorting_options @connections %>
-      <%= display_options %>
-    </div>
-    <div id="content" style="clear:left; padding:10px 20px 10px 20px">
-      <%= columnize(render_connections(@connections)) %>
-    </div>
-  <% end -%>
-  </div>
-
-
+<% nuniverse do -%> 
+  <%= render :partial => "overview" %>
+  <%= render :partial => "conversation" %>
+  <%= render :partial => "connections" %>
+  <%= render :partial => "contributors" %>
+  <%= render :partial => "map" %>
 <% end -%>
+<%= render :partial => "/stories/menu"%>

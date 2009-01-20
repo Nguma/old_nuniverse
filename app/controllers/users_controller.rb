@@ -131,46 +131,26 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_nuniverse
 	def show
-		@user ||= current_user
-		
-		@source = @user
+
 		render :action => :tutorial if (@user == current_user && @count == 0) || (current_user.role == "admin" && params[:tutorial])
-		# render :action => :overview if @klass.nil?
-		@klass = "Story" if @klass == "Comment" || @klass == "Fact" || @klass.nil?
-		@connections = @user.connections.of_klass(@klass)
+		
+
+		
+	
 		@count = @user.connections.count
-		@context = Story.find(params[:context]) rescue nil
-		@filter = params[:filter] || nil
+
 		
+		@bookmarks = @user.bookmarks(:page =>1, :per_page => 10)
+		@nuniverses = @user.nuniverses(:page =>1, :per_page => 10)
+		@stories = @user.stories(:page =>1, :per_page => 10, :order => "updated_at desc")
+		@images = @user.images(:page =>1, :per_page => 10)
+		@contributors = @user.contributors(:page =>1, :per_page => 10)
 		
-	
-	
-		if @context
-			@connections = @connections.sphinx(:conditions => {:context_ids => @context.id}, :per_page => 3000)
-		end
-		if @filter
-			@connections = @connections.sphinx(@filter, :page => 1, :per_page => 3000)
-		end
-			@tags = @connections.gather_tags
-			case params[:order]
-					when "by_latest"
-						@connections = @connections.order_by_date.with_score
-					when "by_name"
-						@connections = @connections.order_by_name.with_score
-					else
-						@connections = @connections.order_by_score(@perspective).with_score
-					end
-		
-		@connections = @connections.paginate(:page => params[:page] || 1)
+		@most_active_story = @stories.first
 	
 		respond_to do |format|
-			format.html {
-				# @latest_stories = @user.connections.of_klass('Story').order_by_date.paginate(:page => 1, :per_page => 5)
-		
-			}	
-			format.js { 
-				
-			}
+			format.html { }	
+			format.js { }
 		end
 	end
 	
@@ -180,6 +160,6 @@ class UsersController < ApplicationController
 	
 protected
   def find_user
-    @source = @user = User.find(params[:id]) rescue nil
+    @source = @user = User.find(params[:id]) rescue current_user
   end
 end

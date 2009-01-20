@@ -1,0 +1,43 @@
+<div id="conversation" class="section">
+  
+  <% if @comments.empty? %>
+    <div class="step">
+      <h2>Start the conversation!<h2>
+    </div>
+  <% else-%>
+    <h2>Conversation</h2>
+  <% end -%>
+  <div class="step"  style="padding:0 0 0 10px" id="new-note-step">
+    <h3 style="padding:0 0 0 10px;font-size:16px;font-weight:bold">Add your note</h3>
+    <%= render :partial => "/comments/new", :locals => {:params => {:behavior => ""}}%>
+    
+    
+  </div>
+  <div id="content">
+  <div class="step">
+    <%= will_paginate @comments unless @comments.empty?%>
+    <%= clear %>
+  </div>
+  <dl id="content-list">
+  <% @comments.each do |comment| -%>
+    <dd class="step connection fact-connection" src="<%= comment_url(comment) %>">
+      <%= thumbnail_tag comment.subjects.first rescue nil %>
+        <span style="font-size:14px;font-weight:bold">
+          <%= link_to comment.author.name.capitalize , comment.author %>
+        </span>
+        <span style="font-size:14px">, <%= comment.created_at.strftime("%h %m %y %H:%M")%></span><br/>
+        <%= render_comment(comment) %>
+        <div class="actions" style="font-size:12px">
+          <%= link_to "x remove", comment_url(comment), :method => :delete, :class => "edit_lnk" if current_user.role == "admin"%>
+        </div>
+          <%# @title = @title.gsub(connection.subject.name, link_to(connection.subject.name, connection.subject) ) %>
+        <%= clear %>
+    </dd>
+  </dl>
+  <% end -%>
+  <div class="step">
+    <h3>If you haven't invited others, we suggest you do <%= link_to "here", "#contributors" %></h3>
+  </div>
+
+  </div>
+</div>

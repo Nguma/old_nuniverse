@@ -1,5 +1,7 @@
-<div id="hat" style="padding:20px 40px 20px 40px">
+<div id="hat">
+  <%= thumbnail_tag @nuniverses.first rescue nil %>
   <h1><%= @source.name.capitalize %></h1>
-  Started by <%= link_to @story.author.name.capitalize, @story.author %>
+  <h5 style="color:#fff">by <%= link_to @story.author.name.capitalize, @story.author, :class => "user-lnk"%></h5>
+ 
   <%= clear %>
 </div>

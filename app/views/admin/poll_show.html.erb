@@ -1,0 +1,17 @@
+<% nuniverse do -%>
+<div id="overview">
+  <div class="poll">
+  <h1><%= @poll.body %></h1>
+<% @poll.options.each do |o| %>
+  <% percent = ((o.votes.count * 100)/@poll.vote_count).ceil rescue 0 %>
+  <div class="step option" src="/admin/poll_vote/<%= o.id %>" style="padding:5px 0 5px 0;margin:0 0 10px 0">
+    
+    <div class="bar" style="width:<%=  percent * 5 %>px"> </div>
+    <span ><%= o.body %></span>
+    
+    <%= clear %>
+  </div>
+<% end -%>
+</div>
+</div>
+<% end -%>

@@ -1,58 +1,19 @@
-<div class="step">
-  <%= will_paginate @connections unless @connections.empty?%>
-  <%= display_options %>
-  <%= clear %>
-</div>
-
-
-
-
-
-<div id="right-column" >
-
-  <%= render :partial => "/nuniverses/information"%>
-  
-
-  <div class="step">
-    <%= link_to "Search this nuniverse.", "#", :class => "expand-lnk", :id => "expand_filter_form" %>
-    <%= render :partial => "/nuniverse/filter_form"%>
-  </div>
-  <% unless @nuniverse.locations.empty? %>
+<div id="facts" class="section">
+  <h2>Quick Facts</h2>
+  <%= render :partial => "/nuniverse/search" , :locals => {:action => facts_url}%>
+  <div class="content">
     <div class="step">
-      <%= link_to "Search this nuniverse.", "#content" %>
-      <%= render :partial => "/nuniverse/search_form"%>
+      <%= will_paginate @facts unless @facts.empty?%>
+      <%= clear %>
     </div>
-  <% end -%>
-
-  
-
-  
-  <div class="step">
-    <% if @nuniverse.locations.empty? -%>
-     
-    <% else -%>
-      <% @map = map(@nuniverse.locations) %>
-       <% if @map -%>
-          <% content_for :head do -%>
-            <%= GMap.header (:large_map => true, :with_vml => false) %>
-            <%= @map.to_html %>
-          <% end -%>
-          <%= @map.div(:width => "100%", :height => 300, :style=>"position:relative") %>
-
-       <% end -%>
+    <% @nuniverse.facts.each do |fact| -%>
+      <%= render :partial => "/facts/instance", :locals => {:instance => fact} %>
     <% end -%>
-   
+    <%= clear %>
+    <%= render :partial => "/facts/new" %>
   </div>
-     <% if current_user.role == "admin" %>
-     <div class="step" id="admin-board">
-        <%= link_to "Destroy that nuniverse", nuniverse_url(@source), :method => :delete %>
-      </div>
-      <% end -%>
 </div>
-<div id="left-column" style="margin: 0 320px 0 0">
-  <%= columnize(render_connections(@connections))%>
-  <%= clear %>
-  <%= render :partial => "/facts/new" %>
-</div>
+
+
 
 

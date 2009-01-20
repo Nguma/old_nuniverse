@@ -1,0 +1,17 @@
+<div id="contributors" class="section">
+  <h2>Contributors</h2>
+  <% @contributors.each do |contributor| -%>
+    <div class="step">
+      <%= thumbnail_tag contributor %>
+      <%= link_to contributor.name, user_url(contributor) %>
+      <%= (contributor == @story.author)? "The author" : "A Contributor" %>
+      
+    </div>
+  <% end -%>
+  <div class="step">
+    <h3>Invite others!</h3>
+    How to? Just type down the email of the ones you want in the confidence. <br/>Alternatively, you could also make that story available to the world, <%= link_to "go public", "#", :class => "account-lnk" %>
+    <%= render :partial => "/stories/invite" %>
+    
+  </div>
+</div>

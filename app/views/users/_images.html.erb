@@ -1,0 +1,9 @@
+<div id="images" class="section">
+  <h2>Images</h2>
+  <% @images.each do |image| -%>
+    <div class="step">
+      <%= link_to thumbnail_tag(image), image_url(image) %>
+
+    </div>
+  <% end -%>
+</div>

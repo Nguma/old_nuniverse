@@ -21,6 +21,7 @@ class CommentsController < ApplicationController
 		end
 		
 		asin = @comment.body.scan(/(http:\/\/www\.amazon\.com\/.+\/(B0\w+)\/.+)(\s|$)/)[0]
+
 		unless asin.nil? || asin[1].nil?
 			n = Nuniverse.find_by_unique_name(asin[1])
 			awsobject = Finder::Search.find(:item_id => asin[1], :service => 'amazon', :operation => "ItemLookup")[0]

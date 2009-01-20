@@ -1,10 +1,17 @@
 class FactsController < ApplicationController
 	
 	after_filter :store_location, :only => [:show]
+	before_filter :find_source, :only => [:index]
   # GET /facts
   # GET /facts.xml
   def index
-    @facts = Fact.find(:all)
+    @input = params[:input]
+		if !@source
+			@facts = Fact.search(@input, :with => {:nuniverse_ids => @source.id}, :page => params[:page] || 1, :per_page => 10)
+		else
+			@facts = Fact.search(@input, :page => params[:page] || 1, :per_page => 10)
+		end
+
 
     respond_to do |format|
       format.html # index.html.erb
@@ -55,19 +62,17 @@ class FactsController < ApplicationController
 		@source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  current_user
 		
 
+
     respond_to do |format|
       if @fact.save
+				@tokens = Nuniversal.tokenize(@fact.body)
+				@tokens.each do |token|
+					n = Nuniverse.find_by_unique_name(token)
+					@fact.subjects << n unless n.nil?
+				end
 				@source.facts << @fact
 				if @scan[1] == "address"
-					sll = Graticule.service(:google).new "ABQIAAAA8l8NOquAug7TyWVBqeUUKBQEtxNUKhNqH9fVyPPamALnlXdwmxQXyPYD9XOjHMOgc3AuNtDGwMBNHQ"
-					@geoloc = sll.locate(@fact.body)
-					
-					@source.locations << Location.new(
-						:name => @source.name,
-						:full_address => "#{@geoloc.street} #{@geoloc.locality} #{@geoloc.region} #{@geoloc.zip} #{@geoloc.country}",
-						:latlng => @geoloc.coordinates.join(',')
-						) rescue nil
-
+					@source.locations << Nuniversal.localize(@fact.body, @source) rescue nil
 				end
         
         format.html { 

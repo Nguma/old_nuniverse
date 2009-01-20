@@ -1,7 +1,9 @@
- <div class="step">
- <h3>What is it about?</h3>
- <% @story.connections.each do |connection| -%>
-   <%= link_to (thumbnail_tag connection.subject), polymorphic_url(connection.subject, :klass => "Comment")%>
- <% end -%>
-   <%= clear %>
+ <div class="section" id="connections">
+   <h2>Connections</h2>
+   <% @nuniverses.each do |connection| -%>
+      <%= render :partial => "/nuniverses/instance", :locals => {:instance => connection}%>
+   <% end -%>
+   
+   <%= render :partial => "/nuniverses/new" %>
+     
  </div>

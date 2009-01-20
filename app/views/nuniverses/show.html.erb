@@ -1,14 +1,14 @@
-<%= render :partial => "hat" %>
 
+<%= render :partial => "/nuniverses/menu" %>
 <% nuniverse do -%>
-  <%= render :partial => "/nuniverses/menu" %>
+  <%= render :partial => "overview" %>
+  <%= render :partial => "facts" %>
+  <%= render :partial => "nuniverses" %>
+  <%= render :partial => "bookmarks" %>
+  <%= render :partial => "images" %>
+  <%= render :partial => "map" %>
+   <%#= render :partial => "/nuniverses/#{@klass.downcase.pluralize}"%>
   <%= clear %>
-   <% if !@klass%>
-      <%= render :partial => "/nuniverses/overview"%>
-    <% else -%>
-      <%= render :partial => "/nuniverses/#{@klass.downcase.pluralize}"%>
-
-    <% end -%>
   
-   <%#= render :partial => "/nuniverses/main_menu"%>
+  
 <% end -%>

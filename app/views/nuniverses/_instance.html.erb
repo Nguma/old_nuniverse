@@ -1,0 +1,6 @@
+  <div class="step connection" >
+    <%= thumbnail_tag instance %>
+    <%= link_to instance.name, nuniverse_url(instance, :klass => nil) %>
+    <p><%= instance.facts[0..2].collect {|c| render_fact(c)}.join('<br/> ') rescue nil%></p>
+    <%= clear %>
+  </div>

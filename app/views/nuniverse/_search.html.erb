@@ -1,6 +1,3 @@
-<div class="input" id="finder">
-  <div class="suggestions"></div>
-  <% form_tag "/lists/find_or_create" do -%>
-    <%= text_field_tag "query", @input, :id => "input" %>
-  <% end -%>
-</div>
+<% form_tag action, :style => "position:absolute;right:-40px;top:20px;width:400px" do  %>
+  <%= text_field_tag :input , "", :class => "search-input"%>
+<% end -%>

@@ -1,6 +1,6 @@
  <% behavior = params[:behavior] || "hidden" %>
   <% @new_polyco = Polyco.new(:object => @source, :subject => Nuniverse.new)  %>
-  <% form_for :polyco, @new_polyco, :url => {:controller => :polycos, :action => :create}, :html => {:multipart => true, :id => "connect_nuniverse_form", :class => behavior} do |f| -%>
+  <% form_for :polyco, @new_polyco, :url => {:controller => :polycos, :action => :create}, :html => {:multipart => true, :id => "connect_nuniverse_form" } do |f| -%>
     <% fields_for :object, @source do |o| -%>
       <%= o.hidden_field :id %>
       <%= o.hidden_field :type %>

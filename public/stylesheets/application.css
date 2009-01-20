@@ -1,6 +1,6 @@
 body
 {
-	background:#efefef url('/images/backgrounds/main.png') 0 00px repeat-x;
+	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 00px repeat-x;
 /*	background:#86bde5 url('/images/backgrounds/main_blue.png') 0 0 repeat-x;*/
 	padding:0px 0 0 0px;
 }
@@ -53,3 +53,4 @@ body
 #notice.added {
 	background:transparent url('/images/backgrounds/notice_added.png') 0 0 no-repeat;
 }
+

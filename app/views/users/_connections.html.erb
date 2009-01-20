@@ -1,0 +1,13 @@
+<div id="connections" class="section">
+  <%= render :partial => "/nuniverse/search", :locals => {:action => nuniverses_url}%>
+  <h2>Connections</h2>
+  <div class="content">
+    <%= columnize(@nuniverses.collect {|c| render :partial => "/nuniverses/instance", :locals => {:instance => c}}) -%>
+    <%= clear %>
+  </div>
+  
+  <%= clear %>
+  <div class="step" >
+    <%= render :partial => "/stories/new"%>
+  </div>
+</div>

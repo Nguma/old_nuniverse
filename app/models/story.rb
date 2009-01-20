@@ -14,7 +14,9 @@ class Story < ActiveRecord::Base
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse", :conditions => ["state = 'active'"]
 	# has_many :stories, :through => :connections, :source => :subject, :source_type => "Story", :dependent => :destroy
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
-	has_many :users, :through => :connecteds, :source => :object, :source_type => "User"
+	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
+	# has_many :contributors, :through => :connections, :source => :subject, :source_type => "user"
+	has_many :contributors, :through => :connecteds, :source => :object, :source_type => "User"
 	
 	has_many :pending_items, :through => :connections, :source => :subject, :source_type => "Tag", :conditions => ["state = 'pending' "], :dependent => :destroy
 		
@@ -30,7 +32,8 @@ class Story < ActiveRecord::Base
 	  indexes name, :sortable => true	
 		
 	  has  created_at, updated_at
-	
+		
+		has users(:id), :as => :user_ids
 
 		
 	end

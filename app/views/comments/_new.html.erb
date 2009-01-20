@@ -1,8 +1,10 @@
 <% new_comment = Comment.new(:author => current_user, :parent => @source)%>
-<% form_for :comment, new_comment, :url => {:controller => "comments"} do |f| -%>
+<% form_for :comment, new_comment, :url => {:controller => "comments"}, :html => {:id => "new-fact"} do |f| -%>
   <%= f.hidden_field :user_id %>
   <%= f.hidden_field :parent_id %>
   <%= f.hidden_field :parent_type %>
-  <%= f.text_area :body , :rows => 2, :cols => 70, :id => "input-note-body"%>
+  <%= f.text_field :body , :cols => 70, :id => "input-note-body"%>
   <%= submit_tag "", :id => "input-note-submit"%>
+  
 <% end -%>
+<dl class="suggestions" id='suggestions' style="width:600px;margin:0;padding:0"></dl>

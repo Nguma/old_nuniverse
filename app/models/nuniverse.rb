@@ -26,7 +26,7 @@ class Nuniverse < ActiveRecord::Base
     indexes :name, :as => :name,  :sortable => true
 		indexes :unique_name, :as => :unique_name, :sortable => true
 		
-		indexes [taggings(:tag).name, connecteds(:object).name], :as => :tags
+		indexes [:name, taggings(:tag).name, connecteds(:object).name], :as => :tags
 	
 		has :active
 		has connections(:id), :as => :c_id

@@ -1,10 +1,51 @@
-<div class='box heading' id="title_box">
-  <h1 class="title"><span class='hidden'>User</span><%= source.title %></h1>
-  <% if source.connections.empty?  %>
-    <h2>Your nuniverse is empty... for now.</h2>
+<%= clear %>
+<div id="right-column" style="display:none">
+
+ 
+  <div class="nuniverse-klass step" style="position:relative;">
+    There are <%= @count %> connections in this nuniverse. 
+    <%= link_to "Browse them all", polymorphic_url(@source, :klass => "nuniverse") %>, or look for something specific
+    <% form_tag "/users/show/#{@user.id}" do -%>
+      <%= text_field_tag "filter", @filter, :style => "width:auto;font-size:20px" %><%= submit_tag "search this nuniverse", :style => "font-size:15px;background:#eee"%>
+    <% end -%>
+  
+  </div>
+
+  <div class="step">
+      <% @tags.each do |story| %>
+        <%= link_to story.name.pluralize, user_url(@user, :filter => story.name, :context => @context), :style => "font-size:#{[(12+story.counted.to_i),20].min}px"%>
+      <% end -%>
+  </div>
+    
+   <div class="step">
+      People you know are also connected to this nuniverse <%= link_to "See all people in that nuniverse.", "#" %>
+   </div>
+
+</div>
+
+
+  <div id="left-column" style="margin:0 0 0 0">
+    <div class="step">
+      <%= will_paginate @connections unless @connections.empty?%>
+      <%= display_options %>
+      <%= clear %>
+    </div>
+  
+    <% if @klass == "Story" %>
+      <%= render :partial => "stories" %>
+    <% else %>
+      <div id="content" style="clear:left">
+      <%= columnize(render_connections(@connections)) %>
+      <%= clear %>
+      </div>
+     
+      <div class="step"  id="new-connection-step">
+        <h3>Want to add something to <%= @story ? @story.name : @source.name %>?</h3>
+        <%= render :partial => "/#{@klass.pluralize.downcase}/new", :locals => {:params => {:behavior => ""}}%>
+        <dl class='suggestions'></dl>
+      </div>
+    
+    
   <% end -%>
-  <h3>
-    <%= link_to "Add something", "#", :id => "select_tag_form", :class => "select_form_lnk" %>
-    <%= link_to "Visit another nuniverse", "#", :id => "select_nuniverse_form", :class => "select_form_lnk" %>
-  </h3>
+ 
 </div>

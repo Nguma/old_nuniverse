@@ -1,3 +1,5 @@
-<div style="padding:20px">
-  Your comment has been posted.
+<div class="step">
+  <%= thumbnail_tag @comment.subjects.first rescue nil %>
+  <%= render_comment(@comment)%>
+  <%= clear %>
 </div>

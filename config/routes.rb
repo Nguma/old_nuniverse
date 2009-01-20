@@ -81,6 +81,7 @@ ActionController::Routing::Routes.draw do |map|
 	map.send_email "/send_email/:id", :controller => "tags", :action => "send_email"
 	
 	map.tutorial_url "/tutorial", :controller => "users", :action => "tutorial"
+	
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "application"

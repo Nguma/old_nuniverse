@@ -21,7 +21,7 @@ $(document).ready(function()
 {
   
   setExpandLinks();
-  $('#left-column .connection').hover(
+  $('.section .connection').hover(
     function() {
     $(this).addClass('hover'); 
   }, 
@@ -38,10 +38,37 @@ $(document).ready(function()
     }
   );
   
+  $('.new-story-lnk').click(
+    function() {
+      $('#new-story-popup').css('top', 00).css('left',200)
+      $("#new-story-popup").show();
+      return false;
+    }
+  );
+  
   
   inlineFacts(window);
   
-  $('#new_fact').ajaxForm(function(response) {$(response).insertBefore($('#new_fact'));});
+  $('#new-fact').ajaxForm({
+    clearForm:true,
+    beforeSubmit:function() {
+      if(suggest_request) { suggest_request.abort();}
+    },
+    success:function(response) {
+      $("#content-list .step:first").before(response);
+      $('#suggestions').empty();
+    }
+  });
+  
+  $('#input-note-body').keyup(function(ev){
+    if(ev.keyCode() == '13') return;
+    if($(this).val().match(/\#[\w|\-]+$/)) {
+      suggest($(this))
+    } else {
+      $('#suggestions').hide();
+    }
+  })
+  
   
   $("#popup .close-btn").click(
     function() {
@@ -53,8 +80,55 @@ $(document).ready(function()
   $('#notice').hide();
   
   $('#popup').draggable();
+   
+  $.localScroll({axis:'xy', duration:500, margin:true, queue:true, offset:{left:-60,top:-80}});
+  
+  $('.search-input').keyup(function(ev) {
+    var target = $(this).parents('.section').children('.content');
+    $.ajax({
+      url:$(this).parents('form').attr('action')+'?input='+$(this).val(),
+       success:function(response) {
+         target.html(response)
+         setPaginationLinks(target)
+         
+        }
+    })
+  })
+  
+  makePollEditable();
+  
+  
   
 });
+
+var suggest_request = null 
+function suggest(el) {
+  if(suggest_request) { suggest_request.abort();}
+  suggest_request = $.ajax({
+      url:"/suggest-a-nuniverse",
+      dataType:'html',
+      data:{'input':el.val()},
+      success:function(response) {
+        $('#suggestions').html(response);
+        $('#suggestions').show();
+        $('#suggestions a').click(function(ev) {
+          
+        });
+      }
+    })
+}
+
+
+function setPaginationLinks(scope) {
+   $('.pagination a').click(function(ev) {
+      $.ajax({
+        url:$(this).attr('href'),
+        target:scope
+      });
+      return false;
+    })
+}
+
 
 
 function setExpandLinks() {
@@ -767,7 +841,64 @@ function inlineFacts(scope) {
   //      
   //     }
   //   });
-  // }
+
+  function makePollEditable() {
+    
+      $(".poll .option").hover(
+        function(ev) {
+          $(this).addClass('hover')
+        },
+        function(ev) {
+          $(this).removeClass('hover')
+        }
+      ).click(
+        function(ev) {
+          var bar = $(this).find('.bar')
+          $.ajax({
+            url:$(this).attr('src'),
+            success:function(resp) {
+              bar.replaceWith(resp);
+            },
+          })
+          return false;
+        }
+      )
+      
+      
+        // 
+        // $('.poll form textarea').keypress(function(ev) {
+        //   if(ev.keyCode == '13') {
+        //   $(this).parents('form').ajaxSubmit({
+        //     target:$(this).parents('.step'), 
+        //     success:function() {
+        //       $.scrollTo( '#step-2', 800, {easing:'elasout'} );
+        //     }
+        //   });
+        // }
+        // });
+        // $('.poll form a.remove-lnk').click(
+        //   function(ev) {
+        //     $(this).parents('.step').remove();
+        //     return false;
+        //   }
+        // );
+        // 
+        // $('.poll form a.add-lnk').click(
+        //   function(ev) {
+        //     var form = $(this).parents('form');
+        //     var input = $(form).find("input.input-add");
+        //     var template =  form.children(".new-item");
+        //     
+        // 
+        //     var new_item = template.clone(true);
+        //     $(new_item).insertBefore($(template)).removeClass('new-item');
+        //     $(new_item).children('.label').text($(input).val());
+        //     $(new_item).show();
+        //     $(input).val("");
+        //     return false;
+        //   }
+        // );
+  }
   
   jQuery.ajaxSetup({ 'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")} })
   

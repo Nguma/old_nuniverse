@@ -1,0 +1,3 @@
+<% form_tag "/share-story/#{@source.id}", :id => "share_form" do -%>
+  <%= text_field_tag :emails, "", :style => "width:400px" %><%= submit_tag "Invite"%>
+<% end -%>

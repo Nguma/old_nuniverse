@@ -1,0 +1,8 @@
+<div class ="step connection <%= instance.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>">
+ <%= render_fact(instance)  %>
+ <span class='step-options'>
+   <%= link_to "edit", edit_fact_url(instance), :class => ""%>
+ </span>
+
+  <%= clear %>
+</div>

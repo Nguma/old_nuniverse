@@ -5,6 +5,8 @@ class Comment < ActiveRecord::Base
 	belongs_to :author, :class_name => 'User', :foreign_key => 'user_id'
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :subjects, :through => :connections, :source => :subject, :source_type => "Nuniverse"
+	
+	has_many :options, :through => :connections, :source => :subject, :source_type => "Fact"
 
 	belongs_to :parent, :polymorphic => true
 	
@@ -19,5 +21,9 @@ class Comment < ActiveRecord::Base
 	
 	def tags
 		taggings.collect {|c| c.predicate }
+	end
+	
+	def vote_count
+		options.to_a.sum {|o| o.rank}
 	end
 end

@@ -17,9 +17,9 @@
 
 
   <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'stories', 'filters', 'box', 'list', 'items', 'input', 'custom' %>
-  <%= javascript_include_tag  'jquery', 'jquery_form', 'application'%>
+  <%= javascript_include_tag  'jquery', 'jquery_form', 'jquery_localscroll', 'scroll_to', 'application'%>
   <% if @kind && @kind == "address"%>
-    <%= GMap.header(:small_zoom => true, :with_vml => false) %>
+    <%= GMap.header(:small_zoom => true, :with_vml => false, :large => true) %>
   <% end -%>
   <%= yield :head %>
 

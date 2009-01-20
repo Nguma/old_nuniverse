@@ -1,5 +1,19 @@
-<%= columnize(render_connections(@connections))%>
-<%= clear %>
- <div class="step" >
- <%= render :partial => "/stories/new"%>
+<div id="stories" class="section" >
+  <%= render :partial => "/stories/new"%>
+  <dl class="menu" style="position:absolute;left:40px;top:0; background:#999">
+    <dd style="color:#FFF;font-weight:bold;padding:5px"><%= link_to "+ New story", "", :class => "new-story-lnk" %></dd>
+    
+  </dl>
+  <%= render :partial => "/nuniverse/search", :locals => {:action => stories_url}%>
+  <h2>Stories</h2>
+
+  
+  <div class="content">
+  <% @stories.each do |story| -%>
+    <%= render :partial => "/stories/instance", :locals => {:instance => story} %>
+  <% end -%>
+  <%= clear %>
+  </div>
+
 </div>
+

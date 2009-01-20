@@ -1,0 +1,37 @@
+<div id="overview" class="section">
+  <%= render :partial => "hat" %>
+
+  
+  <div class="step">
+    <% if @nuniverses.empty? %>
+      Nothing has been connected to that story yet. <%= link_to "Add something", "#nuniverses", :class => "nuniverse_lnk" %>
+    <% else -%>
+     this story is about 
+        <%= @nuniverses[0..2].collect {|c| link_to c.name, c, :class => "nuniverse-lnk" }.join(', ') %>
+      <%= "and #{[(@story.nuniverses.count - 3), 0].max} more" unless @story.nuniverses.count < 3%>
+    <% end -%>
+   
+  </div>
+  
+  <div class="step">
+    <% if @comments.empty? %>
+      The discussion hasn't been started. <%= link_to "Start the conversation", "#conversation", :class => "story-lnk" %>
+    <% else -%>
+    Last comment was <div class="comment" style="clear:left;font-size:20px">"<%= render_comment(@comments.first) %>" - <%= link_to @comments.first.author.name , @comments.first.author, :class => "user-lnk" %></div>
+    <% end -%>
+  </div>
+
+  <div class="step">
+    <%= link_to("#{@source.contributors.count} people", "#contributors", :class => "user-lnk")  %> are involved, including
+    <% @story.contributors.each do |user| %>
+      <%= link_to user.name, user_url(user), :class => "user-lnk" %>
+    <% end -%>
+    <%= link_to "Invite someone else", "#", :class => "expand-lnk account-lnk", :id => "expand_share_form_lnk", :style => "font-size:20px;font-weight:normal"%>
+    <% form_tag "/share-story/#{@source.id}", :id => "share_form", :class => "hidden" do -%>
+      <%= text_field_tag :emails %><%= submit_tag "Invite"%>
+    <% end -%>
+  </div>
+ 
+  <div class="step" style="font-size:15px">it is a public story. <%= link_to "Make private", "#", :class => "account-lnk", :style => "font-weight:normal" %></div>
+
+</div>

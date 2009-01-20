@@ -38,8 +38,8 @@ form.expanded  {
 }
 
 #input-note-body {
-	background:transparent url('/images/backgrounds/input_note.png') 0 0 no-repeat;
-	padding:13px 10px 13px 13px;
+	background:transparent url('/images/backgrounds/input_note_small.png') 0 0 no-repeat;
+	padding:5px;
 	font-size:18px;
 	width:476px;
 	border:none;
@@ -47,16 +47,17 @@ form.expanded  {
 	float:left;
 	min-width:476px;
 	max-width:476px;
-	min-height:85px;
+	min-height:45px;
 	max-height:85px;
 }
 
 #input-note-submit {
-	background:transparent url('/images/icons/submit_button.png') 0 0 no-repeat;
+	background:transparent url('/images/icons/input_submit_small.png') 0 0 no-repeat;
 	border:none;
 	position:relative;
-	width:100px;
-	height:100px;
+	width:50px;
+	height:50px;
+	outline:none;
 }
 
 fieldset {

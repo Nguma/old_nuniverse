@@ -1,4 +1,37 @@
-<div id="overview" >
- 
+<div id="overview" class="section">
+  <div id="hat">
+    <%= thumbnail_tag @source, :size => :small %>
+
+      <% if @source == current_user  -%>
+        <h1><%= @source.name.capitalize %></h1>
+        <h2>this is your nuniverse.</h2>
+      <% else -%>
+       <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
+      <% end -%>
+  </div>
+  
+  
+  <div class="step">
+    <%= link_to("#{@source.stories.count} stories", "#stories",  :class => "story-lnk") %> are being told. <%= link_to "Start a story", "#stories" %>
+  </div>
+  <% unless @stories.empty? %>
+  <div class="step">
+
+      Your most active story is <%= link_to("#{@stories.first.name}", story_url(@stories.first),  :class => "story-lnk") %>.
+
+  </div>
+  <% end -%>
+  <div class="step">
+    <% if !@nuniverses.empty?%>
+    <%= link_to("#{@nuniverses.first.name}", nuniverse_url(@nuniverses.first), :class => "nuniverse-lnk") %> is your hottest topic.
+    <% end -%>
+  </div>
+  <div class="step">
+    Your nuniverse is <%= link_to("#{@source.connections.count}/100 connections", "#connections", :class =>  "nuniverse-lnk") %> wide, <%= link_to "upgrade", "upgrade", :class => "account-lnk"%>.
+  </div>
+  <div class="step">
+    <%= link_to("#{@source.contributors.count} people", "#contributors", :class => "user-lnk") %> are contributing to your nuniverse.
+  </div>
+
   
 </div>

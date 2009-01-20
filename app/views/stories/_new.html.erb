@@ -1,5 +1,8 @@
+<div id="new-story-popup" style="display:none;position:absolute;z-index:998;padding:20px;background:#efefef url('/images/backgrounds/main.png') 0 0 no-repeat;border:solid #333 3px; border-top:none">
+  <h3>You are about to create a new story. how to? Simple!</h3>
+  <h4>Enter the title of the story in that box, and press "+" </h4> 
 <% @new_story = Story.new(:author => current_user)%>
-<% form_for @new_story, :url => {:controller => "stories"}  do |f| %>
+<% form_for @new_story, :url => {:controller => "stories"} , :html => {:id => "new-story", :style => "background:none"} do |f| %>
   
   <%= f.text_area :name, :rows => 2, :cols => 100 , :id => "input-note-body"%>
   <%= submit_tag "", :id => "input-note-submit" %>
@@ -13,3 +16,4 @@
   
 
 <% end %>
+</div>

@@ -2,6 +2,7 @@
 	padding:10px;
 	position:relative;
 	clear:left;
+	border-bottom:solid #ccc 1px;
 }
 
 
@@ -75,7 +76,7 @@
 /*	background:#dedede;*/
 
 	border-bottom:solid 1px #ccc;
-	padding:30px 50px 30px 50px;
+	padding:30px 20px 30px 20px;
 }
 
 .edit_lnk {

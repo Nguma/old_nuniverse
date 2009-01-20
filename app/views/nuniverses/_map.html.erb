@@ -1,0 +1,12 @@
+<div id="map" class="section" style="padding:10px">
+   
+   <% @map = map(@nuniverse.locations) %>
+   <% if @map -%>
+      <% content_for :head do -%>
+        <%= GMap.header (:large_map => true, :with_vml => false) %>
+        <%= @map.to_html %>
+      <% end -%>
+      <%= @map.div(:width => "100%", :height => 500, :style=>"position:relative") %>
+    
+   <% end -%>
+ </div>

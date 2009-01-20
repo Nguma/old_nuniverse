@@ -123,39 +123,18 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
+		raise Nuniversal.localize("335 w 20th street Nyc ny 10011", current_user).inspect
 		ps = Polyco.find(:all, :conditions => ["description is not null AND object_type = 'Nuniverse'"])
 		ps.each do |p|
 		end
 	end
 	
 	def test
-		@images = []
-		@comment = params[:url]
-		urlscan = @comment.scan(/((https?:\/\/)?[a-z0-9]+[-.]{1}([a-z0-9]+\.[a-z]{2,5})\S*)/ix)[0]
-		@output = Bookmark.new
-		unless urlscan.nil?
-			url ||= "#{urlscan[1].nil? ? "http://" : nil}#{urlscan[0]}"
-
-			begin
-				doc = Hpricot open url
-				@output.name = (doc/:title).inner_html rescue "#{urlscan[2]} page"
-				@output.url = url
-				@output.description = (doc/"meta[@name=description]").first.attributes['content'] rescue ""
-			
-				(doc/:img).each do |img|
-					if img.attributes['height'].to_i >= 50
-						img.attributes['src'] = "#{url}/#{img.attributes['src']}" unless img.attributes['src'].match(/^http/)
-						@images <<  img  unless !img.attributes['src'].match(/(\.)(jpg|png)$/)
-					end
-				end
-				@output.images << Image.create(:source_url => @images.first.attributes['src']) 
-			rescue
-			
-			end
-			
-		end
+		# raise Nuniversal.tokenize("It is the last day of #damson").inspect 
+		@poll = Comment.new(:author => current_user)
 		
 	end
+	
 	
 	
 	def netflix

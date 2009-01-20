@@ -117,6 +117,11 @@ class ApplicationController < ActionController::Base
 		Polyco.create(:subject => subject, :object => @object, :state => 'active') unless @object.nil?
 	end
 	
+	def find_source
+	  @source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue session[:source]
+		session[:source] = @source
+	end
+	
 	
 	def wikipedit(bookmark)
 		urlscan = bookmark.scan(/((https?:\/\/)?[a-z0-9\-\_]+\.{1}([a-z0-9\-\_]+\.[a-z]{2,5})\S*)/ix)[0]

@@ -1,0 +1,6 @@
+<div class="step">
+  <%= will_paginate @nuniverses %>
+</div>
+<% @nuniverses.each do |nuniverse| -%>
+ <%= render :partial => "/nuniverses/instance", :locals => {:instance => nuniverse}%>
+<% end -%>

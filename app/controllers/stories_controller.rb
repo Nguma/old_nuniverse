@@ -1,6 +1,7 @@
 class StoriesController < ApplicationController
 	
 	before_filter :find_story, :except => [:new, :create, :index]
+	before_filter :find_source, :only => [:index]
 	before_filter :find_context, :except => [:index]
 	after_filter :store_location, :only => [:show]
 	before_filter :update_session, :only => [:show]
@@ -9,14 +10,22 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.xml
   def index
-    @stories = Story.created_by(current_user).without_parent.order_by_score
-		
 
+		@input = params[:input] 
+		if @source
+			@stories = Story.search(@input, :page => params[:page] || 1, :per_page => 10)
+		else
+			@stories = Story.search(@input, :page => params[:page] || 1, :per_page => 10)
+		end
+	
+		
     respond_to do |format|
       format.html # index.html.erb
+			format.js {}
       format.xml  { render :xml => @stories }
     end
   end
+
 
   # GET /stories/1
   # GET /stories/1.xml
@@ -24,32 +33,38 @@ class StoriesController < ApplicationController
 	
 		@source = @story
 		
+		@comments = @story.comments.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
+		@nuniverses = @story.nuniverses.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
+		@contributors = @story.contributors.paginate(:page => params[:page], :per_page => 10, :order => "name DESC")
+		
 	
-		if !@klass
-			params[:order] = "by_latest"
-			@connections = 	@story.comments.paginate(:page => params[:page], :per_page => 20, :order => "updated_at DESC")
-			render :action => "overview"
-			
-		else
-			@connections = @source.connections.of_klass(@klass)
-			@tags = @connections.gather_tags
-			case params[:order]
-			when "by_latest"
-				@connections = @connections.order_by_date.with_score
-			when "by_name"
-				@connections = @connections.order_by_name.with_score
-			else
-				@connections = @connections.order_by_score(@perspective).with_score
-			end
-
-			@connections = @connections.sphinx(nil, :conditions => {:context_ids => @context.id}, :per_page => 2000) if @context
-			@connections = @connections.sphinx(params[:filter], :page => 1, :per_page => 3000) if params[:filter]
-				@connections = @connections.paginate(:per_page => 20, :page => params[:page])
-		end
+		# if !@klass
+		# 		params[:order] = "by_latest"
+		# 		@connections = 	@story.comments.paginate(:page => params[:page], :per_page => 20, :order => "updated_at DESC")
+		# 		
+		# 		@tags = @story.connections.gather_tags
+		# 	else
+		# 		@connections = @source.connections.of_klass(@klass)
+		# 		@tags = @connections.gather_tags
+		# 		case params[:order]
+		# 		when "by_latest"
+		# 			@connections = @connections.order_by_date.with_score
+		# 		when "by_name"
+		# 			@connections = @connections.order_by_name.with_score
+		# 		else
+		# 			@connections = @connections.order_by_score(@perspective).with_score
+		# 		end
+		# 
+		# 		@connections = @connections.sphinx(nil, :conditions => {:context_ids => @context.id}, :per_page => 2000) if @context
+		# 		@connections = @connections.sphinx(params[:filter], :page => 1, :per_page => 3000) if params[:filter]
+		# 			@connections = @connections.paginate(:per_page => 20, :page => params[:page])
+		# 	end
+		
 		
 		
     respond_to do |format|
       format.html { }
+			format.js {}
       format.xml  { render :xml => @story }
     end
   end
@@ -164,9 +179,9 @@ class StoriesController < ApplicationController
 			@users << User.find(:first, :conditions => ['email = ? OR login = ?', email, email])
 		end
 		
-		@story.users << @users
+		@story.contributors << @users
 		respond_to do |format|
-			format.html {}
+			format.html { redirect_back_or_default("/")}
 			format.js {}
 		end
 	end

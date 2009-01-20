@@ -1,13 +1,9 @@
-<%= render :partial => "hat" %>
-<div id="left-column">
-  <div class="step">
-  <h3>Latest stories</h3>
-  <% @user.stories.paginate(:page => 1, :per_page => 5).each do |story| %>
-    <%= link_to story.name, story_url(story, :klass => nil) %><br/>
-  <% end -%>
-  <%= link_to "See all", user_url(@user, :klass => "Story")%>
-  </div>
-  <div class="step">
-  
-  </div>
-</div>
+<div id="hat" class="section"> 
+
+
+
+
+
+
+
+<% end -%>

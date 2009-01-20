@@ -1,6 +1,6 @@
 
 #breadcrumbs {
-	position:absolute;
+	position:fixed;
 	top:0;
 	right:30px;	
 	background:none;
@@ -48,7 +48,11 @@
 }*/
 
 #nuniverse {
-	padding: 0 0;
+	padding: 30px;
+	position:absolute;
+	width:60000px;
+	white-space:nowrap;
+	height:600px;
 }
 
 #nuniverse .small { width:25%;}
@@ -291,10 +295,13 @@ a.save_button {
 	
 }
 
-#main_menu .suggestions .connection {
-	position:relative;
-	float:left;
-	width:23%;
+#suggestions {
+	position:absolute;
+	z-index:678901;
+	background:#fff;
+}
+
+#suggestions .connection {
 }
 
 #main_menu #show_digest .count {
@@ -383,26 +390,56 @@ a.save_button {
 }
 
 #overview {
-	height:100%;
+	position:relative;
+	background:none;
+	width:800px;
+	margin:0 300px 0 0 ;
+	padding:80px;
 }
 
+#overview .step {
+	position:relative;
+	border:none;
+	padding:5px 30px 5px 0;
+	font-size:30px;
+	color:#FFF;
+	
+}
 
 #overview .step a {
-
 	font-weight:bold;
-	color:#369;
+}
+
+#overview a {
+	color:#6cf;
+}
+
+a.story-lnk {
+	color:#FC0 !important;
+}
+
+a.nuniverse-lnk {
+	color:#6cf !important;
+}
+
+a.account-lnk {
+	color:#F66 !important;
+}
+
+a.user-lnk {
+	color:#3F9 !important;
 }
 
 
 #hat {
 	background:none;
-	margin:0 0 0 0;
-	padding:40px 50px 40px 50px;
-	background:#86bde5 url('/images/backgrounds/main_blue.png') 0 0 repeat-x;
+
+	padding:0;
+/*	background:#86bde5 url('/images/backgrounds/main_blue.png') 0 0 repeat-x;*/
 }
 
 #hat h1 {
-	font-size:30px;
+	font-size:40px;
 	font-weight:bold;
 	color:#FFF;
 }
@@ -471,7 +508,7 @@ a.filter:hover {
 	height:100%;
 	background:#ddd;
 	padding:10px;
-	z-index:123456789;
+	z-index:899;
 }
 
 
@@ -511,11 +548,6 @@ a.filter:hover {
 	float:left;
 	width:20%;
 	font-size:15px;
-}
-
-#overview .step {
-	padding:40px 50px 40px 50px;
-	border-bottom:solid 1px #ccc;
 }
 
 .back-lnk {
@@ -568,4 +600,47 @@ a.filter:hover {
 	top:-22px;
 	left:-22px;
 	z-index:87654;
+}
+
+.section {
+	position:relative;
+	float:left;
+	width:1060px;
+	height:auto;
+	margin:0 100px 0 0px;
+	padding:40px ;
+	border:solid 0px #efefef;
+	background:#FFF url("/images/backgrounds/main_light.png") 0 0 repeat-x;
+}
+
+.section h2 {
+	font-weight:bold;
+	font-size:30px;
+	margin:0 0 0 10px;
+}
+
+.poll {
+
+	padding:0;
+}
+
+.poll .option {
+	padding:0;
+}
+
+
+.poll .hover {
+	color:#333 !important;
+}
+
+
+
+.poll .bar {
+	min-height:40px;
+	height:100%;
+	width:auto;
+	background-color:#ccc;
+	position:relative;
+	float:left;
+	margin: 0 20px 0 0px;
 }

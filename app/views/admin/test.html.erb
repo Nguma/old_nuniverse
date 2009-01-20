@@ -1,5 +1,22 @@
-<div class="step">
-  <%= thumbnail_tag @output %>
-  <%= @output.name %>
-  <p><%= @output.description %></p>
+<div class="poll section">
+  <div class="edit-mode">
+    <% form_for @poll, :url => {:controller => "admin", :action => "poll_create"} do |p| %>
+      <div class="step" >
+        <label>Poll your question</label>
+        <%= p.text_area :body, :rows => 3, :cols => 100 %>
+        <%= p.hidden_field :user_id %>
+        
+        <label>Add some possible answers (Each line is an answer)</label>
+        <% fields_for :answers do |o| %>
+          <%= o.text_area :body, :rows => 5, :cols => 100 %>
+        <% end -%>
+        <%= clear %>
+      </div>
+
+      <%= p.submit "Poll it!"%>
+    <% end -%>
+    
+  </div>
+  <div class="">
+  </div>
 </div>

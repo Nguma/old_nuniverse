@@ -2,53 +2,57 @@ class NuniversesController < ApplicationController
 	
 	before_filter :find_user, :only => [:suggest, :show, :command, :index]
 	before_filter :find_nuniverse, :except => [:index, :suggest]
+	before_filter :find_source, :only => [:index]
 	before_filter :update_session, :only => [:show]
  	after_filter :store_location, :only => [:show]
 
 	def index
-		params[:search_terms] ||= ""
-		@nuniverses = Nuniverse.search(params[:search_terms],:page => params[:page], :per_page => 40)
+			@input = params[:input] rescue nil
+			if @source
+				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 10)
+			else
+				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 10)
+			end
 	end
+
 	
 	def show
-		@perspective = params[:perspective]
-		@source = @nuniverse
-		@context = Story.find(params[:context]) rescue nil
-		@connection_to_current = Polyco.with_subject(@source).with_object(@current_user).first
-		@connections = @nuniverse.connections
-		
-		# render :action => "edit" if !@nuniverse.active
-		
-		
-		if @klass
-			
-		
-		@connections = @connections.of_klass(@klass)
-		
-		case params[:order]
-		when "by_latest"
-			@connections = @connections.order_by_date.with_score
-		when "by_name"
-			@connections = @connections.order_by_name.with_score
-		else
-			@connections = @connections.order_by_score(@perspective).with_score
-		end
-		
-		# @connections = @connections.relateds.of_klass(@klass)
 	
-		if @context
-			@connections = @connections.sphinx(:per_page => 3000, :conditions => {:context_ids => @context.id})
-		end
-		if params[:filter]
-			@connections = @connections.sphinx(params[:filter], :per_page => 3000)
-		end
-		end
-		
-		@connections = @connections.paginate(:per_page => 20, :page => params[:page])
+		@source = @nuniverse
+		@nuniverses = @source.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
+		@facts = @source.facts.paginate(:page => params[:page] || 1, :per_page => 10)
+		@bookmarks = @source.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
+		@images = @source.images.paginate(:page => params[:page] || 1, :per_page => 10)		
+		# # render :action => "edit" if !@nuniverse.active
+		# 	
+		# 	@connections = @connections.of_klass(@klass)
+		# 	
+		# 	@facts = @connections.of_klass(@facts).paginate(:page => 1, :per_page => 10)
+		# 	if @klass
+		# 	case params[:order]
+		# 	when "by_latest"
+		# 		@connections = @connections.order_by_date.with_score
+		# 	when "by_name"
+		# 		@connections = @connections.order_by_name.with_score
+		# 	else
+		# 		@connections = @connections.order_by_score(@perspective).with_score
+		# 	end
+		# 	
+		# 	# @connections = @connections.relateds.of_klass(@klass)
+		# 
+		# 	if @context
+		# 		@connections = @connections.sphinx(:per_page => 3000, :conditions => {:context_ids => @context.id})
+		# 	end
+		# 	if params[:filter]
+		# 		@connections = @connections.sphinx(params[:filter], :per_page => 3000)
+		# 	end
+		# 	end
+		# 	
+		# 	@connections = @connections.paginate(:per_page => 20, :page => params[:page])
 		
 		respond_to do |f|
 			f.html {
-				render :action => "overview" if !@klass
+			
 				@filter = params[:filter]  || nil
 			}
 			
@@ -102,16 +106,17 @@ class NuniversesController < ApplicationController
 	
 	def suggest
 		@conditions = {} 
-		@q = params[:comment] ? params[:comment][:body].scan(/\#[\w\-]+$/)[0] : "#{params[:query]}*"
-		if params[:comment]
+		
+		if params[:input]
+			tokens = Nuniversal.tokenize(params[:input])
 			
-			@conditions[:unique_name] = @q
+			@suggestions = ThinkingSphinx::Search.search(:conditions => {:unique_name => tokens.last}, :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
 		else
 			@conditions[:name] = @q
 		end
 		
 
-		@suggestions = ThinkingSphinx::Search.search(:conditions => @conditions, :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
+		
 
 		respond_to do |format|
 			format.html {}

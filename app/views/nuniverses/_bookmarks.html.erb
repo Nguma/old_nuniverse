@@ -1,10 +1,11 @@
-<div class="step">
-  <%= will_paginate @connections unless @connections.empty?%>
-  <%= display_options %>
-  <%= clear %>
+<div id="bookmarks" class="section">
+  <h2>Bookmarks</h2>
+  <% @bookmarks.each do |bookmark| -%>
+    <div class="step">
+      <%= link_to bookmark.name, bookmark.url %>
+      <p><%= link_to bookmark.url, bookmark.url %></p>
+    </div>
+  <% end -%>
+
+  <%= render :partial => "/bookmarks/new" %>
 </div>
-
-<%= columnize(render_connections(@connections))%>
-
-<%= clear %>
-<%= render :partial => "/bookmarks/new" %>
