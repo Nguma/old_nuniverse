@@ -1,7 +1,7 @@
-<div id="hat">
+<div style="padding:100px"><div id="hat">
   <%= image_tag("/images/icons/logo-nuniverse-2009.png")%>
 </div>
-<div id="sign_up" style="padding:10px 40px 40px 40px">
+<div id="sign_up" style="padding:10px 40px 40px 00px">
   <h1>Signing up, Basics</h1>
   <% if (error_messages_for :user).blank? %>
     
@@ -25,4 +25,5 @@
     <%= submit_tag 'Sign up' , :class => 'submit'%>
     <% end -%>
     <%= link_to "Cancel", "/" %>
+</div>
 </div>

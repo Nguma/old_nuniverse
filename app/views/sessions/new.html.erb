@@ -1,14 +1,14 @@
-<div id="login" >
-    <div class="header">
+<div id="login" style="padding:100px">
+    <div class="header" style="margin: 0 0 0 0">
       <%= image_tag("/images/icons/logo-nuniverse-2009.png") %>
     </div>
     <h1>Log in.</h1>
-    <% form_tag sessions_path do -%>
-      <p><label for="login">Login</label><br/>
-      <%= text_field_tag 'login' %></p>
+    <% form_tag "/sessions/create" do -%>
+      <label for="login" style="color:#eee">Login</label>
+      <%= text_field_tag 'login' %>
 
-      <p><label for="password">Password</label><br/>
-      <%= password_field_tag 'password' %></p>
+      <label for="password" style="color:#eee">Password</label>
+      <%= password_field_tag 'password' %>
 
       <!-- Uncomment this if you want this functionality
         <p><label for="remember_me">Remember me:</label>
@@ -17,4 +17,5 @@
       <br/>
       <p><%= submit_tag 'Log in' %></p>
     <% end -%>
+    <%= link_to "Cancel", "/"%>
   </div>
