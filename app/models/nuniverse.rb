@@ -8,6 +8,7 @@ class Nuniverse < ActiveRecord::Base
 	
 	has_many :story_connections, :as => :subject, :class_name => "Polyco", :dependent => :destroy
 	
+	belongs_to :redirect, :class_name => "Nuniverse"
 	
 	has_many :parents, :through => :connecteds, :source => :object, :source_type => "Nuniverse"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"

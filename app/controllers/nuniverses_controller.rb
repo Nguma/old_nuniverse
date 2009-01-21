@@ -17,7 +17,7 @@ class NuniversesController < ApplicationController
 
 	
 	def show
-	
+		redirect_to @nuniverse.redirect if @nuniverse.redirect
 		@source = @nuniverse
 		@nuniverses = @source.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
 		@facts = @source.facts.paginate(:page => params[:page] || 1, :per_page => 10)

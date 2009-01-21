@@ -61,7 +61,7 @@ $(document).ready(function()
   });
   
   $('#input-note-body').keyup(function(ev){
-    if(ev.keyCode() == '13') return;
+    if(ev.keyCode == '13') return;
     if($(this).val().match(/\#[\w|\-]+$/)) {
       suggest($(this))
     } else {

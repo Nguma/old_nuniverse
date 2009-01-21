@@ -7,7 +7,7 @@
   <%= render :partial => "bookmarks" %>
   <%= render :partial => "images" %>
   <%= render :partial => "contributors" %>
-  <%= render :partial => "account"%>
+  <%= render :partial => "account" if current_user == @user %>
   <%= clear %>
 
 <% end -%>
