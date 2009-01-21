@@ -611,6 +611,7 @@ a.filter:hover {
 	padding:40px ;
 	border:solid 0px #efefef;
 	background:#FFF url("/images/backgrounds/main_light.png") 0 0 repeat-x;
+	white-space:normal;
 }
 
 .section h2 {

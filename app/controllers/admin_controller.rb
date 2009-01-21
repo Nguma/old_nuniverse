@@ -125,27 +125,26 @@ class AdminController < ApplicationController
 	def batch
 		@nuniverses = Nuniverse.find(:all)
 		@nuniverses.each do |n|
-			if n.name.nil?
-				n.destroy
-			else
-			n.unique_name = n.name.gsub(/\s/,'-').gsub(/\,\.\'/,'').downcase
+			
+			n.unique_name = n.name.gsub(/\,/,'').titleize.gsub(/\s/,'_')rescue nil
 			n.save rescue nil
-			end
 		end
 
-		@polycos = Polyco.find(:all, :conditions => "description IS NOT NULL AND subject_type = 'Nuniverse' AND object_type = 'Nuniverse'")
-		@polycos.each do |p|
-			f = Fact.new(:body => p.description)
-			f.body = f.body.gsub(p.subject.name,"##{p.subject.unique_name}")
-			f.save
-			f.objects << p.object rescue nil
+		@facts = Fact.find(:all)
+		@facts.each do |n|
+			
+			Nuniversal.tokenize(n.body).each do |token|
+				n.body = n.body.gsub(/##{token}/,"[[#{token.gsub('-',' ')}]]")
+			end
+			n.save rescue nil
 		end
 	end
 	
 	def test
-		# raise Nuniversal.tokenize("It is the last day of #damson").inspect 
-		@poll = Comment.new(:author => current_user)
-		
+
+			Nuniversal.traverse(params[:token])
+	
+	
 	end
 	
 	

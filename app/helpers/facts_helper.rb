@@ -2,11 +2,18 @@ module FactsHelper
 	
 	def render_fact(fact)
 
-		body = fact.body_with_tag
-		
-			Nuniversal.tokenize(body).each do |token|
-				n = Nuniverse.find_by_unique_name(token)
-				body = body.gsub(/##{token}/,link_to(n.name, n)) unless n.nil?
+		body = fact.body_with_tag.strip
+		tokens = Nuniversal.tokenize(body)
+
+		tokens.each do |token|
+				n = Nuniverse.find_by_unique_name(Nuniversal.sanatize(token)) 
+				if n
+					sub = link_to(n.name, n)
+				else
+					sub = token
+				end
+					
+				body = body.gsub(/\[\[#{token}\]\]/,sub)
 			end
 			body = replace_urls(body)
 			body = body.gsub(/^([\w\-]+)?\:/,'<b style="color:#999;font-weight:bold;margin-right:5px">\1</b>')

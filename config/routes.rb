@@ -82,7 +82,7 @@ ActionController::Routing::Routes.draw do |map|
 	
 	map.tutorial_url "/tutorial", :controller => "users", :action => "tutorial"
 	
-
+	map.nuniverse_by_name "/nuniverse-of/:unique_name", :controller => "nuniverses", :action => "show"
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
    map.root :controller => "application"
 

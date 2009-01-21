@@ -129,7 +129,12 @@ class NuniversesController < ApplicationController
 	protected
 	
 	def find_nuniverse
-		@source = @nuniverse = Nuniverse.find(params[:id])
+		if params[:id]
+			@nuniverse = Nuniverse.find(params[:id]) 
+		elsif params[:unique_name]
+			@nuniverse = Nuniverse.find_by_unique_name(params[:unique_name])
+		end
+		@source = @nuniverse
 	end
 
 	

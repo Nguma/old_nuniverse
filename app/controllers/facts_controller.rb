@@ -67,8 +67,8 @@ class FactsController < ApplicationController
       if @fact.save
 				@tokens = Nuniversal.tokenize(@fact.body)
 				@tokens.each do |token|
-					n = Nuniverse.find_by_unique_name(token)
-					n = Nuniverse.create(:name => token.gsub(/\-/," "), :unique_name => token) if n.nil?
+					n = Nuniverse.find_or_create(token)
+					
 					@fact.subjects << n unless n.nil?
 				end
 				@source.facts << @fact
@@ -97,6 +97,15 @@ class FactsController < ApplicationController
     @fact = Fact.find(params[:id])
 		@scan = params[:fact][:body].scan(/^(([\w\-]+)\:)?(.*)/)[0]
 		@fact.body = @scan[2].strip
+			@tokens = Nuniversal.tokenize(@fact.body)
+			
+			@tokens.each do |token|
+				
+				n = Nuniverse.find_or_create(token)
+				unless n.nil?
+					@fact.subjects << n rescue nil
+				end
+			end
 		@fact.tags = [Tag.find_or_create(:name => @scan[1].downcase)] rescue []
 
 	

@@ -5,15 +5,13 @@ class CommentsController < ApplicationController
 	
 	def create
 		@comment = Comment.create(params[:comment])
-		@matches = @comment.body.scan(/\#([\w\-]+)/i)
+		@tokens = Nuniversal.tokenize(@comment.body)
 		
-		@matches.each do |match|
+		@tokens.each do |token|
 			# n = Nuniverse.search(match[1].gsub('-',' '))
 
-			unless match[0].nil?
-				n = Nuniverse.find_by_unique_name(match[0])
-				n = Nuniverse.create(:unique_name => match[0], :name => match[0].gsub('-',' '), :active => 1) if n.nil?
-
+			unless token.nil?
+				n = Nuniverse.find_or_create(token)
 				Polyco.create(:subject => n, :object => @comment, :state => 'active') rescue nil
 				Polyco.create(:subject => n, :object => @comment.parent, :state => 'active') rescue nil
 			end

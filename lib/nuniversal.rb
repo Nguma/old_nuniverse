@@ -27,11 +27,65 @@ module Nuniversal
 			@value = value.nil? ? label : value
 		end
 	end
+	
+	class Token
+		attr_reader :value
+		def initialize(value)
+			@value = value
+		end		
 		
+		def sanatize
+			@value.titleize.gsub(' ','_')
+		end
+		
+		def humanize
+			@value.gsub('_',' ')
+		end
+	end
+		
+	def self.humanize(token)
+		token.gsub('_',' ')
+	end
+	def self.sanatize(token)
+		token.titleize.gsub(' ','_').gsub(/\|.*/,'')
+	end
 	
 	def self.tokenize(str)
-		str.scan(/\#([\w\-]+)/i)[0] || []
+		# str.scan(/\#([\w\-]+)/i)[0] || []
+		str.scan(/\[\[([\w\s\-\_\,\?\!]+)\]\]/ix)[0] || []
+	end
 	
+	
+	def self.traverse(token)
+		url = "http://en.wikipedia.org/wiki/#{token}?action=edit"
+		father = Nuniverse.find_or_create(token)
+		
+		doc = Hpricot open url
+		if doc
+			content = (doc/:textarea).first.inner_text rescue nil
+			if content
+				p = content.scan(/\n\'\'\'(.*)\n/)[0] rescue []
+				p = p[0].split(". ").first.gsub(/\<ref .*\<\/ref\>/, '').gsub(/\'\'\'/,'') rescue ""
+				sentence = p.gsub(/\{\{.*\}\}/,'')
+		
+	
+			
+					f = Fact.create(:body => sentence.strip)
+					f.objects << father rescue nil
+					Nuniversal.tokenize(sentence).each do |token|
+						unless Nuniverse.find_by_unique_name(Nuniversal.sanatize(token))
+							n = Nuniverse.find_or_create(token)
+							f.subjects << n rescue nil
+							father.nuniverses << n rescue nil
+							Nuniversal.traverse(Nuniversal.sanatize(token)) 
+						end
+				
+					
+			
+				end
+			end
+		end
+		
 	end
 	
 	def self.parse_url(url)

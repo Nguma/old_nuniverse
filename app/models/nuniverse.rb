@@ -61,6 +61,14 @@ class Nuniverse < ActiveRecord::Base
 		Polyco.related_connections(self)
 		
 	end
+	
+	protected
+	def self.find_or_create(token)
+		unique_id = Nuniversal.sanatize(token)
+		n = Nuniverse.find_by_unique_name(unique_id)
+		n = Nuniverse.create(:unique_name => unique_id, :name => Nuniversal.humanize(token), :active => 1) if n.nil?
+		n
+	end
 
 	
 end
