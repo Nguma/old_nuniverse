@@ -57,26 +57,27 @@ class CommentsController < ApplicationController
 		end
 		
 		urlscan = @comment.body.scan(/((https?:\/\/)?[a-z0-9]+[-.]{1}([a-z0-9]+\.[a-z]{2,5})\S*)/ix)[0]
-		@bookmark = Bookmark.new
+	
+		
 		unless urlscan.nil?
 			url ||= "#{urlscan[1].nil? ? "http://" : nil}#{urlscan[0]}"
-
-			begin
-				doc = Hpricot open url
-				@bookmark.name = (doc/:title).inner_html rescue "#{urlscan[2]} page"
-				@bookmark.url = url
-				@bookmark.description = (doc/"meta[@name=description]").first.attributes['content'] rescue ""
-			
-				(doc/:img).each do |img|
-					if img.attributes['height'].to_i >= 50
-						img.attributes['src'] = "#{url}/#{img.attributes['src']}" unless img.attributes['src'].match(/^http/)
-						@images <<  img  unless !img.attributes['src'].match(/(\.)(jpg|png)$/)
-					end
+			@bookmark = Bookmark.find(:first, :conditions => ['url = ?', url]) || Bookmark.new
+				
+				doc = Hpricot open url rescue nil
+				if doc
+					@bookmark.name = (doc/:title).inner_html rescue "#{urlscan[2]} page"
+					@bookmark.url = url
+					@bookmark.description = (doc/"meta[@name=description]").first.attributes['content'] rescue ""
+					@bookmark.save
 				end
-				@bookmark.images << Image.create(:source_url => @images.first.attributes['src']) 
-			rescue
+				# (doc/:img).each do |img|
+				# 	if img.attributes['height'].to_i >= 50
+				# 		img.attributes['src'] = "#{url}/#{img.attributes['src']}" unless img.attributes['src'].match(/^http/)
+				# 		@images <<  img  unless !img.attributes['src'].match(/(\.)(jpg|png)$/)
+				# 	end
+				# end
+				# @bookmark.images << Image.create(:source_url => @images.first.attributes['src']) 
 			
-			end
 			@bookmark.save
 			@comment.parent.bookmarks << @bookmark
 			

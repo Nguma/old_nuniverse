@@ -5,12 +5,20 @@ module FactsHelper
 		body = fact.body_with_tag
 		
 			Nuniversal.tokenize(body).each do |token|
-				
 				n = Nuniverse.find_by_unique_name(token)
-
 				body = body.gsub(/##{token}/,link_to(n.name, n)) unless n.nil?
 			end
-		body = body.gsub(/^([\w\-]+)?\:/,'<b style="color:#999;font-weight:bold;margin-right:5px">\1</b>')
+			body = replace_urls(body)
+			body = body.gsub(/^([\w\-]+)?\:/,'<b style="color:#999;font-weight:bold;margin-right:5px">\1</b>')
 			body
+	end
+	
+	def replace_urls(str)
+		
+		str.scan(/((https?:\/\/)?[a-z0-9]+[-.]{1}([a-z0-9]+\.[a-z]{2,5})\S*)/i).each  do |url|
+			n = Bookmark.find(:first, :conditions => {:url => url[0]})
+			str = str.gsub(url[0],link_to(n.name, n.url)) if n
+		end
+		str
 	end
 end
