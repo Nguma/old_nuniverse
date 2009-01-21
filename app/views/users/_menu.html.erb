@@ -1,6 +1,7 @@
 <ul id="tab-menu" >
+    <li class="selected" style="position:absolute;color:#ccc">--</li>
   <li style="float:right">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></li>
-  <li class="selected"><%= link_to "Overview", "#overview" %></li>
+  <li ><%= link_to "Overview", "#overview" %></li>
   <li class=""><%= link_to "Stories", "#stories" %></li>
   <li class=""><%= link_to "Connections", "#connections"%></li>
   <li class=""><%= link_to "Bookmarks", "#bookmarks" %></li>
@@ -9,5 +10,7 @@
   <% if current_user == @source %>
     <li class=""><%= link_to "Account", "#account" %></li>
   <% end -%>
+  
+
 
 </ul>

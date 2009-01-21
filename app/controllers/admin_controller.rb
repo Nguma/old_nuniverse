@@ -132,20 +132,15 @@ class AdminController < ApplicationController
 
 		@facts = Fact.find(:all)
 		@facts.each do |n|
-			
-			Nuniversal.tokenize(n.body).each do |token|
+			scan = n.body.str.scan(/\#([\w\-]+)/i)[0] || []
+			scan.each do |token|
 				n.body = n.body.gsub(/##{token}/,"[[#{token.gsub('-',' ')}]]")
 			end
 			n.save rescue nil
 		end
 	end
 	
-	def test
 
-			Nuniversal.traverse(params[:token])
-	
-	
-	end
 	
 	
 	

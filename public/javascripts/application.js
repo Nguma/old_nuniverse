@@ -69,6 +69,7 @@ $(document).ready(function()
     }
   })
   
+
   
   $("#popup .close-btn").click(
     function() {
@@ -97,6 +98,12 @@ $(document).ready(function()
   
   makePollEditable();
   
+  $('#tab-menu a').click(function(ev) {
+ 
+    var lnk = $(this).parent();
+     
+    $('#tab-menu .selected').animate({"left":lnk.offset().left, "width":lnk.width()}, "slow")
+  });
   
   
 });
