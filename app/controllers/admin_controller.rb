@@ -123,16 +123,10 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
-		@nuniverses = Nuniverse.find(:all)
-		@nuniverses.each do |n|
-			
-			n.unique_name = n.name.gsub(/\,/,'').titleize.gsub(/\s/,'_')rescue nil
-			n.save rescue nil
-		end
 
 		@facts = Fact.find(:all)
 		@facts.each do |n|
-			scan = n.body.str.scan(/\#([\w\-]+)/i)[0] || []
+			scan = n.body.scan(/\#([\w\-]+)/i)[0] || []
 			scan.each do |token|
 				n.body = n.body.gsub(/##{token}/,"[[#{token.gsub('-',' ')}]]")
 			end
