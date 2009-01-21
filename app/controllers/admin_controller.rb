@@ -123,9 +123,22 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
-		raise Nuniversal.localize("335 w 20th street Nyc ny 10011", current_user).inspect
-		ps = Polyco.find(:all, :conditions => ["description is not null AND object_type = 'Nuniverse'"])
-		ps.each do |p|
+		@nuniverses = Nuniverse.find(:all)
+		@nuniverses.each do |n|
+			if n.name.nil?
+				n.destroy
+			else
+			n.unique_name = n.name.gsub(/\s/,'-').gsub(/\,\.\'/,'').downcase
+			n.save rescue nil
+			end
+		end
+
+		@polycos = Polyco.find(:all, :conditions => "description IS NOT NULL AND subject_type = 'Nuniverse' AND object_type = 'Nuniverse'")
+		@polycos.each do |p|
+			f = Fact.new(:body => p.description)
+			f.body = f.body.gsub(p.subject.name,"##{p.subject.unique_name}")
+			f.save
+			f.objects << p.object rescue nil
 		end
 	end
 	

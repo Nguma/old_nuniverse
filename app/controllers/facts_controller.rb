@@ -68,6 +68,7 @@ class FactsController < ApplicationController
 				@tokens = Nuniversal.tokenize(@fact.body)
 				@tokens.each do |token|
 					n = Nuniverse.find_by_unique_name(token)
+					n = Nuniverse.create(:name => token.gsub(/\-/," "), :unique_name => token) if n.nil?
 					@fact.subjects << n unless n.nil?
 				end
 				@source.facts << @fact
