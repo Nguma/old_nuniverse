@@ -2,6 +2,6 @@
 <% form_for new_fact, :url => {:controller => "facts", :action => "create"} , :html => {:id => "new-fact"} do |f| -%>
     <%= f.text_area :body, :rows => 2, :cols => 100, :id => "input-note-body" %>
     <%= submit_tag "", :id => "input-note-submit"%>
-    <%= fields_for_source %>
+    <%= fields_for_source(parent) %>
     
 <% end -%>

@@ -1,5 +1,6 @@
 <% @suggestions.each do |suggestion| -%>
   <dd class='suggestion <%= cycle('even','odd') %>' >
+    <div class="hidden unique-id"><%= suggestion.id %></div>
     <%= thumbnail_tag suggestion %>
     <%= link_to "#{suggestion.name}", polymorphic_url(suggestion) , :id => "#{suggestion.type}-#{suggestion.id}"%>
     <span style="font-size:14px">(<%= suggestion.tags.collect {|c| c.name}.join(',')%>)</span><br/>

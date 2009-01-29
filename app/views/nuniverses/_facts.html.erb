@@ -6,14 +6,17 @@
       <%= will_paginate @facts unless @facts.empty?%>
       <%= clear %>
     </div>
+    <dl>
     <% @nuniverse.facts.each do |fact| -%>
       <%= render :partial => "/facts/instance", :locals => {:instance => fact} %>
     <% end -%>
+    </dl>
     <%= clear %>
     
-    <%= render :partial => "/facts/new" %>
+    <%= render :partial => "/facts/new" , :locals => {:parent => @source}%>
     <%= clear %>
-    To add a fact, just type it in. Wrap the name of the nuniverses you want to connect with like this: <span style="font-weight:bold">[[Nuniverse Name]]</span> 
+    To add a fact, just type it in. Wrap the name of the nuniverses you want to connect with like this: <span style="font-weight:bold">[[Nuniverse Name]]</span> <br/>
+    To categorize that fact, start it with <span style="font-weight:bold">Category: my fact</span>
   </div>
 </div>
 

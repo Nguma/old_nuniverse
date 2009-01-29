@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge, :upgrade]
 	before_filter :login_required, :except => [:new, :activate, :create]
 	skip_before_filter :invitation_required, :only => [:new, :create, :activate]
-  after_filter :store_location, :only => [:show]
+  after_filter :store_location, :store_source, :only => [:show]
 	before_filter :update_session, :only => [:show, :tutorial]
 	
 	def index
@@ -135,11 +135,9 @@ class UsersController < ApplicationController
 		render :action => :tutorial if (@user == current_user && @count == 0) || (current_user.role == "admin" && params[:tutorial])
 		
 
-		
+		@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/User_#{@user.id}.xml")).boxes rescue []
 	
 		@count = @user.connections.count
-
-		
 		@bookmarks = @user.bookmarks(:page =>1, :per_page => 10)
 		@nuniverses = @user.nuniverses(:page =>1, :per_page => 10)
 		@stories = @user.stories(:page =>1, :per_page => 10, :order => "updated_at desc")
@@ -149,7 +147,7 @@ class UsersController < ApplicationController
 		@most_active_story = @stories.first
 	
 		respond_to do |format|
-			format.html { }	
+			format.html { @source = @user}	
 			format.js { }
 		end
 	end
@@ -160,6 +158,6 @@ class UsersController < ApplicationController
 	
 protected
   def find_user
-    @source = @user = User.find(params[:id]) rescue current_user
+    @user = User.find(params[:id]) rescue current_user
   end
 end

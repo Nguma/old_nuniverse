@@ -111,6 +111,16 @@ module NuniverseHelper
 		))		
 	end
 	
+	def popup(params = {}, &block)
+		params[:html] = params
+		params[:content] = capture(&block)
+		concat(
+			render(
+				:partial => "/nuniverse/popup",
+				:locals => params
+		))
+	end
+	
 	def render_hat(params)
 		if params[:subject]
 			params[:image] ||= avatar_for(params[:subject])
@@ -148,19 +158,7 @@ module NuniverseHelper
 
 		image_tag("/images/backgrounds/empty_perspective.png", :class => "empty_slot", :alt => "Drop a perspective here", :style => "position:relative;")
 	end
-	
-	def urize(params)
-		params[:mode] ||= @mode
-		params[:id] ||= @source.id
-		case @source.class.to_s
-		when "List"
-			listing_url(params)
-		when "User"
-			user_url(params)
-		else
-			tag_url(params)
-		end
-	end
+
 	
 	def search_box
 		render :partial => "/nuniverse/search_box"
@@ -176,11 +174,17 @@ module NuniverseHelper
 		end
 	end
 
-	def box(params)
+	def render_box(params = {}, &block)
+		params[:content] = capture(&block)
 		params[:dom_class] ||= ""
-		params[:title] ||= params[:source].title
-		params[:dom_id] ||= params[:title].pluralize.gsub(" ", "_")
-		render :partial => "/taggings/box", :locals => params
+
+		params[:dom_id] ||= params[:box].name.pluralize rescue ""
+		concat(
+			render(
+			:partial => "/boxes/box", 
+			:locals => params
+		))
+		
 	end
 	
 	def tag_box(params) 

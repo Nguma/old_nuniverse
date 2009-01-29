@@ -2,15 +2,12 @@
   <h3>You are about to create a new story. how to? Simple!</h3>
   <h4>Enter the title of the story in that box, and press "+" </h4> 
 <% @new_story = Story.new(:author => current_user)%>
-<% form_for @new_story, :url => {:controller => "stories"} , :html => {:id => "new-story", :style => "background:none"} do |f| %>
+<% form_for @new_story, :url => {:controller => "stories"} , :html => {:id => "new-story", :class => "new-form", :style => "background:none"} do |f| %>
   
   <%= f.text_area :name, :rows => 2, :cols => 100 , :id => "input-note-body"%>
   <%= submit_tag "", :id => "input-note-submit" %>
   <%#= f.check_box :is_private %>
-   <% fields_for :subject, @source do |s| -%>
-      <%= s.hidden_field :id %>
-      <%= s.hidden_field :type %>
-    <% end -%>
+   <%= fields_for_source(@source)%>
   <%= f.hidden_field :author_id %>
   
   

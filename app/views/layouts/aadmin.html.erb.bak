@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+       
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>* nuniverse admin *</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Language" content="en-us" />
+  <meta name="Author" content="#TODO" />
+  <meta name="ROBOTS" content="noindex, nofollow" />
+  <meta name="MSSmartTagsPreventParsing" content="true" />
+  <meta name="Description" content="." />
+  <meta name="Keywords" content="" />
+  <meta http-equiv="imagetoolbar" content="no" />
+  <meta name="verify-v1" content="/b/gBK4McPYhBKaszdoH2V4g8APPQuLR+gAg4gpteUs=" />
+
+
+
+  <%= stylesheet_link_tag 'application', 'default', 'admin', 'nuniverse', 'account', 'connection', 'stories', 'filters', 'box', 'list', 'items', 'input', 'custom' %>
+   <%= javascript_include_tag  'jquery', 'jquery_form', 'jquery_localscroll','application'%>
+  <%= yield :head %>
+  <%#= head_for(controller.controller_name )%>
+ 
+</head>
+<body onunload="javascript:onUnload()">
+  <div id="notice"><%= flash[:notice] %><%= flash[:error]%></div>
+  
+  
+  <div id="wrap">
+    <%= yield %>
+  </div>
+</body>
+
+</html>

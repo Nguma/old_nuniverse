@@ -1,5 +1,1 @@
-<div class="step">
-  <%= thumbnail_tag @comment.subjects.first rescue nil %>
-  <%= render_comment(@comment)%>
-  <%= clear %>
-</div>
+<%= render :partial => "/comments/instance", :locals => {:instance => @comment}%>

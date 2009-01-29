@@ -101,7 +101,7 @@ class CommentsController < ApplicationController
 
 	
 	def show
-		
+
 		respond_to do |f|
 			f.html {}
 			f.js { render :layout => false}
@@ -113,6 +113,7 @@ class CommentsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_back_or_default('/') }
+			format.js {head :ok}
       format.xml  { head :ok }
     end
 	end

@@ -1,0 +1,38 @@
+
+<% nuniverse do %>
+
+<div id="overview" class="section">
+</div>
+  <div class="section" id="section-1" style="background:none;position:relative">
+    
+  <div class="hat">
+    <h2>Team Members</h2>
+  </div>
+  
+  <dl style="margin:50px 0 0 0; padding:30px 0 0 0;position:relative" id="n">
+  <% @connections.each_with_index do |c, i| %>
+    
+      <% top = (i/4).floor * 100 %>
+
+      <% left = (i%4) * 300 %>
+      <%= render :partial => "/nuniverses/instance", :locals => {:instance => c.subject, :style => "left:#{left}px;top:#{top}px;position:absolute;width:#{280}px"} %>
+
+    
+  <% end -%>
+  </dl>
+  </div>
+  
+ 
+<% end %>
+<div class="resizable box" style="display:none">
+    <%= link_to image_tag("/images/icons/close_btn.png"), "#close", :class => "close-btn"%>
+  <div class="content">
+    <h2>Adding to Team Members</h2>
+    <%= render :partial => "/images/new",  :locals => {:source => @source}%>
+  </div>
+</div>
+
+
+<%= render :partial => "/application/templates" %>
+
+<%= render :partial => "/nuniverse/menu" %>

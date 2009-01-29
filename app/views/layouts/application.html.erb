@@ -15,9 +15,10 @@
   <meta http-equiv="imagetoolbar" content="no" />
   <meta name="verify-v1" content="/b/gBK4McPYhBKaszdoH2V4g8APPQuLR+gAg4gpteUs=" />
 
-
+<style type='text/css'>@import url('http://s3.amazonaws.com/getsatisfaction.com/feedback/feedback.css');</style>
   <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'stories', 'filters', 'box', 'list', 'items', 'input', 'custom' %>
-  <%= javascript_include_tag  'jquery', 'jquery_form', 'jquery_localscroll', 'scroll_to', 'application'%>
+  <%= javascript_include_tag  'jquery', 'jquery_form', 'jquery_localscroll', 'scroll_to',  'application'%>
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
   <% if @kind && @kind == "address"%>
     <%= GMap.header(:small_zoom => true, :with_vml => false, :large => true) %>
   <% end -%>
@@ -41,7 +42,7 @@
       </script>
 </head>
 <body  >
-  <style type='text/css'>@import url('http://s3.amazonaws.com/getsatisfaction.com/feedback/feedback.css');</style>
+  
   <script src='http://s3.amazonaws.com/getsatisfaction.com/feedback/feedback.js' type='text/javascript'></script>
   <script type="text/javascript" charset="utf-8">
   var tab_options = {}

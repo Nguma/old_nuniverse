@@ -1,12 +1,13 @@
 <div id="stories" class="section" >
-  <%= render :partial => "/stories/new"%>
-  <dl class="menu" style="position:absolute;left:40px;top:0; background:#999">
-    <dd style="color:#FFF;font-weight:bold;padding:5px"><%= link_to "+ New story", "", :class => "new-story-lnk" %></dd>
-    
+  
+  <dl class="menu">
+    <dd><%= link_to "+ New story", "", :class => "new-story-lnk" %></dd>
+    <dd><%#= render :partial => "/nuniverse/search", :locals => {:action => stories_url}%></dd>
   </dl>
-  <%= render :partial => "/nuniverse/search", :locals => {:action => stories_url}%>
-  <h2>Stories</h2>
-
+  <%= render :partial => "/stories/new"%>
+  <div class="hat step">
+    <h2>Stories</h2>
+  </div>
   
   <div class="content">
   <% @stories.each do |story| -%>
@@ -15,5 +16,11 @@
   <%= clear %>
   </div>
 
+  <ul class="sub-menu">
+    <li><%= link_to "Browse", "#" %></li>
+    <li><%= link_to "Edit", "#" %></li>
+    <li><%= link_to "Share", "#" %></li>
+    <li><%= link_to "Comment", "#" %></li>
+  </ul>
 </div>
 

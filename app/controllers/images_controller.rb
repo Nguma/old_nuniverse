@@ -7,14 +7,18 @@ class ImagesController < ApplicationController
   def create
 		@source = params[:source][:type].classify.constantize.find(params[:source][:id])
 		begin
-			@source.images << Image.create!(params[:image])
+			@image = Image.create!(params[:image])
+			@source.images << @image
 		rescue
 		end
+
+
 		
 		respond_to do |f|
-			f.html { redirect_back_or_default('/')}
-			f.js {}
+			f.html { render :layout => false}
+			f.js { render :layout => false}
 		end
+		
   end
 
 	

@@ -1,0 +1,5 @@
+<h3>Say it loud!</h3>
+<% form_tag "#TODO" do -%>
+  <%= text_area_tag :body, "", :rows => 3, :style => "width:340px;display:block;" %>
+  <%= submit_tag "Send" %>
+<% end -%>

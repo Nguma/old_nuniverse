@@ -1,0 +1,20 @@
+<story_48>
+  <team_members>
+    <john_doe>
+      <position>Attacker</position>
+      <goals>5</goals>
+    </john_doe>
+    <james_doe>
+      <position>Midfield</position>
+      <goals>3</goals>
+    </james_doe>
+    <joe_doe>
+      <position>Left Winger</position>
+      <goals>2</goals>
+    </joe_doe>
+    <james_doe>
+      <position>Goalkeeper</position>
+      <goals>1</goals>
+    </james_doe>
+  </team_members>
+</story_48>

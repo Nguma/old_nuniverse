@@ -1,12 +1,21 @@
-<ul id="tab-menu">
-    <li style="float:right">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></li>
+<div style="position:fixed;right:20px;">
+  You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee", :id => "logout_lnk"%>
+</div>
+<ul id="sub-menu">
   
-  <li class="<%= @klass ==  nil ? 'selected' : '' %>"><%= link_to "Overview", "#overview" %></li>
-  <li class="<%= @klass ==  nil ? 'selected' : '' %>"><%= link_to "Conversation", "#conversation" %></li>
-  <li class="<%= @klass == 'Nuniverse' ? 'selected' : '' %>"><%= link_to "Connections", "#connections"%></li>
-  <li class="<%= @klass == 'Bookmark' ? 'selected' : '' %>"><%= link_to "Bookmarks", "#bookmarks"%></li>
+</ul>
+<ul id="tab-menu">
+  <li class="selected" style="position:absolute;color:#ccc;width:65px">--</li>
  
-  <li class="<%= @klass == 'User' ? 'selected' : '' %>"><%= link_to "Contributors", "#contributors" %></li>
-  <li class=""><%= link_to "Map", "#map" %></li>
+  <li><%= link_to "Overview", "#overview" %></li>
+ 
+  <% if false %>
+  <li><%= link_to "Storyline", "#new_set" %></li>
+   <li><%= link_to "Contributors", "#contributors" %></li>
+  
+  
+  <li><%= link_to "Map", "#map" %></li>
+  <% end -%>
 
 </ul>
+

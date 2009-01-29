@@ -7,6 +7,8 @@ class ApplicationController < ActionController::Base
 	
 	
 	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about, :screenshots]
+	
+	before_filter :find_source, :only => [:save_layout]
 
 
   # See ActionController::RequestForgeryProtection for details
@@ -35,6 +37,20 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def screenshots
+	end
+	
+	def save_layout	
+	
+		@doc = Nuniversal::Parser.new("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
+		if @doc.write( params[:xml].to_s)
+			respond_to do |f|
+				f.xml {head :ok}
+			end
+		else
+			respond_to do |f|
+				f.xml {raise params[:xml].inspect}
+			end
+		end
 	end
 	
 	def feedback
@@ -70,11 +86,9 @@ class ApplicationController < ActionController::Base
 		# @klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
 		@klass = params[:klass]
 		
-		@size = (@display == "image") ? :large : :small
+		session[:size] = (@display == "image") ? :large : :small
 		
-		session[:service] = @service
-		session[:perspective] = @perspective
-
+		
 		
 		session[:last_input] = @filter
 	
@@ -88,10 +102,8 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	
-	def find_context
-		
-		@context = params[:context][:type].classify.constantize.find(params[:context][:id])  rescue nil
-	
+	def store_source
+		session[:source] = @source
 	end
 
 	def service_items(query)
@@ -119,7 +131,7 @@ class ApplicationController < ActionController::Base
 	
 	def find_source
 	  @source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue session[:source]
-		session[:source] = @source
+		
 	end
 	
 	
@@ -137,5 +149,7 @@ class ApplicationController < ActionController::Base
 			return Bookmark.new(:name => bookmark, :url => bookmark)
 		end
 	end
+	
+
 
 end

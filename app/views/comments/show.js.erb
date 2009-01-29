@@ -1,19 +1,24 @@
-<h2><%#= @comment.body %></h2>
+<dl class="menu">
+  <dd style="position:absolute;right:5px;">
+    <%= link_to "http://www.nuniverse.net/comments/#{@comment.id}", comment_url(@comment) %>
+  </dd>
+</dl>
 
-<% @comment.subjects.each do |subject| %>
+<div class="step">
+  <h2><%= @comment.body %></h2>
+</div>
+<div class="content">
+  <dl class="content-list">
+
+    <% @comment.comments.each do |comment| %>
+      <%= render :partial => "/comments/instance", :locals => {:instance => comment}%>
   
-  <div class="step">
-  <%= thumbnail_tag subject %>
-  <%= link_to subject.name, polymorphic_url(subject)%>
-  <p><%= subject.description %></p>
-  <p><%= subject.bookmarks.first.url rescue nil %></p>
-  <dl class="fact-sheet">
-    <dt>Quick Facts</dt>
-    <% subject.facts.paginate(:page => 1, :per_page => 5).each do |fact| %>
-      <dd class="step">
-        <%= fact.body %>
-      </dd>
     <% end -%>
+    <dd class="step"></dd>
   </dl>
-  </div>
-<% end -%>
+</div>
+<%= clear %>
+
+<div class="step" style="position:relative;bottom:0;z-index:999;width:100%">
+  <%= render :partial => "/comments/new", :locals => {:parent => @comment}%>
+</div>

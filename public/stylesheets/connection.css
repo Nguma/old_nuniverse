@@ -2,7 +2,7 @@
 	padding:10px;
 	position:relative;
 	clear:left;
-	border-bottom:solid #ccc 1px;
+/*	border-bottom:solid #ccc 1px;*/
 }
 
 
@@ -14,9 +14,19 @@
 
 
 .connection a.title {
-	color:#369;
+/*	color:#369;*/
+	color:#FFF;
 	font-size:20px;
 	font-weight:bold;
+}
+
+.connection .name a {
+	font-size:20px;
+	font-weight:bold;
+}
+
+.hover .name a {
+/*	color:#369;*/
 }
 
 
@@ -75,8 +85,8 @@
 .list_mode .connection {
 /*	background:#dedede;*/
 
-	border-bottom:solid 1px #ccc;
-	padding:30px 20px 30px 20px;
+/*	border-bottom:solid 1px #ccc;*/
+	padding:10px;
 }
 
 .edit_lnk {
@@ -87,8 +97,9 @@
 	visibility:visible;
 }
 
-.connection .hover {
-	background:#FFF;
+
+.content-list .hover span {
+		color:#333;
 }
 
 .order_by_name .rank_lnk,
@@ -223,6 +234,12 @@ img.thumbnail {
 	padding:4px 6px 6px 4px;
 }
 
+.image_mode .connection {
+	position:relative;
+	float:left;
+	width:22% !important;
+	clear:none;
+}
 
 .image_mode .connection img.thumbnail {
 	background:none;
@@ -233,7 +250,7 @@ img.thumbnail {
 	
 }
 
-.image_mode #content img.default_img {
+.image_mode .content img.default_img {
 	width:40px;
 	height:40px;
 	display:block;
@@ -245,13 +262,19 @@ img.thumbnail {
 	display:none;
 }
 
-#left-column .card_mode .connection {
+.card_mode .connection {
 	padding:10px !important;
+	width:240px !important;
+	position:relative;
+	float:left !important;
+	clear:none;
 }
 
-.card_mode .description a.title {
+.card_mode .body a {
 	position:relative;
-	font-size:18px;
+	font-size:20px;
+
+	font-weight:bold;
 }
 
 .connection .description {
@@ -272,4 +295,32 @@ img.thumbnail {
 .card_mode .even, 
 .card_mode .odd {
 	background:none;
+}
+
+.connection .body {
+	font-size:25px;
+}
+
+.connection .options {
+	visibility:hidden;
+	position:relative;
+	float:left;
+	clear:none;
+	font-size:15px;
+}
+
+.hover .options {
+	visibility:visible;
+}
+
+.connection p {
+	color:#FFF;
+}
+
+.connection p b {
+	color:#eef;
+}
+
+.hover p {
+/*	color:#333;*/
 }

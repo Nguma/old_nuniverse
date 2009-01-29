@@ -1,7 +1,7 @@
- <div class="section" id="connections">
-   <h2>Connections</h2>
+ <div class="section" id="connections" style="border:10px #FFF solid;padding:10px">
+   <h2>Team members</h2>
    <% @nuniverses.each do |connection| -%>
-      <%= render :partial => "/nuniverses/instance", :locals => {:instance => connection}%>
+      <%= render :partial => "/nuniverses/instance", :locals => {:instance => connection} %>
    <% end -%>
    
    <%= render :partial => "/nuniverses/new" %>

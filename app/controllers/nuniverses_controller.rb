@@ -4,61 +4,43 @@ class NuniversesController < ApplicationController
 	before_filter :find_nuniverse, :except => [:index, :suggest]
 	before_filter :find_source, :only => [:index]
 	before_filter :update_session, :only => [:show]
- 	after_filter :store_location, :only => [:show]
+ 	after_filter :store_location, :store_source, :only => [:show]
 
 	def index
 			@input = params[:input] rescue nil
 			if @source
-				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 10)
+				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 50)
 			else
-				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 10)
+				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 50)
+			end
+			
+			respond_to do |f|
+				f.html {}
+				f.js {}
 			end
 	end
 
 	
 	def show
 		redirect_to @nuniverse.redirect if @nuniverse.redirect
-		@source = @nuniverse
-		@nuniverses = @source.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
-		@facts = @source.facts.paginate(:page => params[:page] || 1, :per_page => 10)
-		@bookmarks = @source.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
-		@images = @source.images.paginate(:page => params[:page] || 1, :per_page => 10)		
-		# # render :action => "edit" if !@nuniverse.active
-		# 	
-		# 	@connections = @connections.of_klass(@klass)
-		# 	
-		# 	@facts = @connections.of_klass(@facts).paginate(:page => 1, :per_page => 10)
-		# 	if @klass
-		# 	case params[:order]
-		# 	when "by_latest"
-		# 		@connections = @connections.order_by_date.with_score
-		# 	when "by_name"
-		# 		@connections = @connections.order_by_name.with_score
-		# 	else
-		# 		@connections = @connections.order_by_score(@perspective).with_score
-		# 	end
-		# 	
-		# 	# @connections = @connections.relateds.of_klass(@klass)
-		# 
-		# 	if @context
-		# 		@connections = @connections.sphinx(:per_page => 3000, :conditions => {:context_ids => @context.id})
-		# 	end
-		# 	if params[:filter]
-		# 		@connections = @connections.sphinx(params[:filter], :per_page => 3000)
-		# 	end
-		# 	end
-		# 	
-		# 	@connections = @connections.paginate(:per_page => 20, :page => params[:page])
 		
+		@nuniverses = @nuniverse.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
+		@facts = @nuniverse.facts.paginate(:page => params[:page] || 1, :per_page => 10)
+		@bookmarks = @nuniverse.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
+		@images = @nuniverse.images.paginate(:page => params[:page] || 1, :per_page => 10)		
+		
+
 		respond_to do |f|
 			f.html {
-			
-				@filter = params[:filter]  || nil
+				@source = @nuniverse
+				if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
+					@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
+				else
+					@boxes  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
+				end
 			}
 			
-			f.js {
-				
-			}
+			f.js { }
 		end
 
 	end
@@ -93,6 +75,30 @@ class NuniversesController < ApplicationController
 		# 		redirect_back_or_default('/')
 	end
 	
+	def create
+		@nuniverse = Nuniverse.find(params[:nuniverse][:id]) rescue Nuniverse.create(params[:nuniverse])
+		
+		if params[:source]
+			@object = params[:source][:type].classify.constantize.find(params[:source][:id])
+			
+			Polyco.create(:object => @object, :subject => @nuniverse, :state => 'active') rescue nil
+		end		
+		
+	
+		params[:properties].each do |p|
+			t = Tag.find_by_name(p[0])
+			@nuniverse.set_property(t,p[1]) 
+		end
+		
+
+		
+		respond_to do |f|
+			f.js {}
+			
+		end
+		
+	end
+	
 	def destroy
 		
 		@nuniverse.destroy
@@ -109,8 +115,11 @@ class NuniversesController < ApplicationController
 		
 		if params[:input]
 			tokens = Nuniversal.tokenize(params[:input])
-			
-			@suggestions = ThinkingSphinx::Search.search(:conditions => {:unique_name => tokens.last}, :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
+			if tokens.empty?
+				@suggestions =  ThinkingSphinx::Search.search(params[:input], :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
+			else
+				@suggestions = ThinkingSphinx::Search.search(:conditions => {:unique_name => tokens.last}, :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
+			end
 		else
 			@conditions[:name] = @q
 		end

@@ -1,12 +1,11 @@
-<div id="overview" class="section">
-  <%= render :partial => "hat"%>
-  <% if @facts.empty? %>
-  <div class='step'>
-    No facts about that nuniverse yet. <%= link_to "Add a fact", "#facts" %>
-  </div>
-  <% else -%>
-    <% @source.facts.paginate(:page =>1, :per_page => 4).each do |f| %>
-      <div class="step" ><%= render_fact(f) rescue " "%></div>
+
+ <%= render :partial => "hat"%>
+  <% @boxes.each do |box| -%>
+    <% render_box(:box => box) do -%>
+        <% klass = box.klass rescue 'Fact' %>
+        <% tags = box.tags rescue nil %>
+      <% @source.connections.of_klass(klass).tagged(tags).each do |c| %>
+        <%= render :partial => "/#{klass.classify.pluralize.downcase}/instance", :locals => {:instance => c.subject}%>
+      <% end %>
     <% end -%>
   <% end -%>
-</div>

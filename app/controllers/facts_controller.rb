@@ -22,12 +22,15 @@ class FactsController < ApplicationController
   # GET /facts/1
   # GET /facts/1.xml
   def show
-    @source = @fact = Fact.find(params[:id])
+     @fact = Fact.find(params[:id])
 
-		@suggestions = Nuniverse.search( @fact.body, :match_mode => :any)
+		# @suggestions = Nuniverse.search( @fact.body, :match_mode => :any)
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html {
+				@source = @fact
+			}# show.html.erb
+			format.js {}
       format.xml  { render :xml => @fact }
     end
   end

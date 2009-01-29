@@ -1,5 +1,8 @@
 
-  <%= link_to "Visit another nuniverse.", "#expand_visit_form", :class => "expand-lnk", :id => "expand_visit_form" %>
-  <% form_tag "/nuniverses/index", :id => "visit_form" , :style => "display:none" do -%>
-    <%= text_field_tag "input", "" , :id => "input-visit"%><%= submit_tag "Visit"%>
+  <%= link_to "Visit another nuniverse.", "#TODO", :class => "expand-lnk", :id => "expand-visit-form" %>
+  <% form_tag "/find-nuniverse", :id => "visit-form" , :style => "display:none;background:#333" do -%>
+    <fieldset style="border:solid 3px #333;padding:0;height:auto;line-height:auto;display:block">
+    <%= text_field_tag "input", "" , :id => "input-visit", :style => "margin:0"%>
+    </fieldset>
+    <dl class="suggestions"></dl>
   <% end -%>

@@ -2,8 +2,8 @@ class StoriesController < ApplicationController
 	
 	before_filter :find_story, :except => [:new, :create, :index]
 	before_filter :find_source, :only => [:index]
-	before_filter :find_context, :except => [:index]
-	after_filter :store_location, :only => [:show]
+	# before_filter :find_context, :except => [:index]
+	after_filter :store_location, :store_source,  :only => [:show]
 	before_filter :update_session, :only => [:show]
 	
 	
@@ -17,7 +17,6 @@ class StoriesController < ApplicationController
 		else
 			@stories = Story.search(@input, :page => params[:page] || 1, :per_page => 10)
 		end
-	
 		
     respond_to do |format|
       format.html # index.html.erb
@@ -30,8 +29,6 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.xml
   def show
-	
-		@source = @story
 		
 		@comments = @story.comments.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
 		@nuniverses = @story.nuniverses.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
@@ -63,7 +60,7 @@ class StoriesController < ApplicationController
 		
 		
     respond_to do |format|
-      format.html { }
+      format.html { 		@source = @story }
 			format.js {}
       format.xml  { render :xml => @story }
     end
@@ -90,7 +87,7 @@ class StoriesController < ApplicationController
   def create
 		params[:active] = 1
 		@story = Story.new(params[:story])
-		@subject = params[:subject][:type].classify.constantize.find(params[:subject][:id]) rescue  nil
+		@subject = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  nil
 		
 
     respond_to do |format|
@@ -194,6 +191,7 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(stories_url) }
+			format.js {head :ok}
       format.xml  { head :ok }
     end
   end

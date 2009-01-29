@@ -43,7 +43,10 @@ class User < ActiveRecord::Base
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
 	has_many :contributors, :through => :connections, :source => :subject, :source_type => "User"
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
+	has_many :comments, :as => :parent
 	has_many :facts, :through => :connecteds, :source => :object, :source_type => "Fact"
+	
+	has_many :boxes, :as => :parent
 
 	alias_attribute :name, :login
 

@@ -1,11 +1,28 @@
-<div class="box card" >
-  <%= thumbnail_tag(item.object)%>
-  <h3><%= link_to_item(item, :kind => source.kind) %></h3>
-  <%= render :partial => "/lists/item_options", :locals => {:item => item}%>
-  
-  <p style="font-size:12px;color:#666;display:block">
-    <%= item.info(:kind => source.label, :info => @info) %>
-    <%#= raise item.info(:kind => source.label, :info => @info).inspect %>
-  </p>
-  <div class="delimiter">&nbsp;</div>
+<div class="box" style="position:absolute;left:<%= box.dimension.x.to_s %>px;top:<%= box.dimension.y.to_s %>px;width:<%= box.dimension.width.to_s %>px;height:<%= box.dimension.height.to_s %>px">
+  <% title = box.title rescue ""%>
+  <% tags = box.tags rescue ""%>
+  <% group = box.content.group rescue nil%>
+  <div class="display" style="padding:0;">
+    <%= "<h2>#{box.title}</h2>" rescue nil %>
+    <%= image_tag(Image.find(box.content.image['id']).public_filename()) rescue nil%>
+    <% if group %>
+      <dl>
+      <% @source.connections.of_klass('Nuniverse').tagged(group['filter']).each do |item| -%>
+        <%= render :partial => "/nuniverses/instance", :locals => {:instance => item.subject}%>
+      <% end -%>
+      </dl>
+    <% end -%>
+    <%= "<p>#{box.content.body}</p>" rescue nil %>
+    <%= content %>
+  </div>
+  <div class="edit">
+    <fieldset>
+      <%#= hidden_field_tag :klass , klass , :class => 'klass'%>
+      <%= text_area_tag :name , title, :class => 'title'%>
+      <%= text_field_tag :tags, tags , :class => 'tags' %>
+    </fieldset>
+    <div class="options">
+      <%= link_to "X Destroy", "#", :class => "destroy-box-lnk" %>
+    </div>
+  </div>
 </div>

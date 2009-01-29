@@ -1,0 +1,17 @@
+<div class="step">
+  <% form_for :nuniverse, @nuniverse, :url => {:controller => "nuniverses", :action => "create"} do |f| %>
+    <%= thumbnail_tag @nuniverse %>
+    <%= f.hidden_field :id %>
+    <%= clear %>
+    <ul>
+      <li><label>Name</label><%= f.text_field :name, :class => "input-name suggestable"%></li>
+    <% @properties.each do |prop| -%>
+      
+      <li><label><%= prop.label.capitalize %></label> <%= text_field_tag "properties[#{prop.label}]", prop.value %></li>
+    <% end -%>
+    </ul>
+
+    <%= fields_for_source @group %>
+    <%= submit_tag "Add it."%>
+  <% end -%>
+</div>

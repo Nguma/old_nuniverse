@@ -1,0 +1,25 @@
+<dl class="menu">
+  <dd><%= link_to "Destroy", story_url(@story) , :method => :delete %></dd>
+</dl>
+<div class="content">
+  <div class="step">
+    <h2><%= @story.name %></h2>
+   
+  </div>
+  <div class="step">
+    <%= will_paginate @comments unless @comments.empty?%>
+    <%= clear %>
+  </div>
+  <dl class="content-list">
+    <% @comments.each do |comment| -%>
+      <%= render :partial => "/comments/instance", :locals => {:instance => comment} %>
+    <% end -%>
+  </dl>
+
+  <div class="step">
+    <h3>If you haven't invited others, we suggest you do <%= link_to "here", "#contributors" %></h3>
+  </div>
+</div>
+<div style="position:absolute;width:100%;z-index:999;bottom:0">
+   <%= render :partial => "/comments/new", :locals => {:parent => @story} %>
+</div>

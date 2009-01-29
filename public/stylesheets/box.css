@@ -1,14 +1,122 @@
-.poll {
-	padding:30px;
-}
-
-.poll .option {
-	padding:5px;
-}
-
-.poll .option .label {
-	font-size:20px;
-	font-weight:bold;
-	margin: 0 0 0 10px;
+.box {
+	padding:0;
+	border:solid 10px #FFF;
+	background:#eee url('/images/backgrounds/main-light.png') 0 0 repeat-x;
+	width:350px;
+	height:350px;
+	white-space:normal;
 	
+}
+
+.box .content {
+	position:relative;
+	overflow:hidden;
+	padding:10px;
+	height:93%;
+	white-space:normal;
+}
+
+.box .close_btn {
+	top:-30px;
+	left:-30px;
+}
+
+.box .display {
+	position:relative;
+	padding:10px;
+}
+
+
+.zoomed .box {
+	border:solid 3px #FFF;
+}
+
+
+.box textarea.title {
+	display:block;
+	border:solid 2px #666;
+	width:90%;
+	height:90%;
+}
+
+.box .connection .name a {
+	font-size:20px;
+}
+
+.zoomed .box .connection .name a {
+	font-size:14px;
+}
+
+.box .edit {
+	display:none;
+}
+
+.box h2 {
+	white-space:normal;
+}
+
+.edit-mode .box {
+	background:#eee url('/images/backgrounds/main.png') -20px 0 repeat-x;
+	border:dashed 10px #fff;
+}
+
+.edit-mode .edit fieldset {
+	position:relative;
+	display:block;
+	padding:0;
+}
+
+.edit-mode .edit {
+	display:block;
+}
+
+.edit-mode .display {
+	display:none;
+}
+
+.hover {
+/*	background:#FFF;*/
+}
+
+.resizable {
+	border:solid 10px #FFF;
+	background:#eee url('/images/backgrounds/main.png') 0 0 repeat-x;
+	width:400px;
+	height:400px;
+}
+
+.resizable .content {
+	padding:10px;
+}
+
+
+.box li label {
+	color:#666;
+	position:relative;
+	float:left;
+	padding:0 10px 0 0;
+	font-size:14px;
+	width:30%;
+}
+
+.box li input {
+	width:65%;
+}
+
+.box ul {
+	clear:both;
+}
+.box ul li {
+	display:block;
+}
+
+
+.box .suggestions {
+	position:absolute;
+	background:#FFF;
+	z-index:2000;
+}
+
+.box p b {
+	color:#333;
 }

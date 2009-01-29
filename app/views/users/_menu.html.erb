@@ -1,16 +1,18 @@
+<ul id="sub-menu"></ul>
 <ul id="tab-menu" >
-    <li class="selected" style="position:absolute;color:#ccc">--</li>
-  <li style="float:right">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></li>
-  <li ><%= link_to "Overview", "#overview" %></li>
-  <li class=""><%= link_to "Stories", "#stories" %></li>
-  <li class=""><%= link_to "Connections", "#connections"%></li>
-  <li class=""><%= link_to "Bookmarks", "#bookmarks" %></li>
-  <li class=""><%= link_to "Images", "#images" %></li>
-    <li class=""><%= link_to "Contributors", "#contributors" %></li>
-  <% if current_user == @source %>
-    <li class=""><%= link_to "Account", "#account" %></li>
-  <% end -%>
+    <li class="selected" style="position:absolute;color:#ccc;width:70px">--</li>
   
-
-
+  <li><%= link_to "Overview", "#overview" %></li>
+   <li><%= link_to "Stories", "#stories" %></li>
+<li><%= link_to "Connections", "#connections"%></li>
+  <% if false && current_user == @source %>
+  
+  
+  <li><%= link_to "Bookmarks", "#bookmarks" %></li>
+  <li><%= link_to "Images", "#images" %></li>
+  <li><%= link_to "Contributors", "#contributors" %></li>
+    <li><%= link_to "Account", "#account" %></li>
+  <% end -%>
 </ul>
+
+<div style="position:fixed;right:20px;">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee", :id => "logout_lnk"%></div>

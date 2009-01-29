@@ -45,10 +45,11 @@ form.expanded  {
 	border:none;
 	position:relative;
 	float:left;
+	
 	min-width:476px;
 	max-width:476px;
-	min-height:45px;
-	max-height:85px;
+	min-height:35px;
+	max-height:35px;
 }
 
 #input-note-submit {
@@ -56,7 +57,7 @@ form.expanded  {
 	border:none;
 	position:relative;
 	width:50px;
-	height:50px;
+	height:40px;
 	outline:none;
 }
 
@@ -76,16 +77,16 @@ fieldset {
 	font-size:15px;
 }
 
-#suggestions .even {
+.suggestions .even {
 	background:transparent url('/images/backgrounds/even.png');
 }
 
-#suggestions .odd {
+.suggestions .odd {
 	background:transparent url('/images/backgrounds/odd.png');
 }
 
-#suggestions .thumbnail, 
-#suggestions .default_img {
+.suggestions .thumbnail, 
+.suggestions .default_img {
 	background:none;
 	position:relative;
 	float:left;
@@ -260,4 +261,70 @@ input.filled {
 .images img{
 	height:50px;
 	width:auto;
+}
+
+dl.table {
+	width:100%;
+}
+
+dl.table dt {
+	clear:both;
+}
+
+
+
+
+dl.table dd {
+	clear:both;
+	margin:0 0 4px 0;
+	padding:0;
+}
+
+dl.table .thumbnail {
+	background:none;
+	height:60px;
+	width:60px;
+	padding:0;
+	
+}
+
+dl.table ul {
+	padding:0;
+}
+
+dl.table li {
+	position:relative;
+
+	padding:0;
+	margin:0 2px 0 0;
+	text-align:center;
+}
+
+dl.table dt li {
+	width:200px;
+}
+
+dl.table dt li.img {
+	width:60px;
+}
+
+
+li input {
+	height:auto;
+	width:200px;
+	padding:3px;
+	margin:0 4px 4px 0;
+	border:none;
+	color:#333;
+}
+
+label {
+	color:#FFF;
+	font-size:20px;
+}
+
+li {
+	font-weight:bold;
+	color:#FFF;
+	background:none;
 }

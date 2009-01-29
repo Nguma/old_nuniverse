@@ -1,4 +1,4 @@
-<div id="contributors" class="section">
+<div id="contributors" class="section" style="background:none">
   <h2>Contributors</h2>
   <% @contributors.each do |contributor| -%>
     <div class="step">
@@ -8,10 +8,18 @@
       
     </div>
   <% end -%>
-  <div class="step">
+  <% popup(:id => "invite-contributor") do -%>
     <h3>Invite others!</h3>
     How to? Just type down the email of the ones you want in the confidence. <br/>Alternatively, you could also make that story available to the world, <%= link_to "go public", "#", :class => "account-lnk" %>
     <%= render :partial => "/stories/invite" %>
+  <% end -%>
+  
+  <% popup(:id => "broadcast-message") do %>
+    <%= render :partial => "/nuniverse/broadcast_message", :locals => {:to => @contributors} %>
+  <% end -%>
     
-  </div>
+  <ul class="sub-menu">
+    <li><%= link_to "Invite" , "#" , :class => "expand-lnk", :id => "expand-invite-contributor"%></li>
+    <li><%= link_to "Broadcast Message", "#TODO", :class => "expand-lnk", :id => "expand-broadcast-message" %></li>
+  </ul>
 </div>

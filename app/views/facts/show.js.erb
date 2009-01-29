@@ -1,0 +1,13 @@
+<div class="hat step">
+  <h2><%= render_fact(@fact) %></h2>
+</div>
+<% if @fact.category && @fact.category.name == "address" %>
+  <%= render :partial => "/nuniverses/map" , :locals => {:source => @fact.objects.first}%>
+<% else -%>
+  <%= clear %>
+  
+  <%= render :partial => "/facts/new", :locals => {:parent => @fact} %>
+  <%= clear %>
+  To add a fact, just type it in. Wrap the name of the nuniverses you want to connect with like this: <span style="font-weight:bold">[[Nuniverse Name]]</span> <br/>
+  To categorize that fact, start it with <span style="font-weight:bold">Category: my fact</span>
+<% end -%>

@@ -1,11 +1,15 @@
 <ul id="tab-menu">
-    <li style="float:right">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></li>
-  <li class="<%= @klass == nil ? 'selected' : '' %> "><%= link_to "Overview", "#overview" %></li>
-  <li class="<%= @klass == 'Fact' ? 'selected' : '' %>"><%= link_to "Facts", "#facts" %></li>
-  <li class="<%= @klass == 'Nuniverse' ? 'selected' : '' %>"><%= link_to "Connections", "#nuniverses" %></li>
-  <li class="<%= @klass == 'Bookmark' ? 'selected' : '' %>"><%= link_to "Bookmarks", "#bookmarks"%></li>
-  <li class="<%= @klass == 'Image' ? 'selected' : '' %>"><%= link_to "Images", "#images" %></li>
-  <li class="<%= @klass == 'User' ? 'selected' : '' %>"><%= link_to "Users", "#contributors"%></li>
-    <li class=""><%= link_to "Comments", "#comments" %></li>
-  <li class=""><%= link_to "Map", "#map" %></li>
+  <li class="selected" >--</li>
+  <li style="float:right">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></li>
+  <li><%= link_to "Overview", "#overview" %></li>
+  <li><%= link_to "Facts", "#facts" %></li>
+  <li><%= link_to "Images", "#images" %></li>
+  <% if false %>
+  <li><%= link_to "Connections", "#nuniverses" %></li>
+  <li><%= link_to "Bookmarks", "#bookmarks"%></li>
+  
+  <li><%= link_to "Users", "#contributors"%></li>
+  <li><%= link_to "Comments", "#comments" %></li>
+  <li><%= link_to "Map", "#map" %></li>
+  <% end -%>
 </ul>

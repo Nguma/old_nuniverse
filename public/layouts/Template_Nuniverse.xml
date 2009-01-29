@@ -1,0 +1,36 @@
+<layout>
+  <box>
+    <title>Quick Facts</title>
+    <dimension>
+      <x>29</x><y>100</y><width>856</width><height>150</height>
+    </dimension>
+  </box>
+  <box>
+    <title>Relationships</title>
+    <klass>Nuniverse</klass>
+    <dimension>
+      <x>29</x><y>274</y><width>545</width><height>340</height>
+    </dimension>
+  </box>
+  <box>
+    <title>Bookmarks</title>
+    <klass>Bookmark</klass>
+    <dimension>
+      <x>600</x><y>274</y><width>285</width><height>200</height>
+    </dimension>
+  </box>
+  <box>
+    <title>Comments</title>
+    <klass>Comment</klass>
+    <dimension>
+      <x>600</x><y>500</y><width>285</width><height>200</height>
+    </dimension>
+  </box>
+  <box>
+    <title>Images</title>
+    <klass>Image</klass>
+    <dimension>
+      <x>910</x><y>100</y><width>215</width><height>460</height>
+    </dimension>
+  </box>
+</layout>

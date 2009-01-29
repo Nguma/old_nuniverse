@@ -1,6 +1,5 @@
 module Nuniversal
-	# GOOG_GEO_KEY = "ABQIAAAAzMUFFnT9uH0xq39J0Y4kbhTJQa0g3IQ9GZqIMmInSLzwtGDKaBR6j135zrztfTGVOm2QlWnkaidDIQ"
-	#GOOG_GEO_KEY = "ABQIAAAA8l8NOquAug7TyWVBqeUUKBQEtxNUKhNqH9fVyPPamALnlXdwmxQXyPYD9XOjHMOgc3AuNtDGwMBNHQ"
+
 	
 	CONFIG_FILE = File.read(RAILS_ROOT + "/config/gmaps_api_key.yml")
 	GOOG_GEO_KEY = YAML.load(CONFIG_FILE)[RAILS_ENV]
@@ -165,43 +164,28 @@ module Nuniversal
 		dc.to_s
 	end
 		
-	def self.collect_infos(params)
-		tag = params[:tag]
-		case params[:kind].singularize
+	
+	
+	class Parser
 		
-		when "bookmark"
-			return tag.url.scan(/http.{1,3}\/\/([^\/]*).*/)[0] 
-
-		when "comment"
-			return "#{connection.owner.login.capitalize} - #{connection.created_at.strftime('%h %d, %H:%M')}"
-
-		else
-			infos = nil
+		attr_accessor :file, :doc
+		
+		def initialize(file)
+			@file = file
 		end
-			
-		 Tagging.select(
-			:perspective => params[:perspective],
-			:label => infos ? infos.join('|') : nil,
-			:subject => params[:tag],
-			:order => params[:order] || nil,
-			:page => params[:page] || 1,
-			:per_page => 3)
-	
-	end
-	
-	class Connection
 		
-		def self.find(params)
-				
-				Tagging.select(
-					:perspective => params[:perspective],
-					:tags => params[:tags] || [params[:kind]],
-					:subject => params[:subject] || nil,
-					:order => params[:order] || params[:order],
-					:page => params[:page] || 1, 
-					:per_page => params[:per_page],
-					:label => params[:label] || nil
-				)
+		def read
+			
+			@doc = Hpricot::XML(File.read(@file))
+			@doc
+		end
+		
+		def write(xml)
+			
+		
+			File.open(@file, 'w') do |f|
+				f.puts(xml)
+			end
 		end
 	end
 	

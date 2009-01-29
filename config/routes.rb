@@ -14,6 +14,8 @@ ActionController::Routing::Routes.draw do |map|
 	map.confirm_connection "/confirm-connection/:id/with/:subject_id/:subject_type", :controller => "Polycos", :action => "update"
 	map.resources :images
 	map.resources :bookmarks
+	
+	map.resources :sets
 
 	map.resources :videos
 	map.signup '/signup', :controller => 'users', :action => 'new'
@@ -76,9 +78,18 @@ ActionController::Routing::Routes.draw do |map|
 	
 	# map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
 	map.add_to_nuniverse "/add-to-favorites/:id", :controller => "connections", :action => "add_to_favorites"
-	map.remove_from_nuniverse "/remove-from-favorites/:id", :controller => "connections", :action => "remove_from_favorites"
+	map.remove_from_nuniverse "/remove-comment/:id", :controller => "comments", :action => "destroy"
 	map.preview "/preview/:id", :controller => "connections", :action => "preview"
 	map.send_email "/send_email/:id", :controller => "tags", :action => "send_email"
+	
+	map.create_box "/create-box", :controller => "boxes", :action => "create"
+	map.save_layout "/save-layout", :controller => "application", :action => "save_layout"
+	map.save_layout "/save-layout.:format", :controller => "application", :action => "save_layout"
+	map.find_nuniverse "/find-nuniverse", :controller => "nuniverses", :action => "index"
+	map.find_nuniverse "/find-nuniverse/:input", :controller => "nuniverses", :action => "index"
+	
+	map.create_set "/create-set", :controller => "groups", :action => "create"
+	map.add_item_to_set "/add-item-to-set/:id", :controller => "groups", :action => "add_item"
 	
 	map.tutorial_url "/tutorial", :controller => "users", :action => "tutorial"
 	

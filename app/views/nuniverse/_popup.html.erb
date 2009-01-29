@@ -1,5 +1,5 @@
-<div id="popup">
+<div class="popup" id="<%= html[:id] rescue ""%>" >
   <%= link_to image_tag("/images/icons/close_btn.png"), "#close", :class => "close-btn"%>
-  <div class="content"></div>
+  <div class="content"><%= content %></div>
   <div class="footer"></div>
 </div>

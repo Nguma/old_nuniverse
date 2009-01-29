@@ -1,17 +1,16 @@
-<div class="popup_box hidden" id="preview_box"  >
-  
-  
-    <div class="wrap" >
-      <%= image_tag("/images/icons/ajax-loader.gif", :alt => "loading... please wait", :style => "padding:10px 10px 10px 20px;", :class => "spinner hidden") %>
-      <div class="content" style="padding:20px"></div>
-      <div class="delimiter">&nbsp;</div>
-    </div>
-  
-    <div class="hidden data">
-      &nbsp;</div>
+<div class="box preview"  id="preview" >
+  <%= link_to image_tag("/images/icons/close_btn.png"), "#", :title => "Close", :class =>"close-btn " %>
+  <%= spinner %>
+  <div class="content">
+    <h2></h2>
+  </div>
+  <div class="edit">
+    <fieldset>
       
-    
-    <%= link_to image_tag("/images/icons/close_btn.png"), "#", :title => "Close", :class =>"close_btn " %>
-
-  <div class="footer">&nbsp;</div>
+    </fieldset>
+    <div class="options">
+      <%= link_to "X Destroy", "#", :class => "destroy-box-lnk" %>
+    </div>
+  </div>
+  
 </div>

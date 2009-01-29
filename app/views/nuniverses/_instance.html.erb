@@ -1,6 +1,16 @@
-  <div class="step connection" >
-    <%= thumbnail_tag instance %>
-    <%= link_to instance.name, nuniverse_url(instance, :klass => nil) %>
-    <p><%= instance.facts[0..2].collect {|c| render_fact(c)}.join('<br/> ') rescue nil%></p>
+  <div class="step connection" id="Nuniverse-<%= instance.id%>" style = "<%= style  rescue '' %>">
+    <%= thumbnail_tag instance, :size => @size %>
+    <span class="name body">
+      <%= link_to instance.name, nuniverse_url(instance) , :title => instance.name, :id=>"Nuniverse-#{instance.id}"%>
+    </span>
+    
+    <% properties ||= []%>
+    
+      <% properties.each do |p| -%>
+        <p><%= render_fact(instance.property(p).subject) rescue nil %></p>
+      <% end -%>
+    
     <%= clear %>
+    <%= hidden_field_tag :id, instance.id %>
+    <%= hidden_field_tag :type, 'Nuniverse'%>
   </div>

@@ -1,8 +1,10 @@
 <% nuniverse do -%> 
   <%= render :partial => "overview" %>
-  <%= render :partial => "conversation" %>
-  <%= render :partial => "connections" %>
-  <%= render :partial => "contributors" %>
-  <%= render :partial => "map" %>
 <% end -%>
+
 <%= render :partial => "/stories/menu"%>
+<div id="templates" style="display:none">
+  <%= render :partial => "/boxes/template" %>
+  <%= render :partial => "/boxes/image_box" %>
+  <%= render :partial => "/boxes/item_box" %>
+</div>

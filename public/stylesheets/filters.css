@@ -71,12 +71,46 @@
 	z-index:999;
 	width:100%;
 	bottom:0;
+
 }
 
 #tab-menu li {
-	padding:11px 20px 11px 20px;position:relative;float:left;font-size:15px;font-weight:bold;color:#666;
+	padding:11px 20px 11px 20px;
+	position:relative;
+	float:left;
+	font-size:15px;
+	font-weight:bold;
+	color:#666;
 }
 
 #tab-menu li.selected {
-	background:#cecece;color:#333;
+	background:#cecece;
+	color:#333;
+	position:absolute;
+	width:70px;
+	height:100%;
+}
+
+#sub-menu {
+	position:fixed;
+	bottom:40px;
+	height:35px;
+	background:#ccc;
+	width:100%;
+	z-index:999;
+	display:block;
+}
+
+#sub-menu li {
+	padding:8px 20px 8px 20px;
+	position:relative;
+	float:left;
+	font-size:14px;
+	font-weight:bold;
+	color:#666;
+}
+
+#sub-menu li.selected {
+	background:#ececec;
+	color:#333;
 }

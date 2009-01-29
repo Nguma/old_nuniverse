@@ -1,9 +1,6 @@
 <ul id="tab-menu">
-  <li class = "back-lnk"><%= link_to "", "/home" %></li>
-  <li class="<%= @klass == 'Comment' ? 'selected' : '' %>"><%= link_to "Notes", polymorphic_url(@source, :klass => "Comment") %></li>
-  <li class="<%= @klass == 'Nuniverse' ? 'selected' : '' %>"><%= link_to "Connections", polymorphic_url(@source, :klass => "Nuniverse") %></li>
-  <li class="<%= @klass == 'Bookmark' ? 'selected' : '' %>"><%= link_to "Bookmarks", polymorphic_url(@source, :klass => "Bookmark") %></li>
-  <li class="<%= @klass == 'Image' ? 'selected' : '' %>"><%= link_to "Images", polymorphic_url(@source, :klass => "Image") %></li>
-  <li class="<%= @klass == 'User' ? 'selected' : '' %>"><%= link_to "Users", polymorphic_url(@source, :klass => "User") %></li>
+  <li class="selected"></li>
+  <li><%= link_to "Overview", "#overview" %></li>
+  <li><%= link_to "Team Members", "#section-1" %></li>
 
 </ul>

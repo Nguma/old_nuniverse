@@ -1,8 +1,9 @@
 
-  <% form_for :image, :url => {:controller => "images"}, :html => {:multipart => true , :id => "connect_image_form" } do |f| -%>
+  <% form_for :image, :url => {:controller => "images"}, :html => {:multipart => true , :id => "connect_image_form" ,  :target => "upload_frame", :class => "image_upload"} do |f| -%>
     <%= fields_for_source %>
     <%= f.text_field :source_url, :id => "input_image", :autocomplete => "off"%><br/>
       .. or upload a file from your computer<br/>
     <%= f.file_field :uploaded_data %>
     <%= f.submit "Upload" %>
   <% end -%>
+  <iframe id="upload_frame" name="upload_frame" style="display:hidden"></iframe>

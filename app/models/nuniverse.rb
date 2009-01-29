@@ -21,6 +21,8 @@ class Nuniverse < ActiveRecord::Base
 	has_many :facts, :through => :connections, :source => :subject, :source_type => "Fact"
 	
 	
+	has_many :boxes, :as => :parent
+	
 	
 	
 	define_index do
@@ -59,7 +61,22 @@ class Nuniverse < ActiveRecord::Base
 	
 	def related_connections
 		Polyco.related_connections(self)
-		
+	end
+	
+	def property(tag)
+		connections.of_klass('Fact').tagged(tag.name).first rescue nil
+	end
+	
+	def set_property(tag, value)
+		begin 
+			p = property(tag).subject 
+		rescue 
+			p = Fact.new
+			self.facts << p
+		end
+		p.body = value
+		p.tags << tag rescue nil
+		p.save
 	end
 	
 	protected

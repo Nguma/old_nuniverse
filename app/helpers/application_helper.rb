@@ -10,8 +10,9 @@ module ApplicationHelper
 	  string.gsub(' ','-').gsub(/[^a-z0-9\-]+/i, '')
 	end
 
-	def fields_for_source
-		render :partial => "/application/source_fields"
+	def fields_for_source(source = nil)
+		source ||= @source
+		render :partial => "/application/source_fields", :locals => {:source => source}
 	end
 
 	def tokenize(str)

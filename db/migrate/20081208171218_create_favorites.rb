@@ -6,7 +6,7 @@ class CreateFavorites < ActiveRecord::Migration
 			t.timestamps
 		end
 		
-		add_index :favorites, [:connection_id, :user_id], :unqiue => true
+		add_index :favorites, [:connection_id, :user_id], :unique => true
   end
 
   def self.down

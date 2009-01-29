@@ -40,8 +40,10 @@ class Polyco < ActiveRecord::Base
 	
 	named_scope :order_by_score, :order => "average_score DESC"
 	
+
+	
 	named_scope :tagged, lambda { |tag| 
-		tag.nil? ? {} : { :conditions => ["taggings.predicate rlike ?",tag ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) "}
+		tag.blank? ? {} : { :conditions => ["tags.name rlike ? AND tag_type = 'Tag'",tag ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) LEFT OUTER JOIN tags on tags.id = tag_id"}
 	}
 	
 	named_scope :with_score, lambda { |user| 

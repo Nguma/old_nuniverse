@@ -9,8 +9,6 @@
 
   
   <%= link_to "Edit this connection", edit_polyco_url(connection), :class => "edit_lnk" if authorized_to_edit?(connection)%>
- 
-  
   <%= link_to "x remove", polymorphic_url(connection), :method => :delete, :class => "edit_lnk" if current_user.role == "admin"%>
 
   <%= clear %>
