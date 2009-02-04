@@ -1,6 +1,7 @@
-<% form_for :group, @group, :url => {:action => :update, :controller => "groups"} do |f| %>
+<div class="step">
+<% form_for :group, @group, :url => {:action => :update, :controller => "groups"}, :html => {:class => "inline"} do |f| %>
   <label>This set is named</label>
-  <%= f.text_field :name, :style => "width:600px;font-size:25px;border:none" %>
+  <%= f.text_field :name, :style => "width:auto;font-size:25px;border:none" %>
   <%= f.hidden_field :id %>
   <ul>
   
@@ -19,3 +20,4 @@
   <%= submit_tag "Save Changes"%>
   
 <% end -%>
+</div>

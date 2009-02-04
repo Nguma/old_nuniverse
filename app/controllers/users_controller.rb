@@ -94,6 +94,10 @@ class UsersController < ApplicationController
 
 	def upgrade
 		@source = current_user
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 	
 	def edit

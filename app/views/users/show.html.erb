@@ -2,17 +2,10 @@
 <%= render :partial => "/users/menu"%>
 <% nuniverse do -%>
   <%= render :partial => "overview" %>
-  <%#= render :partial => "title_box"%>
-  <%= render :partial => "stories" %>
-  
-  <%= render :partial => "connections" %>
-  <%#= render :partial => "bookmarks" %>
-  <%#= render :partial => "images" %>
-  <%#= render :partial => "contributors" %>
-  <%#= render :partial => "account" if current_user == @user %>
+  <%= render :partial => "/stories/stories" %>
   <%= clear %>
-
 <% end -%>
+
 <div id="templates" style="display:none">
   <%= render :partial => "/boxes/template" %>
   <%= render :partial => "/boxes/image_box" %>

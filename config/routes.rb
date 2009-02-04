@@ -73,7 +73,7 @@ ActionController::Routing::Routes.draw do |map|
 	
 	map.suggest "/suggest-a-nuniverse", :controller => "nuniverses", :action => "suggest"
 	
-	map.share_story "/share-story/:id", :controller => "stories", :action => "share"
+	map.share_story "/share-this-nuniverse/:id", :controller => "stories", :action => "share"
 
 	
 	# map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
@@ -92,6 +92,17 @@ ActionController::Routing::Routes.draw do |map|
 	map.add_item_to_set "/add-item-to-set/:id", :controller => "groups", :action => "add_item"
 	
 	map.tutorial_url "/tutorial", :controller => "users", :action => "tutorial"
+	
+	map.visit "/visit/:user/:story", :controller => "stories", :action => "show"
+	map.add_text_box "/add-text-box-to/:story", :controller => "boxes", :action => "add_text_box"
+	map.add_image_box "/add-image-box-to/:story", :controller => "boxes", :action => "add_text_box"
+	
+	map.connections_for "/connections-for/:unique_name/tagged/:tag", :controller => "tags", :action => "show"
+	map.videos_for "/videos-for/:unique_name", :controller => "videos", :action => "index"
+	map.stories_for "/stories-for/:class/:id", :controller => "stories", :action => "index"
+
+	map.create_nuniverse "/create-a-nuniverse", :controller => "stories", :action => "new"
+	map.talk_about "/talk-about/:unique_name", :controller => "nuniverses", :action => "discuss"	
 	
 	map.nuniverse_by_name "/nuniverse-of/:unique_name", :controller => "nuniverses", :action => "show"
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.

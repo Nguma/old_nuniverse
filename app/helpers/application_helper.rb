@@ -23,4 +23,18 @@ module ApplicationHelper
 		str
 	end
 	
+	def render_plugin(box, data) 
+		case box.mode
+    when 'map'
+      return render(
+				:partial => "/stories/map", 
+				:locals => {:locations => Location.gather(@story.sets[0].nuniverses)}
+			)
+    when 'text'
+      return render(
+				:partial => "/boxes/text_box", 
+				:locals => {:box => box, :data =>  data}
+			)			
+    end
+	end
 end

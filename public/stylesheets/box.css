@@ -1,6 +1,6 @@
 .box {
 	padding:0;
-	border:solid 10px #FFF;
+	border:solid 10px transparent;
 	background:#eee url('/images/backgrounds/main-light.png') 0 0 repeat-x;
 	width:350px;
 	height:350px;

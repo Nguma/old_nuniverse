@@ -1,5 +1,6 @@
-<div class="step">
-  <% form_for :nuniverse, @nuniverse, :url => {:controller => "nuniverses", :action => "create"} do |f| %>
+<% render_section :html => {:id => "S-add-item-to-#{@group.unique_name}"} do  %>
+  <div class="step">
+  <% form_for :nuniverse, @nuniverse, :url => {:controller => "nuniverses", :action => "create"}, :html => {:class => "inline" } do |f| %>
     <%= thumbnail_tag @nuniverse %>
     <%= f.hidden_field :id %>
     <%= clear %>
@@ -15,3 +16,4 @@
     <%= submit_tag "Add it."%>
   <% end -%>
 </div>
+<% end -%>

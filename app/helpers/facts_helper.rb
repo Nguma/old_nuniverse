@@ -28,4 +28,15 @@ module FactsHelper
 		end
 		str
 	end
+	
+	
+	def render_cell(cell, data)
+		body = cell.name
+		tokens = Nuniversal.tokenize_new(body, data)
+		tokens.each do |token|
+			body = body.gsub(token.formula, token.result)
+		end
+		body
+	end
+	
 end

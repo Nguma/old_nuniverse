@@ -1,1 +1,11 @@
-<%= render :partial => "/tags/page", :locals => {:items => @items }%>
+<div class="section tag-section" id= "S-Tag-<%= @tag.name.gsub(' ','-') %>" >
+  <div class="content">
+    <h2><%= @tag.name.pluralize %></h2>
+    <dl>
+      
+    <% @connections.each do |connection| %>
+      <%= render :partial => "/polycos/instance", :locals => {:instance => connection } %>
+    <% end -%>
+    </dl>
+  </div>
+</div>

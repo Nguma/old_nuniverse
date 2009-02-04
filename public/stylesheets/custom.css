@@ -1,64 +1,77 @@
-/*
-
-
-.box {
-	background:#333 ;
+body {
+	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;
 }
 
-.box h2 {
-	color:#999;
+.section {
+	background:#fff url('/images/backgrounds/main_light.png') 0 -400px repeat-x !important;
 }
 
-.items {
-	background:#333;
+#overview {
+	background:none !important;
 }
 
-.items .even {
-	background:#efefef;
-}
-
-.items .odd {
-	background:#ddd;
+.section .content {
+	background:none !important;
 }
 
 
-.box a {
-	color:#cf9;
+.section .odd {
+	background:none;
 }
 
-.box .item a {
+.section .even {
+	background:none;
+}
+
+.connection  a {
+	color:#369;
+}
+
+.connection p {
 	color:#333;
 }
 
-p {
-	color:#eee;
+.connection p b {
+	color:#333;
 }
 
-.tabs {
-	padding: 5px 5px 5px 0;
+.hover .title {
+	color:#333;
 }
 
-.nuniverse .tabs li {
-	background:#eee;
+
+.story-section {
+/*	background:#9cf !important;*/
+	background:none !important;
 }
 
-.tabs li a {
-	color:#666;
-}
-
-.nuniverse .tabs .current {
-	background:#333;
-	color:#FFF;
-}
-
-#google_ads {
+.group-section {
 	background:#FFF;
 }
 
-*/
+.nuniverse-section {
+	background:none !important;
+/*	background:#9cf !important;*/
+}
+
+.main-section .selected,
+.group-section .selected {
+	background:transparent url('/images/backgrounds/story-select.png') center right no-repeat !important;
+}
+
+.main-section {
+/*	background:none !important;*/
+}
 
 
+#S-Story-134 {
+	background:#f9dc18 !important;
+}
 
-#google_ads {
-	background:#fff;
+#S-Story-134 h2 {
+	color:#333;
+}
+
+#S-Story-134 a {
+	color:#e00;
 }

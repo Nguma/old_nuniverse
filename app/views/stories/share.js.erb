@@ -1,0 +1,9 @@
+<div class="step">
+  <label>Enter the email(s) of the person(s) you wish to invite... </label>
+  <%= text_field_tag "Email" %>
+  <label>... or pick from your existing contacts</label>
+  <% current_user.contributors.each do |c| -%>
+    <%= thumbnail_tag c%>
+  <% end -%>
+  
+</div>

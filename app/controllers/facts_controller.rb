@@ -42,6 +42,7 @@ class FactsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
+			format.js {}
       format.xml  { render :xml => @fact }
     end
   end

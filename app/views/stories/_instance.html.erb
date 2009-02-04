@@ -1,6 +1,7 @@
-<div class="step connection" title="story-<%= instance.id %>">
+<div class="step connection <%= cycle('even', 'odd') %>" title="story-<%= instance.id %>" style="padding:20px">
    <%= thumbnail_tag instance.nuniverses.first rescue ""%>
-   <span class="name body"><%= link_to instance.name, instance, :style => "font-weight:bold"%></span><p>by <%= link_to instance.author.name, instance.author %></p>
-   <p>This story is about <%= instance.nuniverses.paginate(:per_page => 3, :page => 1).collect {|c| link_to c.name, c}.join(", ") %>, <%= link_to "more", story_url(instance, :klass => "Nuniverse") %></p>
+   <span class="name body"><%= link_to instance.name, instance, :id => "Story-#{instance.id}",:style => "font-weight:bold"%></span><p>by <%= instance.author.name %></p>
+   <p><%= truncate(instance.description, 100, '...')%></p>
+
    <%= clear %>
 </div>

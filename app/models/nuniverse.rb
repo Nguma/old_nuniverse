@@ -16,6 +16,7 @@ class Nuniverse < ActiveRecord::Base
 	has_many :locations, :through => :connections, :source => :subject, :source_type => "Location"
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
 	has_many :stories, :through => :connecteds, :source => :object, :source_type => "Story"
+	has_many :videos, :through => :connecteds, :source => :object, :source_type => "Video"
 
 	has_many :users, :through => :connecteds, :source => :object, :source_type => "User"
 	has_many :facts, :through => :connections, :source => :subject, :source_type => "Fact"
@@ -77,6 +78,10 @@ class Nuniverse < ActiveRecord::Base
 		p.body = value
 		p.tags << tag rescue nil
 		p.save
+	end
+	
+	def rank
+		
 	end
 	
 	protected

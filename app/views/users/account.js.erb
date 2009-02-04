@@ -1,0 +1,23 @@
+<% render_section (:html => {:id => "S-account"}) do -%>
+  <div style="padding:0 30px 0 30px">
+    <div class="step" >
+      <h2 style='padding:0'>Your have a free account. This means your nuniverse can grow up to 100 connections.<br/>You are currently using <%= @count %>/100 of these connections. <span class="connection"><%= link_to "Upgrade?", "/upgrade", :id => "upgrade-account"%></span></h2>
+      
+    </div>
+
+    <div class="step">
+      During beta, we aren't offering any privacy. But you'll be able to manage your privacy settings from here.
+    </div>
+    <% form_tag "/users/update" , :multipart => true  do -%>
+    <div class="step">
+      <h4><%= link_to "Add an avatar.", "#", :class => "expand-lnk" %></h4>
+     
+    </div>
+    
+    <div class="step">
+      <h4><%= link_to "Set your public profile.", "#", :class => "expand-lnk" %></h4>
+    </div>
+  </div>
+    <% end -%>
+ <% end -%>
+

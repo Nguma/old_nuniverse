@@ -1,0 +1,22 @@
+<% render_section :html => {:id => "S-create-a-nuniverse"} do %>
+  <h2>Create a nuniverse</h2>
+  <div class="step">
+  <h3>You can create <span style="color:#f90">3</span> more nuniverses. <span class="connection"><%= link_to "Upgrade", "/upgrade", :id => "upgrade-account" %></span></h3>
+  </div>
+  <div class="step">
+  <% form_for @story, :html => { :class => "inline"} do |f| %>
+      <%= f.error_messages %>
+      <label>This nuniverse is called</label>
+      <%= f.text_field :name, :rows => 1, :style => "width:90%" %>
+      <label>Describe it... if you want</label>
+      <%= f.text_area :description, :rows => 4 , :style => "width:90%"%>
+      <%= f.hidden_field :author_id %>
+      <ul>
+        <li><%= f.check_box :is_private %>This nuniverse is private</li>
+      </ul>
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  <% end %>
+  </div>
+<% end -%>

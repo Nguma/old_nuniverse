@@ -1,0 +1,12 @@
+<div class='section video-section' id="S-Videos-for-<%= @source.unique_name%>" style="background:none;">
+  <div class="content">
+    <h2>Videos for <%= @source.name %></h2>
+    <% @videos.each do |video| -%>
+      <div class="connection step">
+        <%= thumbnail_tag video %>
+        <%= link_to video.name, video_url(video), :id => "Video-#{video.id}"%>
+        <%= clear %>
+      </div>
+    <% end -%>
+  </div>
+</div>

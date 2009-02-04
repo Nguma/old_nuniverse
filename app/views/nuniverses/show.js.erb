@@ -1,16 +1,28 @@
-
- <div class="hat step">
-   <%= thumbnail_tag @source %>
-   <h2><%= link_to @source.name.capitalize, polymorphic_url(@source)%></h2>
- </div>
+<div class="section nuniverse-section" id="S-Nuniverse-<%= @source.id %>" >
+ 
+  <div class="content" style="padding:0">
  
    <div class="step">
-    <dl class="fact-sheet">
-      <% @source.facts.paginate(:page => 1, :per_page => 5).each do |fact| %>
-
-          <%= render :partial  => "facts/instance", :locals => {:instance => fact}%>
-
-      <% end -%>
-    </dl>
+      
+      <%= image_tag(@source.images.first.public_filename(:large), :style => "position:relative;float:left;border:solid 1px #666") rescue nil %>
+      <%= clear %>
     </div>
-  
+    <h2><%= @nuniverse.name.titleize  %></h2>
+      <% unless @nuniverse.videos.empty? %>
+        <div class="step connection">
+        <%= link_to "Videos", "/videos-for/#{@source.unique_name}" , :id => "Videos-for-#{@source.unique_name}"%>
+        </div>
+      <% end -%>
+      <% @nuniverse.connections.of_klass('Fact').each do |connection| -%>
+        <div class="step connection">
+          <%= render_fact(connection.subject)%>
+        </div>
+      <% end -%>
+      
+      
+    </div>
+    
+    <div class="step connection">
+      <%= link_to image_tag("/images/icons/create_button.png"), "/facts/new", :id => "add-fact" %>
+    </div>
+</div>

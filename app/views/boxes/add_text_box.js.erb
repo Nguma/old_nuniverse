@@ -1,0 +1,6 @@
+<% form_for @box , :url => {:controller => "boxes", :action => "create" }, :html => {:class => "inline"} do |f| %> 
+  <%= fields_for_source @story %>
+  <%= f.hidden_field :mode %>
+  <%= f.text_field :name,  :style => "width:95%"%>
+  <%= submit_tag "Save" %>
+<% end -%>

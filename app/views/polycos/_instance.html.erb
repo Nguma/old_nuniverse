@@ -1,0 +1,8 @@
+<div class="connection step">
+  <%= thumbnail_tag instance.subject rescue nil %>
+  
+  <span class="name"><%= link_to (instance.subject.name, polymorphic_url(instance.subject), :id => "#{instance.subject.class.to_s}-#{instance.subject.id}")  rescue render_fact(instance.subject)%></span>
+  
+  <p><%= instance.description rescue nil %></p>
+  <%= clear%>
+</div>

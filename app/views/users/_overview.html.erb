@@ -1,42 +1,19 @@
-<div id="overview" class="section">
-  <div id="hat">
-    <%= thumbnail_tag @source, :size => :small %>
-
-      <% if @source == current_user  -%>
-        <h1><%= @source.name.capitalize %></h1>
-        <h2>this is your nuniverse.</h2>
-      <% else -%>
-       <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
-      <% end -%>
-  </div>
-  
-  
-  <div class="step">
-    <%= link_to("#{@source.stories.count} stories", "#stories",  :class => "story-lnk") %> are being told. <%= link_to "Start a story", "#stories" %>
-  </div>
-  <% unless @stories.empty? %>
-  <div class="step">
-
-      Your most active story is <%= link_to("#{@stories.first.name}", story_url(@stories.first),  :class => "story-lnk") %>.
-
-  </div>
+<% render_section :html => {:id => "overview" } do -%>
+  <div class="step hat" style="padding:0 0 0 30px">
+  <%= thumbnail_tag @source, :size => :large %>
+  <% if @source == current_user  -%>
+    <h2 style="padding:0"><%= @source.name.capitalize %>,<br/> this is your nuniverse.</h2>
+  <% else -%>
+   <h1>This is <span style="color:#FFF"><%= @source.name.capitalize %></span>'s nuniverse</h1>
   <% end -%>
-  <div class="step">
-    <% if !@nuniverses.empty?%>
-    <%= link_to("#{@nuniverses.first.name}", nuniverse_url(@nuniverses.first), :class => "nuniverse-lnk") %> is your hottest topic.
-    <% end -%>
   </div>
-  <div class="step">
-    Your nuniverse is <%= link_to("#{@source.connections.count}/100 connections", "#connections", :class =>  "nuniverse-lnk") %> wide, <%= link_to "upgrade", "upgrade", :class => "account-lnk"%>.
-  </div>
-  <div class="step">
-    <%= link_to("#{@source.contributors.count} people", "#contributors", :class => "user-lnk") %> are contributing to your nuniverse.
-  </div>
+  
+  <ul class="step">
+     <li class="connection"><%= link_to "Your nuniverses", "/stories-for/User/#{current_user.id}", :id => "stories-for-User-#{current_user.id}" %></li>
+     <li class="connection"><%= link_to "Create a nuniverse", "/create-a-nuniverse", :id => "create-a-nuniverse"%></li>
+     <li class="connection"><%= link_to "Manage your account", "/users/account/#{current_user.id}", :id => "account"%></li>
+     <li class="connection"><%= link_to "Customize your colors", "/users/account", :id => "customize"%></li>
+   </ul>
+ 
 
-  <ul class="sub-menu">
-    <li><%= link_to "Browse", "#" %></li>
-    <li><%= link_to "Edit", "#" %></li>
-    <li><%= link_to "Share", "#" %></li>
-    <li><%= link_to "Comment", "#" %></li>
-  </ul>
-</div>
+<% end -%>

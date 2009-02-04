@@ -1,7 +1,7 @@
 class NuniversesController < ApplicationController
 	
 	before_filter :find_user, :only => [:suggest, :show, :command, :index]
-	before_filter :find_nuniverse, :except => [:index, :suggest]
+	before_filter :find_nuniverse, :except => [:index, :suggest, :discuss]
 	before_filter :find_source, :only => [:index]
 	before_filter :update_session, :only => [:show]
  	after_filter :store_location, :store_source, :only => [:show]
@@ -24,23 +24,25 @@ class NuniversesController < ApplicationController
 	def show
 		redirect_to @nuniverse.redirect if @nuniverse.redirect
 		
-		@nuniverses = @nuniverse.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
-		@facts = @nuniverse.facts.paginate(:page => params[:page] || 1, :per_page => 10)
-		@bookmarks = @nuniverse.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
-		@images = @nuniverse.images.paginate(:page => params[:page] || 1, :per_page => 10)		
-		
+		# @nuniverses = @nuniverse.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
+		# 	@facts = @nuniverse.facts.paginate(:page => params[:page] || 1, :per_page => 10)
+		# 	@bookmarks = @nuniverse.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
+		# 	@images = @nuniverse.images.paginate(:page => params[:page] || 1, :per_page => 10)		
+		@videos = @nuniverse.videos.paginate(:page => params[:page] || 1, :per_page => 10)
 
 		respond_to do |f|
 			f.html {
 				@source = @nuniverse
-				if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
-					@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
-				else
-					@boxes  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
-				end
+				# if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
+				# 	@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
+				# else
+				# 	@boxes  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
+				# end
 			}
 			
-			f.js { }
+			f.js { 
+				
+				}
 		end
 
 	end
@@ -131,6 +133,11 @@ class NuniversesController < ApplicationController
 			format.html {}
 			format.js {}
 		end
+	end
+	
+	
+	def discuss
+		
 	end
 
 	

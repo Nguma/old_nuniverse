@@ -2,6 +2,7 @@ class Group < ActiveRecord::Base
 	belongs_to :source, :class_name => "Story", :foreign_key => "parent_id"
 	
 	has_many :connections, :as => :object, :class_name => "Polyco", :dependent => :destroy
+	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
 	has_many :prop_connections, :as => :object, :class_name => "Polyco", :dependent => :destroy, :conditions => {:subject_type => "Tag"}
 	has_many :properties, :through => :connections, :source => :subject, :source_type => "Tag"
 	
@@ -9,6 +10,7 @@ class Group < ActiveRecord::Base
 		XMLObject.new(self.description)
 	end
 	
+
 	
 	def set_properties(props)
 		

@@ -1,8 +1,11 @@
-  <div class="step connection" id="Nuniverse-<%= instance.id%>" style = "<%= style  rescue '' %>">
-    <%= thumbnail_tag instance, :size => @size %>
+  <div class="step connection <%= cycle('odd','even') %>"  style = "<%= style  rescue '' %>">
+        
+    <%= thumbnail_tag instance, :size => @size rescue nil %>
+    
     <span class="name body">
-      <%= link_to instance.name, nuniverse_url(instance) , :title => instance.name, :id=>"Nuniverse-#{instance.id}"%>
+      <%= link_to instance.name, nuniverse_url(instance) , :title => instance.name, :id => "Nuniverse-#{instance.id}" , :class => "inline"%><%= render :partial => "/taggings/star_rating", :locals => {:item => instance }%>
     </span>
+    
     
     <% properties ||= []%>
     

@@ -1,0 +1,57 @@
+<h2><%= group.name %></h2>
+
+  <ul class="step">
+    <li class="connection">
+      <%= link_to "Add an item", "/add-item-to-set/#{@group.id}", :id => "add-item-to-#{@group.unique_name}" %>
+    </li>
+    <li>
+      <%= link_to "Edit this set", "/groups/edit/#{@group.id}", :class => "expand-lnk", :target => "#S-Group-#{@group.id}" %>
+    </li>
+    <li>
+      <%= link_to "Switch view", "/groups/show/#{group.id}?mode=#{(@mode == "table") ? "" : "table"}", :class => "expand-lnk", :target => "#S-Group-#{@group.id}" %>
+    </li>
+  </ul>
+  <% if @mode == "table" %>
+  <% elements.each_with_index do |connection, i| -%>
+    
+      <% content_for :col_images do %>
+        <dd style="clear:left;" class=""><%= thumbnail_tag connection rescue nil %></dd>
+      <% end -%>
+      <% content_for :col_name do %>
+        <dd style="clear:left" class=" connection"><%= link_to connection.name, nuniverse_url(connection), :id => "Nuniverse-#{connection.id}" %></dd>
+      <% end -%>
+      <% group.properties.each_with_index do |p,i| %>
+        <% content_for "prop_#{i}" do %>
+          <dd style="clear:left" class=""><%= connection.property(p).subject.body rescue "-"%></dd>
+        <% end -%>
+      <% end -%>
+  <% end -%>
+
+  <div class="step table">
+    <dl style="width:100px">
+      <dt>Image</dt>
+      <%= yield :col_images %>
+    </dl>
+    <dl style="width:200px">
+      <dt>Name</dt>
+      <%= yield :col_name %>
+    </dl>
+    <% group.properties.each_with_index do |p,i| %>
+      <dl style="width:auto;margin:0 2px 0 0"><dt><%= p.name %></dt><%= yield "prop_#{i}"%></dl>
+    <% end -%>
+  
+  </div>
+  
+  <% else -%>
+  
+  <% elements.each do |connection| -%>
+      <%= render :partial => "/nuniverses/instance", :locals => {
+        :instance => connection,
+        :properties => group.properties
+      } %>
+   <% end -%>
+   
+ <% end -%>
+
+
+

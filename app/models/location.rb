@@ -6,7 +6,7 @@ class Location < ActiveRecord::Base
 
 	
 	named_scope :gather, lambda {|nuniverses|
-			nuniverses.nil? ? {} : {:joins => ["LEFT OUTER JOIN polycos P on P.subject_id = locations.id AND P.subject_type = 'Location'"], :conditions => ["P.object_id IN (?) AND P.object_type = 'Nuniverse'", nuniverses]}
+			nuniverses.nil? ? {} : {:joins => ["LEFT OUTER JOIN polycos P on P.subject_id = locations.id AND P.subject_type = 'Location'"], :conditions => ["P.object_id IN (?) AND P.object_type = 'Nuniverse'", nuniverses.collect {|c| c.id}]}
 		
 		}
 		

@@ -4,9 +4,8 @@ class GroupsController < ApplicationController
 	before_filter :find_source, :only => [:new]
 	
 	def show
-		
-		@elements = @group.connections.of_klass('Nuniverse').order_by_name
-
+		@mode = params[:mode] || ""
+		@elements = @group.nuniverses
 		@collection_1 = @elements.collect {|c| c.subject.property(@group.properties.second) rescue nil }
 
 		respond_to do |f|
@@ -60,14 +59,17 @@ class GroupsController < ApplicationController
 	
 	def update
 	
-		@group = Group.find(params[:group][:id])
-		@group.set_properties(params[:properties])
+		@group = Group.find(params[:group][:id]) rescue Group.find(params[:id])
+		@group.set_properties(params[:properties]) if params[:properties]
 		
 		respond_to do |format|
       if @group.update_attributes(params[:group])
         flash[:notice] = 'This set was successfully updated.'
         format.html { redirect_to(@group) }
-				format.js {head :ok}
+				format.js { 
+					@elements = @group.nuniverses
+				
+				}
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

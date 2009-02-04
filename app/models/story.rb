@@ -6,6 +6,7 @@ class Story < ActiveRecord::Base
 	has_many :sets, :class_name => "Group", :foreign_key => :parent_id
 	
 	has_many :comments, :as => :parent, :dependent => :destroy
+	has_many :boxes, :as => :parent, :dependent => :destroy
 		
 	has_many :rankings, :as => :rankable, :dependent => :destroy
 

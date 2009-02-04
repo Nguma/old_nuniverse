@@ -1,0 +1,11 @@
+<div class="box text-box" style="overflow:hidden;position:absolute;top:<%= box.y %>px;left:<%= box.x %>px;width:<%=  box.width %>;height:<%= box.height %>px;" src="/boxes/update/<%= box.id %>">
+  <div class="content">
+    <h2><%= render_cell(box, data) %></h2>
+  </div>
+  <% form_for box, :url => {:controller => "boxes", :action => "live" }, :html => {:class => "live"} do |f| %>
+    <%= hidden_field_tag :id, box.id %>
+    <%= fields_for_source data %>
+    
+  <% end -%>
+
+</div>

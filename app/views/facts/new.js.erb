@@ -1,0 +1,14 @@
+<% render_section (:html => {:id => "add-fact"}) do %>
+  <h1>New fact</h1>
+
+  <% form_for(@fact) do |f| %>
+    <%= f.error_messages %>
+  
+    <%= f.text_area :body %>
+    <%= fields_for_source @source %>
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  <% end %>
+
+<% end -%>

@@ -72,7 +72,7 @@ class Polyco < ActiveRecord::Base
 	}
 	
 
-	named_scope :gather_tags, :select => "T.name AS name, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "name ASC"
+	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "tag_name ASC"
 
 	named_scope :related_connections, lambda {|object|
 		object.nil? ? {} : { :joins => ["LEFT OUTER JOIN polycos P ON (P.subject_id = polycos.object_id AND P.subject_type = polycos.object_type AND P.object_id = #{object.id} AND P.object_type = '#{object.type}')" ], :conditions => ["P.id IS NOT NULL"]}

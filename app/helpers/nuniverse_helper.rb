@@ -187,6 +187,16 @@ module NuniverseHelper
 		
 	end
 	
+	def render_section(params = {}, &block) 
+		params[:content] = capture(&block)
+		
+		concat(
+			render(
+			:partial => "/nuniverse/section",
+			:locals => params
+		))
+	end
+	
 	def tag_box(params) 
 		params[:source] ||= current_user.tag
 		

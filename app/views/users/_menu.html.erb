@@ -1,18 +1,13 @@
-<ul id="sub-menu"></ul>
+<div style="position:fixed;right:20px;bottom:10px;z-index:1001">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee", :id => "logout_lnk"%></div>
+<ul id="sub-menu">
+  
+</ul>
 <ul id="tab-menu" >
+  
     <li class="selected" style="position:absolute;color:#ccc;width:70px">--</li>
-  
-  <li><%= link_to "Overview", "#overview" %></li>
-   <li><%= link_to "Stories", "#stories" %></li>
-<li><%= link_to "Connections", "#connections"%></li>
-  <% if false && current_user == @source %>
-  
-  
-  <li><%= link_to "Bookmarks", "#bookmarks" %></li>
-  <li><%= link_to "Images", "#images" %></li>
-  <li><%= link_to "Contributors", "#contributors" %></li>
-    <li><%= link_to "Account", "#account" %></li>
-  <% end -%>
+    <li><%= link_to "Overview", "#overview" %></li>
+    <li><%= link_to "Your nuniverses", "#S-stories-for-User-#{current_user.id}" , :id => "stories-for-User-#{current_user.id}"%></li>
+    
+   
 </ul>
 
-<div style="position:fixed;right:20px;">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee", :id => "logout_lnk"%></div>

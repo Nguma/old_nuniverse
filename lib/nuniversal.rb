@@ -28,17 +28,26 @@ module Nuniversal
 	end
 	
 	class Token
-		attr_reader :value
-		def initialize(value)
-			@value = value
+		attr_reader :property, :source, :formula
+		def initialize(params)
+			@property = Tag.find_by_name(params[:property])
+			# @group = Group.find_by_unique_name(params[:group])
+			@source = params[:source]
+			@formula = params[:formula] || build_formula
 		end		
 		
-		def sanatize
-			@value.titleize.gsub(' ','_')
+		def build_formula
+			"<#{@property.name}>"
 		end
 		
-		def humanize
-			@value.gsub('_',' ')
+		def result
+			
+			if @property.name == "name"
+				return @source.name
+			else
+				
+				return @source.property(@property).subject.body rescue ""
+			end
 		end
 	end
 		
@@ -51,6 +60,17 @@ module Nuniversal
 	
 	def self.tokenize(str)
 		str.scan(/\[\[([\w\s\-\_\,\?\!]+)\]\]/ix)[0] || []
+	end
+	
+	def self.tokenize_new(str, source)
+		ptokens = str.scan(/\<([\w\s\-\_\?\!\@]+)\>/i) || []
+		
+		tokens = []
+		ptokens.each do |t|
+			# sub = t.scan(/(.+)\@(.+)/)[0]
+			tokens << Token.new(:property => t[0], :source => source)
+		end
+		tokens
 	end
 	
 	

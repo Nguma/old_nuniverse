@@ -138,9 +138,6 @@ fieldset {
 	padding:0;
 }
 
-label {
-	display:block;
-}
 
 .connect_form h2 {
 	color:#FFF;
@@ -314,17 +311,18 @@ li input {
 	width:200px;
 	padding:3px;
 	margin:0 4px 4px 0;
-	border:none;
+	border:1px solid #999;
 	color:#333;
 }
 
 label {
-	color:#FFF;
+	color:#333;
 	font-size:20px;
+	display:block;
 }
 
 li {
 	font-weight:bold;
-	color:#FFF;
+	color:#666;
 	background:none;
 }

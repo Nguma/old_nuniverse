@@ -1,7 +1,7 @@
 class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
-	before_filter :find_tag, :except => [:index, :remove_tag]
+	before_filter :find_tag, :except => [:index, :remove_tag, :show]
 	before_filter  :find_user, :only => [:show, :preview, :suggest, :share]
 	after_filter :update_session, :only => [:show]
 	after_filter :store_location, :only => [:show]
@@ -18,7 +18,10 @@ class TagsController < ApplicationController
   # GET /tags/1
   # GET /tags/1.xml
   def show	
-	
+		@tag = Tag.find_by_name(params[:tag])
+		@source = Nuniverse.find_by_unique_name(params[:unique_name])
+		@connections = Polyco.with_object(@source).tagged(@tag.name)
+
 	
   end
 

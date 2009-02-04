@@ -36,11 +36,6 @@ input
 
 }
 
-#wrap {
-	position:relative;
-	padding:30px 100px 100px 100px;
-	padding:0;
-}
 
 h1 {
 	font-size:40px;
@@ -51,4 +46,8 @@ h1 {
 h2 {
 	color:#336;
 	font-weight:bold;
+}
+
+form {
+	background:none;
 }

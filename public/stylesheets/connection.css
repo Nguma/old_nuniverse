@@ -1,7 +1,8 @@
 .connection {
-	padding:10px;
+
 	position:relative;
 	clear:left;
+	border:solid 1px transparent;
 /*	border-bottom:solid #ccc 1px;*/
 }
 
@@ -82,6 +83,7 @@
 	background:transparent url('/images/icons/arrow_up_hover.png') top right no-repeat;
 }
 
+
 .list_mode .connection {
 /*	background:#dedede;*/
 
@@ -94,7 +96,7 @@
 }
 
 .hover .edit_lnk {
-	visibility:visible;
+/*	visibility:visible;*/
 }
 
 
@@ -135,8 +137,6 @@
 /*	background:#dedede;*/
 /*	background:transparent url('/images/backgrounds/odd.png') 0 0 repeat;*/
 }
-
-
 
 #digest .bookmark-connection {
 	background:#ffb33b;
