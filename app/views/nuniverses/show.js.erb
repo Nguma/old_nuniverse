@@ -1,28 +1,28 @@
-<div class="section nuniverse-section" id="S-Nuniverse-<%= @source.id %>" >
- 
-  <div class="content" style="padding:0">
- 
-   <div class="step">
-      
-      <%= image_tag(@source.images.first.public_filename(:large), :style => "position:relative;float:left;border:solid 1px #666") rescue nil %>
-      <%= clear %>
+<% render_section(:html => {:id => "S-Nuniverse-#{@source.id}" , :class => "nuniverse-section"}) do %>
+  
+<% if @nuniverse.id == 7359 %>
+  <%= image_tag "/images/mockups/handshake-mountain-roast.png" %>
+<% else -%>
+  <div class="step" style="clear:none;margin:0 0 0 0px">
+    <%= image_tag(@source.images.first.public_filename(:large), :style => "border:solid 1px #666;margin: 0 0 10px 0;position:relative;") rescue nil %>
+    <h2 style="padding:0"><%= @nuniverse.name.titleize  %></h2><%= link_to "edit", edit_nuniverse_url(@source), :class =>"expand-lnk", :target => "S-Nuniverse-#{@source.id}"%>
+    
+    <% @nuniverse.connections.of_klass('Fact').each do |connection| -%>
+     <div class="connection" style="clear:none;margin:5px 0 5px 0;font-size:16px">
+       <%= render_fact(connection.subject)%>
+     </div>
+    <% end -%>
+  </div>
+  <% unless @nuniverse.videos.empty? %>
+    <div class="step connection">
+    <%= link_to "Videos", "/videos-for/#{@source.unique_name}" , :id => "Videos-for-#{@source.unique_name}"%>
     </div>
-    <h2><%= @nuniverse.name.titleize  %></h2>
-      <% unless @nuniverse.videos.empty? %>
-        <div class="step connection">
-        <%= link_to "Videos", "/videos-for/#{@source.unique_name}" , :id => "Videos-for-#{@source.unique_name}"%>
-        </div>
-      <% end -%>
-      <% @nuniverse.connections.of_klass('Fact').each do |connection| -%>
-        <div class="step connection">
-          <%= render_fact(connection.subject)%>
-        </div>
-      <% end -%>
+  <% end -%>
+
       
-      
-    </div>
     
     <div class="step connection">
       <%= link_to image_tag("/images/icons/create_button.png"), "/facts/new", :id => "add-fact" %>
     </div>
-</div>
+<% end -%>
+<% end -%>

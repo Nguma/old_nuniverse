@@ -1,0 +1,12 @@
+<%= thumbnail_tag(@polyco.subject, :size => :large) rescue nil %>
+<h2><%= @polyco.subject.name %></h2>
+<% form_for @polyco, :url => {:controller => "polycos", :action => "update"}, :html => {:class => "inline" } do |f| %>
+
+  <ul>
+  <% @polyco.object.properties.each do |prop| -%>
+    <% val = @polyco.subject.property(prop).subject.body rescue "" %>
+    <li><label><%= prop.name.capitalize %></label> <%= text_field_tag "properties[#{prop.name}]", val %></li>
+  <% end -%>
+  </ul>
+  <%= submit_tag "Save Changes."%>
+<% end -%>

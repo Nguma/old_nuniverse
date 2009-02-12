@@ -9,15 +9,24 @@
   <li><%= f.check_box :rankable %> This set is rankable</li>
   
   </ul>
-  <label>Choose up to 4 properties to display for items in that set.</label>
+  <label>Choose up to 6 properties to display for items in that set.</label>
    <ul>
      <%#= raise @group.properties.inspect %>
-    <li><%= text_field_tag "properties[]", (@group.properties[0].name rescue nil) %>
-    <%= text_field_tag "properties[]",  (@group.properties[1].name rescue nil) %></li>
-    <li><%= text_field_tag "properties[]" , (@group.properties[2].name rescue nil) %><%= text_field_tag "properties[]" , (@group.properties[3].name rescue nil)%></li>
+    <li>
+      <%= text_field_tag "properties[]",  (@group.properties[0].name rescue nil) %>
+      <%= text_field_tag "properties[]",  (@group.properties[1].name rescue nil) %>
+    </li>
+    <li>
+      <%= text_field_tag "properties[]" , (@group.properties[2].name rescue nil) %>
+      <%= text_field_tag "properties[]" , (@group.properties[3].name rescue nil)%>
+    </li>
+    <li>
+      <%= text_field_tag "properties[]" , (@group.properties[4].name rescue nil) %>
+      <%= text_field_tag "properties[]" , (@group.properties[5].name rescue nil)%>
+    </li>
 
   </ul>
   <%= submit_tag "Save Changes"%>
-  
+  <button id="Cancel" label="Cancel" />
 <% end -%>
 </div>

@@ -9,10 +9,10 @@
 	float:left;
 	display:block;
 	text-indent:-9000px;
-	width:25px;
-	height:25px;
+	width:50px;
+	height:50px;
 	padding:0;
-	background:transparent url('/images/icons/stars.png') 0 0 no-repeat;	
+	background:transparent url('/images/icons/star.png') 0 0 no-repeat;	
 }
 
  .star_rating a.half {

@@ -1,13 +1,3 @@
-
 <% nuniverse do -%>
-  <% form_tag "/admin/save_data" do  %>
-    <% 5.times do |time| %>
-        <%= text_field_tag "item[#{time}][name]" %>
-        <%= text_field_tag "item[#{time}][position]" %>
-        <%= text_field_tag "item[#{time}][goals]" %>
-        <br/>
-    <% end -%>
-     <%= submit_tag %>
-  <% end -%>
- 
+  --
 <% end -%>

@@ -1,8 +1,16 @@
-<div class="connection step">
+<div class="connection step <%= cycle('odd','even') %>" id="Polyco-<%= instance.id %>">
   <%= thumbnail_tag instance.subject rescue nil %>
+  <span class="name body">
+    <%= link_to (instance.subject.name, polyco_url(instance), :title => instance.subject.name, :target => "S-Polyco-#{instance.id}", :class => "inline")%>
+    <%= render(:partial => "/taggings/star_rating", :locals => {:item => instance.subject }) if instance.object.rankable %>
+  </span>
+  <p>
+  <% instance.object.properties.each do |p| -%>
+    <span style="margin:0 10px 0 0"><%= render_fact(instance.subject.property(p).subject) rescue nil %></span>
+  <% end -%>
+  </p>
   
-  <span class="name"><%= link_to (instance.subject.name, polymorphic_url(instance.subject), :id => "#{instance.subject.class.to_s}-#{instance.subject.id}")  rescue render_fact(instance.subject)%></span>
-  
-  <p><%= instance.description rescue nil %></p>
+    <%= hidden_field_tag :id, :class => "source-id", :id => "#{dom_id(instance)}-id" %>
+    <%= hidden_field_tag :type,  :class => "source-type", :id => "#{dom_id(instance)}-type"%>
   <%= clear%>
 </div>

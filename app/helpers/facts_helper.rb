@@ -6,6 +6,7 @@ module FactsHelper
 		tokens = Nuniversal.tokenize(body)
 
 		tokens.each do |token|
+				token = token[0]
 				n = Nuniverse.find_by_unique_name(Nuniversal.sanatize(token)) 
 				if n
 					sub = link_to(n.name, n,:title => n.name, :id =>"Nuniverse-#{n.id}")
@@ -37,6 +38,15 @@ module FactsHelper
 			body = body.gsub(token.formula, token.result)
 		end
 		body
+	end
+	
+	def render_text(text)
+		tokens = Nuniversal.tokenize(text)
+		tokens.each do |token|
+			
+			text = text.gsub("[[#{token[0]}]]",link_to(token[0], "/nuniverse-of/#{Nuniversal.sanatize(token[0])}"))
+		end
+		text
 	end
 	
 end

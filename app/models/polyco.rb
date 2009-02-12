@@ -78,6 +78,8 @@ class Polyco < ActiveRecord::Base
 		object.nil? ? {} : { :joins => ["LEFT OUTER JOIN polycos P ON (P.subject_id = polycos.object_id AND P.subject_type = polycos.object_type AND P.object_id = #{object.id} AND P.object_type = '#{object.type}')" ], :conditions => ["P.id IS NOT NULL"]}
 		}  
 		
+
+		
 	
 	def score
 		average_score.to_i || 0

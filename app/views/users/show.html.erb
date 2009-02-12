@@ -1,12 +1,8 @@
 
 <%= render :partial => "/users/menu"%>
 <% nuniverse do -%>
-  <%= render :partial => "overview" %>
-  <%= render :partial => "/stories/stories" %>
+  <%#= render :partial => "overview" %>
+  <%#= render :partial => "/stories/stories" %>
+  <%= render :partial => "connections"%>
   <%= clear %>
 <% end -%>
-
-<div id="templates" style="display:none">
-  <%= render :partial => "/boxes/template" %>
-  <%= render :partial => "/boxes/image_box" %>
-</div>

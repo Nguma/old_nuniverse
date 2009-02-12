@@ -12,6 +12,30 @@
 	font-size:13px;
 }
 
+.grid .connection img.thumbnail,
+.grid .connection img.default {
+	float:none;
+	display:block;
+	margin:0 auto 10px auto;
+	height:150px;
+	width:150px;
+	padding:1px 1px 5px 5px;
+/*	border:solid 1px #666;*/
+	background:transparent url('/images/backgrounds/thumbnail-large.png') 0 0 no-repeat;
+}
+
+.grid .connection img.default {
+	border:transparent 1px solid;
+	background:none;
+	cursor:pointer;
+}
+
+.list .connection img.default {
+	border:transparent 1px solid;
+	background:none;
+	width:70px;
+	height:70px;
+}
 
 
 .connection a.title {

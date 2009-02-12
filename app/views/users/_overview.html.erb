@@ -9,10 +9,10 @@
   </div>
   
   <ul class="step">
-     <li class="connection"><%= link_to "Your nuniverses", "/stories-for/User/#{current_user.id}", :id => "stories-for-User-#{current_user.id}" %></li>
-     <li class="connection"><%= link_to "Create a nuniverse", "/create-a-nuniverse", :id => "create-a-nuniverse"%></li>
-     <li class="connection"><%= link_to "Manage your account", "/users/account/#{current_user.id}", :id => "account"%></li>
-     <li class="connection"><%= link_to "Customize your colors", "/users/account", :id => "customize"%></li>
+     <li class="connection"><%= link_to "Your nuniverses", "/stories-for/User/#{current_user.id}", :target => "S-stories-for-User-#{current_user.id}" %></li>
+     <li class="connection"><%= link_to "Create a nuniverse", "/create-a-nuniverse", :target => "S-create-a-nuniverse"%></li>
+     <li class="connection"><%= link_to "Manage your account", "/users/account/#{current_user.id}", :target => "S-account"%></li>
+     <li class="connection"><%= link_to "Customize your colors", "/users/account", :target => "customize"%></li>
    </ul>
  
 

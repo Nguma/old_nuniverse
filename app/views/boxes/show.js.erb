@@ -1,0 +1,14 @@
+ <div class="box" style="background:#ef3;width:300px;height:150px;top:70px;left:30px;position:absolute"><h2>Going to New York City</h2><p>I need to find an hotel to book...</p></div>
+  <div class="box" style="background:#c0f608;width:300px;height:300px;top:100px;left:400px;position:absolute">
+    <%= image_tag(current_user.nuniverses.first.avatar(:large), :style => "width:100%;height:auto") %>
+  </div>
+  <%= render :partial => "/boxes/address_box", :locals => {:item => Location.find(:last)}%>
+
+    <div class="box" style="background:#Fc0;width:445px;height:364px;top:200px;left:30px;position:absolute">
+      <div class="content video" style="padding:0;margin:10px 0 0 0;">
+        <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="425" height="344"><param name="movie" value="<%=  Video.find(:first).url %>" ></param><param name="quality" value="high"><param name="allowScriptAccess" value="always"><param name="allowFullScreen" value="true"><param name="FlashVars" value="<%=  %>"></param><embed src="<%= Video.find(36).url %>" FlashVars="<%=  %>" type="application/x-shockwave-flash" allowfullscreen="true" width="425" height="344" quality="high" allowScriptAccess="always" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed></object>
+      </div>
+    </div>
+    <div class="box" style="position:absolute;background:#FFF;padding:10px;right:20px;bottom:50px;height:200px;width:230px;">
+      <%= image_tag('/images/icons/calendar.png')%>
+    </div>

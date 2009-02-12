@@ -1,0 +1,72 @@
+dl.set {
+	position:relative;
+	height:auto;
+	z-index:222;
+}
+
+dl.set dd {
+	position:absolute;
+	min-width:70px;
+	min-height:70px;
+}
+
+dl.vertical dd {
+	width:auto;
+	height:auto;	
+
+}
+
+dl.vertical dd .thumbnail {
+	position:absolute;
+	bottom:0;
+	
+}
+
+
+dl.vertical dd .bar {
+	position:absolute;
+	bottom:0;
+}
+
+dl.set dd .bar {
+	background-color:#FFF !important;
+	position:absolute;
+}
+
+dl.set dd.hover .bar {
+	background-color:#9F0;
+}
+
+dl dd .preview {
+	display:none;
+}
+
+#message {
+	position:absolute;
+	background:transparent url('/images/backgrounds/message.png') 0 0 no-repeat;
+	width:260px;
+	height:210px;
+	z-index:4333;
+	display:none;
+	padding:20px;
+	font-size:20px;
+	font-weight:bold;
+}
+
+
+#node {
+	width:20px;
+	height:20px;
+	background:#98F093;
+	position:absolute;
+	margin:auto;
+	border:solid 5px #FFF;
+	top:300px;
+	left:300px;
+}
+
+
+.list .connection {
+/*	background:#FFF !important;*/
+	border-bottom:solid 1px #ccc;
+}

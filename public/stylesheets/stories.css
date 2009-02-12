@@ -62,3 +62,16 @@
 	padding:10px;
 	background:#d9e0ca;
 }
+
+#tutorial {
+	
+}
+
+#tutorial h1 {
+	font-weight:bold;
+	font-size:100px;
+	color:#069;
+	text-align:center;
+	margin:auto;
+	padding:100px;
+}

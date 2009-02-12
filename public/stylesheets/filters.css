@@ -81,11 +81,12 @@
 	font-size:15px;
 	font-weight:bold;
 	color:#666;
+	display:block;
 }
 
 #tab-menu li.selected {
-	background:#eee;
-	color:#eee !important;
+	background:#333;
+	color:#333 !important;
 	position:absolute;
 	width:70px;
 	height:25px;
@@ -95,19 +96,25 @@
 #sub-menu {
 	position:fixed;
 	bottom:40px;
-	height:2px;
-	background:#efefef;
+	height:30px;
+	background:#333;
 	width:100%;
 	z-index:9999;
 	display:block;
 	border-left:solid 1px #eee;
 }
 
+
 .sub-menu {
-	position:absolute;
-	bottom:80px;
+	position:relative;
+
+	display:none;
+}
+
+#sub-menu .sub-menu {
 	display:block;
 }
+
 
 .sub-menu li {
 	padding:8px 20px 8px 20px;
@@ -116,10 +123,11 @@
 	font-size:14px;
 	font-weight:bold;
 	color:#666;
+	display:block;
 }
 
 .sub-menu li.selected {
-	background:#ececec;
+	background:#eee;
 	color:#333;
 	
 }

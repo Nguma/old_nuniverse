@@ -1,4 +1,5 @@
 <%= render :partial => "/boxes/preview" %>
+<%= render :partial => "/nuniverse/view" %>
 
 <%#= breadcrumbs %>
 <div id="nuniverse" class="<%= @display %>_mode">
@@ -6,8 +7,17 @@
   <%#= render :partial => "/nuniverses/main_menu"%>
 </div>
 
-<div id="section-template" style="display:none" class="section">
-  <div class="content"><div class="hat">
-  <h2></h2>
-  </div></div>
+
+
+
+<div id="templates" style="display:none">
+  <%= render :partial => "/boxes/template" %>
+  <%= render :partial => "/boxes/image_box" %>
+  <div id="section-template" class="section">
+    <div class="content"><div class="hat">
+    <h2></h2>
+    </div></div>
+  </div>
+  
+  <%= render :partial => "/boxes/edited_cell"%>
 </div>

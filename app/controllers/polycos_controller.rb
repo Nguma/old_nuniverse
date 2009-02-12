@@ -2,7 +2,7 @@ class PolycosController < ApplicationController
 
 	
 	before_filter :find_polyco, :except => [:index, :new, :create, :connect, :suggest]
-	before_filter :find_context, :only => [:create, :update, :connect]
+	before_filter :find_context, :only => [:create, :connect]
 	before_filter :update_session
 	after_filter :store_location, :only => [:show]
 	
@@ -11,10 +11,9 @@ class PolycosController < ApplicationController
 	end
 	
 	def show
-		redirect_to @polyco.object if @polyco.state == "active"
-		# raise Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10).inspect
-		@suggestions = Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10)
-		@source = @polyco
+		# @suggestions = Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10)
+		# @source = @polyco
+		
 	end
 	
 	def rate
@@ -50,58 +49,18 @@ class PolycosController < ApplicationController
 	end
 	
 	def update
+		@subject = @polyco.subject
 		
-
-		if params[:subject_id] 
-
-			@polyco.subject.delete
-			@polyco.subject = params[:subject_type].classify.constantize.find(params[:subject_id])
-				@polyco.subject.active = 1
-				@polyco.subject.save
-		end
-
-		if params[:polyco]	
-			if @polyco.subject.is_a?(Tag)
-				@polyco.subject = Nuniverse.new(:name => @polyco.subject.name)
-			end
-			@polyco.description = params[:polyco][:description] 
-			
-			if params[:subject]
-				if params[:subject][:description]
-				@polyco.subject.description = params[:subject][:description]
-				params[:subject][:description].split(',').each do |t|
-						tag = Tag.find_or_create(:name => t.strip) 
-						@polyco.subject.taggings << Tagging.new(:taggable => @polyco.subject, :tag => tag) unless tag.name.nil?
-				end
-			end
-			end
-			@polyco.subject.active = 1
-			@polyco.subject.save
-			
-			
-			if params[:image] && (!params[:image][:source_url].blank?)
-				begin
-					@polyco.subject.images << Image.create(params[:image])
-				rescue
-					
-				end
-			end
+		params[:properties].each do |p|
+			t = Tag.find_by_name(p[0])
+			@subject.set_property(t,p[1]) 
 		end
 		
-		@polyco.save_all
-
 		respond_to do |f|
-				f.html { 
-					if params[:subject_id] 
-						redirect_to edit_polyco_url(@polyco)
-					else 
-						redirect_back_or_default("/")
-					end
-				}
+			f.html {}
+			f.js { render :action => "show"}
 		end
-		
-		
-		
+				
 	end
 
 	
@@ -161,6 +120,7 @@ class PolycosController < ApplicationController
 	protected
 	
 	def find_polyco
-		@polyco = @source = Polyco.find(params[:id])
+		
+		@polyco = @source = Polyco.find(params[:id]) 
 	end
 end

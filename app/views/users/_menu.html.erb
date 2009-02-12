@@ -1,6 +1,8 @@
-<div style="position:fixed;right:20px;bottom:10px;z-index:1001">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee", :id => "logout_lnk"%></div>
+<div id="session-info">
+  You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :id => "logout_lnk"%>
+</div>
 <ul id="sub-menu">
-  
+
 </ul>
 <ul id="tab-menu" >
   

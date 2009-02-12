@@ -4,10 +4,11 @@ class GroupsController < ApplicationController
 	before_filter :find_source, :only => [:new]
 	
 	def show
-		@mode = params[:mode] || ""
-		@elements = @group.nuniverses
-		@collection_1 = @elements.collect {|c| c.subject.property(@group.properties.second) rescue nil }
-
+		@mode = session[:mode] = params[:mode] || "list"
+		@elements = @group.connections.of_klass('Nuniverse').paginate(:page => params[:page], :per_page => 18)
+		@collection = @elements.collect {|c| c.subject.property(@group.properties.first).subject.body rescue nil }
+		# @highest_value = @collection.sort {|x,y| x <=> y }.first.gsub(/[^0-9\.]/,'')
+		
 		respond_to do |f|
 			f.js {}	
 		end
@@ -15,7 +16,7 @@ class GroupsController < ApplicationController
 	
 	def create
 		@set = Group.create(params[:group])	
-		@set.parent_id = params[:source]['id']
+		@set.parent_id = params[:source][:id]
 		@set.unique_name = Nuniversal.sanatize(@set.name)
 		
 		# Finds matching Tag for each property, 
@@ -62,12 +63,13 @@ class GroupsController < ApplicationController
 		@group = Group.find(params[:group][:id]) rescue Group.find(params[:id])
 		@group.set_properties(params[:properties]) if params[:properties]
 		
+		@mode = session[:mode]
 		respond_to do |format|
       if @group.update_attributes(params[:group])
         flash[:notice] = 'This set was successfully updated.'
         format.html { redirect_to(@group) }
 				format.js { 
-					@elements = @group.nuniverses
+					@elements = @group.connections.of_klass('Nuniverse').paginate(:page => 1, :per_page => 12)
 				
 				}
         format.xml  { head :ok }

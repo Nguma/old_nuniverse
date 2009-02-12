@@ -1,9 +1,11 @@
 body {
-	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;
+/*	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;*/
+	background:#efefef url('/images/backgrounds/main-grey.png') 0 -280px repeat-x;
 }
 
 .section {
 	background:#fff url('/images/backgrounds/main_light.png') 0 -400px repeat-x !important;
+	background:none !important;
 }
 
 #overview {
@@ -14,6 +16,9 @@ body {
 	background:none !important;
 }
 
+.section {
+/*		background:none !important;*/
+}
 
 .section .odd {
 	background:none;
@@ -60,12 +65,12 @@ body {
 }
 
 .main-section {
-/*	background:none !important;*/
+	background:none !important;
 }
 
 
 #S-Story-134 {
-	background:#f9dc18 !important;
+	background:#FFF url('/images/mockups/handshake.png') 0 0 repeat-x !important;
 }
 
 #S-Story-134 h2 {
@@ -74,4 +79,8 @@ body {
 
 #S-Story-134 a {
 	color:#e00;
+}
+
+h2 {
+	color:#333;
 }

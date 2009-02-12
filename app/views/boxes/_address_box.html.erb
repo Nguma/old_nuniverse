@@ -1,21 +1,20 @@
-<div class="box" id="address_box" style="height:60px;overflow:hidden">
-  <%= render_item(item, :kind => item.kind, :item_classes => "hide_in_preview") %>
-  
+<div class="box" id="address_box" style="height:60px;overflow:hidden;position:absolute;height:300px;width:300px;left:700px;top:200px">
+ 
   
   <div class="content" style="display:block;position:relative;">
-    <% if item.subject.has_address? -%>
-      <% @map = map(item.subject) %>
+    
+      <% @map = map(item) %>
       
        <% content_for :head do -%>
             <%= GMap.header (:small_zoom => true, :with_vml => false) %>
             
-            <%#= @map.to_html %>
+            <%= @map.to_html %>
         <% end -%>
-        <%= @map.div(:width => '378px', :height => '260px', :class => "map", :id => "map_#{item.subject.id}") %>
-    <% end -%>
+        <%= @map.div(:width => '300px', :height => '300px', :class => "map", :id => "map_#{item.id}") %>
+  
     <script type="text/javascript">
     //<![CDATA[
-      function display_map_<%= item.subject.id %>(){
+      function display_map_<%= item.id %>(){
         
         <%=  @map.to_html(:no_load => true, :no_script_tag => true, :no_declare => true, :no_global => true) %>
       }
@@ -26,7 +25,7 @@
   </div>
   
   <div class="hidden">
-     <%= add_to_fav_link(item, :source => @tag)%>
+
     
    </div>
 

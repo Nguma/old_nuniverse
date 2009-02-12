@@ -1,0 +1,15 @@
+<% elements.each do |connection| -%>
+
+<div class="connection step <%= cycle('odd','even') %>" style="position:relative;float:left;overflow:hidden;height:200px;width:200px; clear:none; margin:0 3px 3px 0;text-align:center;padding:0">
+  
+  <%= thumbnail_tag connection.subject, :size => :large rescue nil %>
+  <span class="name">
+    <%= link_to (connection.subject.name, polyco_url(connection), :title => connection.subject.name, :id => "Polyco-#{connection.id}", :class => "inline", :style => "font-size:16px;line-height:16px;padding:0")%>
+    <%#= render(:partial => "/taggings/star_rating", :locals => {:item => connection.subject }) if connection.object.rankable %>
+  </span>
+ 
+  
+  <%= hidden_field_tag :id, connection.id, :class => "connection-id" %>
+  <%= hidden_field_tag :type, 'Polyco', :class => "connection-type"%>
+</div>
+<% end -%>

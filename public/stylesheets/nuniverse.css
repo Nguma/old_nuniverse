@@ -64,8 +64,10 @@ dl.row dd {
 	padding: 0;
 	position:absolute;
 	width:60000px;
+	
 	white-space:nowrap;
 	height:100%;
+	min-height:800px;
 }
 
 #nuniverse .small { width:25%;}
@@ -88,6 +90,8 @@ p strong {
 #profile h2 {
 	font-size:20px;
 }
+
+
 
 #profile .kind {
 	font-size:12px;
@@ -303,7 +307,7 @@ a.save_button {
 	
 }
 
-#suggestions {
+.suggestions {
 	position:absolute;
 	z-index:678901;
 	background:#fff;
@@ -413,6 +417,7 @@ a.save_button {
 	position:relative;
 	border:none;
 	font-size:24px;
+	max-width:600px;
 }
 
 #overview .step a {
@@ -535,24 +540,6 @@ a.filter:hover {
 	clear:none;
 }
 
-#left-column .step {
-	clear:none;
-	padding:10px 40px 10px 40px;
-	border-bottom:solid 1px #ccc;
-	
-}
-
-#right-column .step {
-	margin:0 0 1px 0;
-	font-size:16px; 
-}
-#nuniverse.extended #right-column {
-	display:none;
-}
-
-#nuniverse.extended #left-column {
-	margin:0;
-}
 
 
 #overview dl {
@@ -580,6 +567,8 @@ a.filter:hover {
 	width:470px;
 	height:auto;
 	display:none;
+	border:solid 10px #333;
+
 }
 
 .popup .content {
@@ -671,13 +660,7 @@ a.filter:hover {
 .section .selected .arrow {
 	display:block;
 }
-#nuniverse .even {
-/*	background:#ddd;*/
-}
 
-#nuniverse .odd {
-/*	background:#eee;*/
-}
 
 .hover {
 /*	background:#eee url('/images/backgrounds/section-hover.png') 0 0 repeat;*/
@@ -770,6 +753,14 @@ a.filter:hover {
 	position:absolute;
 	z-index:3000;
 	display:none;
+	width:600px;
+	height:400px;
+	border:solid #FFF 5px;
+}
+
+#preview .content {
+	padding:10px;
+	position:relative;
 }
 
 #theme .swatch {
@@ -806,4 +797,54 @@ a.filter:hover {
 
 .table dd.even {
 	background:#efefef;
+}
+
+#session-info {
+	position:fixed;
+	right:20px;
+	bottom:10px;
+	z-index:10201;
+	font-weight:bold;
+	color:#999;
+	font-size:13px;
+}
+
+#session-info a {
+	color:#FFF;
+}
+
+.tile  {
+	text-align:center;
+	padding:10px 10px 10px 8px;
+	white-space:normal;
+	width:120px;
+	height:120px;
+	margin:10px;
+	overflow:hidden;
+	font-weight:bold;
+	font-size:17px;
+	color:#333;
+	background:transparent;
+	border:solid 2px #666;
+/*	background:transparent url('/images/backgrounds/tile.png') 0 0 no-repeat;*/
+	position:absolute;
+	cursor:pointer;
+	
+}
+
+.tile-hover {
+/*	background:transparent url('/images/backgrounds/tile-hover.png') 0 0 no-repeat;*/
+	background:#FFF;
+}
+
+
+.tile .spinner {
+	padding:5px 40px 30px 32px;
+	position:absolute;
+	z-index:999;
+}
+
+#view {
+	z-index:5000;
+/*	background:transparent url('/images/backgrounds/main_light.png') -300px 0 repeat-x;*/
 }

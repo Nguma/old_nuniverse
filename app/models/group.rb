@@ -29,7 +29,7 @@ class Group < ActiveRecord::Base
 		self.description = description 
 		
 		
-		4.times do |time|
+		6.times do |time|
 			c = prop_connections[time]
 			t = tags[time]
 			

@@ -57,30 +57,22 @@ ActionController::Routing::Routes.draw do |map|
 	  		m.upgrade '/upgrade', :action => 'upgrade'
 		
 	  	end
-  	
-
-			
-	# map.konnect "/connect/:subject_type/:subject_id/with/:object_type/:object_id", :controller => "polycos", :action => "connect"
-	
 	
 	map.locate "/locate", :controller => "locations", :action => "find"
 	
 	map.create_tag "/create_tag", :controller => "tags", :action => "create"
 	map.make_connection "/make_connection/from/:object_type/:object_id/to/:subject_type/:subject_id", :controller => "polycos", :action => "connect"
-	# map.konnect "/connect/:subject/:object", :controller => "connections", :action => "connect", :requirements => {:subject => /\d+/}
-	# map.create_and_connect "/connect/:object", :controller => "connections", :action => "connect"
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"
 	
 	map.suggest "/suggest-a-nuniverse", :controller => "nuniverses", :action => "suggest"
 	
 	map.share_story "/share-this-nuniverse/:id", :controller => "stories", :action => "share"
-
-	
-	# map.visit "/nuniverse-of/:id/according-to/:perspective", :controller => "tags", :action => "show"
 	map.add_to_nuniverse "/add-to-favorites/:id", :controller => "connections", :action => "add_to_favorites"
 	map.remove_from_nuniverse "/remove-comment/:id", :controller => "comments", :action => "destroy"
 	map.preview "/preview/:id", :controller => "connections", :action => "preview"
 	map.send_email "/send_email/:id", :controller => "tags", :action => "send_email"
+	
+	map.update_polyco "/polycos/:id/update", :controller => "polycos", :action => "update"
 	
 	map.create_box "/create-box", :controller => "boxes", :action => "create"
 	map.save_layout "/save-layout", :controller => "application", :action => "save_layout"

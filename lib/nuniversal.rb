@@ -59,7 +59,7 @@ module Nuniversal
 	end
 	
 	def self.tokenize(str)
-		str.scan(/\[\[([\w\s\-\_\,\?\!]+)\]\]/ix)[0] || []
+		str.scan(/\[\[([\w\s\-\_\,\?\!]+)\]\]/i) || []
 	end
 	
 	def self.tokenize_new(str, source)

@@ -22,8 +22,8 @@
     </div>
     <% else %>
       <% @story.sets.each do |group| %>
-        <div class="step connection">
-          <%= link_to group.name, "/groups/show/#{group.id}", :id => "Group-#{group.id}"%>
+        <div class="step connection" style="max-width:500px" id="Group-<%= group.id%>">
+          <%= link_to group.name, "/groups/show/#{group.id}", :target => "S-Group-#{group.id}"%>
         </div>
       <% end -%>
     <% end -%>

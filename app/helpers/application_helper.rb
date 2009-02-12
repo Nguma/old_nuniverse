@@ -14,6 +14,11 @@ module ApplicationHelper
 		source ||= @source
 		render :partial => "/application/source_fields", :locals => {:source => source}
 	end
+	
+	def fields_for_source(source = nil)
+		source ||= @source
+		render :partial => "/application/source_fields", :locals => {:source => source}
+	end
 
 	def tokenize(str)
 		Nuniversal.tokenize(str).each do |token|

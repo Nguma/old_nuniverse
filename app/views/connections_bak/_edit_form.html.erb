@@ -1,0 +1,12 @@
+
+<%= thumbnail_tag(@connection.subject) %> <%= image_tag('/images/icons/related.png',:style => "float:left")%> <%= thumbnail_tag(@connection.object) %>
+
+<h2 style="clear:left">How is <%= link_to_item(@connection.subject) -%> related to <%= link_to_item(@connection.object) %></h2>
+<% form_tag "/connections/update" do -%>
+  <%= hidden_field_tag :id, @connection.id %>
+  
+  <%= text_area_tag :description, @connection.description, :style => "width:100%", :rows => 6 %><br/>
+  <label>Tag this connection (separate tags with commas)</label>
+  <%= text_area_tag :tags, @connection.tags.join(', '), :style => "width:100%;font-size:14px;padding:3px", :rows => 1%>
+  <%= submit_tag "Save" %>
+<% end -%>

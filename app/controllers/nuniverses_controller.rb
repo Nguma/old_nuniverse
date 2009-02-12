@@ -28,6 +28,7 @@ class NuniversesController < ApplicationController
 		# 	@facts = @nuniverse.facts.paginate(:page => params[:page] || 1, :per_page => 10)
 		# 	@bookmarks = @nuniverse.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
 		# 	@images = @nuniverse.images.paginate(:page => params[:page] || 1, :per_page => 10)		
+		
 		@videos = @nuniverse.videos.paginate(:page => params[:page] || 1, :per_page => 10)
 
 		respond_to do |f|
@@ -48,9 +49,14 @@ class NuniversesController < ApplicationController
 	end
 	
 	def edit
+		@scope = params[:scope][:type].classify.constantize.find(params[:scope][:id])
+		# @nuniverse.update_with(params)
+		# redirect_to @nuniverse
 		
-		@nuniverse.update_with(params)
-		redirect_to @nuniverse
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 	
 	def update
@@ -118,7 +124,7 @@ class NuniversesController < ApplicationController
 		if params[:input]
 			tokens = Nuniversal.tokenize(params[:input])
 			if tokens.empty?
-				@suggestions =  ThinkingSphinx::Search.search(params[:input], :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
+				@suggestions =  ThinkingSphinx::Search.search(:conditions => {:name => params[:input]},  :classes => [User,Nuniverse], :order => "length ASC")
 			else
 				@suggestions = ThinkingSphinx::Search.search(:conditions => {:unique_name => tokens.last}, :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
 			end

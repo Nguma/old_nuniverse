@@ -32,7 +32,10 @@ class BoxesController < ApplicationController
 		@selection = params[:source][:type].classify.constantize.find(params[:source][:id])
 		
 	end
-	
+
+	def show
+		
+	end
 	
 	def add_text_box
 		@story = Story.find(params[:story])

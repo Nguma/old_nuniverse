@@ -120,3 +120,10 @@
 .box p b {
 	color:#333;
 }
+
+.edited-cell {
+	font-size:13px;
+	padding:2px;
+	margin:0;
+	width:100%;
+}

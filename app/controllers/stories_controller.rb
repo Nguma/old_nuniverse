@@ -30,15 +30,12 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.xml
   def show
-		
-		
-		
 		# @comments = @story.comments.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
 		 @nuniverses = @story.nuniverses.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
 		# @contributors = @story.contributors.paginate(:page => params[:page], :per_page => 10, :order => "name DESC")
 		
     respond_to do |format|
-      format.html { 		@source = @story }
+      format.html { @source = @story }
 			format.js {}
       format.xml  { render :xml => @story }
     end
@@ -144,7 +141,6 @@ class StoriesController < ApplicationController
 	end
 	
 	def suggest
-		
 		@suggestions = Nuniverse.search(params[:subject][:name]).paginate(:page => 1, :per_page => 5)
 	end
 	

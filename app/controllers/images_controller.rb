@@ -6,14 +6,13 @@ class ImagesController < ApplicationController
   
   def create
 		@source = params[:source][:type].classify.constantize.find(params[:source][:id])
+		@source = @source.is_a?(Polyco) ? @source.subject : @source
 		begin
 			@image = Image.create!(params[:image])
 			@source.images << @image
 		rescue
 		end
 
-
-		
 		respond_to do |f|
 			f.html { render :layout => false}
 			f.js { render :layout => false}
