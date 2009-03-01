@@ -1,0 +1,6 @@
+<dd class="fact" style="<%= style rescue nil %>">
+  
+
+  <%= link_to  fact.category, polymorphic_url(source, :tag_name => "#{fact.category}"), :class => "category" unless fact.category.blank? || (@tag && @tag.name.downcase == fact.category[0].downcase.strip) %>
+  <%= link_to fact.body.gsub(/^([\w\s\-\_]+\:)/,''), fact_url(fact) %>
+</dd>

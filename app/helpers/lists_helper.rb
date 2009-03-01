@@ -33,10 +33,8 @@ module ListsHelper
 
 	
 	def render_item(item, params = {})
-		params[:source] ||= @source
-		params[:kind] ||= nil
-		params[:item] = item.is_a?(Connection) ? item.subject : item
-		render :partial => "/taggings/instance", :locals => params
+		obj = item['type'].classify.constantize.find(item['id'])
+		render :partial => "/#{item['type'].downcase.pluralize}/instance", :locals => {:instance => obj}
 	end
 	
 	def render_connection(connection, params = {})

@@ -1,22 +1,22 @@
-<% render_section :html => {:id => "S-create-a-nuniverse"} do %>
-  <h2>Create a nuniverse</h2>
-  <div class="step">
-  <h3>You can create <span style="color:#f90">3</span> more nuniverses. <span class="connection"><%= link_to "Upgrade", "/upgrade", :id => "upgrade-account" %></span></h3>
+
+
+ 
+<div class="dialog box" style="top:80px;left:250px">
+  <div class="content">
+     <h3>You can create <span style="color:#f90">3</span> more nuniverses this month. <span class="connection"><%= link_to "Upgrade", "/upgrade", :id => "upgrade-account" %></span></h3>
+     <div class="step">
+       <%= link_to "I want to make a list >", "/groups/new", :target => "#create-nuniverse-box"%>
+      </div>
+      <div class="step">
+        <%= link_to "I want to make a free form nuniverse >", "/stories/new", :target => "#create-nuniverse-box" %>
+      </div>
   </div>
-  <div class="step">
-  <% form_for @story, :html => { :class => "inline"} do |f| %>
-      <%= f.error_messages %>
-      <label>This nuniverse is called</label>
-      <%= f.text_field :name, :rows => 1, :style => "width:90%" %>
-      <label>Describe it... if you want</label>
-      <%= f.text_area :description, :rows => 4 , :style => "width:90%"%>
-      <%= f.hidden_field :author_id %>
-      <ul>
-        <li><%= f.check_box :is_private %>This nuniverse is private</li>
-      </ul>
-    <p>
-      <%= f.submit "Create" %>
-    </p>
-  <% end %>
+</div>
+
+
+<div class="dialog box" id="create-nuniverse-box" style="top:80px;left:560px;display:none">
+  <div class="content">
+
   </div>
-<% end -%>
+</div>
+    

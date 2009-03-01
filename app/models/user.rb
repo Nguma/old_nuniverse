@@ -45,8 +45,10 @@ class User < ActiveRecord::Base
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
 	has_many :comments, :as => :parent
 	has_many :facts, :through => :connecteds, :source => :object, :source_type => "Fact"
+	# has_many :groups, :through => :connections, :source => :subject, :source_type => "Group"
 	
 	has_many :boxes, :as => :parent
+	has_many :collections, :as => :parent
 
 	alias_attribute :name, :login
 
@@ -61,7 +63,7 @@ class User < ActiveRecord::Base
 		indexes :login
 		indexes [:firstname, :lastname], :as => :name, :sortable => true
 		indexes taggings(:tag).name, :as => :tags
-		has connections(:id), :as => :c_id
+		# has connections(:id), :as => :c_id
 		has tags(:id), :as => :tag_ids
 		has contexts(:id), :as => :context_ids
 		has :state
@@ -86,8 +88,8 @@ class User < ActiveRecord::Base
 		return email
 	end
 	
-	def avatar(size = {})
-		connections.of_klass('Image').with_score.order_by_score.first.subject.public_filename(size)
+	def avatar
+		connections.of_klass('Image').with_score.order_by_score.first.subject
 	end
 	
 

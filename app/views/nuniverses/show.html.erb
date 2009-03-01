@@ -1,16 +1,23 @@
 
-<%= render :partial => "/nuniverses/menu" %>
+<%= render :partial => "menu" %>
 
 <% nuniverse do -%>
-  <%#= render :partial => "overview" %>
-  <%#= render :partial => "facts" %>
-  <%#= render :partial => "nuniverses" %>
-  <%#= render :partial => "bookmarks" %>
-  <%#= render :partial => "images" %>
-  <%#= render :partial => "map" %>
-  <%= render :partial => "connections" %>
-   <%#= render :partial => "/nuniverses/#{@klass.downcase.pluralize}"%>
-  <%= clear %>
-  
-  
+  <% render_section(:html => {:id => "overview"}) do -%>
+    <%= render :partial => "hat"%>
+    <%= render :partial => "/collections/collections", :locals => {:context => @context, :collections => @context.collections}%>
+  <% end -%>
+  <% render_section(:html => {:id => "connections"}) do -%>
+    <%= render :partial => "connections" %>
+  <% end -%>
+    
+    
 <% end -%>
+
+<div id="menu" style="position:fixed;left:10px;top:30px;z-index:999999">
+  <%#= link_to(image_tag('/images/icons/topic.png'), nuniverse_collections_url(@context), :target => "Nuniverse-#{@context.id}-collections", :class => "expand-lnk")%>
+    <%= link_to(image_tag('/images/icons/comment.png'), nuniverse_comments_url(@context), :target => "comment-box", :class => "expand-lnk")%>
+    <%= link_to(image_tag('/images/icons/group.png'), nuniverse_users_url(@context), :target => "share-box", :class => "expand-lnk")%>
+</div>
+  <%#= link_to(image_tag("/images/icons/product.png"), "#", :target => ".template-box")%>
+  <%#= link_to(image_tag("/images/icons/edit.png"), "#", :class => "build-lnk", :style => "position:fixed;bottom:10px;left:10px")%><br/>
+   <%#= link_to(image_tag("/images/icons/save-changes.png"), "#", :class => "browse-lnk", :style => "position:fixed;bottom:10px;left:10px")%><br/>

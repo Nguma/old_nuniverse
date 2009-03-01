@@ -1,5 +1,8 @@
 class Location < ActiveRecord::Base
-	has_many :taggings, :as => :taggable
+	
+	has_many :taggings, :as => :taggable, :dependent => :destroy
+	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	has_many :contexts, :through => :taggings, :source => :tag, :source_type => "Collection"
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
@@ -24,5 +27,19 @@ class Location < ActiveRecord::Base
 	
 	def address
 		full_address
+	end
+	
+	def self.localize(address, source)
+		begin
+			@geoloc = Graticule.service(:google).new(GOOG_GEO_KEY).locate(address.to_s)
+		
+			return Location.new(
+			:name => source.name,
+			:full_address => "#{@geoloc.street} #{@geoloc.locality} #{@geoloc.region} #{@geoloc.zip} #{@geoloc.country}",
+			:latlng => @geoloc.coordinates.join(',')
+			)
+		rescue
+			raise "Error parsing a location from this address: #{address} to source: #{source}"
+		end
 	end
 end

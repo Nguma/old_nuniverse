@@ -321,6 +321,13 @@ label {
 	display:block;
 }
 
+select {
+	background:#FFF;
+	padding:5px 5px 5px 5px;
+	font-size:14px;
+	min-width:200px;
+}
+
 li {
 	font-weight:bold;
 	color:#666;

@@ -50,7 +50,7 @@ class LocationsController < ApplicationController
 	
 	
 	def suggest
-		geolocate(params[:location][:])
+
 	end
 	
 	

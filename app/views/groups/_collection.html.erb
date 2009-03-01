@@ -1,0 +1,19 @@
+<dl class="set <%= @mode %>" style="width:100%;z-index:1;padding:0" id="collection-<%= @source.id %>">
+
+  <% if connections.previous_page %>
+
+      <%= link_to(image_tag("/images/icons/arrow_less.png"), tag_url(source,:page => connections.previous_page), :class => "pager tile", :style => "border:none;text-align:right") %>
+    
+  <% end -%>
+  <% connections.each  do |connection| -%>
+   
+    <dd class="tile">
+     <%= render :partial => "/polycos/polyco", :locals => {:polyco => connection} %>
+    </dd>
+  <% end -%>
+  <% if connections.next_page %>
+
+      <%= link_to(image_tag("/images/icons/arrow_more.png"), tag_url(source,:page => connections.next_page), :class => "pager tile", :style => "border:none")%>
+  
+  <% end -%>
+</dl>

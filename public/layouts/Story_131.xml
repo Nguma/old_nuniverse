@@ -1,0 +1,34 @@
+<layout>
+  <box>
+    <title>Test</title>
+    <color>#ff9900</color>
+    <dimension>
+      <x>29</x><y>100</y><width>356</width><height>150</height>
+    </dimension>
+    <content>
+ 
+    </content>
+  </box>
+  <box>
+    <title>Relationships</title>
+    <color>#FF9900</color>
+    <dimension>
+      <x>29</x><y>274</y><width>545</width><height>340</height>
+    </dimension>
+    <content>
+      <item type="Video" id="3"/>
+      
+    </content>
+  </box>
+  <box>
+    <title>Bookmarks</title>
+    <color>none</color>
+    <dimension>
+      <x>600</x><y>274</y><width>285</width><height>340</height>
+    </dimension>
+    <content>
+      <item type="Group" id="35"/>
+    </content>
+  </box>
+  
+</layout>

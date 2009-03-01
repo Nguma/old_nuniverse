@@ -1,28 +1,21 @@
-<div class="box" style="position:absolute;left:<%= box.dimension.x.to_s %>px;top:<%= box.dimension.y.to_s %>px;width:<%= box.dimension.width.to_s %>px;height:<%= box.dimension.height.to_s %>px">
-  <% title = box.title rescue ""%>
-  <% tags = box.tags rescue ""%>
-  <% group = box.content.group rescue nil%>
-  <div class="display" style="padding:0;">
-    <%= "<h2>#{box.title}</h2>" rescue nil %>
-    <%= image_tag(Image.find(box.content.image['id']).public_filename()) rescue nil%>
-    <% if group %>
-      <dl>
-      <% @source.connections.of_klass('Nuniverse').tagged(group['filter']).each do |item| -%>
-        <%= render :partial => "/nuniverses/instance", :locals => {:instance => item.subject}%>
-      <% end -%>
-      </dl>
-    <% end -%>
-    <%= "<p>#{box.content.body}</p>" rescue nil %>
-    <%= content %>
+<div class="box <%= html[:class] %>" id="<%= html[:id] %>" style ="<%= html[:style] %>">
+    <%= spinner %>
+  <div class="menu">
+    <%= link_to "close", "#", :title => "Close", :class =>"close-lnk " %> | 
+    <%= link_to "customize", "# ", :class => "customize-lnk" %>
   </div>
-  <div class="edit">
-    <fieldset>
-      <%#= hidden_field_tag :klass , klass , :class => 'klass'%>
-      <%= text_area_tag :name , title, :class => 'title'%>
-      <%= text_field_tag :tags, tags , :class => 'tags' %>
-    </fieldset>
-    <div class="options">
-      <%= link_to "X Destroy", "#", :class => "destroy-box-lnk" %>
+
+
+  <div class="wrap" style="padding:0;margin:0;position:relative"> 
+
+    <%= content %>
+
+    <div class="edit">
     </div>
+    
+   
+    <div class="footer">
+    </div>
+    
   </div>
 </div>

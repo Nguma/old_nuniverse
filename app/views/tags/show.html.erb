@@ -1,15 +1,12 @@
-<% locations = google_localize(:source => @tag.label) %>
-
-
-<% locations[0..6].each do |location| -%>
-  <div class="connection">
-    <strong><%= link_to(location.name,  "", :class => "trigger", :mode => "locate") %></strong>
-    <p><%= location.full_address %> <%#= item.property('tel') %></p>
-    <div class="data hidden" >
-      <%#= hidden_field_tag "data", item.data %>
-
-    </div>
+<% nuniverse do -%>
+  <div style="padding:50px;width:1000px">
+    <%= render :partial => "/tags/grid"%>
   </div>
 <% end -%>
-<div class='delimiter'>&nbsp;</div>
-<%= image_tag("/images/icons/powered_by_google.gif", :style => "position:relative")%>
+
+<div class="tile" style="width:361px;height:161px;padding:10px;margin;0 5px 0px 0;position:fixed;background:#333;color:#FFF;bottom:10px;left:10px;z-index:4000">
+  <h2><%= @tag.name.capitalize %></h2>
+  <%= link_to "zoom", "#", :class => "zoom" %>
+  <%= link_to "Grid", tag_url(@tag, :page => @nuniverses.current_page, :mode => "grid") %>
+  <%= link_to "list", tag_url(@tag, :page => @nuniverses.current_page, :mode => "list") %>
+</div>

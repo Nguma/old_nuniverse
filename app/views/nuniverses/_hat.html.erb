@@ -1,14 +1,7 @@
-<div id="hat" >
-  
-   <%= thumbnail_tag @source, :size => :small %>
-   <%= thumbnail_tag @context, :size => :small if @context %>
-    <h1><%= @source.name.capitalize %></h1>
-    <h3 style="color:#eee;font-weight:bold;margin:0 ;line-height:14px">#<%= @source.unique_name %></h3>
-    <%= clear%>
-    
-   
-    <div style="clear:left"></div>
-    
-
+<div class="box black-and-blue" style="position:relative;background:#000;margin:0 0 3px 0;height:auto;padding:0px;color:#FFF;border:none" >
+  <div class="content" style="padding:20px">
+  <h1 style="color:#FFF;font-size:30px;width:300px"><%= @context.name %></h1>
+  <p><%= @context.description rescue nil%></p>
+  <%= clear %>
   </div>
-
+</div>

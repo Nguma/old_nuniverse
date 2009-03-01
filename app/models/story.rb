@@ -3,7 +3,10 @@ class Story < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Story"
 	belongs_to :author, :class_name => "User"
 	
-	has_many :sets, :class_name => "Group", :foreign_key => :parent_id
+	has_many :taggings, :as => :taggable, :dependent => :destroy
+	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	
+	has_many :sets, :class_name => "Collection", :foreign_key => :parent_id
 	
 	has_many :comments, :as => :parent, :dependent => :destroy
 	has_many :boxes, :as => :parent, :dependent => :destroy

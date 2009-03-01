@@ -1,0 +1,21 @@
+<% nuniverse do -%>
+  <div style="padding:40px">
+    <%= render :partial => @post %>
+    <% div_for @post.comments, :class => "step" do -%>
+      <%= render :partial => @post.comments %>
+    <% end -%>
+    
+    <% form_for [@post,Comment.new], :html => {:class => "step"} do |f| -%>
+      <%= f.label :body, "New Comment" %>
+      <%= f.text_area :body , :rows => 3 %><br/>
+      <%= f.submit "Add Comment" %>
+    <% end -%>
+    <%= link_to 'Edit', edit_post_path(@post) %> |
+    <%= link_to 'Back', posts_path %>
+  </div>
+  
+
+<% end -%>
+
+
+

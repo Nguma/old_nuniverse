@@ -2,15 +2,25 @@ class PolycosController < ApplicationController
 
 	
 	before_filter :find_polyco, :except => [:index, :new, :create, :connect, :suggest]
+	before_filter :find_context, :only => [:show, :new]
 	before_filter :find_context, :only => [:create, :connect]
 	before_filter :update_session
 	after_filter :store_location, :only => [:show]
 	
 	def index
-		@polycos = Polyco.order_by_date.exclude_twins.paginate(:page => 1, :per_page => 78)
+	
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 	
 	def show
+		if params[:collection_id]
+			@collection = Collection.find(params[:collection_id])
+		else
+			@collection = @polyco.subject.contexts.find(:first, :conditions => {:parent_id => @polyco.object.id, :parent_type => @polyco.object.class.to_s})
+		end
 		# @suggestions = Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10)
 		# @source = @polyco
 		
@@ -66,7 +76,9 @@ class PolycosController < ApplicationController
 	
 	def create
 		@object = params[:object][:type].classify.constantize.find(params[:object][:id])
-		@subject =  params[:subject][:type].classify.constantize.find(params[:subject][:id]) rescue @klass.classify.constantize.create!(params[:subject])
+		@subject =  params[:subject][:type].classify.constantize.find(params[:subject][:id]) 
+
+			
 		@polyco = Polyco.new(params[:polyco])
 		@polyco.object = @object
 		@polyco.subject = @subject
@@ -93,8 +105,11 @@ class PolycosController < ApplicationController
 	end
 	
 	def new
-		@source = current_user
-		@polyco = Polyco.new(:object => current_user)
+		@collection = Collection.find(params[:collection_id])
+		@context = @collection.parent
+		@subject = Nuniverse.find(params[:subject_id]) rescue nil
+		@polyco = Polyco.new(:object => @context, :subject => @subject)
+		
 	end
 	
 	

@@ -1,0 +1,10 @@
+<div id="share-box" class="dialog box hidden" >
+  <div class="content">
+    <h2>Share</h2>
+    <p>This nuniverse was originally created by <%= link_to "you", user_url(current_user) %></p>
+    <p>This nuniverse is private.<%=  link_to "Make public", "#" %></p>
+    <label>Invite more people</label>
+    <p>Type in the email address of the people your wish to invite.</p>
+    <%= image_tag "/images/mockups/share.png" %>
+  </div>
+</div>

@@ -1,8 +1,9 @@
 <% new_comment = Comment.new(:author => current_user, :parent => parent)%>
-<% form_for :comment, new_comment, :url => {:controller => "comments"}, :html => {:class => "new-form"} do |f| -%>
+<% form_for :comment, new_comment, :url => "/comments/create", :html => { :style => "position:relative;width:556px"} do |f| -%>
   <%= f.hidden_field :user_id %>
   <%= f.hidden_field :parent_id %>
   <%= f.hidden_field :parent_type %>
-  <%= f.text_field :body , :cols => 70, :class => "input-body"%>
-  <%= submit_tag "", :id => "input-note-submit"%>
+  <%= thumbnail_tag(current_user, :size => :small) %>
+  <%= f.text_area :body ,  :rows => 2, :class => "input-body", :style => "background:transparent url('/images/backgrounds/new_comment_input.png') 0 0 no-repeat; width:370px;padding:10px 90px 10px 20px;border:none;clear:none;position:relative;float:left"%>
+  <%= submit_tag "", :id => "input-note-submit", :style => "background:none;color:#FFF;width:90px;height:90px;font-size:15px;position:absolute;left:455px;cursor:pointer"%>
 <% end -%>

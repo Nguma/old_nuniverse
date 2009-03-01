@@ -21,10 +21,8 @@ class Polyco < ActiveRecord::Base
   end
 	
 	define_index do 
-		indexes [subject.name, subject.taggings(:tag).name, taggings(:tag).name], :as => :name, :sortable => true
+		indexes [subject.name], :as => :name, :sortable => true
 		indexes subject_type, :as => :type
-		
-		has subject.contexts(:id), :as => :context_ids
 		set_property :delta => true
 		has :suggestable => 0
 	end
@@ -43,7 +41,7 @@ class Polyco < ActiveRecord::Base
 
 	
 	named_scope :tagged, lambda { |tag| 
-		tag.blank? ? {} : { :conditions => ["tags.name rlike ? AND tag_type = 'Tag'",tag ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) LEFT OUTER JOIN tags on tags.id = tag_id"}
+		tag.blank? ? {} : { :conditions => ["tag_id = ? AND tag_type = ?",tag.id, tag.class.to_s ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) LEFT OUTER JOIN tags on taggings.tag_id = tags.id "}
 	}
 	
 	named_scope :with_score, lambda { |user| 
@@ -72,7 +70,7 @@ class Polyco < ActiveRecord::Base
 	}
 	
 
-	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "tag_name ASC"
+	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, T.id as tag_id, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "tag_name ASC"
 
 	named_scope :related_connections, lambda {|object|
 		object.nil? ? {} : { :joins => ["LEFT OUTER JOIN polycos P ON (P.subject_id = polycos.object_id AND P.subject_type = polycos.object_type AND P.object_id = #{object.id} AND P.object_type = '#{object.type}')" ], :conditions => ["P.id IS NOT NULL"]}

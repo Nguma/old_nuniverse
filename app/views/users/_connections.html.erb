@@ -1,21 +1,11 @@
- <% @stories.each_with_index do |connection,i| %>
- 
-  <% x = (i % 10)  %>
-  <% y= (i/10).ceil  %>
-  <% content_for "tile_#{x}_#{y}" do -%>
-    <%#=  image_tag(connection.avatar(:large), :style => "height:92px;width:92px;margin:6px 7px 7px 0px;padding:0") rescue nil %>
-    <%= link_to connection.name, story_url(connection), :class => "expand-lnk" rescue nil %>
-  <% end -%>
-<% end -%>
+<div id="connections"  class="" style="width:1200px;height:700px;margin:100px 100px 100px 60px;position:relative;padding:0;background:none;border:none" >
 
-<div id="connections" class="grid" style="width:1600px;height:1000px;top:20px;left:20px;position:fixed" >
-  <% 11.times do |x| -%>
-    <% 5.times do |y| -%>
-      <div  class="tile" style="top:<%= y*150  %>px;left:<%= x*150  %>px;" href="/boxes/show/57">
-        <%= spinner %>
-        <%= yield "tile_#{x}_#{y}" %>
-      </div>
-    <% end -%>
-  <% end -%>
+  <%= spinner %>
+  <div class="wrap">
+
+  <div class="content" style="padding:0">
+  <%= render :partial => "/collections/collection", :locals => {:connections => @connections, :mode => "grid", :collection => @user}%>
+  </div>
+  </div>
 
 </div>

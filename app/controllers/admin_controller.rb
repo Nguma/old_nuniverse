@@ -11,23 +11,16 @@ class AdminController < ApplicationController
 		@users = User.find(:all).paginate(:page => params[:page] || 1, :per_page => 20)
 	end
 	
+	def groups
+		@groups = Group.find(:all)
+	end
+	
 	def send_activation_code
 		@user = User.find(params[:id])
 		UserMailer.deliver_activation_code(@user)
 		redirect_to "/admin/users"
 	end
-	
-	def permissions
-		@page = params[:page] || 1
-		@permissions = Permission.find(:all).paginate(:page => @page, :per_page => 10)	
-	end
-	
-	
-	def scrap_wikipedia
-		@fruits = Nuniverse.find(:all, :conditions => {:id => 7..54})
-		@fruit = Nuniverse.find(2543)
-		@fruit.nuniverses << @fruits
-	end
+
 	
 	def scrap_dbpedia 
 		@museum = Nuniverse.find_by_unique_name("museum")
@@ -78,80 +71,6 @@ class AdminController < ApplicationController
 		
 	end
 	
-	def ct 
-		tag = Tag.find(:first, :conditions => {:name => "painting"})
-		date_tag = Tag.find(:first, :conditions => {:name => "date"})
-		gaugin = Nuniverse.find(2510)
-		
-		cts = [	]		
-			cts.each do |ct|
-				painting = Nuniverse.search(ct[0], :conditions => {:tag_ids => tag.id}).first
-					begin 
-						painting.tags << tag 
-					rescue 
-						
-					end
-					
-					begin 	painting.nuniverses << gaugin  rescue nil end
-					begin gaugin.nuniverses << painting rescue nil end
-	
-					unless ct[1].blank?
-				#	begin	painting.images << Image.create(:source_url => "http://en.wikipedia.org#{ct[1]}") rescue nil end
-					end
-					unless ct[2].blank?
-						date = Nuniverse.search(ct[2], :conditions => {:tag_ids => date_tag.id}) rescue Nuniverse.create(:name => ct[2], :active => 1)
-						begin painting.nuniverses << date rescue nil end
-						begin date.nuniverses << painting rescue nil end
-					end
-				painting.save
-			end
-	
-
-	end
-	
-	def batch
-	
-	end
-	
-	def test
-	
-	
-	end
-	
-	def test_2
-		@source = Story.find(48)
-		@connections = @source.connections.of_klass('Nuniverse')
-	end
-	
-	def save_data
-		@source = Story.find(49)
-			@position = Tag.find_or_create(:name => "Room")
-			# @member = Tag.find_or_create(:name => "member")
-			# @goal =  Tag.find_or_create(:name => "goals")
-			ns = []
-	
-			params['item'].to_a.each do |item|
-				
-				item = item[1]
-				unless item['name'].blank?
-				n = Nuniverse.find_or_create(item['name'])
-				p = Polyco.create(:subject => n, :object => @source) rescue nil
-				# p.tags << @member rescue nil
-				pos = Fact.new(:body => item['position'])
-				pos.tags << @position rescue nil
-				# goals = Fact.new(:body => item['goals'])
-				# goals.tags << @goal
-				n.facts << [pos] rescue nil
-				ns << n rescue nil
-				@source.nuniverses << ns rescue nil
-			end
-			end
-			
-	end
-	
-	
-	
-	
 	
 	def netflix
 		t = Finder::Netflix.new
@@ -173,10 +92,14 @@ class AdminController < ApplicationController
 		
 	end
 	
-	def groups
-		@groups = Group.find(:all)
+	def batch
+		@facts = User.find(1).facts
+		@facts.each do |f|
+			f.destroy
+		end
 	end
 	
+
 	protected
 	
 end

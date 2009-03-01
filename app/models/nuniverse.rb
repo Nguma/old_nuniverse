@@ -1,7 +1,7 @@
 class Nuniverse < ActiveRecord::Base
 	has_many :taggings, :as => :taggable, :dependent => :destroy
 	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
-	has_many :contexts, :through => :taggings, :source => :tag, :source_type => "Story"	
+	has_many :contexts, :through => :taggings, :source => :tag, :source_type => "Collection"	
 	
 	has_many :connections, :as => :object, :class_name => "Polyco", :dependent => :destroy
 	has_many :connecteds, :as => :subject, :class_name => "Polyco", :dependent => :destroy
@@ -20,9 +20,11 @@ class Nuniverse < ActiveRecord::Base
 
 	has_many :users, :through => :connecteds, :source => :object, :source_type => "User"
 	has_many :facts, :through => :connections, :source => :subject, :source_type => "Fact"
-	
+	has_many :collections, :foreign_key => :parent_id	
 	
 	has_many :boxes, :as => :parent
+	
+	has_many :comments, :as => :parent
 	
 	
 	
@@ -49,23 +51,20 @@ class Nuniverse < ActiveRecord::Base
 
 
 	def avatar(size = {})
-		connections.of_klass('Image').with_score.order_by_score.first.subject.public_filename(size) rescue nil
+		connections.of_klass('Image').with_score.order_by_score.first.subject rescue nil
 	end
 	
 	def categories
 		connections.gather_tags
 	end
 	
-	def comments
-		Comment.search("##{unique_name}").paginate(:page => 1, :per_page => 10)
-	end
-	
+
 	def related_connections
 		Polyco.related_connections(self)
 	end
 	
 	def property(tag)
-		connections.of_klass('Fact').tagged(tag.name).first rescue nil
+		self.connections.tagged(tag).to_a.first
 	end
 	
 	def set_property(tag, value)

@@ -1,0 +1,6 @@
+
+  <dd class="fact" style="<%= style rescue nil %>">
+<%#= link_to(thumbnail_tag(polyco.subject),polyco_url(polyco, :collection_id => @collection), :title => polyco.subject.name, :class => "expand-lnk", :target => "Connection-#{polyco.id}")  rescue nil %>
+    
+    <%= link_to(polyco.subject.name, polyco_url(polyco, :collection_id => @collection), :class => "expand-lnk", :title => polyco.subject.name, :target => "Connection-#{polyco.id}") rescue polyco.name %>
+  </dd>

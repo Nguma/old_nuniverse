@@ -1,0 +1,27 @@
+<div class="box text-box">
+  <div class="header">
+    <h2 class="editable">Title</h2>
+   
+  </div>
+  <div class="content" style="padding:0px;">
+    <h2>Let's build this</h2>
+    <dl style="padding:20px">
+      <dt>What do you want to use this box for?</dt>
+      <dd><%= link_to "Some text", "#text" %></dd>
+      <dd><%= link_to "An image", "#image" %></dd>
+      <dd><%= link_to "A video", "#image" %></dd>
+      <dd><%= link_to "A collection", "#image" %></dd>
+      <dd><%= link_to "A map", "#image" %></dd>
+      <dd><%= link_to "Link it to a live update", "#image" %></dd>
+    </dl>
+  </div>
+  <div class="edit hidden" >
+     <% form_for :tag, :url => "/tags/show/" do |f| -%>
+        
+        <p style="font-size:15px;margin:0 0 10px 0">Choose from an existing collection or <%= link_to "Create a new one", "#", :style => "color:#369;font-weight:bold" %></p> 
+        <%= f.text_field :name , :style => "font-size:20px;padding:5px;background:#FFF url('/images/backgrounds/form.png') 0 0 repeat-y"%><%= submit_tag "Find it!", :style => "background:#333;color:#FFF;font-weight:bold;border:solid 1px #333"%><br/>
+        <%= link_to "Show options", "#"%>
+      <% end %>
+  </div>
+
+</div>

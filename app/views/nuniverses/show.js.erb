@@ -1,28 +1,11 @@
-<% render_section(:html => {:id => "S-Nuniverse-#{@source.id}" , :class => "nuniverse-section"}) do %>
-  
-<% if @nuniverse.id == 7359 %>
-  <%= image_tag "/images/mockups/handshake-mountain-roast.png" %>
-<% else -%>
-  <div class="step" style="clear:none;margin:0 0 0 0px">
-    <%= image_tag(@source.images.first.public_filename(:large), :style => "border:solid 1px #666;margin: 0 0 10px 0;position:relative;") rescue nil %>
-    <h2 style="padding:0"><%= @nuniverse.name.titleize  %></h2><%= link_to "edit", edit_nuniverse_url(@source), :class =>"expand-lnk", :target => "S-Nuniverse-#{@source.id}"%>
-    
-    <% @nuniverse.connections.of_klass('Fact').each do |connection| -%>
-     <div class="connection" style="clear:none;margin:5px 0 5px 0;font-size:16px">
-       <%= render_fact(connection.subject)%>
-     </div>
-    <% end -%>
-  </div>
-  <% unless @nuniverse.videos.empty? %>
-    <div class="step connection">
-    <%= link_to "Videos", "/videos-for/#{@source.unique_name}" , :id => "Videos-for-#{@source.unique_name}"%>
-    </div>
-  <% end -%>
 
-      
-    
-    <div class="step connection">
-      <%= link_to image_tag("/images/icons/create_button.png"), "/facts/new", :id => "add-fact" %>
-    </div>
+
+<%= render :partial => @nuniverse %>
+<div class="set list">
+<% @nuniverse.connections.of_klass('Fact').each do |connection| -%>
+  <dd class="tile" style="padding:10px;font-size:18px;margin:0;border:none;height:auto;min-height:0;;border-bottom:solid #efefef 1px">
+    <span style="font-weight:bold;margin: 0 10px 0 0">
+      <%= connection.subject.tags.first.name rescue nil %>
+    </span><%= render_fact(connection.subject)%></span>
 <% end -%>
-<% end -%>
+</div>

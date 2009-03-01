@@ -1,4 +1,9 @@
-<% form_for :story do |f| -%>
-  <%= f.check_box :is_private %>
-  <%= f.text_field :name %>
-<% end -%>
+<div class="dialog box" > 
+  <div class="content">
+    <h2>New Box</h2>
+    <p>Create a new...</p>
+    <% form_tag do %>
+      <%= text_field_tag "input", "" %><%= submit_tag "Build"%>
+    <% end -%>
+  </div>
+</div>

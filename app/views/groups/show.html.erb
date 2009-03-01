@@ -1,0 +1,24 @@
+<h2><%= @group.name %></h2>
+<ul>
+<li class="connection">
+  <%= link_to "Add an item", "/add-item-to-set/#{@group.id}", :target => "S-add-item-to-#{@group.unique_name}" %>
+</li>
+</ul>
+<div class="<%= @mode %>">
+  <%= will_paginate @elements %>
+  <%= render :partial => "/groups/#{@mode}", :locals => {:group => @group, :elements => @elements}%>
+</div>
+
+<ul class="sub-menu">
+
+  <li>
+    <%= link_to "Edit this set", "/groups/edit/#{@group.id}", :class => "expand-lnk", :target => "S-Group-#{@group.id}" %>
+  </li>
+  <li>
+    View as
+    <%= link_to "list", "/groups/show/#{@group.id}?mode=list", :class => "expand-lnk", :target => "S-Group-#{@group.id}" %> | 
+    <%= link_to "grid", "/groups/show/#{@group.id}?mode=grid", :class => "expand-lnk", :target => "S-Group-#{@group.id}" %> | 
+    <%= link_to "table", "/groups/show/#{@group.id}?mode=table", :class => "expand-lnk", :target => "S-Group-#{@group.id}" %>
+  </li>
+
+</ul>

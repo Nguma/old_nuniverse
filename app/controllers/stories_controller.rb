@@ -1,6 +1,6 @@
 class StoriesController < ApplicationController
 	
-	before_filter :find_story, :except => [:new, :create, :index]
+	before_filter :find_story, :except => [:new, :create, :index, :show]
 	before_filter :find_source, :only => [:index]
 	# before_filter :find_context, :except => [:index]
 	after_filter :store_location, :store_source,  :only => [:show]
@@ -30,12 +30,13 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.xml
   def show
-		# @comments = @story.comments.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
-		 @nuniverses = @story.nuniverses.paginate(:page => params[:page], :per_page => 10, :order => "updated_at DESC")
-		# @contributors = @story.contributors.paginate(:page => params[:page], :per_page => 10, :order => "name DESC")
+		@source = Nuniverse.find(params[:id])
+		@source = current_user
+		@tag = Tag.find_by_name(params[:tag_name])
+		@facts = @source.facts.tagged(@tag).paginate(:page => params[:page], :per_page => 10, :order => "created_at DESC")
 		
     respond_to do |format|
-      format.html { @source = @story }
+      format.html { }
 			format.js {}
       format.xml  { render :xml => @story }
     end
@@ -45,6 +46,7 @@ class StoriesController < ApplicationController
   # GET /stories/new.xml
   def new
     @story = Story.new(:author => current_user)
+		@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/Story_new.xml")).boxes rescue []	
 
     respond_to do |format|
       format.html # new.html.erb
@@ -61,15 +63,19 @@ class StoriesController < ApplicationController
   # POST /stories
   # POST /stories.xml
   def create
+		
 		params[:active] = 1
 		@story = Story.new(params[:story])
-		@subject = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  nil
-		@story.unique_name = Nuniversal.sanatize(@story.name)
+		@subject = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue nil
+		@story.unique_name = sanatize(@story.name)
 
     respond_to do |format|
       if @story.save
-				@story.connections << Polyco.new(:subject => @story, :object =>@subject , :state => "active") if @subject
-   			@story.author.stories << @story
+				if @subject
+					@story.connections << Polyco.new(:subject => @story, :object => @subject , :state => "active") rescue nil
+					@story.author.stories << @story
+				end
+   			
         # flash[:notice] = 'Story was successfully created.'
         format.html { redirect_to polymorphic_url(@story) }
         format.xml  { render :xml => @story, :status => :created, :location => @story }

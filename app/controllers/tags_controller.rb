@@ -1,7 +1,8 @@
 class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
-	before_filter :find_tag, :except => [:index, :remove_tag, :show]
+	before_filter :find_tag, :except => [:index, :remove_tag]
+	before_filter :find_context, :only => [:index, :show]
 	before_filter  :find_user, :only => [:show, :preview, :suggest, :share]
 	after_filter :update_session, :only => [:show]
 	after_filter :store_location, :only => [:show]
@@ -11,19 +12,22 @@ class TagsController < ApplicationController
   	
     respond_to do |format|
       format.html # index.html.erb
+			format.js {}
       format.xml  { render :xml => @tags }
     end
   end
 
-  # GET /tags/1
-  # GET /tags/1.xml
-  def show	
-		@tag = Tag.find_by_name(params[:tag])
-		@source = Nuniverse.find_by_unique_name(params[:unique_name])
-		@connections = Polyco.with_object(@source).tagged(@tag.name)
-
-	
-  end
+	def show
+		@tag = Tag.find(params[:id])
+		
+		@connections = Polyco.with_object(@context).tagged(@tag).paginate(:page => params[:page], :per_page => 30)
+		@mode = params[:mode] || "list"
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
+	end
 
   # GET /tags/new
   # GET /tags/new.xml
@@ -146,7 +150,7 @@ class TagsController < ApplicationController
 		elsif params[:url]
 			@tag = Tag.with_url(params[:url]).first
 		else
-			@tag = Tag.with_kind(params[:kind]).with_name(params[:input]).first
+			@tag = Tag.find_by_name(params[:tag]['name'])
 		end
 	end
 

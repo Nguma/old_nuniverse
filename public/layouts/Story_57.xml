@@ -1,0 +1,33 @@
+<layout>
+  <box>
+    <title>My Address Book</title>
+    <color>#ccff00</color>
+    <dimension>
+      <x>29</x><y>100</y><width>356</width><height>150</height>
+    </dimension>
+    <content>
+ 
+    </content>
+  </box>
+  <box type="Image">
+    <title>Relationships</title>
+    <color>#fffff0</color>
+    <dimension>
+      <x>30</x><y>220</y><width>340</width><height>340</height>
+    </dimension>
+    <content>
+      <item type="Image" id="12276"/>
+    </content>
+  </box>
+  <box type="Group">
+    <title>Bookmarks</title>
+    <color>none</color>
+    <dimension>
+      <x>380</x><y>30</y><width>700</width><height>600</height>
+    </dimension>
+    <content>
+      <item type="Group" id="29"/>
+    </content>
+  </box>
+  
+</layout>

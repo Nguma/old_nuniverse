@@ -1,10 +1,29 @@
- <%= image_tag(@polyco.subject.images.first.public_filename(:large), :style => "border:solid 1px #666;margin: 0 0 10px 0;") rescue nil %>
-<h2><%= @polyco.subject.name %></h2>
-<div class="step">
-  <p><%= @polyco.description %></p>
 
-  <% @polyco.object.properties.each do |p| -%>
-    <div class="step connection"><%= render_fact(@polyco.subject.property(p).subject) rescue nil %></div>
+
+<% render_box(:html => {:id => "Connection-#{@polyco.id}"}) do -%>
+  <div class="header" style="padding:20px">
+    <%= render :partial => @polyco.subject %>
+  </div>
+  <div class="content" style="padding:20px">
+  <p><%= @polyco.description %></p>
+ 
+  <% if @collection %>
+    <% properties = @collection.properties %>
+    <% properties.each do |p| -%>
+       <div style="font-size:18px;font-size:bold;font-family:Arial;padding:0" class="step">
+         <span style="color:#000;margin:0 5px 0 0;"><%= p.name.capitalize %></span>
+         <span style="color:#666"><%= render_property(@polyco.subject.property(p)) %></span>
+       </div>
+     <% end -%>
+  <% else -%>
+  <div class="">
+    
+  </div>
   <% end -%>
-  <%= link_to "Edit", edit_polyco_url(@polyco), :class => "expand-lnk", :target => "S-Polyco-#{@polyco.id}"%>
+
+ 
+  <%= clear %>
+ 
+
 </div>
+<% end -%>

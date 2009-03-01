@@ -5,30 +5,16 @@ class GroupsController < ApplicationController
 	
 	def show
 		@mode = session[:mode] = params[:mode] || "list"
-		@elements = @group.connections.of_klass('Nuniverse').paginate(:page => params[:page], :per_page => 18)
-		@collection = @elements.collect {|c| c.subject.property(@group.properties.first).subject.body rescue nil }
+		@connections = @group.parent.connections.of_klass('Nuniverse').tagged(@group).paginate(:page => params[:page], :per_page => 15)
+		# @collection = @elements.collect {|c| c.subject.property(@group.properties.first).subject.body rescue nil }
 		# @highest_value = @collection.sort {|x,y| x <=> y }.first.gsub(/[^0-9\.]/,'')
-		
+		@source = @group
 		respond_to do |f|
+			f.html {}
 			f.js {}	
 		end
 	end
-	
-	def create
-		@set = Group.create(params[:group])	
-		@set.parent_id = params[:source][:id]
-		@set.unique_name = Nuniversal.sanatize(@set.name)
 		
-		# Finds matching Tag for each property, 
-		# adds them to a property array, then
-		# replaces the @set.properties with that array
-		# Also adds an xml version in the description for taking care of display ordering. #TODO!!
-		@set.set_properties(params[:properties])
-		@set.save
-	
-	end
-	
-	
 	def add_item
 		if params[:nuniverse]
 			@nuniverse = Nuniverse.find(params[:nuniverse])

@@ -4,6 +4,7 @@
 class ApplicationController < ActionController::Base
   helper :all # include all helpers, all the time
 	include AuthenticatedSystem
+	include Nuniversal
 	
 	
 	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about, :screenshots]
@@ -16,15 +17,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery  :secret => '6d0fa0cfa575daf50a50a8c4f23265a5'
 
 	def index
-		if logged_in?
-			redirect_to current_user
-		else
-			redirect_to :beta
-		end
+		redirect_to current_user
 	end
 
 	def restricted
-		
 	end
 	
 	def about
@@ -39,19 +35,7 @@ class ApplicationController < ActionController::Base
 	def screenshots
 	end
 	
-	def save_layout	
-	
-		@doc = Nuniversal::Parser.new("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
-		if @doc.write( params[:xml].to_s)
-			respond_to do |f|
-				f.xml {head :ok}
-			end
-		else
-			respond_to do |f|
-				f.xml {raise params[:xml].inspect}
-			end
-		end
-	end
+
 	
 	def feedback
 		if params[:feedback]
@@ -68,7 +52,13 @@ class ApplicationController < ActionController::Base
 	def redirect_to_default
 		raise "DEFAULT"
 	end
-	
+	def save_layout
+		find_context
+			save_page("#{@context.class.to_s}_#{@context.id}")
+		respond_to do |f|
+			f.xml {head :ok}
+		end
+	end
 
 	protected
 	
@@ -85,13 +75,8 @@ class ApplicationController < ActionController::Base
 		@order = session[:order] = params[:order] ? params[:order] : (!session[:order].nil? ? session[:order] : "by_latest")
 		# @klass = session[:klass] = params[:klass] ? params[:klass] : (!session[:klass].nil? ? session[:klass] : "Nuniverse")
 		@klass = params[:klass]
-		
 		session[:size] = (@display == "image") ? :large : :small
-		
-		
-		
 		session[:last_input] = @filter
-	
 	end
 	
 	def find_user
@@ -131,13 +116,16 @@ class ApplicationController < ActionController::Base
 	
 	def find_source
 	  @source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue session[:source]
-		
+	end
+	
+	def find_context
+		context_id = params[:context_id] || params["#{ params[:context_type] }_id"]
+		@context = 	params[:context_type].classify.constantize.find(context_id)
 	end
 	
 	
 	def wikipedit(bookmark)
-		urlscan = bookmark.scan(/((https?:\/\/)?[a-z0-9\-\_]+\.{1}([a-z0-9\-\_]+\.[a-z]{2,5})\S*)/ix)[0]
-		
+		t
 		doc = Hpricot open bookmark
 		
 		if urlscan[2] == "wikipedia.org"

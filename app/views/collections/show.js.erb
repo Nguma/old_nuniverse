@@ -1,0 +1,17 @@
+<% render_box(:html => {}) do %>
+  <div class="header">
+    <%= image_tag "/images/icons/star.png", :style => "position:relative;float:right;right:5px;top:5px"%>
+    <%= spinner %>
+    <h2><%= @collection.name.capitalize %></h2>
+    <%= clear %>
+    <div class="display" style="position:relative;float:right">
+      <h4>Display as <%= link_to "List", "#", :target => "list", :title => "Display as list" %> or <%= link_to "Grid", "#", :target => "grid", :title => "Display as grid" %></h4>
+    </div>
+    <%= link_to "+ Add new", new_collection_item_url(@collection), :style => "padding:0 0 0 20px", :class => "expand-lnk", :target => "New"%>  
+  </div>
+  <div class="content">
+  <% if @connections %>
+    <%= render :partial => @collection, :locals => {:connections => @connections, :mode => @mode } %>
+  <% end -%>
+  </div>
+<% end -%>

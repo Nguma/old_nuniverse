@@ -1,0 +1,13 @@
+<div class="header" style="padding:10px 20px 10px 20px">
+  <h2 style="padding:0">Share</h2>
+  <p>This nuniverse is currently private. <%= link_to "Make public.", "#TODO" , :style => "font-weight:bold"%></p>
+</div>
+<div class="step" style="padding:0  0 0 20px;width:100%">
+  <%#= render :partial => "/nuniverses/invite_new", :locals => {:parent => @nuniverse}%>
+  <h3><%= @users.size %> contributors</h3>
+  <div id="comments" style="clear:both;padding:20px 0 0 0">
+     <% @users.each do |user| %>
+       <%= render :partial => user %>
+     <% end -%>
+   </div>
+</div>

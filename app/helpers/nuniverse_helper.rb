@@ -176,9 +176,8 @@ module NuniverseHelper
 
 	def render_box(params = {}, &block)
 		params[:content] = capture(&block)
-		params[:dom_class] ||= ""
-
-		params[:dom_id] ||= params[:box].name.pluralize rescue ""
+		params[:dom_class] ||= ""	
+		params[:html] ||= []
 		concat(
 			render(
 			:partial => "/boxes/box", 
@@ -189,7 +188,7 @@ module NuniverseHelper
 	
 	def render_section(params = {}, &block) 
 		params[:content] = capture(&block)
-		
+		params[:html] ||= ""
 		concat(
 			render(
 			:partial => "/nuniverse/section",
@@ -251,7 +250,7 @@ module NuniverseHelper
 		str
 	end
 	
-	def clear
-		'<div style="clear:left"></div>'
+	def clear(mode = "left")
+		"<div style='clear:#{mode}'></div>"
 	end
 end

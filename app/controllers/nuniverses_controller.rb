@@ -23,22 +23,17 @@ class NuniversesController < ApplicationController
 	
 	def show
 		redirect_to @nuniverse.redirect if @nuniverse.redirect
-		
-		# @nuniverses = @nuniverse.nuniverses.paginate(:page => params[:page] || 1, :per_page => 10)
-		# 	@facts = @nuniverse.facts.paginate(:page => params[:page] || 1, :per_page => 10)
-		# 	@bookmarks = @nuniverse.bookmarks.paginate(:page => params[:page] || 1, :per_page => 10)		
-		# 	@images = @nuniverse.images.paginate(:page => params[:page] || 1, :per_page => 10)		
-		
-		@videos = @nuniverse.videos.paginate(:page => params[:page] || 1, :per_page => 10)
+	
+		@connections = @nuniverse.connections.of_klass('Nuniverse').paginate(:page => params[:page], :per_page => 30)
 
 		respond_to do |f|
 			f.html {
-				@source = @nuniverse
-				# if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
-				# 	@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
-				# else
-				# 	@boxes  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
-				# end
+				@context = @nuniverse
+				if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
+					@layout =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
+				else
+					@layout  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
+				end
 			}
 			
 			f.js { 
@@ -83,6 +78,12 @@ class NuniversesController < ApplicationController
 		# 		redirect_back_or_default('/')
 	end
 	
+	
+	def new
+		@collection = Collection.find(params[:collection_id])
+		@nuniverse = Nuniverse.new
+	end
+	
 	def create
 		@nuniverse = Nuniverse.find(params[:nuniverse][:id]) rescue Nuniverse.create(params[:nuniverse])
 		
@@ -122,7 +123,7 @@ class NuniversesController < ApplicationController
 		@conditions = {} 
 		
 		if params[:input]
-			tokens = Nuniversal.tokenize(params[:input])
+			tokens = tokenize(params[:input])
 			if tokens.empty?
 				@suggestions =  ThinkingSphinx::Search.search(:conditions => {:name => params[:input]},  :classes => [User,Nuniverse], :order => "length ASC")
 			else
@@ -137,7 +138,9 @@ class NuniversesController < ApplicationController
 
 		respond_to do |format|
 			format.html {}
-			format.js {}
+			format.js {
+				
+			}
 		end
 	end
 	

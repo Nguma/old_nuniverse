@@ -1,1 +1,37 @@
   <%= render :partial => "/stories/stories"%>
+  
+  <div class="section story-section" id="S-Story-<%= @story.id %>" style="width:auto;">
+    <div class="content" style="padding:0">
+      <h2><%= @story.name %></h2>
+      <ul class="" style="padding:0 0 0 20px">
+          <li class="display connection"><%= link_to "Create a category", "/groups/new", :id => "create-new-category" %></li>
+          <li class="display connection"><%= link_to "Share", "/share-this-nuniverse/#{@story.id}", :id => "share" %></li>
+          <li class="display connection"><%= link_to "Discuss", "/talk-about/#{@story.unique_name}" , :id => "add-a-comment"%></li>
+
+        </ul>
+      <div class="step">
+      <p>Visit this nuniverse directly at <%= link_to ("/users/#{current_user.login}/#{@story.unique_name}", story_url(@story)) rescue ""%></p>
+      <p>This nuniverse was created by <%= @story.author.name %>.</p>
+      <p style="white-space:normal;width:300px">
+        <% if @story.description %><%= @story.description %><% else %>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas ligula lacus, cursus at, aliquet convallis, vestibulum id, mi. Proin hendrerit, urna ac luctus laoreet, nunc felis egestas est, et auctor justo quam ac urna. Proin facilisis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi pulvinar.
+          <% end -%>
+      </p>
+      </div>
+      <% if @story.sets.empty? %>
+      <div class="step">
+        <div class="connection"><%= link_to "Create a category", "/groups/new", :id => "create-new-category" %></div>
+      </div>
+      <% else %>
+        <% @story.sets.each do |group| %>
+          <div class="step connection" style="max-width:500px" id="Group-<%= group.id%>">
+            <%= link_to group.name, "/groups/show/#{group.id}", :target => "S-Group-#{group.id}"%>
+          </div>
+        <% end -%>
+      <% end -%>
+
+    </div>
+
+
+  </div>
+  

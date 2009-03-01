@@ -1,24 +1,20 @@
-<dl class="menu">
-  <dd style="position:absolute;right:5px;">
-    <%= link_to "http://www.nuniverse.net/comments/#{@comment.id}", comment_url(@comment) %>
-  </dd>
-</dl>
+<div class="header">
+  <h2>Discuss</h2>
+</div>
+<div class="step" style="position:relative;bottom:0;z-index:999;width:100%">
+  <%= render :partial => "/comments/new", :locals => {:parent => @comment}%>
+</div>
 
 <div class="step">
   <h2><%= @comment.body %></h2>
-</div>
-<div class="content">
   <dl class="content-list">
 
     <% @comment.comments.each do |comment| %>
-      <%= render :partial => "/comments/instance", :locals => {:instance => comment}%>
+      <%= render :partial =>  comment %>
   
     <% end -%>
     <dd class="step"></dd>
   </dl>
 </div>
-<%= clear %>
 
-<div class="step" style="position:relative;bottom:0;z-index:999;width:100%">
-  <%= render :partial => "/comments/new", :locals => {:parent => @comment}%>
-</div>
+

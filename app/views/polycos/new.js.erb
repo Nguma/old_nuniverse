@@ -1,0 +1,40 @@
+<% render_box(:html => {:id => "NEW"}) do -%>
+<div class="header">
+   <h2>Add to &lt;<%= @context.name.titleize  rescue nil%>:<%= @collection.name rescue nil %>&gt;</h2>
+</div>
+<div class="step">
+
+ <% form_for :polyco, @polyco, :url => {:controller => :polycos, :action => :create}, :html => {:multipart => true, :id => "connect_nuniverse_form" } do |f| -%>
+   <% fields_for :object, @context do |o| -%>
+     <%= o.hidden_field :id %>
+     <%= o.hidden_field :type %>
+   <% end -%>
+   <% fields_for :collection, @collection do |c| -%>
+     <%= c.hidden_field :id %>
+     <%= c.hidden_field :type %>
+   <% end -%>
+   
+   <% fields_for(:subject) do |s| %>  
+
+     <ul>
+       <%= s.hidden_field :id %>
+       <%= s.hidden_field :type %>
+       <%= thumbnail_tag @polyco.subject rescue nil %>
+       <li><label>Name</label><%= f.text_field :name, :class => "input-name suggestable"%></li>
+     
+     <% @collection.properties.each_with_index do |prop,i| -%>
+      <% form_for "properties[#{prop.name}]" do |pf| -%>
+        <%= pf.hidden_field :id %>
+        <li><label><%= prop.name.capitalize %></label> <%= pf.text_field :value, :class => "suggestable" %></li>
+      <% end -%>
+     <% end -%>
+     </ul>
+     <%= f.submit "Add it." %>
+   <% end -%>
+   
+   
+ <% end -%>
+</div>
+<% end -%>
+
+ 

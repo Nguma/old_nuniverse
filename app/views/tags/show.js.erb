@@ -1,11 +1,18 @@
-<div class="section tag-section" id= "S-Tag-<%= @tag.name.gsub(' ','-') %>" >
-  <div class="content">
-    <h2><%= @tag.name.pluralize %></h2>
-    <dl>
-      
-    <% @connections.each do |connection| %>
-      <%= render :partial => "/polycos/instance", :locals => {:instance => connection } %>
-    <% end -%>
-    </dl>
+<% render_box(:html => {:id => {}}) do %>
+<div class="header" >
+  <%= image_tag "/images/icons/star.png", :style => "position:relative;float:right;right:5px;top:5px"%>
+  <%= spinner %>
+  <h2><%= @tag.name.pluralize.capitalize %></h2>
+  
+  <%= clear %>
+  <%#= link_to "+ Add new", new_tag_children_url(@tag), :style => "padding:0 0 0 20px", :class => "expand-lnk", :target => "New"%>
+  <div class="display" style="position:relative;float:right">
+    <h4>Display as <%= link_to "List", "#", :target => "list", :title => "Display as list" %> or <%= link_to "Grid", "#", :target => "grid", :title => "Display as grid" %></h4>
   </div>
 </div>
+<div class="content">
+<% if @connections %>
+  <%= render :partial => "/collections/collection", :locals => {:connections => @connections, :collection => @tag, :mode => @mode } %>
+<% end -%>
+</div>
+<% end -%>

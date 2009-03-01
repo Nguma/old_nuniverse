@@ -1,4 +1,13 @@
-<div id="content">
-  <h2><span style="font-style:italic">"<%= @comment.body %>"</span><span style="font-size:16px;color:#999"> - <%= user_url(@comment.author) %></span></h2>
-  <%= link_to "Reply"%>
-</div>
+<p>
+  <b>Body:</b>
+  <%=h @comment.body %>
+</p>
+
+<p>
+  <b>Author:</b>
+  <%=h @comment.author_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_comment_path(@comment) %> |
+<%= link_to 'Back', comments_path %>

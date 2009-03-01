@@ -1,13 +1,15 @@
-<div class="hat">
-  <%= thumbnail_tag @nuniverse %>
-  <h1><%= @nuniverse.name %></h1>
-</div>
+<% render_box(:html => {:id => "connections"}) do -%>
+  <div class="header">
+    <%= image_tag('/images/icons/topic.png', :style => "float:left;position:relative") %>
+    <h2>All connections</h2>
+    <div class="display" style="position:relative;float:right">
+     <h4>Display as <%= link_to "List", "#", :target => "list", :title => "Display as list" %> or <%= link_to "Grid", "#", :target => "grid", :title => "Display as grid" %></h4>
+     </div>
+       <%= link_to "+ Add new", new_collection_item_url(@collection), :style => "padding:0 0 0 20px", :class => "expand-lnk", :target => "New"%>  
+ 
+  </div>
+  <div class="content">
+  <%= render :partial => "/collections/collection", :locals => {:connections => @connections, :mode => "list", :collection => @context}%>
+  </div>
+<% end -%>
 
-<%= clear %>
-<div class="section">
-  
-  <% 10.times do |time| %>
-    <dl class="row"><dt>property</dt><dd></dd><dd></dd></dl>
-  <% end -%>
-  
-</div>

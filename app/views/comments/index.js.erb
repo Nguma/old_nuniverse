@@ -1,0 +1,13 @@
+<div class="header" style="padding:10px 20px 10px 20px">
+  <h2 style="padding:0">Discuss</h2>
+  <p>Speak up about this nuniverse, right here, right now.</p>
+</div>
+<div class="step" style="padding:0  0 0 20px;width:100%">
+  <%= render :partial => "/comments/new", :locals => {:parent => @context}%>
+  
+</div>
+<div id="comments" class="set" style="clear:both;padding:20px">
+   <% @comments.each do |comment| %>
+     <%= render :partial => comment %>
+   <% end -%>
+ </div>

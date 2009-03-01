@@ -1,72 +1,105 @@
-dl.set {
+.set {
 	position:relative;
-	height:auto;
-	z-index:222;
+	width:100%;
+	padding:0;
 }
 
-dl.set dd {
-	position:absolute;
-	min-width:70px;
-	min-height:70px;
+.set .tile {
+	padding:10px;position:relative;float:left;font-size:14px;text-align:center;
 }
 
-dl.vertical dd {
-	width:auto;
-	height:auto;	
-
+.set .tile .title {
+	z-index:200;font-weight:bold;margin:10px auto;
 }
 
-dl.vertical dd .thumbnail {
-	position:absolute;
-	bottom:0;
+.set .tile img {
+/*	position:absolute;height:100%;width:100%;z-index:300;left:0;top:0;border-right:solid 1px #333;*/
+}
+
+.set .tile-hover {
+/*	background:#333;*/
+/*	background:#efefef;*/
+}
+
+.set .tile-hover .title {
+/*	color:#FFF !important;*/
+}
+
+.grid {
+	padding:0 20px 0 20px;
+}
+
+
+.grid .pager {
+	position:relative;float:left;margin:10px;width:130px !important;height:70px !important;padding:0;
+}
+
+.grid .tile img,
+.grid .pager img {
+	position:absolute;height:100% !important;width:100%;z-index:300;
+	text-align:center;
+	position:relative;
+	float:none;
+	margin:0;
+	padding:0;
+	background:none;
 	
 }
 
-
-dl.vertical dd .bar {
-	position:absolute;
-	bottom:0;
+.grid .pager img {
+	width:60px !important;height:60px ;
 }
 
-dl.set dd .bar {
-	background-color:#FFF !important;
-	position:absolute;
+.grid .tile {
+
+	width:80px;
+	height:80px !important;
+	margin:0 20px 20px 0;
+	padding:0;
+	border:none;
+		border:solid #333 3px ;
+	text-align:center;
 }
 
-dl.set dd.hover .bar {
-	background-color:#9F0;
+.grid .tile p {
+	position:relative;
+	clear:both;
+	padding:5px 0 0 0;
 }
 
-dl dd .preview {
-	display:none;
+
+.grid .tile-hover img {
+/*	display:none;*/
 }
 
-#message {
-	position:absolute;
-	background:transparent url('/images/backgrounds/message.png') 0 0 no-repeat;
-	width:260px;
-	height:210px;
-	z-index:4333;
-	display:none;
-	padding:20px;
+.list .tile-hover img {
+	display:block;
+}
+
+
+.list .tile {
+	width:100%;min-height:70px !important;margin:0 0 0 0;border:none;border-bottom:1px solid #666;padding:10px 5px 10px 5px;text-align:left;
+	background:transparent url('/images/icons/arrow-select.png') middle right no-repeat;
+} 
+
+.list .tile p {
+	margin:10px 0 0 0px;
+	font-size:16px;
+	clear:none !important;
+}
+
+
+.list .default {
+	position:relative;
+	float:left;
+}
+
+.set .pager  {
+	display:block !important;
+}
+
+.set dt {
 	font-size:20px;
 	font-weight:bold;
-}
-
-
-#node {
-	width:20px;
-	height:20px;
-	background:#98F093;
-	position:absolute;
-	margin:auto;
-	border:solid 5px #FFF;
-	top:300px;
-	left:300px;
-}
-
-
-.list .connection {
-/*	background:#FFF !important;*/
-	border-bottom:solid 1px #ccc;
+	margin:0 0 10px 0;
 }

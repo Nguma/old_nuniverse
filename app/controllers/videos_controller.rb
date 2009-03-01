@@ -11,7 +11,13 @@ class VideosController < ApplicationController
 	end
 	
 	def show
-		@video = Video.find(params[:id])
+		@tag = Tag.find_by_name(q[0])
+		@video = @tag
+		# @url = params[:url]
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 	
 	def find

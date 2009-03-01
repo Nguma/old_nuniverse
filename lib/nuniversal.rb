@@ -1,68 +1,21 @@
 module Nuniversal
-
+	protected
 	
 	CONFIG_FILE = File.read(RAILS_ROOT + "/config/gmaps_api_key.yml")
 	GOOG_GEO_KEY = YAML.load(CONFIG_FILE)[RAILS_ENV]
-	
-	
-	def self.localize(address, source)
-		begin
-			@geoloc = Graticule.service(:google).new(GOOG_GEO_KEY).locate(address.to_s)
 		
-			return Location.new(
-			:name => source.name,
-			:full_address => "#{@geoloc.street} #{@geoloc.locality} #{@geoloc.region} #{@geoloc.zip} #{@geoloc.country}",
-			:latlng => @geoloc.coordinates.join(',')
-			)
-		rescue
-			raise "Error parsing a location from this address: #{address} to source: #{source}"
-		end
-	end
-	
-	class LabelValue
-		attr_reader :label, :value
-		def initialize(label, value = nil)
-			@label = label
-			@value = value.nil? ? label : value
-		end
-	end
-	
-	class Token
-		attr_reader :property, :source, :formula
-		def initialize(params)
-			@property = Tag.find_by_name(params[:property])
-			# @group = Group.find_by_unique_name(params[:group])
-			@source = params[:source]
-			@formula = params[:formula] || build_formula
-		end		
-		
-		def build_formula
-			"<#{@property.name}>"
-		end
-		
-		def result
-			
-			if @property.name == "name"
-				return @source.name
-			else
-				
-				return @source.property(@property).subject.body rescue ""
-			end
-		end
-	end
-		
-	def self.humanize(token)
+	def humanize(token)
 		token.gsub('_',' ')
 	end
-	def self.sanatize(token)
+	def sanatize(token)
 		token.titleize.gsub(' ','_').gsub(/\|.*/,'')
 	end
 	
-	def self.tokenize(str)
+	def tokenize(str)
 		str.scan(/\[\[([\w\s\-\_\,\?\!]+)\]\]/i) || []
 	end
 	
-	def self.tokenize_new(str, source)
+	def tokenize_new(str, source)
 		ptokens = str.scan(/\<([\w\s\-\_\?\!\@]+)\>/i) || []
 		
 		tokens = []
@@ -73,42 +26,28 @@ module Nuniversal
 		tokens
 	end
 	
-	
-	def self.traverse(token)
-		url = "http://en.wikipedia.org/wiki/#{token}?action=edit"
-		father = Nuniverse.find_or_create(token)
-		
-		doc = Hpricot open url
-		if doc
-			content = (doc/:textarea).first.inner_text rescue nil
-			if content
-				p = content.scan(/\n\'\'\'(.*)\n/)[0] rescue []
-				p = p[0].split(". ").first.gsub(/\<ref .*\<\/ref\>/, '').gsub(/\'\'\'/,'') rescue ""
-				sentence = p.gsub(/\{\{.*\}\}/,'')
-		
-	
-			
-					f = Fact.create(:body => sentence.strip)
-					f.objects << father rescue nil
-					Nuniversal.tokenize(sentence).each do |token|
-						unless Nuniverse.find_by_unique_name(Nuniversal.sanatize(token))
-							n = Nuniverse.find_or_create(token)
-							f.subjects << n rescue nil
-							father.nuniverses << n rescue nil
-							Nuniversal.traverse(Nuniversal.sanatize(token)) 
-						end
-				
-					
-			
-				end
-			end
-		end
-		
+	def contains_url?(str)
+		scan = str.scan(/((https?:\/\/)?[a-z0-9\-\_]+\.{1}([a-z0-9\-\_]+\.[a-z]{2,5})\S*)/ix)[0]
+		return true if !scan.nil?
+		return false
 	end
 	
-	def self.parse_url(url)
-		doc = Hpricot open(url.gsub(/\s|,/,'_'))
-		@t = Tag.new(:kind => "bookmark")
+	def scan_url(str)
+		return str.scan(/((https?:\/\/)?[a-z0-9\-\_]+\.{1}([a-z0-9\-\_]+\.[a-z]{2,5})\S*)/ix)[0]
+	end
+	
+	def parse_amazon
+		
+		asin = url.scan(/(http:\/\/www\.amazon\.com\/.+\/(B0\w+)\/.+)(\s|$)/)[0]
+	  awsobject = Finder::Search.find(:item_id => asin[1], :service => 'amazon', :operation => "ItemLookup")[0]
+	  @comment.body = @comment.body.gsub(/(http:\/\/www\.amazon\.com\/.+\/(B0\w+)\/.+)(\s|$)/,"##{asin[1]}")
+	end
+	
+	def parse_url(url)
+		@t = Bookmark.find_by_url(url)
+		return @t unless @t.nil?
+		doc = Hpricot open(url)
+		@t = Bookmark.new(:url => url)
 		if url.match('en.wikipedia.org/wiki/')
 			
 			@article = self.get_content_from_wikipedia(doc)
@@ -116,7 +55,7 @@ module Nuniversal
 			@t.label = "#{(doc/:h1).first.inner_html.to_s} on Wikipedia"
 			@t.url = url		
 		else
-			@t.label = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
+			@t.name = (doc/:title).first.inner_html.to_s.blank? ? params[:url] : (doc/:title).first.inner_html.to_s
 			@t.description = (doc/:p).first.inner_html.to_s rescue ""
 			@t.url = url
 		end
@@ -124,7 +63,7 @@ module Nuniversal
 
 	end
 	
-	def self.get_content_from_wikipedia(doc)
+	def get_content_from_wikipedia(doc)
 			items_to_remove = [
 			  "#contentSub",        #redirection notice
 			  "div.messagebox",     #cleanup data
@@ -164,7 +103,7 @@ module Nuniversal
 			return "#{(@article/:p)[0..1]}"
 	end
 	
-	def self.wikipedia_description(wiki_content)
+	def wikipedia_description(wiki_content)
 		dc = (wiki_content/:p).first
 		(dc/:sup).remove
 		(dc/:span).remove
@@ -184,29 +123,17 @@ module Nuniversal
 		dc.to_s
 	end
 		
-	
-	
-	class Parser
-		
-		attr_accessor :file, :doc
-		
-		def initialize(file)
-			@file = file
-		end
-		
-		def read
-			
-			@doc = Hpricot::XML(File.read(@file))
-			@doc
-		end
-		
-		def write(xml)
-			
-		
-			File.open(@file, 'w') do |f|
-				f.puts(xml)
+	def save_page(page_id)
+		@doc = Parser.new("#{LAYOUT_DIR}/#{page_id}.xml")
+		if @doc.write( params[:xml].to_s)
+			respond_to do |f|
+				f.xml {head :ok}
+			end
+		else
+			respond_to do |f|
+				f.xml {raise params[:xml].inspect}
 			end
 		end
 	end
-	
+		
 end

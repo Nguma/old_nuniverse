@@ -1,7 +1,10 @@
-<% new_fact = Fact.new()%>
-<% form_for new_fact, :url => {:controller => "facts", :action => "create"} , :html => {:id => "new-fact"} do |f| -%>
-    <%= f.text_area :body, :rows => 2, :cols => 100, :id => "input-note-body" %>
-    <%= submit_tag "", :id => "input-note-submit"%>
-    <%= fields_for_source(parent) %>
-    
+<% body = "#{@tag.name}:" rescue "" %>
+
+<% new_fact = Fact.new(:author_id => current_user, :body => body ) %>
+<% form_for :fact, new_fact, :url => "/facts/create", :html => { :style => "position:relative;", :id => "new-fact-form"} do |f| -%>
+  <%= f.hidden_field :author_id %>
+  <%= fields_for_source source %>
+  <%#= thumbnail_tag(current_user, :size => :small) %>
+  <%= f.text_area :body ,  :rows => 2, :class => "input-body", :style => "background:#FFF; width:490px;padding:10px;border:#333;clear:none;position:relative;float:left"%>
+  <%= submit_tag "Fact!", :id => "input-note-submit", :style => "background:#333;color:#FFF;width:90px;height:86px;font-size:20px;position:absolute;font-weight:bold;cursor:pointer;color:#FFF"%>
 <% end -%>

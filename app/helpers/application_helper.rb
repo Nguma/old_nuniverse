@@ -19,14 +19,6 @@ module ApplicationHelper
 		source ||= @source
 		render :partial => "/application/source_fields", :locals => {:source => source}
 	end
-
-	def tokenize(str)
-		Nuniversal.tokenize(str).each do |token|
-			n = Nuniverse.search(token.gsub('-',' '), :match_mode => :all)
-			str = str.gsub(/\##{token}/,link_to(n.first.name, n.first)) if n.size == 1		
-		end
-		str
-	end
 	
 	def render_plugin(box, data) 
 		case box.mode

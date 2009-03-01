@@ -1,0 +1,12 @@
+<div class="box video-box" >
+  <div class="content" style="display:none">
+    
+  </div>
+  <div class="edit">
+    <h2>Add a video</h2>
+    <p>You can add any youtube url to play a video</p>
+    <% form_tag "/videos/show", :class => "inline" do  -%>
+      <%= text_field_tag :url %><%= submit_tag "Play this video"%>
+    <% end -%>
+  </div>
+</div>

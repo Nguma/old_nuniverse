@@ -1,0 +1,53 @@
+<layout>
+  <box>
+    <title>Test</title>
+    <color>#ccff00</color>
+    <dimension>
+      <x>29</x><y>100</y><width>356</width><height>150</height>
+    </dimension>
+    <content>
+ 
+    </content>
+  </box>
+  <box>
+    <title>Relationships</title>
+    <color>#ccff00</color>
+    <dimension>
+      <x>29</x><y>274</y><width>545</width><height>340</height>
+    </dimension>
+    <content>
+      <item type="Video" id="17"/>
+      
+    </content>
+  </box>
+  <box>
+    <title>Bookmarks</title>
+    <color>#ccffcc</color>
+    <dimension>
+      <x>600</x><y>274</y><width>285</width><height>200</height>
+    </dimension>
+    <content>
+      <item type="Video" id="18"/>
+    </content>
+  </box>
+  <box>
+    <title>Comments</title>
+    <color>#efefee</color>
+    <dimension>
+      <x>600</x><y>500</y><width>285</width><height>200</height>
+    </dimension>
+    <content>
+      <item type="Video" id="19"/>
+    </content>
+  </box>
+  <box>
+    <title>Images</title>
+    <color>#cc0f00</color>
+    <dimension>
+      <x>910</x><y>100</y><width>215</width><height>460</height>
+    </dimension>
+    <content>
+      <item type="Video" id="20"/>
+    </content>
+  </box>
+</layout>

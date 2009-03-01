@@ -2,20 +2,20 @@
 
 one:
   id: 1
-  label: State
+  name: State
 
 two:
   id: 2
-  label: Oyster
+  name: Person
   
 three:
   id: 3
-  label: Food
+  name: Restaurant
 
 four:
   id: 4
-  label: Seafood
+  name: Film
   
 five: 
   id: 5
-  label: country
+  name: Fruit

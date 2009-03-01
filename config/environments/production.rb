@@ -2,6 +2,7 @@
 
 # The production environment is meant for finished, "live" apps.
 # Code is not reloaded between requests
+
 config.cache_classes = true
 
 # Use a different logger for distributed setups
@@ -29,3 +30,4 @@ dir = temp.path
 temp.delete
 Dir.mkdir(dir, 0755)
 ENV['INLINEDIR'] = RAILS_ROOT + '/tmp'
+LAYOUT_DIR = "#{RAILS_ROOT}/public/layouts"

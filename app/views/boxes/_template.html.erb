@@ -1,15 +1,37 @@
-<div class="template box preview" style="position:absolute;" >
-  <div class="content">
-    <h2></h2>
+<div class="template-box box" style ="<%= html rescue nil %>">
+  <div class="menu">
+    <%= link_to "x", "#", :title => "Close", :class =>"close-lnk " %> | 
+    <%= link_to "customize", "# ", :class => "customize-lnk" %>
   </div>
-  <div class="edit">
-    <fieldset>
-      <%#= hidden_field_tag :klass , "" , :class => 'klass'%>
-      <%#= text_area_tag :name , "", :class => 'title'%>
-      <%#= text_field_tag :tags, "" , :class => 'tags' %>
-    </fieldset>
-    <div class="options">
-      <%= link_to "X Destroy", "#", :class => "destroy-box-lnk" %>
+
+  <%= spinner %>
+  <div class="wrap"> 
+    <div class="footer">
+      
+    </div>
+    <div class='header'>
+      <h2></h2>
+      
+    </div>
+    <div class="content">
+    
+    </div>
+  
+    <div class="edit">
+    </div>
+    <div class="customize" style="padding:20px">
+      <h3>Customize</h3>
+      <dl>
+        <dt>Pick a theme for this box</dt>
+        <dd><%= link_to "All black", "#apply-theme" , :title => "ntheme-black-and-blue",:class => "theme-lnk"%></dd>
+        <dd><%= link_to "All white", "#apply-theme" , :title => "ntheme-rare", :class => "theme-lnk"%></dd>
+        <dd><%= link_to "Pan seared", "#apply-theme" , :title => "ntheme-pan-seared", :class => "theme-lnk"%></dd>
+        <dd><%= link_to "Cristal clear", "#apply-theme" ,:title => "ntheme-cristal-clear", :class => "theme-lnk"%></dd>
+      </dl>
+
+      
+      <%= link_to "Ok good.", "#", :class => "customize-lnk" %>
+      
     </div>
   </div>
 </div>

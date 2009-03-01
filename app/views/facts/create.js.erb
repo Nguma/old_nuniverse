@@ -1,7 +1,1 @@
-<div class ="step connection fact-connection">
- <%= render_fact(@fact)%>
- <span class='step-options'>
-   <%= link_to "edit", edit_fact_url(@fact), :class => ""%>
- </span>
- <%= clear %>
-</div>
+<%= render :partial => @fact, :locals => {:style => "font-size:36px", :source => @source}%>

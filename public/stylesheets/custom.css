@@ -1,19 +1,11 @@
 body {
-/*	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;*/
-	background:#efefef url('/images/backgrounds/main-grey.png') 0 -280px repeat-x;
+	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;
+/*	background:#FFF url('/images/backgrounds/main-grey-med.png') 0 0px repeat-x;*/
 }
 
 .section {
-	background:#fff url('/images/backgrounds/main_light.png') 0 -400px repeat-x !important;
-	background:none !important;
-}
-
-#overview {
-	background:none !important;
-}
-
-.section .content {
-	background:none !important;
+/*	background:#fff url('/images/backgrounds/main_light.png') 0 -400px repeat-x !important;*/
+/*	background:none !important;*/
 }
 
 .section {
@@ -83,4 +75,33 @@ body {
 
 h2 {
 	color:#333;
+}
+
+.box {
+	color:#333;
+}
+
+.ntheme-default {
+	border:#333 solid 3px;color:#000;background:#FFF;
+}
+
+.ntheme-black-and-blue {
+	border:#000 solid 3px;color:#FFF;background:#000;
+}
+
+.ntheme-black-and-blue .header {
+	color:#FFF;background:#000;
+}
+
+
+
+.ntheme-pan-seared {
+	background:#FFF url('/images/backgrounds/main_light.png') 0 0px repeat-x; color:#333;
+}
+
+.ntheme-cristal-clear {
+	border:transparent solid 3px;background:none;color:#333;
+}
+.ntheme-cristal-clear .header {
+	background:none;color:#333;
 }

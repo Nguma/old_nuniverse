@@ -22,7 +22,10 @@ class FactsController < ApplicationController
   # GET /facts/1
   # GET /facts/1.xml
   def show
-     @fact = Fact.find(params[:id])
+    @fact = Fact.find(params[:id])
+		@tag = Tag.find_by_name(params[:tag_name])
+		@facts = @fact.connections.tagged(@tag).paginate(:page => params[:page], :per_page => 10, :order => "created_at DESC")
+	
 
 		# @suggestions = Nuniverse.search( @fact.body, :match_mode => :any)
 
@@ -60,29 +63,35 @@ class FactsController < ApplicationController
   # POST /facts.xml
   def create
     @fact = Fact.new(params[:fact])
-		@scan = @fact.body.scan(/^(([\w\-]+)\:)?(.*)/)[0]
-		@fact.body = @scan[2].strip
-		@fact.tags = [Tag.find_or_create(:name => @scan[1])]
+	
+		# @fact.body = @scan[2].strip
+		# @fact.tags = [Tag.find_or_create(:name => @scan[1])]
 		@source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  current_user
 		
 
-
     respond_to do |format|
       if @fact.save
-				@tokens = Nuniversal.tokenize(@fact.body)
-				@tokens.each do |token|
-					n = Nuniverse.find_or_create(token)
+				
+				if contains_url?(@fact.body) 			
+					url = scan_url(@fact.body_without_category)
 					
-					@fact.subjects << n unless n.nil?
+					@fact.bookmarks << parse_url(url[0])
 				end
+				# @tokens = Nuniversal.tokenize(@fact.body)
+				# 			@tokens.each do |token|
+				# 				n = Nuniverse.find_or_create(token)
+				# 				
+				# 				@fact.subjects << n unless n.nil?
+				# 			end
+				@fact.tags << Tag.find_or_create(:name => @fact.category) if @fact.category 
 				@source.facts << @fact
-				if @scan[1] == "address"
-					@source.locations << Nuniversal.localize(@fact.body, @source) rescue nil
-				end
+				# if @scan[1] == "address"
+				# 				@source.locations << Nuniversal.localize(@fact.body, @source) rescue nil
+				# 			end
         
         format.html { 
 					flash[:notice] = 'Fact was successfully created.'
-					redirect_to polymorphic_url(@source, :klass => "Fact") 
+					redirect_to polymorphic_url(@source) 
 				}
 				format.js {
 					
@@ -134,7 +143,7 @@ class FactsController < ApplicationController
     @fact.destroy
 
     respond_to do |format|
-      format.html { redirect_to(facts_url) }
+      format.html { redirect_back_or_default('/') }
       format.xml  { head :ok }
     end
   end

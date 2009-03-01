@@ -30,10 +30,12 @@ class ImagesController < ApplicationController
 	
 	def show
 		@image = Image.find(params[:id])
-
+		
 		respond_to do |f|
 			f.html {}
-			f.js {}
+			f.js {
+				render :action => :new if @image.nil?
+			}
 		end
 	end
 end

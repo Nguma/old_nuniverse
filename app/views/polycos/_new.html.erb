@@ -1,0 +1,12 @@
+<% body = "#{@tag.name}:" rescue "" %>
+
+<% new_fact = Polyco.new(:object_id => source.id, :description => body ) %>
+<% form_for :fact, new_fact, :url => "/facts/create", :html => { :style => "position:relative;", :id => "new-fact-form"} do |f| -%>
+  <%#= f.hidden_field :author_id %>
+  <%= f.hidden_field :object_id %>
+  <%= f.hidden_field :object_type %>
+  <%#= fields_for_source source %>
+  <%#= thumbnail_tag(current_user, :size => :small) %>
+  <%= f.text_area :description ,  :rows => 2, :class => "input-body", :style => "background:#FFF; width:490px;padding:10px;border:#333;clear:none;position:relative;float:left"%>
+  <%= submit_tag "Fact!", :id => "input-note-submit", :style => "background:#333;color:#FFF;width:90px;height:86px;font-size:20px;position:absolute;font-weight:bold;cursor:pointer;color:#FFF"%>
+<% end -%>

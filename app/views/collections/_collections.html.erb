@@ -1,0 +1,24 @@
+<% render_box(:html => {:id => "Nuniverse-#{context.id}-collections", :style => "height:auto; px;position:relative;clear:left;border:none"}) do -%>
+  <div class="header">
+    <%= image_tag('/images/icons/topic.png', :style => "float:left;position:relative") %>
+    <h2>Collections for this nuniverse</h2>
+  </div>
+  <div class="content">
+   <dl style="padding:20px">
+    <% collections.each do |collection| -%>
+      <dd>
+        <%= link_to collection.name, polymorphic_url(collection), :class => "expand-lnk", :target => "Collection-#{collection.id}" %>
+      </dd>
+    <% end -%>
+      <dd><%= link_to "+ Create a new collection", "/groups/new", :class => "expand-lnk", :target => "#Nuniverse-#{context.id}-Collection-new"%></dd>
+    </dl>
+    <div class="step">
+      <h3>Filter by</h3>
+      <p>
+      <% @context.connections.gather_tags.each do |tag| %>
+         <%= link_to tag.tag_name, tag_url(tag.tag_id, :context_type => @context.class.to_s, :context_id => @context), :class => "expand-lnk", :target => "Group" %>
+      <% end -%>
+      </p>
+    </div>
+  </div>
+<% end -%>

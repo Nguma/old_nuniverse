@@ -61,9 +61,11 @@ dl.row dd {
 }*/
 
 #nuniverse {
+	top:50px;
+/*	left:80px;*/
 	padding: 0;
 	position:absolute;
-	width:60000px;
+	width:50000px;
 	
 	white-space:nowrap;
 	height:100%;
@@ -403,34 +405,9 @@ a.save_button {
 }
 
 #overview {
-	position:relative;
-	background:none;
-	width:auto;
-	margin:0 0 0 0 ;
-	padding:0;
-	height:800px;
-	overflow:hidden;
-	border:none;
+	width:400px;
 }
 
-#overview .step {
-	position:relative;
-	border:none;
-	font-size:24px;
-	max-width:600px;
-}
-
-#overview .step a {
-	font-weight:bold;
-}
-
-#overview .connection {
-	padding:10px;
-}
-
-#overview a {
-	color:#369;
-}
 
 a.story-lnk {
 	color:#FC0 !important;
@@ -533,24 +510,6 @@ a.filter:hover {
 
 
 
-#left-column {
-	position:relative;
-	width:auto;
-	margin:0 0 0 0;
-	clear:none;
-}
-
-
-
-#overview dl {
-	position:relative;
-}
-
-#overview dl dd {
-	float:left;
-	width:20%;
-	font-size:15px;
-}
 
 .back-lnk {
 	background:#ccc url("/images/icons/back-button.png") 0 -8px no-repeat;
@@ -630,35 +589,30 @@ a.filter:hover {
 	display:none;
 }
 
+.edit-mode .build-lnk {
+	display:none;
+}
+
 .section {
 	position:relative;
 	float:left;
-	width:auto;
 	border-top:none;
-	margin:0 0 0 0px;
+	margin:0 4px 4px 0px;
 	padding:0;
-	width:750px;
+	width:auto;
 	white-space:normal;
-	min-height:800px;
-	height:100%;
-	background:#fff;
+	min-height:600px;
+	height:600px;
+	min-width:300px;
+	width:600px;
+/*	height:auto;*/
+/*	background:#FFF;*/
+	background:none;
+	overflow:hidden;
 }
 
-.section h2 {
-	padding:20px;
-}
-
-.section .step {
-	padding:10px 50px 10px 20px;
-
-}
-
-.section .selected {
-	background:transparent url('/images/backgrounds/arrow-select.png') center right no-repeat !important;
-}
-
-.section .selected .arrow {
-	display:block;
+.section .wrap {
+	position:relative;
 }
 
 
@@ -668,40 +622,9 @@ a.filter:hover {
 	border-top:none;
 /*	border-left:solid #eee 3px;*/
 }
-.section .content {
-	padding:10px 0px 10px 0px;
-
-}
-
-.section .content .hover {
-/*	background:#FFF !important;*/
-}
 
 
 
-#overview .hover .meta {
-	display:none;
-}
-
-#overview .hover .options {
-	display:none;
-}
-
-
-
-.section .menu dd {
-	color:#FFF;
-	font-weight:bold;
-	padding:5px;
-	position:relative;
-	float:left;
-}
-
-.section h2 {
-	font-weight:bold;
-	font-size:30px;
-	margin:0 0 0 0px;
-}
 
 .poll {
 
@@ -814,28 +737,32 @@ a.filter:hover {
 }
 
 .tile  {
-	text-align:center;
+	text-align:left;
 	padding:10px 10px 10px 8px;
 	white-space:normal;
-	width:120px;
-	height:120px;
-	margin:10px;
+	margin:0 5px 5px 0;
 	overflow:hidden;
 	font-weight:bold;
-	font-size:17px;
+	font-size:20px;
 	color:#333;
+	position:relative;
 	background:transparent;
 	border:solid 2px #666;
 /*	background:transparent url('/images/backgrounds/tile.png') 0 0 no-repeat;*/
-	position:absolute;
 	cursor:pointer;
-	
+	float:left;
 }
 
-.tile-hover {
-/*	background:transparent url('/images/backgrounds/tile-hover.png') 0 0 no-repeat;*/
+.current-tile {
 	background:#FFF;
 }
+
+.tile h2 {
+	color:inherit;
+	display:inline;
+	font-size:25px;
+}
+
 
 
 .tile .spinner {
@@ -844,7 +771,53 @@ a.filter:hover {
 	z-index:999;
 }
 
+.empty {
+	border:solid #ccc 2px;
+}
+
 #view {
 	z-index:5000;
+	position:fixed;
+	padding:100px;
+	height:100%;
+	width:100%;
+	display:none;
+	position:fixed;
+	top:0;
+	left:0;
 /*	background:transparent url('/images/backgrounds/main_light.png') -300px 0 repeat-x;*/
+}
+
+
+#view .content {
+	position:relative;
+}
+
+#view .menu {
+
+}
+
+#view .menu a {
+	display:block;
+}
+
+.list {
+	background:#FFF;
+}
+
+
+
+#nuniverse #menu {
+	position:fixed;
+	left:10px;
+	top:100px;
+}
+
+#menu a {
+	display:block;
+	clear:left;
+}
+
+#menu a img {
+	width:50px;
 }

@@ -1,15 +1,16 @@
 module FactsHelper
+	include Nuniversal
 	
 	def render_fact(fact)
-
-		body = fact.body_with_tag.strip
-		tokens = Nuniversal.tokenize(body)
+		return link_to(fact.name, polymorphic_url(fact), :class => "expand-lnk", :target => "Prop") if !fact.is_a?(Fact)
+		body = fact.body.strip
+		tokens = tokenize(body)
 
 		tokens.each do |token|
 				token = token[0]
-				n = Nuniverse.find_by_unique_name(Nuniversal.sanatize(token)) 
+				n = Nuniverse.find_by_unique_name(sanatize(token)) 
 				if n
-					sub = link_to(n.name, n,:title => n.name, :id =>"Nuniverse-#{n.id}")
+					sub = link_to(n.name, n,:title => n.name, :id =>"Nuniverse-#{n.id}", :class => "expand-lnk", :target => "Prop" )
 				else
 					sub = token
 				end
@@ -33,7 +34,7 @@ module FactsHelper
 	
 	def render_cell(cell, data)
 		body = cell.name
-		tokens = Nuniversal.tokenize_new(body, data)
+		tokens = tokenize_new(body, data)
 		tokens.each do |token|
 			body = body.gsub(token.formula, token.result)
 		end
@@ -41,12 +42,30 @@ module FactsHelper
 	end
 	
 	def render_text(text)
-		tokens = Nuniversal.tokenize(text)
+		tokens = tokenize(text)
 		tokens.each do |token|
 			
-			text = text.gsub("[[#{token[0]}]]",link_to(token[0], "/nuniverse-of/#{Nuniversal.sanatize(token[0])}"))
+			text = text.gsub("[[#{token[0]}]]",link_to(token[0], "/nuniverse-of/#{sanatize(token[0])}"))
 		end
 		text
+	end
+	
+	def render_property(property)
+		
+		return nil if property.nil?
+
+		# if property.subject.is_a?(Fact) 
+		# 	tokens = tokenize(property.subject.body)
+		# 	text = property.subject.body
+		# 	tokens.each do |token|
+		# 		text = text.gsub("[[#{token[0]}]]",link_to(token[0], polymorphic_url(property), :class => "expand-lnk", :target => "Prop"))
+		# 	end
+		# else 
+			
+			text = link_to(property.subject.name, polymorphic_url(property), :class => "expand-lnk", :target => "Prop")
+		# end
+	
+		return text
 	end
 	
 end

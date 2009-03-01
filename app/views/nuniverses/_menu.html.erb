@@ -1,9 +1,11 @@
+<div style="position:fixed;bottom:10px;right:10px">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></div>
+
 <ul id="tab-menu">
   <li class="selected" >--</li>
-  <li style="float:right">You are logged in as <%= current_user.login %>. <%= link_to "Logout", "/logout", :style => "color:#eee"%></li>
+  
   <li><%= link_to "Overview", "#overview" %></li>
-  <li><%= link_to "Facts", "#facts" %></li>
-  <li><%= link_to "Images", "#images" %></li>
+  <li><%= link_to "Collections", "#collections" %></li>
+ 
   <% if false %>
   <li><%= link_to "Connections", "#nuniverses" %></li>
   <li><%= link_to "Bookmarks", "#bookmarks"%></li>

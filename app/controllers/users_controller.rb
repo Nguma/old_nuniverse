@@ -10,8 +10,10 @@ class UsersController < ApplicationController
 	
 	def index
 		# @users = User.paginate(:conditions => {:state => 'active'}, :page => 1, :per_page => 5)
-		@users = []
-		render :action => :find
+		@nuniverse = Nuniverse.find(params[:nuniverse_id])
+		
+		@users = @nuniverse.users
+	
 	end
 	
 	def find
@@ -135,24 +137,29 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_nuniverse
 	def show
-		@count = @user.connections.count
-		@nuniverses = @user.nuniverses(:page =>1, :per_page => 10)
-		@boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/User_#{@user.id}.xml")).boxes rescue []
-		@bookmarks = @user.bookmarks(:page =>1, :per_page => 10)
-		@stories = @user.stories(:page =>1, :per_page => 10, :order => "updated_at desc")
+		# @count = @user.connections.count
+		# @filter = Tag.find_by_name(params[:filter].singularize) if params[:filter]
+		# @connections = @user.connections.tagged(@filter).paginate(:page => params[:page] , :per_page => 18, :order => "updated_at DESC")
+		# # @nuniverses = @user.nuniverses(:page =>1, :per_page => 10)
+		# @boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/User_#{@user.id}.xml")).boxes rescue []
+		# @contributors = @user.contributors(:page =>1, :per_page => 10)
+		# # @most_active_story = @stories.first
 		
-		@images = @user.images(:page =>1, :per_page => 10)
-		@contributors = @user.contributors(:page =>1, :per_page => 10)
-		@most_active_story = @stories.first
+		@source = Nuniverse.find(params[:id])
+		@source = current_user
+		@tag = Tag.find_by_name(params[:tag_name])
+		@facts = @source.facts.tagged(@tag).paginate(:page => params[:page], :per_page => 20, :order => "created_at DESC")
+		
+
 	
 		respond_to do |format|
 			format.html { 
-				
-				if @nuniverses.empty?
-					render :action => :tutorial 
-				else
-					@source = @user
-				end
+				# @context = @user
+				# if @connections.empty?
+				# 	# render :action => :tutorial 
+				# else
+				# 	@source = @user
+				# end
 				}	
 			format.js { }
 		end
@@ -164,6 +171,6 @@ class UsersController < ApplicationController
 	
 protected
   def find_user
-    @user = User.find(params[:id]) rescue current_user
+     @user = User.find(params[:id]) rescue current_user
   end
 end

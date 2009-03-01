@@ -1,133 +1,32 @@
-
-
-/* ITEM */
-.box .connection {
-	position:relative;
+dl.facts {
+	padding:10px 0 0 0;
 	clear:both;
-	margin:0 0 1px 0;
-	overflow:hidden;
-	padding:0;
-	background:none;
+	width:800px;
+	margin:auto;
 }
 
-
-img.default_img {
-	width:60px;
-	height:60px;
-	background:transparent url('/images/backgrounds/icon_bg.png') 0 0 no-repeat;
-	float:left;
-	margin:0 5px 0 0;
-	padding:4px 6px 6px 4px;
-}
-
-.personal .thumbnail {
-	background:transparent url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
-}
-
-.private .thumbnail {
-	background:transparent url("/images/backgrounds/icon_private.png") 0 0 no-repeat;
-}
-
-.box .connections .connection .options {
-	position:absolute;
-	top:5px;
-	right:5px;
-	z-index:1234567890;
-	background:none;
-}
-
-#content .box h2 a.link_to_list {
-	font-size:24px;
-}
-
-#content .box h3 {
-	position:relative;
-	padding:0 5px 0 5px;
-}
-
-#content .box h3 a,
-#content .box h3 a:visited
- {
-	color:#666;
-	font-size:16px;
-	font-weight:bold;
-	line-height:20px;
-}
-
-span.unique_item {
-	display:block;
-}
-
-span.unique_item a,
-span.unique_item a:visited {
-	color:#666;
-	font-size:14px;
-}
-
-.box .connections .connection .icon {
-	height:20px;
-}
-
-.box .connection .sort_actions {
-	position:relative;
-	float:left;
-	margin-right:5px;
-	width:20px;
-	height:20px;
-}
-
-.connection .sort_actions a {
-	display:block;
-}
-
-.connections .hover {
-/*	background:#eee;*/
-	color:#FFF;
-}
-
-.hover .connection h3 {
-	color:#ccc;
-}
-
-.box .hover h3 a {
-	color:#9F0 !important;
-}
-
-.expanded .unique_item {
-	display:none;
-}
-
-.#content .list .connection {
-	min-height:50px;
-	background:#FFF;
+dl.facts dd {
 	margin:0 0 3px 0;
-	border-bottom:dashed 1px #999;
+	padding:20px;
+	background:#FFF;
+	font-size:20px;
+	font-weight:normal;
+	color:#333;
+	white-space:normal;
 }
 
-
-.list .list .connection .thumbnail {
-	height:70px;
+dl.facts dd a,
+dl.facts dd a:visited {
+	color:inherit;
+	font-weight:normal;
 }
 
-#content .list .connection h3 {
-	line-height:14px;
-	font-size:14px;
-	padding:0;
-	margin:3px 0 0 0;
+dl.facts dd a.category {
+	font-weight:bold;
 }
 
-#content .list .connection h3 a,
-#content .list .connection h3 a:visited {
-	font-weight:inherit;
-	font-size:inherit;
-	line-height:inherit;
-}
-
-img.icon {
-	background:#FFF url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;
-	padding:3px;
-	margin:0 3px 0 0;
-	width:28px;
-	height:28px;
-	
+dl.facts dd.hover {
+	background:#FFF;
+/*	background:transparent url('/images/backgrounds/arrow-select.png') center right no-repeat;*/
+	color:#333;
 }

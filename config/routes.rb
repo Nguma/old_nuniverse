@@ -1,26 +1,42 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :comments
+
+  map.resources :posts, :has_many  => :comments
+
   map.resources :facts
 
   map.resources :stories
 
 	map.resources :kinds
-
-	
  	map.resources :taggings
 	map.resources :comments
 	map.resources :tags
-	map.resources :nuniverses
+	
+	map.resources :nuniverses do |n|
+		n.resources :collections, :requirements => {:context_type => 'nuniverse'}
+		n.resources :comments, :requirements => {:context_type => 'nuniverse'}
+		n.resources :users, :requirements => {:context_type => 'nuniverse'}
+	end
+	
 	map.resources :polycos
 	map.confirm_connection "/confirm-connection/:id/with/:subject_id/:subject_type", :controller => "Polycos", :action => "update"
 	map.resources :images
 	map.resources :bookmarks
 	
-	map.resources :sets
+	map.resources :collections
+	map.new_collection_item "/collections/:collection_id/children/new", :controller => "Polycos", :action => "new"
 
 	map.resources :videos
 	map.signup '/signup', :controller => 'users', :action => 'new'
  	map.register '/register', :controller => 'users', :action => 'create'
-	map.resources :users
+	map.resources :users do |u|
+		u.resources :collections, :requirements => {:context_type => 'user'}
+		u.resources :comments, :requirements => {:context_type => 'user'}
+		u.resources :users, :requirements => {:context_type => 'user'}
+	end
+	
+
+
  	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
   	                                 :purge     => :delete }
@@ -79,9 +95,8 @@ ActionController::Routing::Routes.draw do |map|
 	map.save_layout "/save-layout.:format", :controller => "application", :action => "save_layout"
 	map.find_nuniverse "/find-nuniverse", :controller => "nuniverses", :action => "index"
 	map.find_nuniverse "/find-nuniverse/:input", :controller => "nuniverses", :action => "index"
+
 	
-	map.create_set "/create-set", :controller => "groups", :action => "create"
-	map.add_item_to_set "/add-item-to-set/:id", :controller => "groups", :action => "add_item"
 	
 	map.tutorial_url "/tutorial", :controller => "users", :action => "tutorial"
 	
