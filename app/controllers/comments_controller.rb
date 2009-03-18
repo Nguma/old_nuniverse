@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
 	
-	before_filter :find_context, :only => [:index]
+	before_filter :find_source, :only => [:index]
 	
 	def index
 	
@@ -12,11 +12,9 @@ class CommentsController < ApplicationController
 	end
 	
 	def create
-		# @parent =  params[:parent_type].classify.constantize.find(params[:parent_id])
-		@comment = Comment.create(params[:comment])
-		# @comment = @post.comments.build(params[:comment])
-		# @comment.author = current_user
-		# @comment.save!
+
+		@comment = Comment.create(params[:value], :user_id => current_user.id)
+		
 		respond_to do |f|
 			f.html { redirect_to @post }
 			f.js { 

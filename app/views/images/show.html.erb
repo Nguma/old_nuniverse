@@ -1,6 +1,9 @@
-<%= home_link %>
+<% nuniverse do -%>
+<div class="section"  id="Image-<%= @image.id %>" style="top:20px;" >
 <div id="content">
   <div class="step" style="position:relative">
-    <%= image_tag @image.avatar, :style => "width:100%"%>
+    <%= image_tag @image.avatar, :style => "height:100%"%>
   </div>
 </div>
+</div>
+<% end -%>

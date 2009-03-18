@@ -16,7 +16,7 @@ class LocationsController < ApplicationController
 	end
 	
 	def show
-		
+		@location = Fact.find_by_id(params[:id])
 	end
 	
 	def new

@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
         current_user.remember_me unless current_user.remember_token?
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
-      redirect_back_or_default('/my_nuniverse')
+      redirect_back_or_default("/#{current_user.login}")
       flash[:notice] = "Welcome back"
     elsif current_user
       redirect_to '/activate/'

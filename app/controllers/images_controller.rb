@@ -1,5 +1,14 @@
 class ImagesController < ApplicationController
 	protect_from_forgery :except => [:upload]
+	
+	before_filter :make_token, :only => [:index]
+	
+	def index
+		@token.tag = Nuniverse.find_or_create(:unique_name => "image")
+		@images = @token.namespace.images.paginate(:page => params[:page], :per_page => 30)
+		
+	end
+	
   def new
     @image = Image.new
   end

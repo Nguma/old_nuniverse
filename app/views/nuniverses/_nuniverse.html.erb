@@ -1,7 +1,10 @@
 
-  <%= link_to(thumbnail_tag(nuniverse), image_url(nuniverse.avatar), :class => "expand-lnk", :target => "image") rescue nil%>
-  <%#= image_tag("/images/icons/nuniverse.png", :style => "width:30px;float:left") %>
-  <h2 style="padding:0"><%= link_to nuniverse.name, nuniverse_url(nuniverse) %></h2>
-  <p><%= nuniverse.tags.collect {|c| c.name}.join(', ')%></p>
-  <p style="font-size:16px;line-height:20px;padding:0 10px 0 0"><%= @polyco.subject.description rescue ""%></p>
-  <div style="clear:both"> </div>
+     <% if !nuniverse.score.nil? %>
+      <div class="score" style="color:<%= color_for_score(nuniverse.score) %>;position:relative;float:right;font-size:60px;font-weight:bold;top:10px;right:20px"><%= sprintf('%.1f',nuniverse.score) %></div>
+    <% end %>
+    <%= link_to(thumbnail_tag(nuniverse, :style => "float:left"), image_url(nuniverse.avatar), :class => "expand-lnk",  :target => "image") rescue nil %>
+    <div class="tag"><%= link_to tags.first.name.capitalize, "/#{path.first.unique_name}/#{tags.first.name}", :style => "font-weight:bold" rescue "Connected to" %></div> 
+    
+    <h2 style="padding:0;"><%= link_to nuniverse.name.titleize, "/#{nuniverse.unique_name}" %></h2>
+    <p><%= fact_for(nuniverse, :context => path.first)%></p>
+    <div style="clear:both"> </div>

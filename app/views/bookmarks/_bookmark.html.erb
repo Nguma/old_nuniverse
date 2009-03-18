@@ -1,10 +1,4 @@
-<div class="step connection" title="Bookmark-<%= bookmark.id%>">
+<div class="tag"><%= tags.first.name rescue "Bookmark" %></div>
   <h2><%= link_to bookmark.name, bookmark.url, :target => "_blank" %></h2>
-  
   <p><%= bookmark.description %></p>
   <%= clear %>
-</div>
-
-<div class="footer">
-  <%= link_to "Visit this page >", bookmark.url, :target => "_blank" %>
-</div>

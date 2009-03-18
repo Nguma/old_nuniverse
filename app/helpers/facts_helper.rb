@@ -1,25 +1,33 @@
 module FactsHelper
 	include Nuniversal
 	
+	def fact_for(nuniverse, options = {})
+		facts = nuniverse.facts
+		return nil if facts.empty?
+		fact = nuniverse.facts.sphinx(options[:context].unique_name).first rescue nil
+		fact = nuniverse.facts.first if fact.nil?
+		render_fact(fact) rescue nil
+	end
+	
 	def render_fact(fact)
-		return link_to(fact.name, polymorphic_url(fact), :class => "expand-lnk", :target => "Prop") if !fact.is_a?(Fact)
-		body = fact.body.strip
-		tokens = tokenize(body)
+		# return link_to(fact.name, polymorphic_url(fact), :class => "expand-lnk", :target => "Prop") if !fact.is_a?(Fact)
+		body = fact.body_without_category.strip.downcase
+		tokens = Token.find(body)
 
 		tokens.each do |token|
-				token = token[0]
-				n = Nuniverse.find_by_unique_name(sanatize(token)) 
-				if n
-					sub = link_to(n.name, n,:title => n.name, :id =>"Nuniverse-#{n.id}", :class => "expand-lnk", :target => "Prop" )
-				else
-					sub = token
+			unless token.nil?
+				n = token.namespace
+				unless n.nil?
+					# 
+					body = body.gsub(token.regxp, link_to(token.to_s, token.uri, :style => "color:#369"))
 				end
-					
-				body = body.gsub(/\[\[#{token}\]\]/,sub)
 			end
-			body = replace_urls(body)
-			body = body.gsub(/^([\w\-]+)?\:/,'<b style=";font-weight:bold;margin-right:5px">\1</b>')
-			body
+		end
+
+
+			# cat = body.scan(/^([\w_]+)\:/)[0]
+			# body = body.gsub(/^([\w_]+)\:/, link_to(cat, visit_url(@token.namespace.unique_name, :category => cat.to_s), :class => "category")) if cat
+			body.capitalize
 	end
 	
 	def replace_urls(str)

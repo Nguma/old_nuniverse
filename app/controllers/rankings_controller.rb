@@ -40,12 +40,15 @@ class RankingsController < ApplicationController
   # POST /rankings
   # POST /rankings.xml
   def create
-    @rankings = Rankings.new(params[:rankings])
+		
+		@score = params[:rate].scan(/\d+/).to_s.to_i.round
+		@ranking = Ranking.find_or_create(:user_id => current_user.id, :score => @score, :rankable_id => params[:source][:id] , :rankable_type => params[:source][:type])
 
     respond_to do |format|
       if @rankings.save
         flash[:notice] = 'Rankings was successfully created.'
         format.html { redirect_to(@rankings) }
+				format.js		{ }
         format.xml  { render :xml => @rankings, :status => :created, :location => @rankings }
       else
         format.html { render :action => "new" }

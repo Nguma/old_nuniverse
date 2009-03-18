@@ -2,9 +2,7 @@
   <dd class='suggestion <%= cycle('even','odd') %>' >
     <div class="hidden unique-id"><%= suggestion.id %></div>
     <%= thumbnail_tag suggestion, :style => "width:30px;height:30px" %>
-    <%= link_to "#{suggestion.name}", polymorphic_url(suggestion) , :id => "#{suggestion.type}-#{suggestion.id}"%>
-    <span style="font-size:14px">(<%= suggestion.tags.collect {|c| c.name}.join(',')%>)</span><br/>
-   
+    <%= link_to "#{suggestion.name}", "/#{suggestion.unique_name}" , :id => "#{suggestion.type}-#{suggestion.id}"%>   
     <%= clear %>
   </dd>
 <% end -%>

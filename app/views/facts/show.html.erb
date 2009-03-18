@@ -1,29 +1,46 @@
 <% nuniverse do -%>
-  
+  <div class="box" style="width:300px;position:fixed;left:10px" id="about">
+    <div class="content">
+
+     <h2>This fact is about</h2>
+     <dl class="set facts" id="facts" style="padding:0 20px" >
+         <% @source.tokens.each do |token| %>
+           <%= thumbnail_tag(token.namespace) %>
+           <dd class="fact"><%= link_to token.namespace.name.titleize, polymorphic_url(token.namespace.unique_name) %></dd>
+           <%= clear %>
+         <% end -%>
+       </dl>
+       
+      <h2>Find more about</h2>
+      <% @source.tokens.each do |token| %>
+      
+      <%= link_to "#{@source.parent.name} and #{token.namespace.name} (/#{@source.parent.unique_name}/#{token.namespace.unique_name})", "/#{@source.parent.unique_name}/#{token.namespace.unique_name}" %>
+      <% end -%>
+    </div>
+  </div>
   <div class="section" style="width:600px;height:auto;margin:0 auto;background:none;" id="overview">
-    <h2><%= @source.category %></h2>
-    <h1 style="font-weight:bold"><%= "#{@tag.name}@" if @tag %><%= link_to @source.body_without_category, story_url(@source) %></h1>
-    <%= link_to 'Destroy', @fact, :confirm => 'Are you sure?', :method => :delete %>
+    <h2><%= link_to "/#{@source.parent.unique_name}/#{@source.category}", "/#{@source.parent.unique_name}"%></h2>
+    <h1 style="font-weight:bold"><%= "#{@tag.name}@" if @tag %><%= render_fact(@source) %></h1>
+    <%#= link_to 'Destroy', @fact, :confirm => 'Are you sure?', :method => :delete %>
   <div class="box" >
     
     <div class="content" style="height:400px;overflow:hidden" >
-      <dl class="set facts" id="facts" >
-        <% @facts.each_with_index do |fact,i| %>
-          <%= render :partial => fact, :locals => {:style => "font-size:#{[(36 - (i*3)),16].max}px;opacity:.#{[9 - i,5].max}", :source => @source }%>
-        <% end -%>
+      <% if @source.votes.size == 0 %>
+        This fact hasn't been approved yet.
+      <% else -%>
+        <h3><%= @source.votes.size %> People talked about that fact,</h3>
+        <p style="font-weight:bold;">
+        <span style="font-weight:bold;color:#8c5;font-size:<%= (@source.percent_of_pros/5).ceil + 20 %>px"><%= @source.percent_of_pros %>% Agreed. <%= "So are you." if @vote && @vote.score == 1 %></span><br/>
+ 
+        <span style="font-weight:bold;color:#c96;font-size:<%= (@source.percent_of_cons/5).ceil + 20 %>px"><%=  @source.percent_of_cons %>% disagreed. <%= "So are you." if @vote && @vote.score == 0 %></span></p>
+      <% end -%>
+      <h3>What do you think? <%= link_to "Agree", fact_url(@source, :vote => 1) %> or <%= link_to "Disagree", fact_url(@source, :vote => 0) %></h3>
       
-      </dl>
-    
+       
     </div>
-    <%= render :partial => "/facts/new", :locals => {:source => @source} %>
+    <%#= render :partial => "/facts/new", :locals => {:source => @source} %>
   </div>
   </div>
 
 <% end -%>
 
-<ul id="tab-menu" style="background:#000">
-  <li class="selected" ></li>
-  <li><%= link_to "Overview", "#overview" %></li>
- 
- 
-</ul>

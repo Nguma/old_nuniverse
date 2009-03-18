@@ -1,6 +1,22 @@
-<dd class="fact" style="<%= style rescue nil %>">
+
+  <% @tokens = [fact.tokens.collect {|c| c.namespace },fact.parent].flatten.reject {|t| t == @source || t == @tag }%>
+  <% if fact.parent != @namespace %>
+    <%= thumbnail_tag(fact.parent) rescue nil %>
+    <div class="tag">Related to</div>
+    <h2 style="padding:0;"><%= link_to fact.parent.name.titleize, "/#{fact.parent.unique_name}" %></h2>
+    <p><%= render_fact(fact) %></p>
+  <% else -%>
+    <%= thumbnail_tag(@tokens.first) rescue nil %> 
+    <div class="tag"><%= tags.first.name.capitalize rescue "Quick Fact" %></div>
+    <div style="font-size:<%= 26 %>px"><%= render_fact(fact) %></div>
+  <% end -%>
+  
+  <% unless fact.tags.empty? %>
+    <span style="color:#999;font-size:14px">tagged: <%= fact.tags.collect {|c| c.name }.join('/') %></span>
+  <% end -%>
+  
   
 
-  <%= link_to  fact.category, polymorphic_url(source, :tag_name => "#{fact.category}"), :class => "category" unless fact.category.blank? || (@tag && @tag.name.downcase == fact.category[0].downcase.strip) %>
-  <%= link_to fact.body.gsub(/^([\w\s\-\_]+\:)/,''), fact_url(fact) %>
-</dd>
+
+
+ 

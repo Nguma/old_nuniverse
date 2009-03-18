@@ -1,0 +1,5 @@
+<%= thumbnail_tag(element.author, :size => :small) %>
+<div class="tag"><%= element.author.login.titleize %> dislikes it because</div>
+<span class="dislike">"<%= render_fact(element) %>"</span>
+<p><%= time_ago_in_words(element.created_at) %> ago</p>
+

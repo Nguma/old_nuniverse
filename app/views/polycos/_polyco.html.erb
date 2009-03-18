@@ -1,6 +1,17 @@
 
-  <dd class="fact" style="<%= style rescue nil %>">
-<%#= link_to(thumbnail_tag(polyco.subject),polyco_url(polyco, :collection_id => @collection), :title => polyco.subject.name, :class => "expand-lnk", :target => "Connection-#{polyco.id}")  rescue nil %>
-    
-    <%= link_to(polyco.subject.name, polyco_url(polyco, :collection_id => @collection), :class => "expand-lnk", :title => polyco.subject.name, :target => "Connection-#{polyco.id}") rescue polyco.name %>
-  </dd>
+
+  <% if polyco.subject.is_a?(Location) %>
+   <%= thumbnail_tag(polyco.subject) %> Map of <%= polyco.subject.name %>
+<% elsif polyco.subject.is_a?(User) %>
+  <%= thumbnail_tag(polyco.subject)%> <%= polyco.subject.name %> added it to his nuniverse.
+<% elsif polyco.subject.nil?  %>
+  <% polyco.destroy %>
+<% else %>
+
+  <%= link_to(image_tag("/images/icons/arrow_select.png", :style => "height:80px"), polyco_url(polyco), :class => "expand-lnk", :style => "position:absolute;right:10px;top:0px") %>
+  
+ <%= render :partial => "/tags/#{polyco.tags.first.name.downcase}", :locals => {:element => polyco.subject, :path => @path} rescue  render :partial => polyco.subject, :locals => {:path => @path, :tags => polyco.tags} %>
+<% end -%>
+<%= clear %>
+
+

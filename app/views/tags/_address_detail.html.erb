@@ -1,0 +1,18 @@
+
+  
+  
+   <% locations = google_localize(:source => element.body) rescue []%>
+ 
+    <%= link_to element.body, "#Location-#{element.id}", :class => "section-lnk" %>
+  
+       <% @map = map(locations.first) %>
+        <% if @map -%>
+
+           <%= @map.div(:width => '100%', :height => "400px", :style => "position:relative") %>
+           <script type="text/javascript">
+           //<![CDATA[
+
+             <%=  @map.to_html(:no_load => true, :no_script_tag => true, :no_declare => true, :no_global => true) %>
+           //]]> 
+           </script>
+        <% end -%>

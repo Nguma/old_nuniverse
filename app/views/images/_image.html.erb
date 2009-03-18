@@ -1,3 +1,7 @@
-<% render_box(:html => {:id => {}}) do -%>
-  <%= image_tag image.public_filename(), :style => "height:100%" %>
-<% end -%>
+
+  
+  <%= image_tag(image.public_filename(:small), :class => "thumbnail") %>
+  <div class="tag">Image <%= tags.first.name.capitalize rescue nil %></div>
+  this image was added to this nuniverse.
+  <%= link_to "View", image_url(image), :style => "color:#369" , :class => "expand-lnk"%>
+  <%= clear %>

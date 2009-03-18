@@ -21,7 +21,15 @@ class Bookmark < ActiveRecord::Base
 		connections.of_klass('Image').with_score.order_by_score.first.subject.public_filename(size)
 	end
 	
+
+	
 	protected
+	
+	def self.find_or_create(params)
+		b = Bookmark.find_by_url(params[:url])
+		b = Bookmark.create(:url => params[:url], :name => params[:url]) if b.nil?
+		b
+	end
 	
 	def make_name
 		self.name ||= self.url

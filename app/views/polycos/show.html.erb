@@ -1,96 +1,11 @@
 <% nuniverse do -%>
-  <div id="right-column">
-    <%= spinner %>
-    <div class="step suggestions">
-      <%= render :partial => "/locations/locate", :locals => {:subject => @polyco.subject.name} %>
-    </div>
-    <div class="step">
- 
-      <%#= render :partial => "/bookmarks/google", :locals => {:subject => @polyco.subject.name} %>
-    </div>
-   
-  </div>
-  <div id="left-column">
 
-   
-   <% unless !@suggestions || @suggestions.empty? %>
-    <% if current_user.role == "admin" %>
-      <div class="admin step">
-        <%= link_to "make active", "/polycos/update/#{@polyco.id}?state=active"%>
-      </div>
-    <% end -%>
-    <div class="step">
-       Does any of those nuniverses match what you are talking about?
-     </div>
-    <% @suggestions.each do |suggestion| -%>
-        <div class="step">
-        <%= thumbnail_tag suggestion, :style => "background:none;height:30px;width:30px"%>
-        <%= link_to suggestion.name, suggestion, :class => "title" rescue suggestion.inspect %>
-        <%= link_to("Yes, that's the same", confirm_connection_url(@polyco, :subject_id => suggestion.id, :subject_type => suggestion.class.to_a) , :class => "action")%>
-        <p><%= suggestion.tags.collect{|c| c.name}.join(',') %><%= suggestion.description %></p>
-        <%= clear %>
-        </div>
-      <% end -%>
-      <div class="step">
-        Not What you're looking for? Well, that's fine.
-        Please tell us a bit more about it.
-      </div>
-  <% else -%>
-    <div class="step">
-      Great you're the first to have created this nuniverse,
-      Please tell us a bit more about it.
-    </div>
-  <% end -%>
-     <% form_for(@polyco, :html => {:multipart => true, :id => "edit_connection_form"}) do |f| %>
-        <%= f.error_messages %>
-        <% fields_for :subject do |s| -%>
+     <div class="section" style="width:600px;height:auto;margin:0 auto;background:none;" id="overview">
+       <h1 style="font-weight:bold"><%= thumbnail_tag(@polyco.object) %><%= thumbnail_tag(@polyco.subject) %><%= link_to @polyco.object.name, visit_url(@polyco.object.unique_name) %>:<%= link_to @polyco.subject.name, visit_url(@polyco.subject.unique_name) %></h1>
+     <div class="box" >
 
-          <div class="step">
-            What is it? (ie: a person? a film? a restaurant?)
-            <%= s.text_field :description %>
-          </div>
-        <% end -%>
        
-        <% fields_for :image do |i| -%>
-          <div class="step">
-            Would you like to add an image for it?
-            <%= i.text_field :source_url, :id => "input_image", :autocomplete => "off" %>
-          </div>
-        <% end -%>
-        
-        <% fields_for :bookmark do |b| -%>
-          <div class="step">
-            How about a website url?
-            <%= b.text_field :source_url, :id => "input_bookmark", :autocomplete => "off" %>
-          </div>
-        <% end -%>
-        
-        <% fields_for :location do |l| -%>
-          <div class="step">
-            Is this a location?
-            <%= link_to "Add an address", "#", :class => "expand-lnk", :id => "expand_address_field"%>
-            <%= l.text_field :address, :id => "address_field" , :class => "hidden"%>
-          </div>
-        <% end -%>
-         <div class="step">
-            How is <%= @polyco.name %> related to <%= @polyco.object.name %>?<br/>
-            <%= f.text_area :description, :rows => 2, :style =>"background:#FFF"%>
-          </div>
-           <div class="step">
-              If you are in a hurry don't worry. You can always add more later...
-          </div>
-        <p>
-          <%= f.submit "Great, Save it." %>
-        </p>
-     
-  <% end -%>
-  <%= clear %>
-  <% if current_user == @polyco.object %>
-    <div class="step">
-      <%= link_to "Nah, after all, i'm not feeling like making that connection", @polyco, :method => "delete", :class => "action"%>
-    </div>
-  <% end -%>
-    
-  </div>
+     </div>
+     </div>
 
 <% end -%>

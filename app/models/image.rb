@@ -75,5 +75,16 @@ class Image < ActiveRecord::Base
 	def avatar(size = {})
 		self.public_filename(size)
 	end
+	
+	
+	def self.find_or_create(params)
+		image = Image.find_by_url(params[:source_url]) 
+		if image.nil?
+			image = Image.create(:source_url => params[:source_url])
+			image.url = params[:source_url]
+			image.save
+		end
+		image
+	end
 
 end

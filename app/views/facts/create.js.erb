@@ -1,1 +1,15 @@
-<%= render :partial => @fact, :locals => {:style => "font-size:36px", :source => @source}%>
+<dl>
+  <dd class="fact polyco" style="font-size:20px">
+  <%#= raise @fact.inspect %>
+  
+  <%= render :partial => @connection, :locals => { :source => @source, :path => @token.path }%>
+  <%= clear %>
+</dd>
+
+
+<div class="hidden data">
+  <% if @source.score %>
+    <h2 id="score" style="color:<%= color_for_score(@source.score)%>"><%=  sprintf('%.1f',@source.score) %></h2> 
+ <% end %>
+</div>
+</dl>

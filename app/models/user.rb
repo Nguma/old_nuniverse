@@ -44,23 +44,28 @@ class User < ActiveRecord::Base
 	has_many :contributors, :through => :connections, :source => :subject, :source_type => "User"
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
 	has_many :comments, :as => :parent
-	has_many :facts, :through => :connecteds, :source => :object, :source_type => "Fact"
+	has_many :facts,:through => :connections, :source => :subject, :source_type => 'Fact'
 	# has_many :groups, :through => :connections, :source => :subject, :source_type => "Group"
 	
 	has_many :boxes, :as => :parent
 	has_many :collections, :as => :parent
 
 	alias_attribute :name, :login
+	alias_attribute :unique_name, :login
 
 	has_many :taggings, :as => :taggable
 	has_many :tags, :through => :taggings, :source => :tag, :source_type => 'Tag'
 	has_many :contexts, :through => :taggings, :source => :tag, :source_type => 'Story'
 	
+	
+	has_many :votes, :as => :rankable, :class_name => 'Ranking'
+	
+	
 
 	alias_attribute :title, :label
 	
 	define_index do
-		indexes :login
+		indexes :login, :as => :identifier
 		indexes [:firstname, :lastname], :as => :name, :sortable => true
 		indexes taggings(:tag).name, :as => :tags
 		# has connections(:id), :as => :c_id
@@ -82,6 +87,14 @@ class User < ActiveRecord::Base
     u = find(:first,:conditions => {:login => login})
 		u && u.authenticated?(password) ? u : nil
   end
+
+	def aliases
+		[]
+	end
+
+	def redirect
+		return nil
+	end
 	
 	def label
 		return login.capitalize if login
@@ -115,6 +128,18 @@ class User < ActiveRecord::Base
 		tag.property('address')
 	end
 	
+	def score
+		(votes.average(:score)) rescue nil
+	end
+	
+	def stat(params)
+		return Stat.new(:score => params[:score], :value => votes.count(:conditions  => ['score = ?', params[:score]]), :total => votes.count)
+	end
+	
+	
+	def categories
+		Tag.search(:conditions => {:object_id => self.id, :object_type => 'User' }, :per_page => 10)
+	end
 
 
 	def add_image(params)

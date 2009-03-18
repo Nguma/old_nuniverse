@@ -1,32 +1,51 @@
-dl.facts {
-	padding:10px 0 0 0;
+dl.connections {
+	padding:0 0 0 0;
 	clear:both;
-	width:800px;
-	margin:auto;
+	width:100%;
+	margin:0 auto;
 }
 
-dl.facts dd {
-	margin:0 0 3px 0;
+dl.connections dd {
+	margin:0 0 2px 0;
 	padding:20px;
+/*	background:#FFF url('/images/icons/arrow_select.png') center right no-repeat;*/
 	background:#FFF;
 	font-size:20px;
 	font-weight:normal;
 	color:#333;
 	white-space:normal;
+	
 }
 
-dl.facts dd a,
-dl.facts dd a:visited {
+dl.connections dd a,
+dl.connections dd a:visited {
 	color:inherit;
 	font-weight:normal;
+	
 }
 
-dl.facts dd a.category {
+
+
+dl.connections dd a.category {
 	font-weight:bold;
 }
 
-dl.facts dd.hover {
-	background:#FFF;
+dl.connections dd.hover {
+/*	background:#FFF;*/
 /*	background:transparent url('/images/backgrounds/arrow-select.png') center right no-repeat;*/
 	color:#333;
+}
+
+dl.connections dd .tag a, 
+dl.connections dd .tag a:visited {
+	font-weight:bold;
+	color:#369;
+}
+
+dl.connections dd.activated {
+	background-color:#eee !important;
+}
+
+dl.connections dd.activated .expand-lnk {
+	display:none;
 }

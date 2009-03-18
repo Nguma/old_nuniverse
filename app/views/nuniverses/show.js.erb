@@ -1,11 +1,21 @@
+<div class="section" id="<%= @source.unique_name %>" style="top:80px">
+  
+   <div class="header" style="height:150px;display:block;background:#000;margin:0 0 5px 0">
+      <%= image_tag(@source.images.first.public_filename(), :height => "150", :style => "max-width:400px;float:left;margin:0 20px 0 0") rescue nil %>
+      <h1 style="font-size:40px;color:#333;font-weight:bold;z-index:99999;padding:20px 20px 0 20px;color:#FFF"><%= @source.name.titleize %></h1>
+      <h2 style="color:#eee"><%= @token.path.last.name.titleize %></h2>
+      <div class="path"><%= @path.to_s %></div>
+      <div class="privacy" style="color:#ccc">This nuniverse is <%= @source.active ? "public" : "private" %></div>
+      
+      <div class="hidden">
+        <%= link_to "#{@token.path.last.name}", "##{@token.path.last.unique_name}", :class => "section-lnk" %>
+        <div class="category" ><%= "#{@path.last.name.singularize}: " unless @path.empty? %></div>
+        <%= fields_for_source @source %>
+      </div>
+    </div>
 
+   <div class="content" style="height:800px;overflow:hidden" >
+     <%= render :partial => "/nuniverses/connections" %>
 
-<%= render :partial => @nuniverse %>
-<div class="set list">
-<% @nuniverse.connections.of_klass('Fact').each do |connection| -%>
-  <dd class="tile" style="padding:10px;font-size:18px;margin:0;border:none;height:auto;min-height:0;;border-bottom:solid #efefef 1px">
-    <span style="font-weight:bold;margin: 0 10px 0 0">
-      <%= connection.subject.tags.first.name rescue nil %>
-    </span><%= render_fact(connection.subject)%></span>
-<% end -%>
+   </div>
 </div>

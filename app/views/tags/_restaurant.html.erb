@@ -1,0 +1,8 @@
+ <% if !nuniverse.score.nil? %>
+  <div class="score" style="color:<%= color_for_score(nuniverse.score) %>;position:relative;float:right;font-size:60px;font-weight:bold;top:10px;right:20px"><%= sprintf('%.1f',nuniverse.score) %></div>
+<% end %>
+
+<%= thumbnail_tag(element) %>
+<div class="tag">Restaurant</div>
+<h2><%= visit_url(element) %></h2>
+<p><%= element.connections.sphinx('hours|tel|address|cuisine ', :match_mode => :extended).paginate(:page => 1, :per_page => 3).collect {|c| c.subject.body}.join(' | ') rescue nil%></p>

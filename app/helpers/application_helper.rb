@@ -9,6 +9,10 @@ module ApplicationHelper
 	  return '' if string.blank?
 	  string.gsub(' ','-').gsub(/[^a-z0-9\-]+/i, '')
 	end
+	
+	def path_url(obj)
+		visit_url(fact.parent.unique_name)
+	end
 
 	def fields_for_source(source = nil)
 		source ||= @source

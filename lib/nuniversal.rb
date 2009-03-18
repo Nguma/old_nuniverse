@@ -7,24 +7,20 @@ module Nuniversal
 	def humanize(token)
 		token.gsub('_',' ')
 	end
-	def sanatize(token)
-		token.titleize.gsub(' ','_').gsub(/\|.*/,'')
-	end
+
 	
-	def tokenize(str)
-		str.scan(/\[\[([\w\s\-\_\,\?\!]+)\]\]/i) || []
-	end
+
 	
-	def tokenize_new(str, source)
-		ptokens = str.scan(/\<([\w\s\-\_\?\!\@]+)\>/i) || []
-		
-		tokens = []
-		ptokens.each do |t|
-			# sub = t.scan(/(.+)\@(.+)/)[0]
-			tokens << Token.new(:property => t[0], :source => source)
-		end
-		tokens
-	end
+	# def tokenize_new(str, source)
+	# 		ptokens = str.scan(/\<([\w\s\-\_\?\!\@]+)\>/i) || []
+	# 		
+	# 		tokens = []
+	# 		ptokens.each do |t|
+	# 			# sub = t.scan(/(.+)\@(.+)/)[0]
+	# 			tokens << Token.new(:property => t[0], :source => source)
+	# 		end
+	# 		tokens
+	# 	end
 	
 	def contains_url?(str)
 		scan = str.scan(/((https?:\/\/)?[a-z0-9\-\_]+\.{1}([a-z0-9\-\_]+\.[a-z]{2,5})\S*)/ix)[0]

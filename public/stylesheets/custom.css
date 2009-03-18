@@ -105,3 +105,57 @@ h2 {
 .ntheme-cristal-clear .header {
 	background:none;color:#333;
 }
+
+
+/*#nuniverse {
+	position:relative;
+	margin:0 80px;
+	left:0;
+	padding:0;
+	width:auto;
+	
+}
+#nuniverse .wrap {
+	position:relative;
+	padding:0;
+	width:auto;	
+}*/
+
+#nuniverse .facts {
+	padding:0;
+}
+
+
+.connections dd {
+	position:relative;
+/*	float:left;*/
+		width:auto;
+		min-width:200px;
+		width:46%;
+	min-width:300px;
+	padding:0 50px 0 0;
+/*	margin:0 3px 3px 0 !important;*/
+/*	*/
+/*	min-height:100px !important;*/
+	font-size:20px;
+	width:auto !important;
+	display:block;
+	
+/*	background:#FFF !important;*/
+}
+
+.connections dd p {
+	font-size:15px;
+}
+
+.facts dd.hover {
+/*	background:#FFF !important;*/
+}
+
+.fact .tag {
+	font-weight:bold;
+	font-size:16px;
+	color:#000;
+}
+
+

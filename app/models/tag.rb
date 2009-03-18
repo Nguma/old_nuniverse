@@ -6,15 +6,17 @@ class Tag < ActiveRecord::Base
 	
 	has_many :taggings, :as => :tag, :class_name => "Tagging"
 	has_many :nuniverses, :through => :taggings, :source => :taggable, :source_type => "Nuniverse"
+	has_many :polycos, :through => :taggings, :source => :taggable, :source_type => "Polyco"
+
 	
 	define_index do 
 		indexes :name
+		
+		indexes [polycos.object_type], :as => :object_type
+		set_property :delta => true
+		has polycos(:object_id), :as => :object_id
 	end
-	
-	def self.find_or_create(params)
-		Tag.find(:first, :conditions => {:name => params[:name]}) || Tag.create(:name => params[:name]) 
-	end
-	
+		
 	def avatar
 		return nil
 	end
@@ -23,4 +25,18 @@ class Tag < ActiveRecord::Base
 		[]
 	end
 
+	def unique_name
+		name.gsub(' ', '_')
+	end
+	
+	protected
+	
+	def self.analyze(str)
+		
+		Tag.find_or_create(:name => str)
+	end
+	
+	def self.find_or_create(params)
+		Tag.find(:first, :conditions => {:name => params[:name]}) || Tag.create(:name => params[:name]) 
+	end
 end

@@ -1,15 +1,32 @@
-<% render_box(:html => {:id => "connections"}) do -%>
-  <div class="header">
-    <%= image_tag('/images/icons/topic.png', :style => "float:left;position:relative") %>
-    <h2>All connections</h2>
-    <div class="display" style="position:relative;float:right">
-     <h4>Display as <%= link_to "List", "#", :target => "list", :title => "Display as list" %> or <%= link_to "Grid", "#", :target => "grid", :title => "Display as grid" %></h4>
-     </div>
-       <%= link_to "+ Add new", new_collection_item_url(@collection), :style => "padding:0 0 0 20px", :class => "expand-lnk", :target => "New"%>  
- 
-  </div>
-  <div class="content">
-  <%= render :partial => "/collections/collection", :locals => {:connections => @connections, :mode => "list", :collection => @context}%>
-  </div>
-<% end -%>
+<div style="padding:2%;background:#FFF;margin:0 0 2px 0;width:96%;min-height:20px">
+  <% if @path.empty? -%>
+    <%= link_to "+ Add", "Add", :class => "input-lnk" %>
+  <% else -%>
+    <%= link_to "+ Add a #{@path.empty? ? "fact" : @path.last.name }", "#{@path.last.name}: ", :class => "input-lnk" %>
+  <% end -%>
+  
+  <%= will_paginate @connections %>
+</div>
+<dl class="set connections" id="connections" >
+    
+   <% @connections.each_with_index do |connection,i| %>
 
+    <dd class="fact <%= connection.class.to_s %>" style="<%= style rescue nil %>">
+       <%= render :partial => connection, :locals => {:source => @source, :path => @path} %>
+       <%= clear %>
+    </dd>
+ 
+   <% end -%>
+
+ </dl>
+  <% if @connections.empty? %>
+    <% if @path.to_a.length == 1 %>
+    
+    <% else -%>
+      <h2>There is no <%= @path.last.name %> for <%= @path.first.name %> yet.<br/>
+        <span class="color:#f90">Be the first to add one</span></h2>
+        <h4>(To do so just start typing!)</h4>
+      
+    <% end -%>
+   
+   <% end -%>

@@ -145,7 +145,7 @@ class UsersController < ApplicationController
 		# @contributors = @user.contributors(:page =>1, :per_page => 10)
 		# # @most_active_story = @stories.first
 		
-		@source = Nuniverse.find(params[:id])
+		@source =User.find(params[:id])
 		@source = current_user
 		@tag = Tag.find_by_name(params[:tag_name])
 		@facts = @source.facts.tagged(@tag).paginate(:page => params[:page], :per_page => 20, :order => "created_at DESC")

@@ -1,0 +1,9 @@
+<h2><%= source.name.capitalize %>, in a nutshell</h2>
+  <h2>Comments &amp; Reviews (6)</h2>
+  <h2>About that nuniverse.</h2>
+  <h2>Where should i go from there?</h2>
+  <div class="tags">
+    <% source.categories.each do |cat| -%>
+      <%= link_to cat.name, "/#{source.unique_name}/#{cat.name}" %><br/>
+    <% end %>
+  </div>

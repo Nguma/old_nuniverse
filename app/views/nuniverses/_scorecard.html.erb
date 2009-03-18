@@ -1,0 +1,38 @@
+
+ <div style="position:relative;width:96%;background:#FFF;text-align:center;padding:2%" id="scorecard">
+   <h2 >Score card</h2>
+     <% if source.votes.count > 0 %>
+     
+     <h3>Overall score</h3>
+     <h2 id="score" style="color:<%= color_for_score(source.score)%>;"><%= sprintf('%.1f',source.score) %></h2>
+     <ul style="position:relative;background:none;width:90%;text-align:center;height:100px;padding:5%;margin:auto"  id="votes">
+        <% 11.times do |t| -%>
+         <%= render_stat(source.stat(:score => t), :label => "Despicable") %> 
+        <% end -%>
+      </ul>
+        <% if v = source.votes.by(current_user).first %>
+          <h2>Your rate: <span style="font-weight:bold;color:<%= color_for_score(v.score.round) %>"><%= v.score.round %></span></h2><%= link_to "Change your mind", "#TODO" %>
+          
+        <% else %>
+          <h2 style=" text-align:center;">You haven't given your point of view yet.</h2>
+          <h3>What's your rate?</h3>
+          <% 10.times do |t|%>
+            <%= link_to t+1, "Rate it #{t+1} because:" , :class => "input-lnk", :style => "color:#{color_for_score(t+1)};font-size:16px;font-weight:bold"%>
+          <% end -%>
+          
+        <% end -%>
+        
+        <%= clear %>
+      <% else -%>
+        <h2 id="score" style="font-size:20px"><%= source.name %> hasn't been rated yet.</h2>
+        <h3>What's your rate?</h3>
+        <% 10.times do |t|%>
+          <%= link_to t+1, "Rate it #{t+1} because" , :class => "input-lnk", :style => "color:#{color_for_score(t+1)};font-size:16px;font-weight:bold"%>
+        <% end -%>
+        
+      <% end -%>
+      
+
+       
+       <%= clear %>
+ </div>

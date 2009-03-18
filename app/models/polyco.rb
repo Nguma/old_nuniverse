@@ -3,7 +3,9 @@ class Polyco < ActiveRecord::Base
 	belongs_to :object, :polymorphic => true
 	
 	has_many :rankings, :as => :rankable
-	has_many :taggings, :as => :taggable
+	has_many :taggings, :as => :taggable, :dependent => :destroy
+	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	
@@ -21,10 +23,16 @@ class Polyco < ActiveRecord::Base
   end
 	
 	define_index do 
-		indexes [subject.name], :as => :name, :sortable => true
+		
+		indexes [subject.unique_name, subject.login, subject.body, object.unique_name, object.login], :as => :content, :sortable => true
+		indexes [taggings(:tag).name, subject_type], :as => :tags
 		indexes subject_type, :as => :type
+		# indexes [subject_type, subject_id], :as => :subject
+		index object_type, :as => :object_type
 		set_property :delta => true
 		has :suggestable => 0
+		has :object_id
+		has :subject_id
 	end
 	
 	named_scope :sphinx, lambda {|*args| {
@@ -47,7 +55,7 @@ class Polyco < ActiveRecord::Base
 	named_scope :with_score, lambda { |user| 
 		user.nil? ? {
 			:select => "polycos.*, AVG(score) as average_score",
-			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.id AND rankable_type = 'Polyco'"],
+			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.subject_id AND rankable_type = 'Nuniverse'"],
 			:group => "polycos.id" 		
 		} :
 		{
@@ -70,7 +78,7 @@ class Polyco < ActiveRecord::Base
 	}
 	
 
-	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, T.id as tag_id, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.subject_id AND TA.taggable_type = polycos.subject_type INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "tag_name ASC"
+	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, T.id as tag_id, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.id AND TA.taggable_type = 'Polyco' INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "tag_name ASC"
 
 	named_scope :related_connections, lambda {|object|
 		object.nil? ? {} : { :joins => ["LEFT OUTER JOIN polycos P ON (P.subject_id = polycos.object_id AND P.subject_type = polycos.object_type AND P.object_id = #{object.id} AND P.object_type = '#{object.type}')" ], :conditions => ["P.id IS NOT NULL"]}
@@ -78,6 +86,9 @@ class Polyco < ActiveRecord::Base
 		
 
 		
+	def category
+		tags.first
+	end
 	
 	def score
 		average_score.to_i || 0
@@ -87,10 +98,7 @@ class Polyco < ActiveRecord::Base
 		self.subject.connections.with_subject(self.object).first || Polyco.new(:subject => self.object, :object => self.subject, :name => self.object.name, :description => self.description)
 	end
 	
-	def tags
-		taggings.collect {|c| c.predicate}
-	end
-	
+
 	def self.find_or_create(params)
 		Polyco.with_subject(params[:subject]).with_object(params[:object]).first || Polyco.create(params)
 	end

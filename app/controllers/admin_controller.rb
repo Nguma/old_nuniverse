@@ -93,13 +93,27 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
-		@facts = User.find(1).facts
-		@facts.each do |f|
-			f.destroy
+		rev_tag = Tag.find_by_name('review')
+		like = Tag.find_by_name('comment')
+		@pos = Polyco.find(:all)
+
+		@pos.each do |p|
+			p.
 		end
 	end
+		
+
 	
 
 	protected
+	
+	
+	def boxing
+			if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
+				@layout =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
+			else
+				@layout  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
+			end
+		end
 	
 end

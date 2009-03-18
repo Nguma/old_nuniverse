@@ -1,0 +1,10 @@
+
+ <% if !element.score.nil? %>
+  <div class="score" style="color:<%= color_for_score(element.score) %>;position:relative;float:right;font-size:60px;font-weight:bold;top:10px;right:20px"><%= sprintf('%.1f',element.score) %></div>
+<% end %>
+<%= link_to(thumbnail_tag(element, :style => "float:left"), image_url(element.avatar), :class => "expand-lnk",  :target => "image") rescue nil %>
+<div class="tag"><%= link_to tags.first.name.capitalize, "/#{path.first.unique_name}/#{tags.first.name}", :style => "font-weight:bold" rescue "Connected to" %></div> 
+
+<h2 style="padding:0;"><%= link_to element.name.titleize, "/#{element.unique_name}" %></h2>
+<p><%= fact_for(element, :context => path.first)%></p>
+<div style="clear:both"> </div>

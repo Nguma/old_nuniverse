@@ -1,0 +1,4 @@
+<%= thumbnail_tag(element.author, :size => :small) %>
+<div class="tag"><%= link_to element.author.login.capitalize, "/#{element.author.unique_name}" %> said</div>
+"<%= render_fact(element) %>"
+<p><%= time_ago_in_words(element.created_at) %> ago</p>

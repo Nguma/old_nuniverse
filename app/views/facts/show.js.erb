@@ -1,6 +1,39 @@
-
+<div class="section" id="Fact-<%= @fact.id %>" style="padding:2%;width:96%;whitespace:normal">
   
-  <div class="box" >
-    <h1><%= @fact.body %></h1>
-    <%= link_to 'Destroy', @fact, :confirm => 'Are you sure?', :method => :delete %>
+  <h2><%= @fact.body %></h2> 
+  <%= link_to "Edit Name", "#TODO" if current_user == @fact.author %>
+  <%= link_to("Remove that fact", fact_url(@fact), :method => :delete) if current_user == @fact.author %>
+  <%= fields_for_source @fact %>
+  <div class="scorecard">
+    <h3>Show some</h3>
+    <%= link_to "Love", "love it because:" , :class => "input-lnk"%>
+    <%= link_to "Like", "like it because:" , :class => "input-lnk"%>
+    <%= link_to "No comment", "" %>
+    <%= link_to "Dislike", "Dislike it because:" , :class => "input-lnk"%>
+    <%= link_to "Hate", "Hate it because:" , :class => "input-lnk"%>
   </div>
+  
+  <div>
+    
+    <% if @fact.category == "address"%>
+    <%= google_localize(:source => @fact.body).inspect%>
+      <%#= map()  %>
+    <% end -%>
+     <div class="content" style="height:800px;overflow:hidden" >
+       <dl class="set facts" id="facts" >
+          <% @facts.each_with_index do |fact,i| %>
+           <% style =  "font-size:#{[[(36 - (i*3)),20].max,(60/@facts.length).ceil].max}px;opacity:1"  %>
+           <dd class="fact <%= fact.class.to_s %>" style="<%= style rescue nil %>">
+               <%#= link_to fact.category, visit_url(@source, :category => fact.category) unless fact.category.nil? %>
+              <%= render :partial => fact, :locals => {:source => @fact} %>
+              <%= clear %>
+           </dd>
+
+          <% end -%>
+
+        </dl>
+       
+     </div>
+  </div>
+
+</div>

@@ -1,22 +1,2 @@
-<div class="form_box hidden"  id="select_email_form" > 
-  <div class="wrap" style=" height:100px;" >
-    <% form_tag "/tags/share" do -%>
-      <fieldset style="width:100%">
-        <h2>Who do you want to email that to?</h2>
-        <div class="step" style="height:auto;padding:0 0 10px 0;">
-          <label>Enter email addresses, comma separated</label>
-          <%= text_field_tag "input", "", :class => 'input', :style => "width:80%", :autocomplete => "off" %>
-          <%= text_area_tag "message", "", :class => '',:style => "width:80%"%>
-        </div>
-
-      <div class="data"></div>
-      <%= hidden_field_tag "nuniverse", @tag.id %>
-      <%= hidden_field_tag "kind", "", :class => 'kind' %>
-      <%= submit_tag %>
-      </fieldset>
-      
-    <% end -%>
-    <%= link_to image_tag("/images/icons/cancel_btn.png"), "#", :title => "Cancel", :class =>"cancel_btn"%>
-  </div>
-  
-</div>
+<div class="tag">Email</div>
+  <%= link_to element.body, "mailto:#{element.body}", :style => "font-size:30px" %>

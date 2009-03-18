@@ -23,10 +23,17 @@ class FactsController < ApplicationController
   # GET /facts/1.xml
   def show
     @fact = Fact.find(params[:id])
-		@tag = Tag.find_by_name(params[:tag_name])
-		@facts = @fact.connections.tagged(@tag).paginate(:page => params[:page], :per_page => 10, :order => "created_at DESC")
 	
+		if params[:vote]
+			@vote = @fact.votes.by(current_user).first
+			@vote = Ranking.new(:rankable_id => @fact.id, :rankable_type => 'Fact', :user => current_user) if @vote.nil?
+			@vote.score = params[:vote]
+			@vote.save
+		end
 
+		@facts = @fact.facts.paginate(:page => params[:page], :per_page => 10, :order => "created_at DESC")
+	
+		@namespace = @fact
 		# @suggestions = Nuniverse.search( @fact.body, :match_mode => :any)
 
     respond_to do |format|
@@ -63,44 +70,57 @@ class FactsController < ApplicationController
   # POST /facts.xml
   def create
     @fact = Fact.new(params[:fact])
-	
-		# @fact.body = @scan[2].strip
-		# @fact.tags = [Tag.find_or_create(:name => @scan[1])]
-		@source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  current_user
-		
 
+		@source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue  current_user
+		@fact.author = current_user
+		@fact.parent = @source
+		@fact.body = @fact.body_without_category
+		@path = params[:path]
+		
+		@namespace = @source
+		unless params[:fact][:body].blank?
+			body = params[:fact][:body]
+			body = ":#{body}" unless body.match(':')
+			str = "#{@path}#{body}" 
+		end
+	
+		
+		@token = Token.new(str, :current_user => current_user)
+	
+		if @token
+		 	if !@token.images.empty?
+				@new = @token.images.first
+			elsif !@token.bookmarks.empty?
+				@new = @token.bookmarks.first
+			elsif @token.value.is_a?(Comment)
+				@source.comments << @token.value
+				@new = @token.value
+			elsif @token.value
+				@source.nuniverses << @token.value rescue nil
+				@new = @token.value
+			elsif !@token.body.blank?
+				@source.facts << @fact 
+				@new = @fact
+			end
+			if @new
+				@connection = @source.connections.with_subject(@new).first
+				@connection.tags << @token.tags rescue nil
+			end
+		
+			@tag = nil
+		end
     respond_to do |format|
-      if @fact.save
-				
-				if contains_url?(@fact.body) 			
-					url = scan_url(@fact.body_without_category)
-					
-					@fact.bookmarks << parse_url(url[0])
-				end
-				# @tokens = Nuniversal.tokenize(@fact.body)
-				# 			@tokens.each do |token|
-				# 				n = Nuniverse.find_or_create(token)
-				# 				
-				# 				@fact.subjects << n unless n.nil?
-				# 			end
-				@fact.tags << Tag.find_or_create(:name => @fact.category) if @fact.category 
-				@source.facts << @fact
-				# if @scan[1] == "address"
-				# 				@source.locations << Nuniversal.localize(@fact.body, @source) rescue nil
-				# 			end
-        
+
+
         format.html { 
 					flash[:notice] = 'Fact was successfully created.'
 					redirect_to polymorphic_url(@source) 
 				}
 				format.js {
-					
+					head 500 if @token.nil?
 				}
         format.xml  { render :xml => @fact, :status => :created, :location => @fact }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @fact.errors, :status => :unprocessable_entity }
-      end
+
     end
   end
 
@@ -140,10 +160,11 @@ class FactsController < ApplicationController
   # DELETE /facts/1.xml
   def destroy
     @fact = Fact.find(params[:id])
+		@parent = @fact.parent
     @fact.destroy
 
     respond_to do |format|
-      format.html { redirect_back_or_default('/') }
+      format.html { redirect_to "/nuniverse-of/#{@parent.unique_name}" }
       format.xml  { head :ok }
     end
   end

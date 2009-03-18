@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery  :secret => '6d0fa0cfa575daf50a50a8c4f23265a5'
 
 	def index
-		redirect_to current_user
+		@fact = Fact.find(:first, :offset => rand(Fact.count))
 	end
 
 	def restricted
@@ -52,6 +52,7 @@ class ApplicationController < ActionController::Base
 	def redirect_to_default
 		raise "DEFAULT"
 	end
+	
 	def save_layout
 		find_context
 			save_page("#{@context.class.to_s}_#{@context.id}")
@@ -59,11 +60,9 @@ class ApplicationController < ActionController::Base
 			f.xml {head :ok}
 		end
 	end
+	
 
 	protected
-	
-
-	
 	def invitation_required
 		if !logged_in?
 			redirect_to "/beta"
@@ -115,7 +114,7 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def find_source
-	  @source = params[:source][:type].classify.constantize.find(params[:source][:id]) rescue session[:source]
+	  @source = params[:source][:type].classify.constantize.find(params[:source][:id])
 	end
 	
 	def find_context
@@ -123,18 +122,13 @@ class ApplicationController < ActionController::Base
 		@context = 	params[:context_type].classify.constantize.find(context_id)
 	end
 	
-	
-	def wikipedit(bookmark)
-		t
-		doc = Hpricot open bookmark
-		
-		if urlscan[2] == "wikipedia.org"
-			@lat = (doc/"span[@class=geo-default]"/"span[@class=latitude]").first.inner_html
-			@lng = (doc/"span[@class=geo-default]"/"span[@class=latitude]").first.inner_html
-			@description = (doc/"#bodyContent"/:p)[1].inner_html
-			raise @description.inspect
-		else
-			return Bookmark.new(:name => bookmark, :url => bookmark)
+	def make_token
+		if params[:path]
+			@path = params[:path]
+			@token = Token.new("/#{@path.to_s}/")
+			# @path.shift
+			# @token = Token.new("/#{@path.join('/')}/", :category => params[:category])
+			@namespace = @token.namespace
 		end
 	end
 	

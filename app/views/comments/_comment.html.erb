@@ -1,5 +1,5 @@
 <% div_for :comment, :style => "clear:both;padding:10px 0 0 0px" do -%>
   <%= thumbnail_tag(comment.author, :size => :small) %>
-  <p style="font-size:17px;color:#333;padding:0 0 0 10px">"<%= h(comment.body) %>"</p>
+  <p style="font-size:17px;color:#333;padding:0 0 0 10px"><%= render_comment(comment) %></p>
   <p style="font-size:14px;color:#999;padding:5px 0 0 10px"><%= link_to comment.author.login.capitalize, user_url(comment.author) %>, <%= time_ago_in_words(comment.created_at) %> ago</p>
 <% end -%>

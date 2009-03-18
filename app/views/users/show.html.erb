@@ -1,13 +1,17 @@
 <% nuniverse do -%>
 
      <div class="section" style="width:600px;height:auto;margin:0 auto;background:none;" id="overview">
-       <h1 style="font-weight:bold"><%= thumbnail_tag(@source) %><%= "#{@tag.name}@" if @tag %><%= link_to @source.name, story_url(@source) %></h1>
+      <h1 style="font-weight:bold">
+        <%= thumbnail_tag(@source) %>
+        <%= "#{@tag.name}@" if @tag %>
+        <%= link_to @source.name, user_url(@source) %>
+      </h1>
      <div class="box" >
 
        <div class="content" style="height:400px;overflow:hidden" >
          <dl class="set facts" id="facts" >
            <% @facts.each_with_index do |fact,i| %>
-              <% style = @tag.nil? ? "font-size:#{[(36 - (i*3)),16].max}px;opacity:.#{[9 - i,5].max}" : "opacity:.8" %>
+             <% style = @tag.nil? ? "font-size:#{[(36 - (i*3)),16].max}px;opacity:.#{[9 - i,5].max}" : "opacity:.8" %>
              <%= render :partial => fact, :locals => {:style => style, :source => @source}%>
            <% end -%>
 

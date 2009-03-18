@@ -1,0 +1,18 @@
+<% nuniverse do -%>
+  <div class="section">
+  
+  <h1 style="font-weight:bold;font-size:27px"><%= thumbnail_tag(@location) %><%= @location.name %></h1>
+  <% @map = map(@location) %>
+   <% if @map -%>
+
+      <%= @map.div(:width => "100%", :height => "500px", :style => "position:relative") %>
+      <script type="text/javascript">
+      //<![CDATA[
+
+        <%=  @map.to_html(:no_load => true, :no_script_tag => true, :no_declare => true, :no_global => true) %>
+      //]]> 
+      </script>
+   <% end -%>
+  </div>
+ 
+ <% end -%>

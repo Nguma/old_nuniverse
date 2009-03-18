@@ -1,0 +1,8 @@
+<% vote = path.first.votes.by(element.author).first %>
+
+<%= thumbnail_tag(element.author, :size => :small) %>
+<div class="tag"><%= element.author.login.titleize %> gave a <%= vote.score %></div>
+
+<span style="color:<%= color_for_score(vote.score) %>;font-size:18px">"<%= element.body %>"</span>
+<p><%= time_ago_in_words(element.created_at) %> ago</p> 
+

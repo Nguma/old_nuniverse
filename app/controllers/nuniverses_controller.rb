@@ -1,13 +1,14 @@
 class NuniversesController < ApplicationController
 	
 	before_filter :find_user, :only => [:suggest, :show, :command, :index]
-	before_filter :find_nuniverse, :except => [:index, :suggest, :discuss]
+	before_filter :make_token, :except => [:index, :suggest, :discuss]
 	before_filter :find_source, :only => [:index]
 	before_filter :update_session, :only => [:show]
  	after_filter :store_location, :store_source, :only => [:show]
 
 	def index
-			@input = params[:input] rescue nil
+			@input = params[:input].gsub('_',' ') rescue nil
+
 			if @source
 				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 50)
 			else
@@ -22,18 +23,30 @@ class NuniversesController < ApplicationController
 
 	
 	def show
-		redirect_to @nuniverse.redirect if @nuniverse.redirect
+		
+		redirect_to @namespace.redirect if @namespace.redirect			
+		@path = @token.path
+		
+		@connections = @namespace.connections
+		# @connections = Polyco
+		if @path.last.name.match(/^review/)
+			@connections = @connections.of_klass('Comment')	
+		else
+			@connections = @connections.sphinx(@path.to_s, :without => {:subject_id =>  @path.first.id}, :per_page => 3000, :page => 1)	
+		end
+		
+		@connections = @connections.of_klass('Fact').with_score.order_by_score.paginate(:per_page => 15, :page => params[:page])
+		
+		@source = @token.path.first
+		
+		@comments = @namespace.comments.paginate(:page => 1, :per_page => 20)
+		
 	
-		@connections = @nuniverse.connections.of_klass('Nuniverse').paginate(:page => params[:page], :per_page => 30)
-
 		respond_to do |f|
 			f.html {
-				@context = @nuniverse
-				if FileTest.exist?("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")
-					@layout =	XMLObject.new(File.open("#{LAYOUT_DIR}/#{@source.class.to_s}_#{@source.id}.xml")).boxes rescue []
-				else
-					@layout  = XMLObject.new(File.open("#{LAYOUT_DIR}/Template_#{@source.class.to_s}.xml")).boxes
-				end
+			
+				
+				
 			}
 			
 			f.js { 
@@ -120,19 +133,12 @@ class NuniversesController < ApplicationController
 	end
 	
 	def suggest
-		@conditions = {} 
 		
-		if params[:input]
-			tokens = tokenize(params[:input])
-			if tokens.empty?
-				@suggestions =  ThinkingSphinx::Search.search(:conditions => {:name => params[:input]},  :classes => [User,Nuniverse], :order => "length ASC")
-			else
-				@suggestions = ThinkingSphinx::Search.search(:conditions => {:unique_name => tokens.last}, :with => {:active => 1 }, :classes => [User,Nuniverse], :order => "length ASC")
-			end
-		else
-			@conditions[:name] = @q
-		end
-		
+		@path = params[:value].split('/')
+		@subject = @path.to_a.pop
+		@tags = @path.join(' ')
+	
+		@suggestions = Nuniverse.search(@subject, :conditions => {:tags => @tags}, :page => 1, :per_page => 10)
 
 		
 
@@ -153,14 +159,7 @@ class NuniversesController < ApplicationController
 	
 	protected
 	
-	def find_nuniverse
-		if params[:id]
-			@nuniverse = Nuniverse.find(params[:id]) 
-		elsif params[:unique_name]
-			@nuniverse = Nuniverse.find_by_unique_name(params[:unique_name])
-		end
-		@source = @nuniverse
-	end
+
 
 	
 end

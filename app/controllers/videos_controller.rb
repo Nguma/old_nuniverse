@@ -1,9 +1,8 @@
 class VideosController < ApplicationController
 
 	def index
-		@source = Nuniverse.find_by_unique_name(params[:unique_name])
-	
-		@videos = @source.videos.paginate(:page => 1, :per_page => 10)
+		@token.category = "video"
+		@videos = @token.namespace.videos.paginate(:page => 1, :per_page => 10)
 		respond_to do |f|
 			f.html{}
 			f.js  {}

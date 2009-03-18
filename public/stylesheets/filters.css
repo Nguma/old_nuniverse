@@ -63,28 +63,35 @@
 }
 
 
-#tab-menu {
-	position:fixed;
-	padding:0;
-	height:40px;
-	background:#ccc;
-	z-index:9999;
-	width:100%;
-	bottom:0;
+#breadcrumbs {
+	position:relative;
 
+	left:0;
+	width:100%;
+	padding:0;
+	height:50px;
+	background:#000;
+	color:#FFF;
 }
 
-#tab-menu li {
-	padding:11px 20px 11px 20px;
+#breadcrumbs li {
+	padding:12px ;
 	position:relative;
 	float:left;
 	font-size:15px;
-	font-weight:bold;
-	color:#666;
+	font-weight:normal;
+	color:#FFF;
 	display:block;
+	background:none;
 }
 
-#tab-menu li.selected {
+#breadcrumbs li a {
+	font-weight:normal;	
+/*	font-weight:bold;*/
+	font-size:16px;
+}
+
+#breadcrumbs li.selected {
 	background:#333;
 	color:#333 !important;
 	position:absolute;

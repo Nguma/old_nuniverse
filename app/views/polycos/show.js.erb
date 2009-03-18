@@ -1,29 +1,6 @@
+<div style="100%">
 
-
-<% render_box(:html => {:id => "Connection-#{@polyco.id}"}) do -%>
-  <div class="header" style="padding:20px">
-    <%= render :partial => @polyco.subject %>
-  </div>
-  <div class="content" style="padding:20px">
-  <p><%= @polyco.description %></p>
- 
-  <% if @collection %>
-    <% properties = @collection.properties %>
-    <% properties.each do |p| -%>
-       <div style="font-size:18px;font-size:bold;font-family:Arial;padding:0" class="step">
-         <span style="color:#000;margin:0 5px 0 0;"><%= p.name.capitalize %></span>
-         <span style="color:#666"><%= render_property(@polyco.subject.property(p)) %></span>
-       </div>
-     <% end -%>
-  <% else -%>
-  <div class="">
-    
-  </div>
-  <% end -%>
-
- 
-  <%= clear %>
- 
-
+  <%= render :partial => "/tags/#{@polyco.tags.first.name.downcase}_detail" , :locals => {:element => @polyco.subject } rescue  render :partial => "/#{@polyco.subject_type.downcase.pluralize}/detail", :locals => {:element => @polyco.subject, :path => Path.new("/#{@polyco.subject.name}") }%>
+  <h2><%= @polyco.subject.name %></h2>
+  <%#= render :partial => "/nuniverses/scorecard", :locals => {:source => @polyco.subject} %>
 </div>
-<% end -%>

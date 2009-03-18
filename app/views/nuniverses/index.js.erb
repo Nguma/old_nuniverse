@@ -1,3 +1,11 @@
-<% @nuniverses.each do |nuniverse| -%>
- <%= render :partial => "/nuniverses/instance", :locals => {:instance => nuniverse}%>
-<% end -%>
+<div>
+  <dl id="search-results">
+  <% @nuniverses.each do |nuniverse| -%>
+    <dd>
+      <%= thumbnail_tag nuniverse rescue nil %>
+      <%= link_to nuniverse.name, "/#{nuniverse.unique_name}"%>
+      
+    </dd>
+  <% end -%>
+  </dl>
+</div>
