@@ -1,0 +1,8 @@
+<dl >
+  <dd class="fact connection" style="font-size:20px">
+
+  <%= render :partial => @connection, :locals => { :source => @source, :path => @token.path, :tags => @connection.tags }%>
+  <%= clear %>
+</dd>
+
+</dl>

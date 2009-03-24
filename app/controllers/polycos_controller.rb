@@ -2,8 +2,8 @@ class PolycosController < ApplicationController
 
 	
 	before_filter :find_polyco, :except => [:index, :new, :create, :connect, :suggest]
-	before_filter :find_context, :only => [:show, :new]
-	before_filter :find_context, :only => [:create, :connect]
+	before_filter :find_source, :only => [:new, :create]
+
 	before_filter :update_session
 	after_filter :store_location, :only => [:show]
 	
@@ -21,9 +21,7 @@ class PolycosController < ApplicationController
 		else
 			@collection = @polyco.subject.contexts.find(:first, :conditions => {:parent_id => @polyco.object.id, :parent_type => @polyco.object.class.to_s})
 		end
-		# @suggestions = Nuniverse.search( :match_mode => :extended, :conditions => {:name => @polyco.subject.name, :active => 1}, :per_page => 10)
-		# @source = @polyco
-		
+		@source = @polyco.object
 	end
 	
 	def rate
@@ -75,33 +73,31 @@ class PolycosController < ApplicationController
 
 	
 	def create
-		@object = params[:object][:type].classify.constantize.find(params[:object][:id])
-		@subject =  params[:subject][:type].classify.constantize.find(params[:subject][:id]) 
-
-			
-		@polyco = Polyco.new(params[:polyco])
-		@polyco.object = @object
-		@polyco.subject = @subject
-		@polyco.state = "active" if @polyco.subject.active
+		@command = Command.new(:commander => current_user, :order => params[:command][:order], :value => params[:command][:value])
+		@token = Token.new("/#{@source.unique_name}/#{@command.order}/#{@command.value}", :current_user => current_user)
 		
+		if @token
+		 	if !@token.images.empty?
+				@new = @token.images.first
+			elsif !@token.bookmarks.empty?
+				@new = @token.bookmarks.first
+			elsif @token.value.is_a?(Comment)
+				@source.comments << @token.value
+				@new = @token.value
+			elsif @token.value
+				@source.nuniverses << @token.value rescue nil
+				@new = @token.value
+			elsif !@token.body.blank?
+				@source.facts << @fact 
+				@new = @fact
+			end
+			if @new
+				@connection = @source.connections.with_subject(@new).first
+				@connection.tags << @token.tags rescue nil
+			end
 
-		@polyco.subject.contexts << @context if @context
-		
-    respond_to do |format|
-      if @polyco.save_all
-        flash[:notice] = 'Story was successfully created.'
-				
-        format.html { 
-	redirect_back_or_default("/")
-			
-				}
-        format.xml  { render :xml => @story, :status => :created, :location => @story }
-      else
-	 			flash[:notice] = 'Blaaaa eeee nooo connection.'
-        format.html { 	redirect_back_or_default("/")}
-        format.xml  { render :xml => @story.errors, :status => :unprocessable_entity }
-      end
-    end
+			@tag = nil
+		end
 	end
 	
 	def new

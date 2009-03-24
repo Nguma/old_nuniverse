@@ -1,10 +1,10 @@
 <div>
   <dl id="search-results">
   <% @nuniverses.each do |nuniverse| -%>
-    <dd>
+    <dd style="width:20%;padding:2%;position:relative;float:left;height:auto;background:#FFF;margin:0 2px 2px 0;height:80px">
       <%= thumbnail_tag nuniverse rescue nil %>
-      <%= link_to nuniverse.name, "/#{nuniverse.unique_name}"%>
-      
+      <h3><%= link_to nuniverse.name, "/#{nuniverse.unique_name}"%></h3>
+      <%= clear %>
     </dd>
   <% end -%>
   </dl>

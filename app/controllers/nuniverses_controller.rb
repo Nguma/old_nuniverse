@@ -2,23 +2,32 @@ class NuniversesController < ApplicationController
 	
 	before_filter :find_user, :only => [:suggest, :show, :command, :index]
 	before_filter :make_token, :except => [:index, :suggest, :discuss]
-	before_filter :find_source, :only => [:index]
+	# before_filter :find_source, :only => [:index]
 	before_filter :update_session, :only => [:show]
  	after_filter :store_location, :store_source, :only => [:show]
 
 	def index
-			@input = params[:input].gsub('_',' ') rescue nil
-
-			if @source
-				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 50)
-			else
-				@nuniverses = Nuniverse.search(@input, :page => params[:page] || 1, :per_page => 50)
-			end
-			
-			respond_to do |f|
-				f.html {}
-				f.js {}
-			end
+		@nuniverses = Nuniverse.find(:all, :conditions => ['name rlike ? OR unique_name rlike ?', params[:input], params[:input].gsub(' ','_')]).paginate(:page => params[:page], :per_page => 20)
+		json = []
+		@nuniverses.each do |n|
+			json << n
+			json.last['image'] = n.images.first.public_filename(:large) rescue nil
+			json.last['url'] = "/wdyto/#{n.unique_name}"
+		end
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+			f.json { render :json => {:results => json}}
+		end
+	end
+	
+	
+	def wdyto
+		@namespace = Nuniverse.find_by_unique_name(params[:namespace])
+		@source = @namespace
+		@comments = @namespace.comments
+		@current_user_vote = @source.votes.by(current_user).first
 	end
 
 	
@@ -35,31 +44,28 @@ class NuniversesController < ApplicationController
 			@connections = @connections.sphinx(@path.to_s, :without => {:subject_id =>  @path.first.id}, :per_page => 3000, :page => 1)	
 		end
 		
-		@connections = @connections.of_klass('Fact').with_score.order_by_score.paginate(:per_page => 15, :page => params[:page])
+		@connections = @connections.of_klass('Nuniverse').with_score.order_by_score.paginate(:per_page => 3, :page => params[:page])
+		@media = @namespace.connections.of_klass(['Image', 'Video']).with_score.order_by_score.paginate(:per_page => 3, :page => params[:page])
 		
-		@source = @token.path.first
+		@source = @token.path.first	
+		# @pros = @namespace.pros.paginate(:page => 1, :per_page => 10)	
+		# @cons = @namespace.cons.paginate(:page => 1, :per_page => 10)
+			@comments = @namespace.comments
 		
-		@comments = @namespace.comments.paginate(:page => 1, :per_page => 20)
-		
-	
+		@facts = Polyco.search("Fact #{@source.unique_name}").paginate(:page => 1, :per_page => 10)
+
 		respond_to do |f|
 			f.html {
-			
-				
-				
 			}
 			
 			f.js { 
-				
-				}
+			}	
 		end
 
 	end
 	
 	def edit
 		@scope = params[:scope][:type].classify.constantize.find(params[:scope][:id])
-		# @nuniverse.update_with(params)
-		# redirect_to @nuniverse
 		
 		respond_to do |f|
 			f.html {}
@@ -81,48 +87,10 @@ class NuniversesController < ApplicationController
 			@nuniverse.active = 1 if !@tags.empty?
 			@nuniverse.save
 			redirect_to @nuniverse
-		# @taggings = []
-		# 		params[:nuniverse][:tags].split(',').each do |t|
-		# 			tag = Tag.find_or_create(:name => t.strip)
-		# 			@taggings << Tagging.new(:taggable => @nuniverse, :tag => tag)
-		# 		end
-		# 		@nuniverse.taggings = @taggings
-		# 		@nuniverse.save
-		# 		redirect_back_or_default('/')
-	end
-	
-	
-	def new
-		@collection = Collection.find(params[:collection_id])
-		@nuniverse = Nuniverse.new
-	end
-	
-	def create
-		@nuniverse = Nuniverse.find(params[:nuniverse][:id]) rescue Nuniverse.create(params[:nuniverse])
-		
-		if params[:source]
-			@object = params[:source][:type].classify.constantize.find(params[:source][:id])
-			
-			Polyco.create(:object => @object, :subject => @nuniverse, :state => 'active') rescue nil
-		end		
-		
-	
-		params[:properties].each do |p|
-			t = Tag.find_by_name(p[0])
-			@nuniverse.set_property(t,p[1]) 
-		end
-		
 
-		
-		respond_to do |f|
-			f.js {}
-			
-		end
-		
 	end
 	
 	def destroy
-		
 		@nuniverse.destroy
 
     respond_to do |format|
@@ -133,15 +101,11 @@ class NuniversesController < ApplicationController
 	end
 	
 	def suggest
-		
 		@path = params[:value].split('/')
 		@subject = @path.to_a.pop
 		@tags = @path.join(' ')
-	
 		@suggestions = Nuniverse.search(@subject, :conditions => {:tags => @tags}, :page => 1, :per_page => 10)
-
 		
-
 		respond_to do |format|
 			format.html {}
 			format.js {
@@ -149,17 +113,7 @@ class NuniversesController < ApplicationController
 			}
 		end
 	end
-	
-	
-	def discuss
-		
-	end
 
-	
-	
 	protected
-	
-
-
 	
 end

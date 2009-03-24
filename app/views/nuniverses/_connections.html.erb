@@ -1,32 +1,12 @@
-<div style="padding:2%;background:#FFF;margin:0 0 2px 0;width:96%;min-height:20px">
-  <% if @path.empty? -%>
-    <%= link_to "+ Add", "Add", :class => "input-lnk" %>
-  <% else -%>
-    <%= link_to "+ Add a #{@path.empty? ? "fact" : @path.last.name }", "#{@path.last.name}: ", :class => "input-lnk" %>
+
+
+  <% source.categories.each do |cat| -%>
+    <div class="box" id="connections" style="background:#FFF">
+      <h3 style="color:#000"><%= cat.name.pluralize.titleize %></h3>
+      <dl>
+      <% source.connections.of_klass('Nuniverse').tagged(cat).paginate(:page => 1, :per_page => 3).each do |connection| %>
+        <%= render :partial => connection  %>
+      <% end -%>
+      </dl>
+    </div>
   <% end -%>
-  
-  <%= will_paginate @connections %>
-</div>
-<dl class="set connections" id="connections" >
-    
-   <% @connections.each_with_index do |connection,i| %>
-
-    <dd class="fact <%= connection.class.to_s %>" style="<%= style rescue nil %>">
-       <%= render :partial => connection, :locals => {:source => @source, :path => @path} %>
-       <%= clear %>
-    </dd>
- 
-   <% end -%>
-
- </dl>
-  <% if @connections.empty? %>
-    <% if @path.to_a.length == 1 %>
-    
-    <% else -%>
-      <h2>There is no <%= @path.last.name %> for <%= @path.first.name %> yet.<br/>
-        <span class="color:#f90">Be the first to add one</span></h2>
-        <h4>(To do so just start typing!)</h4>
-      
-    <% end -%>
-   
-   <% end -%>

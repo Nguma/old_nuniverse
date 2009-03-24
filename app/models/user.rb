@@ -41,10 +41,10 @@ class User < ActiveRecord::Base
 	has_many :nuniverse_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Nuniverse'"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
-	has_many :contributors, :through => :connections, :source => :subject, :source_type => "User"
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
-	has_many :comments, :as => :parent
+	has_many :comments, :through => :connections, :source => :subject, :source_type => "Comment"
 	has_many :facts,:through => :connections, :source => :subject, :source_type => 'Fact'
+	has_many :tastemakers, :through => :connections, :source => :subject , :source_type => "User"
 	# has_many :groups, :through => :connections, :source => :subject, :source_type => "Group"
 	
 	has_many :boxes, :as => :parent
@@ -57,8 +57,13 @@ class User < ActiveRecord::Base
 	has_many :tags, :through => :taggings, :source => :tag, :source_type => 'Tag'
 	has_many :contexts, :through => :taggings, :source => :tag, :source_type => 'Story'
 	
+	has_many :reviews, :class_name => "Comment", :foreign_key => :user_id	
 	
-	has_many :votes, :as => :rankable, :class_name => 'Ranking'
+	has_many :votes, :class_name => "Ranking", :foreign_key => :user_id
+	
+	def pros
+		comments.pros
+	end
 	
 	
 
@@ -148,6 +153,21 @@ class User < ActiveRecord::Base
 	
 	def users
 		Connection.with_subject_kind('user').with_object(self.tag).collect {|c| c.subject }
+	end
+	
+	
+	def latest_review
+		reviews.last
+	end
+	
+	def voting_stats
+		return [] if votes.empty?
+		votes_by_score = votes.group_by(&:score)
+		stats = []
+		11.times do |t|
+			votes_by_score[t] =  votes_by_score[t] ? votes_by_score[t] : [] 
+		end
+		votes_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/votes.count} }
 	end
 
   protected

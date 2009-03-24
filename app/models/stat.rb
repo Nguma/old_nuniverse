@@ -11,7 +11,7 @@ class Stat
 
 	
 	def percent
-		return nil if @total == 0
+		return '0%' if @total == 0
 		"#{(@value * 100) / @total}%"
 	end
 end

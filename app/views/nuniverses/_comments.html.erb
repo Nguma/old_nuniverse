@@ -1,10 +1,5 @@
-<div class="step">
-  <%= will_paginate @connections unless @connections.empty?%>
-  <%= display_options %>
-  <%= clear %>
-</div>
 
-<%= columnize(render_connections(@connections))%>
-
-<%= clear %>
-<%= render :partial => "/bookmarks/new" %>
+<% @comments.each do |comment| -%>
+  <% vote = @namespace.votes.by(comment.author).first %>
+  <div class="box" style="background:<%= color_for_score(vote.score) %>"><%= render :partial => comment %></div>
+<% end -%>

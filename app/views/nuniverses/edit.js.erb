@@ -1,0 +1,24 @@
+<%= render :partial => "/nuniverses/toolbar" %>
+
+<% nuniverse do -%>
+<div id="overview" >
+  
+  <%= clear %>
+  <div id="left-col" class="section" > 
+    <%= render :partial => "hat", :locals => {:path => @path} %>
+    <div style="width:100%;position:relative;float:left">
+        <%= image_tag(@source.images.first.public_filename(), :id => "image") rescue nil %>
+     </div>
+ 
+  
+  </div>
+   <div id="center-col" class="section" >    
+     <%= render :partial => "stats", :locals => {:source => @source} %>
+    <%= render :partial => "/nuniverses/categories", :locals => {:source => @source }%>
+     <%#= render :partial => "/nuniverses/connections" %>
+   </div>
+   <div id="right-col" class="section" style="background:none;padding:none;padding:0">
+     
+     
+   </div>
+<% end -%>

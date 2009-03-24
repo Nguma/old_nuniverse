@@ -137,30 +137,17 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_nuniverse
 	def show
-		# @count = @user.connections.count
-		# @filter = Tag.find_by_name(params[:filter].singularize) if params[:filter]
-		# @connections = @user.connections.tagged(@filter).paginate(:page => params[:page] , :per_page => 18, :order => "updated_at DESC")
-		# # @nuniverses = @user.nuniverses(:page =>1, :per_page => 10)
-		# @boxes =	XMLObject.new(File.open("#{LAYOUT_DIR}/User_#{@user.id}.xml")).boxes rescue []
-		# @contributors = @user.contributors(:page =>1, :per_page => 10)
-		# # @most_active_story = @stories.first
-		
-		@source =User.find(params[:id])
-		@source = current_user
-		@tag = Tag.find_by_name(params[:tag_name])
-		@facts = @source.facts.tagged(@tag).paginate(:page => params[:page], :per_page => 20, :order => "created_at DESC")
-		
-
+				
+		@source = User.find_by_login(params[:namespace])
 	
+		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20, :order => "updated_at DESC")
+		
+		
+		@reviews = Comment.search(:with => {:user_id => @source.tastemakers.collect {|c| c.id} }).paginate(:page => params[:page], :per_page => 10)
+	
+		
 		respond_to do |format|
-			format.html { 
-				# @context = @user
-				# if @connections.empty?
-				# 	# render :action => :tutorial 
-				# else
-				# 	@source = @user
-				# end
-				}	
+			format.html { }	
 			format.js { }
 		end
 	end

@@ -333,3 +333,10 @@ li {
 	color:#666;
 	background:none;
 }
+
+
+#login label {
+	font-size:1em;
+	color:#eee;
+	padding:0;
+}

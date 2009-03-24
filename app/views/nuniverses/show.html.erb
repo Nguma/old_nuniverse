@@ -1,52 +1,28 @@
 <%= render :partial => "/nuniverses/toolbar" %>
-
-
 <% nuniverse do -%>
- 
-  <div  id="<%= @source.unique_name %>" style="top:20px;position:relative">
-   
-    <div id="left-col" >  
-      <%= render :partial => "/nuniverses/categories", :locals => {:source => @source }%>
+  <div id="grid">
+    
+    <div class="col" id="col_1">
+      <%= render :partial => "hat" , :locals => {:path => @path }%>
+      <%= render :partial => "media"%>
     </div>
     
-    <div id="center-col" class="section" >
-        <div class="image" style="background:#000;padding:2%;text-align:center;position:relative;width:96%;max-height:300px;overflow:hidden ">
-           <%= image_tag(@source.images.first.public_filename(), :width=>"100%") rescue nil %>
-           <%= clear %>
-          </div>
-          <div class="header" style="display:block;background:#000;padding:2%;width:96%">
-             <%= image_tag('/images/icons/star.png', :style => "position:relative;float:right;top:10px;right:10px") %>
-             <div style="padding:2%;">
-             <div class="privacy" style="color:#ccc;padding:0 0 0 0">This is the nuniverse of</div>
-             <h1 style="font-size:40px;color:#333;font-weight:bold;z-index:99999;padding:0;color:#FFF">
-             <%= @path.first.name.titleize %> <%= @path.last.name unless @path.empty? %></h1>
-             </div>
-
-             <div class="hidden path"><%= @path.to_s %></div>
-
-             <div class="category hidden" ><%= "#{@path.last.name.singularize}: " unless @path.empty? %></div>
-             <%= clear %>
-           </div>
-      
-       <%= render :partial => "/nuniverses/connections" %>
-           
-  
+    <div class="col" id="col_2">
+      <div class="box" id="facts" style="background:#FFF;height:150px;overflow:hidden;padding:3% 2% 2% 2%"> 
+         <dl style="padding:0">
+          <%  @facts.paginate(:page => 1, :per_page => 6).each do |fact| %>
+            <%= render :partial => fact.subject, :locals => {:tags => fact.tags}%>
+          <% end -%>
+        </dl>
+      </div>
+      <%= render :partial => "/nuniverses/connections", :locals => {:source => @source, :path => @path, :connections => @connections }%>
     </div>
-    <div id="right-col" class="section">
-     <%= render :partial => "/nuniverses/scorecard", :locals => {:source => @source} %>
-      
-     <% @comments.each do |comment| %>
-        <%= render :partial => comment %>
-     <% end -%>
+    
+    <div class="col" id="col_3">
+      <%= render :partial => "/nuniverses/scorecard", :locals => {:source => @source, :path => @path}%>
+      <%= render :partial => "comments"%>
+      <%= clear %>
     </div>
-
- </div>
-
-
-   <% end -%>
+  </div>
   
-   
- 
-   
-
-  
+<% end -%>

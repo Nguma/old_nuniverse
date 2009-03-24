@@ -1,6 +1,6 @@
 body {
-	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;
-/*	background:#FFF url('/images/backgrounds/main-grey-med.png') 0 0px repeat-x;*/
+/*	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;*/
+	background:#FFF url('/images/backgrounds/main-grey-med.png') 0 0px repeat-x;
 }
 
 .section {
@@ -60,26 +60,6 @@ body {
 	background:none !important;
 }
 
-
-#S-Story-134 {
-	background:#FFF url('/images/mockups/handshake.png') 0 0 repeat-x !important;
-}
-
-#S-Story-134 h2 {
-	color:#333;
-}
-
-#S-Story-134 a {
-	color:#e00;
-}
-
-h2 {
-	color:#333;
-}
-
-.box {
-	color:#333;
-}
 
 .ntheme-default {
 	border:#333 solid 3px;color:#000;background:#FFF;

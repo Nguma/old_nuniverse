@@ -1,10 +1,10 @@
 
      <% if !nuniverse.score.nil? %>
-      <div class="score" style="color:<%= color_for_score(nuniverse.score) %>;position:relative;float:right;font-size:60px;font-weight:bold;top:10px;right:20px"><%= sprintf('%.1f',nuniverse.score) %></div>
+      <div class="score" style="color:<%= color_for_score(nuniverse.score) %>;position:relative;float:right;font-size:40px;font-weight:bold;top:0px;right:28px"><%= sprintf('%.1f',nuniverse.score) %></div>
     <% end %>
     <%= link_to(thumbnail_tag(nuniverse, :style => "float:left"), image_url(nuniverse.avatar), :class => "expand-lnk",  :target => "image") rescue nil %>
     <div class="tag"><%= link_to tags.first.name.capitalize, "/#{path.first.unique_name}/#{tags.first.name}", :style => "font-weight:bold" rescue "Connected to" %></div> 
     
     <h2 style="padding:0;"><%= link_to nuniverse.name.titleize, "/#{nuniverse.unique_name}" %></h2>
-    <p><%= fact_for(nuniverse, :context => path.first)%></p>
+    <p><%= fact_for(nuniverse, :context => path.first) rescue nil%></p>
     <div style="clear:both"> </div>

@@ -1,8 +1,10 @@
 body
 {
-	background:#efefef url('/images/backgrounds/main-big-blue.png') 0 00px repeat-y;
+/*	background:#efefef url('/images/backgrounds/main-big-blue.png') 0 00px repeat-y;*/
+	background:#FFF;
 	padding:0px 0 0 0px;
-	overflow:hidden;
+/*	overflow:hidden;*/
+		background:#eee !important;
 	
 }
 

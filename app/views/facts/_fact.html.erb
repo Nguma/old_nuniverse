@@ -1,4 +1,4 @@
-
+  <dd class="fact" style="height:160px;padding:4%">
   <% @tokens = [fact.tokens.collect {|c| c.namespace },fact.parent].flatten.reject {|t| t == @source || t == @tag }%>
   <% if fact.parent != @namespace %>
     <%= thumbnail_tag(fact.parent) rescue nil %>
@@ -15,8 +15,7 @@
     <span style="color:#999;font-size:14px">tagged: <%= fact.tags.collect {|c| c.name }.join('/') %></span>
   <% end -%>
   
-  
-
+</dd>
 
 
  

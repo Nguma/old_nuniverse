@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 	include Nuniversal
 	
 	
-	before_filter :invitation_required, :except => [:beta, :feedback, :thank_you, :about, :screenshots]
+
 	
 	before_filter :find_source, :only => [:save_layout]
 
@@ -17,7 +17,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery  :secret => '6d0fa0cfa575daf50a50a8c4f23265a5'
 
 	def index
-		@fact = Fact.find(:first, :offset => rand(Fact.count))
+
+		@votes = Ranking.find(:all, :group => "rankable_id, rankable_type", :order => "updated_at DESC").paginate(:page => params[:page], :per_page => 20, :order => "updated_at desc" )
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 
 	def restricted
@@ -65,7 +70,7 @@ class ApplicationController < ActionController::Base
 	protected
 	def invitation_required
 		if !logged_in?
-			redirect_to "/beta"
+			redirect_to "/"
 		end
 	end
 	
@@ -125,9 +130,8 @@ class ApplicationController < ActionController::Base
 	def make_token
 		if params[:path]
 			@path = params[:path]
-			@token = Token.new("/#{@path.to_s}/")
-			# @path.shift
-			# @token = Token.new("/#{@path.join('/')}/", :category => params[:category])
+			@token = Token.new("/#{@path.join('/')}/")
+	
 			@namespace = @token.namespace
 		end
 	end

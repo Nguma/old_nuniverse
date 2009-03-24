@@ -1,19 +1,13 @@
-<div class="section "  style="visibility:hidden;width:100px">  
-  <div class="content ">
-  
-  <% menu(:name => "main_menu") do -%>
-    <%= menu_item(:label =>"Overview", :action => "/overview_for/#{nuniverse.path}") %>
-    <%= menu_item(:label =>"Search",:action =>  "#") %>
-    <%= menu_item(:label =>"Your most active topics",:action =>  "/section/#{nuniverse.path}/with_kind/topic/by/latest?perspective=you") %>
-    <%= menu_item(:label =>"Preferences",:action =>  "/edit/#{current_user.tag}") %>
-<%= menu_item(:label =>"People",:action =>  "/section/#{nuniverse.path}/with_kind/person/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Places",:action =>  "/section/#{nuniverse.path}/with_kind/location/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Bands",:action =>  "/section/#{nuniverse.path}/with_kind/band/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Movies",:action =>  "/section/#{nuniverse.path}/with_kind/movie/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Sport",:action =>  "/section/#{nuniverse.path}/with_kind/sport/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Products", :action => "/section/#{nuniverse.path}/with_kind/item/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Videos", :action => "/section/#{nuniverse.path}/with_kind/video/by/name?perspective=you&degree=all") %>
-    <%= menu_item(:label =>"Events", :action => "/section/#{nuniverse.path}/with_kind/event/by/name?perspective=you&degree=all") %>
-  <% end -%>
+<div id="main-menu">
+  <div class="wrap" style="width:1100px;margin:auto">
+    <%= link_to(image_tag('/images/icons/magnifier.png', :style => "height:30px"), "/search/" ,:target => "search", :style => "position:relative;float:right;background:none;height:30px")%>
+    <%= link_to_homepage unless request.request_uri == "/"%>
+    <% if logged_in?  %>
+      <%= link_to "Me", "/nuniverse-of/#{current_user.login}" , :id => "account-lnk"  %>
+      <%= link_to("Log out.", "/logout") %>
+    <% else -%>
+      <%= link_to("Log in.", "/login", :style=>"color:#FFF;font-size:16px;font-weight:bold") %>
+      <%= link_to("Sign up.", "/signup", :style=>"color:#FFF;font-size:16px;font-weight:bold") %>
+    <% end -%>
   </div>
 </div>

@@ -1,10 +1,9 @@
 class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
-	before_filter :find_tag, :except => [:index, :remove_tag]
-	before_filter :find_context, :only => [:index, :show]
-	before_filter  :find_user, :only => [:show, :preview, :suggest, :share]
-	after_filter :update_session, :only => [:show]
+	
+	before_filter :find_source, :only => [:index, :show, :create]
+	before_filter :find_user, :only => [:show, :preview, :suggest, :share]
 	after_filter :store_location, :only => [:show]
   # GET /tags
   # GET /tags.xml
@@ -62,13 +61,6 @@ class TagsController < ApplicationController
 				response = Net::HTTP.get_response(URI.parse(feed_url)).response.body
 				@images =  REXML::Document.new(response).elements.to_a("//img").collect {|c| c.attributes['url']}
 		end
-				
-				
-
-				
-				
-			# 	@images = ds.collect {|c| c.elements["url"].text}
-			
 
 
     respond_to do |format|
@@ -79,8 +71,10 @@ class TagsController < ApplicationController
   end
 
 	def create
-
-		@tag = Tag.new()
+		
+		@tag = Tag.find_or_create(:name => params[:command][:value])
+		@source.tags << @tag rescue nil
+		
 		respond_to do |f|
 			f.html { redirect_back_or_default('/') }
 			f.js {}

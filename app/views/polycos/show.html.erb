@@ -1,7 +1,7 @@
 <% nuniverse do -%>
 
      <div class="section" style="width:600px;height:auto;margin:0 auto;background:none;" id="overview">
-       <h1 style="font-weight:bold"><%= thumbnail_tag(@polyco.object) %><%= thumbnail_tag(@polyco.subject) %><%= link_to @polyco.object.name, visit_url(@polyco.object.unique_name) %>:<%= link_to @polyco.subject.name, visit_url(@polyco.subject.unique_name) %></h1>
+       <h1 style="font-weight:bold"><%= thumbnail_tag(@polyco.object) %><%= thumbnail_tag(@polyco.subject) %><%= link_to @polyco.object.name, visit_url(@polyco.object) %>:<%= link_to @polyco.subject.name, visit_url(@polyco.subject) %></h1>
      <div class="box" >
 
        

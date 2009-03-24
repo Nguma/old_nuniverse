@@ -1,0 +1,42 @@
+<%= render :partial => "toolbar" %>
+<%= render :partial => "/nuniverse/main_menu"%>
+<% nuniverse do -%>
+<div id="wdyto">
+  <div class="box" style="width:21%">
+    <div class="wrap" >
+      <%= image_tag(@source.images.first.public_filename(:large), :id => "image", :style=>"width:100%;margin:0;border:none;padding:0") rescue nil %>
+    </div>
+  </div>
+  <div class="box" style="width:35%" >
+    <div class="wrap">
+      <h3>What do you think of</h3>
+      <h1><%= @namespace.name.titleize %></h1>
+      <h5 style="position:absolute;bottom:5%;font-size:1.1em;color:#ccc"><%= @source.votes.count %> voted, <%= @source.comments.count %> reviewed.</h5>
+    </div>
+  </div>
+  
+  <div class="box">
+    <div class="wrap" >
+      <%= render :partial => "scorecard", :locals => {:source => @source, :current_user_vote => @current_user_vote}%>
+    </div>
+  </div>
+  <div class="box">
+   
+    <%= render :partial => "stats", :locals =>  {:source => @source} %>
+ 
+  </div>
+  <% @source.votes.each do |vote| %>
+    <div class="vote" style="background:<%= vote.color %>;padding:4% 2% 2% 2%" id="vote-by-<%= vote.user.login %>">
+      <div class="score" style="padding:2%;background:#FFF;position:absolute;top:0;right:3%;width:15%;text-align:center;font-weight:bold;font-size:1em;color:<%= vote.color %>">
+        <%= vote.score %>
+      </div>
+      <%= thumbnail_tag(vote.user, :size => :small) rescue nil %>
+      <h4><%= link_to_author(vote.user) %> finds it <%= vote.label  %>.</h4>
+      <% if vote.review %>
+        <p class="review">"<%= vote.review.body %>"</p>
+      <% end -%>
+      <p><%= time_ago_in_words(vote.created_at) rescue nil %> ago</p>
+    </div>
+  <% end -%>
+</div>
+<% end -%>

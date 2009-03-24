@@ -1,9 +1,8 @@
- <%= render :partial => "/boxes/suggestions" %>
-<div id="nuniverse" >
- <div class="wrap">
+ <%#= render :partial => "/boxes/suggestions" %>
+<div id="nuniverse" style="<%= style rescue nil %>" >
   <%= content %>
- </div>  
 </div>
+
 
 
 
@@ -17,7 +16,12 @@
     <h2></h2>
     </div></div>
   </div>
-  
+  <div class="result box">
+    <div class="wrap">
+    <%= link_to "", "#", :class => "name" %>
+    <%= link_to '<img src="" class="image"/>',"#" %>
+    </wrap>
+  </div>
   
   <%= render :partial => "/boxes/edited_cell"%>
 </div>

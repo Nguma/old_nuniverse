@@ -198,12 +198,16 @@ module NuniverseHelper
 	
 	def render_stat(stat, params = {})
 		params[:stat] = stat
-		params[:color] = color_for_score(stat.score)
+		params[:color] = Ranking.color(stat.score)
 		render :partial => "/nuniverse/stat", :locals => params
 	end
 	
 	def visit_url(nuniverse)
 		link_to nuniverse.name.titleize, "/#{nuniverse.unique_name}"
+	end
+	
+	def link_to_author(user)
+		link_to (user.login.titleize, "/nuniverse-of/#{user.unique_name}")
 	end
 	
 	def tag_box(params) 
@@ -228,10 +232,8 @@ module NuniverseHelper
 		params[:item] = item
 		render :partial => "/taggings/manage", :locals => params
 	end
+
 	
-	def color_for_score(score)
-		['#f95850','#e16f4d','#e0a757','#ead766','#e6d866','#bdd56b','#9edd6a','#9c6','#79c85d','#55dd5d', '#00dd53'][(score).floor ]
-	end
 	
 	
 	def cancel_button(params ={})
@@ -257,10 +259,14 @@ module NuniverseHelper
 		"<dd id= 'show_#{item}' class = '#{item}-klass #{(item == @klass) ? "activated" : ""}'>#{lnk}</dd>"
 	end
 	
-	def home_link 
-		str = link_to "< Back to your nuniverse", home_url(:klass => "Story"), :class => "home_lnk"
-		# str << link_to("< Back to previous", session[:return_to])
-		str
+	def link_to_homepage
+		link_to image_tag("/images/icons/wdyto.png"), "/", :id => "home-lnk"
+	end
+	
+
+	
+	def wdyto_url(nuniverse)
+		link_to nuniverse.name, "/wdyto/nuniverse.unique_name"
 	end
 	
 	def clear(mode = "left")

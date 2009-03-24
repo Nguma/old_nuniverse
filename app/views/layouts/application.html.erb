@@ -37,22 +37,22 @@
 
 </html>
 <%= stylesheet_link_tag 'application', 'default', 'nuniverse', 'account', 'connection', 'stories', 'filters', 'box', 'list', 'items', 'input', 'custom', 'star_rating'%>
- <%= javascript_include_tag  'jquery', 'jquery-ui', 'jquery_form', 'jquery.localScroll', 'scroll_to',  'application', 'jquery.colorpicker'%>
- <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAA8l8NOquAug7TyWVBqeUUKBTJQa0g3IQ9GZqIMmInSLzwtGDKaBTkRKFsYU1nJXs7m0cuhHHmMYXxNg&amp;hl=" type="text/javascript"></script>
+ <%= javascript_include_tag  'jquery', 'jquery-ui', 'jquery_form', 'jquery.localScroll','jquery.serialScroll', 'scroll_to',  'application'%>
+ <!-- <script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key=ABQIAAAA8l8NOquAug7TyWVBqeUUKBTJQa0g3IQ9GZqIMmInSLzwtGDKaBTkRKFsYU1nJXs7m0cuhHHmMYXxNg&amp;hl=" type="text/javascript"></script>
 
      <script type="text/javascript">
        // google.load("maps", "2");
        // google.load("search", "1");
-     </script>
+     </script> -->
  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 
- <script type="text/javascript"><!--
-  google_ad_client = "pub-8435960507166132";
-  google_ad_slot = "4376243957";
-  google_ad_width = 300;
-  google_ad_height = 60;
-  //-->
-  </script>
+ // <script type="text/javascript"><!--
+ //   google_ad_client = "pub-8435960507166132";
+ //   google_ad_slot = "4376243957";
+ //   google_ad_width = 300;
+ //   google_ad_height = 60;
+ //   //-->
+ //   </script>
 
    <!-- <script type="text/javascript">
        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");

@@ -1,0 +1,12 @@
+ <div class="result" style="height:200px;width:200px;background:#000;padding:0;border:solid 1px #000" >
+    <div class="wrap" style="padding:0;width:100%;top:0">
+        <div class="score" style="background:<%= vote.color %>;color:#FFF;position:absolute;font-size:1.3em;width:auto;padding:3%;">
+          <%= sprintf('%.1f',vote.score )%>
+        </div>
+         <%= link_to vote.rankable.name.titleize, "/wdyto/#{vote.rankable.unique_name}", :class => "name" %>
+     
+      <%= link_to image_tag(vote.rankable.avatar.public_filename(:large), :style => "position:absolute;width:100%;top:0"), "/wdyto/#{vote.rankable.unique_name}" rescue nil %>
+      <%= vote.rankable.name %>
+    </div>
+   
+  </div>

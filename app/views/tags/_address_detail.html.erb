@@ -1,9 +1,8 @@
 
-  
-  
+<div style="padding:2%;background:#FFF"> 
    <% locations = google_localize(:source => element.body) rescue []%>
  
-    <%= link_to element.body, "#Location-#{element.id}", :class => "section-lnk" %>
+    <h2><%= link_to element.body, "#Location-#{element.id}", :class => "section-lnk" %></h2>
   
        <% @map = map(locations.first) %>
         <% if @map -%>
@@ -16,3 +15,4 @@
            //]]> 
            </script>
         <% end -%>
+</div>

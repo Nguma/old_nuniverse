@@ -39,20 +39,23 @@ class RankingsController < ApplicationController
 
   # POST /rankings
   # POST /rankings.xml
+	# POST /rankings.json
   def create
 		
-		@score = params[:rate].scan(/\d+/).to_s.to_i.round
-		@ranking = Ranking.find_or_create(:user_id => current_user.id, :score => @score, :rankable_id => params[:source][:id] , :rankable_type => params[:source][:type])
-
+		@score = params[:score].to_i.round
+		@namespace = Nuniverse.find_by_unique_name(params[:namespace])
+		@ranking = Ranking.find_or_create(:user_id => current_user.id, :score => @score, :rankable_id => @namespace.id,  :rankable_type => @namespace.class.to_s)
+		
     respond_to do |format|
-      if @rankings.save
+      if @ranking.save
         flash[:notice] = 'Rankings was successfully created.'
-        format.html { redirect_to(@rankings) }
+        format.html { redirect_to(@ranking) }
 				format.js		{ }
-        format.xml  { render :xml => @rankings, :status => :created, :location => @rankings }
+				format.json { render :json => {'user' => current_user.login,'color' => @ranking.color, 'score' => sprintf('%.1f',@namespace.score), 'score_label' => Ranking.label(@namespace.score),'vote' => @ranking, 'stats' => @namespace.stats}}
+        format.xml  { render :xml => @ranking, :status => :created, :location => @ranking }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @rankings.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @ranking.errors, :status => :unprocessable_entity }
       end
     end
   end

@@ -1,0 +1,5 @@
+  <div class="wrap" style="padding:4%;width:92%;height:92%">
+    <% 10.times do |t| -%>
+      <%= render_stat(source.stat(:score => 10 - t )) %> 
+    <% end -%>
+  </div>

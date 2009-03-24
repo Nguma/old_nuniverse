@@ -1,0 +1,16 @@
+<dl id="just-tasted"
+  <dt>
+    <ul>
+      <li class="selected">Just tasted</li>
+      <li>Your tastebook</li>
+    </ul>
+
+      <%= will_paginate @votes %>
+
+    <%= clear %>
+  </dt>
+  <% @reviews.each do |review| -%>
+    
+    <%= render :partial => "review", :locals => {:review => review} %>
+  <% end -%>
+</dl>

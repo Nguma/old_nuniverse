@@ -7,10 +7,10 @@
  
   <%= fields_for_source source %>
   <%#= thumbnail_tag(current_user, :size => :small) %>
-  <%= hidden_field_tag :path, @path.first.to_s , :id => "input_path"%>
+  <%#= hidden_field_tag :path, @path.first.to_s , :id => "input_path"%>
   <%= submit_tag "Fact!", :id => "input_submit" %>
   <%= f.text_field :order ,  :value => "", :id => "input_order", :size => 2, :style => "text-align:center"%>
-  <%= f.text_field :value ,  :value => "",  :id => "input_value", :size => 160%>
+  <%= f.text_field :value ,  :value => "",  :id => "input_value", :size => 160 %>
   </fieldset>
   <%= clear %>
 <% end -%>

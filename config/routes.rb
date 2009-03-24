@@ -93,8 +93,8 @@ ActionController::Routing::Routes.draw do |map|
 	map.save_layout "/save-layout", :controller => "application", :action => "save_layout"
 	map.save_layout "/save-layout.:format", :controller => "application", :action => "save_layout"
 	
-	map.search "/search_for/:input", :controller => "nuniverses", :action => "index"
-	map.search "/search/:input", :controller => "nuniverses", :action => "index"
+	map.search "/search-for/:input.:format", :controller => "nuniverses", :action => "index"
+	map.search "/search", :controller => "nuniverses", :action => "index"
 	
 	map.tutorial "/tutorial", :controller => "users", :action => "tutorial"
 	map.connect "/facts/create", :controller => "facts", :action => "create"
@@ -107,11 +107,18 @@ ActionController::Routing::Routes.draw do |map|
   # map.connect ':controller/:action/:id'
   # map.connect ':controller/:action/:id.:format'
 
-	map.add "/add/", :controller => "create", :action => "new"
+	map.wdyto "/wdyto/:namespace", :controller => "nuniverses", :action => "wdyto"
+	map.nuniverse "/nuniverse-of/:namespace", :controller => "users", :action => "show"
 	
-	map.process ":rate/:value", :controller => "rankings", :action => "create", :requirements => {:rate => /rate_it_\d+/}
-
-	map.process "/process", :controller => "command", :action => "new"
+	map.add_tag "/add-tag", :controller => "tags", :action => "create"
+	
+	map.process "/rate/:namespace/:score", :controller => "rankings", :action => "create"
+	map.process "/rate/:namespace/:score.:format", :controller => "rankings", :action => "create"
+	map.comment "/comment/create", :controller => "comments", :action => "create"
+	map.comment "/comments/create", :controller => "comments", :action => "create"
+	map.comment "/comments/create.:format", :controller => "comments", :action => "create"
+	
+	map.process "/process", :controller => "polycos", :action => "create"
 	map.connect "/sessions/create", :controller => "sessions", :action => "create"
 	map.connect "/admin/:action/:id", :controller => "admin"
 	map.connect "/locations/show/:id", :controller => "locations", :action => "show"

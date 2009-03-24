@@ -1,12 +1,51 @@
-<% nuniverse do -%>
-  <div id="hat" style="margin:50px">
-    <%= image_tag("/images/icons/logo-nuniverse-2009.png") %>
-  </div>
-  <div id="fact-tv" style="width:300px">
-    <div class="fact" style="width:300px">
-      
-      <%= render :partial => @fact %>
+
+<%= render :partial => "/nuniverse/main_menu"%>
+<% nuniverse(:style => "top:0;margin:0 auto") do -%>
+
+
+  <div id="wdyto">
+    
+    <div id="hat" style="width:100%;padding:0;background:none;position:relative;float:none;height:400px">
+      <div id="signin" style="position:relative;float:right;width:30%;background:#6c7;padding:0;height:100%">
+        <% if !logged_in? %>
+          <%= render :partial => "/sessions/new"%>
+        <% else -%>
+          <div style="padding:3%">
+            <h3><%= current_user.login %>, you are already logged in.</h3>
+            <h4>Your latest review was about <%= wdyto_url(current_user.latest_review.parent) %>
+            "<%= current_user.latest_review.body%>"
+          </div>
+        <% end -%>
+      </div>
+      <div class="wrap" style="position:relative;width:69.5%;padding:0;height:100%">
+        <div id="logo" style="text-align:center;background:#000;padding:8% 15px 2% 15px;height:36.5%;width:335px;position:relative;float:left;margin:0 0 0 0">
+        <%= image_tag("/images/icons/wdyto.png") %><br/><span style="color:#eee;font-size:20px">Collective tastemaking</span>
+        </div>
+        <div  style="float:none;background:#e6d866;padding:2%;height:47.5%;position:relative;margin:0 0 0 370px">
+          <h1 style="color:#000;padding:5%;font-size:30px;">WDYTO helps you build a tastebook of favorites.</h1>
+        </div>
+        <div style="position:relative;background:#c30;padding:2%;clear:left;margin:.5% 0 0 0;height:49.5%">
+          <h2>Try me. What do you think of?</h2>
+          <% form_tag "/search-for" do -%>
+            <%= text_field_tag " ", "", :style => "width:90%;padding:1em;border:none", :id => "search-input"%>
+          <% end -%>
+        </div>
+      </div>
     </div>
+    <div style="clear:both"> </div>
+    
+    <div style="padding:2%;width:96%;background:#FFF;margin:0 0 1% 0;border-top:solid 5px #000">
+      <%= will_paginate @votes %>
+      <h3 style="color:#333;padding:0;display:inline">Just reviewed</h3>
+      
+    </div>
+  <div id="connections">
+  <% @votes.each do |vote| %>
+    <%= render :partial => "/users/vote", :locals => {:vote => vote}%>
+  <% end -%>
   </div>
-  
+  <%= clear %>
+  <%= will_paginate @votes %>
+  </div>
+  <%#= render :partial => "/nuniverse/input", :locals => {:source => current_user} %>
 <% end -%>

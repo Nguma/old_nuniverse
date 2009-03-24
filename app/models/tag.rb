@@ -11,10 +11,11 @@ class Tag < ActiveRecord::Base
 	
 	define_index do 
 		indexes :name
-		
+		indexes [polycos.subject_type], :as => :subject_type
 		indexes [polycos.object_type], :as => :object_type
 		set_property :delta => true
 		has polycos(:object_id), :as => :object_id
+		has polycos(:subject_id), :as => :object_id
 	end
 		
 	def avatar

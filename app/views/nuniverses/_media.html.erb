@@ -1,0 +1,5 @@
+<div class="box" id="media" style="background:#000"> 
+  <%= image_tag(@source.images.first.public_filename(), :id => "image") rescue nil %>
+   <h3>Media</h3>
+   <%= render :partial => @media%>
+ </div>

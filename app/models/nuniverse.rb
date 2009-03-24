@@ -32,7 +32,6 @@ class Nuniverse < ActiveRecord::Base
 	
 	has_many :votes, :as => :rankable, :class_name => 'Ranking'
 	
-	
 	define_index do
     indexes :name, :as => :name,  :sortable => true
 		indexes :unique_name, :as => :identifier, :sortable => true
@@ -50,12 +49,11 @@ class Nuniverse < ActiveRecord::Base
 		set_property :field_weights => {:name => 100}
 		set_property :enable_star => true
 		set_property :min_prefix_len => 1
-
-	  
 	end
 	
-
-
+	def gather_tags 
+		Tag.search(:conditions => {:subject_id => self.id, :subject_type => 'Nuniverse'})
+	end
 
 	def avatar(size = {})
 		connections.of_klass('Image').with_score.order_by_score.first.subject rescue nil
@@ -63,6 +61,14 @@ class Nuniverse < ActiveRecord::Base
 	
 	def categories
 		Tag.search(:conditions => {:object_id => self.id, :object_type => 'Nuniverse' }, :per_page => 10)
+	end
+	
+	def pros
+		comments.pros
+	end
+	
+	def cons
+		comments.cons
 	end
 	
 
@@ -90,6 +96,16 @@ class Nuniverse < ActiveRecord::Base
 		
 	end
 	
+	def stats
+		return [] if votes.empty?
+		votes_by_score = votes.group_by(&:score)
+		stats = []
+		11.times do |t|
+			votes_by_score[t] =  votes_by_score[t] ? votes_by_score[t] : [] 
+		end
+		votes_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/votes.count} }
+	end
+	
 	def stat(params)
 		return Stat.new(:score => params[:score], :value => votes.count(:conditions  => ['score = ?', params[:score]]), :total => votes.count)
 	end
@@ -100,26 +116,14 @@ class Nuniverse < ActiveRecord::Base
 	
 	protected
 	def self.find_or_create(params)
-
-			# params[:path].split('/').reject {|p| p.blank?}
-			
-
-			params[:uid] = params[:unique_name] || params[:name]
-			params[:uid] = Token.sanatize(params[:uid])
-			params[:name] = params[:name] || params[:uid]
-			params[:name] = Token.humanize(params[:name]).gsub('/','')
-			params[:is_unique] ||= 0
-			# n = Nuniverse.search(:conditions => {:tags => params[:path]}).first
-			
-			# if n.nil?
-			
-				n = Nuniverse.find(:first, :conditions => ["unique_name = ?",params[:uid]])
-				n = Nuniverse.create(:unique_name => params[:uid], :name => params[:name], :is_unique => params[:is_unique], :active => 1) if n.nil?
-				n.tags << Tag.find_or_create(:name => params[:path]) rescue nil
-			
-			# end
-			n
-
+		params[:uid] = params[:unique_name] || params[:name]
+		params[:uid] = Token.sanatize(params[:uid])
+		params[:name] = params[:name] || params[:uid]
+		params[:name] = Token.humanize(params[:name]).gsub('/','')
+		params[:is_unique] ||= 0			
+		n = Nuniverse.find(:first, :conditions => ["unique_name = ?",params[:uid]])
+		n = Nuniverse.create(:unique_name => params[:uid], :name => params[:name], :is_unique => params[:is_unique], :active => 1) if n.nil?
+		n
 	end
 
 	

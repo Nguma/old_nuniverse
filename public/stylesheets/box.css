@@ -70,27 +70,6 @@
 	display:block;
 }
 
-.box h2 {
-	padding:10px 20px 5px 20px;
-	background:none;
-	color:inherit;
-}
-
-.box .edit {
-	padding:20px;
-}
-
-.box .close_btn {
-	top:-30px;
-	left:-30px;
-}
-
-.box .display {
-	position:relative;
-	padding:10px;
-}
-
-
 .zoomed .box {
 	border:solid 3px #FFF;
 }

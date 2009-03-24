@@ -1,6 +1,8 @@
 <div style="100%">
 
   <%= render :partial => "/tags/#{@polyco.tags.first.name.downcase}_detail" , :locals => {:element => @polyco.subject } rescue  render :partial => "/#{@polyco.subject_type.downcase.pluralize}/detail", :locals => {:element => @polyco.subject, :path => Path.new("/#{@polyco.subject.name}") }%>
-  <h2><%= @polyco.subject.name %></h2>
+
+  
+  <p><%#= render_fact(@polyco.subject.facts.first) unless @polyco.subject.facts%></p>
   <%#= render :partial => "/nuniverses/scorecard", :locals => {:source => @polyco.subject} %>
 </div>

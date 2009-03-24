@@ -12,13 +12,24 @@ class Comment < ActiveRecord::Base
 	has_many :objects, :through => :connecteds, :source => :object, :source_type => "Nuniverse"
 	
 	has_many :votes, :as => :rankable, :class_name => 'Ranking'
-	has_many :pros, :as => :rankable, :class_name => 'Ranking', :conditions => "score = 1"
-	has_many :cons, :as => :rankable, :class_name => 'Ranking', :conditions => "score = 0"
 	# has_many :parents, :through => :connecteds, :source => :object, :source_type => "Nuniverse" 
 	has_many :facts, :through => :connections, :source => :subject, :source_type => "Fact"
 	
 	belongs_to :parent, :polymorphic => :true
 	belongs_to :author, :class_name => "User", :foreign_key => 'user_id'
+
+	
+	
+	define_index do 
+		indexes [:body], :as => :body
+		has :user_id
+	end
+	
+	
+	def matching_vote
+		Ranking.by(author).about(parent).first
+	end
+	
 	
 
 end

@@ -1,7 +1,13 @@
-<div class="box black-and-blue" style="position:relative;background:#000;margin:0 0 3px 0;height:auto;padding:0px;color:#FFF;border:none" >
-  <div class="content" style="padding:20px">
-  <h1 style="color:#FFF;font-size:30px;width:300px"><%= @context.name %></h1>
-  <p><%= @context.description rescue nil%></p>
-  <%= clear %>
-  </div>
+<div class="box" id="hat" >
+  
+  <div class="privacy" style="color:#ccc;padding:0 0 0 0">This is the nuniverse of</div>
+    <h1>
+      <%= path.first.name.titleize %> <%= path.last.name unless path.empty? %>
+    </h1>
+
+    <div class="hidden path"><%= path.to_s %></div>
+
+    <div class="category hidden" ><%= "#{path.last.name.singularize}: " unless path.empty? %></div>
+    <div style="clear:both"> </div>
+ 
 </div>

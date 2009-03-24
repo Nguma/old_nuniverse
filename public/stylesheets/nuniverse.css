@@ -6,11 +6,13 @@
 	padding:0;
 	background:none;
 	margin:auto;
-	width:95%;
+	width:1100px;
 	height:100%;
 	min-height:800px;
 	overflow:hidden;
 	position:relative;
+	background:none;
+	margin:4% auto;
 
 }
 
@@ -223,70 +225,17 @@ a.save_button {
 	color:#333;
 }
 
-#main_menu {
+#main-menu {
 	position:fixed;
-
-	background:url('/images/backgrounds/main_menu.png') 0 0 repeat-x;
-/*	background:#333;*/
-	margin:0 30px 0px 30px;
-	padding:0 0 0 0;
-	bottom:0;
-	left:0;
-	width:auto;
-	z-index:987;
+	width:100%;
+	top:0;
+	z-index:9999;
 }
 
-#main_menu dt {
-	height:0;
-	padding:0;
-	margin:0 0 0 0;
-}
-
-#main_menu  img {
-	width:40px;
-}
-
-#main_menu .tab {
-	position:relative;
-	float:left;
-	padding:10px;
-	color:#FFF;
-	font-weight:bold;
-	font-size:14px;
-	text-align:center;
-	margin: 0 0 0 10px;
-}
-
-#main_menu .activated {
-/*	background:#27406a;*/
-
+#main-menu a {
+	padding:5px;line-height:30px;background:#000;color:#FFF;font-weight:bold;font-size:16px;position:relative;float:left;top:0;margin:0 2px 0 0;
 	
 }
-
-
-#suggestions {
-	position:fixed;
-	z-index:678901;
-	background:none;
-	padding:2%;
-	width:96%;
-
-}
-
-#main_menu #show_digest .count {
-	display:none;
-}
-
-#main_menu .star {
-	width:40px;
-	padding:3px 0 0 0;
-	position:relative;
-	float:right;
-	top:-15px;
-	font-size:40px;
-	font-weight:bold;
-}
-
 
 
 #sub_menu {
@@ -359,9 +308,6 @@ a.save_button {
 	font-size:25px;
 }
 
-#overview {
-	width:400px;
-}
 
 
 a.story-lnk {
@@ -380,14 +326,20 @@ a.user-lnk {
 }
 
 
-#hat {
-	background:none;
-	padding:0;
-	z-index:1101;
-	
-	width:600px;
 
-/*	background:#86bde5 url('/images/backgrounds/main_blue.png') 0 0 repeat-x;*/
+#overview {
+	position:relative;overflow:hidden;
+	background:none;
+	padding:0;margin:0;
+	z-index:1101;
+	width:100%;height:600px;
+}
+
+#hat {
+	width:33%;
+	position:relative;
+	float:left;
+	padding:2%;
 }
 
 #hat h1 {
@@ -398,8 +350,8 @@ a.user-lnk {
 
 #hat h2 {
 	font-size:28px;
-	color:#eee;
-	font-weight:normal;
+	color:#000;
+	font-weight:bold;
 }
 
 .home_lnk {
@@ -453,9 +405,9 @@ a.filter:hover {
 #left-col {
 	position:relative;
 	float:left;
-	padding:2%;
-	width:18%;
-	background:#FFF;
+	padding:0;
+	width:30%;
+	background:none;
 	top:0;
 	display:block;
 	margin:0 0 0 0;
@@ -465,8 +417,8 @@ a.filter:hover {
 
 #right-col {
 	background:#FFF;
-	padding:2%;
-	width:29%;
+	padding:0%;
+	width:30%;
 	position:relative;
 	float:left;
 	margin:0;
@@ -475,10 +427,12 @@ a.filter:hover {
 #center-col {
 	position:relative;
 	float:left;
-	width:44.6%;
+	width:33.6%;
 	margin:0 0.2% 0 0.2%;
 	padding:0
 }
+
+
 
 .back-lnk {
 	background:#ccc url("/images/icons/back-button.png") 0 -8px no-repeat;
@@ -841,31 +795,28 @@ a.filter:hover {
 }
 
 
+#votes {
+	position:relative;background:none;width:100%;text-align:left;height:300px;padding:0 !important;margin:auto;clear:left;
+}
+
 #votes li {
 	padding:0;
 	font-size:10px;
 	position:relative;
-	margin: 0 0 0px 0;
-
-	height:auto;
-	min-height:auto;
+	margin: 0 0 0 0;
 	bottom:0;
-	float:left;
-	width:9%;
-	height:100%;
+	height:8%;
+/*	height:100%;*/
 }
 
 #votes li div {
-	bottom:0;
-	position:absolute;
-	width:90%;
-	padding:5%; 
 	min-width:10px;
+	height:auto;
+	margin:0;
+	padding:0;;
 }
 
 #votes li span {
-	bottom:-20px;
-	position:absolute;
 }
 
 
@@ -875,8 +826,7 @@ a.filter:hover {
 	position:relative;
 	font-weight:bold;
 	color:#000;
-	height:auto;
-	min-height:auto;
+
 }
 
 
@@ -903,10 +853,292 @@ a.filter:hover {
 
 
 #scorecard {
-	width:98%;
+	position:relative;
+	width:96%;
+	background:none;
+	text-align:center;
+	padding:2%;
 }
 
 #score {
-	font-size:80px;text-align:center;line-height:40px;padding:20px 0 20px 0;
+	font-size:75px;text-align:center;line-height:60px;padding:10px 0 0 0;
 }
 
+
+#scorecard .status span,
+#scorecard .status span {
+	font-weight:bold;
+}
+
+#score-label {
+	font-size:18px;display:block;padding:0;line-height:22px;margin:2% 0 0 0;
+}
+
+#scorecard .status span {
+	font-weight:bold;
+}
+
+#change-your-mind-lnk {display:none;font-size:14px;}
+
+.voted #change-your-mind-lnk {display:block;}
+.voted #rate-picker {display:none;}
+
+#rate-picker a { font-size:16px;font-weight:bold;}
+#rate-picker h4 {color:#FFF;}
+
+.score_1 {color:#cc0000 !important;}
+.score_2 {color:#ff3300 !important;}
+.score_3 {color:#FF9900 !important;}
+.score_4 {color:#dd9933 !important;}
+.score_5 {color:#e6d866 !important;}
+.score_6 {color:#bdd566 !important;}
+.score_7 {color:#9ed56a !important;}
+.score_8 {color:#99CC66 !important;}
+.score_9 {color:#79c85d !important;}
+.score_10 {color:#55dd5d !important;}
+.score_11 {color:#00dd55 !important;}
+
+#categories {
+	font-size:26px;
+	font-weight:bold;
+}
+
+#categories dt {
+	font-size:1em;
+}
+
+#categories dd {
+	font-size:0.8em;
+}
+
+#image {
+	background:#000;text-align:left;
+	padding:0;margin:0;min-width:0;width:100%;border:none;
+}
+
+#comments {
+}
+
+h3 {
+	background:none;font-weight:bold;font-size:20px;margin:1px 0 0 0;padding:2%;color:#FFF;
+}
+
+#comments dd {
+	background:#FFF;padding:2%;clear:both;margin:1px 0 0 0;
+}
+
+#highlight-score {
+	position:absolute;top:0;left:2%;width:120px;padding:0;z-index:9876;z-index:9999;
+}
+
+
+#grid .col {
+	margin:0 .3% 0 0;
+	width:33%;
+	padding:0;
+	background:none;
+	position:relative;
+	float:left;
+}
+
+#grid .row .wrap {
+
+	width:33%;
+	height:99.6%;
+	padding:0;
+	margin:0 .3% .3% 0;
+	background:none;
+}
+
+#grid .col .box {
+	width:96%;
+	min-width:1%;
+	margin:0 0 1% 0;
+	padding:2%;
+	background:#000;
+	overflow:hidden;
+	min-height:50px;
+}
+
+#grid .row .box .wrap {
+
+}
+
+
+
+#media .arrow {
+	display:none;
+}
+
+#media .thumbnail {
+	background:none;
+	height:80px;
+	width:80px;
+}
+
+.comment p {
+	color:#000 !important;
+}
+
+#wdyto {
+	width:100%;
+	padding:0;
+}
+
+#wdyto h1 {
+	color:#FFF;
+	padding:0 2% 0 2%;
+}
+
+#wdyto .pagination {
+	position:relative;
+	float:right;
+	padding:2%;
+}
+
+#wdyto .pagination .current {
+	font-weight:bold;
+	font-size:22px;
+}
+
+#wdyto .vote {
+	position:relative;
+	float:left;
+	padding:2%;
+	width:20.5%;
+	margin:0 0.5% 0.5% 0;
+	height:220px;
+	background:#FFF;
+	font-size:16px;
+	color:#000;
+}
+
+#wdyto .score {
+	z-index:9999;padding:2%;background:#FFF;position:absolute;top:0;right:3%;width:15%;text-align:center;font-weight:bold;font-size:1.1em;
+}
+
+#wdyto .box {
+	width:21%;
+	min-width:0;
+	margin:0 0.5% 0.5% 0;
+	padding:0;
+	background:#000;
+	overflow:hidden;
+	min-height:50px;
+	height:230px;
+	position:relative;
+	float:left;
+}
+
+#wdyto .wrap {
+	padding:3%;
+	width:94%;
+	height:99%;
+	overflow:hidden;
+	padding:0;
+	width:99%;
+	padding:.5%;
+	border:none;
+	margin:0;
+}
+
+#wdyto .vote h4 {
+	font-weight:bold;
+	font-size:16px;
+}
+
+#wdyto .vote .review {
+	font-size:1.4em;
+	display:inline;
+}
+
+#wdyto .vote p {
+	display:inline;
+}
+
+.result {
+	position:relative;
+	float:left;
+	width:200px !important;
+	height:200px !important;
+	padding:0;
+	background:#FFF;
+	margin: 0 1% 1% 0;
+	overflow:hidden;
+}
+
+.result .name {
+	position:absolute;top:3%;left:3%;background:#000;z-index:99999;color:#FFF;font-weight:bold;padding:3%;margin:0 130px 0 0;
+}
+
+.result .image {
+	width:100%;
+	position:absolute;
+	top:0;
+	left:0;
+}
+
+#home-lnk {
+	position:relative;float:left;top:0;left:0;padding:5px;background:#000;margin:0 2px 0 0;
+}
+
+#home-lnk img {
+	height:30px
+}
+
+#account-lnk {
+	padding:5px;line-height:30px;background:#000;color:#FFF;font-weight:bold;font-size:16px;position:relative;float:left;top:0;margin:0 2px 0 0;
+}
+
+
+dd.review {
+	position:relative;clear:both;margin:0 0 1% 0;padding:2% 12% 2% 2%;
+}
+
+#just-tasted {
+	
+	background:none;
+	width:59%;
+	margin: 0 1% 0 0;
+	position:relative;
+	float:left;
+}
+
+#just-tasted dt {
+	background:#FFF;
+	padding:0;
+	position:relative;
+	display:block;
+	width:100%;
+	border-bottom:solid #000 4px;
+}
+
+#just-tasted dt .tabs {
+	background:#FFF;
+	width:100%;
+	position:relative;
+	float:none;
+	display:block;
+}
+
+#just-tasted dt li {
+	position:relative;
+	float:left;
+	padding:1em;
+}
+
+#just-tasted dt .selected {
+	background:#000;
+	color:#FFF;
+	padding:1em;
+}
+
+dd.review p.body {
+	font-size:1.4em;
+	line-height:1.6em;
+	font-weight:normal;
+}
+
+dd.review a {
+	font-weight:bold;
+}

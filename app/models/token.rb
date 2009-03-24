@@ -3,11 +3,13 @@ class Token
 	attr_reader :fullscan
 	attr_accessor :namespace,  :path, :body, :value, :images, :bookmarks, :vote, :author
 	def initialize(str, params = {})
+		
 		return nil if str.blank?
 		@images = []
 		@bookmarks = []
 		@author = params[:current_user]
 		@fullscan = extract_urls(str).scan(/^\/([\w\_]+)((\/[\w\s]+)*)?(?:\/|\:)(.*)?/)[0]
+
 		@body = @fullscan.last
 
 		
