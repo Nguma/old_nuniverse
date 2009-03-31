@@ -137,23 +137,49 @@ class UsersController < ApplicationController
 	# GET /user
 	# GET /my_nuniverse
 	def show
-				
+		@tag = Tag.find_by_name(params[:filter]) || nil
 		@source = User.find_by_login(params[:namespace])
-	
-		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20, :order => "updated_at DESC")
+		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20, :order => :created_at)
+		@reviews = Comment.search(:with => {:user_id => [@source.tastemakers, @source].flatten.collect {|c| c.id} }, :page => params[:page], :per_page => 10, :order => "created_at DESC")
+		# @saved_items = @source.nuniverses.tagged(@tag).paginate(:page => params[:page], :per_page => 20)
+		conditions = {:from_user => true, :to_nuniverse => true, :object_id => current_user.id}
 		
-		
-		@reviews = Comment.search(:with => {:user_id => @source.tastemakers.collect {|c| c.id} }).paginate(:page => params[:page], :per_page => 10)
-	
-		
+		conditions[:tag_ids] = @tag.id  unless @tag.nil?
+
+		@saved_items = Polyco.search(:with => conditions, :page => params[:page], :per_page => 20, :order => :created_at, :sort_mode => :desc)
+		@tags = Tag.search(:with => {:related_user_ids => current_user.id}, :order => :name, :page => params[:tag_page], :per_page => 30 )
 		respond_to do |format|
 			format.html { }	
-			format.js { }
+			format.js {}
+			format.json {
+
+				render :json => {'tastebook' => @saved_items.collect {|item| item.subject.to_json } }
+			}
 		end
 	end
 	
 	def tutorial
 		@user = @source = current_user
+	end
+	
+	def follow
+		@user = User.find_by_login(params[:login])
+		current_user.tastemakers << @user
+		respond_to do |f|
+			f.html { redirect_to "/nuniverse-of/#{@user.login}"}
+			f.js { head :ok}
+			f.json {}
+		end
+	end
+	
+	def stop_following
+		@user = User.find_by_login(params[:login])
+		current_user.tastemakers.delete @user
+		respond_to do |f|
+			f.html { redirect_to "/nuniverse-of/#{@user.login}"}
+			f.js { head :ok}
+			f.json {}
+		end
 	end
 	
 protected

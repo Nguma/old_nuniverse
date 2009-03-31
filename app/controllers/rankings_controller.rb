@@ -51,7 +51,11 @@ class RankingsController < ApplicationController
         flash[:notice] = 'Rankings was successfully created.'
         format.html { redirect_to(@ranking) }
 				format.js		{ }
-				format.json { render :json => {'user' => current_user.login,'color' => @ranking.color, 'score' => sprintf('%.1f',@namespace.score), 'score_label' => Ranking.label(@namespace.score),'vote' => @ranking, 'stats' => @namespace.stats}}
+				format.json { 
+					sc = @namespace.total_score
+			
+					render :json => {'user' => current_user.login,'color' => @ranking.color, 'score' => sc, 'score_label' => Ranking.label(@namespace.score),'vote' => @ranking, 'stats' => @namespace.stats}
+				}
         format.xml  { render :xml => @ranking, :status => :created, :location => @ranking }
       else
         format.html { render :action => "new" }

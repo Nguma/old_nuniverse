@@ -13,7 +13,6 @@
 	position:relative;
 	background:none;
 	margin:4% auto;
-
 }
 
 .menu img {
@@ -1002,19 +1001,30 @@ h3 {
 }
 
 #wdyto .vote {
-	position:relative;
-	float:left;
-	padding:2%;
-	width:20.5%;
-	margin:0 0.5% 0.5% 0;
-	height:220px;
+	clear:left;position:relative;
+	height:auto;
 	background:#FFF;
 	font-size:16px;
 	color:#000;
+	padding:0;width:100%;margin:0 0 .5% 0
 }
 
-#wdyto .score {
+#wdyto .vote .actions {
+	position:absolute;right:0;top:0;background:#FFF;height:100%;width:10%;
+}
+
+#wdyto #scorecard .score {
 	z-index:9999;padding:2%;background:#FFF;position:absolute;top:0;right:3%;width:15%;text-align:center;font-weight:bold;font-size:1.1em;
+}
+
+#wdyto .vote .score,
+.taste .score {
+	position:relative;text-align:center;padding:30% 0 0 0;margin:auto;font-size:2em;font-weight:bold;
+}
+
+
+.vote .body {
+	font-size:1.1em;
 }
 
 #wdyto .box {
@@ -1056,27 +1066,16 @@ h3 {
 	display:inline;
 }
 
-.result {
-	position:relative;
-	float:left;
-	width:200px !important;
-	height:200px !important;
-	padding:0;
-	background:#FFF;
-	margin: 0 1% 1% 0;
-	overflow:hidden;
-}
 
 .result .name {
-	position:absolute;top:3%;left:3%;background:#000;z-index:99999;color:#FFF;font-weight:bold;padding:3%;margin:0 130px 0 0;
+	z-index:99999;color:#000;font-weight:bold;padding:0;margin:0 0 0 0;position:relative;font-size:1.5em;
 }
 
-.result .image {
-	width:100%;
-	position:absolute;
-	top:0;
-	left:0;
+.result .tags {
+	padding:0;font-size:1em;color:#666;
 }
+
+
 
 #home-lnk {
 	position:relative;float:left;top:0;left:0;padding:5px;background:#000;margin:0 2px 0 0;
@@ -1092,19 +1091,46 @@ h3 {
 
 
 dd.review {
-	position:relative;clear:both;margin:0 0 1% 0;padding:2% 12% 2% 2%;
+	position:relative;clear:both;margin:0 0 .4% 0;padding:2% 12% 2% 2%;
 }
 
-#just-tasted {
+
+.result {
+	height:140px;width:100%;background:#000;padding:0;margin:0 0 1% 0;
+}
+
+#logo {
+	text-align:center;background:#000;
+	margin:0 0 0 0;padding:4%;
+}
+
+#featured {
+	position:relative;
+	margin:0 0 0 0;padding:2%;
+	background:#000;height:auto;
+}
+
+#featured h1 {
+	font-size:1.5em;color:#333;
+}
+
+#featured h2 {
+	font-size:1.1em;color:#333;padding:0.7em 0 0 0;
+}
+
+#featured  p {
+	font-size:0.6em;color:#333;line-height:auto;padding:0;
+}
+
+#feeds {
 	
 	background:none;
-	width:59%;
-	margin: 0 1% 0 0;
+	width:100%;
+	margin: 0 0 0 0;
 	position:relative;
-	float:left;
 }
 
-#just-tasted dt {
+#feeds dt {
 	background:#FFF;
 	padding:0;
 	position:relative;
@@ -1113,32 +1139,124 @@ dd.review {
 	border-bottom:solid #000 4px;
 }
 
-#just-tasted dt .tabs {
+.tabs {
 	background:#FFF;
 	width:100%;
 	position:relative;
 	float:none;
 	display:block;
+	padding:0;
 }
 
-#just-tasted dt li {
+.tabs li {
 	position:relative;
 	float:left;
 	padding:1em;
 }
 
-#just-tasted dt .selected {
+.tabs .selected {
 	background:#000;
-	color:#FFF;
-	padding:1em;
+	color:#FFF !important;
+	padding:1em !important;
+	margin:0;
+	
+}
+
+.tabs a, .tabs a:visited {
+	color:inherit !important;
+	padding:0 !important;
+}
+
+#hat .tabs .selected {
+	background:#eee !important; 
+	color:#000 !important;
+}
+
+
+#just-tasted {
+	
+}
+
+#tastebook {
+	
+}
+
+dd.review img.thumb {
+	position:relative;float:left;width:60px;margin:0 1em 0 0;background:#000;border:solid 6px;
+}
+
+dd.review p.desc {
+	color:#666;
 }
 
 dd.review p.body {
-	font-size:1.4em;
+	color:#111;
+	font-size:1.2em;
 	line-height:1.6em;
 	font-weight:normal;
 }
 
 dd.review a {
 	font-weight:bold;
+}
+
+#wdyto #image {
+	width:100%;margin:0;border:none;padding:0;
+}
+
+#wdyto #hat .star {
+	position:absolute;
+	right:2%;
+	top:2%;
+	z-index:6666;
+}
+
+.star img {
+	background: transparent url('/images/backgrounds/star.png') 0 0 no-repeat;
+	height:30px;
+	padding:0;
+	margin:0;
+	line-height:1em;
+}
+
+.saved img {
+	background: transparent url('/images/backgrounds/star_saved.png') 0 0 no-repeat;
+	height:30px;
+	padding:0;
+	margin:0;
+	line-height:1em;
+}
+
+#feeds .pagination {
+	position:absolute;top:0;right:0;background:none;width:auto;border:none;padding:2%;
+}
+
+.column {
+	position:relative;float:left;width:19.6%;margin:0 .4% 0 0;z-index:6;
+}
+
+
+#wdyto .column {
+	width:32.8%;margin:0 0.5% 0 0 !important;
+}
+
+#tastemakers, #tags {
+	width:90%;padding:5%;background:#000;height:auto;clear:left;margin:0 0 1% 0;
+}
+
+#tags .selected {
+	color:#F90;
+}
+
+#user_stats {width:100% !important;background:#000;height:230px}
+
+
+.taste {
+	 background:#FFF;position:relative;clear:both;float:none;padding:0;margin:0 0 1% 0 ;height:auto;
+}
+
+
+
+.review .actions {
+/*	position:relative;float:right;width:6%;text-align:center;top:0;right:0;padding:2%;height:97%;margin:0;*/
 }

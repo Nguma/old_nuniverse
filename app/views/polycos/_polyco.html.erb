@@ -1,9 +1,21 @@
+  <%#= link_to(image_tag("/images/icons/arrow_select.png", :style => "height:80px"), polyco_url(polyco), :class => "expand-lnk arrow", :style => "position:absolute;right:10px;top:0px") %>
+  <dd class="connection" style="background:#FFF;margin: 0 0 .5% 0;padding:0;">
 
-
-  <%= link_to(image_tag("/images/icons/arrow_select.png", :style => "height:80px"), polyco_url(polyco), :class => "expand-lnk arrow", :style => "position:absolute;right:10px;top:0px") %>
+    <div style="padding:3%;position:relative;float:left;background:#09f;height:100%;margin:0 .5% 0 0;font-size:1.4em;font-weight:bold;color:#FFF">
+        <%= polyco.tags.collect {|t| t.name }.join(' + ') %> >
+      </div>
+    <div style="padding:0">
+    <%= thumbnail_tag polyco.subject, :style => "border:solid #{ Ranking.color(polyco.subject.score) rescue "#FFF" } .5em"  rescue nil %>
+    <p style="font-size:1.3em;padding:1em 10% 0 0;clear:none;position:relative;float:left">
+      <%= wdyto_url(polyco.subject) rescue nil %>
+    </p>
+    <p><%= render_fact(polyco.subject.fact.first) rescue nil%></p>
+        <%= clear %>
+    </div>
+  </dd>
   
- <%= render :partial => "/tags/#{polyco.tags.first.name.downcase}", :locals => {:element => polyco.subject, :path => @path} rescue  render :partial => polyco.subject, :locals => {:path => @path, :tags => polyco.tags} %>
+ <%#= render :partial => "/tags/#{polyco.tags.first.name.downcase}", :locals => {:element => polyco.subject, :path => @path} rescue  render :partial => polyco.subject, :locals => {:path => @path, :tags => polyco.tags} %>
 
-<%= clear %>
+
 
 

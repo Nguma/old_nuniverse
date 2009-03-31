@@ -1,4 +1,5 @@
-<div  id="stat_<%= stat.score.round %>" style="padding:0;height:9%;margin:0 0 1% 0;width:<%= stat.percent  %>;min-width:2%;background-color:<%= color %>;position:relative">
-  
-  <div style="position:absolute;right:-100px;color:<%= color %>;text-align:left" class="percent"><%= stat.value rescue 0 %> <%= Ranking.label(stat.score)%></div>
+<div  id="stat_<%= stat.score.round %>" style="padding:0;height:9%;margin:0 .5em 1% 0;width:<%= stat.percent.to_i * 0.8 %>%;min-width:2%;background-color:<%= color %>;position:relative;float:left">
+
 </div>  
+  <div style="color:<%= color %>;text-align:left;padding:0 1em 0 0;position:relative;float:left;width:auto" class="percent"><%= stat.percent %>% <%#= Ranking.label(stat.score)%></div>
+<%= clear %>

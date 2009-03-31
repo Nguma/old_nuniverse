@@ -93,8 +93,8 @@ class User < ActiveRecord::Base
 		u && u.authenticated?(password) ? u : nil
   end
 
-	def aliases
-		[]
+	def connected_to?(nuniverse)
+		connections.of_klass('Nuniverse').with_subject(nuniverse).first
 	end
 
 	def redirect
@@ -107,10 +107,16 @@ class User < ActiveRecord::Base
 	end
 	
 	def avatar
-		connections.of_klass('Image').with_score.order_by_score.first.subject
+		connections.of_klass('Image').first.subject rescue nil
 	end
 	
-
+	def happyface
+		connections.of_klass('Image').tagged('happy').first.subject rescue nil
+	end
+	
+	def grumpyface
+		connections.of_klass('Image').tagged('grumpy').first.subject rescue nil
+	end
 	
 	def connections_count 
 		Tagging.count(:select => "DISTINCT object_id", :conditions => ['user_id = ?',self.id])
@@ -168,6 +174,10 @@ class User < ActiveRecord::Base
 			votes_by_score[t] =  votes_by_score[t] ? votes_by_score[t] : [] 
 		end
 		votes_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/votes.count} }
+	end
+	
+	def is_following?(user)
+		return self.tastemakers.find_by_id(user.id)
 	end
 
   protected

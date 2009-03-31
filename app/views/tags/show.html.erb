@@ -1,12 +1,8 @@
 <% nuniverse do -%>
-  <div style="padding:50px;width:1000px">
-    <%= render :partial => "/tags/grid"%>
-  </div>
+  <dl id="best">
+    <dt style="background:#000;color:#FFF;padding:4%;font-size:2em">Best <%= @tag.name %></dt>
+    <% @taggeds.each do |t| %>
+      <%= render :partial => t %>
+    <% end -%>
+  </dl>
 <% end -%>
-
-<div class="tile" style="width:361px;height:161px;padding:10px;margin;0 5px 0px 0;position:fixed;background:#333;color:#FFF;bottom:10px;left:10px;z-index:4000">
-  <h2><%= @tag.name.capitalize %></h2>
-  <%= link_to "zoom", "#", :class => "zoom" %>
-  <%= link_to "Grid", tag_url(@tag, :page => @nuniverses.current_page, :mode => "grid") %>
-  <%= link_to "list", tag_url(@tag, :page => @nuniverses.current_page, :mode => "list") %>
-</div>

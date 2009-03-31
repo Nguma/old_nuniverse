@@ -1,0 +1,16 @@
+<div class="vote" style="background:<%= ranking.color %>;" id="ranking-by-<%= ranking.user.login %>">
+    <div class="actions">
+      <div  style="color:<%= ranking.color %>" class="score">+<%= pretty_score(ranking.score) %></div>
+    </div>
+    <div style="padding:2% 12% 2% 2%">
+      <%= thumbnail_tag(ranking.user, :size => :small) rescue nil %>
+      <h4><%= link_to_author(ranking.user) %> finds it <%= ranking.label  %>.</h4>
+      <% if ranking.review %>
+          <p class="body">"<%= ranking.review.body %>"</p>
+        <% end -%>
+        <p><%= time_ago_in_words(ranking.created_at) rescue nil %> ago</p>
+            
+      <%= clear %>
+    </div>
+      
+</div>

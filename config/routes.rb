@@ -94,6 +94,8 @@ ActionController::Routing::Routes.draw do |map|
 	map.save_layout "/save-layout.:format", :controller => "application", :action => "save_layout"
 	
 	map.search "/search-for/:input.:format", :controller => "nuniverses", :action => "index"
+	map.search "/search-for/:input", :controller => "nuniverses", :action => "index"
+	map.search "/search-for", :controller => "nuniverses", :action => "index"
 	map.search "/search", :controller => "nuniverses", :action => "index"
 	
 	map.tutorial "/tutorial", :controller => "users", :action => "tutorial"
@@ -101,29 +103,41 @@ ActionController::Routing::Routes.draw do |map|
 
   map.root :controller => "application"
 
-  # See how all your routes lay out with "rake routes"
-
-  # Install the default routes as the lowest priority.
-  # map.connect ':controller/:action/:id'
-  # map.connect ':controller/:action/:id.:format'
-
+	map.save "/save/:namespace", :controller => "nuniverses", :action => "save"
+	map.save "/save/:namespace.:format", :controller => "nuniverses", :action => "save"
+	
 	map.wdyto "/wdyto/:namespace", :controller => "nuniverses", :action => "wdyto"
 	map.nuniverse "/nuniverse-of/:namespace", :controller => "users", :action => "show"
+	map.nuniverse "/nuniverse-of/:namespace/:filter.:format", :controller => "users", :action => "show"
 	
 	map.add_tag "/add-tag", :controller => "tags", :action => "create"
 	
+	map.follow "/follow/:login", :controller => "users", :action => "follow"
+	map.follow "/stop-following/:login", :controller => "users", :action => "stop_following"
+		
 	map.process "/rate/:namespace/:score", :controller => "rankings", :action => "create"
 	map.process "/rate/:namespace/:score.:format", :controller => "rankings", :action => "create"
 	map.comment "/comment/create", :controller => "comments", :action => "create"
 	map.comment "/comments/create", :controller => "comments", :action => "create"
 	map.comment "/comments/create.:format", :controller => "comments", :action => "create"
 	
+	map.connecting "/connect", :controller => "polycos", :action => "connect"
+	
 	map.process "/process", :controller => "polycos", :action => "create"
 	map.connect "/sessions/create", :controller => "sessions", :action => "create"
 	map.connect "/admin/:action/:id", :controller => "admin"
 	map.connect "/locations/show/:id", :controller => "locations", :action => "show"
 
-	map.connect '*path', :controller => 'nuniverses', :action => 'show'
+  # See how all your routes lay out with "rake routes"
+
+  # Install the default routes as the lowest priority.
+  map.connect ':controller/:action/:id'
+  map.connect ':controller/:action/:id.:format'
+
+	map.bestof '/best/:tag', :controller => "tags", :action => "show"
+
+
+	# map.connect '*path', :controller => 'nuniverses', :action => 'show'
 
 
 	#map.connect '*path', :controller => 'application', :action => 'redirect_to_default'

@@ -1,9 +1,19 @@
-<div id="images" class="section">
-  <h2>Images</h2>
-  <% @images.each do |image| -%>
-    <div class="step">
-      <%= link_to thumbnail_tag(image), image_url(image) %>
-
-    </div>
-  <% end -%>
-</div>
+<dl id="images" >
+  <h2>Your expressive panel</h2>
+  <dd>
+    <%= link_to image_tag(@source.avatar.public_filename(:small)), "" %>
+    <h3>The Poker face</h3>
+    <p>This is your profile and default picture</p>
+  </dd>
+  <dd>
+    <%= link_to image_tag(@source.happyface.public_filename(:small)), "" %>
+    <h3>The Happy face</h3>
+    <p>This image will show for all your 6-10 ratings</p> 
+  </dd>
+  <dd>
+    <%= link_to image_tag(@source.grumpyface.public_filename(:small)), "" %>
+    <h3>The Grumpy face</h3>
+    <p>This image will show for all your 1-5 ratings</p> 
+  </dd>  
+  
+</dl>

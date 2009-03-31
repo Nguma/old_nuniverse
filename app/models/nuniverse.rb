@@ -18,30 +18,32 @@ class Nuniverse < ActiveRecord::Base
 	has_many :comments, :through => :connections, :source => :subject, :source_type => "Comment"
 	has_many :facts,:through => :connections, :source => :subject, :source_type => "Fact"
 	
+	
+	
+	
 	has_many :stories, :through => :connecteds, :source => :object, :source_type => "Story"
 	has_many :videos, :through => :connecteds, :source => :object, :source_type => "Video"
 	has_many :users, :through => :connecteds, :source => :object, :source_type => "User"
 	# has_many :facts, :through => :connections, :source => :subject, :source_type => "Fact"
 	has_many :collections, :foreign_key => :parent_id	
-	
-
 	has_many :boxes, :as => :parent
-	
-	
 	has_many :aliases, :foreign_key => :redirect_id, :class_name => 'Nuniverse'
+	has_many :votes, :as => :rankable, :class_name => 'Ranking', :dependent => :destroy
 	
-	has_many :votes, :as => :rankable, :class_name => 'Ranking'
+	named_scope :with_rankings, :select => "nuniverses.*, AVG(rankings.score) as score", :joins => ["LEFT OUTER JOIN rankings on rankable_id = nuniverses.id AND rankable_type = 'Nuniverse'"], :group => "nuniverses.id"
 	
 	define_index do
     indexes :name, :as => :name,  :sortable => true
 		indexes :unique_name, :as => :identifier, :sortable => true
-		indexes [taggings(:tag).name], :as => :tags
+		indexes tags(:name), :as => :tags
 		indexes [polycos(:object).name, taggings(:tag).name], :as => :contexts
+	
 		# indexes [:name, taggings(:tag).name, connecteds(:object).name], :as => :tags
 	
 		has :active
 		# has connections(:id), :as => :c_id
 		has tags(:id), :as => :tag_ids
+		has users(:id), :as => :user_ids
 		has contexts(:id), :as => :context_ids
 		has "CHAR_LENGTH(nuniverses.name)", :as => :length, :type => :integer
 		
@@ -64,11 +66,11 @@ class Nuniverse < ActiveRecord::Base
 	end
 	
 	def pros
-		comments.pros
+		connections.of_klass('Tag').with_score_higher_than(0)
 	end
 	
 	def cons
-		comments.cons
+		connections.of_klass('Tag').with_score_lower_than(0)
 	end
 	
 
@@ -112,6 +114,22 @@ class Nuniverse < ActiveRecord::Base
 	
 	def score
 		(votes.average(:score)) rescue nil
+	end
+	
+	def total_score
+		(votes.sum(:score)) rescue nil
+	end
+	
+	def to_json
+		{
+			:id => id,
+			:name => name.titleize,
+			:unique_name => unique_name,
+			:image => (avatar.public_filename(:small) rescue nil),
+			:tags => tags.collect {|t| t.name.capitalize}.join(', '),
+			:score => score,
+			:wdyto_uri => "/wdyto/#{unique_name}"
+		}
 	end
 	
 	protected

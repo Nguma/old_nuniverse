@@ -38,12 +38,12 @@ class Token
 			uri = URI.parse(url[0].to_s)
 			http_path =  uri.path.blank? ? "/" : uri.path
 			req = Net::HTTP.start(uri.host,uri.port).head(http_path)
-			
+		
 			if !req['content-type'].nil? && req['content-type'].match('image/')
+				
 				@images << Image.find_or_create(:source_url => url[0].to_s)
 			else
-				if uri.host == "www.amazon.com"
-					
+				if uri.host == "www.amazon.com"					
 				end
 				@bookmarks << Bookmark.find_or_create(:url => url[0].to_s)
 			end
@@ -191,7 +191,7 @@ class Token
 	end
 	
 	def self.sanatize(str)
-		str.to_s.titleize.gsub(' ','_').gsub(/\W/,'')
+		str.to_s.titleize.gsub(/\W/,'')
 	end
 	
 	def self.find(str)
@@ -208,7 +208,7 @@ class Token
 	def self.extract_urls(str)
 		
 		@urls = Token.find_urls(str)
-		
+		raise @urls.inspect
 		@urls.each do |url|
 			uri = URI.parse(url[0].to_s)
 			http_path =  uri.path.blank? ? "/" : uri.path

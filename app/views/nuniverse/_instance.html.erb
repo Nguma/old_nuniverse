@@ -16,12 +16,16 @@
     <h2></h2>
     </div></div>
   </div>
-  <div class="result box">
-    <div class="wrap">
-    <%= link_to "", "#", :class => "name" %>
-    <%= link_to '<img src="" class="image"/>',"#" %>
-    </wrap>
+  <div class="result box" style="width:96%;height:auto;background:#FFF;padding:2%">
+    
+      <%= image_tag('/images/backgrounds/blank.gif', :class => "thumbnail") %>
+      <p class="tags"> </p>
+      <%= link_to "", "#", :class => "name" %>
+      
+
   </div>
+  
+  <%= render :partial => "/nuniverses/template"%>
   
   <%= render :partial => "/boxes/edited_cell"%>
 </div>

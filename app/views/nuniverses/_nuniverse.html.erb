@@ -1,10 +1,19 @@
+<dd  class="taste" style="background:#FFF;position:relative;clear:both;float:none;padding:0;margin:0 0 1% 0 ;height:auto" id="<%= nuniverse.unique_name %>">
+  <% if !nuniverse.score.nil? %>
+  <div style="position:absolute;width:6%;text-align:center;top:0;right:0;padding:0 2% 0 2%;height:100%;background:<%= Ranking.color(nuniverse.score) rescue nil %>;margin:0">
+     
+       
+        <h3  class="score" style="text-align:center" ><%= pretty_score(nuniverse.total_score) %></h3>
+     <%= link_to image_tag('/images/backgrounds/blank.gif', :style => "width:30px;height:30px;"), "/save/#{nuniverse.unique_name }", :class => "star #{current_user.connected_to?(nuniverse) ? "saved" : ""}" %>
+   </div>
+   <% end %>
+   <div style="padding:2%;margin:0 10% 0 0">
+     <%= link_to(thumbnail_tag(nuniverse, :style => "float:left;border-color:#{Ranking.color(nuniverse.score)}"), image_url(nuniverse.avatar)) rescue nil %>
+     <p class="tags" style="color:#666;font-size:0.9em"><%= nuniverse.tags.collect {|t| t.name.capitalize }.join(', ') %></p>
 
-     <% if !nuniverse.score.nil? %>
-      <div class="score" style="color:<%= color_for_score(nuniverse.score) %>;position:relative;float:right;font-size:40px;font-weight:bold;top:0px;right:28px"><%= sprintf('%.1f',nuniverse.score) %></div>
-    <% end %>
-    <%= link_to(thumbnail_tag(nuniverse, :style => "float:left"), image_url(nuniverse.avatar), :class => "expand-lnk",  :target => "image") rescue nil %>
-    <div class="tag"><%= link_to tags.first.name.capitalize, "/#{path.first.unique_name}/#{tags.first.name}", :style => "font-weight:bold" rescue "Connected to" %></div> 
-    
-    <h2 style="padding:0;"><%= link_to nuniverse.name.titleize, "/#{nuniverse.unique_name}" %></h2>
-    <p><%= fact_for(nuniverse, :context => path.first) rescue nil%></p>
-    <div style="clear:both"> </div>
+     <h2><%= wdyto_url(nuniverse, :class => "name") %></h2>
+     <%= clear %>
+    </div>
+
+    <%= clear %>
+</dd>

@@ -18,6 +18,11 @@ class Image < ActiveRecord::Base
   
   validates_as_attachment
 
+	define_index do 
+
+		has tags(:id), :as => :tag_ids	
+	end
+	
 	alias_attribute :name, :filename
 
 	#override from has_attachment plugin

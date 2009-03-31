@@ -47,7 +47,7 @@ class Ranking < ActiveRecord::Base
 	end
 	
 	def self.label(score) 
-		['Despicable','Regretable','Very bad','Bad','Plain','Okay','Good','Very Good','Exquisite','Iconic'][(score-1).floor]
+		['Despicable','Miserable','Regretable','Forgetable','Plain','Okay','Likeable','Remarkable','Memorable','Iconic'][(score-1).floor]
 	end
 	
 	

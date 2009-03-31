@@ -1,0 +1,25 @@
+<div class="box" style="width:75%;position:relative;padding:0;border:none" id="hat" >
+  <% if logged_in?%>
+  <%= link_to image_tag('/images/backgrounds/blank.gif', :style => "width:30px;height:30px;"), "/save/#{@source.unique_name }", :class => "star #{current_user.connected_to?(@source) ? "saved" : ""}" %>
+  <% end -%>
+  <div class="wrap" style="padding:0;margin:0;border:none">
+
+
+    <h1 style="font-size:2em;padding:0.5em 1em 0 0.4em "><%= @namespace.name.titleize %></h1>
+    <h3 style="font-size:1em;font-weight:normal">
+      <%= @namespace.tags.map {|c| "<span style='padding:.4em;background:#0cf;color:#eee;margin:0 0.1em 0 0'>#{c.name.capitalize}</span>" } %>
+    </h3>
+    
+
+  </div>
+  <ul class="tabs" target="" style="background:#000;position:absolute;bottom:0;border-bottom:none">
+    <li class="selected"><%= link_to "Experienced", "Experienced", :target => "#reviews", :title => "Reviews"%></li>
+    <li><%#= link_to "Pros&cons", "Pros", :target => "#pros", :title => "Pros" %></li>
+   
+    <li><%#= link_to "Connections", "Connections", :target => "#connections", :title => "Connections" %></li>
+    <li><%#= link_to "Media",  "Media", :target => "#media", :title => "Images & Videos" %></li>
+    <li><%#= link_to "Bookmarks",  "Bookmarks", :target => "#bookmarks", :title => "Bookmarks" %></li>
+  </ul>
+
+</div>
+

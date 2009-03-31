@@ -1,8 +1,11 @@
 body {
 /*	background:#efefef url('/images/backgrounds/main-blue-2.png') 0 -500px repeat-x;*/
-	background:#FFF url('/images/backgrounds/main-grey-med.png') 0 0px repeat-x;
+	
 }
 
+#featured {
+	background:#FFF url('/images/backgrounds/main-grey-med.png') 0 0px repeat-x;
+}
 .section {
 /*	background:#fff url('/images/backgrounds/main_light.png') 0 -400px repeat-x !important;*/
 /*	background:none !important;*/

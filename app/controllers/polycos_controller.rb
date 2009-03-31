@@ -71,11 +71,21 @@ class PolycosController < ApplicationController
 				
 	end
 
+	def connect
+		@command = Command.new(:commander => current_user, :order => params[:command][:order], :value => params[:command][:value])
+		@order => Nuniverse.find()
+	end
 	
 	def create
 		@command = Command.new(:commander => current_user, :order => params[:command][:order], :value => params[:command][:value])
-		@token = Token.new("/#{@source.unique_name}/#{@command.order}/#{@command.value}", :current_user => current_user)
+		if @command.order == "pro"
+			
+		elsif @command.order == "con"
 		
+		else
+		
+		@token = Token.new("/#{@source.unique_name}/#{@command.order}/#{@command.value}", :current_user => current_user)
+
 		if @token
 		 	if !@token.images.empty?
 				@new = @token.images.first
@@ -91,12 +101,14 @@ class PolycosController < ApplicationController
 				@source.facts << @fact 
 				@new = @fact
 			end
+			
 			if @new
 				@connection = @source.connections.with_subject(@new).first
 				@connection.tags << @token.tags rescue nil
 			end
 
 			@tag = nil
+		end
 		end
 	end
 	

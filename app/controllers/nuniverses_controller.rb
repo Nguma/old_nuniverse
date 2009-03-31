@@ -7,13 +7,15 @@ class NuniversesController < ApplicationController
  	after_filter :store_location, :store_source, :only => [:show]
 
 	def index
+		
 		@nuniverses = Nuniverse.find(:all, :conditions => ['name rlike ? OR unique_name rlike ?', params[:input], params[:input].gsub(' ','_')]).paginate(:page => params[:page], :per_page => 20)
 		json = []
 		@nuniverses.each do |n|
-			json << n
-			json.last['image'] = n.images.first.public_filename(:large) rescue nil
+			json << n.to_json
 			json.last['url'] = "/wdyto/#{n.unique_name}"
 		end
+		
+		@new_nuniverse = Nuniverse.new(:name => params[:input], :unique_name => Token.sanatize(params[:input]))
 		
 		respond_to do |f|
 			f.html {}
@@ -28,6 +30,17 @@ class NuniversesController < ApplicationController
 		@source = @namespace
 		@comments = @namespace.comments
 		@current_user_vote = @source.votes.by(current_user).first
+		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20)
+		@connections = @source.connections.of_klass('Nuniverse').paginate(:page => 1, :per_page => params[:page])
+		
+		@prosandcons = @source.connections.of_klass('Tag').paginate(:page => 1, :per_page => params[:page])
+	end
+	
+	def create
+		@nuniverse = Nuniverse.create(params[:nuniverse])
+		respond_to do |f|
+			f.html {redirect_to "/wdyto/#{@nuniverse.unique_name}"}
+		end
 	end
 
 	
@@ -50,7 +63,7 @@ class NuniversesController < ApplicationController
 		@source = @token.path.first	
 		# @pros = @namespace.pros.paginate(:page => 1, :per_page => 10)	
 		# @cons = @namespace.cons.paginate(:page => 1, :per_page => 10)
-			@comments = @namespace.comments
+		@comments = @namespace.comments
 		
 		@facts = Polyco.search("Fact #{@source.unique_name}").paginate(:page => 1, :per_page => 10)
 
@@ -59,6 +72,7 @@ class NuniversesController < ApplicationController
 			}
 			
 			f.js { 
+				
 			}	
 		end
 
@@ -110,6 +124,25 @@ class NuniversesController < ApplicationController
 			format.html {}
 			format.js {
 				
+			}
+		end
+	end
+	
+	def save
+		@namespace = Nuniverse.find_by_unique_name(params[:namespace])
+		if connection = current_user.connected_to?(@namespace)
+			connection.destroy
+			@action = 'remove'
+		else
+			current_user.nuniverses << @namespace
+			@action = 'add'
+		end
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+			f.json { 
+				render :json  => {'action' => @action, 'element' => @namespace.to_json}
 			}
 		end
 	end

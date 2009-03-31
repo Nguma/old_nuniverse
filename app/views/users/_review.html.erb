@@ -1,14 +1,14 @@
-<dd class="review" style="background:#FFF<%#= review.matching_vote.color %>;" >
-  <div style="position:absolute;width:7%;text-align:center;top:0;right:0;padding:0;height:100%;background:<%= review.matching_vote.color %>;">
+<dd class="review" style="background:#FFF;" >
+
+  <div style="position:absolute;width:7%;text-align:center;top:0;right:0;padding:0;height:100%;background:#000;">
     <div  style="padding:10%;font-weight:bold;text-align:center;font-size:1.4em;color:#FFF">
-    <%= review.matching_vote.score.round.to_i rescue nil %></div>
-    
-    <%= link_to image_tag('/images/icons/star.png', :style => "width:30px") %>
+    </div>
+    <%= link_to image_tag('/images/backgrounds/blank.gif', :style => "width:30px;height:30px;"), "/save/#{review.parent.unique_name }", :class => "star #{current_user.connected_to?(review.parent) ? "saved" : ""}" , :title => "Save #{review.parent.name} to your taste book."%>
   </div>
   <%#= render :partial => "vote", :locals => {:vote => review.matching_vote}%>
-  <%= image_tag(review.parent.avatar.public_filename(:small), :style => "position:relative;float:left;width:60px;margin:0 1em 0 0;background:#000;border:solid 6px #{review.matching_vote.color}") rescue nil%>
-  <%= link_to_author(review.author) %> about <%= wdyto_url(review.parent) %><br/>
-  <p class="body">"<%= review.body %>"</p>
+  <%= image_tag(review.parent.avatar.public_filename(:small), :class => "thumb", :style => "border-color:#{review.matching_vote.color}") rescue nil%>
+  <p class="desc"><%= link_to_author(review.author) %> about <span style="color:<%= review.matching_vote.color %>"><%= wdyto_url(review.parent) %></span></p>
+  <p class="body">"<%= review.body %>" <span style="color:<%= review.matching_vote.color %>;font-size:1.3em;font-weight:bold">+<%= review.matching_vote.score.round.to_i rescue nil %></span></p>
   
   <%= clear %>
 </dd>

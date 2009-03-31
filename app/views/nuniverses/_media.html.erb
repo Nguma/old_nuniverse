@@ -1,5 +1,4 @@
-<div class="box" id="media" style="background:#000"> 
-  <%= image_tag(@source.images.first.public_filename(), :id => "image") rescue nil %>
-   <h3>Media</h3>
-   <%= render :partial => @media%>
+ <div style="width:100%;height:auto;background:#000;padding:0;margin:0 0 .6% 0" id="media">
+     <%= image_tag(source.images.first.public_filename(), :id => "image") rescue link_to "Add an image", "", :class => "input-lnk", :style => "padding:3%;line-height:2em;font-size:1.4em;color:#eee;margin:0" %>
+   
  </div>

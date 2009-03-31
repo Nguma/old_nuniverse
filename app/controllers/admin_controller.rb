@@ -4,6 +4,17 @@ class AdminController < ApplicationController
 	
 	before_filter :find_source, :only => :save_layout
 	
+	def twitter
+			Twitter::Client.new(:login => "nuniverse", :password => "abc123").timeline_for(:me, :since => 5.month.ago).each do |status|
+				@user = User.find_by_login(status.user.screen_name)
+				scan = status.text.scan(/^\#(\w+)\s*\+(\d)/i)[0]
+			
+				@nuniverse = Nuniverse.find_by_unique_name(scan[0].to_s)
+				@vote = scan[1]
+				raise "#{@user.firstname} voted +#{@vote} for #{@nuniverse.name}"
+			end
+	end
+	
 	def index
 	end
 	
@@ -81,11 +92,8 @@ class AdminController < ApplicationController
 			session[:request_token_secret] =  @request_token.secret
 			redirect_to t.authorization_url
 		else
-			
 			@request_token = OAuth::RequestToken.new(t.consumer,session[:request_token],session[:request_token_secret])
-			
 			@access_token = @request_token.get_access_token 
-			raise @access_token.inspect
 			session[:request_token] = nil
 			session[:request_token_secret]
 		end
@@ -93,13 +101,15 @@ class AdminController < ApplicationController
 	end
 	
 	def batch
-		rev_tag = Tag.find_by_name('review')
-		like = Tag.find_by_name('comment')
-		@pos = Polyco.find(:all)
-
-		@pos.each do |p|
-			p.
+		@tag_1 = Tag.find_by_name("Country")
+		# @tag_2 = Tag.find_by_name("tennis player")
+		@films = Nuniverse.find(:all, :conditions => ["id >= 2515 AND id <= 2786"])
+		@films.each do |f|
+			f.tags << @tag_1 rescue nil
+		# 	f.tags << @tag_2 rescue nil
+			
 		end
+		
 	end
 		
 

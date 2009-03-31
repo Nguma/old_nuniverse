@@ -22,7 +22,12 @@ class Comment < ActiveRecord::Base
 	
 	define_index do 
 		indexes [:body], :as => :body
+		
 		has :user_id
+		has :created_at
+		has tags(:id), :as => :tag_ids
+		
+		set_property :delta => true
 	end
 	
 	

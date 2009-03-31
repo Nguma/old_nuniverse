@@ -1,14 +1,16 @@
 <div id="scorecard" style="text-align:center;padding:5% 1% 1% 1%;" class="<%= current_user_vote ? 'voted' : '' %>">
-  <h3 style="padding:3% 0 6% 0">Overall Score</h3>
+  <h3 style="padding:3% 0 15% 0">Overall Score</h3>
   <% if source.votes.count > 0 %>
-    <h2 id="score" class="score_<%= source.score.round.to_i%>" style="font-size:110px; padding:1% 0 0% 0"><%= sprintf('%.1f',source.score) %></h2>
+    <h2 id="score" class="score_<%= source.score.round.to_i %>" style="font-size:110px; padding:1% 0 0% 0">
+      <%= pretty_score(source.total_score) %>
+    </h2>
     <h5 id="score-label" class="score_<%= source.score.round.to_i %>"><%= Ranking.label(source.score) %></h5>
       <% if !logged_in? %>
         <h3>Log in and vote</h3>
       <% elsif current_user_vote %>
         <h3 class="status" style="background:none;color:#FFF;padding:0">
-          Your rate: <span class="score_<%= current_user_vote.score.round %>"><%= current_user_vote.score.round %></span>
-         <%= link_to "Change your mind", "#", :class => "toggle-lnk", :target => "#rate-picker", :id => "change-your-mind-lnk" %>
+          Your rate: <span class="score_<%= current_user_vote.score.round %>">+<%= current_user_vote.score.round %></span>
+         <%= link_to "Change your mind", "#", :target => "#rate-picker", :id => "change-your-mind-lnk" %>
         </h3>
       <% else -%>
         <h3 class="status" style="font-size:20px;padding:0%">You haven't voted yet.</h3>
@@ -21,7 +23,7 @@
   <% end -%>
  
   <div id="rate-picker" style="padding:2%">
-    
+
      <h4>What's your rate?</h4>
       <% 10.times do |t|%>
          <%= link_to t+1, "/rate/#{@source.unique_name}/#{t+1}" , :class => "rate-lnk score_#{t+1}" %>

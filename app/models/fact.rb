@@ -49,6 +49,7 @@ class Fact < ActiveRecord::Base
 		
 		has :parent_id, :created_at
 		has objects(:id), :as => :nuniverse_ids
+		has tags(:id), :as => :tag_ids
 		set_property :delta => :true
 		
 		# has parent(:id), :as => :parent

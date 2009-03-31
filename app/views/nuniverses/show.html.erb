@@ -1,28 +1,44 @@
-<%= render :partial => "/nuniverses/toolbar" %>
+<%= render :partial => "toolbar" %>
+<%= render :partial => "/nuniverse/main_menu"%>
 <% nuniverse do -%>
-  <div id="grid">
-    
-    <div class="col" id="col_1">
-      <%= render :partial => "hat" , :locals => {:path => @path }%>
-      <%= render :partial => "media"%>
-    </div>
-    
-    <div class="col" id="col_2">
-      <div class="box" id="facts" style="background:#FFF;height:150px;overflow:hidden;padding:3% 2% 2% 2%"> 
-         <dl style="padding:0">
-          <%  @facts.paginate(:page => 1, :per_page => 6).each do |fact| %>
-            <%= render :partial => fact.subject, :locals => {:tags => fact.tags}%>
-          <% end -%>
-        </dl>
-      </div>
-      <%= render :partial => "/nuniverses/connections", :locals => {:source => @source, :path => @path, :connections => @connections }%>
-    </div>
-    
-    <div class="col" id="col_3">
-      <%= render :partial => "/nuniverses/scorecard", :locals => {:source => @source, :path => @path}%>
-      <%= render :partial => "comments"%>
-      <%= clear %>
+<div id="leftcol" style="position:relative;float:right;margin:2em 0 0 0;width:14.6%">
+  <%= render :partial => "media", :locals => {:source => @source} %>
+  <%= render :partial => "stats", :locals =>  {:source => @source} %>
+</div>
+<div id="hat">
+
+  <div class="box" style="width:35%;position:relative" id="hatt" >
+    <% if logged_in?%>
+    <%= link_to image_tag('/images/backgrounds/blank.gif', :style => "width:30px;height:30px;"), "/save/#{@source.unique_name }", :class => "star #{current_user.connected_to?(@source) ? "saved" : ""}" %>
+    <% end -%>
+    <div class="wrap">
+ 
+      <h3>What do you think of</h3>
+      
+      <h1 style="font-size:2em"><%= @namespace.name.titleize %></h1>
+      <h6 style="color:#FFF;font-size:0.8em;padding:0 3%;color:#eee"><%= @namespace.tags.collect {|c| c.name.capitalize }.join(', ')%></h6>
+     
     </div>
   </div>
   
+  <div class="box">
+    <div class="wrap" >
+      <%= render :partial => "scorecard", :locals => {:source => @source, :current_user_vote => @current_user_vote}%>
+    </div>
+  </div>
+ 
+  <% @source.votes.each do |vote| %>
+    <div class="vote" style="background:<%= vote.color %>;padding:4% 2% 2% 2%" id="vote-by-<%= vote.user.login %>">
+      <div class="score" style="padding:2%;background:#FFF;position:absolute;top:0;right:3%;width:15%;text-align:center;font-weight:bold;font-size:1em;color:<%= vote.color %>">
+        <%= vote.score %>
+      </div>
+      <%= thumbnail_tag(vote.user, :size => :small) rescue nil %>
+      <h4><%= link_to_author(vote.user) %> finds it <%= vote.label  %>.</h4>
+      <% if vote.review %>
+        <p class="review">"<%= vote.review.body %>"</p>
+      <% end -%>
+      <p><%= time_ago_in_words(vote.created_at) rescue nil %> ago</p>
+    </div>
+  <% end -%>
+</div>
 <% end -%>

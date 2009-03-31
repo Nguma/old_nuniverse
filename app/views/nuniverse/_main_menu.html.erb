@@ -1,6 +1,6 @@
 <div id="main-menu">
   <div class="wrap" style="width:1100px;margin:auto">
-    <%= link_to(image_tag('/images/icons/magnifier.png', :style => "height:30px"), "/search/" ,:target => "search", :style => "position:relative;float:right;background:none;height:30px")%>
+ 
     <%= link_to_homepage unless request.request_uri == "/"%>
     <% if logged_in?  %>
       <%= link_to "Me", "/nuniverse-of/#{current_user.login}" , :id => "account-lnk"  %>

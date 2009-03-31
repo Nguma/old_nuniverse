@@ -1,21 +1,20 @@
-<div id="login" style="padding:100px">
-    <div class="header" style="margin: 0 0 0 0">
-      <%= image_tag("/images/icons/logo-nuniverse-2009.png") %>
-    </div>
-    <h1>Log in.</h1>
+<% nuniverse do -%>
+
+<div id="login" style="padding:4% 2%;text-align:center;background:#000;width:30%;margin:auto">
+
+    <h2 style="color:#FFF;font-size:30px">Already a wdytoist?</h2>
     <% form_tag "/sessions/create" do -%>
-      <label for="login" style="color:#eee">Login</label>
+      <label for="login" >Login or email</label>
       <%= text_field_tag 'login' %>
 
-      <label for="password" style="color:#eee">Password</label>
-      <%= password_field_tag 'password' %>
-
-      <!-- Uncomment this if you want this functionality
-        <p><label for="remember_me">Remember me:</label>
-        <%= check_box_tag 'remember_me' %></p>
-      -->
+      <label for="password" >Password</label>
+      <%= password_field_tag 'password' %><br/>
+      <%= check_box_tag 'remember_me' %><label for="remember_me" style="display:inline;clear:none;font-size:1em;padding: 0 0 0 5px;">Remember me.</label>
+   
       <br/>
-      <p><%= submit_tag 'Log in' %></p>
+      <p><%= submit_tag 'Log in', :style => "border:none;background:none;color:#FFF;font-weight:bold;cursor:pointer" %></p>
     <% end -%>
-    <%= link_to "Cancel", "/"%>
+ 
   </div>
+
+<% end -%>

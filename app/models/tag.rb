@@ -10,12 +10,18 @@ class Tag < ActiveRecord::Base
 
 	
 	define_index do 
-		indexes :name
+		indexes :name, :sortable => true
+		# indexes [nuniverses(:unique_name)], :as => :nuniverses
 		indexes [polycos.subject_type], :as => :subject_type
 		indexes [polycos.object_type], :as => :object_type
-		set_property :delta => true
+
+		
+		has nuniverses(:id), :as => :tagged_nuniverse_ids
+		has nuniverses.users(:id), :as => :related_user_ids
 		has polycos(:object_id), :as => :object_id
 		has polycos(:subject_id), :as => :object_id
+		
+		set_property :delta => true
 	end
 		
 	def avatar
@@ -38,6 +44,7 @@ class Tag < ActiveRecord::Base
 	end
 	
 	def self.find_or_create(params)
-		Tag.find(:first, :conditions => {:name => params[:name]}) || Tag.create(:name => params[:name]) 
+		return if params[:name].blank?
+		Tag.find(:first, :conditions => {:name => params[:name]}) || Tag.create(:name => params[:name].capitalize) 
 	end
 end

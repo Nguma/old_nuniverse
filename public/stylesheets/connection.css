@@ -239,11 +239,7 @@ img.thumbnail {
 	line-height:-999999px;
 	height:60px;
 	width:60px;
-/*	border:transparent 3px #000;*/
-/*	background:transparent url("/images/backgrounds/icon_bg.png") 0 0 no-repeat;*/
-	background:transparent url("/images/backgrounds/thumbnail_frame.png") 0 0 no-repeat;
-	
-	padding:3px;
+	border:solid .5em #FFF;
 }
 
 img.default {

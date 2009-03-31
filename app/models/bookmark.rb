@@ -1,13 +1,17 @@
 class Bookmark < ActiveRecord::Base
-	has_many :taggings_as_taggable, :as => :taggable, :class_name => :taggings
-	has_many :tags, :through => :taggings_as_taggable, :source => :tag, :source_type => "Tag"
-	has_many :taggings_as_tag, :as => :tag, :class_name => :taggings, :dependent => :destroy
+  has_many :taggings, :as => :taggable, :dependent => :destroy
+	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
 	
 	# before_create :make_name
+	
+	define_index do 
+		indexes :url
+		has tags(:id), :as => :tag_ids
+	end
 	
 	def category
 		tags.first.name rescue nil

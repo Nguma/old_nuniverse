@@ -1,3 +1,9 @@
-<% form_tag action, :style => "position:absolute;right:-40px;top:20px;width:400px" do  %>
-  <%= text_field_tag :input , "", :class => "search-input"%>
-<% end -%>
+ <div style="position:relative;background:none;height:30px;width:300px;padding:.5%">
+     <% form_tag "/" do -%>
+       <%= link_to(image_tag('/images/icons/magnifier.png', :style => "height:30px"), "/search/" ,:target => "search", :style => "position:relative;float:right;width:15%;background:none") %>
+       <%= text_field_tag "search-input", "", :style => "width:75%;"%>
+
+     <% end -%>
+     <dl id="suggestions"></dl>
+     <%= clear %>
+   </div>

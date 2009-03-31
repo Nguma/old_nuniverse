@@ -1,15 +1,25 @@
 <% nuniverse do -%>
-
+  
   <h1>Nuniverses matching <%= @input %></h1>
   <%= will_paginate @nuniverses %>
-  <div style="width:2000px">
+ 
   <% @nuniverses.each do |nuniverse| -%>
     <div class="connection" style="white-space:wrap;position:relative;float:left;width:auto;clear:none;background:#eee;margin:0 1px 1px 0">
     <%= thumbnail_tag nuniverse -%>
-    <%= link_to nuniverse.name, nuniverse  %>
+    <%= wdyto_url(nuniverse)  %>
     <p style="font-size:12px;color:#999"><%= nuniverse.tags.collect{|c| c.name }.join(',')%></p>
     </div>
   <% end -%>
-  </div>
- 
+   <h4 style="color:#FFF">If its not part of the above, you can create it</h4>
+  <% form_for @new_nuniverse, :html => {:style => "padding:2%;background:#000"} do |f| -%>
+    <%= f.hidden_field :name %>
+    <%= f.hidden_field :unique_name %>
+   
+    <h3 style="padding:0"><%= @new_nuniverse.name.titleize %></h3>
+    <h4 style="color:#eee">#<%= @new_nuniverse.unique_name.downcase %></h4>
+    
+     <%= submit_tag "create it!" %></h4>
+  <% end -%>
+  
+
 <% end %>

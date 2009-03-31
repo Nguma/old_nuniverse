@@ -5,7 +5,7 @@ class Polyco < ActiveRecord::Base
 	has_many :rankings, :as => :rankable
 	has_many :taggings, :as => :taggable, :dependent => :destroy
 	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
-	
+
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	
@@ -15,7 +15,6 @@ class Polyco < ActiveRecord::Base
 	acts_as_state_machine :initial => :pending
 
   state :pending
-	state :twin
 	state :active
 
   event :make_active do
@@ -25,14 +24,20 @@ class Polyco < ActiveRecord::Base
 	define_index do 
 		
 		indexes [subject.unique_name, subject.login, subject.body, object.unique_name, object.login], :as => :content, :sortable => true
-		indexes [taggings(:tag).name, subject_type], :as => :tags
-		indexes subject_type, :as => :type
-		# indexes [subject_type, subject_id], :as => :subject
-		index object_type, :as => :object_type
-		set_property :delta => true
+		# indexes [tags(:name), subject.tags(:name),  subject_type], :as => :tags
+		indexes subject_type, :as => :subject_type
+		
+		
+		has "object_type = 'User'", :as => :from_user, :type => :boolean 
+		has "subject_type = 'Nuniverse'", :as => :to_nuniverse, :type => :boolean
+		
+		has [tags(:id), subject.tags(:id)], :as => :tag_ids
 		has :suggestable => 0
 		has :object_id
 		has :subject_id
+		has :created_at
+		
+		set_property :delta => true
 	end
 	
 	named_scope :sphinx, lambda {|*args| {
@@ -65,6 +70,25 @@ class Polyco < ActiveRecord::Base
 		}
 	}
 	
+	named_scope :with_score_lower_than, lambda { |score| 
+		score.nil? ? {} : {
+			:select => "polycos.*, AVG(rankings.score) as score",
+			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.subject_id AND rankable_type = 'Nuniverse'"],
+			:conditions => ["score < #{score}"],
+			:group => "polycos.id"
+		}
+	}
+	
+	
+	named_scope :with_score_higher_than, lambda { |score| 
+		score.nil? ? {} : {
+			:select => "polycos.*, AVG(rankings.score) as score",
+			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.subject_id AND rankable_type = 'Nuniverse'"],
+			:conditions => ["score > #{score}"],
+			:group => "polycos.id"
+		}
+	}
+	
  	named_scope :of_klass, lambda { |klass| 
 		klass.nil? ? {} : {:conditions => ['polycos.subject_type in (?)', [*klass]]}
 	}
@@ -93,26 +117,12 @@ class Polyco < ActiveRecord::Base
 	def score
 		average_score.to_i || 0
 	end
-	
-	def twin
-		self.subject.connections.with_subject(self.object).first || Polyco.new(:subject => self.object, :object => self.subject, :name => self.object.name, :description => self.description)
-	end
-	
 
 	def self.find_or_create(params)
 		Polyco.with_subject(params[:subject]).with_object(params[:object]).first || Polyco.create(params)
 	end
 	
-	def save_all
-		begin
-			twin.save if self.subject.is_a?(Nuniverse) && !self.object.is_a?(Story)# if !self.pending? 
-			self.save
-			true
-		rescue
-			false
-		end
-	end
-	
+
 	protected
 	
 	def update_state

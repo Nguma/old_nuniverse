@@ -2,7 +2,7 @@ class TagsController < ApplicationController
 	
 	protect_from_forgery :except => [:suggest]
 	
-	before_filter :find_source, :only => [:index, :show, :create]
+	before_filter :find_source, :only => [:index, :create]
 	before_filter :find_user, :only => [:show, :preview, :suggest, :share]
 	after_filter :store_location, :only => [:show]
   # GET /tags
@@ -17,9 +17,9 @@ class TagsController < ApplicationController
   end
 
 	def show
-		@tag = Tag.find(params[:id])
+		@tag = Tag.find_by_name(params[:tag])
 		
-		@connections = Polyco.with_object(@context).tagged(@tag).paginate(:page => params[:page], :per_page => 30)
+		@taggeds = @tag.nuniverses.with_rankings.paginate(:page => params[:page] , :per_page => 30, :order => "AVG(rankings.score) DESC")
 		@mode = params[:mode] || "list"
 		
 		respond_to do |f|
@@ -71,9 +71,12 @@ class TagsController < ApplicationController
   end
 
 	def create
-		
-		@tag = Tag.find_or_create(:name => params[:command][:value])
-		@source.tags << @tag rescue nil
+		params[:command][:value].split(',').each do |t|
+			unless t.blank?
+				@tag = Tag.find_or_create(:name => t.strip)
+				@source.tags << @tag rescue nil
+			end
+		end
 		
 		respond_to do |f|
 			f.html { redirect_back_or_default('/') }

@@ -3,10 +3,10 @@
     <h2 style="color:#FFF;font-size:30px">Already a wdytoist?</h2>
     <% form_tag "/sessions/create" do -%>
       <label for="login" >Login or email</label>
-      <%= text_field_tag 'login' %>
+      <%= text_field_tag 'login' , "",  :style => "color:#333"%>
 
       <label for="password" >Password</label>
-      <%= password_field_tag 'password' %><br/>
+      <%= password_field_tag 'password' , "", :style => "color:#333"%><br/>
       <%= check_box_tag 'remember_me' %><label for="remember_me" style="display:inline;clear:none;font-size:1em;padding: 0 0 0 5px;">Remember me.</label>
    
       <br/>

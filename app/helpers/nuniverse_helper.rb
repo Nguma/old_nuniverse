@@ -196,6 +196,11 @@ module NuniverseHelper
 		))
 	end
 	
+	def pretty_score(score)
+		sc = sprintf('%.1f', score)
+		sc = sc.gsub('.0','')
+		sc
+	end
 	def render_stat(stat, params = {})
 		params[:stat] = stat
 		params[:color] = Ranking.color(stat.score)
@@ -206,8 +211,10 @@ module NuniverseHelper
 		link_to nuniverse.name.titleize, "/#{nuniverse.unique_name}"
 	end
 	
-	def link_to_author(user)
-		link_to (user.login.titleize, "/nuniverse-of/#{user.unique_name}")
+	def link_to_author(user, params = {})
+		uri =  "/nuniverse-of/#{user.unique_name}"
+		uri << "/#{params[:filter]}" if params[:filter]
+		link_to (user.login.titleize,uri)
 	end
 	
 	def tag_box(params) 
@@ -265,8 +272,9 @@ module NuniverseHelper
 	
 
 	
-	def wdyto_url(nuniverse)
-		link_to nuniverse.name, "/wdyto/nuniverse.unique_name"
+	def wdyto_url(nuniverse, params = {})
+
+		link_to nuniverse.name.titleize, "/wdyto/#{nuniverse.unique_name}", params
 	end
 	
 	def clear(mode = "left")

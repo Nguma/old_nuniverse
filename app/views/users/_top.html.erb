@@ -1,0 +1,40 @@
+<div class="box" style="width:96%;padding:2%;height:auto" >
+   <div class="wrap">
+     <h1><%= @source.login.capitalize %></h1>
+   </div>
+   <%= clear %>
+ </div>
+ <% unless current_user == @source %>
+  
+  <% if current_user.is_following?(@source) -%>
+    <div style="color:#FFF;background:#eee">
+    <%= link_to "Stop Listening", "/stop-following/#{@source.login}", :style => "padding:2%;font-weight:bold;color:#000"%>
+  <% else -%>
+    <div style="color:#FFF;background:#0CF">
+    <%= link_to "Listen", "/follow/#{@source.login}", :style => "padding:2%;font-weight:bold"  %>
+  <% end -%>
+  </div>
+ <% end -%>
+  <div class="box" style="height:auto;width:100%;margin:0 0 0 0;">
+    <div class="wrap">
+      <%= image_tag(@source.images.first.public_filename(), :id => "image") rescue nil %>
+    </div>
+  </div>
+ 
+  <div style="width:94%;padding:3%;background:#000;margin:0 0 .5% 0;clear:both">
+    <h5 style="color:#666;font-size:1.3em">Experience <span style="color:#FFF;font-weight:bold"> <%= @source.reviews.count %></span></h5>
+  </div>
+
+  <div id="tastemakers">
+    <h3 style="padding:0">Choosen Tastemakers</h3>
+    <% @source.tastemakers.each_with_index do |user,i| -%>
+        <span style="color:#FFF">#<%= i+1 %> <%= link_to_author(user) %></span>
+    <% end -%>
+  </div>
+  
+  <div id="tags" style="display:none">
+    <h3 style="padding:0">Filter by tag</h3>
+    <% @tags.each do |tag| -%>
+        <span style="color:#FFF"><%= link_to tag.name.capitalize, "/nuniverse-of/#{@source.unique_name}/#{tag.name}", :class => "tag-lnk" %></span>
+    <% end -%>
+  </div>

@@ -1,12 +1,8 @@
- <div class="result" style="height:200px;width:200px;background:#000;padding:0;border:solid 1px #000" >
-    <div class="wrap" style="padding:0;width:100%;top:0">
-        <div class="score" style="background:<%= vote.color %>;color:#FFF;position:absolute;font-size:1.3em;width:auto;padding:3%;">
-          <%= sprintf('%.1f',vote.score )%>
-        </div>
-         <%= link_to vote.rankable.name.titleize, "/wdyto/#{vote.rankable.unique_name}", :class => "name" %>
-     
-      <%= link_to image_tag(vote.rankable.avatar.public_filename(:large), :style => "position:absolute;width:100%;top:0"), "/wdyto/#{vote.rankable.unique_name}" rescue nil %>
-      <%= vote.rankable.name %>
-    </div>
-   
-  </div>
+
+  <dd style="padding:3%;margin: 0 0 .4% 0;background:#FFF;" >
+    
+    <%= thumbnail_tag(vote.rankable, :style => "position:relative;float:left;border-color:#{vote.color}") rescue nil %>
+    <h3 style="padding:0;color:<%= vote.color %>"><%= wdyto_url(vote.rankable) rescue nil %> </h3>
+    <p style="font-size:1.2em"><%= vote.review.body rescue nil %>" - <%= link_to_author(vote.user)%> <span  style="color:<%= vote.color %>;font-weight:bold;font-size:1.4em"> +<%= sprintf('%.0f',vote.score) %></span></p>
+    <%= clear %>
+  </dd>
