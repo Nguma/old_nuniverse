@@ -1,9 +1,0 @@
-<dd class ="step connection <%= instance.class.to_s.downcase %>-connection  <%= cycle('even','odd') %>" title="fact-<%= instance.id %>">
- <span class="body"><%= render_fact(instance)  %></span>
- <span class="name hidden" ><%= link_to truncate(instance.body,40,'...'), instance %></span>
- <span class='step-options'>
-   <%#= link_to "edit", edit_fact_url(instance), :class => ""%>
- </span>
-
-  <%= clear %>
-</dd>

@@ -1,6 +1,0 @@
-<div style="padding:20px"> 
-  <%= render_tag tag %>
-  <p><%= truncate(tag.description,500, '...') %></p>
-  
-  <%= link_to("Buy it on #{tag.service} for #{tag.property('price')}", tag.url, :style => "color:#393") unless tag.property('price').blank? %>
-</div>

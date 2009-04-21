@@ -1,9 +1,0 @@
-<div id="bookmarks" class="section">
-  <h2>Bookmarks</h2>
-  <% @bookmarks.each do |bookmark| -%>
-    <div class="step">
-      <%= link_to bookmark.name, bookmark.url %>
-      <p><%= link_to bookmark.url, bookmark.url %></p>
-    </div>
-  <% end -%>
-</div>

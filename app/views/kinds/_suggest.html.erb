@@ -1,6 +1,0 @@
-<% @kinds = ["address", "image", "person", "location", "restaurant", "film", "character", "comment"] -%>
-<% @kinds.each do |kind| -%>
-  <div class="kind">
-    <%= image_tag("/images/icons/#{kind}.png", :class => "icon")%> <%= link_to (kind.capitalize, "#") %>
-  </div>
-<% end -%>

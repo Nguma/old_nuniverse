@@ -1,7 +1,0 @@
-<div class="step connection <%= cycle('even', 'odd') %>" title="story-<%= instance.id %>" style="padding:20px;max-width:500px" id="Story-<%= instance.id%>">
-   <%= thumbnail_tag instance.nuniverses.first rescue ""%>
-   <span class="name body"><%= link_to instance.name, instance, :target => "S-Story-#{instance.id}",:style => "font-weight:bold"%></span><p>by <%= instance.author.name %></p>
-   <p><%= truncate(instance.description, 100, '...')%></p>
-
-   <%= clear %>
-</div>

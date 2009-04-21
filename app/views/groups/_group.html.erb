@@ -1,8 +1,0 @@
-
-
-  <h2>
-    <%= check_box_tag :private, group.private %>
-    <%= link_to_unless_current group.name, "/groups/show/#{group.id}", :class => "expand-lnk" rescue nil %>
-  </h2>
-  <%= simple_format h(group.description) %>
-  

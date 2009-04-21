@@ -1,8 +1,0 @@
- <div class="step">
-   <h3>Who's involved?</h3>
-   <% @story.users.each do |user| %>
-     <%= user.name %>
-   <% end -%>
-   <%= link_to "Invite someone else", "#", :class => "expand-lnk", :id => "expand_share_form_lnk"%>
-
- </div>

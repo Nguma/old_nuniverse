@@ -1,6 +1,0 @@
-<h2><%= instance.name %></h2>
-
-<div class="<%= @mode %>">
-  <%#= will_paginate instance.elements %>
-  <%= render :partial => "/groups/list", :locals => {:group => instance, :elements => instance.connections.of_klass('Nuniverse')}%>
-</div>

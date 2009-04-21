@@ -1,7 +1,0 @@
- <div id="search_box" class="<%= @filter.blank? ? "" : "filled" %>"style="position:absolute;top:5px;right:5px;z-index:7654">
-  <% form_tag "/#{controller.controller_name}/show/#{@source.id}"  do -%> 
-    <%= text_field_tag "input", @filter, :class => "main_input" , :id => "input_filter", :style => "font-size:20px"%> 
-  <% end -%>
- </div>
-
- 

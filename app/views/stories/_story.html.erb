@@ -1,8 +1,0 @@
-<div class="tile <%= (story == @source) ? "current-tile": "" %> ">
-  <%= check_box_tag :private, story.is_private %>
-  <%= spinner %>
-  <h2 style="color:inherit"><%= link_to_unless_current story.name, story_url(story), :class => "expand-lnk" rescue nil %></h2>
-  <%= simple_format h(story.description) %>
-  <%= clear %>
-  <p><%= story.tags.collect {|c| c.name}.join(', ') %></p>
-</div>

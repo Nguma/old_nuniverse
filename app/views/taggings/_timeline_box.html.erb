@@ -1,6 +1,0 @@
-<div class="box" id="timeline_box">
-  <h2>Timeline</h2>
-  <% connections(:subject => @source, :kind => 'date', :order => 'by_related_date').each do |event| -%>
-    <div class="item"><%= event.kind.capitalize %>: <%= event.object.label %></div>
-  <% end -%>
-</div>

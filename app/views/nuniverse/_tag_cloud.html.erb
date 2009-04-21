@@ -1,8 +1,0 @@
-<% unless @categories.nil? -%>
-  <div id="tag_cloud" class="tag_cloud" style="margin:10px 0 5px 0;position:relative;width:100%;float:left">
-  <strong style="font-weight:bold;font-size:13px">Filter by </strong>
-   <% @categories.each do |cat| -%>
-      <%= link_to(cat.predicate, "#{cat.predicate}" ,:class => "", :style => "font-size:#{([cat.counted.to_i+11,18].min)}px;") %>
-    <% end -%>
-  </div>
-<% end -%>
