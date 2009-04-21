@@ -1,9 +1,4 @@
-<div class="box" style="width:96%;padding:2%;height:auto" >
-   <div class="wrap">
-     <h1><%= @source.login.capitalize %></h1>
-   </div>
-   <%= clear %>
- </div>
+
  <% unless current_user == @source %>
   
   <% if current_user.is_following?(@source) -%>
@@ -17,7 +12,11 @@
  <% end -%>
   <div class="box" style="height:auto;width:100%;margin:0 0 0 0;">
     <div class="wrap">
-      <%= image_tag(@source.images.first.public_filename(), :id => "image") rescue nil %>
+      <% if current_user == @source %>
+        <%= link_to image_tag(@source.avatar, :id => "image"), pick_a_face_url, :title => "Pick your faces", :class => "tippable" rescue nil %>
+      <% else %>
+        <%= image_tag(@source.avatar, :id => "image") rescue nil %>
+      <% end -%>
     </div>
   </div>
  
@@ -25,12 +24,7 @@
     <h5 style="color:#666;font-size:1.3em">Experience <span style="color:#FFF;font-weight:bold"> <%= @source.reviews.count %></span></h5>
   </div>
 
-  <div id="tastemakers">
-    <h3 style="padding:0">Choosen Tastemakers</h3>
-    <% @source.tastemakers.each_with_index do |user,i| -%>
-        <span style="color:#FFF">#<%= i+1 %> <%= link_to_author(user) %></span>
-    <% end -%>
-  </div>
+
   
   <div id="tags" style="display:none">
     <h3 style="padding:0">Filter by tag</h3>

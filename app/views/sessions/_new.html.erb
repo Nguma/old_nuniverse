@@ -1,16 +1,16 @@
-<div id="login" style="padding:4% 2%;text-align:center">
-
-    <h2 style="color:#FFF;font-size:30px">Already a wdytoist?</h2>
-    <% form_tag "/sessions/create" do -%>
-      <label for="login" >Login or email</label>
-      <%= text_field_tag 'login' , "",  :style => "color:#333"%>
-
-      <label for="password" >Password</label>
-      <%= password_field_tag 'password' , "", :style => "color:#333"%><br/>
-      <%= check_box_tag 'remember_me' %><label for="remember_me" style="display:inline;clear:none;font-size:1em;padding: 0 0 0 5px;">Remember me.</label>
-   
-      <br/>
-      <p><%= submit_tag 'Log in', :style => "border:none;background:none;color:#FFF;font-weight:bold;cursor:pointer" %></p>
+  <div id="login-box" >
+    
+    <% form_tag "/sessions/create" , :style => "width:90%" , :id => "login-form" do -%>
+      <div style="position:relative;width:98%;padding:1%">
+        <label for="input-login">login or email</label>
+        <%= text_field_tag 'login' , "login or email",  :id => "input-login", :class => "empty"%>
+      </div>
+      <div style="position:relative;width:98%;padding:1%">
+        <label for="input-password" >Password</label>
+        <%= password_field_tag 'password' , "password", :id => "input-password", :class => "empty" %><br/>
+        <%= check_box_tag 'remember_me' %>
+        <label for="remember_me" style="display:inline;clear:none;font-size:1em;padding: 0 0 0 5px;">Remember me.</label>
+      </div>
+      <p><%= submit_tag 'Log in', :style => "border:none;background:none;color:#FFF;background:#000;padding:1em;font-weight:bold;cursor:pointer" %></p>
     <% end -%>
- 
-  </div>
+ </div>

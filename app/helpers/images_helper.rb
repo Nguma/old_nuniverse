@@ -26,4 +26,18 @@ module ImagesHelper
 		 }
 	end
 	
+	
+	def face_for_ranking(ranking, params = {})
+
+		if ranking.score < 1
+			image = ranking.user.bad_face(:size => params[:size]) 
+		elsif ranking.score > 1
+			image = ranking.user.good_face(:size => params[:size]) 
+		else
+			image = ranking.user.poker_face(:size => params[:size])
+		end
+		image = ranking.user.poker_face(:size => params[:size]) if image.nil?
+		image_tag(image, :class => "thumbnail") rescue nil 
+	end
+	
 end

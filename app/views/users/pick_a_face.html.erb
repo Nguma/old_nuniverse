@@ -1,0 +1,29 @@
+<%= render :partial => "toolbar"%>
+<% nuniverse do -%>
+  <h1>Great you are now a wdytoist.</h1>
+  <p>Your experience will be 100 million times better if you add a bit more to your profile.</p>
+  <h2>Pick a face</h2>
+  <p>Add pictures to your profile. The Good and bad pictures will show depending on your rating. By default, your poker face will be displayed.</p>
+  
+  <dl id="faces">
+   
+    <dd id="very-bad-face">
+      <%= link_to image_tag((current_user.very_bad_face || ""), :alt => "Very Bad Face", :id => "very-bad-face-img"), "/images/create", :rel => "very-bad-face", :target => "bad-face", :title => "Pick an image to display for your bad ratings", :name => "image",  :class => "input-lnk" %>
+    </dd>
+    <dd id="bad-face">
+      <%= link_to image_tag((current_user.bad_face || ""), :alt => "Bad Face", :id => "good-face-img"), "/images/create", :target => "bad-face", :title => "Pick an image to display for your good ratings",  :name => "image", :rel => "badface", :class => "input-lnk"%>
+    </dd>
+    <dd id="poker-face">
+      <%= link_to image_tag((current_user.poker_face || ""), :alt => "Poker Face", :id => "poker-face-img"), "/images/create",:target => "poker-face", :rel => "default", :title => "Pick a default image to display as you", :name => "image",  :class => "input-lnk"%>
+    </dd>
+    <dd id="good-face">
+      <%= link_to image_tag((current_user.good_face || ""), :alt => "Good Face", :id => "good-face-img"), "/images/create", :target => "good-face", :title => "Pick an image to display for your good ratings",  :name => "image", :rel => "goodface", :class => "input-lnk"%>
+    </dd>
+    <dd id="very-good-face">
+      <%= link_to image_tag((current_user.very_good_face || ""), :alt => "Very Good Face", :id => "very-good-face-img"), "/images/create", :target => "very-good-face", :title => "Pick an image to display for your good ratings",  :name => "image", :rel => "rank5", :class => "input-lnk"%>
+    </dd>
+  </dl>
+  
+  <h4 style="clear:both;font-size:25px;font-weight:bold"><%= link_to "Skip and start rating", "/nuniverse-of/#{current_user.login}" %></h4>
+  
+<% end -%>

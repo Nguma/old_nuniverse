@@ -40,20 +40,20 @@ class Fact < ActiveRecord::Base
 
 	alias_attribute :name, :body
 	
-	define_index do 
-		indexes [:body,  tags(:name)], :as => :body
-		indexes author.login, :as => :author
-		indexes [tags(:name)], :as => :tags
-		indexes [parent.unique_name], :as => :parent
-		indexes [:parent_type], :as => :parent_type
-		
-		has :parent_id, :created_at
-		has objects(:id), :as => :nuniverse_ids
-		has tags(:id), :as => :tag_ids
-		set_property :delta => :true
-		
-		# has parent(:id), :as => :parent
-	end
+	# define_index do 
+	# 		indexes [:body,  tags(:name)], :as => :body
+	# 		indexes author.login, :as => :author
+	# 		indexes [tags(:name)], :as => :tags
+	# 		indexes [parent.unique_name], :as => :parent
+	# 		indexes [:parent_type], :as => :parent_type
+	# 		
+	# 		has :parent_id, :created_at
+	# 		has objects(:id), :as => :nuniverse_ids
+	# 		has tags(:id), :as => :tag_ids
+	# 		set_property :delta => :true
+	# 		
+	# 		# has parent(:id), :as => :parent
+	# 	end
 	
 	def unique_name
 		body.gsub(/[^a-z0-9\_\s]+/i, '').gsub(' ','_').downcase
@@ -84,7 +84,11 @@ class Fact < ActiveRecord::Base
 	
 	
 	def tokens
-		Token.find(body_without_category)
+		tokens = []
+		self.body.scan(/\#([\w\_]+)/).flatten.reject {|t| t.blank?}.each do |t|
+			tokens << Nuniverse.find_by_unique_name(t)
+		end
+		tokens
 	end
 	
 	def percent_of_pros

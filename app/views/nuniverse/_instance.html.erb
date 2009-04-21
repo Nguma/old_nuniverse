@@ -1,4 +1,4 @@
- <%#= render :partial => "/boxes/suggestions" %>
+<%= render :partial => "/nuniverse/tooltip"%>
 <div id="nuniverse" style="<%= style rescue nil %>" >
   <%= content %>
 </div>
@@ -16,13 +16,16 @@
     <h2></h2>
     </div></div>
   </div>
+  <dd class="suggestion">
+    <%= image_tag('/images/backgrounds/blank.gif', :class => "thumbnail") %>
+    <p class="tags"> </p>
+    <%= link_to "", "#", :class => "name" %>
+    <%= clear %>
+  </dd>
   <div class="result box" style="width:96%;height:auto;background:#FFF;padding:2%">
-    
       <%= image_tag('/images/backgrounds/blank.gif', :class => "thumbnail") %>
       <p class="tags"> </p>
       <%= link_to "", "#", :class => "name" %>
-      
-
   </div>
   
   <%= render :partial => "/nuniverses/template"%>

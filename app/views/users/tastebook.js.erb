@@ -1,0 +1,4 @@
+<%= will_paginate @saved_items,  :previous_label => "Less", :next_label => "More", :page_links => false, :params => {:controller => "users", :action => "tastebook"} %>
+<% @saved_items.each do |item|  -%>
+  <%= render :partial => item.subject , :locals => {:options => nil}%>
+<% end -%>

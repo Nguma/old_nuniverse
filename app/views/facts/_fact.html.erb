@@ -1,13 +1,13 @@
   <dd class="fact" style="background:#FFF;margin:0 0 .4% 0;padding:2%;clear:both">
-  <% @tokens = [fact.tokens.collect {|c| c.namespace },fact.parent].flatten.reject {|t| t == @source || t == @tag }%>
-  <% if fact.parent != @namespace %>
+  <% @tokens = [fact.tokens.collect {|c| c },fact.parent].flatten.reject {|t| t == @source || t == @tag }%>
+  <% if fact.parent != @source %>
     <%= thumbnail_tag(fact.parent) rescue nil %>
     <div class="tag">Related to</div>
-    <h2 style="padding:0;"><%= link_to fact.parent.name.titleize, "/#{fact.parent.unique_name}" %></h2>
+    <h2 style="padding:0;"><%= wdyto_url(fact.parent) %></h2>
     <p><%= render_fact(fact) %></p>
   <% else -%>
     <%= thumbnail_tag(@tokens.first) rescue nil %> 
-    <div class="tag"><%= tags.first.name.capitalize rescue "Quick Fact" %></div>
+    <div class="tag"><%= tags.first.name.capitalize rescue "" %></div>
     <div style="font-size:<%= 26 %>px"><%= render_fact(fact) %></div>
   <% end -%>
   

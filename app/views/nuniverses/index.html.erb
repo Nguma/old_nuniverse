@@ -1,25 +1,33 @@
 <% nuniverse do -%>
+  <div id="left-col" style="width:60%">
+    <h1>Nuniverses matching <%= @input %></h1>
+    <%= will_paginate @nuniverses %>
+    <dl id="nuniverses">
+    <% @nuniverses.each do |nuniverse| -%>
+      <dd class="connection" style="">
+        <%= thumbnail_tag nuniverse -%>
+        <%= wdyto_url(nuniverse)  %>
+        <p style="font-size:12px;color:#999"><%= nuniverse.tags.collect{|c| c.name }.join(',')%></p>
+        <%= clear %>
+      </dd>
+    <% end -%>
+    </dl>
+  </div>
   
-  <h1>Nuniverses matching <%= @input %></h1>
-  <%= will_paginate @nuniverses %>
- 
-  <% @nuniverses.each do |nuniverse| -%>
-    <div class="connection" style="white-space:wrap;position:relative;float:left;width:auto;clear:none;background:#eee;margin:0 1px 1px 0">
-    <%= thumbnail_tag nuniverse -%>
-    <%= wdyto_url(nuniverse)  %>
-    <p style="font-size:12px;color:#999"><%= nuniverse.tags.collect{|c| c.name }.join(',')%></p>
-    </div>
-  <% end -%>
-   <h4 style="color:#FFF">If its not part of the above, you can create it</h4>
-  <% form_for @new_nuniverse, :html => {:style => "padding:2%;background:#000"} do |f| -%>
-    <%= f.hidden_field :name %>
-    <%= f.hidden_field :unique_name %>
+  <div id="right-col" style="width:35%;background:#000;padding:2%">
+      <h2 style="color:#FFF">What you're looking for doesn't have its nuniverse yet?</h2>
+      <% form_for @new_nuniverse, :html => {:style => "padding:2%;color:#FFF"} do |f| -%>
+         <%= f.hidden_field :name %>
+         <%= f.hidden_field :unique_name %>
+          
+         <h3>#<%= @new_nuniverse.unique_name.downcase %></h3>
+          <%= submit_tag "create #{@new_nuniverse.name.titleize}!", :style => "background:#000;color:#FFF;padding:4%" %>
+       <% end -%>
    
-    <h3 style="padding:0"><%= @new_nuniverse.name.titleize %></h3>
-    <h4 style="color:#eee">#<%= @new_nuniverse.unique_name.downcase %></h4>
     
-     <%= submit_tag "create it!" %></h4>
-  <% end -%>
+  </div>
+
+ 
   
 
 <% end %>

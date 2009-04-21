@@ -3,8 +3,8 @@ class UsersController < ApplicationController
   # Protect these actions behind an admin login
   # before_filter :admin_required, :only => [:suspend, :unsuspend, :destroy, :purge]
   before_filter :find_user, :only => [:show, :suspend, :unsuspend, :destroy, :purge, :upgrade]
-	before_filter :login_required, :except => [:new, :activate, :create]
-	skip_before_filter :invitation_required, :only => [:new, :create, :activate]
+	before_filter :login_required, :except => [:new, :activate, :create, :validate]
+	skip_before_filter :invitation_required, :only => [:new, :create, :activate, :validate]
   after_filter :store_location, :store_source, :only => [:show]
 	before_filter :update_session, :only => [:show, :tutorial]
 	
@@ -37,7 +37,9 @@ class UsersController < ApplicationController
     success = @user && @user.valid?
     if success && @user.errors.empty?
 			@user.register!
-      redirect_to('/thank_you')
+			@user.activate!
+			self.current_user = @user
+      redirect_to pick_a_face_url
      # flash[:notice] = "Thanks for signing up!  We're sending you an email with your activation code."
     else
       flash[:error]  = "There were some problems with creating the account. :("
@@ -141,13 +143,13 @@ class UsersController < ApplicationController
 		@source = User.find_by_login(params[:namespace])
 		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20, :order => :created_at)
 		@reviews = Comment.search(:with => {:user_id => [@source.tastemakers, @source].flatten.collect {|c| c.id} }, :page => params[:page], :per_page => 10, :order => "created_at DESC")
-		# @saved_items = @source.nuniverses.tagged(@tag).paginate(:page => params[:page], :per_page => 20)
-		conditions = {:from_user => true, :to_nuniverse => true, :object_id => current_user.id}
 		
+		conditions = {:from_user => true, :to_nuniverse => true, :object_id => @source.id}
 		conditions[:tag_ids] = @tag.id  unless @tag.nil?
 
 		@saved_items = Polyco.search(:with => conditions, :page => params[:page], :per_page => 20, :order => :created_at, :sort_mode => :desc)
-		@tags = Tag.search(:with => {:related_user_ids => current_user.id}, :order => :name, :page => params[:tag_page], :per_page => 30 )
+	
+		@tags = Tag.search(:with => {:related_user_ids => current_user.id}, :order => :name, :page => params[:tag_page], :per_page => 50 )
 		respond_to do |format|
 			format.html { }	
 			format.js {}
@@ -160,6 +162,32 @@ class UsersController < ApplicationController
 	
 	def tutorial
 		@user = @source = current_user
+	end
+	
+	
+	def feed 
+		@user = User.find_by_login(params[:namespace])
+		@reviews = Comment.search(:with => {:user_id => [@user.tastemakers, @user].flatten.collect {|c| c.id} }, :page => params[:page], :per_page => 10, :order => "created_at DESC")
+		respond_to do |f|
+			f.html {}
+			f.js {}
+			f.json {}
+		end
+	end
+	
+	def tastebook 
+		@user = User.find_by_login(params[:namespace])
+		@tag = Tag.find_by_name(params[:filter]) || nil
+		conditions = {:from_user => true, :to_nuniverse => true, :object_id => @user.id}
+		conditions[:tag_ids] = @tag.id  unless @tag.nil?
+
+		@saved_items = Polyco.with_score.sphinx(:with => conditions, :page => 1, :per_page => 2000).paginate(:page => params[:page], :per_page => 20, :order => "total_score DESC")
+
+		respond_to do |f|
+			f.html {}
+			f.js {}
+			f.json {}
+		end		
 	end
 	
 	def follow
@@ -180,6 +208,44 @@ class UsersController < ApplicationController
 			f.js { head :ok}
 			f.json {}
 		end
+	end
+	
+	
+	def validate
+		case params[:what]
+		when "login"
+			@user = User.find_by_login(params[:value])
+			if @user
+				resp = "taken"
+			else
+				resp = "ok"
+			end
+		when "password"
+			if params[:value].length <= 3
+				resp = "too short"
+			else
+				resp = "ok"
+			end
+		when "email"
+
+			if params[:value].match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)
+				@user = User.find_by_email(params[:value])
+				if @user 
+					resp = "used"
+				else
+					resp = "ok"
+				end
+			else
+				resp = "Not an email"
+			end
+		end
+		respond_to do |f|
+			f.json {  render :json => {'response' => resp }}
+		end
+	end
+	
+	def pick_a_face
+		@user = current_user
 	end
 	
 protected

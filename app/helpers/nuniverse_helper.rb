@@ -196,16 +196,7 @@ module NuniverseHelper
 		))
 	end
 	
-	def pretty_score(score)
-		sc = sprintf('%.1f', score)
-		sc = sc.gsub('.0','')
-		sc
-	end
-	def render_stat(stat, params = {})
-		params[:stat] = stat
-		params[:color] = Ranking.color(stat.score)
-		render :partial => "/nuniverse/stat", :locals => params
-	end
+
 	
 	def visit_url(nuniverse)
 		link_to nuniverse.name.titleize, "/#{nuniverse.unique_name}"
@@ -234,12 +225,17 @@ module NuniverseHelper
 			render :partial => "/taggings/default_content", :locals => {:source => params[:source]}
 		end
 	end
-	
-	def save_button(item, params = {})
-		params[:item] = item
-		render :partial => "/taggings/manage", :locals => params
-	end
 
+	def star_lnk(object, params = {})
+		params[:object] = object
+		if logged_in? && current_user.connected_to?(object) 
+			params[:status] =  "saved"
+		else
+			params[:status] = ""
+		end
+		
+		render :partial => "/nuniverse/star_lnk", :locals => params
+	end
 	
 	
 	
@@ -267,7 +263,7 @@ module NuniverseHelper
 	end
 	
 	def link_to_homepage
-		link_to image_tag("/images/icons/wdyto.png"), "/", :id => "home-lnk"
+		link_to image_tag("/images/icons/wdyto_logo_small.png"), "/", :id => "home-lnk"
 	end
 	
 

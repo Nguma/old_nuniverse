@@ -53,7 +53,6 @@ class RankingsController < ApplicationController
 				format.js		{ }
 				format.json { 
 					sc = @namespace.total_score
-			
 					render :json => {'user' => current_user.login,'color' => @ranking.color, 'score' => sc, 'score_label' => Ranking.label(@namespace.score),'vote' => @ranking, 'stats' => @namespace.stats}
 				}
         format.xml  { render :xml => @ranking, :status => :created, :location => @ranking }

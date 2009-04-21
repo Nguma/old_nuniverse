@@ -1,14 +1,17 @@
 <% body = "#{@tag.name}:" rescue "" %>
-
+ <dl id="input-suggestions"></dl>
 <% new_fact = Command.new(:commander => current_user, :value => body ) %>
-<% form_for :command,  :url => process_url, :html => {  :id => "input_form"} do |f| -%>
+<% form_for :command,  :url => process_url, :html => {  :id => "input_form",:multipart => true , :target => "upload_frame"} do |f| -%>
+ 
+  <h5 style="position:absolute;top:-1.2em;font-size:1em;padding:.1em;color:#FFF">check</h5>
   <fieldset>
-  <%= fields_for_source source %>
-  <%#= thumbnail_tag(current_user, :size => :small) %>
-  <%#= hidden_field_tag :path, @path.first.to_s , :id => "input_path"%>
-  <%= submit_tag "Fact!", :id => "input_submit" %>
-  <%= f.text_field :order ,  :value => "", :id => "input_order", :size => 2, :style => "text-align:center"%>
-  <%= f.text_field :value ,  :value => "",  :id => "input_value", :size => 160 %>
+    <%= fields_for_source source %>
+    <button id="upload_button">Upload from file</button>
+    <%= submit_tag "Add", :id => "input_submit" %>
+  
+    <%= f.text_field :order ,  :value => "", :id => "input_order", :size => 2, :style => "text-align:center; display:none"%>
+    <%= f.text_field :value ,  :value => "",  :id => "input_value" %>
+    <%= f.file_field :uploaded_data , :id => "input_uploaded_data"%>
   </fieldset>
   <%= clear %>
 <% end -%>

@@ -94,9 +94,13 @@ module UsersHelper
 		if user == current_user
 			link_to("You", "/my_nuniverse", options)
 		else
-			link_to(user.login.capitalize, "/users/#{user.id}", options)
+			link_to(user.login.capitalize, "/nuniverse-of/#{user.id}", options)
 		end
 	end
 
+	def possessive_for_user(user)
+		return "Your" if user == current_user
+		return "#{user.login.capitalize}\'s"
+	end
 
 end

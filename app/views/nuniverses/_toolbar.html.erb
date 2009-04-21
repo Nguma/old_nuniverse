@@ -1,24 +1,16 @@
 <div id="toolbar" >
+  <div class="wrap" style="padding:0;width:95%; margin:0 auto 1% auto;background:none" >
+      
+      <ul id="breadcrumbs" style="height:0;border:none;padding:0;display:none" >
+        <div style="display:none">
+          <li class="selected" style="background:#000" > </li>
+          <li><%= link_to "#{@source.name.titleize}", "##{@source.unique_name}" %></li>
+        </div>
+      </ul>
 
  
+      <%= render :partial => "/nuniverse/input", :locals => {:source => @source, :path => "/#{@source.unique_name}"} %>
   
-  <div class="wrap">
-      <div class="menu" style="position:relative;padding:0 0 0 2%">
-        <%= link_to "?", "#TODO", :style=>"color:#000;font-weight:bold;font-size:30px;padding:0;margin:0;position:absolute;float:right;right:20px;z-index:999" %>
-       <%= link_to(image_tag('/images/icons/magnifier.png'), "/search/" ,:target => "search", :class => "input-lnk")%>
-       <%= link_to(image_tag('/images/icons/comment.png'), "/comment/create" ,:target => "comment", :class => "input-lnk") %>
-       <%= link_to(image_tag('/images/icons/group.png'), "/share/" ,:target => "Share with", :class => "input-lnk")%>
-       <%= link_to(image_tag('/images/icons/bookmark.png'), "/add-tag" ,:target => "This nuniverse is about a", :class => "input-lnk")%>
-      </div>
-
-
-  <ul id="breadcrumbs" style="height:5px" >
-    <div style="display:none">
-      <li class="selected" style="background:#000" > </li>
-      <li><%= link_to "#{@source.name.titleize}", "##{@source.unique_name}" %></li>
-    </div>
-  </ul>
-  <%= render :partial => "/nuniverse/input", :locals => {:source => @source, :path => "/#{@source.unique_name}"} %>
-
-   </div>
+   
+  </div>
 </div>

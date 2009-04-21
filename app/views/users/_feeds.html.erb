@@ -1,0 +1,11 @@
+<div id="feeds" >
+  <ul class="tabs" target="#feeds">
+    <li class="selected"><%= link_to "Just tasted", "JustTasted", :target => "#just-tasted", :title => "Recently tasted" %></li>
+    <li><%= link_to "#{possessive_for_user(@source)} tastebook", "TasteBook", :target => "#tastebook", :title => "Your bookmarked tastes" %></li>
+  </ul>
+  <%= clear %>
+
+  <%= render :partial => "feed" %>
+  <%= render :partial => "tastebook" %>
+  
+</div>

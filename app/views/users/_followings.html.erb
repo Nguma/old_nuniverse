@@ -1,0 +1,12 @@
+<div id="tastemakers">
+  <h3 style="padding:0">People you trust</h3>
+  <dl>
+  <% @source.tastemakers.each_with_index do |user,i| -%>
+    <dd>
+      <%= image_tag(user.avatar(:size => :small), :style => "display:inline;height:30px") %>
+      <%= link_to_author(user)%>
+    </dd>
+  
+  <% end -%>
+  </dl>
+</div>

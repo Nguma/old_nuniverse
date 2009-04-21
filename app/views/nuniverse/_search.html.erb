@@ -1,9 +1,12 @@
- <div style="position:relative;background:none;height:30px;width:300px;padding:.5%">
-     <% form_tag "/" do -%>
-       <%= link_to(image_tag('/images/icons/magnifier.png', :style => "height:30px"), "/search/" ,:target => "search", :style => "position:relative;float:right;width:15%;background:none") %>
-       <%= text_field_tag "search-input", "", :style => "width:75%;"%>
-
+  <div style="position:relative;float:left;background:none;height:40px;width:auto;padding:0;">
+    <%= link_to image_tag('/images/icons/magnifier.png', :style => "height:30px;"), '/search-for', :id => "search-lnk" %>
+ 
+    <% form_tag "/search-for/", :id => "search-form", :style => "display:none;width:270px;padding:0;position:relative;float:left;height:auto" do -%>
+      <%= text_field_tag "input", "",  :id => "search-input"%>
      <% end -%>
-     <dl id="suggestions"></dl>
      <%= clear %>
    </div>
+    
+   
+   
+         

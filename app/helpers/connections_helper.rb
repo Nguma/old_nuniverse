@@ -24,13 +24,8 @@ module ConnectionsHelper
 	end
 	
 	def authorized_to_edit?(connection)
-
 		return true if connection.object == current_user
-		
-		return false if connection.object.is_a?(Story) && connection.object.author != current_user
 		return true if !connection.subject.is_a?(User) && !connection.object.is_a?(User)
-		
-		# return true if connection.subject.kind == 'user' && connection.subject == current_user.tag
 		return false
 	end
 	

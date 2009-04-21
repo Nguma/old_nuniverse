@@ -6,6 +6,7 @@ class Polyco < ActiveRecord::Base
 	has_many :taggings, :as => :taggable, :dependent => :destroy
 	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
 
+	has_many :votes, :as => :rankable, :class_name => 'Ranking', :dependent => :destroy
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	
@@ -59,13 +60,12 @@ class Polyco < ActiveRecord::Base
 	
 	named_scope :with_score, lambda { |user| 
 		user.nil? ? {
-			:select => "polycos.*, AVG(score) as average_score",
+			:select => "polycos.*, AVG(score) as average_score, SUM(score) as total_score",
 			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.subject_id AND rankable_type = 'Nuniverse'"],
 			:group => "polycos.id" 		
-		} :
-		{
-			:select => "polycos.*, AVG(score) as average_score",
-			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.id AND rankable_type = 'Polyco' AND rankings.user_id in (#{[*user]}) "],
+		} : {
+			:select => "polycos.*, AVG(score) as average_score, SUM(score) as total_score",
+			:joins => ["LEFT OUTER JOIN rankings ON rankable_id = polycos.subject_id AND rankable_type = 'Nuniverse' AND rankings.user_id in (#{[*user]}) "],
 			:group => "polycos.id"
 		}
 	}
@@ -115,12 +115,15 @@ class Polyco < ActiveRecord::Base
 	end
 	
 	def score
-		average_score.to_i || 0
+			(votes.average(:score)) rescue 0
 	end
 
 	def self.find_or_create(params)
-		Polyco.with_subject(params[:subject]).with_object(params[:object]).first || Polyco.create(params)
+		params[:description] ||= nil
+		Polyco.with_subject(params[:subject]).with_object(params[:object]).first || Polyco.create(:subject_id => params[:subject].id,:subject_type =>params[:subject].class.to_s, :object_id =>params[:object].id ,:object_type =>  params[:object].class.to_s, :description => params[:description])
 	end
+	
+	
 	
 
 	protected

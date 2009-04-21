@@ -18,13 +18,42 @@ class TagsController < ApplicationController
 
 	def show
 		@tag = Tag.find_by_name(params[:tag])
+		@tag = Tag.new(:name => params[:tag]) if @tag.nil?
+		@filters = []
 		
-		@taggeds = @tag.nuniverses.with_rankings.paginate(:page => params[:page] , :per_page => 30, :order => "AVG(rankings.score) DESC")
-		@mode = params[:mode] || "list"
+		if params[:filters]
+			params[:filters].each do |f|
+			 @filters << Tag.find_by_name(f)
+			end
+		end
+		
+		@conditions = {}
+		@conditions['tags'] = "#{@tag.name} #{@filters.collect {|f| f.name}.join(' ')} ";
+		@conditions['name'] = params[:input] if params[:input]
+		
+
+		@taggeds = Nuniverse.sphinx(:conditions => @conditions, :per_page => 1000, :page => 1, :match_mode => :any).with_rankings.paginate(:page => params[:page] , :per_page => 30, :order => "SUM(rankings.score) DESC")
+		
+		@tags = Tag.sphinx(:with  => {:related_tag_ids => @tag.id}, :without => {:self_id => [@filters.collect{|c| c.id}, @tag.id].flatten}, :per_page => 2000, :page => 1, :order => :name)
+		@filters.each do |f|
+		# @tags = @tags.sphinx(:with => {:related_tag_ids => f.id}, :per_page => 2000, :page => 1)
+		end
+
 		
 		respond_to do |f|
 			f.html {}
 			f.js {}
+		end
+	end
+	
+	def remove
+		@namespace = Nuniverse.find_by_unique_name(params[:namespace])
+		@tag = Tag.find_by_name(params[:tag])
+		
+		if @namespace.tags.delete @tag
+			respond_to do |f|
+				f.json { head :ok}
+			end
 		end
 	end
 
@@ -71,16 +100,19 @@ class TagsController < ApplicationController
   end
 
 	def create
+		@tags = []
 		params[:command][:value].split(',').each do |t|
 			unless t.blank?
 				@tag = Tag.find_or_create(:name => t.strip)
+				@tags << @tag
 				@source.tags << @tag rescue nil
 			end
 		end
-		
+
 		respond_to do |f|
-			f.html { redirect_back_or_default('/') }
+			f.html { render :layout => false}
 			f.js {}
+			
 		end
 	end
 

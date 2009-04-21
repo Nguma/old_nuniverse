@@ -1,65 +1,48 @@
-
 <%= render :partial => "/nuniverse/main_menu"%>
-<% @votes.each_with_index do |vote,i| %>
-  <% content_for "col_#{i%1}" do -%>
-  <%= render :partial => "/users/vote", :locals => {:vote => vote} %>
-  <% end %>
-<% end -%>
+
 <% nuniverse do -%>
 
-  <div id="wdyto" style="position:relative;z-index:9">
-    
-   
-      <div style="position:relative;float:left;margin: 0 .5% 0 0 ;width:39.5%;z-index:10;">
-        <div id="logo" >
-          <%= image_tag("/images/icons/wdyto.png") %>
-          <span style="color:#eee;font-size:20px;display:block">Collective tastemaking</span>
-        </div>
 
-        <div id="signin" style="background:#000;color:#FFF;padding:0;height:auto;text-align:center">
-            <% if !logged_in? %>
-              <%= render :partial => "/sessions/new"%>
-            <% else -%>
-              <div style="padding:3%">
-                <h3><%= current_user.login %>, you are already logged in.</h3>
-                <% if current_user.latest_review %>
-                <h4>Your latest review was about <%= wdyto_url(current_user.latest_review.parent) %><br/>
-                <span style="color:<%= current_user.latest_review.matching_vote.color%>">"<%= current_user.latest_review.body %>" - <%= current_user.latest_review.matching_vote.score %>
-                <% else -%>
-                  <h4>You haven't reviewed any experience yet, Share your taste now</h4> 
-                <% end -%>
-              </div>
-            <% end -%>
-             
-        </div>
-         <div id="featured" style="text-align:center;font-size:2em;color:#333;background:#FFF;padding:4%">
-            <h1>Build your experience book.</h1>
-            <h2 style="padding:0;" class="score_2">1. Taste it</h2>
-            <p >Experience something remarkable.</p>
-            <h2 class="score_6">2. Review it</h2>
-            <p >Rate how good (or bad) that experience was, you are the editor</p>
-            <h2 class="score_10">3. Spread it</h2>
-            <p >Others want to know how you feel about it.</p>
-
-          </div>
-           <div style="padding:3%;margin:0 0 0 0;background:#FFF">
-              <h2 style="color:#333;text-align:center">So what did you taste?</h2>
-              <% form_tag "/search-for/" do -%>
-
-                <%= text_field_tag "input", "", :style => "width:90%;padding:1em;border:solid 3px #333", :id => "search-input"%>
+    <div id="left-col" style="margin:0 2% 0 0;width:28%">
+      <div id="logo" style="position:relative;padding:0;background:#FFF;text-align:center">
+        <%= image_tag("/images/icons/wdyto_logo_2.png") %>
+        <h2 style="color:#000;font-size:20px;display:block">Collective tastemaking</h2>
+        <% if !logged_in?%>
+          <%= render :partial => "/sessions/new" %>
+        <% end %>
+      </div>
+    </div>
+    <div id="right-col" style="width:70%">
+       <dl id="suggestions" style="padding:0;min-height:0;margin:0"></dl>
+        <% if !logged_in? %>
+      
+         <h1 style="color:#000;font-size:3em;font-weight:bold;padding:.5em .5em 0 .5em">Build your experience book.</h1>
+       
+         <h2 style="font-size:2em;line-height:1.8em;font-weight:normal;color:#000;text-align:justify;padding:0 .5em">Wdyto is a place where you can give your point of view on just about anything. <%= link_to "Get started.", "/signup", :style => "font-weight:bold;color:#FFF;background:#000;padding:.3em" %><br/><span class="score_2">1. Experience something remarkable.</span> <span class="score_6" >2. Rate how good (or bad) that experience was, you are the editor.</span> <span class="score_10" >3. Spread the word, others want to know how you feel about it.</span > </h2>
+           <dl id="homepage_feed" style="position:relative;float:right;width:100%;">
+              <% @votes.each_with_index do |vote,i| %>  
+                <%= render :partial => "/users/vote", :locals => {:vote => vote} %>
               <% end -%>
-            </div>
-            <dl id="connections" style="position:relative;"></dl>
-      
-      </div>
-      <div style="position:relative;float:left;width:59%;">
-        <%= yield :col_0 %>
-      </div>
-      
-  </div>
+            </dl>
+         <% else -%>
+           <% if current_user.latest_review %>
+              <h2 style="font-size:2em;line-height:1.8em;font-weight:normal;color:#000;text-align:justify;padding:0 .5em">Wdyto is a place where you can give your point of view on just about anything.<br/><span class="score_2">1. Experience something remarkable.</span> <span class="score_6" >2. Rate how good (or bad) that experience was, you are the editor.</span> <span class="score_10" >3. Spread the word, others want to know how you feel about it.</span > </h2>
+            <h2>Your latest review was about <%= wdyto_url(current_user.latest_review.parent) %><br/>
+              <span style="color:<%= current_user.latest_review.matching_vote.color  rescue nil %>">"<%= current_user.latest_review.body %>" - <%= current_user.latest_review.matching_vote.score rescue nil %></h2>
+            <% else -%>
+                <h2>You haven't reviewed any experience yet, Share your taste now</h2> 
+            <% end -%>
+        <dl id="homepage_feed" style="position:relative;width:100%;">
+          <% @votes.each_with_index do |vote,i| %>  
+            <%= render :partial => "/users/vote", :locals => {:vote => vote} %>
+          <% end -%>
+        </dl>
+     <% end -%>
+    </div>
 
-
-  <%#= render :partial => "/nuniverse/input", :locals => {:source => current_user} %>
 <% end -%>
+
+ 
+
 
  

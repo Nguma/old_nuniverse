@@ -20,7 +20,7 @@ class Image < ActiveRecord::Base
 
 	define_index do 
 
-		has tags(:id), :as => :tag_ids	
+		# has tags(:id), :as => :tag_ids	
 	end
 	
 	alias_attribute :name, :filename
@@ -83,9 +83,12 @@ class Image < ActiveRecord::Base
 	
 	
 	def self.find_or_create(params)
-		image = Image.find_by_url(params[:source_url]) 
+	
+		image = Image.find_by_url(params[:source_url])  unless params[:source_url].blank?
+	
 		if image.nil?
-			image = Image.create(:source_url => params[:source_url])
+			image = Image.create(params)
+	
 			image.url = params[:source_url]
 			image.save
 		end

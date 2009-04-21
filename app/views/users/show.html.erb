@@ -2,14 +2,15 @@
 <%= render :partial => "/nuniverse/main_menu"%>
 <% nuniverse do -%>
   <div id="wdyto">
-    <div style="position:relative;float:right;width:30%;padding:0;margin:0 auto;z-index:9999;height:100%;">
-      <%= render :partial => "top"%>    
-    </div>
-    <div style="width:69.5%;position:relative;float:left;margin:0 .5% 0 0">
-      
-      <%= render :partial => "just_tasted"%>
-    </div>
+     <div id="left-col">
+       <%= render :partial => "name"%>
+       <%= render :partial => "top"%>
+       <%= render :partial => "followings"%>
+     </div>
+
+     <div id="right-col">
+       <dl id="suggestions" style="padding:0;min-height:0"></dl>
+       <%= render :partial => "feeds"%>
+     </div> 
   </div>
-  
-  
 <% end -%>

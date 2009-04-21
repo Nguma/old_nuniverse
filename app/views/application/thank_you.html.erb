@@ -1,12 +1,13 @@
-
+<% nuniverse do -%>
   <% if @selected == "feedback" -%>
     <h1>Thanks for your feedback!</h1>
     <h2><%= link_to "Add more feedback", "/feedback" %></h2>
   <% else -%>
-    <h1>Thanks for registering.</h1>
-    <h2>An email has been sent to you with more details. We will welcome you as soon as possible.</h2>
+    <h1>You just became a wdytoist.</h1>
+    <h2>You are now part of the adventure.</h2>
    
   <% end -%>
    <br/>
-    <h4><%= link_to("Back to base", "/my_nuniverse", :style=>"color:#1A9" )%></h4>
+    <h4><%= link_to("Back to base", "/")%></h4>
+<% end -%>
 

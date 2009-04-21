@@ -1,13 +1,15 @@
-<div id="main-menu">
-  <div class="wrap" style="width:1100px;margin:auto">
+<div id="main-menu" style="background:none">
+  <div class="wrap" style="width:90%;margin:auto;height:auto;background:none;">
  
     <%= link_to_homepage unless request.request_uri == "/"%>
     <% if logged_in?  %>
-      <%= link_to "Me", "/nuniverse-of/#{current_user.login}" , :id => "account-lnk"  %>
+      <%= link_to "Me", "/nuniverse-of/#{current_user.login}" , :id => "account-lnk" %>
       <%= link_to("Log out.", "/logout") %>
     <% else -%>
-      <%= link_to("Log in.", "/login", :style=>"color:#FFF;font-size:16px;font-weight:bold") %>
-      <%= link_to("Sign up.", "/signup", :style=>"color:#FFF;font-size:16px;font-weight:bold") %>
+      <%= link_to("Log in.", "/login") %>
+      <%= link_to("Sign up.", "/signup") %>
     <% end -%>
+    <%= render :partial => "/nuniverse/search"%>
+    
   </div>
 </div>

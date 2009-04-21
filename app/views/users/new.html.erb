@@ -1,29 +1,28 @@
-<div style="padding:100px"><div id="hat">
-  <%= image_tag("/images/icons/logo-nuniverse-2009.png")%>
-</div>
-<div id="sign_up" style="padding:10px 40px 40px 00px">
-  <h1>Signing up, Basics</h1>
-  <% if (error_messages_for :user).blank? %>
-    
-    <h4>Three quick and easy steps.</h4>
-  <% else -%>
-    <%= error_messages_for :user, :header_message => "Wait a minute...", :message => ""%>
-  <% end -%>
-  <% form_for :user, :url => {:action => :create}, :html => { :multipart => true } do |f| -%>
-    <div class="image_picker"></div>
-    <label for="login">Login</label>
-    <%= f.text_field :login %>
 
-    <label for="email">Email</label>
-    <%= f.text_field :email %>
-
-    <label for="password">Password</label>
-    <%= f.password_field :password %>
-    <br/>
-    <br/>
-  
-    <%= submit_tag 'Sign up' , :class => 'submit'%>
+<% nuniverse do %>
+  <div id="sign_up" style="padding:0 0 0;text-align:center">
+    <%= image_tag('/images/icons/getonwdyto.png') %>.
+    <% if (error_messages_for :user).blank? %>
+    <% else -%>
+      <%= error_messages_for :user, :header_message => "Wait a minute...", :message => ""%>
     <% end -%>
-    <%= link_to "Cancel", "/" %>
-</div>
-</div>
+    <% form_for :user, :url => {:action => :create}, :html => { :id => "signup_form" } do |f| -%>
+     <div style="position:relative;width:100%;clear:both">
+       <label for="email">#1 Enter your email</label>
+        <%= f.text_field :email, :id => "signup_email" %><div class="signal"> </div>
+      </div>
+      <div style="position:relative;width:100%;clear:both">
+        <label for="login">#2 Pick a login</label>
+        <%= f.text_field :login, :id => "signup_login"%><div class="signal"> </div>
+      </div>
+      <div style="position:relative;width:100%;clear:both">
+        <label for="password">#3 Pick a password</label>
+        <%= f.password_field :password, :id => "signup_password" %><div class="signal"> </div>
+      </div>
+     
+      
+      <%= submit_tag 'Sign up' , :class => 'submit', :style => "clear:both;display:none", :id =>"signup_submit" %>
+      <% end -%>
+      <%= link_to "Cancel", "/" %>
+  </div>
+<% end -%>

@@ -15,4 +15,15 @@ module CommentsHelper
 		end
 		"\"#{body.capitalize}\""
 	end
+	
+	def render_tweet(tweet)
+		tweet = tweet.gsub(/(http\:\/\/[^\s]+)/,link_to('\1','\1',:target => "_blank"))
+		tweet = tweet.gsub(/\@([\w\_]+)/i,link_to('@\1','http://www.twitter.com/\1', :target => '_blank'))
+		tweet.scan(/\#([\w\_\-]+)/i).flatten.each do |s|
+			n = Nuniverse.find_by_unique_name(s)
+			tweet = tweet.gsub(/\##{s}/i,wdyto_url(n)) unless n.nil?
+		end
+		
+		tweet
+	end
 end

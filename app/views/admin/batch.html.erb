@@ -1,9 +1,1 @@
-<% nuniverse do -%>
-  <% form_tag "/admin/batch" do -%>
-    <fieldset>
-      <%= text_field_tag "kind", @kind %><br/>
-      <%= text_area_tag "batch", @batch %><br/>
-      <%= submit_tag %>
-    </fieldset>
-  <% end -%>
-<% end -%>
+<%= @ambig.join('<br/>')%>

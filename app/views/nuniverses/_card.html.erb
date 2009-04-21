@@ -1,25 +1,18 @@
-<div class="box" style="width:75%;position:relative;padding:0;border:none" id="hat" >
-  <% if logged_in?%>
-  <%= link_to image_tag('/images/backgrounds/blank.gif', :style => "width:30px;height:30px;"), "/save/#{@source.unique_name }", :class => "star #{current_user.connected_to?(@source) ? "saved" : ""}" %>
-  <% end -%>
-  <div class="wrap" style="padding:0;margin:0;border:none">
-
-
-    <h1 style="font-size:2em;padding:0.5em 1em 0 0.4em "><%= @namespace.name.titleize %></h1>
-    <h3 style="font-size:1em;font-weight:normal">
-      <%= @namespace.tags.map {|c| "<span style='padding:.4em;background:#0cf;color:#eee;margin:0 0.1em 0 0'>#{c.name.capitalize}</span>" } %>
-    </h3>
-    
-
-  </div>
-  <ul class="tabs" target="" style="background:#000;position:absolute;bottom:0;border-bottom:none">
-    <li class="selected"><%= link_to "Experienced", "Experienced", :target => "#reviews", :title => "Reviews"%></li>
-    <li><%#= link_to "Pros&cons", "Pros", :target => "#pros", :title => "Pros" %></li>
+<div id="hat" >
+  <h2 id="score" class="score_<%= @source.score.round.to_i + 4 rescue 0%>" style="font-size:110px; padding:3%;position:relative;float:right;">
+    <%= pretty_score(@source.total_score) if @source.votes.count > 0 %>
+  </h2>
+  <div style="position:relative;">
+  <h1 style="font-size:3em;padding:0 1em 0 0;color:#000;margin:0 0 0 0;line-height:1em"><%= @namespace.name.titleize %><%= star_lnk(@namespace)%></h1>
+  <h2 style="padding:0 0 0 1%;font-size:1.3em;line-height:1em">#<%= @namespace.unique_name %></h2>
+  <dl class="tags" style="clear:left;background:none;margin:0.5em 0 0 .5em" id="tags">
+    <% @namespace.tags.each do |tag| -%>
+      <dd class="tag"><%= link_to tag.name.capitalize,"/bestof/#{tag.name}" %><%= link_to "x", "/remove-tag/#{tag.name}/from/#{@source.unique_name}", :class => "remove-tag-lnk" %></dd>
+    <% end -%>
+     <dd><%= link_to "Add tags", add_tag_url, :target => "", :rel => "", :class => "input-lnk", :style => "color:#09F" %></dd>
+  </dl>
    
-    <li><%#= link_to "Connections", "Connections", :target => "#connections", :title => "Connections" %></li>
-    <li><%#= link_to "Media",  "Media", :target => "#media", :title => "Images & Videos" %></li>
-    <li><%#= link_to "Bookmarks",  "Bookmarks", :target => "#bookmarks", :title => "Bookmarks" %></li>
-  </ul>
-
+  
+  </div>
 </div>
 

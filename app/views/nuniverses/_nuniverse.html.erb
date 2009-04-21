@@ -1,19 +1,16 @@
-<dd  class="taste" style="background:#FFF;position:relative;clear:both;float:none;padding:0;margin:0 0 1% 0 ;height:auto" id="<%= nuniverse.unique_name %>">
-  <% if !nuniverse.score.nil? %>
-  <div style="position:absolute;width:6%;text-align:center;top:0;right:0;padding:0 2% 0 2%;height:100%;background:<%= Ranking.color(nuniverse.score) rescue nil %>;margin:0">
-     
-       
-        <h3  class="score" style="text-align:center" ><%= pretty_score(nuniverse.total_score) %></h3>
-     <%= link_to image_tag('/images/backgrounds/blank.gif', :style => "width:30px;height:30px;"), "/save/#{nuniverse.unique_name }", :class => "star #{current_user.connected_to?(nuniverse) ? "saved" : ""}" %>
-   </div>
-   <% end %>
-   <div style="padding:2%;margin:0 10% 0 0">
-     <%= link_to(thumbnail_tag(nuniverse, :style => "float:left;border-color:#{Ranking.color(nuniverse.score)}"), image_url(nuniverse.avatar)) rescue nil %>
-     <p class="tags" style="color:#666;font-size:0.9em"><%= nuniverse.tags.collect {|t| t.name.capitalize }.join(', ') %></p>
-
-     <h2><%= wdyto_url(nuniverse, :class => "name") %></h2>
-     <%= clear %>
-    </div>
-
+<dd  class="nuniverse"  id="<%= nuniverse.unique_name %>">
+  <div style="background:<%= Ranking.color(nuniverse.score) rescue nil %>;" class="actions">
+    <h3  class="score" ><%= pretty_score(nuniverse.total_score)  unless nuniverse.score.nil? %></h3>
+    
+  </div>
+  <div class="content" style="border-color:<%= Ranking.color(nuniverse.score)  rescue "#FFF"%>">
+    <% unless options.nil? %>
+      <h3 class="rank" style="font-size:<%= [60 - (options[:rank].to_i*3),20].max %>px;top:0;left:-2%">#<%= options[:rank] %></h3>
+    <% end -%>
+    <%= link_to(thumbnail_tag(nuniverse, :style => "float:left;"), image_url(nuniverse.avatar)) rescue nil %>
+    <p class="tags"><%= nuniverse.tags.collect {|t| t.name.capitalize }.join(', ') %></p>
+    <h2><%= wdyto_url(nuniverse, :class => "name") %></h2>
     <%= clear %>
+  </div>
+  <%= clear %>
 </dd>

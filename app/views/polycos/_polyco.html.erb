@@ -1,15 +1,17 @@
   <%#= link_to(image_tag("/images/icons/arrow_select.png", :style => "height:80px"), polyco_url(polyco), :class => "expand-lnk arrow", :style => "position:absolute;right:10px;top:0px") %>
   <dd class="connection" style="background:#FFF;margin: 0 0 .5% 0;padding:0;">
 
-    <div style="padding:3%;position:relative;float:left;background:#09f;height:100%;margin:0 .5% 0 0;font-size:1.4em;font-weight:bold;color:#FFF">
-        <%= polyco.tags.collect {|t| t.name }.join(' + ') %> >
+    <div style="padding:3%;position:relative;float:left;background:#09f;height:100%;margin:0 .5% 0 0;font-size:1.4em;font-weight:bold;color:#FFF;display:none" class="tags">
+        <%= link_to  "#{polyco.tags.collect {|t| t.name}.join(' + ')} > ", '#'%> 
       </div>
     <div style="padding:0">
     <%= thumbnail_tag polyco.subject, :style => "border:solid #{ Ranking.color(polyco.subject.score) rescue "#FFF" } .5em"  rescue nil %>
+    
     <p style="font-size:1.3em;padding:1em 10% 0 0;clear:none;position:relative;float:left">
-      <%= wdyto_url(polyco.subject) rescue nil %>
+      <%#= render_description(polyco) %>
+      <%= "#{polyco.tags.collect {|c| c.name.capitalize }.join(',')}: " unless polyco.tags.empty? %> <%= wdyto_url(polyco.subject) rescue nil %>
     </p>
-    <p><%= render_fact(polyco.subject.fact.first) rescue nil%></p>
+    <p><%#= render_fact(polyco.subject.facts.first) rescue nil%></p>
         <%= clear %>
     </div>
   </dd>

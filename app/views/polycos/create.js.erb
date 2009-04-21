@@ -1,8 +1,5 @@
-<dl >
-  <dd class="fact connection" style="font-size:20px">
-
-  <%= render :partial => @connection, :locals => { :source => @source, :path => @token.path, :tags => @connection.tags }%>
-  <%= clear %>
-</dd>
-
+<dl class="images">
+  <% @token.images.each do |img| %>
+    <%= image_tag(img.public_filename(), :class => "image")%>
+  <% end -%>
 </dl>

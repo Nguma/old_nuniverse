@@ -1,7 +1,7 @@
-<div id="stats" class="box" style="position:relative;float:none;width:100%">
+<div id="stats" class="box" style="position:relative;float:none;width:100%;display:<%= @current_user_vote ? "block" : "none" %>">
   <div class="wrap" style="padding:4%;width:70%;height:70%">
     <% 10.times do |t| -%>
-      <%= render_stat(source.stat(:score => 10 - t )) %> 
+      <%= render_stat(source.stat(:score => 5 - t )) %> 
     <% end -%>
   </div>
    <h5 style="position:relative;padding:4%;font-size:1em;color:#ccc;text-align:center"><%= @source.votes.count %> votes, <%= @source.comments.count %> reviews.</h5>

@@ -1,0 +1,2 @@
+<span class="stars <%= status %>" ><%= link_to image_tag('/images/icons/star_saved.png'), "/save/#{object.unique_name }", :class => "star_saved tippable" , :title => "Remove #{object.name} from your taste book."  %>
+  <%= link_to image_tag('/images/icons/star.png'), "/save/#{object.unique_name }", :class => "star_unsaved tippable", :title => "Save #{object.name} to your taste book." %></span>

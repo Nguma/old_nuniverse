@@ -1,5 +1,6 @@
 class NuniversesController < ApplicationController
 	
+	require 'rwikibot'
 	before_filter :find_user, :only => [:suggest, :show, :command, :index]
 	before_filter :make_token, :except => [:index, :suggest, :discuss]
 	# before_filter :find_source, :only => [:index]
@@ -8,14 +9,16 @@ class NuniversesController < ApplicationController
 
 	def index
 		
-		@nuniverses = Nuniverse.find(:all, :conditions => ['name rlike ? OR unique_name rlike ?', params[:input], params[:input].gsub(' ','_')]).paginate(:page => params[:page], :per_page => 20)
+		# @nuniverses = Nuniverse.find(:all, :conditions => ['name rlike ? OR unique_name rlike ?', params[:input], params[:input].gsub(' ','_')]).paginate(:page => params[:page], :per_page => 20)
+		@nuniverses = Nuniverse.search(params[:input], :match_mode => :all).paginate(:page => params[:page], :per_page => 20)
 		json = []
 		@nuniverses.each do |n|
 			json << n.to_json
 			json.last['url'] = "/wdyto/#{n.unique_name}"
 		end
 		
-		@new_nuniverse = Nuniverse.new(:name => params[:input], :unique_name => Token.sanatize(params[:input]))
+		
+		@new_nuniverse = Nuniverse.new(:name => params[:input], :unique_name => Token.generate(params[:input]))
 		
 		respond_to do |f|
 			f.html {}
@@ -28,12 +31,78 @@ class NuniversesController < ApplicationController
 	def wdyto
 		@namespace = Nuniverse.find_by_unique_name(params[:namespace])
 		@source = @namespace
+		@title = "#{@namespace.unique_name} on Wdyto"
 		@comments = @namespace.comments
 		@current_user_vote = @source.votes.by(current_user).first
 		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20)
 		@connections = @source.connections.of_klass('Nuniverse').paginate(:page => 1, :per_page => params[:page])
+		@connecteds = @source.connected_nuniverses.paginate(:page => 1, :per_page => params[:page])
+		@comments = Comment.find(:all, :conditions => ['user_id = 0']).paginate(:page => 1)
 		
-		@prosandcons = @source.connections.of_klass('Tag').paginate(:page => 1, :per_page => params[:page])
+		@procons = @source.connections.of_klass(['Tag', 'Nuniverse']).with_score.paginate(:per_page => 50, :page => 1)
+		begin
+			@client = TwitterSearch::Client.new 'wdyto'
+			@tweets = @client.query :q => "##{@source.unique_name} OR @#{@source.unique_name} OR \"#{@source.name}\"", :lang => 'en' rescue nil
+		rescue 
+		end
+			@tweets ||= []
+		
+		@links = []
+		if @source.wikipedia_id && @source.description.blank?
+		 	# @wiki = RWikiBot.new('u','p','http://en.wikipedia.org/w/api.php')
+			
+			# wikipedia_id = @source.name.titleize.gsub(/\s/,'_').gsub(':','')
+			# @wikicontent = Wikipedia.find(@source.wikipedia_id)
+			# 		if @wikicontent.redirect?
+			# 			@wikicontent = Wikipedia.find(@wikicontent.content.scan(/\[\[([\w\s\:]+)\]\]/).to_s)
+			# 		end
+			# 		raise @wikicontent.content.split(/\n/).pretty_inspect
+			begin
+				doc = Hpricot open "http://en.wikipedia.org/wiki/#{@source.wikipedia_id}?action=render"
+				@wikicontent = doc.search(" > p")[0..1]
+				@source.description = @wikicontent.to_s
+				@source.save
+			rescue
+				@wikicontent = []
+			end
+			
+			
+		else
+			
+		end
+		# 
+		# 	@source.wikipedia_id = wikipedia_id if @source.wikipedia_id.nil?
+		# 	
+		# 		@source.save
+		# 		@links =  []
+		# 	@wikicontent.content.scan(/\[\[([\w\s]+)\]\]/).flatten.uniq!.each do |c|
+		# 				link = Nuniverse.find_or_create(:name => c)
+		# 				link.wikipedia_id = c.titleize.gsub(' ','_')
+		# 				link.save
+		# 				@links << link
+		# 				
+		# 			end
+		
+		
+		# @prosandcons = @source.connections.of_klass('Tag').paginate(:page => 1, :per_page => params[:page])
+		
+		@tags = []
+		 @tags << "#{@source.name} "
+			# @tags <<  @source.tags.sort {|a,b| b.weight <=> a.weight }.collect {|t| "#{t.name} #{t.parent.name rescue nil}"}# .each do |t|
+			
+					@source.tags.sort {|a,b| b.weight <=> a.weight }.each do |t|
+								(t.weight/2).floor.times do |i|
+									@tags << "#{t.name}"
+								end
+							end
+		
+
+		# @similars = Nuniverse.search(@tagstr[0..2].to_s, :field_weights => {:tags => 20, :name => 1}, :per_page => 10, :page => 1, :without => {:self_id => [@source.id]}, :match_mode => :any, :sort_mode => :relevance) rescue []
+
+
+		@similars = Nuniverse.search(@tags.join(' '), :field_weights => {:primary_tags => 50, :secondary_tags => 30, :tertiary_tags => 15,  :name => 1}, :per_page => 10, :page => 1, :without => {:self_id => [@source.id]}, :match_mode => :any, :sort_mode => :relevance, :rank_mode => :wordcount) rescue nil
+		# .with_rankings.paginate(:page => params[:page] , :per_page => 3)
+	
 	end
 	
 	def create
@@ -126,6 +195,13 @@ class NuniversesController < ApplicationController
 				
 			}
 		end
+	end
+	
+	def twitter
+		@tweets = Twitter::Search.new('').fecth()
+		# oauth = Twitter::OAuth.new('mDpj6JFZdEi1jead8mmC3g', 'RLpbiKGRbFLEVCCGmekFujCrEKPyRjN2x6kF4hPZnA')
+		# oauth.authorize_from_access('access token', 'access secret')
+		
 	end
 	
 	def save

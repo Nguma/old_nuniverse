@@ -36,8 +36,6 @@ class User < ActiveRecord::Base
 
 	has_many :connecteds, :as => :subject, :class_name => "Polyco"
 	has_many :connections, :as => :object, :class_name => "Polyco"
-	has_many :stories, :through => :connections, :source => :subject, :source_type => 'Story'
-	has_many :story_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.subject_type = 'Story'"
 	has_many :nuniverse_connections, :as => :object, :class_name => "Polyco", :conditions => "polycos.object_type = 'Nuniverse'"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
 	has_many :nuniverses, :through => :connections, :source => :subject, :source_type => "Nuniverse"
@@ -55,7 +53,6 @@ class User < ActiveRecord::Base
 
 	has_many :taggings, :as => :taggable
 	has_many :tags, :through => :taggings, :source => :tag, :source_type => 'Tag'
-	has_many :contexts, :through => :taggings, :source => :tag, :source_type => 'Story'
 	
 	has_many :reviews, :class_name => "Comment", :foreign_key => :user_id	
 	
@@ -75,7 +72,6 @@ class User < ActiveRecord::Base
 		indexes taggings(:tag).name, :as => :tags
 		# has connections(:id), :as => :c_id
 		has tags(:id), :as => :tag_ids
-		has contexts(:id), :as => :context_ids
 		has :state
 		set_property :suggestable => true
 		set_property :delta => true
@@ -106,17 +102,32 @@ class User < ActiveRecord::Base
 		return email
 	end
 	
-	def avatar
-		connections.of_klass('Image').first.subject rescue nil
+
+	
+	def avatar(params = {})
+		connections.of_klass('Image').first.subject.public_filename(params[:size]) rescue nil
 	end
 	
-	def happyface
-		connections.of_klass('Image').tagged('happy').first.subject rescue nil
+	def poker_face(params = {})
+		connections.of_klass('Image').tagged(Tag.find_by_name('default')).first.subject.public_filename(params[:size]) rescue avatar(:size => params[:size])
 	end
 	
-	def grumpyface
-		connections.of_klass('Image').tagged('grumpy').first.subject rescue nil
+	def very_good_face(params = {})
+		connections.of_klass('Image').tagged(Tag.find_by_name('rank5')).first.subject.public_filename(params[:size])  rescue nil
 	end
+	
+	def good_face(params = {})
+		connections.of_klass('Image').tagged(Tag.find_by_name('goodface')).first.subject.public_filename(params[:size])  rescue nil
+	end
+	
+	def bad_face(params = {})
+		connections.of_klass('Image').tagged(Tag.find_by_name('badface')).first.subject.public_filename(params[:size]) rescue nil
+	end
+	
+	def very_bad_face(params = {})
+		connections.of_klass('Image').tagged(Tag.find_by_name('rank0')).first.subject.public_filename(params[:size]) rescue nil
+	end
+
 	
 	def connections_count 
 		Tagging.count(:select => "DISTINCT object_id", :conditions => ['user_id = ?',self.id])
@@ -135,9 +146,7 @@ class User < ActiveRecord::Base
 		UserMailer.deliver_list(params)		
 	end
 	
-	def address
-		tag.property('address')
-	end
+
 	
 	def score
 		(votes.average(:score)) rescue nil
@@ -180,6 +189,14 @@ class User < ActiveRecord::Base
 		return self.tastemakers.find_by_id(user.id)
 	end
 
+	def add(element, params = {})
+		connection = Polyco.find_or_create(:object => self, :subject => element)
+		begin
+			connection.tags << params[:tags].collect {|t| Tag.find_or_create(:name => t)} if params[:tags]
+		rescue 
+		end
+	end
+	
   protected
     
     def make_activation_code

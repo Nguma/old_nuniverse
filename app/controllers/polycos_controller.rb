@@ -1,8 +1,8 @@
 class PolycosController < ApplicationController
 
 	
-	before_filter :find_polyco, :except => [:index, :new, :create, :connect, :suggest]
-	before_filter :find_source, :only => [:new, :create]
+	before_filter :find_polyco, :except => [:index, :new, :create, :suggest, :make_connection]
+	before_filter :find_source, :only => [:new, :create, :make_connection]
 
 	before_filter :update_session
 	after_filter :store_location, :only => [:show]
@@ -33,24 +33,41 @@ class PolycosController < ApplicationController
 		redirect_back_or_default("/")
 	end
 	
-	def connect
-		@object = params[:object_type].classify.constantize.find(params[:object_id])
-		@subject = params[:subject_type].classify.constantize.find(params[:subject_id])
+	def make_connection
+
+		# @object = params[:object_type].classify.constantize.find(params[:object_id])
+		tokens = params[:command][:value].scan(/#(\w+)/).flatten.reject {|c| c.blank? }
+		label = params[:command][:value].scan(/^(\w+)\:/).flatten.reject {|t| t.blank? }.to_s
+		@tag = Tag.find_or_create(:name => label) unless label.blank?
+		body =  params[:command][:value].gsub(/^#{label}\:/, '')
+		tokens.each do |t|
+			subject = Nuniverse.find_or_create(:unique_name => t)
+			@polyco = Polyco.find_or_create(:subject => subject, :object => @source, :description => params[:command][:value])
+			body = body.gsub(/\##{t}/,'')
+		end
 		
-	
 		
-		unless @object.nil? || @subject.nil?
-			@polyco = Polyco.find_or_create(:subject => @subject, :object => @object,:state => "active")
+		if !body.blank?
+			@fact =  Fact.create(:parent_id => @source.id, :parent_type => @source.class.to_s, :body => params[:command][:value], :author_id => current_user)
+			@source.facts << @fact rescue nil
+		end
+		if @fact && @tag
+			@fact.tags << @tag
+		elsif @tag
+			@polyco.tags << @tag
+		end
+		# @subject = Nuniverse.find_by_unique_name(value)
+		
+		unless @source.nil? || @subject.nil?
 			
-			@polyco.save_all
-			flash[:notice] = "#{@subject.name} was connected to #{@object.name}"
+			flash[:notice] = "#{@subject.name} was connected to #{@source.name}"
 		else
 			flash[:error] = "There was some error creating that connection"
 		end
 
-		
-		
-		redirect_back_or_default('/')
+		respond_to do |f|
+			f.js {}
+		end
 	end
 	
 	def edit
@@ -73,7 +90,7 @@ class PolycosController < ApplicationController
 
 	def connect
 		@command = Command.new(:commander => current_user, :order => params[:command][:order], :value => params[:command][:value])
-		@order => Nuniverse.find()
+		# @order => Nuniverse.find()
 	end
 	
 	def create
@@ -83,6 +100,7 @@ class PolycosController < ApplicationController
 		elsif @command.order == "con"
 		
 		else
+			
 		
 		@token = Token.new("/#{@source.unique_name}/#{@command.order}/#{@command.value}", :current_user => current_user)
 
@@ -110,6 +128,11 @@ class PolycosController < ApplicationController
 			@tag = nil
 		end
 		end
+		
+		respond_to do |f|
+			f.html {}
+			f.js {}
+		end
 	end
 	
 	def new
@@ -124,7 +147,6 @@ class PolycosController < ApplicationController
 	def destroy
 		@object = @polyco.object
 		@polyco.subject.destroy if @polyco.subject.active == 0
-		@polyco.twin.destroy rescue nil
 		@polyco.destroy
 		redirect_back_or_default('/')
 	end
@@ -132,8 +154,10 @@ class PolycosController < ApplicationController
 	
 	def suggest
 		
-		@object = params[:object][:type].classify.constantize.find(params[:object][:id])
-		@suggestions = ThinkingSphinx::Search.search(:conditions => {:name => "#{params[:subject][:name]}"}, :with => {:active => 1}, :classes => [User,Nuniverse])
+		# @object = params[:object][:type].classify.constantize.find(params[:object][:id])
+		value = params[:command][:value].scan(/\#([\w\_]+)/).flatten.last
+	
+		@suggestions = Nuniverse.search("#{value}*")
 		respond_to do |format|
 			format.html {}
 			format.js {}

@@ -201,7 +201,18 @@ class Token
 	
 	def self.tokenize(str)
 		str.scan(/(^|\s)\/([\w\_\/]+)/i) || []
-
+	end
+	
+	def self.generate(str)
+		t = Token.sanatize(str)
+		n = Nuniverse.find_by_unique_name(t)
+		time = 1
+		while !n.nil? do 
+			t = Token.sanatize("#{str}#{time}")
+		 	n = Nuniverse.find_by_unique_name(t)
+			time += 1
+		end
+		t
 	end
 	
 	

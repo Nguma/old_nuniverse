@@ -9,19 +9,19 @@ module FactsHelper
 		render_fact(fact) rescue nil
 	end
 	
+	def render_description(polyco)
+		return wdyto_url(polyco.subject) if polyco.description.nil? 
+		body = polyco.description
+		return body.gsub(/\##{polyco.subject.unique_name}/i,wdyto_url(polyco.subject));
+	end
+	
 	def render_fact(fact)
 		# return link_to(fact.name, polymorphic_url(fact), :class => "expand-lnk", :target => "Prop") if !fact.is_a?(Fact)
 		body = fact.body_without_category.strip.downcase
-		tokens = Token.find(body)
-
-		tokens.each do |token|
-			unless token.nil?
-				n = token.namespace
-				unless n.nil?
-					# 
-					body = body.gsub(token.regxp, link_to(token.to_s, token.uri, :style => "color:#369"))
-				end
-			end
+		
+		fact.tokens.each do |token|
+		
+			body = body.gsub(/##{token.unique_name}/i,wdyto_url(token))
 		end
 
 

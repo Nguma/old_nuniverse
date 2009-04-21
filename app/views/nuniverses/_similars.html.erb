@@ -1,0 +1,5 @@
+<dl id="similars">
+  <% similars.each do |similar| -%>
+    <%= render :partial => similar, :locals => {:options => nil} %>
+  <% end %>
+</dl>

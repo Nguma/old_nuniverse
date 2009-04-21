@@ -1,0 +1,17 @@
+<dl id="tastebook" style="display:none" >
+  <% if !@saved_items.empty? -%>
+    <dt>
+      <%= will_paginate @saved_items, :previous_label => "Less", :next_label => "More", :page_links => false, :params => {:controller => "users", :action => "tastebook"} %>
+    </dt>
+      <% @saved_items.each do |item|  -%>
+        <%= render :partial => item.subject , :locals => {:options => nil}%>
+      <% end -%> 
+    
+  <% else -%>
+    <div style="min-height:500px;background:#FFF;position:relative;color:#000;padding:5%">
+      <h2>This is your tastebook </h2>
+      <p>You can save your essentials here. To do so, just click on the appropriate <%= image_tag('/images/icons/star.png', :style => "width:30px") %>. </p>
+      <%= clear %>
+    </div>
+  <% end -%>
+</dl>

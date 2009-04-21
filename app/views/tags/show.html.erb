@@ -1,8 +1,57 @@
+<%= render :partial => "/nuniverse/main_menu"%>
 <% nuniverse do -%>
-  <dl id="best">
-    <dt style="background:#000;color:#FFF;padding:4%;font-size:2em">Best <%= @tag.name %></dt>
-    <% @taggeds.each do |t| %>
-      <%= render :partial => t %>
+  <div id="left-col">
+    <div id="page-hat" style="background:#000;padding:4%;position:relative;display:block">
+    <h1 style="color:#FFF;font-size:2em">Best of <%= @filters.collect {|c| c.name.downcase}.join(' ') %> <%= @tag.name.downcase %></h1>
+    </div>
+    <%= will_paginate @taggeds %>
+    
+    <div id="filters" style="background:#000;margin:.2em 0 0 0;padding:4%">
+      <%= render :partial => "search_filter"%>
+      <%= clear %>
+    <dl id="related-tags" >
+      <dt></dt>
+       <dd class="selected tag"><%= link_to @tag.name, "/bestof/#{@filters.collect {|c| c.name.downcase}.join('/')}" %> x</dd>
+      <% @filters.each do |filter| -%>
+       
+        <dd class="selected tag"><%= link_to filter.name, "/bestof/#{@filters.reject{|t| t == filter}.collect {|c| c.name.downcase}.join('/')}/#{@tag.name}" %> x</dd>
+      <% end -%>
+      
+    <% @tags.group_by {|c| c.parent_id}.each do |group,tags| %>
+        <dd class="tag-group"><h4><%= group %></h4>
+        <% tags.each do |tag| %>
+      <div class="tag" style="color:#FFF"><%= link_to tag.name, "/bestof/#{@filters.map {|c| "#{c.name}/"}}#{tag.name}/#{@tag.name}" %></div>
+      <% end -%>
+      </dd>
     <% end -%>
-  </dl>
+    </dl>
+    </div>
+  </div>
+  <div id="right-col">
+    
+    <dl id="bestof">
+      <dt style="clear:both;"></dt>
+       
+
+       <% @taggeds.each_with_index do |nuniverse, i| %>
+          <dd class="nuniverse rank-<%= i+1 %>" id="<%= nuniverse.unique_name %>" >
+            <div style="background:<%= Ranking.color(nuniverse.score) rescue nil %>;" class="actions">
+              <h3  class="score" ><%= pretty_score(nuniverse.total_score)  unless nuniverse.score.nil? %></h3>
+
+            </div>
+            <div class="content" style="border-color:<%= Ranking.color(nuniverse.score)  rescue "#FFF"%>">
+         
+                <h3 class="rank" style="font-size:<%= [60 - (i.to_i*3),20].max %>px;top:0;left:-2%">#<%= i+1 %></h3>
+       
+              <%= link_to(thumbnail_tag(nuniverse, :style => "float:left;"), image_url(nuniverse.avatar)) rescue nil %>
+              <p class="tags"><%= nuniverse.tags.collect {|t| t.name.capitalize }.join(', ') %></p>
+              <h2><%= wdyto_url(nuniverse, :class => "name") %></h2>
+              <%= clear %>
+            </div>
+            <%= clear %>
+          </dd>
+         
+       <% end -%>
+     </dl>
+  </div>
 <% end -%>

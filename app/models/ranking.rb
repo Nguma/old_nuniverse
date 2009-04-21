@@ -13,7 +13,7 @@ class Ranking < ActiveRecord::Base
 	
 	
 	def review
-		Comment.find(:first, :conditions => {:parent_id => rankable_id, :parent_type => rankable_type, :user_id => user_id})
+		Comment.find(:last, :conditions => {:parent_id => rankable_id, :parent_type => rankable_type, :user_id => user_id})
 	end
 	
 	
@@ -43,11 +43,11 @@ class Ranking < ActiveRecord::Base
 	protected
 	
 	def self.color(score)
-		['#CC0000','#f93300','#FF9900','#dd9933','#d6d866','#bdd556','#9ed56a','#99da60','#55dd56', '#00dd55'][(score-1).floor]
+		['#FF0000','#f93300','#FF9900','#dd9933','#FFEB00','#eaf419','#caea00','#99cc00','#66CC00', '#00FF00'][(score + 4).floor]
 	end
 	
 	def self.label(score) 
-		['Despicable','Miserable','Regretable','Forgetable','Plain','Okay','Likeable','Remarkable','Memorable','Iconic'][(score-1).floor]
+		['Despicable','Miserable','Regretable','Forgetable','Plain','Okay','Likeable','Remarkable','Memorable','Iconic'][(score + 4).floor]
 	end
 	
 	

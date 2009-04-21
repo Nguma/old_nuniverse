@@ -1,0 +1,4 @@
+<% form_tag "/bestof/#{@filters.collect{|c|c.name}.join('/')}#{@tag.name}", :style => "position:relative;width:100%;padding:0" do %>
+  <%= text_field_tag :input, "", :id => "search-input", :style=>"width:60%;padding:.5em;margin:0;position:relative" %>
+  <%= submit_tag "Filter" , :style => "position:relative;width:26%"%>
+<% end -%>
