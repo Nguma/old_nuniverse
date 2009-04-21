@@ -37,29 +37,93 @@ form.expanded  {
 	display:block;
 }
 
-#input-note-body {
-	background:transparent url('/images/backgrounds/input_note_small.png') 0 0 no-repeat;
-	padding:5px;
-	font-size:18px;
-	width:476px;
-	border:none;
-	position:relative;
-	float:left;
 	
-	min-width:476px;
-	max-width:476px;
-	min-height:35px;
-	max-height:35px;
-}
+	#input_form {
+		position:relative;
+		background:#000;
+		width:100%;
+		padding:0;
+		height:80px;
+		display:none;
+		overflow:hidden;
+		border:solid 2px #000;
+	}
 
-#input-note-submit {
-	background:transparent url('/images/icons/input_submit_small.png') 0 0 no-repeat;
-	border:none;
-	position:relative;
-	width:50px;
-	height:40px;
-	outline:none;
-}
+	#input_form fieldset {
+		clear:both;
+		position:relative;
+		padding:10px;
+		display:block;
+		width:100%;
+		height:100%;
+		background:#FFF url('/images/backgrounds/input-bg.png') 0 0 repeat-x;
+	}
+
+	#input_value {
+		position:relative;
+		float:left;
+		margin:0 8% 0 0;
+		color:#333;
+		background:none;
+		font-weight:bold;
+		width:60%;
+		font-size:1.8em;
+		border:none;
+		height:auto;
+		min-height:auto;
+		padding:5px;
+	}
+	
+	#upload_button {
+		position:relative;float:right;width:10%;top:-10px;background:#09c;color:#FFF;font-size:1.5em;font-weight:bold;height:100%;padding:0;text-align:center;
+	}
+
+	#input_order {
+
+		font-weight:bold;
+		text-align:left;
+		background:#f90;
+		display:inline;
+		border:none;
+		display:none;
+		padding:10px;
+		margin:0;
+		size:auto;
+	/*	color:#f90;*/
+	/*	background:#FFF;*/
+
+	}
+	
+	#input_uploaded_data {
+		position:absolute;
+		top:0;
+		right:0;
+		-moz-opacity:0;
+		filter:alpha(opacity: 0);
+		opacity: 0;
+		z-index: 2;
+		height:100%;
+		width:10%;
+	}
+
+	#input_submit {
+		position:relative;
+		float:right;
+		right:0;
+		top:-10px;
+		background:#000;
+		border:none;
+		color:#FFF;
+		width:10%;
+		padding:0;
+		text-align:center;
+		height:100%;
+		font-size:24px;
+		font-weight:bold;
+		cursor:pointer;
+		z-index:9999;
+		background:#0CF;
+	}
 
 fieldset {
 	display:none;
@@ -155,6 +219,8 @@ fieldset {
 	z-index:12345678;
 }
 
+#search-input {background:#333;width:95% ;margin:0;font-size:16px;line-height:1.5em;margin:1% 0 0 0;color:#FFF;}
+
 #visit_form {
 	padding:10px;
 	background:#333;
@@ -221,30 +287,7 @@ input.filled {
 	background:#FFF;
 }
 
-.tags {
-	margin:10px 0 0 0;
-}
 
-.tags a.tag {
-	position:relative;
-	float:left;
-	width:auto;
-	padding:5px 40px 5px 10px;
-	font-weight:bold;
-	font-size:20px;
-	margin:0 1px 1px 0; 
-	font-size:14px;
-	color:#FFF;
-	background:#eeeeef url('/images/backgrounds/tag_selected.png') center right no-repeat;
-}
-
-.tags a:visited {
-	color:#FFF;
-}
-
-.tags .selected {
-/*	background:#eeeeef url('/images/backgrounds/tag_selected.png') center right no-repeat;*/
-}
 
 .toggle {
 	display:block;
@@ -340,3 +383,23 @@ li {
 	color:#eee;
 	padding:0;
 }
+
+#login-box {background:url('/images/backgrounds/signup.png') 0 0 no-repeat;width:90%;padding:20% 5%;margin:0%;text-align:center;display:block !important;}
+
+#login-form .empty {color:#ccc;}
+
+#login-form label {display:none;}
+
+#signup_form label {color:#000;font-size:1.3em;margin:0 0 .3em 0}
+
+#signup_form input {
+	border:solid #333 3px;
+	font-size:1.6em;font-weight:bold;
+	padding:.5em;margin:0 auto 1.5em 30%;
+	background:#FFF url('/images/backgrounds/input-bg.png') 0 0 repeat-x;
+	width:38%;
+	position:relative;
+	float:left;
+}
+
+#signup_form .signal { height:30px;background:#FFF;color:#FFF;font-weight:bold;padding:.5em;width:auto;position:relative;float:left;font-size:2em;}

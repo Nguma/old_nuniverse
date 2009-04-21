@@ -27,13 +27,6 @@ ActionController::Routing::Routes.draw do |map|
 	map.resources :videos
 	map.signup '/signup', :controller => 'users', :action => 'new'
  	map.register '/register', :controller => 'users', :action => 'create'
-	map.resources :users do |u|
-		u.resources :collections, :requirements => {:context_type => 'user'}
-		u.resources :comments, :requirements => {:context_type => 'user'}
-		u.resources :users, :requirements => {:context_type => 'user'}
-	end
-	
-
 
  	map.resource :user, :member => { :suspend   => :put,
 	                                   :unsuspend => :put,
@@ -52,36 +45,34 @@ ActionController::Routing::Routes.draw do |map|
  	map.logout '/logout', :controller => 'sessions', :action => 'destroy' 
 	
 	map.session '/session', :controller => 'sessions', :action => 'create'
-		
+	map.pick_a_face '/pick-a-face', :controller => "users", :action => "pick_a_face"
  		
  	map.restricted "/restricted",
  		:controller => "application",
  		:action => 'restricted'
 
-	  	map.with_options :controller => 'application' do |m|
-				m.about "/about", :action => "about"
-	  		m.thank_you '/thank_you', :action => 'thank_you' 
-	  		m.feedback '/feedback', :action => 'feedback'
-	  		m.beta '/beta', :action => 'beta'
-	  	end
-  			
-	  	map.with_options :controller => 'users' do |m|
-	  		
-				m.account '/account', :action => 'account'
-	  		m.upgrade '/upgrade', :action => 'upgrade'
-		
-	  	end
+ 	map.with_options :controller => 'application' do |m|
+		m.about "/about", :action => "about"
+ 		m.thank_you '/thank_you', :action => 'thank_you' 
+ 		m.feedback '/feedback', :action => 'feedback'
+ 		m.beta '/beta', :action => 'beta'
+ 	end
+			
+ 	map.with_options :controller => 'users' do |m|
+		m.account '/account', :action => 'account'
+ 		m.upgrade '/upgrade', :action => 'upgrade'	
+ 	end
 	
 	
 	map.locate "/locate", :controller => "locations", :action => "find"
 	
 	map.create_tag "/create_tag", :controller => "tags", :action => "create"
-	map.make_connection "/make_connection/from/:object_type/:object_id/to/:subject_type/:subject_id", :controller => "polycos", :action => "connect"
+	# map.make_connection "/make_connection/from/:object_type/:object_id/to/:subject_type/:subject_id", :controller => "polycos", :action => "connect"
 	map.disconnect "/disconnect/:id", :controller => "connections", :action => "disconnect"
 	
 	map.suggest "/suggest", :controller => "nuniverses", :action => "suggest"
 	
-	map.share_story "/share-this-nuniverse/:id", :controller => "stories", :action => "share"
+	map.add_connection "/make-connection", :controller => "polycos", :action => "make_connection"
 	map.add_to_nuniverse "/add-to-favorites/:id", :controller => "connections", :action => "add_to_favorites"
 	map.remove_from_nuniverse "/remove-comment/:id", :controller => "comments", :action => "destroy"
 	map.preview "/preview/:id", :controller => "connections", :action => "preview"
@@ -100,6 +91,8 @@ ActionController::Routing::Routes.draw do |map|
 	
 	map.tutorial "/tutorial", :controller => "users", :action => "tutorial"
 	map.connect "/facts/create", :controller => "facts", :action => "create"
+	
+	map.suggest_connections "/suggest-connection", :controller => "polycos", :action => "suggest"
 
   map.root :controller => "application"
 
@@ -112,12 +105,14 @@ ActionController::Routing::Routes.draw do |map|
 	
 	map.add_tag "/add-tag", :controller => "tags", :action => "create"
 	
+	map.add_image "/add-image", :controller => "images", :action => "create"
+	
 	map.follow "/follow/:login", :controller => "users", :action => "follow"
 	map.follow "/stop-following/:login", :controller => "users", :action => "stop_following"
 		
 	map.process "/rate/:namespace/:score", :controller => "rankings", :action => "create"
 	map.process "/rate/:namespace/:score.:format", :controller => "rankings", :action => "create"
-	map.comment "/comment/create", :controller => "comments", :action => "create"
+
 	map.comment "/comments/create", :controller => "comments", :action => "create"
 	map.comment "/comments/create.:format", :controller => "comments", :action => "create"
 	
@@ -134,9 +129,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connect ':controller/:action/:id'
   map.connect ':controller/:action/:id.:format'
 
-	map.bestof '/best/:tag', :controller => "tags", :action => "show"
+	map.bestof '/bestof/:tag', :controller => "tags", :action => "show"
+	map.bestof '/bestof/*filters/:tag', :controller => "tags", :action => "show"
+	
+	map.remove_tag '/remove-tag/:tag/from/:namespace', :controller => "tags", :action => "remove"
 
-
+	map.validate_login '/validate/:what.:format', :controller => "users", :action => "validate"
 	# map.connect '*path', :controller => 'nuniverses', :action => 'show'
 
 

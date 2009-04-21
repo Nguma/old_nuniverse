@@ -1,15 +1,12 @@
-
-
 #nuniverse {
 	top:0px;
 	left:0px;
 	padding:0;
 	background:none;
-	margin:auto;
-	width:1100px;
+	width:1000px;
 	height:100%;
 	min-height:800px;
-	overflow:hidden;
+
 	position:relative;
 	background:none;
 	margin:4% auto;
@@ -233,9 +230,9 @@ a.save_button {
 
 #main-menu a {
 	padding:5px;line-height:30px;background:#000;color:#FFF;font-weight:bold;font-size:16px;position:relative;float:left;top:0;margin:0 2px 0 0;
-	
 }
 
+#home-lnk {background:none !important;}
 
 #sub_menu {
 	padding:10px 10px 5px 10px;
@@ -335,11 +332,15 @@ a.user-lnk {
 }
 
 #hat {
-	width:33%;
+	width:100%;height:auto;
 	position:relative;
-	float:left;
-	padding:2%;
+	padding:0;margin:0;
+	border:none;	background:none;
 }
+
+#hat .tags {font-size:1em;font-weight:normal;padding:.5em 0 1em 0;}
+
+#hat .tags span a {color:#FFF;}
 
 #hat h1 {
 	font-size:40px;
@@ -730,68 +731,7 @@ a.filter:hover {
 	margin:auto;
 }
 
-#input_form {
-	position:relative;
-	background:#000;
-	width:100%;
-	padding:0;
-	height:60px;
-	display:none;
-	overflow:hidden;
-}
 
-#input_form fieldset {
-	padding:10px;
-	display:block;
-	background:#FFF;
-}
-
-#input_value {
-	background:none;
-	display:inline;
-	margin:0 8% 0 0;
-	color:#333;
-	background:none;
-	font-weight:bold;
-	width:auto;
-	font-size:20px;
-	display:inline;
-	border:none;
-	height:auto;
-	min-height:auto;
-	padding:5px;
-}
-
-#input_order {
-
-	font-weight:bold;
-	text-align:left;
-	background:#f90;
-	display:inline;
-	border:none;
-
-	padding:10px;
-	margin:0;
-	size:auto;
-/*	color:#f90;*/
-/*	background:#FFF;*/
-
-}
-
-#input_submit {
-	position:absolute;
-	right:0;
-	top:0;
-	background:#000;
-	border:none;
-	color:#FFF;
-	width:90px;
-	height:60px;
-	font-size:20px;
-	font-weight:bold;
-	cursor:pointer;
-	z-index:9999;
-}
 
 
 #votes {
@@ -828,13 +768,6 @@ a.filter:hover {
 
 }
 
-
-.love {color:#9c6;}
-.like {color:#bdd56b;}
-.dislike {color:#e2a959;;}
-.hate {color:#e16f4d;}
-
-
 #call-to-action-box {
 	background:none;position:relative;float:left;top:0;display:block;padding:0;width:24%;clear:left;margin:0 0.2% 0 0;
 	font-size:16px;
@@ -853,10 +786,9 @@ a.filter:hover {
 
 #scorecard {
 	position:relative;
-	width:96%;
-	background:none;
 	text-align:center;
 	padding:2%;
+	text-align:center;padding:1%;background:#000;margin:0 0 0 0;width:98%;position:relative;float:right;width:23%;
 }
 
 #score {
@@ -877,10 +809,10 @@ a.filter:hover {
 	font-weight:bold;
 }
 
-#change-your-mind-lnk {display:none;font-size:14px;}
+#change-your-mind-lnk {font-size:14px;}
 
 .voted #change-your-mind-lnk {display:block;}
-.voted #rate-picker {display:none;}
+.voted #rate-picker {display:none;text-align:left;}
 
 #rate-picker a { font-size:16px;font-weight:bold;}
 #rate-picker h4 {color:#FFF;}
@@ -969,6 +901,8 @@ h3 {
 	display:none;
 }
 
+#media img { width:100%;}
+
 #media .thumbnail {
 	background:none;
 	height:80px;
@@ -989,18 +923,8 @@ h3 {
 	padding:0 2% 0 2%;
 }
 
-#wdyto .pagination {
-	position:relative;
-	float:right;
-	padding:2%;
-}
 
-#wdyto .pagination .current {
-	font-weight:bold;
-	font-size:22px;
-}
-
-#wdyto .vote {
+.vote {
 	clear:left;position:relative;
 	height:auto;
 	background:#FFF;
@@ -1009,7 +933,7 @@ h3 {
 	padding:0;width:100%;margin:0 0 .5% 0
 }
 
-#wdyto .vote .actions {
+.vote .actions {
 	position:absolute;right:0;top:0;background:#FFF;height:100%;width:10%;
 }
 
@@ -1017,9 +941,9 @@ h3 {
 	z-index:9999;padding:2%;background:#FFF;position:absolute;top:0;right:3%;width:15%;text-align:center;font-weight:bold;font-size:1.1em;
 }
 
-#wdyto .vote .score,
+.vote .score,
 .taste .score {
-	position:relative;text-align:center;padding:30% 0 0 0;margin:auto;font-size:2em;font-weight:bold;
+	position:relative;text-align:center;padding:30% 0 0 0;margin:auto;font-size:3em;font-weight:bold;
 }
 
 
@@ -1123,7 +1047,6 @@ dd.review {
 }
 
 #feeds {
-	
 	background:none;
 	width:100%;
 	margin: 0 0 0 0;
@@ -1172,6 +1095,8 @@ dd.review {
 	color:#000 !important;
 }
 
+#hat #tags dd.tag { padding:.4em;background:#0cf;color:#FFF;margin:0 0.1em 0 0;display:inline; }
+#hat #tags dd { display:inline; }
 
 #just-tasted {
 	
@@ -1204,32 +1129,32 @@ dd.review a {
 	width:100%;margin:0;border:none;padding:0;
 }
 
-#wdyto #hat .star {
-	position:absolute;
-	right:2%;
-	top:2%;
+#wdyto #hat span.stars {
+	display:inline;	margin: 0 1% 0 0;width:auto;
+	
 	z-index:6666;
 }
 
-.star img {
-	background: transparent url('/images/backgrounds/star.png') 0 0 no-repeat;
-	height:30px;
-	padding:0;
-	margin:0;
-	line-height:1em;
-}
+.star_saved { display:none;}
+.star_unsaved {display:inline;}
 
-.saved img {
-	background: transparent url('/images/backgrounds/star_saved.png') 0 0 no-repeat;
-	height:30px;
-	padding:0;
-	margin:0;
-	line-height:1em;
-}
+.saved .star_saved {display:inline;}
+.saved .star_unsaved {display:none;}
 
-#feeds .pagination {
+.stars img {height:50px;padding:0;margin:0;line-height:1em;}
+
+
+.pagination {
 	position:absolute;top:0;right:0;background:none;width:auto;border:none;padding:2%;
 }
+
+.pagination .disabled {display:none;}
+
+.pagination .current {
+	font-weight:bold;
+	font-size:22px;
+}
+
 
 .column {
 	position:relative;float:left;width:19.6%;margin:0 .4% 0 0;z-index:6;
@@ -1251,12 +1176,139 @@ dd.review a {
 #user_stats {width:100% !important;background:#000;height:230px}
 
 
-.taste {
-	 background:#FFF;position:relative;clear:both;float:none;padding:0;margin:0 0 1% 0 ;height:auto;
-}
-
-
-
 .review .actions {
 /*	position:relative;float:right;width:6%;text-align:center;top:0;right:0;padding:2%;height:97%;margin:0;*/
 }
+
+
+
+
+#tooltip {display:none; background: transparent url('/images/backgrounds/tooltip.png') 0 0 no-repeat; position:absolute;z-index:765432; width:250px;height:200px; left:250px; padding:0;}
+
+#tooltip .wrap {width:60%;height:80%;padding:10% 20% 10% 20%;}
+
+#tooltip h4 {font-size:1.4em;color:#FFF;padding:0;font-weight:bold;color:#000;}
+
+#tooltip p {font-size:1em;color:#FFF;padding:0;}
+
+
+#suggestions dd {
+	background:#FFF;
+	clear:both;
+	margin:0 0 .5% 0;
+	padding:2%;
+	width:96%;
+}
+
+#suggestions dd .thumbnail {
+}
+
+#suggestions {
+	width:100%;
+}
+
+#homepage_feed {
+	height:150px;
+	overflow:hidden;
+}
+
+#homepage_feed dd {
+	height:90%;padding:5%;
+}
+
+#left-col { position:relative;float:left;width:25%;padding:0;margin:0 .5% 0 0;z-index:9999;height:100%; }
+#right-col { width:74.5%;position:relative;float:left;margin:0 0 0 0}
+
+
+#faces {
+	width:100%;
+	height:80px;
+	padding:4%;
+}
+
+#faces dd {
+	width:80px;
+	height:80px;
+	margin: 0 2% 0 0;
+	position:relative;float:left;font-size:20px;font-weight:bold;text-align:center;
+}
+
+#faces dd {	border:solid 10px #000;}
+#faces dd img {width:100%;}
+#very-bad-face {border:#F00 solid 10px !important;}
+#bad-face {border:#F90 solid 10px !important;}
+#poker-face {border:#FF0  solid 10px !important;}
+#good-face {border:solid 10px #9F0 !important;}
+#very-good-face {border:solid 10px #0F0 !important;}
+
+#nuniverse .content {
+
+}
+
+#nuniverse #nav {
+	background:none;
+}
+
+#nuniverse #tabs {
+	
+}
+
+.fact a {
+	color:#09F;
+}
+
+#vote {clear:both;}
+#vote dd {float:left;clear:none;width:80px;height:80px;border:1em solid #000;background:#FFF;margin:1em 1em 0 0;}
+#vote dd img {width:80px;}
+#vote-2 {border-color:#F00 !important;}
+#vote-1 {border-color:#F90 !important;;}
+#vote0 {border-color:#FF0 !important;;}
+#vote1 {border-color:#9F0 !important;;}
+#vote2 {border-color:#0F0 !important;;}
+
+.remove-tag-lnk {display:none;margin:0 0 0 .3em;}
+.hover .remove-tag-lnk {display:inline;}
+
+#input-suggestions {
+	position:absolute;
+	top:-60px;
+}
+
+#input-suggestions dd {
+	display:relative;
+	float:left;
+	width:100px;
+	height:70px;
+	overflow:hidden;
+}
+
+#input-suggestion dd .thumbnail {
+	height:40px;
+	width:40px;
+}
+
+.tweet {clear:both;}
+.tweet .body {font-size:17px;}
+.tweet a {color:#09f;}
+
+#input-suggestion dd .name {
+	font-size:13px;
+	font-weight:bold;
+}
+
+
+.nuniverse .thumbnail {border-color:inherit;}
+
+
+#left-col .pagination a {color:#000 !important;}
+#left-col .pagination {position:relative;background:#eee;clear:left;}
+
+#left-col #related-tags .selected { color:#FFF;background:#09F;padding:.3em;display:inline;margin:0 .2em .4em 0;line-height:2em;}
+
+.rank-1 {}
+.rank-1 h2 a {font-size:2em;color:#000;}
+.rank-2 h2 a {font-size:1.7em;color:#000;}
+.rank-3 h2 a {font-size:1.3em;color:#000;}
+
+#tastemakers dd a {color:#FFF;}
+#tastemakers img {display:block;}

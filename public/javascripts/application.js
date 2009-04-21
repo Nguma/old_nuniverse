@@ -15,11 +15,71 @@ $(document).ready(function()
   setConnections();
   setGeneral();
   setTagLinks();
+  setTagFields();
+  rotateHomeFeed();
   
+  setPaginationLinks();
+  
+  $('#input_uploaded_data').change(function(ev) {
+    ev.preventDefault();
+    submitInputForm();
+    return false;
+  })
+  
+  $('#login-form input').blur(function(e) { $(this).showLabelIfEmpty(); }).focus(function(e) {$(this).updateOnFocus();});
 
+ 
+  $('#signup_login').keypress(function(e) {
+    var timeout = $('#signup_form').data('timeout'); 
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if(code == 9) return;
+    if(String.fromCharCode(code).match(/[a-zA-Z0-9_]/) || code == 8) { 
+      if ( timeout != undefined) {clearTimeout(timeout)};
+      $('#signup_form').data('timeout', setTimeout(function() {validate('login');},300));
+    } else {
+      e.preventDefault();
+    }
+  });
+  
+  $('#signup_password').keyup(function(e) {
+      var code = (e.keyCode ? e.keyCode : e.which);
+      if(code == 9) return;
+      var signal =  $(this).siblings('.signal');
+      if($(this).val().length >= 4) {
+        signal.hide().css({background:'#0F0'}).fadeIn('fast').html('ok');
+      } else {
+        signal.hide().css({background:'#F00'}).fadeIn('fast').html('too short!');
+      }
+      validateSignupForm();
+  });
+  
+  $('#signup_email').keypress(function(e) {
+    var timeout = $('#signup_form').data('timeout');
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if(code == 9) return;
+    if(String.fromCharCode(code).match(/[a-zA-Z0-9_\.\-\@]/) || code == 8 || code == 45 || code == 46 || code == 43 || code == 95 ) {
+      
+      if ( timeout != undefined) {clearTimeout(timeout)};
+      $('#signup_form').data('timeout', setTimeout(function() {validate('email');},300));
+    } else {
+      e.preventDefault();
+    }
+  });
+  
+  
+  $('.input_suggestion a').live('click', function(ev) {
+    ev.preventDefault();
+
+    acceptSuggestion($(this))
+  });
+     
 });
 
   function setTagLinks() {
+    
+    $('.tag').hover(function() {$(this).addClass('hover')}, function() {$(this).removeClass('hover')});
+    
+    $('.remove-tag-lnk').click(function(ev) {ev.preventDefault(); $(this).parent().remove(); $.getJSON($(this).attr('href'))});
     $('.tag-lnk').live('click', function(ev) {
       ev.preventDefault();
       $('#tags').find('.selected').removeClass('selected');
@@ -27,11 +87,16 @@ $(document).ready(function()
    
       var taste = $('#tastebook').find('dd:first').clone();
       $('#tastebook').empty();
-      $.getJSON($(this).attr('href')+'.json', function(json) {
-        $.each(json.tastebook, function(i) {
-          makeNewTaste(this);
-        });
+      $.ajax({
+        'url':'/users/tastebook?filter='+$(this).html()+'&namespace=nguma',
+        success:function(resp) {$('#tastebook').html(resp);}
+        
       });
+      // $.getJSON($(this).attr('href')+'.json', function(json) {
+      //         $.each(json.tastebook, function(i) {
+      //           makeNewTaste(this);
+      //         });
+      //       });
     });
   }
 
@@ -45,9 +110,11 @@ $(document).ready(function()
   
     $('.tabs a').live('click',function(ev) {
       ev.preventDefault();
-      var target = $($(this).parents('.tabs').attr('target'));
-      target.children('dd').hide();
-      $($(this).attr('target')).fadeIn('slow');
+      var target = $($(this).attr('target'));
+      
+      target.siblings('dl').hide();
+      target.fadeIn('slow');
+   
       activateTab($(this));
     });
   
@@ -62,7 +129,15 @@ $(document).ready(function()
     $(tab.attr('target')).fadeIn('fast');
     eval('onSelect'+tab.attr('href'))();
   }
-
+  
+ 
+ function onSelectReviews() {
+   
+ }
+ 
+  function onSelectComments() {
+    
+  }
 
   function onSelectTasteBook() {
     $('#tastemakers').hide();
@@ -116,11 +191,12 @@ $(document).ready(function()
   var suggest_request = null 
   function suggest(el) {
     if(suggest_request) { suggest_request.abort();}
-    $('#connections').empty();
+    $('#feeds').hide();
+    $('#suggestions').empty().show();
     suggest_request = $.getJSON("/search-for/"+el.val()+".json", function(json) {
     
       $.each(json.results, function(i) {
-        var result = $('#templates').find('.result').clone();
+        var result = $('#templates').find('.suggestion').clone();
         if(this.image == undefined) {
           result.find('.thumbnail').hide();
         } else {
@@ -130,7 +206,7 @@ $(document).ready(function()
         result.find('.name').html(this.name).attr('href',this.url);
       
         result.find('.tags').html(this.tags);
-        result.appendTo($('#connections'));
+        result.appendTo($('#suggestions'));
       });
     
 
@@ -140,15 +216,21 @@ $(document).ready(function()
   }
 
 
-  function setPaginationLinks(scope) {
-     $('.pagination a').click(function(ev) {
-            ev.preventDefault();
-            $.ajax({
-              url:$(this).attr('href'),
-              target:scope
-            });
-            return false;
-          })
+  function setPaginationLinks() {
+    $('.pagination a').live('click', function(e) {
+      e.preventDefault();
+      var dl = $(this).parents('dl:first');
+      
+      dl.empty();    
+      $.ajax({
+        url:$(this).attr('href'), 
+        success:function (resp) { 
+          dl.html(resp); 
+        }
+      });
+      
+      return false;
+    })
   }
    
  
@@ -221,7 +303,7 @@ $(document).ready(function()
    }
   
   
-  function isValidKey(ev) {
+  function isValidKey (ev) {
     keycode = (ev.which == 0) ? ev.keyCode : ev.which
     if(keycode == 32 || (65 <= keycode && keycode <= 65 + 25) || (97 <= keycode && keycode <= 97 + 25)) return true
     return false
@@ -243,19 +325,48 @@ $(document).ready(function()
       $('#stat_'+stat.score).animate({width:stat.percent});
       $('#stat_'+stat.score).find('.percent').html(stat.percent+'%')
     });
-    $('#score-label').removeClass().css({'color':json.color}).html(json.score_label);
-    $('#scorecard .status').html('Your rate: <span class="score_'+ json.vote.score +'">'+ json.vote.score +'</span>').show();
+    // $('#score-label').removeClass().css({'color':json.color}).html(json.score_label);
+     // $('#scorecard .status').html('Your rate: <span class="score_'+ json.vote.score +'">'+ json.vote.score +'</span>').show();
     // $('#scorecard').addClass('voted');
-    $('#change-your-mind-lnk').show();
+    // $('#change-your-mind-lnk').show();
     // $('#rate-picker').hide();
   }
   
-  function expandInput(order, href) {
-    if (href != undefined) {
-      $('#input_form').attr('action', href);
+  function expandTagger(params) {
+    $('#tagger').hide();
+    $('#tagger_input').val(params['val']);
+    $('#tagger').appendTo(params['target']).show();
+    // css({top:params['x'], left:params['y']}).fadeIn('fast');
+  }
+  
+  function setTagFields() {
+    $('.connection .tags a').click(function(ev) {
+      ev.preventDefault();
+      var val = $(this).html();
+      $(this).hide();
+      expandTagger({val:val, target:$(this).parent()})
+    });
+  }
+  
+  
+  
+  function expandInput(params) {
+    if (params['href'] != undefined) {
+      $('#input_form').attr('action', params['href']);
     }
+    
+    if(params['kind'] != "image") {
+      $('#input_uploaded_data').hide();
+      $('#upload_button').hide();
+    } else {
+       $('#input_uploaded_data').show();
+       $('#upload_button').show();
+    }
+    
+    $('#input_form .label').html(params['title']);
     $('#input_form').fadeIn('fast');
-    $('#input_order').attr('size',order.length+3).val(order);
+    $('#input_order').attr('size',params['rel'].length+3).val(params['rel']);
+    $('#input_form').data('target', params['target']);
     $('#input_value').focus();
   }
   
@@ -284,11 +395,21 @@ $(document).ready(function()
   }
   
   function setStars(){
-    $('.star').live('click', function(ev) {
+    $('.stars a').live('click', function(ev) {
       ev.preventDefault();
-      $(this).toggleClass('saved');
+      $(this).parent('.stars').toggleClass('saved');
       saveToTasteBook($(this));
     });
+    
+    $('.tippable').mouseenter(function(ev) {
+      $('#tooltip').css({'top':ev.pageY, 'left':ev.pageX})
+      $('#tooltip .title').html($(this).attr('title'));
+      $('#tooltip').stop().hide().show('fast');
+    });
+    $('.tippable').mouseleave(function(ev) {
+       $('#tooltip').stop().hide('fast');
+    });
+    
   }
   
   function setScore() {
@@ -299,20 +420,29 @@ $(document).ready(function()
       ev.stopPropagation();
       $($(this).attr('target')).toggle();
       $(this).hide();
-      $('#scorecard').find('.status').hide();
+      $('#stats').hide();
+      $('#scoretag').hide();
       $('#rate-picker').show();
-     
     });
 
     $('.rate-lnk').live('click', function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
       $('#rate-picker').hide();
-      $('#change-your-mind-lnk').show('fast');
+      $('#vote').hide();
+      $('#stats').fadeIn('fast');
+      $('#scoretag').fadeIn('slow');
+      $('#change-your-mind-lnk').show();
       $.getJSON($(this).attr('href')+'.json',function(json) {
         updateScoreCard(json);
       });
-      expandInput('Review',"/comments/create");
+      
+      expandInput({
+        'title':"You're giving a "+$(this).html()+" because",
+        'kind':'Rating',
+        'rel':'Review',
+        'href':"http://localhost:3000/comments/create.js"
+      });
 
     });
   }
@@ -321,51 +451,39 @@ $(document).ready(function()
   function setInputCommand() {
     $('.input-lnk').live('click', function(ev) {
       ev.preventDefault();
-      expandInput($(this).attr('target'),$(this).attr('href'));
+      
+      expandInput({
+        rel:$(this).attr('rel'),
+        kind:$(this).attr('name'),
+        target:$(this).attr('target'),
+        href:$(this).attr('href'),
+        title:$(this).attr('title')
+      });
     });
 
     $('#input_order').keyup(function(ev) {
       $(this).attr('size', $(this).val().length*1.5);
     });
-
-    $(document).keypress(function(ev) {
-             if(isValidKey(ev) && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey && !ev.altKey) {
-               $('#input_form:hidden').each(function() {
-                 $(this).fadeIn('fast');
-                 if(ev.which != 32) {
-                   // var path = $('#nuniverse').data('current_section').find('.category').text();
-                   // $('#input_value').val(path+ String.fromCharCode(ev.which)).focus();
-                 } else {
-                   $('#input_value').focus();
-                 }
-        
-               });
-             }
-           });
+    // 
+    // $(document).keypress(function(ev) {
+    //          if(isValidKey(ev) && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey && !ev.altKey) {
+    //            $('#input_form:hidden').each(function() {
+    //              $(this).fadeIn('fast');
+    //              if(ev.which != 32) {
+    //                // var path = $('#nuniverse').data('current_section').find('.category').text();
+    //                // $('#input_value').val(path+ String.fromCharCode(ev.which)).focus();
+    //              } else {
+    //                $('#input_value').focus();
+    //              }
+    //     
+    //            });
+    //          }
+    //        });
 
     $('#input_form').submit(function(ev) {
       ev.preventDefault();
       ev.stopPropagation();
-      // var section = $('#nuniverse').data('current_section');
-
-      // $(this).find('.source-id').val(section.find('.source-id').val());
-      // $(this).find('.source-type').val(section.find('.source-type').val());
-      // $(this).find('#input_path').val(section.find('.path').text());
-
-      var url = ("/"+$('#input_order').val().toLowerCase()+"/"+$('#input_value').val()+'/').replace(/\s/g,'_')
-
-       $(this).ajaxSubmit({
-
-          resetForm:true,
-          success:function(resp) {
-
-            $(resp).find('.comment' ).prependTo($('#comments')).hide().slideDown('fast');
-            $(resp).find('.connection').prependTo($('#connections')).hide().slideDown('fast');   
-
-
-          }
-        });
-      return false;
+      submitInputForm();
     });
 
     var ajax_timeout;
@@ -383,17 +501,33 @@ $(document).ready(function()
       } else if (ev.keyCode == 27) {
         $(this).parents('form').fadeOut('fast');
       } else if(isValidKey(ev) && !ev.ctrlKey && !ev.shiftKey && !ev.metaKey && !ev.altKey) {
-
-        ajax_timeout = setTimeout(function() {
-          suggest(el);
-        }, delay);
+ 
+        if ($('#input_order').val() == "connect" && $('#input_value').val().match(/\#\w+$/) ) {
+          
+          ajax_timeout = setTimeout(function() {
+            $('#input_form').ajaxSubmit({
+              url:"/suggest-connection",
+              success:function(resp) {
+                $('#input-suggestions').html(resp)
+              }
+            });
+          }, delay);
+        }
+        
+        
       }
     });
     
   }
   
-   var ajax_timeout;
+  
+  var ajax_timeout;
   function setSearchInput() {
+    
+    $('#search-lnk').click(function(ev) {
+      ev.preventDefault();
+      $('#search-form').toggle('fast');
+    });
     $('#search-input').keypress(function(ev) {
       if (ajax_timeout != undefined) {clearTimeout(ajax_timeout)};
       var el = $(this);
@@ -456,6 +590,26 @@ $(document).ready(function()
     }, 5000);
   }
   
+  function submitInputForm() {
+     var target = $('#input_form').data('target');
+     var iframe = (target == "media" || target == "bad-face") ? true : false
+   
+     $('#input_form').ajaxSubmit({
+        iframe:iframe,
+        resetForm:true,
+        success:function(resp) {
+          if (target != undefined && target != "") {$('#'+target).html(resp).hide().slideDown('fast');}
+          $(resp).find('.comment').prependTo($('#reviews')).hide().slideDown('fast');
+          $(resp).find('.connection').prependTo($('#connections')).hide().slideDown('fast');
+          $(resp).find('.fact').prependTo($('#facts')).hide().slideDown('fast');
+          $(resp).find('.tag').prependTo($('#tags'));
+          $(resp).find('.image').prependTo($('#media')).hide().slideDown('fast');
+          $('#input_form').fadeOut('slow');
+        }
+      });
+      // var url = ("/"+$('#input_order').val().toLowerCase()+"/"+$('#input_value').val()+'/').replace(/\s/g,'_');
+      return false;
+  }
   
   function setGeneral(){
     $('.toggle-lnk').live('click', function(ev) {
@@ -467,7 +621,7 @@ $(document).ready(function()
       ev.preventDefault();
     });
 
-    $('#input-visit').makeSuggestable();
+    // $('#input-visit').makeSuggestable();
     $('#notice').hide();
     $('.popup').draggable();
     $('#message').hover(function(ev) {
@@ -539,6 +693,23 @@ $(document).ready(function()
       $(this).setForms();
       $(this).createSuggestables(url);
     },
+    
+    // Replaces empty field with the previous label value, and adds the 'empty' class to the field in a positive case 
+    showLabelIfEmpty:function() {
+      if($(this).val() == "") {
+        $(this).val($(this).prev('label').html());
+        $(this).addClass('empty');
+        
+      } 
+    },
+    
+    // Reset field if with 'empty' class, and removes that class
+    updateOnFocus:function() {
+       if($(this).hasClass('empty')) {
+          $(this).removeClass('empty').val("");
+        };
+    },
+    
 
   
     // previews the item in the preview box
@@ -714,3 +885,70 @@ $(document).ready(function()
       $(this).find('.edit form').submit();
     }
   });
+  
+  
+  function validateSignupForm() {
+    var ok = true;
+    $('#signup_form .signal').each(function(i) {
+     if($(this).html() != 'ok') { ok = false;}
+    
+    });
+    if(ok == true) {
+      $('#signup_submit').show();
+    } else {
+      $('#signup_submit').hide();
+    }
+    
+    return true;
+  }
+  
+  function rotateHomeFeed() {
+    var hf = $('#homepage_feed');
+    hf.data('index', 0);
+    if(hf.length == 1) {
+      hf.data('interval', setInterval(function(ev) {
+        hf.data('index', hf.data('index')+1);
+        var dd = hf.find('dd')[hf.data('index')];
+        hf.scrollTo(dd, 500);
+      }, 3000));
+    }
+
+  }
+  
+  function validate(what) {
+    var val = $('#signup_'+what).val();
+    var signal =  $('#signup_'+what).siblings('.signal');  
+    $.getJSON("/validate/"+what+".json", {'value':val}, function(json) {
+      if(json.response == 'ok') {
+        signal.hide().css({background:'#0F0'}).fadeIn('fast').html(json.response);
+      } else {
+        signal.hide().css({background:'#F00'}).fadeIn('fast').html(json.response);
+      }
+    });
+    validateSignupForm();  
+  }
+  
+  function acceptSuggestion(suggested_lnk) {
+    
+    var newval = $('#input_value').val().replace(/\#(\w+)$/,suggested_lnk.attr('title'));
+    $('#input_value').val(newval+' ');
+    // $('#input_form').fadeOut('fast');
+    $('#input-suggestions').empty();
+    // $('#input_form').ajaxSubmit({
+    //       url:"/make-connection",
+    //       success:function(resp) {
+    //         $(resp).prependTo($('#connections'));
+    //       }
+    //     });
+  }
+  
+  Array.prototype.index = function(val) {
+    for(var i = 0, l = this.length; i < l; i++) {
+      if(this[i] == val) return i;
+    }
+    return null;
+  }
+
+  Array.prototype.include = function(val) {
+    return this.index(val) !== null;
+  }
