@@ -2,11 +2,11 @@
   <dt>Options for <%= item.label.capitalize %></dt>
 <% if @order == "by_vote" -%>
   
-  <dd class="votes">
+  <dd class="rankings">
     <%= link_to(image_tag("/images/icons/star.png", 
                 :alt => "vote for  #{item.label} ", 
                 :style => "position:relative;float:right"), 
-        "/rate/#{item.id}/1")%><%= item.votes %>
+        "/rate/#{item.id}/1")%><%= item.rankings %>
   </dd>
 <% end -%>
 <% if @perspective.kind != "service" %>

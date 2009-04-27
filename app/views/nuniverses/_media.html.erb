@@ -1,6 +1,6 @@
  <div style="width:100%;height:auto;background:#000;padding:0;margin:0 0 .6% 0" id="media">
     <% if source.images.first %>
-       <%= image_tag(source.images.first.public_filename(), :id => "image")  %>
+       <%= link_to image_tag(source.images.first.public_filename(), :id => "image"), "/images-for/#{source.unique_name}" %>
     <% else -%>
       <%=  link_to image_tag("/images/icons/image_small.png"), add_image_url, :title => "Add an image to #{@source.name}",:target => "media", :rel => "default", :class => "input-lnk", :style => "padding:1% 0 1% 1%" %>
     <% end -%>

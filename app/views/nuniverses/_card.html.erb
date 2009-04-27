@@ -1,12 +1,12 @@
 <div id="hat" >
-  <h2 id="score" class="score_<%= @source.score.round.to_i + 4 rescue 0%>" style="font-size:110px; padding:3%;position:relative;float:right;">
-    <%= pretty_score(@source.total_score) if @source.votes.count > 0 %>
+  <h2 id="score" class="score_<%= @source.score.round.to_i + 3 rescue 0 %>" style="font-size:110px; padding:3%;position:relative;float:right;">
+    <%= "#{@source.percent_score.ceil}%" if @source.rankings.count > 0 %>
   </h2>
   <div style="position:relative;">
   <h1 style="font-size:3em;padding:0 1em 0 0;color:#000;margin:0 0 0 0;line-height:1em"><%= @namespace.name.titleize %><%= star_lnk(@namespace)%></h1>
-  <h2 style="padding:0 0 0 1%;font-size:1.3em;line-height:1em">#<%= @namespace.unique_name %></h2>
+  <h2 style="padding:0 0 0 1%;font-size:1.3em;line-height:1em"><%#= @source.type_tags.collect {|c| c.name}.join(',') %> (#<%= @namespace.unique_name.downcase %>)</h2>
   <dl class="tags" style="clear:left;background:none;margin:0.5em 0 0 .5em" id="tags">
-    <% @namespace.tags.each do |tag| -%>
+    <% @namespace.genres.each do |tag| -%>
       <dd class="tag"><%= link_to tag.name.capitalize,"/bestof/#{tag.name}" %><%= link_to "x", "/remove-tag/#{tag.name}/from/#{@source.unique_name}", :class => "remove-tag-lnk" %></dd>
     <% end -%>
      <dd><%= link_to "Add tags", add_tag_url, :target => "", :rel => "", :class => "input-lnk", :style => "color:#09F" %></dd>

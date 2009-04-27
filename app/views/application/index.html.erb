@@ -20,7 +20,7 @@
        
          <h2 style="font-size:2em;line-height:1.8em;font-weight:normal;color:#000;text-align:justify;padding:0 .5em">Wdyto is a place where you can give your point of view on just about anything. <%= link_to "Get started.", "/signup", :style => "font-weight:bold;color:#FFF;background:#000;padding:.3em" %><br/><span class="score_2">1. Experience something remarkable.</span> <span class="score_6" >2. Rate how good (or bad) that experience was, you are the editor.</span> <span class="score_10" >3. Spread the word, others want to know how you feel about it.</span > </h2>
            <dl id="homepage_feed" style="position:relative;float:right;width:100%;">
-              <% @votes.each_with_index do |vote,i| %>  
+              <% @rankings.each_with_index do |vote,i| %>  
                 <%= render :partial => "/users/vote", :locals => {:vote => vote} %>
               <% end -%>
             </dl>
@@ -33,7 +33,7 @@
                 <h2>You haven't reviewed any experience yet, Share your taste now</h2> 
             <% end -%>
         <dl id="homepage_feed" style="position:relative;width:100%;">
-          <% @votes.each_with_index do |vote,i| %>  
+          <% @rankings.each_with_index do |vote,i| %>  
             <%= render :partial => "/users/vote", :locals => {:vote => vote} %>
           <% end -%>
         </dl>

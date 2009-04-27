@@ -141,7 +141,7 @@ class UsersController < ApplicationController
 	def show
 		@tag = Tag.find_by_name(params[:filter]) || nil
 		@source = User.find_by_login(params[:namespace])
-		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20, :order => :created_at)
+		@rankings = @source.rankings.paginate(:page => params[:page], :per_page => 20, :order => :created_at)
 		@reviews = Comment.search(:with => {:user_id => [@source.tastemakers, @source].flatten.collect {|c| c.id} }, :page => params[:page], :per_page => 10, :order => "created_at DESC")
 		
 		conditions = {:from_user => true, :to_nuniverse => true, :object_id => @source.id}
@@ -207,6 +207,14 @@ class UsersController < ApplicationController
 			f.html { redirect_to "/nuniverse-of/#{@user.login}"}
 			f.js { head :ok}
 			f.json {}
+		end
+	end
+	
+	def tweet
+		#TODO
+		respond_to do |f|
+			f.html {}
+			f.js {}
 		end
 	end
 	

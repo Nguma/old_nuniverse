@@ -1,6 +1,6 @@
 <dd  class="nuniverse"  id="<%= nuniverse.unique_name %>">
-  <div style="background:<%= Ranking.color(nuniverse.score) rescue nil %>;" class="actions">
-    <h3  class="score" ><%= pretty_score(nuniverse.total_score)  unless nuniverse.score.nil? %></h3>
+  <div style="background:<%= Ranking.color(nuniverse.score-1) rescue nil %>;" class="actions">
+    <h3  class="score" ><%= pretty_score(nuniverse.score)  unless nuniverse.score.nil? %></h3>
     
   </div>
   <div class="content" style="border-color:<%= Ranking.color(nuniverse.score)  rescue "#FFF"%>">

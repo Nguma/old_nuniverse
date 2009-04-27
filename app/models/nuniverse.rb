@@ -1,16 +1,22 @@
 class Nuniverse < ActiveRecord::Base
 	has_many :taggings, :as => :taggable, :dependent => :destroy
-	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
-	has_many :primary_tags, :through => :taggings, :source => :tag, :source_type => "Tag", :conditions => "tags.weight > 10"
-	has_many :secondary_tags, :through => :taggings, :source => :tag, :source_type => "Tag", :conditions => "tags.weight < 10"
-	has_many :tertiary_tags, :through => :taggings, :source => :tag, :source_type => "Tag", :conditions => "tags.weight < 5"
-			
-	has_many :date_tags, :through => :taggings, :source => :tag, :source_type => "Tag", :conditions => "parent_id = 5391"
+	has_many :rankings, :as => :rankable, :dependent => :destroy
+	
+	has_many :tags, :through => :taggings
+
+	has_many :platforms, :through => :taggings, :source => :tag, :conditions => "tags.parent_id = '5757'"
+	has_many :dates, :through => :taggings, :source => :tag, :conditions => "(tags.parent_id IS NOT NULL and tags.parent_id = 5391) "
+	has_many :genres, :through => :taggings, :source => :tag,  :conditions => "tags.parent_id IS NULL"		
+
+	has_many :kinds, :through => :taggings, :source => :tag, :source_type => "Tag", :conditions => "tags.parent_id = 5561"
+
 	
 	has_many :connections, :as => :object, :class_name => "Polyco", :dependent => :destroy
 	has_many :connecteds, :as => :subject, :class_name => "Polyco", :dependent => :destroy
 	
 	belongs_to :redirect, :class_name => "Nuniverse"
+	
+	has_many :redirecteds, :class_name => "Nuniverse", :foreign_key => "redirect_id"
 	
 	has_many :parents, :through => :connecteds, :source => :object, :source_type => "Nuniverse"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"
@@ -24,11 +30,13 @@ class Nuniverse < ActiveRecord::Base
 	
 	has_many :connected_nuniverses, :through => :connecteds, :source => :object, :source_type => "Nuniverse"
 	
+
+	
 	has_many :boxes, :as => :parent
 	has_many :aliases, :foreign_key => :redirect_id, :class_name => 'Nuniverse'
-	has_many :votes, :as => :rankable, :class_name => 'Ranking', :dependent => :destroy
 	
-	named_scope :with_rankings, :select => "nuniverses.*, AVG(rankings.score) as score", :joins => ["LEFT OUTER JOIN rankings on rankable_id = nuniverses.id AND rankable_type = 'Nuniverse'"], :group => "nuniverses.id"
+	
+	# named_scope :with_rankings, :select => "nuniverses.*, AVG(rankings.score) as score", :joins => ["LEFT OUTER JOIN rankings on rankable_id = nuniverses.id AND rankable_type = 'Nuniverse'"], :group => "nuniverses.id"
 	
 	
 	named_scope :sphinx, lambda {|*args| {
@@ -36,26 +44,32 @@ class Nuniverse < ActiveRecord::Base
   }}
 
 	define_index do
-    indexes :name, :as => :name,  :sortable => true
+    indexes [:name, redirecteds.name], :as => :name,  :sortable => true
 		indexes :unique_name, :as => :identifier, :sortable => true
+	
 		indexes tags(:name), :as => :tags
-		indexes primary_tags(:name), :as => :primary_tags
-		indexes secondary_tags(:name), :as => :secondary_tags
-		indexes tertiary_tags(:name), :as => :tertiary_tags
-		indexes [polycos(:object).name, tags(:name)], :as => :contexts, :sortable => true
+		indexes platforms.name, :as => :platforms
+		indexes genres.name, :as => :genres
 		
-		has :active
+		# indexes dates.name, :as => :dates
+		indexes rankings.score, :as => :score
+		
+		has "AVG(rankings.score)", :as => :score, :type => :integer
+	
+		
+		# has :active
+		# has dates(:name), :as => :dates, :type => :integer
 		has tags(:id), :as => :tag_ids
+		
+		# has type_tags(:id), :as => :type_ids
 		has users(:id), :as => :user_ids
 		
-		has (:id), :as => :self_id
+		# has (:id), :as => :self_id
 
 		has "CHAR_LENGTH(nuniverses.name)", :as => :length, :type => :integer
 		
 		set_property :delta => true
-		set_property :field_weights => {:name => 100}
-		# set_property :enable_star => true
-		# set_property :min_prefix_len => 1
+		where "nuniverses.redirect_id IS NULL"
 	end
 	
 	def gather_tags 
@@ -66,9 +80,11 @@ class Nuniverse < ActiveRecord::Base
 		connections.of_klass('Image').with_score.order_by_score.first.subject rescue nil
 	end
 	
-	def categories
-		Tag.search(:conditions => {:object_id => self.id, :object_type => 'Nuniverse' }, :per_page => 10)
+	def has_kinds?(kind)
+		return true if taggings.find(:first, :conditions => ["tags.name = ?",kind], :include => :tag)
+		return false
 	end
+	
 	
 	def pros
 		connections.of_klass('Tag').with_score_higher_than(0)
@@ -104,25 +120,29 @@ class Nuniverse < ActiveRecord::Base
 	end
 	
 	def stats
-		return [] if votes.empty?
-		votes_by_score = votes.group_by(&:score)
+		return [] if rankings.empty?
+		rankings_by_score = rankings.group_by(&:score)
 		stats = []
 		11.times do |t|
-			votes_by_score[t] =  votes_by_score[t] ? votes_by_score[t] : [] 
+			rankings_by_score[t] =  rankings_by_score[t] ? rankings_by_score[t] : [] 
 		end
-		votes_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/votes.count} }
+		rankings_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/rankings.count} }
 	end
 	
 	def stat(params)
-		return Stat.new(:score => params[:score], :value => votes.count(:conditions  => ['score = ?', params[:score]]), :total => votes.count)
+		return Stat.new(:score => params[:score], :value => rankings.count(:conditions  => ['score = ?', params[:score]]), :total => rankings.count)
 	end
 	
 	def score
-		(votes.average(:score)) rescue 0
+		(rankings.average(:score)) rescue 0
 	end
 	
 	def total_score
-		(votes.sum(:score)) rescue 0
+		(rankings.sum(:score)) rescue 0
+	end
+	
+	def percent_score
+		((rankings.sum(:score) * 100) / (rankings.count * 5)) rescue nil
 	end
 	
 	def to_json

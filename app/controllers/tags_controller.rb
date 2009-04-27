@@ -18,9 +18,10 @@ class TagsController < ApplicationController
 
 	def show
 		@tag = Tag.find_by_name(params[:tag])
-		@tag = Tag.new(:name => params[:tag]) if @tag.nil?
-		@filters = []
+		@tag = Tag.new(:name => params[:tag]) if @tag.nil? # creates a temporary tag if needed
 		
+		
+		@filters = []
 		if params[:filters]
 			params[:filters].each do |f|
 			 @filters << Tag.find_by_name(f)
@@ -30,11 +31,10 @@ class TagsController < ApplicationController
 		@conditions = {}
 		@conditions['tags'] = "#{@tag.name} #{@filters.collect {|f| f.name}.join(' ')} ";
 		@conditions['name'] = params[:input] if params[:input]
+	
+		@taggeds = Nuniverse.search(:conditions => @conditions, :per_page => 30, :page => params[:page], :match_mode => :any, :sort_mode => :expr, :sort_by => "@weight * score")
 		
-
-		@taggeds = Nuniverse.sphinx(:conditions => @conditions, :per_page => 1000, :page => 1, :match_mode => :any).with_rankings.paginate(:page => params[:page] , :per_page => 30, :order => "SUM(rankings.score) DESC")
-		
-		@tags = Tag.sphinx(:with  => {:related_tag_ids => @tag.id}, :without => {:self_id => [@filters.collect{|c| c.id}, @tag.id].flatten}, :per_page => 2000, :page => 1, :order => :name)
+		@tags = Tag.sphinx(:with  => {:related_tag_ids => @tag.id}, :without => {:self_id => [@filters.collect{|c| c.id}, @tag.id].flatten}, :per_page => 20, :page => 1, :order => :name)
 		@filters.each do |f|
 		# @tags = @tags.sphinx(:with => {:related_tag_ids => f.id}, :per_page => 2000, :page => 1)
 		end

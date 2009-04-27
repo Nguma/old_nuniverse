@@ -1,0 +1,8 @@
+development: 
+  max_matches: 10000
+  rank_mode: :wordcount
+  html_strip: 1
+  
+production:
+  max_matches: 10000
+  html_strip: 1

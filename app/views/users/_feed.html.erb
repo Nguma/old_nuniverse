@@ -1,6 +1,6 @@
 <dd id="just-tasted">
   <dl>
-    <%= will_paginate @votes,  :previous_label => "Less", :next_label => "More", :page_links => false, :params => {:controller => "users", :action => "feed"} %>
+    <%= will_paginate @rankings,  :previous_label => "Less", :next_label => "More", :page_links => false, :params => {:controller => "users", :action => "feed"} %>
     <% @reviews.each do |review| -%>
       <%= render :partial => "review", :locals => {:review => review} %>
     <% end -%>

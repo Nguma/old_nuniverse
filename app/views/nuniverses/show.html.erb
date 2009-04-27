@@ -28,7 +28,7 @@
     </div>
   </div>
  
-  <% @source.votes.each do |vote| %>
+  <% @source.rankings.each do |vote| %>
     <div class="vote" style="background:<%= vote.color %>;padding:4% 2% 2% 2%" id="vote-by-<%= vote.user.login %>">
       <div class="score" style="padding:2%;background:#FFF;position:absolute;top:0;right:3%;width:15%;text-align:center;font-weight:bold;font-size:1em;color:<%= vote.color %>">
         <%= vote.score %>

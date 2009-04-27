@@ -1,26 +1,7 @@
 <% nuniverse do -%>
-
-     <div class="section" style="width:600px;height:auto;margin:0 auto;background:none;" id="overview">
-
-       <h1 style="font-weight:bold"><%= thumbnail_tag(@token.namespace) %><%= link_to @token.namespace.name.titleize, visit_url(@token.namespace.unique_name) %><%= "/#{@token.tag.name}" unless @token.tag.blank? %></h1>
-       <h2>/<%= @token.namespace.unique_name %></h2>
-     <div class="box" >
-
-       <div class="content" style="height:400px;overflow:hidden" >
-         <dl class="set facts" id="facts" >
-           <% @images.each_with_index do |image,i| %>
-            
-            <dd class="fact " style="<%= style rescue nil %>">
-                <%= render :partial => image %>
-            </dd>
-            
-           <% end -%>
-
-         </dl>
-
-       </div>
-       <%= render :partial => "/facts/new", :locals => {:source => @token.namespace} %>
-     </div>
-     </div>
-
-   <% end -%>
+  <h1>Images for <%= @source.name %></h1>
+  
+  <% @images.each do |img| %>
+    <%= link_to image_tag(img.public_filename(:large)), "/remove-image/#{img.id}/from/#{@source.unique_name}" %> 
+  <% end -%>
+<% end -%>

@@ -10,7 +10,7 @@ class Tag < ActiveRecord::Base
 	has_many :polycos, :through => :taggings, :source => :taggable, :source_type => "Polyco"
 	
 	belongs_to :redirect, :class_name => 'Tag'
-	belongs_to :parent
+	belongs_to :parent, :class_name => 'Tag'
 
 	
 	named_scope :sphinx, lambda {|*args| {
@@ -19,17 +19,19 @@ class Tag < ActiveRecord::Base
 	
 	define_index do 
 		indexes :name, :sortable => true
+		
 		# indexes [nuniverses(:unique_name)], :as => :nuniverses
-		indexes [polycos.subject_type], :as => :subject_type
+		# indexes [polycos.subject_type], :as => :subject_type
 		# indexes [polycos.object_type], :as => :object_type
 
-		has nuniverses.tags(:id), :as => :related_tag_ids
+		# has nuniverses.tags(:id), :as => :related_tag_ids
 		# has nuniverses(:id), :as => :tagged_nuniverse_ids
-		has nuniverses.users(:id), :as => :related_user_ids
+		# has nuniverses.users(:id), :as => :related_user_ids
 		# has polycos(:object_id), :as => :object_id
-		has polycos(:subject_id), :as => :object_id
+		# has polycos(:subject_id), :as => :subject_id
 		
 		has (:id), :as => :self_id
+		has (:parent_id), :as => :group_id
 		
 		set_property :delta => true
 	end

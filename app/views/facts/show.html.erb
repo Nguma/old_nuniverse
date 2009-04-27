@@ -25,10 +25,10 @@
   <div class="box" >
     
     <div class="content" style="height:400px;overflow:hidden" >
-      <% if @source.votes.size == 0 %>
+      <% if @source.rankings.size == 0 %>
         This fact hasn't been approved yet.
       <% else -%>
-        <h3><%= @source.votes.size %> People talked about that fact,</h3>
+        <h3><%= @source.rankings.size %> People talked about that fact,</h3>
         <p style="font-weight:bold;">
         <span style="font-weight:bold;color:#8c5;font-size:<%= (@source.percent_of_pros/5).ceil + 20 %>px"><%= @source.percent_of_pros %>% Agreed. <%= "So are you." if @vote && @vote.score == 1 %></span><br/>
  

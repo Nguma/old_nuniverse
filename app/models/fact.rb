@@ -2,7 +2,7 @@ class Fact < ActiveRecord::Base
 	include ActionView::Helpers::TextHelper
 	
 	has_many :taggings, :as => :taggable, :dependent => :destroy
-	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Nuniverse"
+	has_many :tags, :through => :taggings
 	has_many :contexts, :through => :taggings, :source => :tag, :source_type => "Collection"
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
 	has_many :connections, :as => :object, :class_name => 'Polyco'
@@ -12,7 +12,7 @@ class Fact < ActiveRecord::Base
 
 	has_many :objects, :through => :connecteds, :source => :object, :source_type => "Nuniverse"
 	
-	has_many :votes, :as => :rankable, :class_name => 'Ranking'
+	has_many :rankings, :as => :rankable, :class_name => 'Ranking'
 	has_many :pros, :as => :rankable, :class_name => 'Ranking', :conditions => "score = 1"
 	has_many :cons, :as => :rankable, :class_name => 'Ranking', :conditions => "score = 0"
 	# has_many :parents, :through => :connecteds, :source => :object, :source_type => "Nuniverse" 
@@ -74,7 +74,7 @@ class Fact < ActiveRecord::Base
 	end
 	
 	def rank
-		votes.count
+		rankings.count
 	end
 	
 	def is_a_join?
@@ -92,11 +92,11 @@ class Fact < ActiveRecord::Base
 	end
 	
 	def percent_of_pros
-		((pros.size * 100)/votes.size).round
+		((pros.size * 100)/rankings.size).round
 	end
 	
 	def percent_of_cons
-		((cons.size * 100)/votes.size).round
+		((cons.size * 100)/rankings.size).round
 	end
 	
 	def build_path

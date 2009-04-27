@@ -4,7 +4,7 @@
     <div id="page-hat" style="background:#000;padding:4%;position:relative;display:block">
     <h1 style="color:#FFF;font-size:2em">Best of <%= @filters.collect {|c| c.name.downcase}.join(' ') %> <%= @tag.name.downcase %></h1>
     </div>
-    <%= will_paginate @taggeds %>
+    <%= will_paginate @taggeds, :attributes => {:target => "mo"} %>
     
     <div id="filters" style="background:#000;margin:.2em 0 0 0;padding:4%">
       <%= render :partial => "search_filter"%>

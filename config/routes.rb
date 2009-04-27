@@ -90,7 +90,10 @@ ActionController::Routing::Routes.draw do |map|
 	map.search "/search", :controller => "nuniverses", :action => "index"
 	
 	map.tutorial "/tutorial", :controller => "users", :action => "tutorial"
-	map.connect "/facts/create", :controller => "facts", :action => "create"
+	# map.connect "/facts/create", :controller => "facts", :action => "create"
+	
+	map.connect "/images-for/:namespace", :controller => "images", :action => "index"
+	map.connect "/remove-image/:id/from/:namespace", :controller => "images", :action => "disconnect"
 	
 	map.suggest_connections "/suggest-connection", :controller => "polycos", :action => "suggest"
 
@@ -112,6 +115,8 @@ ActionController::Routing::Routes.draw do |map|
 		
 	map.process "/rate/:namespace/:score", :controller => "rankings", :action => "create"
 	map.process "/rate/:namespace/:score.:format", :controller => "rankings", :action => "create"
+	
+	map.tweet_about "/tweet-about/:namespace", :controller => "users", :action => "tweet"
 
 	map.comment "/comments/create", :controller => "comments", :action => "create"
 	map.comment "/comments/create.:format", :controller => "comments", :action => "create"

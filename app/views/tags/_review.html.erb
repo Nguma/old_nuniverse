@@ -1,4 +1,4 @@
-<% vote = path.first.votes.by(element.author).first %>
+<% vote = path.first.rankings.by(element.author).first %>
 
 <%= thumbnail_tag(element.author, :size => :small) %>
 <div class="tag"><%= element.author.login.titleize %> gave a <%= vote.score %></div>

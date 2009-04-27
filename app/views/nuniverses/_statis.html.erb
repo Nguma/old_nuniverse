@@ -1,13 +1,13 @@
-  <% personal_vote = source.votes.by(current_user).first -%>
+  <% personal_vote = source.rankings.by(current_user).first -%>
   
   <div id="scorecard"  class="box" style="background:#000;height:130px;" class="<%= personal_vote ? 'voted' : '' %>">
-   <ul id="votes">
+   <ul id="rankings">
      <% source.stats.each_with_index do |stat,i| %>
         <li id="stat_<%= i %>"></li>
      <% end -%>
     </ul>
     <div id="score_tag" style="text-align:center;position:absolute;top:0;right:20px;padding:1% 1% 1% 1%;width:100px" class="<%= personal_vote ? 'voted' : '' %>">
-      <% if source.votes.count > 0 %>
+      <% if source.rankings.count > 0 %>
         <h2 id="score" class="score_<%= source.score.round.to_i%>"><%= sprintf('%.1f',source.score) %></h2>
           <% if personal_vote %>
             <h3 class="status" style="background:none;color:#FFF">

@@ -25,7 +25,7 @@ class FactsController < ApplicationController
     @fact = Fact.find(params[:id])
 	
 		if params[:vote]
-			@vote = @fact.votes.by(current_user).first
+			@vote = @fact.rankings.by(current_user).first
 			@vote = Ranking.new(:rankable_id => @fact.id, :rankable_type => 'Fact', :user => current_user) if @vote.nil?
 			@vote.score = params[:vote]
 			@vote.save

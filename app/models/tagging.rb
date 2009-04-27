@@ -1,6 +1,7 @@
 class Tagging < ActiveRecord::Base
 	belongs_to :taggable, :polymorphic => true 
-	belongs_to :tag, :polymorphic => true
+	belongs_to :tag
+	
 	
 	
 	define_index do

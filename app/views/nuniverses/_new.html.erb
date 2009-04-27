@@ -1,0 +1,7 @@
+ <% form_for @new_nuniverse, :url => {:controller => "nuniverses", :action => "create"}, :html => {:style => "padding:2%;color:#FFF"} do |f| -%>
+     <%= f.hidden_field :name %>
+     <%= f.hidden_field :unique_name %>
+      
+     <h3>#<%= @new_nuniverse.unique_name.downcase %></h3>
+      <%= submit_tag "create #{@new_nuniverse.name.titleize}!", :style => "background:#000;color:#FFF;padding:4%" %>
+   <% end -%>

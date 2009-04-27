@@ -1,6 +1,6 @@
 class Bookmark < ActiveRecord::Base
   has_many :taggings, :as => :taggable, :dependent => :destroy
-	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	has_many :tags, :through => :taggings
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	has_many :images, :through => :connections, :source => :subject, :source_type => "Image"

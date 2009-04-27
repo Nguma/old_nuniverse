@@ -1,5 +1,5 @@
 
 <% @comments.each do |comment| -%>
-  <% vote = @namespace.votes.by(comment.author).first %>
+  <% vote = @namespace.rankings.by(comment.author).first %>
   <div class="box" style="background:<%= color_for_score(vote.score) %>"><%= render :partial => comment %></div>
 <% end -%>

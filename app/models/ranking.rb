@@ -12,6 +12,12 @@ class Ranking < ActiveRecord::Base
 	}
 	
 	
+	define_index do
+		indexes rankable.name, :as => :rankable
+		set_property :delta => true
+	end
+	
+	
 	def review
 		Comment.find(:last, :conditions => {:parent_id => rankable_id, :parent_type => rankable_type, :user_id => user_id})
 	end
@@ -31,8 +37,10 @@ class Ranking < ActiveRecord::Base
 		r
 	end
 	
+
+	
 	def color 
-		Ranking.color(score)
+		Ranking.color(score-1)
 	end
 	
 	
@@ -43,7 +51,7 @@ class Ranking < ActiveRecord::Base
 	protected
 	
 	def self.color(score)
-		['#FF0000','#f93300','#FF9900','#dd9933','#FFEB00','#eaf419','#caea00','#99cc00','#66CC00', '#00FF00'][(score + 4).floor]
+		['#FF0000','#FF9900','#dddd00','#99FF00','#00FF00'][(score).floor]
 	end
 	
 	def self.label(score) 

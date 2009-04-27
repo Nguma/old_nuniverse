@@ -1,7 +1,7 @@
 class Comment < ActiveRecord::Base
 	
 	has_many :taggings, :as => :taggable, :dependent => :destroy
-	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	has_many :tags, :through => :taggings
 
 	has_many :bookmarks, :through => :connections, :source => :subject, :source_type => "Bookmark"
 	has_many :connections, :as => :object, :class_name => 'Polyco'
@@ -11,7 +11,7 @@ class Comment < ActiveRecord::Base
 
 	has_many :objects, :through => :connecteds, :source => :object, :source_type => "Nuniverse"
 	
-	has_many :votes, :as => :rankable, :class_name => 'Ranking'
+	has_many :rankings, :as => :rankable, :class_name => 'Ranking'
 	has_many :facts, :through => :connections, :source => :subject, :source_type => "Fact"
 	
 	belongs_to :parent, :polymorphic => :true

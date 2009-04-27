@@ -18,11 +18,11 @@ class ApplicationController < ActionController::Base
 
 	def index
 
-		@votes = Ranking.find(:all, :conditions => "rankable_type = 'Nuniverse'", :group => "rankable_id, rankable_type", :order => "updated_at DESC").paginate(:page => params[:page], :per_page => 20, :order => "updated_at desc" )
+		@rankings = Ranking.find(:all, :conditions => "rankable_type = 'Nuniverse'", :group => "rankable_id, rankable_type", :order => "updated_at DESC").paginate(:page => params[:page], :per_page => 20, :order => "updated_at desc" )
 		respond_to do |f|
 			f.html {}
 			f.js {}
-			f.json {render :json => {:votes => @votes}}
+			f.json {render :json => {:rankings => @rankings}}
 		end
 	end
 

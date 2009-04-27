@@ -4,9 +4,9 @@ class Polyco < ActiveRecord::Base
 	
 	has_many :rankings, :as => :rankable
 	has_many :taggings, :as => :taggable, :dependent => :destroy
-	has_many :tags, :through => :taggings, :source => :tag, :source_type => "Tag"
+	has_many :tags, :through => :taggings
 
-	has_many :votes, :as => :rankable, :class_name => 'Ranking', :dependent => :destroy
+	has_many :rankings, :as => :rankable, :class_name => 'Ranking', :dependent => :destroy
 	
 	has_many :connections, :as => :object, :class_name => "Polyco"
 	
@@ -55,7 +55,7 @@ class Polyco < ActiveRecord::Base
 
 	
 	named_scope :tagged, lambda { |tag| 
-		tag.blank? ? {} : { :conditions => ["tag_id = ? AND tag_type = ?",tag.id, tag.class.to_s ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) LEFT OUTER JOIN tags on taggings.tag_id = tags.id "}
+		tag.blank? ? {} : { :conditions => ["tag_id = ?",tag.id ], :joins => "LEFT OUTER JOIN taggings ON (taggable_id = polycos.id AND taggable_type = 'Polyco') OR (taggable_id = polycos.subject_id AND taggable_type = polycos.subject_type) LEFT OUTER JOIN tags on taggings.tag_id = tags.id "}
 	}
 	
 	named_scope :with_score, lambda { |user| 
@@ -102,7 +102,7 @@ class Polyco < ActiveRecord::Base
 	}
 	
 
-	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, T.id as tag_id, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.id AND TA.taggable_type = 'Polyco' INNER JOIN tags T on T.id = TA.tag_id AND TA.tag_type = 'Tag'" ], :group => "T.id", :order => "tag_name ASC"
+	named_scope :gather_tags, :select => "polycos.*, T.name AS tag_name, T.id as tag_id, COUNT(DISTINCT TA.id) AS counted", :joins => ["LEFT OUTER JOIN taggings TA ON TA.taggable_id = polycos.id AND TA.taggable_type = 'Polyco' INNER JOIN tags T on T.id = TA.tag_id " ], :group => "T.id", :order => "tag_name ASC"
 
 	named_scope :related_connections, lambda {|object|
 		object.nil? ? {} : { :joins => ["LEFT OUTER JOIN polycos P ON (P.subject_id = polycos.object_id AND P.subject_type = polycos.object_type AND P.object_id = #{object.id} AND P.object_type = '#{object.type}')" ], :conditions => ["P.id IS NOT NULL"]}
@@ -115,7 +115,7 @@ class Polyco < ActiveRecord::Base
 	end
 	
 	def score
-			(votes.average(:score)) rescue 0
+			(rankings.average(:score)) rescue 0
 	end
 
 	def self.find_or_create(params)

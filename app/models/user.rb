@@ -52,11 +52,11 @@ class User < ActiveRecord::Base
 	alias_attribute :unique_name, :login
 
 	has_many :taggings, :as => :taggable
-	has_many :tags, :through => :taggings, :source => :tag, :source_type => 'Tag'
+	has_many :tags, :through => :taggings
 	
 	has_many :reviews, :class_name => "Comment", :foreign_key => :user_id	
 	
-	has_many :votes, :class_name => "Ranking", :foreign_key => :user_id
+	has_many :rankings, :class_name => "Ranking", :foreign_key => :user_id
 	
 	def pros
 		comments.pros
@@ -149,11 +149,11 @@ class User < ActiveRecord::Base
 
 	
 	def score
-		(votes.average(:score)) rescue nil
+		(rankings.average(:score)) rescue nil
 	end
 	
 	def stat(params)
-		return Stat.new(:score => params[:score], :value => votes.count(:conditions  => ['score = ?', params[:score]]), :total => votes.count)
+		return Stat.new(:score => params[:score], :value => rankings.count(:conditions  => ['score = ?', params[:score]]), :total => rankings.count)
 	end
 	
 	
@@ -176,13 +176,13 @@ class User < ActiveRecord::Base
 	end
 	
 	def voting_stats
-		return [] if votes.empty?
-		votes_by_score = votes.group_by(&:score)
+		return [] if rankings.empty?
+		rankings_by_score = rankings.group_by(&:score)
 		stats = []
 		11.times do |t|
-			votes_by_score[t] =  votes_by_score[t] ? votes_by_score[t] : [] 
+			rankings_by_score[t] =  rankings_by_score[t] ? rankings_by_score[t] : [] 
 		end
-		votes_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/votes.count} }
+		rankings_by_score.collect {|s,v| {'score' => s.round,'count' => v.length, 'percent' => (v.length * 100)/rankings.count} }
 	end
 	
 	def is_following?(user)

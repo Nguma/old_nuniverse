@@ -19,6 +19,7 @@ class NuniversesController < ApplicationController
 		
 		
 		@new_nuniverse = Nuniverse.new(:name => params[:input], :unique_name => Token.generate(params[:input]))
+	
 		
 		respond_to do |f|
 			f.html {}
@@ -33,8 +34,8 @@ class NuniversesController < ApplicationController
 		@source = @namespace
 		@title = "#{@namespace.unique_name} on Wdyto"
 		@comments = @namespace.comments
-		@current_user_vote = @source.votes.by(current_user).first
-		@votes = @source.votes.paginate(:page => params[:page], :per_page => 20)
+		@current_user_vote = @source.rankings.by(current_user).first
+		@rankings = @source.rankings.paginate(:page => params[:page], :per_page => 20)
 		@connections = @source.connections.of_klass('Nuniverse').paginate(:page => 1, :per_page => params[:page])
 		@connecteds = @source.connected_nuniverses.paginate(:page => 1, :per_page => params[:page])
 		@comments = Comment.find(:all, :conditions => ['user_id = 0']).paginate(:page => 1)
@@ -49,14 +50,6 @@ class NuniversesController < ApplicationController
 		
 		@links = []
 		if @source.wikipedia_id && @source.description.blank?
-		 	# @wiki = RWikiBot.new('u','p','http://en.wikipedia.org/w/api.php')
-			
-			# wikipedia_id = @source.name.titleize.gsub(/\s/,'_').gsub(':','')
-			# @wikicontent = Wikipedia.find(@source.wikipedia_id)
-			# 		if @wikicontent.redirect?
-			# 			@wikicontent = Wikipedia.find(@wikicontent.content.scan(/\[\[([\w\s\:]+)\]\]/).to_s)
-			# 		end
-			# 		raise @wikicontent.content.split(/\n/).pretty_inspect
 			begin
 				doc = Hpricot open "http://en.wikipedia.org/wiki/#{@source.wikipedia_id}?action=render"
 				@wikicontent = doc.search(" > p")[0..1]
@@ -86,22 +79,33 @@ class NuniversesController < ApplicationController
 		
 		# @prosandcons = @source.connections.of_klass('Tag').paginate(:page => 1, :per_page => params[:page])
 		
-		@tags = []
-		 @tags << "#{@source.name} "
-			# @tags <<  @source.tags.sort {|a,b| b.weight <=> a.weight }.collect {|t| "#{t.name} #{t.parent.name rescue nil}"}# .each do |t|
-			
-					@source.tags.sort {|a,b| b.weight <=> a.weight }.each do |t|
-								(t.weight/2).floor.times do |i|
-									@tags << "#{t.name}"
-								end
-							end
+
+
 		
 
-		# @similars = Nuniverse.search(@tagstr[0..2].to_s, :field_weights => {:tags => 20, :name => 1}, :per_page => 10, :page => 1, :without => {:self_id => [@source.id]}, :match_mode => :any, :sort_mode => :relevance) rescue []
-
-
-		@similars = Nuniverse.search(@tags.join(' '), :field_weights => {:primary_tags => 50, :secondary_tags => 30, :tertiary_tags => 15,  :name => 1}, :per_page => 10, :page => 1, :without => {:self_id => [@source.id]}, :match_mode => :any, :sort_mode => :relevance, :rank_mode => :wordcount) rescue nil
-		# .with_rankings.paginate(:page => params[:page] , :per_page => 3)
+	# 	@type_ids = @source.type_tags.collect {|c| c.id}
+		@query = []
+		
+		@genres = "(\"#{@source.name.gsub(/\s|\-|\/|\:/i, ' ')}\"/2)|#{@source.genres.collect{|c| "#{c.name}"}.join('|').gsub(/\s|\-|\/|\:/i, '|').gsub('\'','')} "
+		 @platforms = "#{@source.platforms.collect{|c| "(\"#{c.name}\")"}.join('|').gsub(/\s|\-|\/|\:/i, ' ')} "
+		# @date_tags =  "@dates #{@source.date_tags.collect{|c| "(#{c.name.gsub(/(\d\d\d\d)/,'\1')})"}.join('|')} "
+		
+		# @platform_ids = @source.platforms.collect {|c| c.id}
+		@query << @genres unless @genres.blank?
+		# @query << @platform_tags unless @platform_tags.blank?
+		# @query << @date_tags unless @date_tags.blank?
+		@query << "@name(\"#{@source.name.gsub(/\s|\-|\/|\:/i, ' ')}\"/2)" 
+		
+		conditions = {}
+		conditions[:platforms] = @platforms unless @platforms.blank?
+		conditions[:genres] = @genres unless @genres.blank?
+		
+	
+	
+	
+		@similars = Nuniverse.search(:conditions => conditions, :match_mode => :extended, :sort_mode => :expr, :sort_by => "(@weight * 2) + (score)", :rank_mode => :wordcount, :per_page => 10, :page => 1,  :without => {:sphinx_internal_id => [@source.id]}, :field_weights => {:name => 10,  :genres => 70, :platforms => 20, :dates => 20, :unique_name => 1})
+		
+	
 	
 	end
 	

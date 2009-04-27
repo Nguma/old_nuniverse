@@ -1,74 +1,127 @@
 <div id="tagger" style="display:none"><% form_tag "/add-tags" do -%><%= text_field_tag "value", :id => "tagger-input"%><% end -%></div>
 <%= render :partial => "/nuniverse/main_menu"%>
 <% nuniverse do -%>
-<div id="wdyto">
+  <div id="wdyto">
 
   <div id="left-col" >
     <%= render :partial => "media", :locals => {:source => @source} %>
     <%= render :partial => "scorecard", :locals => {:source => @source, :current_user_vote => @current_user_vote } %>
-    <%= render :partial => "stats", :locals =>  {:source => @source} %>
+    
     <% if @source.description %>
     <div style="padding:1em 0;clear:both">
       <%= @source.description rescue nil%>
       <%= link_to "More at wikipedia","http://en.wikipedia.org/wiki/#{@source.wikipedia_id}" if @source.wikipedia_id %>
     </div>
     <% end -%>
- 
+    <% if @source.has_kinds?('video game') %>
+    <dl class="" id="platform-tags">
+      <dt>Available for</dt>
+      <% @source.platforms.each do |t| %>
+        <dd class="tag"><%= link_to t.name, "/bestof/#{t.name}"%></dd>
+      <% end -%>
+    </dl>
+    <% end -%>
+      
+      
   </div>
   
   <div id="right-col" >
     <dl id="suggestions" style="padding:0;min-height:0;margin:0"></dl>
+    <ul class="tabs" style="margin:0 0 1% 0">
+      <!-- <li  class="selected"><%#= link_to "Pros and Cons" , "proscons", :target => "#prosandcons"%></li> -->
+      <li id="tab-overview"><%= link_to "Overview" , "Overview", :target => "#overview" %></li>
+      <li id="tab-reviews"><%= link_to "Reviews" , "Reviews", :target => "#reviews" %></li>
+      <li id="tab-tweets"><%= link_to "Tweets" , "Tweets", :target => "#tweets"%></li>
+      <li id="tab-relateds"><%= link_to "Relateds" , "Related", :target => "#relateds"%></li>
+      <li id="tab-links"><%= link_to "Links" , "Links", :target => "#links"%></li>
+    </ul>
     
-    <div  style="position:relative;width:100%;margin:0 .4% .5% 0;background:#FFF;">
+    <div  style="position:relative;width:100%;margin:0 .4% .5% 0;background:#FFF;clear:both">
        <%= render :partial => "card", :locals => {:source => @source} %>
-      <div style="clear:right"> </div>
+      <div style="clear:both"> </div>
     </div>
-        <% if @current_user_vote.nil? %>
-         <%= render :partial => "/nuniverse/rate_picker"%>
-        <% end -%>
-    <div id="feeds" style="margin:1em 0 0 0;padding:0;top:0;position:relative">
-      <ul class="tabs" style="margin:0 0 1% 0">
-        <!-- <li  class="selected"><%#= link_to "Pros and Cons" , "proscons", :target => "#prosandcons"%></li> -->
-        <li><%= link_to "Reviews" , "Reviews", :target => "#reviews" %></li>
-        <li><%= link_to "Tweets" , "Tweets", :target => "#tweets"%></li>
-        <li><%= link_to "Relateds" , "Related", :target => "#relateds"%></li>
-        <li><%= link_to "Links" , "Links", :target => "#links"%></li>
-      </ul>
+ 
+
+    <div id="feeds" style="margin:1em 0 0 0;padding:0;top:0;position:relative;clear:left">
+
   
 
-    
-    <dl id="links" style="clear:left;display:none">
-     
-      <% @links.each_with_index do |link, i| -%>
-        <dd class="connection"><%= thumbnail_tag(link) %>
-          <h3><%= wdyto_url(link)%></h3>
-        </dd>
+      <div id="overview" style="clear:none;width:58%;position:relative;float:left;padding:0 1% 0 1%" >
+        <dl>
+          <h2>Wdyto?</h2>
+          <% if @source.comments.empty? %>
+            <i style="color:#ccc">No one has reviewed yet.</i>
+          <% else %>
+            <%= render :partial => @source.comments.first %>
+            <% content_for :review_options do -%>
+              <li><%= link_to "More reviews" , "Reviews", :target => "#reviews" , :class => "section-lnk" %></li>
+            <% end -%>
+          <% end -%>
+         
+          <ul class="options">
+             <%= yield :review_options %>
+            <li><%= link_to "Make your own" , "#TODO", :target => "" %></li>
+          </ul>
+        </dl>
+        <dl>
+          <dt><h2>What's the buzz on twitter?</h2></dt>
+         
+           <% if @tweets.size > 0 %>
+            <%= render :partial => "/nuniverse/tweet", :locals => {:tweet => @tweets[0] } rescue nil%>
+            <% content_for :buzz_options do -%>
+              <li><%= link_to "Check out more tweets" , "Tweets", :target => "#tweets" , :class => "section-lnk" %></li>
+            <% end -%>
+          <% else %>
+            <i style="color:#ccc">No one tweeted about it lately</i>
+          <% end -%>
+          <ul class="options">
+            <%= yield :buzz_options %>
+            <li><%= link_to "tweet about it!", tweet_about_url(@source) %></li>
+          </ul>
+        </dl>
         
-      <% end -%>
-    </dl>
+        <dl>
+          <dt><h2>In the same vein</h2></dt>
+          <% if @similars.empty? %>
+            <i style="color:#ccc">Huh? Nothing like it?</li>
+          <% else -%>
+            <%= render :partial => "/nuniverses/nuniverse", :locals => {:options => nil, :nuniverse => @similars.first } %>
+          <% end -%>
+          <ul class="options">
+            <li><%= link_to "See others in the same vein" , "Relateds", :target => "#relateds" , :class => "section-lnk" %></li>
+          </ul>
+        </dl>
+      </div>
+      <div  style="clear:none;width:40%;position:relative;float:left;margin:0;padding:0">
+        <%= render :partial => "stats", :locals =>  {:source => @source} %>
+      <% if @current_user_vote.nil? %>
+          <%= render :partial => "/nuniverse/rate_picker"%>
+         <% end -%>
+         
+        </div>
     
     <dl id="reviews" style="clear:left;display:none">
-      <%= will_paginate @votes %>
-      <% @votes.each_with_index do |vote, i| -%>
+      <dt>
+         <% if @current_user_vote.nil? %>
+            <%= render :partial => "/nuniverse/rate_picker"%>
+           <% end -%>
+        </dt>
+      <%= will_paginate @rankings %>
+      <% @rankings.each_with_index do |vote, i| -%>
         <%= render :partial => vote %>
       <% end -%>
     </dl>
     <% if @similars %>
     <dl id="relateds" style="clear:left;display:none">
       <%= will_paginate @similars %>
-      <% @similars.each do |similar| -%>
+      <% @similars.each_with_weight do |similar,w| -%>
         <%= render :partial => similar, :locals => {:options => nil} %>
+        <p style="color:#000"><%= w%></p>
       <% end %>
     </dl>
     <% end -%>
     
-    <dl id="comments" style="clear:left;display:none">
-       <%= will_paginate @comments %>
-       <% @comments.each_with_index do |comment, i| -%>
-         <%= render :partial => comment %>
-       <% end -%>
-       <%= link_to "Add a comment", add_connection_url, :rel => "connect", :class => "input-lnk" %>
-    </dl>
+
    
    <div id="media" style="display:none" >
     <% @source.images.each_with_index do |img, i| %>

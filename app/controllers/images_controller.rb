@@ -5,8 +5,8 @@ class ImagesController < ApplicationController
 	before_filter :find_source, :only => [:create]
 	
 	def index
-		@token.tag = Nuniverse.find_or_create(:unique_name => "image")
-		@images = @token.namespace.images.paginate(:page => params[:page], :per_page => 30)
+		@source = Nuniverse.find_by_unique_name(params[:namespace])
+		@images = @source.images.paginate(:page => params[:page], :per_page => 10)
 		
 	end
 	
@@ -34,6 +34,18 @@ class ImagesController < ApplicationController
 		
   end
 
+	def disconnect
+		if authorized?
+			@source = Nuniverse.find_by_unique_name(params[:namespace])
+			@image = Image.find_by_id(params[:id])
+			@source.images.delete @image
+		end
+		
+		respond_to do |f|
+			f.html {redirect_back_or_default('/')}
+			f.js { head :ok}
+		end
+	end
 	
 	
 	def destroy
